@@ -1,0 +1,1227 @@
+SimaPro 7.3;Inventaire;Date:;04/03/2014;Heure:;16:50;;;
+Projet;_Forest resources database;;;;;;;
+;;;;;;;;
+;;;;;;;;
+Calculation: ;Analyser;;;;;;;
+Results: ;Inventaire;;;;;;;
+Product: ;1 ha _Oak forest manual clearance by brush-cutter, in forest/FR U (of project _Forest resources database);;;;;;;
+Méthode: ;;;;;;;;
+Indicateur: ;Inventaire;;;;;;;
+Unité: ;?;;;;;;;
+Compartiment: ;Tous les compartiments;;;;;;;
+Per sub-compartment: ;Oui;;;;;;;
+Default units: ;Non;;;;;;;
+Exclure les processus d'infrastructure: ;Non;;;;;;;
+Exclure les émissions à long terme: ;Oui;;;;;;;
+Sorted on item: ;Substance;;;;;;;
+Sort order: ;Croissant;;;;;;;
+;;;;;;;;
+N°;Substance;Compartiment;Sous-compartiment;Unité;Total;_Oak forest manual clearance by brush-cutter, in forest/FR U;_Power sawing, without catalytic converter/hr/RER_Brush-cutter/hr/FR U;Operation, passenger car, diesel, fleet average/RER S
+1;1-Butanol;Air;high. pop.;kg;4.54558E-13;x;3.08596E-13;1.45963E-13
+2;1-Butanol;Eau;river;kg;3.11705E-09;x;2.57532E-09;5.41732E-10
+3;1-Pentanol;Air;high. pop.;kg;2.79304E-13;x;2.26363E-13;5.29407E-14
+4;1-Pentanol;Eau;river;kg;6.70339E-13;x;5.43283E-13;1.27056E-13
+5;1-Pentene;Air;high. pop.;kg;2.11066E-13;x;1.7106E-13;4.00064E-14
+6;1-Pentene;Eau;river;kg;5.06552E-13;x;4.10537E-13;9.60156E-14
+7;1-Propanol;Air;high. pop.;kg;6.68674E-11;x;4.91915E-11;1.76759E-11
+8;1-Propanol;Eau;river;kg;1.63341E-12;x;1.06377E-12;5.6964E-13
+9;1,4-Butanediol;Air;high. pop.;kg;1.25644E-11;x;1.0022E-11;2.54235E-12
+10;1,4-Butanediol;Eau;river;kg;5.02574E-12;x;4.0088E-12;1.01694E-12
+11;2-Aminopropanol;Air;high. pop.;kg;6.24086E-14;x;2.94237E-14;3.29849E-14
+12;2-Aminopropanol;Eau;river;kg;1.56731E-13;x;7.37885E-14;8.2943E-14
+13;2-Butene, 2-methyl-;Air;high. pop.;kg;4.68171E-17;x;3.79433E-17;8.87387E-18
+14;2-Methyl-1-propanol;Air;high. pop.;kg;8.46737E-13;x;6.34307E-13;2.1243E-13
+15;2-Methyl-1-propanol;Eau;river;kg;2.03215E-12;x;1.52233E-12;5.0982E-13
+16;2-Methyl-2-butene;Eau;river;kg;1.12363E-16;x;9.10653E-17;2.12976E-17
+17;2-Nitrobenzoic acid;Air;high. pop.;kg;1.10308E-13;x;5.09885E-14;5.93197E-14
+18;2-Propanol;Air;high. pop.;kg;1.83893E-07;x;1.52039E-07;3.18539E-08
+19;2-Propanol;Eau;river;kg;8.63328E-13;x;5.83595E-13;2.79734E-13
+20;2,4-D;Sol;agricultural;kg;4.57532E-09;x;3.25166E-09;1.32366E-09
+21;4-Methyl-2-pentanone;Eau;;kg;1.25459E-12;x;1.04761E-12;2.06975E-13
+22;Acenaphthene;Air;;kg;2.8785E-15;x;2.40361E-15;4.74886E-16
+23;Acenaphthene;Air;high. pop.;kg;5.54403E-12;x;4.25953E-12;1.28451E-12
+24;Acenaphthene;Air;low. pop.;kg;1.58623E-13;x;1.18853E-13;3.97699E-14
+25;Acenaphthene;Eau;ocean;kg;2.38782E-09;x;1.74453E-09;6.4329E-10
+26;Acenaphthene;Eau;river;kg;5.42724E-09;x;3.44772E-09;1.97952E-09
+27;Acenaphthylene;Eau;ocean;kg;1.49333E-10;x;1.09101E-10;4.02317E-11
+28;Acenaphthylene;Eau;river;kg;3.39417E-10;x;2.15618E-10;1.23799E-10
+29;Acetaldehyde;Air;;kg;0.000247232;x;2.4671E-07;0.000246985
+30;Acetaldehyde;Air;high. pop.;kg;1.02907E-06;x;7.44743E-07;2.84329E-07
+31;Acetaldehyde;Air;low. pop.;kg;4.96093E-08;x;3.52562E-08;1.43531E-08
+32;Acetaldehyde;Eau;river;kg;6.01298E-09;x;4.87113E-09;1.14185E-09
+33;Acetic acid;Air;;kg;5.05782E-06;x;2.99309E-06;2.06474E-06
+34;Acetic acid;Air;high. pop.;kg;6.53956E-06;x;4.85128E-06;1.68828E-06
+35;Acetic acid;Air;low. pop.;kg;3.25893E-07;x;2.31604E-07;9.42889E-08
+36;Acetic acid;Eau;river;kg;3.72869E-07;x;2.25814E-07;1.47056E-07
+37;Acetone;Air;high. pop.;kg;1.20205E-06;x;8.86062E-07;3.15984E-07
+38;Acetone;Air;low. pop.;kg;2.48565E-07;x;1.87644E-07;6.09215E-08
+39;Acetone;Eau;;kg;2.99022E-12;x;2.4969E-12;4.93323E-13
+40;Acetone;Eau;river;kg;5.12607E-11;x;2.37067E-11;2.7554E-11
+41;Acetonitrile;Air;low. pop.;kg;1.36367E-08;x;9.69131E-09;3.94543E-09
+42;Acetonitrile;Eau;river;kg;5.13985E-13;x;2.35389E-13;2.78596E-13
+43;Acetyl chloride;Eau;river;kg;5.26588E-13;x;4.26775E-13;9.98124E-14
+44;Acidity, unspecified;Eau;;kg;6.29187E-11;x;5.25387E-11;1.038E-11
+45;Acidity, unspecified;Eau;river;kg;4.12427E-07;x;3.39486E-07;7.29411E-08
+46;Aclonifen;Sol;agricultural;kg;9.34753E-10;x;4.26617E-10;5.08136E-10
+47;Acrolein;Air;;kg;1.66635E-12;x;1.39145E-12;2.74904E-13
+48;Acrolein;Air;high. pop.;kg;2.67044E-09;x;1.84008E-09;8.30356E-10
+49;Acrolein;Air;low. pop.;kg;3.32074E-10;x;2.53048E-10;7.90257E-11
+50;Acrylate, ion;Eau;river;kg;1.12656E-09;x;9.31375E-10;1.95186E-10
+51;Acrylic acid;Air;high. pop.;kg;4.75992E-10;x;3.93522E-10;8.24701E-11
+52;Actinides, radioactive, unspecified;Air;low. pop.;Bq;0.000644499;x;0.000482921;0.000161578
+53;Actinides, radioactive, unspecified;Eau;ocean;Bq;0.10045136;x;0.075937998;0.024513362
+54;Aerosols, radioactive, unspecified;Air;low. pop.;Bq;0.014979848;x;0.011464411;0.003515437
+55;Aldehydes, unspecified;Air;;kg;1.22525E-11;x;1.02312E-11;2.02135E-12
+56;Aldehydes, unspecified;Air;high. pop.;kg;6.19038E-08;x;3.94952E-08;2.24086E-08
+57;Aldehydes, unspecified;Air;low. pop.;kg;2.79139E-08;x;2.08829E-08;7.03099E-09
+58;Aldrin;Sol;agricultural;kg;1.22534E-11;x;1.01293E-11;2.12407E-12
+59;Aluminium;Brut;in ground;kg;0.010735407;x;0.0102982;0.000437207
+60;Aluminium;Air;;kg;0.000211919;x;0.000186834;2.50856E-05
+61;Aluminium;Air;high. pop.;kg;5.15619E-05;x;5.11152E-05;4.46722E-07
+62;Aluminium;Air;low. pop.;kg;2.07892E-06;x;1.72396E-06;3.54968E-07
+63;Aluminium;Eau;;kg;2.48688E-07;x;1.90504E-07;5.81842E-08
+64;Aluminium;Eau;groundwater;kg;5.21533E-06;x;4.12394E-06;1.0914E-06
+65;Aluminium;Eau;ocean;kg;7.616E-05;x;5.23014E-05;2.38586E-05
+66;Aluminium;Eau;river;kg;3.6935E-05;x;2.88971E-05;8.03787E-06
+67;Aluminium;Sol;agricultural;kg;3.86288E-06;x;3.40344E-06;4.59437E-07
+68;Aluminium;Sol;industrial;kg;0.000557977;x;0.000389249;0.000168728
+69;Ammonia;Air;;kg;0.000714967;x;0.00011665;0.000598317
+70;Ammonia;Air;high. pop.;kg;1.74592E-05;x;1.28099E-05;4.64936E-06
+71;Ammonia;Air;low. pop.;kg;7.37161E-05;x;5.10131E-05;2.27031E-05
+72;Ammonium carbonate;Air;high. pop.;kg;1.31713E-08;x;1.25483E-08;6.23012E-10
+73;Ammonium, ion;Eau;;kg;3.68826E-09;x;3.07978E-09;6.08478E-10
+74;Ammonium, ion;Eau;groundwater;kg;6.81888E-07;x;5.73435E-07;1.08452E-07
+75;Ammonium, ion;Eau;ocean;kg;5.19795E-05;x;3.8144E-05;1.38355E-05
+76;Ammonium, ion;Eau;river;kg;7.95082E-05;x;5.88229E-05;2.06853E-05
+77;Anhydrite;Brut;in ground;kg;6.72234E-07;x;6.44294E-07;2.79399E-08
+78;Aniline;Air;high. pop.;kg;9.60939E-12;x;6.86325E-12;2.74614E-12
+79;Aniline;Eau;river;kg;2.31079E-11;x;1.64931E-11;6.61483E-12
+80;Anthranilic acid;Air;high. pop.;kg;8.04994E-14;x;3.72416E-14;4.32578E-14
+81;Antimony;Air;;kg;1.93918E-10;x;1.2614E-10;6.77779E-11
+82;Antimony;Air;high. pop.;kg;7.87152E-09;x;7.76317E-09;1.08346E-10
+83;Antimony;Air;low. pop.;kg;6.81461E-08;x;5.67165E-08;1.14296E-08
+84;Antimony;Eau;;kg;3.36761E-12;x;2.81204E-12;5.55574E-13
+85;Antimony;Eau;groundwater;kg;2.54995E-07;x;1.95169E-07;5.98261E-08
+86;Antimony;Eau;river;kg;4.95217E-07;x;4.50021E-07;4.51964E-08
+87;Antimony;Sol;agricultural;kg;2.48155E-12;x;2.18703E-12;2.94524E-13
+88;Antimony-122;Eau;river;Bq;4.70682E-05;x;2.20216E-05;2.50465E-05
+89;Antimony-124;Air;low. pop.;Bq;1.16748E-07;x;5.46224E-08;6.21261E-08
+90;Antimony-124;Eau;river;Bq;0.017186614;x;0.012551639;0.004634974
+91;Antimony-125;Air;low. pop.;Bq;1.21836E-06;x;5.70032E-07;6.48332E-07
+92;Antimony-125;Eau;river;Bq;0.016170188;x;0.011891142;0.004279047
+93;AOX, Adsorbable Organic Halogen as Cl;Eau;;kg;1.06025E-07;x;1.05163E-07;8.61074E-10
+94;AOX, Adsorbable Organic Halogen as Cl;Eau;ocean;kg;1.48401E-07;x;1.08929E-07;3.94721E-08
+95;AOX, Adsorbable Organic Halogen as Cl;Eau;river;kg;8.23586E-07;x;5.83907E-07;2.39679E-07
+96;Argon-41;Air;low. pop.;Bq;7.363559524;x;5.608573688;1.754985836
+97;Arsenic;Air;;kg;1.16593E-09;x;7.58617E-10;4.07314E-10
+98;Arsenic;Air;high. pop.;kg;5.67509E-07;x;4.62995E-07;1.04514E-07
+99;Arsenic;Air;low. pop.;kg;1.90846E-06;x;1.80554E-06;1.02923E-07
+100;Arsenic;Sol;agricultural;kg;9.40803E-10;x;8.15018E-10;1.25785E-10
+101;Arsenic;Sol;industrial;kg;2.23197E-07;x;1.55704E-07;6.74923E-08
+102;Arsenic, ion;Eau;;kg;2.56377E-08;x;2.127E-08;4.36772E-09
+103;Arsenic, ion;Eau;groundwater;kg;1.28098E-06;x;9.81209E-07;2.99766E-07
+104;Arsenic, ion;Eau;lake;kg;2.23163E-14;x;1.84244E-14;3.89189E-15
+105;Arsenic, ion;Eau;ocean;kg;2.59741E-07;x;1.90157E-07;6.95837E-08
+106;Arsenic, ion;Eau;river;kg;3.36341E-06;x;2.81682E-06;5.46595E-07
+107;Arsine;Air;high. pop.;kg;5.54839E-15;x;4.58709E-15;9.61305E-16
+108;Atrazine;Sol;agricultural;kg;3.21457E-12;x;2.65734E-12;5.57225E-13
+109;Barite;Eau;ocean;kg;0.004210087;x;0.003084639;0.001125449
+110;Barium;Air;;kg;4.15921E-16;x;3.08795E-16;1.07126E-16
+111;Barium;Air;high. pop.;kg;6.07106E-07;x;6.01857E-07;5.24923E-09
+112;Barium;Air;low. pop.;kg;3.13989E-07;x;2.4226E-07;7.17298E-08
+113;Barium;Eau;;kg;8.51804E-08;x;7.11273E-08;1.4053E-08
+114;Barium;Eau;groundwater;kg;8.4151E-08;x;6.72158E-08;1.69353E-08
+115;Barium;Eau;ocean;kg;0.000334778;x;0.000244589;9.01887E-05
+116;Barium;Eau;river;kg;0.000761189;x;0.000483597;0.000277592
+117;Barium;Sol;agricultural;kg;1.59272E-08;x;1.00719E-08;5.85523E-09
+118;Barium;Sol;industrial;kg;0.000278997;x;0.00019463;8.43663E-05
+119;Barium-140;Air;low. pop.;Bq;7.92528E-05;x;3.70792E-05;4.21736E-05
+120;Barium-140;Eau;river;Bq;0.000206184;x;9.6466E-05;0.000109718
+121;Baryte;Brut;in ground;kg;0.095314643;x;0.06682596;0.028488683
+122;Basalt;Brut;in ground;kg;0.001052523;x;0.000769186;0.000283336
+123;Benomyl;Sol;agricultural;kg;2.91617E-11;x;2.07243E-11;8.43741E-12
+124;Bentazone;Sol;agricultural;kg;4.77051E-10;x;2.17719E-10;2.59333E-10
+125;Benzal chloride;Air;;kg;2.11398E-16;x;1.76522E-16;3.48755E-17
+126;Benzaldehyde;Air;high. pop.;kg;1.39331E-09;x;9.60069E-10;4.33236E-10
+127;Benzene;Air;;kg;2.75697E-05;x;8.38857E-07;2.67308E-05
+128;Benzene;Air;high. pop.;kg;0.000184999;x;0.000139267;4.57318E-05
+129;Benzene;Air;low. pop.;kg;1.35011E-05;x;9.95979E-06;3.54131E-06
+130;Benzene;Air;stratosphere + troposphere;kg;1.82654E-11;x;1.76109E-11;6.54567E-13
+131;Benzene;Eau;;kg;5.01842E-10;x;4.19051E-10;8.27913E-11
+132;Benzene;Eau;ocean;kg;3.16898E-05;x;2.31532E-05;8.53657E-06
+133;Benzene;Eau;river;kg;5.70841E-05;x;3.63319E-05;2.07522E-05
+134;Benzene, 1-methyl-2-nitro-;Air;high. pop.;kg;9.52575E-14;x;4.40311E-14;5.12263E-14
+135;Benzene, 1,2-dichloro-;Air;high. pop.;kg;2.36998E-12;x;1.25334E-12;1.11664E-12
+136;Benzene, 1,2-dichloro-;Eau;river;kg;1.35343E-09;x;1.11375E-09;2.39679E-10
+137;Benzene, chloro-;Eau;river;kg;2.78355E-08;x;2.29383E-08;4.89721E-09
+138;Benzene, ethyl-;Air;high. pop.;kg;0.000144017;x;0.000133702;1.03149E-05
+139;Benzene, ethyl-;Air;low. pop.;kg;2.92603E-11;x;2.19241E-11;7.33616E-12
+140;Benzene, ethyl-;Eau;;kg;2.82053E-11;x;2.35521E-11;4.65316E-12
+141;Benzene, ethyl-;Eau;ocean;kg;9.21491E-06;x;6.73234E-06;2.48257E-06
+142;Benzene, ethyl-;Eau;river;kg;2.09414E-05;x;1.33031E-05;7.63833E-06
+143;Benzene, hexachloro-;Air;;kg;3.88913E-09;x;3.38123E-09;5.07902E-10
+144;Benzene, hexachloro-;Air;high. pop.;kg;1.60262E-11;x;1.23109E-11;3.71521E-12
+145;Benzene, pentachloro-;Air;high. pop.;kg;4.02172E-11;x;3.08931E-11;9.32405E-12
+146;Benzo(a)pyrene;Air;;kg;2.22054E-08;x;2.0637E-08;1.56838E-09
+147;Benzo(a)pyrene;Air;high. pop.;kg;6.17109E-10;x;5.11564E-10;1.05545E-10
+148;Benzo(a)pyrene;Air;low. pop.;kg;4.31967E-08;x;3.34373E-08;9.75939E-09
+149;Beryllium;Air;;kg;2.90888E-10;x;1.89219E-10;1.0167E-10
+150;Beryllium;Air;high. pop.;kg;6.17463E-09;x;6.09832E-09;7.63096E-11
+151;Beryllium;Air;low. pop.;kg;3.10699E-09;x;3.01478E-09;9.2212E-11
+152;Beryllium;Eau;;kg;2.99971E-12;x;2.50483E-12;4.94874E-13
+153;Beryllium;Eau;groundwater;kg;9.13506E-09;x;7.41041E-09;1.72465E-09
+154;Beryllium;Eau;river;kg;5.95104E-10;x;4.61578E-10;1.33526E-10
+155;BOD5, Biological Oxygen Demand;Eau;;kg;8.33568E-05;x;7.25889E-05;1.07678E-05
+156;BOD5, Biological Oxygen Demand;Eau;groundwater;kg;1.35896E-07;x;1.14354E-07;2.15419E-08
+157;BOD5, Biological Oxygen Demand;Eau;ocean;kg;0.040479874;x;0.027880205;0.01259967
+158;BOD5, Biological Oxygen Demand;Eau;river;kg;0.209491481;x;0.152612272;0.056879209
+159;Borate;Eau;river;kg;5.7107E-11;x;4.41248E-11;1.29823E-11
+160;Borax;Brut;in ground;kg;7.21748E-08;x;4.11162E-08;3.10586E-08
+161;Boron;Air;;kg;2.40071E-15;x;1.78237E-15;6.18339E-16
+162;Boron;Air;high. pop.;kg;2.29515E-06;x;2.27232E-06;2.28291E-08
+163;Boron;Air;low. pop.;kg;2.05979E-05;x;1.57934E-05;4.80452E-06
+164;Boron;Eau;;kg;9.39531E-10;x;7.84534E-10;1.54997E-10
+165;Boron;Eau;groundwater;kg;8.39403E-06;x;7.10528E-06;1.28874E-06
+166;Boron;Eau;ocean;kg;3.1872E-06;x;2.34155E-06;8.45648E-07
+167;Boron;Eau;river;kg;5.62535E-06;x;3.65309E-06;1.97227E-06
+168;Boron;Sol;;kg;2.33732E-07;x;1.57617E-07;7.61145E-08
+169;Boron;Sol;agricultural;kg;4.44165E-09;x;2.80657E-09;1.63508E-09
+170;Boron;Sol;industrial;kg;5.57977E-06;x;3.89249E-06;1.68728E-06
+171;Boron trifluoride;Air;high. pop.;kg;7.59334E-17;x;6.27771E-17;1.31563E-17
+172;Bromate;Eau;river;kg;1.431E-06;x;1.10631E-06;3.24685E-07
+173;Bromide;Eau;river;kg;8.02436E-09;x;5.8483E-09;2.17605E-09
+174;Bromine;Brut;in water;kg;8.016E-09;x;5.87753E-09;2.13846E-09
+175;Bromine;Air;;kg;1.96908E-15;x;1.46301E-15;5.06073E-16
+176;Bromine;Air;high. pop.;kg;1.01725E-07;x;9.07669E-08;1.09582E-08
+177;Bromine;Air;low. pop.;kg;2.2557E-06;x;1.73062E-06;5.25079E-07
+178;Bromine;Eau;;kg;6.41447E-08;x;5.35624E-08;1.05823E-08
+179;Bromine;Eau;groundwater;kg;5.93293E-07;x;4.54536E-07;1.38757E-07
+180;Bromine;Eau;ocean;kg;0.000268717;x;0.000196322;7.23957E-05
+181;Bromine;Eau;river;kg;0.000615533;x;0.000391726;0.000223807
+182;Butadiene;Air;;kg;4.03763E-11;x;3.89294E-11;1.44691E-12
+183;Butadiene;Air;high. pop.;kg;1.80008E-13;x;1.45888E-13;3.41193E-14
+184;Butadiene;Air;low. pop.;kg;2.84729E-12;x;2.74525E-12;1.02039E-13
+185;Butadiene;Air;stratosphere + troposphere;kg;1.73047E-11;x;1.66845E-11;6.20123E-13
+186;Butane;Air;;kg;3.02556E-09;x;2.52641E-09;4.99146E-10
+187;Butane;Air;high. pop.;kg;0.001211338;x;0.000768609;0.000442728
+188;Butane;Air;low. pop.;kg;3.13905E-05;x;2.34652E-05;7.92532E-06
+189;Butene;Air;high. pop.;kg;2.81729E-05;x;1.78652E-05;1.03077E-05
+190;Butene;Eau;river;kg;2.8174E-07;x;2.81524E-07;2.16568E-10
+191;Butyl acetate;Eau;river;kg;4.05079E-09;x;3.34697E-09;7.03812E-10
+192;Butyrolactone;Air;high. pop.;kg;2.88408E-12;x;2.38117E-12;5.02916E-13
+193;Butyrolactone;Eau;river;kg;6.92182E-12;x;5.71483E-12;1.20698E-12
+194;Cadmium;Brut;in ground;kg;8.78497E-07;x;3.13486E-07;5.65011E-07
+195;Cadmium;Air;;kg;9.66882E-08;x;1.16259E-08;8.50623E-08
+196;Cadmium;Air;high. pop.;kg;1.07217E-06;x;8.35919E-07;2.36255E-07
+197;Cadmium;Air;low. pop.;kg;1.35138E-07;x;1.10759E-07;2.43784E-08
+198;Cadmium;Air;stratosphere + troposphere;kg;9.15563E-15;x;8.82753E-15;3.28109E-16
+199;Cadmium;Sol;;kg;1.12317E-08;x;1.55922E-10;1.10758E-08
+200;Cadmium;Sol;agricultural;kg;1.90307E-09;x;1.5622E-09;3.40869E-10
+201;Cadmium, ion;Eau;;kg;1.26567E-07;x;9.70333E-08;2.95338E-08
+202;Cadmium, ion;Eau;groundwater;kg;1.05272E-08;x;8.79327E-09;1.7339E-09
+203;Cadmium, ion;Eau;lake;kg;1.89553E-14;x;1.56496E-14;3.30574E-15
+204;Cadmium, ion;Eau;ocean;kg;1.03805E-07;x;7.6148E-08;2.76566E-08
+205;Cadmium, ion;Eau;river;kg;1.51134E-07;x;1.08679E-07;4.24547E-08
+206;Calcite;Brut;in ground;kg;0.32252263;x;0.257786473;0.064736156
+207;Calcium;Air;high. pop.;kg;1.43969E-05;x;1.26941E-05;1.70278E-06
+208;Calcium;Air;low. pop.;kg;2.58742E-07;x;2.13965E-07;4.4777E-08
+209;Calcium;Sol;agricultural;kg;3.52236E-05;x;2.9771E-05;5.45257E-06
+210;Calcium;Sol;industrial;kg;0.002231967;x;0.001557044;0.000674923
+211;Calcium, ion;Eau;;kg;9.62162E-07;x;8.03428E-07;1.58734E-07
+212;Calcium, ion;Eau;groundwater;kg;0.000652314;x;0.000516636;0.000135678
+213;Calcium, ion;Eau;lake;kg;3.33918E-07;x;2.9874E-07;3.51778E-08
+214;Calcium, ion;Eau;ocean;kg;0.012161938;x;0.008884418;0.00327752
+215;Calcium, ion;Eau;river;kg;0.027739603;x;0.017902581;0.009837022
+216;Carbetamide;Sol;agricultural;kg;1.75454E-10;x;8.27608E-11;9.26928E-11
+217;Carbofuran;Sol;agricultural;kg;1.59879E-08;x;1.13621E-08;4.62572E-09
+218;Carbon;Sol;agricultural;kg;2.39935E-05;x;2.18397E-05;2.15374E-06
+219;Carbon;Sol;industrial;kg;0.001673978;x;0.001167783;0.000506195
+220;Carbon-14;Air;low. pop.;Bq;61.95459043;x;46.14030978;15.81428066
+221;Carbon dioxide, biogenic;Air;;kg;0.004884522;x;0.003539896;0.001344627
+222;Carbon dioxide, biogenic;Air;high. pop.;kg;0.091065587;x;0.075551352;0.015514235
+223;Carbon dioxide, biogenic;Air;low. pop.;kg;0.036943298;x;0.034495754;0.002447544
+224;Carbon dioxide, fossil;Air;;kg;22.39977574;x;0.52993508;21.86984066
+225;Carbon dioxide, fossil;Air;high. pop.;kg;6.972746489;x;5.542456456;1.430290033
+226;Carbon dioxide, fossil;Air;low. pop.;kg;22.63795943;x;20.88944297;1.748516459
+227;Carbon dioxide, fossil;Air;stratosphere + troposphere;kg;2.88399E-06;x;2.78064E-06;1.03354E-07
+228;Carbon dioxide, in air;Brut;in air;kg;0.140183902;x;0.120920774;0.019263128
+229;Carbon dioxide, land transformation;Air;low. pop.;kg;0.00035326;x;0.00026013;9.313E-05
+230;Carbon disulfide;Air;;kg;3.92083E-17;x;3.27399E-17;6.46837E-18
+231;Carbon disulfide;Air;high. pop.;kg;2.59056E-11;x;2.16467E-11;4.25886E-12
+232;Carbon disulfide;Air;low. pop.;kg;1.79758E-05;x;1.6183E-05;1.7928E-06
+233;Carbon disulfide;Eau;river;kg;2.93316E-11;x;2.52602E-11;4.07147E-12
+234;Carbon monoxide, biogenic;Air;high. pop.;kg;1.28936E-05;x;1.11624E-05;1.73123E-06
+235;Carbon monoxide, biogenic;Air;low. pop.;kg;0.000907509;x;0.000905752;1.75699E-06
+236;Carbon monoxide, fossil;Air;;kg;0.028912709;x;0.009163262;0.019749447
+237;Carbon monoxide, fossil;Air;high. pop.;kg;0.002552416;x;0.002207654;0.000344762
+238;Carbon monoxide, fossil;Air;low. pop.;kg;7.903304546;x;7.900634701;0.002669845
+239;Carbon monoxide, fossil;Air;stratosphere + troposphere;kg;3.38753E-09;x;3.26613E-09;1.21401E-10
+240;Carbon, in organic matter, in soil;Brut;in ground;kg;2.01942E-05;x;1.43514E-05;5.84285E-06
+241;Carbonate;Eau;river;kg;1.10579E-05;x;1.04063E-05;6.51678E-07
+242;Carboxylic acids, unspecified;Eau;ocean;kg;0.002162149;x;0.001579749;0.0005824
+243;Carboxylic acids, unspecified;Eau;river;kg;0.003210945;x;0.002039765;0.00117118
+244;Cerium-141;Air;low. pop.;Bq;1.92127E-05;x;8.98892E-06;1.02237E-05
+245;Cerium-141;Eau;river;Bq;8.24363E-05;x;3.85695E-05;4.38668E-05
+246;Cerium-144;Eau;river;Bq;2.50965E-05;x;1.17417E-05;1.33548E-05
+247;Cesium;Eau;ocean;kg;3.83886E-07;x;2.80464E-07;1.03422E-07
+248;Cesium;Eau;river;kg;8.72524E-07;x;5.54287E-07;3.18238E-07
+249;Cesium-134;Air;low. pop.;Bq;9.20172E-07;x;4.30518E-07;4.89654E-07
+250;Cesium-134;Eau;river;Bq;0.014433226;x;0.011090343;0.003342883
+251;Cesium-136;Eau;river;Bq;1.46308E-05;x;6.84526E-06;7.78556E-06
+252;Cesium-137;Air;low. pop.;Bq;1.63115E-05;x;7.63162E-06;8.6799E-06
+253;Cesium-137;Eau;ocean;Bq;11.51088065;x;8.701832519;2.809048131
+254;Cesium-137;Eau;river;Bq;0.054531614;x;0.034888131;0.019643483
+255;Chloramine;Air;high. pop.;kg;1.10782E-12;x;8.53572E-13;2.54247E-13
+256;Chloramine;Eau;river;kg;9.95146E-12;x;7.6468E-12;2.30466E-12
+257;Chlorate;Eau;river;kg;1.19332E-05;x;9.17258E-06;2.76064E-06
+258;Chloride;Eau;;kg;0.000132031;x;9.69158E-05;3.51153E-05
+259;Chloride;Eau;groundwater;kg;0.009047246;x;0.007612159;0.001435086
+260;Chloride;Eau;ocean;kg;0.192609987;x;0.140722237;0.05188775
+261;Chloride;Eau;river;kg;0.442298494;x;0.281512166;0.160786328
+262;Chloride;Sol;;kg;0.00059198;x;0.000166138;0.000425841
+263;Chloride;Sol;agricultural;kg;3.15151E-07;x;2.62915E-07;5.22358E-08
+264;Chloride;Sol;industrial;kg;0.001952921;x;0.001362356;0.000590565
+265;Chlorinated solvents, unspecified;Eau;ocean;kg;2.58261E-10;x;2.5826E-10;2.62333E-16
+266;Chlorinated solvents, unspecified;Eau;river;kg;1.59512E-08;x;1.39661E-08;1.98509E-09
+267;Chlorine;Air;;kg;3.06285E-09;x;3.03436E-09;2.8492E-11
+268;Chlorine;Air;high. pop.;kg;7.03318E-06;x;5.12137E-06;1.91181E-06
+269;Chlorine;Air;low. pop.;kg;8.19419E-09;x;6.13592E-09;2.05827E-09
+270;Chlorine;Eau;river;kg;3.48891E-07;x;3.2725E-07;2.16412E-08
+271;Chloroacetic acid;Air;high. pop.;kg;2.00906E-10;x;8.7513E-11;1.13393E-10
+272;Chloroacetic acid;Eau;river;kg;1.07872E-08;x;4.9369E-09;5.85032E-09
+273;Chloroacetyl chloride;Eau;river;kg;2.09028E-13;x;9.84095E-14;1.10619E-13
+274;Chloroform;Air;;kg;1.78397E-17;x;1.48966E-17;2.94312E-18
+275;Chloroform;Air;high. pop.;kg;1.28998E-09;x;1.02083E-09;2.69148E-10
+276;Chloroform;Air;low. pop.;kg;3.0493E-11;x;2.2848E-11;7.64502E-12
+277;Chloroform;Eau;river;kg;6.33534E-11;x;5.23316E-11;1.10218E-11
+278;Chlorosilane, trimethyl-;Air;high. pop.;kg;5.28522E-10;x;3.87065E-10;1.41456E-10
+279;Chlorosulfonic acid;Air;high. pop.;kg;7.495E-13;x;3.43245E-13;4.06255E-13
+280;Chlorosulfonic acid;Eau;river;kg;1.86907E-12;x;8.55978E-13;1.01309E-12
+281;Chlorothalonil;Sol;agricultural;kg;6.51795E-09;x;5.62101E-09;8.96946E-10
+282;Chromium;Brut;in ground;kg;0.074067296;x;0.073885094;0.000182202
+283;Chromium;Air;;kg;1.46316E-06;x;4.51125E-07;1.01203E-06
+284;Chromium;Air;high. pop.;kg;6.69594E-07;x;5.47802E-07;1.21792E-07
+285;Chromium;Air;low. pop.;kg;0.000254854;x;0.000254257;5.96454E-07
+286;Chromium;Air;stratosphere + troposphere;kg;4.57787E-14;x;4.41382E-14;1.64054E-15
+287;Chromium;Sol;;kg;5.35661E-08;x;7.43602E-10;5.28225E-08
+288;Chromium;Sol;agricultural;kg;2.86061E-08;x;2.42152E-08;4.39081E-09
+289;Chromium;Sol;industrial;kg;2.78997E-06;x;1.9463E-06;8.43663E-07
+290;Chromium-51;Air;low. pop.;Bq;1.23114E-06;x;5.76006E-07;6.55136E-07
+291;Chromium-51;Eau;river;Bq;0.022965827;x;0.013271354;0.009694473
+292;Chromium VI;Air;;kg;6.96952E-10;x;3.69081E-11;6.60044E-10
+293;Chromium VI;Air;high. pop.;kg;1.92122E-08;x;1.78609E-08;1.35121E-09
+294;Chromium VI;Air;low. pop.;kg;6.3708E-06;x;6.35546E-06;1.53413E-08
+295;Chromium VI;Eau;;kg;4.36086E-08;x;3.64151E-08;7.1935E-09
+296;Chromium VI;Eau;groundwater;kg;7.59337E-07;x;5.81485E-07;1.77852E-07
+297;Chromium VI;Eau;river;kg;2.13517E-05;x;1.88208E-05;2.53086E-06
+298;Chromium VI;Sol;;kg;1.32056E-06;x;8.90365E-07;4.30191E-07
+299;Chromium, ion;Eau;;kg;3.7851E-07;x;2.74566E-07;1.03944E-07
+300;Chromium, ion;Eau;groundwater;kg;7.70117E-10;x;4.7238E-10;2.97736E-10
+301;Chromium, ion;Eau;ocean;kg;1.84524E-06;x;1.35556E-06;4.89676E-07
+302;Chromium, ion;Eau;river;kg;1.62726E-06;x;9.51799E-07;6.75459E-07
+303;Chrysotile;Brut;in ground;kg;2.71369E-07;x;2.09294E-07;6.20748E-08
+304;Cinnabar;Brut;in ground;kg;2.53871E-08;x;1.96398E-08;5.74726E-09
+305;Clay;Brut;in ground;kg;0.08134271;x;0.06199035;0.019352361
+306;Clay, bentonite;Brut;in ground;kg;0.00953194;x;0.007222149;0.002309791
+307;Coal, brown;Brut;in ground;kg;0.797001294;x;0.609344743;0.187656551
+308;Coal, hard;Brut;in ground;kg;0.945660513;x;0.796117516;0.149542997
+309;Cobalt;Brut;in ground;kg;2.12656E-07;x;1.50615E-08;1.97595E-07
+310;Cobalt;Air;;kg;3.88062E-10;x;2.52472E-10;1.35589E-10
+311;Cobalt;Air;high. pop.;kg;1.15206E-06;x;9.06781E-07;2.45279E-07
+312;Cobalt;Air;low. pop.;kg;3.02473E-06;x;3.00416E-06;2.05682E-08
+313;Cobalt;Eau;;kg;6.63151E-12;x;5.53748E-12;1.09403E-12
+314;Cobalt;Eau;groundwater;kg;9.36264E-08;x;7.46644E-08;1.8962E-08
+315;Cobalt;Eau;ocean;kg;3.4675E-10;x;2.62131E-10;8.46195E-11
+316;Cobalt;Eau;river;kg;7.74475E-07;x;6.75184E-07;9.92916E-08
+317;Cobalt;Sol;agricultural;kg;2.61396E-09;x;2.30671E-09;3.07251E-10
+318;Cobalt-57;Eau;river;Bq;0.000464433;x;0.000217291;0.000247141
+319;Cobalt-58;Air;low. pop.;Bq;1.71443E-06;x;8.02121E-07;9.12305E-07
+320;Cobalt-58;Eau;river;Bq;0.153820864;x;0.100007916;0.053812948
+321;Cobalt-60;Air;low. pop.;Bq;1.51454E-05;x;7.08596E-06;8.05939E-06
+322;Cobalt-60;Eau;river;Bq;0.122868609;x;0.077993441;0.044875169
+323;COD, Chemical Oxygen Demand;Eau;;kg;0.000116156;x;0.000105128;1.10277E-05
+324;COD, Chemical Oxygen Demand;Eau;groundwater;kg;1.35896E-07;x;1.14354E-07;2.15419E-08
+325;COD, Chemical Oxygen Demand;Eau;ocean;kg;0.041129403;x;0.028356845;0.012772558
+326;COD, Chemical Oxygen Demand;Eau;river;kg;0.211039197;x;0.1536469;0.057392298
+327;Colemanite;Brut;in ground;kg;5.26787E-06;x;4.13718E-06;1.13069E-06
+328;Copper;Air;;kg;5.51506E-05;x;3.20388E-07;5.48302E-05
+329;Copper;Air;high. pop.;kg;1.98204E-06;x;1.55757E-06;4.24469E-07
+330;Copper;Air;low. pop.;kg;1.13327E-05;x;1.09319E-05;4.00834E-07
+331;Copper;Air;stratosphere + troposphere;kg;1.55642E-12;x;1.50065E-12;5.57761E-14
+332;Copper;Sol;;kg;1.57596E-06;x;5.66253E-07;1.0097E-06
+333;Copper;Sol;agricultural;kg;5.15018E-08;x;4.65492E-08;4.95264E-09
+334;Copper;Sol;industrial;kg;1.32902E-08;x;7.82466E-09;5.46551E-09
+335;Copper, 0.99% in sulfide, Cu 0.36% and Mo 8.2E-3% in crude ore, in ground;Brut;in ground;kg;9.30357E-05;x;7.72248E-05;1.58109E-05
+336;Copper, 1.18% in sulfide, Cu 0.39% and Mo 8.2E-3% in crude ore, in ground;Brut;in ground;kg;0.000513261;x;0.000426261;8.69997E-05
+337;Copper, 1.42% in sulfide, Cu 0.81% and Mo 8.2E-3% in crude ore, in ground;Brut;in ground;kg;0.000136153;x;0.000113075;2.30778E-05
+338;Copper, 2.19% in sulfide, Cu 1.83% and Mo 8.2E-3% in crude ore, in ground;Brut;in ground;kg;0.000677318;x;0.000562498;0.00011482
+339;Copper, ion;Eau;;kg;1.0537E-06;x;2.63346E-07;7.90357E-07
+340;Copper, ion;Eau;groundwater;kg;7.17264E-08;x;5.84029E-08;1.33236E-08
+341;Copper, ion;Eau;lake;kg;8.60369E-13;x;7.10324E-13;1.50045E-13
+342;Copper, ion;Eau;ocean;kg;4.03733E-07;x;2.98531E-07;1.05202E-07
+343;Copper, ion;Eau;river;kg;1.06381E-06;x;8.97826E-07;1.65984E-07
+344;Cumene;Air;;kg;1.601E-18;x;1.33687E-18;2.64129E-19
+345;Cumene;Air;high. pop.;kg;1.80162E-06;x;1.13868E-06;6.62944E-07
+346;Cumene;Air;low. pop.;kg;1.69403E-12;x;1.26931E-12;4.24726E-13
+347;Cumene;Eau;river;kg;4.32928E-06;x;2.73625E-06;1.59303E-06
+348;Cyanide;Air;;kg;7.54751E-16;x;6.30238E-16;1.24513E-16
+349;Cyanide;Air;high. pop.;kg;6.58234E-08;x;4.97359E-08;1.60876E-08
+350;Cyanide;Air;low. pop.;kg;2.85405E-06;x;2.83734E-06;1.67111E-08
+351;Cyanide;Eau;;kg;2.55714E-07;x;2.12146E-07;4.35679E-08
+352;Cyanide;Eau;ocean;kg;1.43141E-06;x;1.05646E-06;3.74945E-07
+353;Cyanide;Eau;river;kg;2.28654E-06;x;1.67311E-06;6.13431E-07
+354;Cyanoacetic acid;Air;high. pop.;kg;6.13811E-13;x;2.81107E-13;3.32704E-13
+355;Cypermethrin;Sol;agricultural;kg;2.26154E-09;x;1.60635E-09;6.55192E-10
+356;Diatomite;Brut;in ground;kg;3.11717E-10;x;1.18862E-10;1.92854E-10
+357;Dichromate;Eau;river;kg;3.44302E-08;x;2.32192E-08;1.1211E-08
+358;Diethylamine;Air;high. pop.;kg;4.29668E-12;x;3.06036E-12;1.23632E-12
+359;Diethylamine;Eau;river;kg;1.03121E-11;x;7.34499E-12;2.9671E-12
+360;Dimethyl malonate;Air;high. pop.;kg;7.69713E-13;x;3.52506E-13;4.17208E-13
+361;Dimethylamine;Eau;river;kg;9.03212E-12;x;5.20928E-12;3.82284E-12
+362;Dinitrogen monoxide;Air;;kg;0.000848258;x;2.56324E-05;0.000822626
+363;Dinitrogen monoxide;Air;high. pop.;kg;8.29539E-05;x;6.37644E-05;1.91895E-05
+364;Dinitrogen monoxide;Air;low. pop.;kg;9.04423E-05;x;6.02181E-05;3.02243E-05
+365;Dinitrogen monoxide;Air;stratosphere + troposphere;kg;2.74666E-11;x;2.64822E-11;9.84327E-13
+366;Dioxin, 2,3,7,8 Tetrachlorodibenzo-p-;Air;;kg;2.89617E-12;x;2.41981E-12;4.76358E-13
+367;Dioxin, 2,3,7,8 Tetrachlorodibenzo-p-;Air;high. pop.;kg;3.28555E-13;x;2.71176E-13;5.73789E-14
+368;Dioxin, 2,3,7,8 Tetrachlorodibenzo-p-;Air;low. pop.;kg;1.7308E-12;x;1.61741E-12;1.13393E-13
+369;Dipropylamine;Air;high. pop.;kg;2.70867E-12;x;1.93827E-12;7.70402E-13
+370;Dipropylamine;Eau;river;kg;6.50097E-12;x;4.65196E-12;1.84901E-12
+371;DOC, Dissolved Organic Carbon;Eau;;kg;3.50111E-05;x;3.32879E-05;1.7232E-06
+372;DOC, Dissolved Organic Carbon;Eau;lake;kg;5.3111E-08;x;3.38524E-08;1.92587E-08
+373;DOC, Dissolved Organic Carbon;Eau;ocean;kg;0.013359775;x;0.009294441;0.004065334
+374;DOC, Dissolved Organic Carbon;Eau;river;kg;0.062759111;x;0.045248292;0.017510819
+375;Dolomite;Brut;in ground;kg;0.001131135;x;0.000967126;0.00016401
+376;Energy, gross calorific value, in biomass;Brut;biotic;MJ;1.424057838;x;1.245112638;0.1789452
+377;Energy, gross calorific value, in biomass, primary forest;Brut;biotic;MJ;0.001400091;x;0.000995008;0.000405083
+378;Energy, kinetic (in wind), converted;Brut;in air;MJ;0.345565538;x;0.268591105;0.076974433
+379;Energy, potential (in hydropower reservoir), converted;Brut;in water;MJ;5.540086832;x;4.905262478;0.634824354
+380;Energy, solar, converted;Brut;in air;MJ;0.004793567;x;0.003580782;0.001212785
+381;Ethane;Air;;kg;4.47632E-09;x;3.73784E-09;7.38479E-10
+382;Ethane;Air;high. pop.;kg;0.000306594;x;0.000197869;0.000108726
+383;Ethane;Air;low. pop.;kg;0.000215543;x;0.000178196;3.73473E-05
+384;Ethane, 1,1-difluoro-, HFC-152a;Air;high. pop.;kg;1.76196E-09;x;1.31799E-09;4.43967E-10
+385;Ethane, 1,1,1-trichloro-, HCFC-140;Air;;kg;3.29999E-17;x;2.75557E-17;5.4442E-18
+386;Ethane, 1,1,1-trichloro-, HCFC-140;Air;low. pop.;kg;6.22164E-12;x;4.66174E-12;1.5599E-12
+387;Ethane, 1,1,1,2-tetrafluoro-, HFC-134a;Air;;kg;7.22712E-07;x;1.88677E-07;5.34036E-07
+388;Ethane, 1,1,1,2-tetrafluoro-, HFC-134a;Air;high. pop.;kg;6.06699E-11;x;4.9542E-11;1.11279E-11
+389;Ethane, 1,1,1,2-tetrafluoro-, HFC-134a;Air;low. pop.;kg;1.49313E-09;x;1.11858E-09;3.74555E-10
+390;Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113;Air;high. pop.;kg;2.25899E-11;x;1.86759E-11;3.91397E-12
+391;Ethane, 1,2-dichloro-;Air;high. pop.;kg;5.31776E-07;x;4.83785E-07;4.79905E-08
+392;Ethane, 1,2-dichloro-;Air;low. pop.;kg;1.2428E-11;x;9.31206E-12;3.1159E-12
+393;Ethane, 1,2-dichloro-;Eau;river;kg;1.49062E-08;x;1.11083E-08;3.79797E-09
+394;Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114;Air;low. pop.;kg;2.56933E-08;x;1.90419E-08;6.65141E-09
+395;Ethane, hexafluoro-, HFC-116;Air;;kg;1.41251E-07;x;1.32134E-07;9.11714E-09
+396;Ethane, hexafluoro-, HFC-116;Air;high. pop.;kg;1.60022E-09;x;1.31954E-09;2.80682E-10
+397;Ethanol;Air;high. pop.;kg;1.95101E-06;x;1.39975E-06;5.51258E-07
+398;Ethanol;Air;low. pop.;kg;8.9533E-09;x;6.66124E-09;2.29206E-09
+399;Ethanol;Eau;river;kg;7.36257E-09;x;6.02921E-09;1.33336E-09
+400;Ethene;Air;high. pop.;kg;7.22352E-05;x;5.1058E-05;2.11772E-05
+401;Ethene;Air;low. pop.;kg;1.69243E-05;x;1.59015E-05;1.02281E-06
+402;Ethene;Eau;river;kg;1.69312E-06;x;1.02828E-06;6.6484E-07
+403;Ethene, chloro-;Air;;kg;1.20893E-17;x;1.00948E-17;1.99446E-18
+404;Ethene, chloro-;Air;high. pop.;kg;2.48698E-07;x;2.34542E-07;1.41557E-08
+405;Ethene, chloro-;Eau;river;kg;5.14336E-10;x;3.92444E-10;1.21892E-10
+406;Ethene, tetrachloro-;Air;;kg;2.61386E-14;x;2.18263E-14;4.31229E-15
+407;Ethene, tetrachloro-;Air;high. pop.;kg;1.55304E-12;x;1.16728E-12;3.85764E-13
+408;Ethene, tetrachloro-;Air;low. pop.;kg;1.33674E-11;x;1.00159E-11;3.35147E-12
+409;Ethyl acetate;Air;high. pop.;kg;8.58712E-07;x;7.09514E-07;1.49197E-07
+410;Ethyl acetate;Eau;river;kg;1.14383E-11;x;8.20711E-12;3.23123E-12
+411;Ethyl cellulose;Air;high. pop.;kg;1.72792E-09;x;1.42857E-09;2.99354E-10
+412;Ethylamine;Air;high. pop.;kg;6.18875E-13;x;4.77988E-13;1.40887E-13
+413;Ethylamine;Eau;river;kg;1.48532E-12;x;1.1472E-12;3.38125E-13
+414;Ethylene diamine;Air;high. pop.;kg;7.29674E-12;x;5.57711E-12;1.71963E-12
+415;Ethylene diamine;Eau;river;kg;1.75718E-11;x;1.34193E-11;4.15256E-12
+416;Ethylene oxide;Air;;kg;3.90306E-10;x;3.76319E-10;1.39872E-11
+417;Ethylene oxide;Air;high. pop.;kg;2.2085E-08;x;1.36245E-08;8.4605E-09
+418;Ethylene oxide;Air;low. pop.;kg;2.75241E-11;x;2.65377E-11;9.86368E-13
+419;Ethylene oxide;Air;stratosphere + troposphere;kg;1.67266E-10;x;1.61271E-10;5.99444E-12
+420;Ethylene oxide;Eau;river;kg;5.88044E-10;x;4.72198E-10;1.15846E-10
+421;Ethyne;Air;;kg;3.46694E-09;x;2.68593E-09;7.8101E-10
+422;Ethyne;Air;high. pop.;kg;2.4091E-06;x;2.38819E-06;2.09162E-08
+423;Ethyne;Air;low. pop.;kg;2.15207E-07;x;1.74789E-07;4.0418E-08
+424;Feldspar;Brut;in ground;kg;7.58866E-10;x;6.18057E-10;1.40809E-10
+425;Fenpiclonil;Sol;agricultural;kg;2.88777E-10;x;2.35953E-10;5.28247E-11
+426;Fluoride;Eau;;kg;1.03273E-06;x;7.41483E-07;2.91245E-07
+427;Fluoride;Eau;groundwater;kg;4.45228E-06;x;3.6451E-06;8.07177E-07
+428;Fluoride;Eau;ocean;kg;4.20257E-05;x;3.08214E-05;1.12043E-05
+429;Fluoride;Eau;river;kg;5.6682E-05;x;3.66894E-05;1.99926E-05
+430;Fluoride;Sol;;kg;8.93435E-07;x;6.0247E-07;2.90966E-07
+431;Fluoride;Sol;industrial;kg;2.78997E-05;x;1.9463E-05;8.43663E-06
+432;Fluorine;Air;;kg;4.46205E-11;x;3.26165E-11;1.2004E-11
+433;Fluorine;Air;high. pop.;kg;3.77466E-08;x;3.14992E-08;6.24741E-09
+434;Fluorine;Air;low. pop.;kg;1.01223E-06;x;1.00041E-06;1.18211E-08
+435;Fluorine, 4.5% in apatite, 1% in crude ore, in ground;Brut;in ground;kg;5.65824E-05;x;4.07447E-05;1.58377E-05
+436;Fluorine, 4.5% in apatite, 3% in crude ore, in ground;Brut;in ground;kg;2.50008E-05;x;1.79838E-05;7.01693E-06
+437;Fluorspar;Brut;in ground;kg;0.00171524;x;0.001255557;0.000459683
+438;Fluosilicic acid;Air;high. pop.;kg;1.65091E-07;x;1.54436E-07;1.06555E-08
+439;Fluosilicic acid;Eau;river;kg;2.97157E-07;x;2.77978E-07;1.91795E-08
+440;Formaldehyde;Air;;kg;0.000458955;x;8.78529E-07;0.000458077
+441;Formaldehyde;Air;high. pop.;kg;4.58884E-06;x;3.56019E-06;1.02865E-06
+442;Formaldehyde;Air;low. pop.;kg;1.06319E-06;x;8.07482E-07;2.55708E-07
+443;Formaldehyde;Air;stratosphere + troposphere;kg;1.44211E-10;x;1.39044E-10;5.16792E-12
+444;Formaldehyde;Eau;;kg;1.06025E-05;x;1.05163E-05;8.61074E-08
+445;Formaldehyde;Eau;river;kg;9.10103E-09;x;8.4184E-09;6.82631E-10
+446;Formamide;Air;high. pop.;kg;5.10824E-13;x;4.14001E-13;9.68232E-14
+447;Formamide;Eau;river;kg;1.22601E-12;x;9.93626E-13;2.32384E-13
+448;Formate;Eau;river;kg;1.72716E-10;x;9.12115E-11;8.15041E-11
+449;Formic acid;Air;high. pop.;kg;1.06904E-09;x;8.83855E-10;1.8518E-10
+450;Formic acid;Air;low. pop.;kg;9.12073E-08;x;6.48189E-08;2.63884E-08
+451;Formic acid;Eau;river;kg;3.55892E-13;x;2.88435E-13;6.74566E-14
+452;Furan;Air;;kg;2.56817E-18;x;2.14449E-18;4.23677E-19
+453;Furan;Air;low. pop.;kg;2.58994E-08;x;1.84062E-08;7.49321E-09
+454;Gallium;Brut;in ground;kg;1.3571E-11;x;1.01501E-11;3.42085E-12
+455;Gas, mine, off-gas, process, coal mining/m3;Brut;in ground;m3;0.009167435;x;0.007706136;0.001461298
+456;Gas, natural/m3;Brut;in ground;m3;1.603823315;x;1.05140544;0.552417875
+457;Glutaraldehyde;Eau;ocean;kg;5.19753E-07;x;3.80818E-07;1.38935E-07
+458;Glyphosate;Sol;agricultural;kg;4.57827E-08;x;2.64806E-08;1.93022E-08
+459;Glyphosate;Sol;industrial;kg;1.09823E-07;x;4.76721E-08;6.21506E-08
+460;Gold;Brut;in ground;kg;3.71646E-09;x;3.07256E-09;6.43904E-10
+461;Gold, Au 1.1E-4%, Ag 4.2E-3%, in ore, in ground;Brut;in ground;kg;1.69267E-09;x;1.3994E-09;2.93264E-10
+462;Gold, Au 1.3E-4%, Ag 4.6E-5%, in ore, in ground;Brut;in ground;kg;3.104E-09;x;2.56622E-09;5.37784E-10
+463;Gold, Au 2.1E-4%, Ag 2.1E-4%, in ore, in ground;Brut;in ground;kg;5.67657E-09;x;4.69308E-09;9.8349E-10
+464;Gold, Au 4.3E-4%, in ore, in ground;Brut;in ground;kg;1.40687E-09;x;1.16312E-09;2.43751E-10
+465;Gold, Au 4.9E-5%, in ore, in ground;Brut;in ground;kg;3.36965E-09;x;2.78584E-09;5.83806E-10
+466;Gold, Au 6.7E-4%, in ore, in ground;Brut;in ground;kg;5.21679E-09;x;4.31295E-09;9.03839E-10
+467;Gold, Au 7.1E-4%, in ore, in ground;Brut;in ground;kg;5.88236E-09;x;4.8632E-09;1.01916E-09
+468;Gold, Au 9.7E-4%, Ag 9.7E-4%, Zn 0.63%, Cu 0.38%, Pb 0.014%, in ore, in ground;Brut;in ground;kg;3.52488E-10;x;2.91417E-10;6.10709E-11
+469;Granite;Brut;in ground;kg;3.69753E-12;x;3.16203E-12;5.35497E-13
+470;Gravel;Brut;in ground;kg;1.612990477;x;0.975924149;0.637066328
+471;Gypsum;Brut;in ground;kg;1.22612E-06;x;9.03864E-07;3.22253E-07
+472;Heat, waste;Air;;MJ;327.1783967;x;12.83359674;314.3448
+473;Heat, waste;Air;high. pop.;MJ;100.7477524;x;80.21863439;20.52911803
+474;Heat, waste;Air;low. pop.;MJ;76.82996013;x;49.97646833;26.8534918
+475;Heat, waste;Air;stratosphere + troposphere;MJ;4.17498E-05;x;4.02536E-05;1.49621E-06
+476;Heat, waste;Eau;;MJ;0.046379163;x;0.043467051;0.002912112
+477;Heat, waste;Eau;ocean;MJ;0.000366433;x;0.000272054;9.43793E-05
+478;Heat, waste;Eau;river;MJ;24.0467313;x;18.41703477;5.629696525
+479;Heat, waste;Sol;;MJ;0.200926607;x;0.121710201;0.079216407
+480;Heat, waste;Sol;industrial;MJ;0.006583169;x;0.00482718;0.00175599
+481;Helium;Air;;kg;1.24732E-14;x;9.05431E-15;3.41884E-15
+482;Helium;Air;low. pop.;kg;7.10202E-05;x;3.15291E-05;3.94911E-05
+483;Heptane;Air;high. pop.;kg;0.000280553;x;0.000177477;0.000103076
+484;Hexane;Air;;kg;2.59097E-09;x;2.16351E-09;4.27459E-10
+485;Hexane;Air;high. pop.;kg;0.000675848;x;0.000454762;0.000221085
+486;Hexane;Air;low. pop.;kg;5.9632E-07;x;4.46108E-07;1.50212E-07
+487;Hydrocarbons, aliphatic, alkanes, cyclic;Air;high. pop.;kg;3.27917E-08;x;2.14859E-08;1.13058E-08
+488;Hydrocarbons, aliphatic, alkanes, cyclic;Air;low. pop.;kg;1.80183E-10;x;1.35007E-10;4.51752E-11
+489;Hydrocarbons, aliphatic, alkanes, unspecified;Air;;kg;4.08197E-05;x;3.33575E-05;7.4622E-06
+490;Hydrocarbons, aliphatic, alkanes, unspecified;Air;high. pop.;kg;0.003052256;x;0.003040435;1.18211E-05
+491;Hydrocarbons, aliphatic, alkanes, unspecified;Air;low. pop.;kg;1.03593E-05;x;8.25272E-06;2.10656E-06
+492;Hydrocarbons, aliphatic, alkanes, unspecified;Eau;ocean;kg;4.99058E-05;x;3.64607E-05;1.34452E-05
+493;Hydrocarbons, aliphatic, alkanes, unspecified;Eau;river;kg;0.000113429;x;7.20569E-05;4.13717E-05
+494;Hydrocarbons, aliphatic, unsaturated;Air;;kg;7.40103E-16;x;5.4948E-16;1.90624E-16
+495;Hydrocarbons, aliphatic, unsaturated;Air;high. pop.;kg;0.000556419;x;0.000555956;4.62817E-07
+496;Hydrocarbons, aliphatic, unsaturated;Air;low. pop.;kg;3.25597E-06;x;2.51725E-06;7.38725E-07
+497;Hydrocarbons, aliphatic, unsaturated;Eau;ocean;kg;4.60671E-06;x;3.36559E-06;1.24112E-06
+498;Hydrocarbons, aliphatic, unsaturated;Eau;river;kg;1.04704E-05;x;6.65142E-06;3.81894E-06
+499;Hydrocarbons, aromatic;Air;;kg;1.4998E-05;x;1.30386E-05;1.95944E-06
+500;Hydrocarbons, aromatic;Air;high. pop.;kg;0.000561542;x;0.000561203;3.39598E-07
+501;Hydrocarbons, aromatic;Air;low. pop.;kg;3.78014E-06;x;3.05517E-06;7.24972E-07
+502;Hydrocarbons, aromatic;Eau;ocean;kg;0.000211357;x;0.000154452;5.69049E-05
+503;Hydrocarbons, aromatic;Eau;river;kg;0.000458805;x;0.000291147;0.000167657
+504;Hydrocarbons, chlorinated;Air;;kg;4.12745E-07;x;3.9116E-07;2.15854E-08
+505;Hydrocarbons, chlorinated;Air;high. pop.;kg;4.19752E-07;x;4.18808E-07;9.44774E-10
+506;Hydrocarbons, chlorinated;Air;low. pop.;kg;6.31412E-11;x;4.73102E-11;1.5831E-11
+507;Hydrocarbons, unspecified;Eau;;kg;1.13345E-06;x;9.55374E-07;1.78075E-07
+508;Hydrocarbons, unspecified;Eau;ocean;kg;8.03833E-05;x;5.92731E-05;2.11102E-05
+509;Hydrocarbons, unspecified;Eau;river;kg;5.9921E-06;x;5.32609E-06;6.66011E-07
+510;Hydrogen;Air;;kg;2.99559E-07;x;1.77288E-07;1.22271E-07
+511;Hydrogen;Air;high. pop.;kg;4.99635E-05;x;3.71575E-05;1.2806E-05
+512;Hydrogen-3, Tritium;Air;low. pop.;Bq;353.4856785;x;268.2884444;85.1972341
+513;Hydrogen-3, Tritium;Eau;ocean;Bq;23915.21542;x;18079.05654;5836.158885
+514;Hydrogen-3, Tritium;Eau;river;Bq;2577.252279;x;1945.640305;631.6119738
+515;Hydrogen chloride;Air;;kg;4.16408E-05;x;3.12803E-05;1.03605E-05
+516;Hydrogen chloride;Air;high. pop.;kg;0.000247674;x;0.000234684;1.29901E-05
+517;Hydrogen chloride;Air;low. pop.;kg;0.000163852;x;0.000129728;3.41237E-05
+518;Hydrogen chloride;Air;stratosphere + troposphere;kg;7.87389E-13;x;7.59171E-13;2.82176E-14
+519;Hydrogen fluoride;Air;;kg;6.74835E-06;x;5.96705E-06;7.813E-07
+520;Hydrogen fluoride;Air;high. pop.;kg;1.11066E-05;x;9.91812E-06;1.18847E-06
+521;Hydrogen fluoride;Air;low. pop.;kg;3.06658E-05;x;2.35723E-05;7.09356E-06
+522;Hydrogen peroxide;Air;high. pop.;kg;1.28324E-09;x;1.06064E-09;2.22602E-10
+523;Hydrogen peroxide;Eau;river;kg;1.41374E-08;x;1.17586E-08;2.37883E-09
+524;Hydrogen sulfide;Air;;kg;4.69643E-06;x;3.75853E-06;9.37904E-07
+525;Hydrogen sulfide;Air;high. pop.;kg;5.72835E-09;x;3.94604E-09;1.78231E-09
+526;Hydrogen sulfide;Air;low. pop.;kg;1.49902E-05;x;1.2911E-05;2.07924E-06
+527;Hydrogen sulfide;Eau;river;kg;3.09916E-07;x;2.56059E-07;5.38576E-08
+528;Hydroxide;Eau;river;kg;3.70288E-08;x;3.04806E-08;6.54812E-09
+529;Hypochlorite;Eau;ocean;kg;6.9549E-07;x;5.33331E-07;1.62158E-07
+530;Hypochlorite;Eau;river;kg;6.62843E-07;x;5.08124E-07;1.54718E-07
+531;Indium;Brut;in ground;kg;1.53087E-08;x;5.72282E-09;9.58583E-09
+532;Iodide;Eau;groundwater;kg;7.21307E-08;x;5.52679E-08;1.68628E-08
+533;Iodide;Eau;ocean;kg;3.83886E-05;x;2.80464E-05;1.03422E-05
+534;Iodide;Eau;river;kg;8.73673E-05;x;5.5528E-05;3.18394E-05
+535;Iodine;Brut;in water;kg;2.64013E-09;x;1.91175E-09;7.28374E-10
+536;Iodine;Air;;kg;1.00158E-15;x;7.43604E-16;2.57972E-16
+537;Iodine;Air;high. pop.;kg;5.4874E-08;x;5.44138E-08;4.60185E-10
+538;Iodine;Air;low. pop.;kg;1.20845E-06;x;9.25655E-07;2.8279E-07
+539;Iodine-129;Air;low. pop.;Bq;0.06184355;x;0.046752055;0.015091495
+540;Iodine-131;Air;low. pop.;Bq;2.908200363;x;2.219535176;0.688665187
+541;Iodine-131;Eau;river;Bq;0.00321004;x;0.00229111;0.00091893
+542;Iodine-133;Air;low. pop.;Bq;0.000169165;x;9.95755E-05;6.95893E-05
+543;Iodine-133;Eau;river;Bq;0.000129438;x;6.05589E-05;6.88788E-05
+544;Iodine-135;Air;low. pop.;Bq;0.000161375;x;0.00011981;4.15646E-05
+545;Iron;Brut;in ground;kg;0.338230379;x;0.280607191;0.057623188
+546;Iron;Air;;kg;3.16385E-06;x;2.76393E-06;3.99919E-07
+547;Iron;Air;high. pop.;kg;2.68357E-05;x;2.53596E-05;1.47613E-06
+548;Iron;Air;low. pop.;kg;2.44853E-06;x;2.29795E-06;1.5058E-07
+549;Iron;Sol;;kg;0.000211421;x;9.31878E-05;0.000118233
+550;Iron;Sol;agricultural;kg;1.80939E-05;x;1.68277E-05;1.26621E-06
+551;Iron;Sol;industrial;kg;0.001115978;x;0.00077851;0.000337467
+552;Iron-59;Eau;river;Bq;3.55854E-05;x;1.66491E-05;1.89363E-05
+553;Iron, ion;Eau;;kg;5.63836E-05;x;4.12173E-05;1.51662E-05
+554;Iron, ion;Eau;groundwater;kg;0.001291598;x;0.000989824;0.000301774
+555;Iron, ion;Eau;ocean;kg;2.05829E-05;x;1.50495E-05;5.53344E-06
+556;Iron, ion;Eau;river;kg;0.000127009;x;9.33491E-05;3.36597E-05
+557;Isocyanic acid;Air;high. pop.;kg;3.64492E-08;x;2.37224E-08;1.27268E-08
+558;Isoprene;Air;;kg;3.43076E-17;x;2.86478E-17;5.65981E-18
+559;Isoprene;Air;low. pop.;kg;1.20182E-09;x;8.54099E-10;3.47718E-10
+560;Isopropylamine;Air;high. pop.;kg;1.55928E-13;x;1.05406E-13;5.05225E-14
+561;Isopropylamine;Eau;river;kg;3.74235E-13;x;2.52979E-13;1.21256E-13
+562;Kaolinite;Brut;in ground;kg;0.000104701;x;0.000100678;4.02339E-06
+563;Kieserite;Brut;in ground;kg;1.17982E-07;x;6.58123E-08;5.21699E-08
+564;Krypton-85;Air;low. pop.;Bq;23.07359553;x;17.55767081;5.515924721
+565;Krypton-85m;Air;low. pop.;Bq;1.509338747;x;0.815319593;0.694019154
+566;Krypton-87;Air;low. pop.;Bq;0.533140512;x;0.332244047;0.200896466
+567;Krypton-88;Air;low. pop.;Bq;0.553950075;x;0.323952567;0.229997508
+568;Krypton-89;Air;low. pop.;Bq;0.160953434;x;0.080697465;0.080255969
+569;Lactic acid;Air;high. pop.;kg;2.12188E-12;x;1.5184E-12;6.03481E-13
+570;Lactic acid;Eau;river;kg;5.09245E-12;x;3.64409E-12;1.44836E-12
+571;Lanthanum-140;Air;low. pop.;Bq;6.77343E-06;x;3.1691E-06;3.60434E-06
+572;Lanthanum-140;Eau;river;Bq;0.000219607;x;0.000102745;0.000116861
+573;Lead;Brut;in ground;kg;0.000104035;x;5.38137E-05;5.02213E-05
+574;Lead;Air;;kg;4.22143E-06;x;1.23904E-06;2.98238E-06
+575;Lead;Air;high. pop.;kg;2.46503E-06;x;1.88724E-06;5.77793E-07
+576;Lead;Air;low. pop.;kg;8.89305E-06;x;8.61406E-06;2.78997E-07
+577;Lead;Air;stratosphere + troposphere;kg;1.83122E-14;x;1.7656E-14;6.56229E-16
+578;Lead;Eau;;kg;6.93557E-07;x;2.00735E-07;4.92822E-07
+579;Lead;Eau;groundwater;kg;4.38471E-09;x;3.65146E-09;7.33248E-10
+580;Lead;Eau;lake;kg;5.61652E-14;x;4.63702E-14;9.79497E-15
+581;Lead;Eau;ocean;kg;2.87064E-06;x;2.10845E-06;7.62193E-07
+582;Lead;Eau;river;kg;2.75552E-06;x;1.73336E-06;1.02216E-06
+583;Lead;Sol;;kg;4.62229E-07;x;6.41658E-09;4.55812E-07
+584;Lead;Sol;agricultural;kg;1.66397E-08;x;1.47963E-08;1.84344E-09
+585;Lead-210;Air;;Bq;4.15921E-10;x;3.08795E-10;1.07126E-10
+586;Lead-210;Air;high. pop.;Bq;0.223821359;x;0.22194669;0.001874669
+587;Lead-210;Air;low. pop.;Bq;0.315053671;x;0.24019517;0.0748585
+588;Lead-210;Eau;;Bq;8.65958E-05;x;7.23097E-05;1.42862E-05
+589;Lead-210;Eau;groundwater;Bq;0.000546352;x;0.000393463;0.000152889
+590;Lead-210;Eau;ocean;Bq;0.645625147;x;0.464739134;0.180886013
+591;Lead-210;Eau;river;Bq;0.140728368;x;0.108857762;0.031870605
+592;Linuron;Sol;agricultural;kg;7.20413E-09;x;3.28893E-09;3.9152E-09
+593;Lithium;Brut;in ground;kg;1.47784E-11;x;1.19772E-11;2.80113E-12
+594;Lithium, ion;Eau;;kg;3.21668E-07;x;2.68601E-07;5.30667E-08
+595;Lithium, ion;Eau;river;kg;2.33859E-11;x;1.89533E-11;4.43264E-12
+596;m-Xylene;Air;high. pop.;kg;9.00878E-08;x;7.51814E-08;1.49063E-08
+597;m-Xylene;Eau;;kg;9.06511E-12;x;7.56957E-12;1.49554E-12
+598;m-Xylene;Eau;river;kg;1.29726E-12;x;1.05994E-12;2.37326E-13
+599;Magnesite;Brut;in ground;kg;0.005712808;x;0.004958825;0.000753984
+600;Magnesium;Brut;in water;kg;0.007831116;x;0.007831108;7.95466E-09
+601;Magnesium;Air;;kg;6.20798E-12;x;5.18382E-12;1.02417E-12
+602;Magnesium;Air;high. pop.;kg;1.85416E-05;x;1.83365E-05;2.05168E-07
+603;Magnesium;Air;low. pop.;kg;7.51728E-07;x;6.23612E-07;1.28116E-07
+604;Magnesium;Eau;;kg;1.87718E-07;x;1.56749E-07;3.09694E-08
+605;Magnesium;Eau;groundwater;kg;0.000255915;x;0.000202472;5.34426E-05
+606;Magnesium;Eau;ocean;kg;0.002118155;x;0.001548315;0.000569841
+607;Magnesium;Eau;river;kg;0.004594338;x;0.002917654;0.001676684
+608;Magnesium;Sol;agricultural;kg;3.87404E-06;x;3.29585E-06;5.78195E-07
+609;Magnesium;Sol;industrial;kg;0.000446384;x;0.000311397;0.000134987
+610;Mancozeb;Sol;agricultural;kg;8.46546E-09;x;7.30053E-09;1.16493E-09
+611;Manganese;Brut;in ground;kg;0.000626476;x;0.000545218;8.12576E-05
+612;Manganese;Air;;kg;4.07332E-07;x;3.51975E-07;5.53567E-08
+613;Manganese;Air;high. pop.;kg;2.63476E-07;x;2.34604E-07;2.88713E-08
+614;Manganese;Air;low. pop.;kg;1.23343E-06;x;1.17761E-06;5.58263E-08
+615;Manganese;Eau;;kg;3.67541E-07;x;3.09833E-07;5.7708E-08
+616;Manganese;Eau;groundwater;kg;1.33197E-05;x;1.05941E-05;2.72562E-06
+617;Manganese;Eau;ocean;kg;1.69568E-05;x;1.2395E-05;4.5618E-06
+618;Manganese;Eau;river;kg;3.94808E-05;x;2.55593E-05;1.39214E-05
+619;Manganese;Sol;agricultural;kg;2.03055E-06;x;1.69137E-06;3.39174E-07
+620;Manganese;Sol;industrial;kg;2.23197E-05;x;1.55704E-05;6.74923E-06
+621;Manganese-54;Air;low. pop.;Bq;6.3048E-07;x;2.94975E-07;3.35504E-07
+622;Manganese-54;Eau;river;Bq;0.009488489;x;0.00620963;0.003278859
+623;Mercury;Air;;kg;4.59145E-07;x;3.97535E-07;6.16097E-08
+624;Mercury;Air;high. pop.;kg;1.10782E-07;x;8.7801E-08;2.29808E-08
+625;Mercury;Air;low. pop.;kg;2.31299E-07;x;1.36801E-07;9.44986E-08
+626;Mercury;Air;stratosphere + troposphere;kg;6.40898E-17;x;6.1793E-17;2.29674E-18
+627;Mercury;Eau;;kg;2.05599E-08;x;1.72977E-08;3.26224E-09
+628;Mercury;Eau;groundwater;kg;1.39099E-09;x;1.10088E-09;2.90118E-10
+629;Mercury;Eau;lake;kg;4.85836E-16;x;4.01108E-16;8.47276E-17
+630;Mercury;Eau;ocean;kg;8.1977E-09;x;6.0077E-09;2.19E-09
+631;Mercury;Eau;river;kg;1.02227E-08;x;8.60657E-09;1.61612E-09
+632;Mercury;Sol;agricultural;kg;1.63494E-10;x;1.55978E-10;7.51563E-12
+633;Metaldehyde;Sol;agricultural;kg;3.47062E-11;x;1.70225E-11;1.76837E-11
+634;Metamorphous rock, graphite containing;Brut;in ground;kg;2.7601E-05;x;2.69937E-05;6.07363E-07
+635;Methane, biogenic;Air;;kg;7.50441E-05;x;5.67703E-05;1.82738E-05
+636;Methane, biogenic;Air;high. pop.;kg;6.34266E-06;x;6.08833E-06;2.54336E-07
+637;Methane, biogenic;Air;low. pop.;kg;0.000241438;x;0.000232195;9.2434E-06
+638;Methane, bromo-, Halon 1001;Air;;kg;4.83576E-17;x;4.03798E-17;7.97775E-18
+639;Methane, bromochlorodifluoro-, Halon 1211;Air;low. pop.;kg;2.44707E-08;x;2.08856E-08;3.58515E-09
+640;Methane, bromotrifluoro-, Halon 1301;Air;high. pop.;kg;1.48221E-14;x;5.65178E-15;9.17034E-15
+641;Methane, bromotrifluoro-, Halon 1301;Air;low. pop.;kg;7.72186E-07;x;4.50212E-07;3.21974E-07
+642;Methane, chlorodifluoro-, HCFC-22;Air;high. pop.;kg;1.46059E-09;x;1.12811E-09;3.32481E-10
+643;Methane, chlorodifluoro-, HCFC-22;Air;low. pop.;kg;9.46007E-08;x;7.9952E-08;1.46487E-08
+644;Methane, dichloro-, HCC-30;Air;high. pop.;kg;7.87015E-11;x;5.73938E-11;2.13077E-11
+645;Methane, dichloro-, HCC-30;Air;low. pop.;kg;9.0245E-11;x;6.76189E-11;2.26261E-11
+646;Methane, dichloro-, HCC-30;Eau;river;kg;1.41261E-05;x;9.85446E-06;4.27169E-06
+647;Methane, dichlorodifluoro-, CFC-12;Air;;kg;3.21511E-17;x;2.6847E-17;5.30411E-18
+648;Methane, dichlorodifluoro-, CFC-12;Air;high. pop.;kg;1.56173E-08;x;1.56015E-08;1.57998E-11
+649;Methane, dichlorodifluoro-, CFC-12;Air;low. pop.;kg;1.29256E-10;x;1.04466E-10;2.479E-11
+650;Methane, dichlorofluoro-, HCFC-21;Air;high. pop.;kg;1.72608E-13;x;1.40949E-13;3.16598E-14
+651;Methane, fossil;Air;;kg;0.000330155;x;1.58991E-05;0.000314256
+652;Methane, fossil;Air;high. pop.;kg;0.002806423;x;0.002397458;0.000408965
+653;Methane, fossil;Air;low. pop.;kg;0.05033005;x;0.025676146;0.024653904
+654;Methane, fossil;Air;stratosphere + troposphere;kg;4.57787E-11;x;4.41382E-11;1.64054E-12
+655;Methane, monochloro-, R-40;Air;high. pop.;kg;7.98438E-12;x;5.89711E-12;2.08727E-12
+656;Methane, monochloro-, R-40;Air;low. pop.;kg;1.64782E-10;x;1.23469E-10;4.13137E-11
+657;Methane, tetrachloro-, CFC-10;Air;;kg;1.43764E-14;x;1.20047E-14;2.3717E-15
+658;Methane, tetrachloro-, CFC-10;Air;high. pop.;kg;1.49641E-08;x;1.16619E-08;3.30217E-09
+659;Methane, tetrafluoro-, CFC-14;Air;;kg;1.27129E-06;x;1.18924E-06;8.20551E-08
+660;Methane, tetrafluoro-, CFC-14;Air;high. pop.;kg;9.06184E-11;x;6.7786E-11;2.28324E-11
+661;Methane, trichlorofluoro-, CFC-11;Air;high. pop.;kg;2.80222E-13;x;2.28825E-13;5.1397E-14
+662;Methane, trifluoro-, HFC-23;Air;high. pop.;kg;5.49204E-11;x;4.4847E-11;1.00735E-11
+663;Methanesulfonic acid;Air;high. pop.;kg;6.20276E-13;x;2.84069E-13;3.36207E-13
+664;Methanol;Air;;kg;2.54894E-06;x;1.50832E-06;1.04062E-06
+665;Methanol;Air;high. pop.;kg;2.80193E-06;x;1.97855E-06;8.23384E-07
+666;Methanol;Air;low. pop.;kg;0.000108393;x;0.000107841;5.52094E-07
+667;Methanol;Eau;;kg;3.18067E-06;x;3.15483E-06;2.58318E-08
+668;Methanol;Eau;ocean;kg;2.88102E-07;x;2.50621E-07;3.74811E-08
+669;Methanol;Eau;river;kg;2.09515E-08;x;1.72226E-08;3.72893E-09
+670;Methyl acetate;Air;high. pop.;kg;2.55432E-14;x;1.18069E-14;1.37363E-14
+671;Methyl acetate;Eau;river;kg;6.13018E-14;x;2.83358E-14;3.29659E-14
+672;Methyl acrylate;Air;high. pop.;kg;5.40058E-10;x;4.46488E-10;9.35706E-11
+673;Methyl acrylate;Eau;river;kg;1.05502E-08;x;8.72224E-09;1.82793E-09
+674;Methyl amine;Air;high. pop.;kg;2.60571E-12;x;1.91898E-12;6.86724E-13
+675;Methyl amine;Eau;river;kg;6.25342E-12;x;4.60529E-12;1.64813E-12
+676;Methyl borate;Air;high. pop.;kg;1.08191E-13;x;8.61524E-14;2.20383E-14
+677;Methyl ethyl ketone;Air;high. pop.;kg;8.587E-07;x;7.09503E-07;1.49197E-07
+678;Methyl formate;Air;high. pop.;kg;2.22873E-12;x;1.84047E-12;3.88252E-13
+679;Methyl formate;Eau;river;kg;8.89787E-13;x;7.34779E-13;1.55009E-13
+680;Methyl lactate;Air;high. pop.;kg;2.32942E-12;x;1.66689E-12;6.62531E-13
+681;Metolachlor;Sol;agricultural;kg;5.21235E-08;x;2.37887E-08;2.83348E-08
+682;Metribuzin;Sol;agricultural;kg;2.9808E-10;x;2.57061E-10;4.10192E-11
+683;Molybdenum;Brut;in ground;kg;1.52215E-05;x;1.31978E-05;2.02369E-06
+684;Molybdenum;Air;;kg;2.45357E-12;x;1.86802E-12;5.85546E-13
+685;Molybdenum;Air;high. pop.;kg;5.66683E-07;x;4.48304E-07;1.18378E-07
+686;Molybdenum;Air;low. pop.;kg;1.82974E-08;x;1.40239E-08;4.27347E-09
+687;Molybdenum;Eau;;kg;6.87668E-12;x;5.74219E-12;1.13448E-12
+688;Molybdenum;Eau;groundwater;kg;1.74025E-06;x;1.33549E-06;4.0476E-07
+689;Molybdenum;Eau;ocean;kg;7.96796E-08;x;5.85381E-08;2.11415E-08
+690;Molybdenum;Eau;river;kg;9.11581E-07;x;7.15514E-07;1.96067E-07
+691;Molybdenum;Sol;agricultural;kg;8.62253E-10;x;7.9391E-10;6.83434E-11
+692;Molybdenum-99;Eau;river;Bq;7.57152E-05;x;3.54244E-05;4.02908E-05
+693;Molybdenum, 0.010% in sulfide, Mo 8.2E-3% and Cu 1.83% in crude ore, in ground;Brut;in ground;kg;1.25867E-05;x;1.0453E-05;2.13367E-06
+694;Molybdenum, 0.014% in sulfide, Mo 8.2E-3% and Cu 0.81% in crude ore, in ground;Brut;in ground;kg;1.78837E-06;x;1.48523E-06;3.03135E-07
+695;Molybdenum, 0.022% in sulfide, Mo 8.2E-3% and Cu 0.36% in crude ore, in ground;Brut;in ground;kg;7.54769E-06;x;6.54397E-06;1.00371E-06
+696;Molybdenum, 0.025% in sulfide, Mo 8.2E-3% and Cu 0.39% in crude ore, in ground;Brut;in ground;kg;6.55308E-06;x;5.44231E-06;1.11077E-06
+697;Monoethanolamine;Air;high. pop.;kg;4.09766E-08;x;3.19279E-08;9.04865E-09
+698;Napropamide;Sol;agricultural;kg;6.1402E-11;x;3.0117E-11;3.1285E-11
+699;Nickel;Air;;kg;1.1905E-06;x;2.44102E-07;9.46403E-07
+700;Nickel;Air;high. pop.;kg;1.19681E-05;x;9.08799E-06;2.8801E-06
+701;Nickel;Air;low. pop.;kg;7.5473E-06;x;6.27997E-06;1.26733E-06
+702;Nickel;Air;stratosphere + troposphere;kg;6.40898E-14;x;6.1793E-14;2.29674E-15
+703;Nickel;Sol;;kg;1.45144E-07;x;2.01498E-09;1.43129E-07
+704;Nickel;Sol;agricultural;kg;1.08813E-08;x;9.24602E-09;1.6353E-09
+705;Nickel, 1.13% in sulfide, Ni 0.76% and Cu 0.76% in crude ore, in ground;Brut;in ground;kg;5.10815E-06;x;4.52202E-06;5.86137E-07
+706;Nickel, 1.98% in silicates, 1.04% in crude ore, in ground;Brut;in ground;kg;0.170905049;x;0.170039681;0.000865368
+707;Nickel, ion;Eau;;kg;7.82451E-07;x;5.3754E-07;2.44911E-07
+708;Nickel, ion;Eau;groundwater;kg;5.32504E-07;x;4.24638E-07;1.07866E-07
+709;Nickel, ion;Eau;lake;kg;7.62894E-14;x;6.29848E-14;1.33046E-14
+710;Nickel, ion;Eau;ocean;kg;1.72685E-07;x;1.26774E-07;4.59114E-08
+711;Nickel, ion;Eau;river;kg;3.14282E-06;x;2.92736E-06;2.15464E-07
+712;Niobium-95;Air;low. pop.;Bq;7.48436E-08;x;3.50168E-08;3.98268E-08
+713;Niobium-95;Eau;river;Bq;0.00147756;x;0.001098889;0.00037867
+714;Nitrate;Air;high. pop.;kg;9.58538E-09;x;8.44621E-09;1.13917E-09
+715;Nitrate;Air;low. pop.;kg;8.47367E-08;x;6.33922E-08;2.13445E-08
+716;Nitrate;Eau;groundwater;kg;4.99061E-05;x;3.68993E-05;1.30068E-05
+717;Nitrate;Eau;ocean;kg;7.28629E-05;x;5.36901E-05;1.91728E-05
+718;Nitrate;Eau;river;kg;0.000215274;x;0.00018259;3.26849E-05
+719;Nitrite;Eau;ocean;kg;1.55862E-07;x;1.17827E-07;3.80355E-08
+720;Nitrite;Eau;river;kg;1.78151E-06;x;1.74775E-06;3.37601E-08
+721;Nitrobenzene;Air;high. pop.;kg;1.29416E-11;x;9.21858E-12;3.72301E-12
+722;Nitrobenzene;Eau;river;kg;5.18633E-11;x;3.69436E-11;1.49197E-11
+723;Nitrogen;Eau;ocean;kg;1.64264E-06;x;1.20103E-06;4.41602E-07
+724;Nitrogen;Eau;river;kg;6.95452E-05;x;5.16652E-05;1.788E-05
+725;Nitrogen oxides;Air;;kg;0.084173454;x;0.00312666;0.081046794
+726;Nitrogen oxides;Air;high. pop.;kg;0.009565948;x;0.007622681;0.001943267
+727;Nitrogen oxides;Air;low. pop.;kg;0.089426107;x;0.078768924;0.010657183
+728;Nitrogen oxides;Air;stratosphere + troposphere;kg;1.28175E-08;x;1.23581E-08;4.59337E-10
+729;Nitrogen, organic bound;Eau;ocean;kg;0.00011656;x;0.000103606;1.29533E-05
+730;Nitrogen, organic bound;Eau;river;kg;9.63831E-05;x;8.03402E-05;1.60429E-05
+731;NMVOC, non-methane volatile organic compounds, unspecified origin;Air;;kg;0.003388378;x;0.000469797;0.002918581
+732;NMVOC, non-methane volatile organic compounds, unspecified origin;Air;high. pop.;kg;0.003471278;x;0.003298768;0.000172509
+733;NMVOC, non-methane volatile organic compounds, unspecified origin;Air;low. pop.;kg;3.077166227;x;3.064362437;0.01280379
+734;NMVOC, non-methane volatile organic compounds, unspecified origin;Air;stratosphere + troposphere;kg;6.14306E-10;x;5.92291E-10;2.20148E-11
+735;Noble gases, radioactive, unspecified;Air;low. pop.;Bq;594306.2868;x;449280.6999;145025.5869
+736;o-Xylene;Eau;;kg;6.60303E-12;x;5.51368E-12;1.08935E-12
+737;Occupation, arable, non-irrigated;Brut;land;m2a;0.000256846;x;0.000126053;0.000130793
+738;Occupation, construction site;Brut;land;m2a;0.002691069;x;0.002016759;0.00067431
+739;Occupation, dump site;Brut;land;m2a;0.011290554;x;0.010301052;0.000989502
+740;Occupation, dump site, benthos;Brut;land;m2a;0.006756853;x;0.00495067;0.001806183
+741;Occupation, forest, intensive;Brut;land;m2a;0.003396048;x;0.003096025;0.000300023
+742;Occupation, forest, intensive, normal;Brut;land;m2a;0.110239228;x;0.096393645;0.013845582
+743;Occupation, forest, intensive, short-cycle;Brut;land;m2a;0.000351199;x;0.000249587;0.000101613
+744;Occupation, industrial area;Brut;land;m2a;0.060486166;x;0.044011563;0.016474603
+745;Occupation, industrial area, benthos;Brut;land;m2a;5.38598E-05;x;3.81225E-05;1.57373E-05
+746;Occupation, industrial area, built up;Brut;land;m2a;0.007702316;x;0.006578875;0.001123441
+747;Occupation, industrial area, vegetation;Brut;land;m2a;0.003227097;x;0.002626694;0.000600403
+748;Occupation, mineral extraction site;Brut;land;m2a;0.007011943;x;0.005221487;0.001790456
+749;Occupation, permanent crop, fruit, intensive;Brut;land;m2a;0.000504436;x;0.000358161;0.000146275
+750;Occupation, shrub land, sclerophyllous;Brut;land;m2a;0.000556132;x;0.000528431;2.77012E-05
+751;Occupation, traffic area, rail embankment;Brut;land;m2a;0.00163164;x;0.000708271;0.00092337
+752;Occupation, traffic area, rail network;Brut;land;m2a;0.001804219;x;0.000783184;0.001021035
+753;Occupation, traffic area, road embankment;Brut;land;m2a;0.001660165;x;0.001144544;0.000515621
+754;Occupation, traffic area, road network;Brut;land;m2a;0.036911089;x;0.02253011;0.014380979
+755;Occupation, urban, discontinuously built;Brut;land;m2a;1.9773E-06;x;1.3601E-06;6.17201E-07
+756;Occupation, water bodies, artificial;Brut;land;m2a;0.00809675;x;0.006018295;0.002078455
+757;Occupation, water courses, artificial;Brut;land;m2a;0.016793158;x;0.007958442;0.008834715
+758;Oil, crude;Brut;in ground;kg;20.83754964;x;13.32660289;7.510946754
+759;Oils, biogenic;Sol;;kg;1.18137E-06;x;5.12812E-07;6.68554E-07
+760;Oils, biogenic;Sol;forestry;kg;9.96375E-07;x;8.62202E-07;1.34173E-07
+761;Oils, unspecified;Eau;;kg;1.19851E-05;x;8.49014E-06;3.49491E-06
+762;Oils, unspecified;Eau;ocean;kg;0.012902612;x;0.008892379;0.004010233
+763;Oils, unspecified;Eau;river;kg;0.066010837;x;0.048095124;0.017915713
+764;Oils, unspecified;Sol;;kg;0.000382736;x;0.000270905;0.000111831
+765;Oils, unspecified;Sol;forestry;kg;0.081952447;x;0.059874025;0.022078422
+766;Oils, unspecified;Sol;industrial;kg;2.27254E-06;x;1.63625E-06;6.36297E-07
+767;Olivine;Brut;in ground;kg;2.57157E-07;x;2.47134E-07;1.00227E-08
+768;Orbencarb;Sol;agricultural;kg;1.60967E-09;x;1.38816E-09;2.21509E-10
+769;Ozone;Air;;kg;2.15248E-05;x;1.64473E-05;5.07746E-06
+770;Ozone;Air;high. pop.;kg;2.28207E-08;x;2.14449E-08;1.37575E-09
+771;Ozone;Air;low. pop.;kg;2.03984E-10;x;1.65822E-10;3.81615E-11
+772;PAH, polycyclic aromatic hydrocarbons;Air;;kg;9.98642E-07;x;8.4698E-07;1.51662E-07
+773;PAH, polycyclic aromatic hydrocarbons;Air;high. pop.;kg;1.31894E-07;x;1.13013E-07;1.88805E-08
+774;PAH, polycyclic aromatic hydrocarbons;Air;low. pop.;kg;4.35701E-07;x;3.03926E-07;1.31775E-07
+775;PAH, polycyclic aromatic hydrocarbons;Eau;ocean;kg;3.04607E-06;x;2.22597E-06;8.20094E-07
+776;PAH, polycyclic aromatic hydrocarbons;Eau;river;kg;4.21627E-06;x;2.67912E-06;1.53715E-06
+777;Particulates, < 2.5 um;Air;;kg;0.006907533;x;0.000296499;0.006611034
+778;Particulates, < 2.5 um;Air;high. pop.;kg;0.00138001;x;0.001086156;0.000293855
+779;Particulates, < 2.5 um;Air;low. pop.;kg;0.004727149;x;0.004024809;0.00070234
+780;Particulates, < 2.5 um;Air;stratosphere + troposphere;kg;3.47917E-11;x;3.35448E-11;1.24681E-12
+781;Particulates, > 10 um;Air;;kg;0.001451556;x;6.54357E-05;0.00138612
+782;Particulates, > 10 um;Air;high. pop.;kg;0.000557435;x;0.000419247;0.000138188
+783;Particulates, > 10 um;Air;low. pop.;kg;0.004241867;x;0.003524658;0.000717209
+784;Particulates, > 2.5 um, and < 10um;Air;;kg;0.001616271;x;7.41057E-05;0.001542166
+785;Particulates, > 2.5 um, and < 10um;Air;high. pop.;kg;0.000290719;x;0.000253896;3.6823E-05
+786;Particulates, > 2.5 um, and < 10um;Air;low. pop.;kg;0.002830555;x;0.00255071;0.000279845
+787;Pd, Pd 2.0E-4%, Pt 4.8E-4%, Rh 2.4E-5%, Ni 3.7E-2%, Cu 5.2E-2% in ore, in ground;Brut;in ground;kg;3.09591E-07;x;3.02907E-07;6.68354E-09
+788;Pd, Pd 7.3E-4%, Pt 2.5E-4%, Rh 2.0E-5%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground;Brut;in ground;kg;7.44001E-07;x;7.27939E-07;1.60619E-08
+789;Peat;Brut;biotic;kg;0.005338049;x;0.005334301;3.74789E-06
+790;Pentane;Air;;kg;3.75744E-09;x;3.13755E-09;6.19889E-10
+791;Pentane;Air;high. pop.;kg;0.001536866;x;0.000976384;0.000560482
+792;Pentane;Air;low. pop.;kg;2.09014E-06;x;1.6089E-06;4.81232E-07
+793;Phenol;Air;;kg;3.71012E-09;x;3.28365E-09;4.26477E-10
+794;Phenol;Air;high. pop.;kg;1.29636E-07;x;1.26062E-07;3.57422E-09
+795;Phenol;Air;low. pop.;kg;1.57771E-07;x;1.15292E-07;4.24793E-08
+796;Phenol;Eau;;kg;1.06038E-06;x;1.05175E-06;8.63283E-09
+797;Phenol;Eau;ocean;kg;4.80531E-05;x;3.51144E-05;1.29388E-05
+798;Phenol;Eau;river;kg;7.1147E-05;x;4.52182E-05;2.59288E-05
+799;Phenol, 2,4-dichloro-;Air;high. pop.;kg;1.41916E-12;x;9.8147E-13;4.37687E-13
+800;Phenol, pentachloro-;Air;high. pop.;kg;1.04831E-11;x;8.45628E-12;2.02681E-12
+801;Phenol, pentachloro-;Air;low. pop.;kg;1.5937E-08;x;1.22203E-08;3.71666E-09
+802;Phosphate;Eau;groundwater;kg;0.000993506;x;0.000792309;0.000201198
+803;Phosphate;Eau;ocean;kg;1.08914E-05;x;7.83999E-06;3.05143E-06
+804;Phosphate;Eau;river;kg;1.01219E-05;x;9.26773E-06;8.5417E-07
+805;Phosphine;Air;high. pop.;kg;4.11443E-13;x;3.40157E-13;7.12858E-14
+806;Phosphorus;Brut;in ground;kg;9.99462E-05;x;7.19148E-05;2.80314E-05
+807;Phosphorus;Air;;kg;3.25009E-09;x;3.2199E-09;3.01919E-11
+808;Phosphorus;Air;high. pop.;kg;5.48302E-07;x;5.03961E-07;4.43409E-08
+809;Phosphorus;Air;low. pop.;kg;1.50926E-08;x;1.22793E-08;2.81329E-09
+810;Phosphorus;Eau;;kg;1.06032E-06;x;1.05169E-06;8.63126E-09
+811;Phosphorus;Eau;groundwater;kg;2.19546E-09;x;1.5603E-09;6.35159E-10
+812;Phosphorus;Eau;ocean;kg;3.08269E-06;x;2.26482E-06;8.17863E-07
+813;Phosphorus;Eau;river;kg;3.62496E-06;x;2.23438E-06;1.39058E-06
+814;Phosphorus;Sol;agricultural;kg;9.65159E-07;x;8.05187E-07;1.59972E-07
+815;Phosphorus;Sol;industrial;kg;2.78997E-05;x;1.9463E-05;8.43663E-06
+816;Phosphorus, 18% in apatite, 4% in crude ore, in ground;Brut;in ground;kg;0.00022633;x;0.000162979;6.33508E-05
+817;Pirimicarb;Sol;agricultural;kg;4.51262E-11;x;2.0595E-11;2.45312E-11
+818;Platinum;Air;high. pop.;kg;3.74757E-14;x;1.81623E-14;1.93133E-14
+819;Platinum;Air;low. pop.;kg;8.30489E-13;x;6.28265E-13;2.02224E-13
+820;Plutonium-238;Air;low. pop.;Bq;8.43652E-09;x;6.3777E-09;2.05882E-09
+821;Plutonium-alpha;Air;low. pop.;Bq;1.93398E-08;x;1.46202E-08;4.71952E-09
+822;Polonium-210;Air;;Bq;7.5998E-10;x;5.64236E-10;1.95743E-10
+823;Polonium-210;Air;high. pop.;Bq;0.409134763;x;0.405707889;0.003426874
+824;Polonium-210;Air;low. pop.;Bq;0.553526184;x;0.422353987;0.131172197
+825;Polonium-210;Eau;groundwater;Bq;0.000831388;x;0.000598736;0.000232652
+826;Polonium-210;Eau;ocean;Bq;0.985280476;x;0.70923885;0.276041626
+827;Polonium-210;Eau;river;Bq;0.140728368;x;0.108857762;0.031870605
+828;Polychlorinated biphenyls;Air;;kg;6.26857E-09;x;5.3791E-09;8.89472E-10
+829;Polychlorinated biphenyls;Air;high. pop.;kg;1.7337E-14;x;1.43338E-14;3.00324E-15
+830;Potassium;Air;high. pop.;kg;2.36602E-05;x;2.06939E-05;2.96632E-06
+831;Potassium;Air;low. pop.;kg;2.61796E-07;x;2.19371E-07;4.24246E-08
+832;Potassium;Sol;agricultural;kg;5.36755E-06;x;4.47791E-06;8.8964E-07
+833;Potassium;Sol;industrial;kg;0.000195292;x;0.000136236;5.90565E-05
+834;Potassium-40;Air;;Bq;1.02299E-10;x;7.59506E-11;2.63482E-11
+835;Potassium-40;Air;high. pop.;Bq;0.064981539;x;0.064437297;0.000544242
+836;Potassium-40;Air;low. pop.;Bq;0.069527345;x;0.053348325;0.01617902
+837;Potassium-40;Eau;groundwater;Bq;6.60362E-05;x;4.75572E-05;1.8479E-05
+838;Potassium-40;Eau;ocean;Bq;0.078036447;x;0.056173299;0.021863148
+839;Potassium-40;Eau;river;Bq;0.176657327;x;0.136649807;0.04000752
+840;Potassium chloride;Brut;in ground;kg;1.78547E-05;x;1.27804E-05;5.07433E-06
+841;Potassium, ion;Eau;groundwater;kg;0.000160373;x;0.000123743;3.66301E-05
+842;Potassium, ion;Eau;ocean;kg;0.001619259;x;0.001183368;0.000435891
+843;Potassium, ion;Eau;river;kg;0.003890292;x;0.002499933;0.001390358
+844;Propanal;Air;;kg;1.14683E-16;x;9.57638E-17;1.89196E-17
+845;Propanal;Air;high. pop.;kg;1.43109E-09;x;9.87867E-10;4.43219E-10
+846;Propanal;Eau;river;kg;9.70432E-13;x;7.86501E-13;1.83931E-13
+847;Propane;Air;;kg;2.30343E-09;x;1.92341E-09;3.8002E-10
+848;Propane;Air;high. pop.;kg;0.001193167;x;0.000757599;0.000435568
+849;Propane;Air;low. pop.;kg;7.578E-05;x;5.85993E-05;1.71807E-05
+850;Propene;Air;;kg;2.71518E-12;x;2.26723E-12;4.47949E-13
+851;Propene;Air;high. pop.;kg;6.02182E-05;x;3.92875E-05;2.09307E-05
+852;Propene;Air;low. pop.;kg;7.00954E-07;x;5.55404E-07;1.4555E-07
+853;Propene;Eau;river;kg;3.50601E-06;x;2.83412E-06;6.71889E-07
+854;Propionic acid;Air;;kg;5.22775E-11;x;4.36529E-11;8.62457E-12
+855;Propionic acid;Air;high. pop.;kg;2.34366E-07;x;2.03427E-07;3.09381E-08
+856;Propionic acid;Eau;river;kg;3.75313E-12;x;2.51491E-12;1.23822E-12
+857;Propylamine;Air;high. pop.;kg;1.61767E-13;x;1.31105E-13;3.06626E-14
+858;Propylamine;Eau;river;kg;3.88241E-13;x;3.14652E-13;7.35892E-14
+859;Propylene oxide;Air;high. pop.;kg;4.31381E-07;x;3.89799E-07;4.15825E-08
+860;Propylene oxide;Eau;river;kg;1.03798E-06;x;9.37927E-07;1.00053E-07
+861;Protactinium-234;Air;low. pop.;Bq;0.008512651;x;0.006368387;0.002144264
+862;Protactinium-234;Eau;river;Bq;0.156920695;x;0.117392802;0.039527894
+863;Pt, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground;Brut;in ground;kg;7.15657E-09;x;6.99484E-09;1.61734E-10
+864;Pt, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Ni 3.7E-2%, Cu 5.2E-2% in ore, in ground;Brut;in ground;kg;2.56551E-08;x;2.50753E-08;5.7979E-10
+865;Radioactive species, alpha emitters;Eau;river;Bq;0.00193454;x;0.001392005;0.000542535
+866;Radioactive species, Nuclides, unspecified;Eau;ocean;Bq;60.0569403;x;45.40157046;14.65536984
+867;Radioactive species, Nuclides, unspecified;Eau;river;Bq;0.178685575;x;0.132352565;0.046333009
+868;Radioactive species, other beta emitters;Air;high. pop.;Bq;0.499980083;x;0.190643473;0.30933661
+869;Radioactive species, other beta emitters;Air;low. pop.;Bq;0.00034011;x;0.000258336;8.1774E-05
+870;Radium-224;Eau;ocean;Bq;19.19493711;x;14.02378557;5.171151541
+871;Radium-224;Eau;river;Bq;43.62734301;x;27.71490629;15.91243672
+872;Radium-226;Air;;Bq;1.07345E-10;x;7.96972E-11;2.76477E-11
+873;Radium-226;Air;high. pop.;Bq;0.057761778;x;0.057277991;0.000483787
+874;Radium-226;Air;low. pop.;Bq;0.35652455;x;0.267793698;0.088730852
+875;Radium-226;Eau;;Bq;0.000396181;x;0.000330819;6.53619E-05
+876;Radium-226;Eau;groundwater;Bq;0.000612852;x;0.000441358;0.000171494
+877;Radium-226;Eau;ocean;Bq;31.43750866;x;22.96005929;8.477449377
+878;Radium-226;Eau;river;Bq;167.4934898;x;117.4283193;50.06517049
+879;Radium-228;Air;;Bq;3.18058E-11;x;2.36138E-11;8.19202E-12
+880;Radium-228;Air;high. pop.;Bq;0.3128775;x;0.310258183;0.002619317
+881;Radium-228;Air;low. pop.;Bq;0.026271914;x;0.020135264;0.00613665
+882;Radium-228;Eau;;Bq;0.000557489;x;0.000465515;9.19733E-05
+883;Radium-228;Eau;ocean;Bq;38.38861463;x;28.04642309;10.34219154
+884;Radium-228;Eau;river;Bq;87.2524212;x;55.42866317;31.82375803
+885;Radon-220;Air;;Bq;2.23253E-09;x;1.65752E-09;5.75016E-10
+886;Radon-220;Air;high. pop.;Bq;0.004813961;x;0.00477344;4.05206E-05
+887;Radon-220;Air;low. pop.;Bq;3.224444477;x;2.484091199;0.740353279
+888;Radon-222;Air;;Bq;1.25389E-09;x;9.30935E-10;3.22956E-10
+889;Radon-222;Air;high. pop.;Bq;0.004813723;x;0.004773274;4.04492E-05
+890;Radon-222;Air;low. pop.;Bq;26916.53833;x;20066.69499;6849.843344
+891;Rh, Rh 2.0E-5%, Pt 2.5E-4%, Pd 7.3E-4%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground;Brut;in ground;kg;7.07517E-09;x;6.92241E-09;1.52755E-10
+892;Rh, Rh 2.4E-5%, Pt 4.8E-4%, Pd 2.0E-4%, Ni 3.7E-2%, Cu 5.2E-2% in ore, in ground;Brut;in ground;kg;2.21607E-08;x;2.16823E-08;4.78444E-10
+893;Rhenium;Brut;in ground;kg;3.67308E-08;x;3.645E-08;2.80816E-10
+894;Rubidium;Eau;ocean;kg;3.83886E-06;x;2.80464E-06;1.03422E-06
+895;Rubidium;Eau;river;kg;8.72524E-06;x;5.54287E-06;3.18238E-06
+896;Ruthenium-103;Air;low. pop.;Bq;1.64437E-08;x;7.69339E-09;8.75028E-09
+897;Ruthenium-103;Eau;river;Bq;1.59764E-05;x;7.47477E-06;8.50165E-06
+898;Sand;Brut;in ground;kg;2.11279E-05;x;1.91221E-05;2.00584E-06
+899;Scandium;Air;high. pop.;kg;6.06476E-09;x;6.01398E-09;5.07801E-11
+900;Scandium;Air;low. pop.;kg;6.71003E-10;x;5.40868E-10;1.30135E-10
+901;Scandium;Eau;groundwater;kg;9.43504E-08;x;7.24672E-08;2.18832E-08
+902;Scandium;Eau;river;kg;1.00922E-07;x;8.63923E-08;1.45293E-08
+903;Selenium;Air;;kg;6.51184E-08;x;7.25826E-10;6.43926E-08
+904;Selenium;Air;high. pop.;kg;4.82999E-07;x;3.81333E-07;1.01666E-07
+905;Selenium;Air;low. pop.;kg;2.55377E-07;x;1.93687E-07;6.169E-08
+906;Selenium;Air;stratosphere + troposphere;kg;9.15563E-15;x;8.82753E-15;3.28109E-16
+907;Selenium;Eau;;kg;6.65027E-13;x;5.55313E-13;1.09714E-13
+908;Selenium;Eau;groundwater;kg;1.99434E-07;x;1.535E-07;4.59337E-08
+909;Selenium;Eau;ocean;kg;1.19429E-07;x;8.77415E-08;3.16877E-08
+910;Selenium;Eau;river;kg;2.4338E-07;x;1.7596E-07;6.74198E-08
+911;Shale;Brut;in ground;kg;1.90316E-06;x;1.82406E-06;7.90971E-08
+912;Silicon;Air;;kg;4.92635E-14;x;3.57604E-14;1.35032E-14
+913;Silicon;Air;high. pop.;kg;7.67848E-05;x;7.59483E-05;8.36446E-07
+914;Silicon;Air;low. pop.;kg;5.00645E-06;x;4.44386E-06;5.6259E-07
+915;Silicon;Eau;groundwater;kg;0.000127833;x;9.85921E-05;2.92405E-05
+916;Silicon;Eau;ocean;kg;1.20823E-07;x;8.29638E-08;3.78592E-08
+917;Silicon;Eau;river;kg;0.000508899;x;0.000496535;1.23643E-05
+918;Silicon;Sol;agricultural;kg;1.12532E-05;x;9.85166E-06;1.40151E-06
+919;Silicon;Sol;industrial;kg;5.57977E-05;x;3.89249E-05;1.68728E-05
+920;Silicon tetrafluoride;Air;low. pop.;kg;1.71023E-09;x;1.23164E-09;4.78589E-10
+921;Silver;Air;high. pop.;kg;2.84045E-10;x;2.12365E-10;7.16807E-11
+922;Silver;Air;low. pop.;kg;1.12174E-12;x;9.20645E-13;2.01097E-13
+923;Silver-110;Air;low. pop.;Bq;1.62969E-07;x;7.62473E-08;8.6722E-08
+924;Silver-110;Eau;river;Bq;0.113861054;x;0.071077279;0.042783775
+925;Silver, 0.007% in sulfide, Ag 0.004%, Pb, Zn, Cd, In, in ground;Brut;in ground;kg;3.88228E-08;x;3.19787E-08;6.84404E-09
+926;Silver, 3.2ppm in sulfide, Ag 1.2ppm, Cu and Te, in crude ore, in ground;Brut;in ground;kg;2.7713E-08;x;2.28266E-08;4.88639E-09
+927;Silver, Ag 2.1E-4%, Au 2.1E-4%, in ore, in ground;Brut;in ground;kg;2.55708E-09;x;2.10633E-09;4.50748E-10
+928;Silver, Ag 4.2E-3%, Au 1.1E-4%, in ore, in ground;Brut;in ground;kg;5.84012E-09;x;4.81065E-09;1.02947E-09
+929;Silver, Ag 4.6E-5%, Au 1.3E-4%, in ore, in ground;Brut;in ground;kg;5.72424E-09;x;4.71519E-09;1.00904E-09
+930;Silver, Ag 9.7E-4%, Au 9.7E-4%, Zn 0.63%, Cu 0.38%, Pb 0.014%, in ore, in ground;Brut;in ground;kg;3.7772E-09;x;3.11138E-09;6.65822E-10
+931;Silver, ion;Eau;;kg;6.27301E-10;x;5.23812E-10;1.03489E-10
+932;Silver, ion;Eau;groundwater;kg;5.93006E-09;x;4.70344E-09;1.22662E-09
+933;Silver, ion;Eau;ocean;kg;2.30328E-07;x;1.68274E-07;6.20536E-08
+934;Silver, ion;Eau;river;kg;8.28703E-07;x;5.01732E-07;3.26971E-07
+935;Sodium;Air;;kg;2.30822E-10;x;1.6284E-10;6.7982E-11
+936;Sodium;Air;high. pop.;kg;2.93431E-05;x;2.32704E-05;6.07274E-06
+937;Sodium;Air;low. pop.;kg;1.35128E-07;x;1.10983E-07;2.41453E-08
+938;Sodium;Sol;;kg;1.79396E-06;x;5.30984E-07;1.26298E-06
+939;Sodium;Sol;industrial;kg;0.001115978;x;0.00077851;0.000337467
+940;Sodium-24;Eau;river;Bq;0.000572881;x;0.000268029;0.000304853
+941;Sodium chlorate;Air;high. pop.;kg;1.90758E-08;x;1.37159E-08;5.35988E-09
+942;Sodium chloride;Brut;in ground;kg;0.016932026;x;0.012257231;0.004674794
+943;Sodium dichromate;Air;high. pop.;kg;9.29481E-09;x;6.27272E-09;3.02209E-09
+944;Sodium formate;Air;high. pop.;kg;6.90917E-10;x;6.60407E-10;3.05098E-11
+945;Sodium formate;Eau;river;kg;1.65991E-09;x;1.58661E-09;7.3298E-11
+946;Sodium hydroxide;Air;high. pop.;kg;4.77898E-09;x;3.95058E-09;8.28404E-10
+947;Sodium nitrate;Brut;in ground;kg;1.47813E-11;x;1.37241E-11;1.05716E-12
+948;Sodium sulphate;Brut;in ground;kg;0.000464566;x;0.000333494;0.000131072
+949;Sodium, ion;Eau;;kg;0.00042035;x;0.00013398;0.00028637
+950;Sodium, ion;Eau;groundwater;kg;0.000368457;x;0.000285506;8.29508E-05
+951;Sodium, ion;Eau;ocean;kg;0.117547798;x;0.085889121;0.031658677
+952;Sodium, ion;Eau;river;kg;0.266400368;x;0.169371982;0.097028386
+953;Solids, inorganic;Eau;groundwater;kg;0.002836329;x;0.002174969;0.00066136
+954;Solids, inorganic;Eau;river;kg;0.000232552;x;0.000176008;5.65435E-05
+955;Solved solids;Eau;;kg;1.33006E-05;x;1.11064E-05;2.19423E-06
+956;Solved solids;Eau;groundwater;kg;0.000146123;x;0.000122953;2.31693E-05
+957;Solved solids;Eau;river;kg;0.000214011;x;0.000187663;2.63482E-05
+958;Stibnite;Brut;in ground;kg;3.23952E-11;x;1.23524E-11;2.00428E-11
+959;Strontium;Air;;kg;3.79227E-16;x;2.81553E-16;9.76742E-17
+960;Strontium;Air;high. pop.;kg;9.14575E-07;x;9.06911E-07;7.66432E-09
+961;Strontium;Air;low. pop.;kg;3.08673E-07;x;2.37974E-07;7.06991E-08
+962;Strontium;Eau;;kg;1.63191E-08;x;1.36269E-08;2.69226E-09
+963;Strontium;Eau;groundwater;kg;9.94338E-06;x;8.02131E-06;1.92207E-06
+964;Strontium;Eau;ocean;kg;0.00069656;x;0.000508926;0.000187634
+965;Strontium;Eau;river;kg;0.001579197;x;0.001003133;0.000576065
+966;Strontium;Sol;agricultural;kg;5.82401E-08;x;3.67863E-08;2.14538E-08
+967;Strontium;Sol;industrial;kg;5.57977E-06;x;3.89249E-06;1.68728E-06
+968;Strontium-89;Eau;river;Bq;0.002234859;x;0.001369011;0.000865848
+969;Strontium-90;Eau;ocean;Bq;1.279780333;x;0.967476733;0.3123036
+970;Strontium-90;Eau;river;Bq;79.16114897;x;60.43899488;18.7221541
+971;Styrene;Air;;kg;7.54751E-18;x;6.30238E-18;1.24513E-18
+972;Styrene;Air;high. pop.;kg;2.72867E-08;x;1.91125E-08;8.17417E-09
+973;Styrene;Air;low. pop.;kg;2.10638E-10;x;1.61381E-10;4.92576E-11
+974;Sulfate;Air;;kg;7.71908E-09;x;5.57994E-09;2.13913E-09
+975;Sulfate;Air;high. pop.;kg;5.66636E-05;x;4.13077E-05;1.53558E-05
+976;Sulfate;Air;low. pop.;kg;6.40248E-07;x;4.7897E-07;1.61277E-07
+977;Sulfate;Eau;;kg;7.92683E-07;x;5.76149E-07;2.16535E-07
+978;Sulfate;Eau;groundwater;kg;0.010007811;x;0.007905932;0.002101878
+979;Sulfate;Eau;ocean;kg;0.002156359;x;0.001574885;0.000581474
+980;Sulfate;Eau;river;kg;0.005782863;x;0.004710776;0.001072087
+981;Sulfide;Eau;ocean;kg;8.18641E-07;x;6.01571E-07;2.1707E-07
+982;Sulfide;Eau;river;kg;7.20278E-07;x;4.22831E-07;2.97446E-07
+983;Sulfite;Eau;river;kg;3.69703E-06;x;2.83695E-06;8.60081E-07
+984;Sulfur;Brut;in ground;kg;9.30206E-06;x;8.24428E-06;1.05778E-06
+985;Sulfur;Eau;;kg;7.93323E-10;x;6.6244E-10;1.30882E-10
+986;Sulfur;Eau;ocean;kg;5.4024E-06;x;3.94958E-06;1.45282E-06
+987;Sulfur;Eau;river;kg;0.000205446;x;0.000148804;5.66416E-05
+988;Sulfur;Sol;agricultural;kg;2.53094E-06;x;2.35483E-06;1.76112E-07
+989;Sulfur;Sol;industrial;kg;0.000334796;x;0.000233557;0.000101239
+990;Sulfur dioxide;Air;;kg;0.001240151;x;0.000451735;0.000788416
+991;Sulfur dioxide;Air;high. pop.;kg;0.029252025;x;0.023846303;0.005405722
+992;Sulfur dioxide;Air;low. pop.;kg;0.071698442;x;0.056315825;0.015382617
+993;Sulfur dioxide;Air;stratosphere + troposphere;kg;9.15563E-10;x;8.82753E-10;3.28109E-11
+994;Sulfur hexafluoride;Air;;kg;4.68547E-07;x;3.9647E-07;7.20767E-08
+995;Sulfur hexafluoride;Air;low. pop.;kg;3.70598E-05;x;3.70598E-05;3.24506E-11
+996;Sulfur trioxide;Air;high. pop.;kg;1.04422E-10;x;7.42554E-11;3.01663E-11
+997;Sulfuric acid;Air;high. pop.;kg;1.00249E-09;x;8.28518E-10;1.7397E-10
+998;Sulfuric acid;Air;low. pop.;kg;1.74927E-12;x;1.30834E-12;4.40933E-13
+999;Sulfuric acid;Sol;agricultural;kg;6.17159E-13;x;5.1023E-13;1.06929E-13
+1000;Suspended solids, unspecified;Eau;;kg;0.00010033;x;8.51272E-05;1.5203E-05
+1001;Suspended solids, unspecified;Eau;ocean;kg;0.015238296;x;0.011164261;0.004074034
+1002;Suspended solids, unspecified;Eau;river;kg;0.001107316;x;0.000736543;0.000370773
+1003;t-Butyl methyl ether;Air;high. pop.;kg;0.000275741;x;0.000275741;4.80976E-10
+1004;t-Butyl methyl ether;Eau;ocean;kg;2.52472E-06;x;1.85486E-06;6.69859E-07
+1005;t-Butyl methyl ether;Eau;river;kg;4.22972E-06;x;4.22971E-06;8.90119E-12
+1006;t-Butylamine;Air;high. pop.;kg;5.60358E-13;x;2.95928E-13;2.6443E-13
+1007;t-Butylamine;Eau;river;kg;1.34489E-12;x;7.10236E-13;6.34657E-13
+1008;Talc;Brut;in ground;kg;1.45153E-05;x;1.43053E-05;2.10021E-07
+1009;Tantalum;Brut;in ground;kg;3.04208E-08;x;2.50758E-08;5.34493E-09
+1010;Tebutam;Sol;agricultural;kg;1.45495E-10;x;7.13628E-11;7.41324E-11
+1011;Technetium-99m;Eau;river;Bq;0.00174866;x;0.000820828;0.000927831
+1012;Teflubenzuron;Sol;agricultural;kg;1.98718E-11;x;1.71373E-11;2.73454E-12
+1013;Tellurium;Brut;in ground;kg;4.15691E-09;x;3.42394E-09;7.32969E-10
+1014;Tellurium-123m;Eau;river;Bq;0.001846207;x;0.001402742;0.000443465
+1015;Tellurium-132;Eau;river;Bq;4.384E-06;x;2.05112E-06;2.33288E-06
+1016;Terpenes;Air;low. pop.;kg;1.1364E-08;x;8.0761E-09;3.28789E-09
+1017;Thallium;Air;;kg;1.26039E-09;x;8.1985E-10;4.40542E-10
+1018;Thallium;Air;high. pop.;kg;7.61222E-09;x;7.54677E-09;6.54567E-11
+1019;Thallium;Air;low. pop.;kg;1.28847E-10;x;1.06368E-10;2.24789E-11
+1020;Thallium;Eau;;kg;7.1125E-13;x;5.93909E-13;1.17341E-13
+1021;Thallium;Eau;groundwater;kg;6.23523E-10;x;5.12451E-10;1.11071E-10
+1022;Thallium;Eau;river;kg;7.06068E-09;x;5.42159E-09;1.63909E-09
+1023;Thiram;Sol;agricultural;kg;5.17374E-11;x;3.67686E-11;1.49688E-11
+1024;Thorium;Air;high. pop.;kg;9.14544E-09;x;9.06889E-09;7.65495E-11
+1025;Thorium;Air;low. pop.;kg;4.8113E-10;x;3.98825E-10;8.2305E-11
+1026;Thorium-228;Air;;Bq;1.71263E-11;x;1.27152E-11;4.41111E-12
+1027;Thorium-228;Air;high. pop.;Bq;0.026473464;x;0.026251731;0.000221732
+1028;Thorium-228;Air;low. pop.;Bq;0.014151029;x;0.010845288;0.00330574
+1029;Thorium-228;Eau;groundwater;Bq;6.69858E-06;x;4.82413E-06;1.87445E-06
+1030;Thorium-228;Eau;ocean;Bq;76.78512423;x;56.09873341;20.68639082
+1031;Thorium-228;Eau;river;Bq;174.5059578;x;110.8573263;63.64863148
+1032;Thorium-230;Air;low. pop.;Bq;0.034565424;x;0.025770195;0.00879523
+1033;Thorium-230;Eau;river;Bq;21.41065337;x;16.01753528;5.393118098
+1034;Thorium-232;Air;;Bq;2.6913E-11;x;1.99813E-11;6.93171E-12
+1035;Thorium-232;Air;high. pop.;Bq;0.016846807;x;0.016705708;0.000141099
+1036;Thorium-232;Air;low. pop.;Bq;0.022252728;x;0.017052799;0.005199929
+1037;Thorium-232;Eau;river;Bq;0.032935779;x;0.025476811;0.007458969
+1038;Thorium-234;Air;low. pop.;Bq;0.008514402;x;0.006369692;0.00214471
+1039;Thorium-234;Eau;river;Bq;0.156938015;x;0.117405659;0.039532355
+1040;Tin;Brut;in ground;kg;2.25218E-06;x;1.9131E-06;3.39073E-07
+1041;Tin;Air;;kg;9.73261E-09;x;7.65918E-09;2.07344E-09
+1042;Tin;Air;high. pop.;kg;3.82418E-09;x;3.58338E-09;2.40806E-10
+1043;Tin;Air;low. pop.;kg;1.63E-06;x;1.61405E-06;1.59492E-08
+1044;Tin;Sol;agricultural;kg;2.09378E-09;x;2.05975E-09;3.40345E-11
+1045;Tin, ion;Eau;;kg;3.29243E-11;x;2.74926E-11;5.43171E-12
+1046;Tin, ion;Eau;groundwater;kg;3.82542E-09;x;3.22669E-09;5.9873E-10
+1047;Tin, ion;Eau;river;kg;3.35302E-08;x;3.11753E-08;2.35485E-09
+1048;TiO2, 54% in ilmenite, 2.6% in crude ore, in ground;Brut;in ground;kg;0.001049772;x;0.000738004;0.000311768
+1049;TiO2, 95% in rutile, 0.40% in crude ore, in ground;Brut;in ground;kg;8.93193E-10;x;5.76071E-10;3.17122E-10
+1050;Titanium;Air;;kg;4.36856E-09;x;3.62097E-09;7.47592E-10
+1051;Titanium;Air;high. pop.;kg;1.83361E-06;x;1.8131E-06;2.05102E-08
+1052;Titanium;Air;low. pop.;kg;7.41065E-08;x;6.14288E-08;1.26777E-08
+1053;Titanium;Sol;agricultural;kg;1.35909E-07;x;1.13382E-07;2.25268E-08
+1054;Titanium, ion;Eau;;kg;5.16937E-11;x;4.31656E-11;8.52809E-12
+1055;Titanium, ion;Eau;groundwater;kg;7.64623E-08;x;5.94289E-08;1.70334E-08
+1056;Titanium, ion;Eau;ocean;kg;1.84002E-08;x;1.25593E-08;5.84096E-09
+1057;Titanium, ion;Eau;river;kg;3.07431E-07;x;2.64964E-07;4.2467E-08
+1058;TOC, Total Organic Carbon;Eau;;kg;3.50111E-05;x;3.32879E-05;1.7232E-06
+1059;TOC, Total Organic Carbon;Eau;ocean;kg;0.013940202;x;0.009875091;0.004065111
+1060;TOC, Total Organic Carbon;Eau;river;kg;0.062931989;x;0.045345322;0.017586667
+1061;Toluene;Air;;kg;7.62667E-05;x;2.45915E-07;7.60208E-05
+1062;Toluene;Air;high. pop.;kg;0.000451729;x;0.000387697;6.40323E-05
+1063;Toluene;Air;low. pop.;kg;3.58059E-06;x;2.57478E-06;1.00581E-06
+1064;Toluene;Eau;;kg;4.74479E-10;x;3.96201E-10;7.82783E-11
+1065;Toluene;Eau;ocean;kg;5.8588E-05;x;4.28317E-05;1.57563E-05
+1066;Toluene;Eau;river;kg;0.000100316;x;6.32312E-05;3.70851E-05
+1067;Toluene, 2-chloro-;Air;high. pop.;kg;3.94056E-12;x;2.7754E-12;1.16516E-12
+1068;Toluene, 2-chloro-;Eau;river;kg;8.12677E-12;x;5.75341E-12;2.37337E-12
+1069;Transformation, from arable;Brut;land;m2;5.83153E-06;x;5.22742E-06;6.04117E-07
+1070;Transformation, from arable, non-irrigated;Brut;land;m2;0.000474376;x;0.000232689;0.000241687
+1071;Transformation, from arable, non-irrigated, fallow;Brut;land;m2;1.30264E-06;x;1.24963E-06;5.30132E-08
+1072;Transformation, from dump site, inert material landfill;Brut;land;m2;2.19456E-05;x;1.882E-05;3.1256E-06
+1073;Transformation, from dump site, residual material landfill;Brut;land;m2;8.85472E-05;x;8.62875E-05;2.25971E-06
+1074;Transformation, from dump site, sanitary landfill;Brut;land;m2;5.162E-07;x;3.88363E-07;1.27837E-07
+1075;Transformation, from dump site, slag compartment;Brut;land;m2;7.68889E-08;x;5.32857E-08;2.36032E-08
+1076;Transformation, from forest;Brut;land;m2;0.024165605;x;0.016889786;0.007275818
+1077;Transformation, from forest, extensive;Brut;land;m2;0.000844726;x;0.000736817;0.000107909
+1078;Transformation, from forest, intensive, clear-cutting;Brut;land;m2;1.25431E-05;x;8.91407E-06;3.62899E-06
+1079;Transformation, from industrial area;Brut;land;m2;1.33112E-05;x;9.64963E-06;3.66156E-06
+1080;Transformation, from industrial area, benthos;Brut;land;m2;1.3201E-08;x;1.15309E-08;1.6701E-09
+1081;Transformation, from industrial area, built up;Brut;land;m2;8.07645E-08;x;5.81641E-08;2.26004E-08
+1082;Transformation, from industrial area, vegetation;Brut;land;m2;1.37773E-07;x;9.92199E-08;3.8553E-08
+1083;Transformation, from mineral extraction site;Brut;land;m2;5.94425E-05;x;4.69265E-05;1.2516E-05
+1084;Transformation, from pasture and meadow;Brut;land;m2;0.000223761;x;0.000208303;1.54573E-05
+1085;Transformation, from pasture and meadow, intensive;Brut;land;m2;3.8711E-07;x;1.89872E-07;1.97238E-07
+1086;Transformation, from sea and ocean;Brut;land;m2;0.006759411;x;0.004952447;0.001806964
+1087;Transformation, from shrub land, sclerophyllous;Brut;land;m2;0.000143285;x;0.000134825;8.46016E-06
+1088;Transformation, from tropical rain forest;Brut;land;m2;1.25431E-05;x;8.91407E-06;3.62899E-06
+1089;Transformation, from unknown;Brut;land;m2;0.001136978;x;0.000788468;0.00034851
+1090;Transformation, to arable;Brut;land;m2;6.32593E-05;x;5.17717E-05;1.14876E-05
+1091;Transformation, to arable, non-irrigated;Brut;land;m2;0.000474776;x;0.000232888;0.000241888
+1092;Transformation, to arable, non-irrigated, fallow;Brut;land;m2;1.70248E-06;x;1.57424E-06;1.28239E-07
+1093;Transformation, to dump site;Brut;land;m2;6.77574E-05;x;6.04264E-05;7.33103E-06
+1094;Transformation, to dump site, benthos;Brut;land;m2;0.006756853;x;0.00495067;0.001806183
+1095;Transformation, to dump site, inert material landfill;Brut;land;m2;2.19456E-05;x;1.882E-05;3.1256E-06
+1096;Transformation, to dump site, residual material landfill;Brut;land;m2;8.85477E-05;x;8.62879E-05;2.25971E-06
+1097;Transformation, to dump site, sanitary landfill;Brut;land;m2;5.162E-07;x;3.88363E-07;1.27837E-07
+1098;Transformation, to dump site, slag compartment;Brut;land;m2;7.68889E-08;x;5.32857E-08;2.36032E-08
+1099;Transformation, to forest;Brut;land;m2;0.000124199;x;0.000115513;8.68614E-06
+1100;Transformation, to forest, intensive;Brut;land;m2;2.26167E-05;x;2.06177E-05;1.99893E-06
+1101;Transformation, to forest, intensive, clear-cutting;Brut;land;m2;1.25431E-05;x;8.91407E-06;3.62899E-06
+1102;Transformation, to forest, intensive, normal;Brut;land;m2;0.000805677;x;0.000702915;0.000102763
+1103;Transformation, to forest, intensive, short-cycle;Brut;land;m2;1.25431E-05;x;8.91407E-06;3.62899E-06
+1104;Transformation, to heterogeneous, agricultural;Brut;land;m2;0.001131109;x;0.000782633;0.000348476
+1105;Transformation, to industrial area;Brut;land;m2;0.000117922;x;9.99824E-05;1.79391E-05
+1106;Transformation, to industrial area, benthos;Brut;land;m2;2.47036E-06;x;1.73098E-06;7.39383E-07
+1107;Transformation, to industrial area, built up;Brut;land;m2;0.000177022;x;0.000149837;2.71848E-05
+1108;Transformation, to industrial area, vegetation;Brut;land;m2;8.99894E-05;x;7.15996E-05;1.83898E-05
+1109;Transformation, to mineral extraction site;Brut;land;m2;0.023180169;x;0.016212427;0.006967742
+1110;Transformation, to pasture and meadow;Brut;land;m2;3.17613E-06;x;2.65969E-06;5.16435E-07
+1111;Transformation, to permanent crop, fruit, intensive;Brut;land;m2;7.10093E-06;x;5.04188E-06;2.05905E-06
+1112;Transformation, to sea and ocean;Brut;land;m2;1.3201E-08;x;1.15309E-08;1.6701E-09
+1113;Transformation, to shrub land, sclerophyllous;Brut;land;m2;0.000111086;x;0.00010555;5.53667E-06
+1114;Transformation, to traffic area, rail embankment;Brut;land;m2;3.79666E-06;x;1.64805E-06;2.14861E-06
+1115;Transformation, to traffic area, rail network;Brut;land;m2;4.17316E-06;x;1.81151E-06;2.36166E-06
+1116;Transformation, to traffic area, road embankment;Brut;land;m2;9.60453E-06;x;7.6297E-06;1.97483E-06
+1117;Transformation, to traffic area, road network;Brut;land;m2;0.000423649;x;0.00027898;0.000144669
+1118;Transformation, to unknown;Brut;land;m2;1.60456E-05;x;1.15938E-05;4.45182E-06
+1119;Transformation, to urban, discontinuously built;Brut;land;m2;3.93855E-08;x;2.70915E-08;1.2294E-08
+1120;Transformation, to water bodies, artificial;Brut;land;m2;7.33261E-05;x;5.24657E-05;2.08604E-05
+1121;Transformation, to water courses, artificial;Brut;land;m2;0.00016246;x;8.57493E-05;7.67112E-05
+1122;Tributyltin compounds;Eau;ocean;kg;1.21895E-06;x;8.36291E-07;3.82664E-07
+1123;Triethylene glycol;Eau;ocean;kg;2.43812E-07;x;2.12593E-07;3.12192E-08
+1124;Trimethylamine;Air;high. pop.;kg;4.53803E-14;x;2.10253E-14;2.4355E-14
+1125;Trimethylamine;Eau;river;kg;1.08911E-13;x;5.04606E-14;5.84508E-14
+1126;Tungsten;Air;low. pop.;kg;2.54215E-11;x;1.9018E-11;6.40346E-12
+1127;Tungsten;Eau;groundwater;kg;1.81077E-07;x;1.422E-07;3.88776E-08
+1128;Tungsten;Eau;river;kg;8.44411E-08;x;7.1035E-08;1.34061E-08
+1129;Ulexite;Brut;in ground;kg;6.44105E-07;x;5.01266E-07;1.42839E-07
+1130;Uranium;Brut;in ground;kg;3.52746E-05;x;2.65352E-05;8.73946E-06
+1131;Uranium;Air;high. pop.;kg;1.21778E-08;x;1.20759E-08;1.01933E-10
+1132;Uranium;Air;low. pop.;kg;2.44625E-10;x;2.02778E-10;4.18468E-11
+1133;Uranium-234;Air;low. pop.;Bq;0.10207056;x;0.07627113;0.02579943
+1134;Uranium-234;Eau;river;Bq;0.188303671;x;0.140870867;0.047432803
+1135;Uranium-235;Air;low. pop.;Bq;0.004801824;x;0.003592273;0.00120955
+1136;Uranium-235;Eau;river;Bq;0.31070312;x;0.232438158;0.078264962
+1137;Uranium-238;Air;;Bq;8.94538E-11;x;6.64139E-11;2.30399E-11
+1138;Uranium-238;Air;high. pop.;Bq;0.048133328;x;0.047730174;0.000403154
+1139;Uranium-238;Air;low. pop.;Bq;0.156607423;x;0.11804882;0.038558603
+1140;Uranium-238;Eau;groundwater;Bq;0.000280295;x;0.000201859;7.84356E-05
+1141;Uranium-238;Eau;ocean;Bq;0.331232778;x;0.238431795;0.092800983
+1142;Uranium-238;Eau;river;Bq;0.542759367;x;0.407794776;0.13496459
+1143;Uranium alpha;Air;low. pop.;Bq;0.462533615;x;0.346017904;0.116515711
+1144;Uranium alpha;Eau;river;Bq;9.04041479;x;6.763194069;2.277220721
+1145;Urea;Eau;river;kg;1.17267E-12;x;9.30415E-13;2.42256E-13
+1146;Vanadium;Air;;kg;1.24715E-08;x;1.02508E-08;2.22067E-09
+1147;Vanadium;Air;high. pop.;kg;2.80325E-05;x;2.11396E-05;6.8929E-06
+1148;Vanadium;Air;low. pop.;kg;9.17701E-08;x;7.07469E-08;2.10232E-08
+1149;Vanadium;Sol;agricultural;kg;3.89015E-09;x;3.24536E-09;6.44785E-10
+1150;Vanadium, ion;Eau;;kg;8.13129E-12;x;6.78978E-12;1.3415E-12
+1151;Vanadium, ion;Eau;groundwater;kg;7.70862E-08;x;5.90656E-08;1.80206E-08
+1152;Vanadium, ion;Eau;ocean;kg;2.38148E-07;x;1.74962E-07;6.31857E-08
+1153;Vanadium, ion;Eau;river;kg;5.12745E-07;x;3.58406E-07;1.54339E-07
+1154;Vermiculite;Brut;in ground;kg;6.6656E-07;x;6.26532E-07;4.00276E-08
+1155;VOC, volatile organic compounds, unspecified origin;Eau;ocean;kg;0.00013436;x;9.81631E-05;3.61973E-05
+1156;VOC, volatile organic compounds, unspecified origin;Eau;river;kg;0.00030578;x;0.000194297;0.000111483
+1157;Volume occupied, final repository for low-active radioactive waste;Brut;in ground;m3;7.13087E-08;x;5.33294E-08;1.79793E-08
+1158;Volume occupied, final repository for radioactive waste;Brut;in ground;m3;1.79241E-08;x;1.34864E-08;4.43777E-09
+1159;Volume occupied, reservoir;Brut;in water;m3y;0.055370626;x;0.043481473;0.011889153
+1160;Volume occupied, underground deposit;Brut;in ground;m3;5.10351E-07;x;4.51021E-07;5.93298E-08
+1161;Water;Air;;kg;0.000328246;x;0.000289608;3.86378E-05
+1162;Water;Air;high. pop.;kg;2.31617E-08;x;1.74085E-08;5.75317E-09
+1163;Water;Air;low. pop.;kg;1.86805E-07;x;1.8011E-07;6.69447E-09
+1164;Water;Air;stratosphere + troposphere;kg;1.13527E-06;x;1.09458E-06;4.06846E-08
+1165;Water, cooling, unspecified natural origin/m3;Brut;in water;m3;0.164995141;x;0.117380526;0.047614615
+1166;Water, lake;Brut;in water;m3;0.000700801;x;0.000659763;4.10382E-05
+1167;Water, river;Brut;in water;m3;0.03291353;x;0.024160463;0.008753067
+1168;Water, salt, ocean;Brut;in water;m3;0.00800719;x;0.005972683;0.002034508
+1169;Water, salt, sole;Brut;in water;m3;0.015358404;x;0.01038903;0.004969374
+1170;Water, turbine use, unspecified natural origin;Brut;in water;m3;52.65179189;x;47.74588481;4.905907082
+1171;Water, unspecified natural origin/m3;Brut;in water;m3;0.059061625;x;0.038449967;0.020611658
+1172;Water, well, in ground;Brut;in water;m3;0.006218313;x;0.005003855;0.001214458
+1173;Wood, hard, standing;Brut;biotic;m3;5.41716E-05;x;4.93141E-05;4.8575E-06
+1174;Wood, primary forest, standing;Brut;biotic;m3;1.29874E-07;x;9.22983E-08;3.75759E-08
+1175;Wood, soft, standing;Brut;biotic;m3;7.56202E-05;x;6.34745E-05;1.21457E-05
+1176;Wood, unspecified, standing/m3;Brut;biotic;m3;1.3251E-09;x;1.10571E-09;2.1939E-10
+1177;Xenon-131m;Air;low. pop.;Bq;2.50830777;x;1.522140471;0.986167298
+1178;Xenon-133;Air;low. pop.;Bq;82.10112172;x;48.2607027;33.84041902
+1179;Xenon-133m;Air;low. pop.;Bq;0.294044751;x;0.211024797;0.083019954
+1180;Xenon-135;Air;low. pop.;Bq;33.48636986;x;19.80029118;13.68607869
+1181;Xenon-135m;Air;low. pop.;Bq;20.03215044;x;11.65475333;8.377397115
+1182;Xenon-137;Air;low. pop.;Bq;0.44104171;x;0.221250202;0.219791508
+1183;Xenon-138;Air;low. pop.;Bq;3.702434958;x;1.966634171;1.735800787
+1184;Xylene;Air;;kg;5.29381E-05;x;1.98143E-07;5.27399E-05
+1185;Xylene;Air;high. pop.;kg;0.000719393;x;0.000678125;4.12679E-05
+1186;Xylene;Air;low. pop.;kg;1.49255E-05;x;1.12976E-05;3.62787E-06
+1187;Xylene;Eau;;kg;2.39597E-10;x;2.00069E-10;3.95279E-11
+1188;Xylene;Eau;ocean;kg;4.53514E-05;x;3.31366E-05;1.22149E-05
+1189;Xylene;Eau;river;kg;8.2627E-05;x;5.24407E-05;3.01863E-05
+1190;Zinc;Brut;in ground;kg;0.001207932;x;0.001031976;0.000175956
+1191;Zinc;Air;;kg;2.79484E-05;x;4.29614E-06;2.36523E-05
+1192;Zinc;Air;high. pop.;kg;1.85264E-06;x;1.40837E-06;4.44268E-07
+1193;Zinc;Air;low. pop.;kg;2.80813E-05;x;2.7375E-05;7.06222E-07
+1194;Zinc;Air;stratosphere + troposphere;kg;9.15563E-13;x;8.82753E-13;3.28109E-14
+1195;Zinc;Sol;;kg;3.17209E-05;x;4.40343E-07;3.12806E-05
+1196;Zinc;Sol;agricultural;kg;3.57777E-07;x;2.87862E-07;6.9915E-08
+1197;Zinc;Sol;industrial;kg;8.36978E-06;x;5.8388E-06;2.53098E-06
+1198;Zinc-65;Air;low. pop.;Bq;3.14815E-06;x;1.47291E-06;1.67523E-06
+1199;Zinc-65;Eau;river;Bq;0.007766944;x;0.003633904;0.00413304
+1200;Zinc, ion;Eau;;kg;3.2368E-05;x;9.79253E-07;3.13887E-05
+1201;Zinc, ion;Eau;groundwater;kg;6.63866E-07;x;5.41818E-07;1.22048E-07
+1202;Zinc, ion;Eau;lake;kg;5.53432E-14;x;4.56916E-14;9.65164E-15
+1203;Zinc, ion;Eau;ocean;kg;0.000230208;x;0.000168436;6.17725E-05
+1204;Zinc, ion;Eau;river;kg;6.72256E-05;x;4.39983E-05;2.32273E-05
+1205;Zirconium;Brut;in ground;kg;4.06731E-08;x;3.36156E-08;7.05742E-09
+1206;Zirconium;Air;low. pop.;kg;5.92787E-09;x;4.91381E-09;1.01406E-09
+1207;Zirconium-95;Air;low. pop.;Bq;3.07725E-06;x;1.43972E-06;1.63753E-06
+1208;Zirconium-95;Eau;river;Bq;8.99431E-05;x;4.20809E-05;4.78622E-05

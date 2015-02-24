@@ -1,0 +1,110 @@
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2013 Mathieu Fortin AgroParisTech/INRA UMR LERFoB, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
+package lerfob.carbonbalancetool;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.util.Vector;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import repicea.gui.REpiceaPanel;
+
+abstract class CarbonAccountingToolViewer extends REpiceaPanel { 
+	
+	private static final long serialVersionUID = 20130911L;
+	
+	private static Vector<Color> COLORS = new Vector<Color>();
+	static {
+		COLORS.add(Color.BLUE);
+		COLORS.add(Color.BLACK);
+		COLORS.add(Color.RED);
+		COLORS.add(Color.GRAY);
+		COLORS.add(Color.YELLOW);
+		COLORS.add(Color.GREEN);
+		COLORS.add(Color.WHITE);
+		COLORS.add(Color.MAGENTA);
+		COLORS.add(Color.ORANGE);
+		COLORS.add(Color.PINK);
+		COLORS.add(Color.CYAN);
+	}
+
+	private JPanel viewer;
+	protected CarbonAssessmentToolSimulationResult summary;
+	
+	protected CarbonAccountingToolViewer(CarbonAssessmentToolSimulationResult summary) {
+		super();
+		this.summary = summary;
+		createUI();
+	}
+	
+
+	/**
+	 * This method creates the panels that compose the UI.
+	 */
+	protected void createUI() {
+		setLayout(new BorderLayout());
+		viewer = new JPanel(new BorderLayout()); 
+		add(viewer, BorderLayout.CENTER);
+	}
+	
+	/**
+	 * This method returns the appropriate graph for the CarbonViewer instance.
+	 * @return a JComponent
+	 */
+	protected abstract JComponent createChart();
+	
+	protected String getPrefix() {return this.getClass().getSimpleName() + ".";}
+	
+	/**
+	 * This method returns a color for a particular compartment.
+	 * @param compartmentInfo = a CompartmentInfo instance
+	 * @return a Color object
+	 */
+	protected Color getColor(int i) {
+		if (i < COLORS.size()) {
+			return COLORS.get(i);
+		} else {
+			return COLORS.get(0);
+		}
+	}
+	
+
+	protected abstract String getTitle();
+	protected abstract String getXAxisLabel();
+	protected abstract String getYAxisLabel();
+
+	@Override
+	public String toString() {return getTitle();}
+	
+	@Override
+	public final void refreshInterface() {
+		viewer.removeAll();
+		viewer.add(createChart(), BorderLayout.CENTER);
+	}
+
+	@Override
+	public void listenTo () {}
+
+	@Override
+	public void doNotListenToAnymore () {}
+
+	
+}

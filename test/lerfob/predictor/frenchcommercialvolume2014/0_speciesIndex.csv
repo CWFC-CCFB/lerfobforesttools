@@ -1,0 +1,92 @@
+CODE,GENUS,SPECIES,COMMON NAME,match
+ABNO,Abies,nordmanniana,Nordman fir,ABIES_NORDMANNIANA
+ACCA,Acer,campestre,Hedge maple,CARPINUS_BETULUS
+ACNE,Acer,negundo,Boxelder,CARPINUS_BETULUS
+ACPL,Acer,platanoides,Norway maple,CARPINUS_BETULUS
+ACPS,Acer,pseudoplatanus,Sycamore maple,CARPINUS_BETULUS
+ACSA1,Acer,saccharinum,Silver maple,CARPINUS_BETULUS
+AEHI,Aesculus,hippocastanum,Horsechestnut,CARPINUS_BETULUS
+AIAL,Ailanthus,altissima,Tree of heaven,CARPINUS_BETULUS
+ALGL,Alnus,glutinosa,European alder,CARPINUS_BETULUS
+BENI,Betula,nigra,River birch,CARPINUS_BETULUS
+BEPE,Betula,pendula,European white birch,CARPINUS_BETULUS
+BEAL1,Betula,pubescens,Cut leaved birch,CARPINUS_BETULUS
+CADE2,Calocedrus,decurrens,Incense cedar,CEDRUS_ATLANTICA_OU_LIBAN
+CABE,Carpinus,betulus,European hornbeam,CARPINUS_BETULUS
+CABEFA,Carpinus,betulus 'fastigiata',Fastigate hornbeam,CARPINUS_BETULUS
+CASA2,Castanea,sativa,Castaﾑo comﾚn,CARPINUS_BETULUS
+CABI,Catalpa,bignonioides,Southern catalpa,CARPINUS_BETULUS
+CEATGL,Cedrus,atlantica glauca,Blue atlas cedar,CEDRUS_ATLANTICA_OU_LIBAN
+CEDE,Cedrus,deodara,Deodar cedar,CEDRUS_ATLANTICA_OU_LIBAN
+CELI,Cedrus,libani,Cedar of lebanon,CEDRUS_ATLANTICA_OU_LIBAN
+CESI3,Ceratonia,siliqua,Algarrobo europeo,CARPINUS_BETULUS
+COMA,Cornus,mas,Cornelian cherry,CARPINUS_BETULUS
+COSA81,Cornus,sanguinea,Bloodtwig dogwood,CARPINUS_BETULUS
+COAV,Corylus,avellana,European filbert,CARPINUS_BETULUS
+CROX,Crataegus,monogyna,Oneseed hawthorn,CARPINUS_BETULUS
+CRLA,Crataegus,x lavallei,Carriere hawthorn,CARPINUS_BETULUS
+CULE,Cupressocyparis,leylandii,Leyland cypress,CEDRUS_ATLANTICA_OU_LIBAN
+ELAN,Elaeagnus,angustifolia,Russian olive,CARPINUS_BETULUS
+FASY,Fagus,sylvatica,European beech,FAGUS_SYLVATICA
+FASYPU,Fagus,sylvatica 'purpurea',Copper beech,FAGUS_SYLVATICA
+FRAN2,Fraxinus,angustifolia,Narrow-leafed ash,FRAXINUS_EXCELSIOR
+FREX,Fraxinus,excelsior,European ash,FRAXINUS_EXCELSIOR
+FROR,Fraxinus,ornus,Flowering ash,FRAXINUS_EXCELSIOR
+GIBI,Ginkgo,biloba,Ginkgo,CARPINUS_BETULUS
+GLTR,Gleditsia,triacanthos,Honeylocust,CARPINUS_BETULUS
+MACLASS,Hardwood,species,Hardwood,CARPINUS_BETULUS
+JUNI,Juglans,nigra,Black walnut,JUGLANS_NIGRA
+JURE,Juglans,regia,English walnut,JUGLANS_NIGRA
+LIVU,Ligustrum,vulgare,Common privet,CARPINUS_BETULUS
+LIST,Liquidambar,styraciflua,Sweetgum,FAGUS_SYLVATICA
+LITU,Liriodendron,tulipifera,Tulip tree,FAGUS_SYLVATICA
+MAKO,Magnolia,kobus,Kobushi magnolia,CARPINUS_BETULUS
+MASO,Magnolia,x soulangiana,Saucer magnolia,CARPINUS_BETULUS
+MAFL80,Malus,floribunda,Japanese flower crabapple,CARPINUS_BETULUS
+MASY2,Malus,sylvestris,European crabapple,CARPINUS_BETULUS
+MEGL,Metasequoia,glyptostroboides,Dawn redwood,PSEUDOTSUGA_MENZIESII
+MONI,Morus,nigra,Black mulberry,CARPINUS_BETULUS
+NYSY,Nyssa,sylvatica,Black tupelo,CARPINUS_BETULUS
+PAPE,Parrotia,persica,Persian ironwood,FAGUS_SYLVATICA
+PATO,Paulownia,tomentosa,Royal paulownia,CARPINUS_BETULUS
+PIAB,Picea,abies,Norway spruce,PICEA_ABIES
+PINI,Pinus,nigra,Austrian pine,PINUS_NIGRA
+PISY,Pinus,sylvestris,Scotch pine,PINUS_SYLVESTRIS
+PLAC1,Platanus,x acerifolia,London plane,FAGUS_SYLVATICA
+POAL,Populus,alba,White poplar,FAGUS_SYLVATICA
+POEUNI,Populus,euramericana x nigra,Crows nest poplar,FAGUS_SYLVATICA
+PONI,Populus,nigra,Black poplar,FAGUS_SYLVATICA
+PONIIT,Populus,nigra 'italica',Lombardy poplar,FAGUS_SYLVATICA
+POSI,Populus,simonii,Chinese popular,FAGUS_SYLVATICA
+POTR10,Populus,tremula,European aspen,FAGUS_SYLVATICA
+POCA,Populus,x canescens,Gray poplar,FAGUS_SYLVATICA
+PRAV,Prunus,avium,Sweet cherry,CARPINUS_BETULUS
+PRCE,Prunus,cerasifera,Cherry plum,CARPINUS_BETULUS
+PRFR2,Prunus,fruticosa,European dwarf cherry,CARPINUS_BETULUS
+PRSE2,Prunus,serrulata,Kwanzan cherry,CARPINUS_BETULUS
+PRSEAM,Prunus,serrulata 'amanogawa,Amanogawa cherry,CARPINUS_BETULUS
+PRSU,Prunus,subhirtella,Higan cherry,CARPINUS_BETULUS
+PTFR,Pterocarya,fraxinifolia,Caucasian wingnut,CARYA_TOMENTOSA
+PYCACH,Pyrus,calleryana 'chanticl,Callery pear chanticleer,CARPINUS_BETULUS
+QURO,Quercus,robur,English oak,QUERCUS_ROBUR
+QUROFA,Quercus,robur 'fastigiata',Columnar english oak,QUERCUS_ROBUR
+ROPS,Robinia,pseudoacacia,Black locust,CARPINUS_BETULUS
+ROPSUM,Robinia,pseudoacacia umbracu,Robinia mop top,CARPINUS_BETULUS
+SAAL4,Salix,alba,White willow,CARPINUS_BETULUS
+SABA1PE,Salix,babylonica pekinensi,Peking willow,CARPINUS_BETULUS
+SACA4,Salix,caprea,Goat willow,CARPINUS_BETULUS
+SANI4,Sambucus,nigra,European black elderberry,CARPINUS_BETULUS
+PICLASS,Softwood,species,Softwood,ABIES_ALBA
+SOJA,Sophora,japonica,Japanese pagoda tree,CARPINUS_BETULUS
+SOAR,Sorbus,aria,Whitebeam,CARPINUS_BETULUS
+SOAU,Sorbus,aucuparia,European mountain ash,CARPINUS_BETULUS
+TADI,Taxodium,distichum,Baldcypress,LARIX_DECIDUA
+TABA,Taxus,baccata,English yew,LARIX_DECIDUA
+THPL,Thuja,plicata,Western redcedar,THUYA_PLICATA
+TICO,Tilia,cordata,Littleleaf linden,CARPINUS_BETULUS
+TICOGR,Tilia,cordata 'greenspire',Greenspire linden,CARPINUS_BETULUS
+TIEU2,Tilia,euchlora,Crimean linden,CARPINUS_BETULUS
+TIPL,Tilia,platyphyllos,Bigleaf linden,CARPINUS_BETULUS
+TITO,Tilia,tomentosa,Silver linden,CARPINUS_BETULUS
+ULMI,Ulmus,minor,Smooth-leaf elm,CARPINUS_BETULUS
+VIOP,Viburnum,opulus,European cranberry bush,CARPINUS_BETULUS
