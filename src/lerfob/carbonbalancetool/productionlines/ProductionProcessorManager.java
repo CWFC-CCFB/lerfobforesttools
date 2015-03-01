@@ -37,8 +37,6 @@ import lerfob.carbonbalancetool.ExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
-import quebecmrnfutility.treelogger.petrotreelogger.PetroTreeLogger;
-import quebecmrnfutility.treelogger.sybille.SybilleTreeLogger;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.serial.Memorizable;
 import repicea.serial.MemorizerPackage;
@@ -142,8 +140,16 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(PetroTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(SybilleTreeLogger.class.getName()));
+		try {
+			Class<?> petroTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.petrotreelogger.PetroTreeLogger");
+			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(petroTreeLoggerClass.getName()));
+		} catch (ClassNotFoundException e) {}
+		
+		try {
+			Class<?> sybilleTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.sybille.SybilleTreeLogger");
+			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(sybilleTreeLoggerClass.getName()));
+		} catch (ClassNotFoundException e) {}
+		
 		setAvailableTreeLoggers(defaultTreeLoggerDescriptions);
 	}
 
