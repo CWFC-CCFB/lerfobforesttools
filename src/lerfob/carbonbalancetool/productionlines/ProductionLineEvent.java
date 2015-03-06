@@ -24,7 +24,7 @@ import java.util.EventObject;
  * A ProductionLineEvent object is generated every time there is a change within a production line manager.
  * @author Mathieu Fortin - January 2013
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings("serial")
 @Deprecated
 public class ProductionLineEvent extends EventObject {
 

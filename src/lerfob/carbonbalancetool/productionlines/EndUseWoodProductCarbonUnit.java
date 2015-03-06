@@ -48,12 +48,12 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param creationDate the creation date (integer) (yr)
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
-	protected EndUseWoodProductCarbonUnit(int creationDate,
+	protected EndUseWoodProductCarbonUnit(double initialVolumeBeforeFirstTransformation,
+			int creationDate,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
-			AmountMap<Element> amountMap,
-			double originalRawVolume) {
+			AmountMap<Element> amountMap) {
 		super(creationDate, carbonUnitFeature, amountMap);
-		this.rawRoundWoodVolume = originalRawVolume;
+		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	
 		reinitProduct();
 	}
@@ -170,11 +170,11 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	}
 	
 
-//	@Override
-//	protected void addProcessUnit(ProcessUnit<Element> carbonUnit) {
-//		super.addProcessUnit(carbonUnit);
-////		this.rawRoundWoodVolume += ((EndUseWoodProductCarbonUnit) carbonUnit).rawRoundWoodVolume;
-//	}
+	@Override
+	protected void addProcessUnit(ProcessUnit<Element> carbonUnit) {
+		super.addProcessUnit(carbonUnit);
+		this.rawRoundWoodVolume += ((EndUseWoodProductCarbonUnit) carbonUnit).rawRoundWoodVolume;
+	}
 
 	/**
 	 * This method returns the substitution in eq tC obtained from a volume of this product.
