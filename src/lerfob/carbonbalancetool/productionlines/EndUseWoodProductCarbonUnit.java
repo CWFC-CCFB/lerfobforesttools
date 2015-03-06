@@ -40,6 +40,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	/**
 	 * Raw volume in m3 of wood material
 	 */
+	@Deprecated
 	private double rawRoundWoodVolume;	// this member is required in order to calculate the emissions with respect to the input round wood volume
 	
 	/**
@@ -48,6 +49,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param creationDate the creation date (integer) (yr)
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
+	@Deprecated
 	protected EndUseWoodProductCarbonUnit(double initialVolumeBeforeFirstTransformation,
 			int creationDate,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
@@ -58,6 +60,18 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 		reinitProduct();
 	}
 	
+	/**
+	 * The constructor of this class.
+	 * @param initialVolumeBeforeFirstTransformation the volume before the processing (double) (m3)
+	 * @param creationDate the creation date (integer) (yr)
+	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
+	 */
+	protected EndUseWoodProductCarbonUnit(int creationDate,
+			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
+			AmountMap<Element> amountMap) {
+		super(creationDate, carbonUnitFeature, amountMap);
+		reinitProduct();
+	}
 
 	/**
 	 * This method makes sure that the derived subproducts won't pile up in the collection. It is called at

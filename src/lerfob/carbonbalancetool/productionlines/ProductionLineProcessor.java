@@ -198,6 +198,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	 * @param processedVolume the volume after processing (m3)
 	 * @return the initial volume before any processing (m3)
 	 */
+	@Deprecated
 	protected double getInitialVolumeBeforeFirstTransformation(double processedVolume) {
 		double yieldFactor = (double) 1 / averageYield;
 		double initialVolume = processedVolume * yieldFactor;
@@ -227,9 +228,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
-			woodProduct = new EndUseWoodProductCarbonUnit(
-					getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)),		// TODO simplify this method 
-					creationDate, 
+			woodProduct = new EndUseWoodProductCarbonUnit(creationDate, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 					processedAmountMap);
 			woodProduct.addStatus(CarbonUnitStatus.EndUseWoodProduct);
