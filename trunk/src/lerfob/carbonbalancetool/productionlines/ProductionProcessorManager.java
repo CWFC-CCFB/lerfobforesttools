@@ -318,7 +318,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param creationDate the date at which the wood log is processed
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory, int creationDate, AmountMap<Element> amountMap) {
+	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory, int creationDate,	AmountMap<Element> amountMap) {
 		Processor processor = findLeftHandSideProcessor(treeLogCategory);
 		return processAmountMap(processor, creationDate, amountMap);
 	}

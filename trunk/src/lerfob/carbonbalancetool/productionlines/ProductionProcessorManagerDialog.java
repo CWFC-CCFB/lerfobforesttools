@@ -117,7 +117,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		ProductionLineFileExtension("production lines file (*.prl)", "fichier de lignes de production (*.prl)"),
 		Default("Default","D\u00E9faut"),
 		BuckingModelLabel("Bucking model", "Mod\u00E8le de billonnage"),
-		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un transformateur"),
+		ProcessorButtonToolTip("Create a processor", "Cr\u00E9 un transformateur"),
 		LandfillButtonToolTip("Landfill site", "D\u00E9charge"),
 		LeftInForestButtonToolTip("Left on forest floor", "Laiss\u00E9 en for\u00EAt"),
 		EndOfLifeLinkButtonToolTip("End of life destination", "Destination en fin de vie"),
@@ -143,6 +143,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UISetup.ToolTips.put(CreateEndOfLifeLinkButton.class.getName(), MessageID.EndOfLifeLinkButtonToolTip.toString());
 		UISetup.ToolTips.put(CreateLeftInForestProcessorButton.class.getName(), MessageID.LeftInForestButtonToolTip.toString());
 		UISetup.ToolTips.put(CreateLandfillProcessorButton.class.getName(), MessageID.LandfillButtonToolTip.toString());
+		
 	}
 
 	
