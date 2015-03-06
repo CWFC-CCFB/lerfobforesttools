@@ -198,6 +198,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	 * @param processedVolume the volume after processing (m3)
 	 * @return the initial volume before any processing (m3)
 	 */
+	@Deprecated
 	protected double getInitialVolumeBeforeFirstTransformation(double processedVolume) {
 		double yieldFactor = (double) 1 / averageYield;
 		double initialVolume = processedVolume * yieldFactor;
@@ -223,15 +224,14 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		CarbonUnit woodProduct;
 		
 		if (!isFinalProcessor()) {
-			woodProduct = new CarbonUnit(creationDate, null, processedAmountMap);
+			woodProduct = new CarbonUnit(creationDate, null, processedAmountMap, carbonUnit.getOriginalRawVolume());
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
-			woodProduct = new EndUseWoodProductCarbonUnit(
-					getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)),		// TODO simplify this method 
-					creationDate, 
+			woodProduct = new EndUseWoodProductCarbonUnit(creationDate, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
-					processedAmountMap);
+					processedAmountMap,
+					carbonUnit.getOriginalRawVolume());
 			woodProduct.addStatus(CarbonUnitStatus.EndUseWoodProduct);
 			outputUnits.add(woodProduct);
 			return outputUnits;
@@ -264,10 +264,10 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 //				Collection<ProcessUnit> processedUnits = this.createProcessUnitFromThisUnit(unit, intake)
 				if (!isLandfillProcessor() && !isLeftInForestProcessor()) {
 					woodProduct = new EndUseWoodProductCarbonUnit(
-							getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)),		// TODO simplify this method 
 							creationDate, 
 							(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
-							processedAmountMap);
+							processedAmountMap,
+							getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
 					outputMap.get(CarbonUnitStatus.EndUseWoodProduct).add(woodProduct);
 
 				} else if (isLandfillProcessor()) {
@@ -275,15 +275,15 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 					double docf = lfcuf.getDegradableOrganicCarbonFraction();
 					
 					AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp);
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 					landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp); 
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume))); 
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 				} else {				// is left in the forest
-					woodProduct = new CarbonUnit(creationDate, woodProductFeature, processedAmountMap);
+					woodProduct = new CarbonUnit(creationDate, woodProductFeature, processedAmountMap, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LeftInForest).add(woodProduct);
 				}
 
