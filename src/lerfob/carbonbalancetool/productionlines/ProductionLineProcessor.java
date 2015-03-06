@@ -224,14 +224,14 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		CarbonUnit woodProduct;
 		
 		if (!isFinalProcessor()) {
-			woodProduct = new CarbonUnit(creationDate, null, processedAmountMap, carbonUnit.getOriginalRawVolume());
+			woodProduct = new CarbonUnit(creationDate, null, processedAmountMap);
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
 			woodProduct = new EndUseWoodProductCarbonUnit(creationDate, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 					processedAmountMap,
-					carbonUnit.getOriginalRawVolume());
+					getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
 			woodProduct.addStatus(CarbonUnitStatus.EndUseWoodProduct);
 			outputUnits.add(woodProduct);
 			return outputUnits;
@@ -275,15 +275,15 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 					double docf = lfcuf.getDegradableOrganicCarbonFraction();
 					
 					AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 					landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume))); 
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp); 
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 				} else {				// is left in the forest
-					woodProduct = new CarbonUnit(creationDate, woodProductFeature, processedAmountMap, getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)));
+					woodProduct = new CarbonUnit(creationDate, woodProductFeature, processedAmountMap);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LeftInForest).add(woodProduct);
 				}
 
