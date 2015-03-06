@@ -83,6 +83,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	private int creationDate;
 	private boolean isActualized; 
 	private final List<CarbonUnitStatus> status; 
+	private double originalRawVolume;
 	
 	/**
 	 * Initial carbon in this product (Mg)
@@ -99,19 +100,23 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 */
 	protected CarbonUnit(int creationDate, 
 			CarbonUnitFeature carbonUnitFeature,
-			AmountMap<Element> initialAmounts) {
+			AmountMap<Element> initialAmounts,
+			double originalRawVolume) {
 		super(initialAmounts);
 		this.creationDate = creationDate;
 		this.carbonUnitFeature = carbonUnitFeature;
 		status = new ArrayList<CarbonUnitStatus>();
+		this.originalRawVolume = originalRawVolume;
 	}
 
 
 	@Override
 	protected void addProcessUnit(ProcessUnit<Element> unit) {
 		super.addProcessUnit(unit);
+		originalRawVolume += ((CarbonUnit) unit).originalRawVolume;
 	}
 
+	protected double getOriginalRawVolume() {return originalRawVolume;}
 	
 	protected boolean isActualized() {return isActualized;}
 	protected void setActualized(boolean isActualized) {this.isActualized = isActualized;}

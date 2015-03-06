@@ -41,7 +41,7 @@ import repicea.simulation.Parameterizable;
  * carbon balance assessment tool.
  * @author Mathieu Fortin - November 2012
  */
-@SuppressWarnings({ "serial"})
+@SuppressWarnings({ "serial", "deprecation"})
 @Deprecated
 public abstract class AbstractDesigner<C> 
 									implements 	Workspaceable, 
