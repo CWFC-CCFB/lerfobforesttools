@@ -37,10 +37,10 @@ import repicea.simulation.processsystem.Processor;
  */
 public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 
-//	/**
-//	 * Raw volume in m3 of wood material
-//	 */
-//	private double rawRoundWoodVolume;	// this member is required in order to calculate the emissions with respect to the input round wood volume
+	/**
+	 * Raw volume in m3 of wood material
+	 */
+	private double rawRoundWoodVolume;	// this member is required in order to calculate the emissions with respect to the input round wood volume
 	
 	/**
 	 * The constructor of this class.
@@ -52,8 +52,8 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap,
 			double originalRawVolume) {
-		super(creationDate, carbonUnitFeature, amountMap, originalRawVolume);
-//		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
+		super(creationDate, carbonUnitFeature, amountMap);
+		this.rawRoundWoodVolume = originalRawVolume;
 	
 		reinitProduct();
 	}
@@ -99,7 +99,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				Processor disposedToProcessor = ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
 				if (disposedToProcessor != null && updatedMap.get(Element.Volume) > 0) { // new implementation
 					List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
-					disposedUnits.add(new CarbonUnit(creationDate, null, updatedMap, updatedMap.get(Element.Volume)));
+					disposedUnits.add(new CarbonUnit(creationDate, null, updatedMap));
 					Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
 					for (CarbonUnit carbonUnit : processedUnits) {
 						if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
@@ -122,7 +122,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @return the substitution in tC (double)
 	 */
 	public double getTotalCarbonSubstitution() {
-		return getSubstitutionForAGivenRawVolume(getOriginalRawVolume());
+		return getSubstitutionForAGivenRawVolume(rawRoundWoodVolume);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 */
 	public double[] getCurrentCarbonSubstitution() {
 		if (isActualized()) {
-			double ratioToGetRawRoundWoodVolume = getOriginalRawVolume() / getProcessedVolumeAtCreationDate();
+			double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
 			double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
 			double[] releasedCarbonArray = getReleasedCarbonArray();
 			double[] outputArray = new double[getTimeScale().length];
@@ -164,7 +164,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	public double getTotalNonRenewableCarbonEmissions() {
 		double emission = 0d;
 		if (getCarbonUnitFeature().getLCA() != null) {		// lca is supposed to be instantiated at creation date
-			emission = - getCarbonUnitFeature().getLCA().getCarbonEmissionPerM3() * getOriginalRawVolume();
+			emission = - getCarbonUnitFeature().getLCA().getCarbonEmissionPerM3() * rawRoundWoodVolume;
 		}
 		return emission;
 	}

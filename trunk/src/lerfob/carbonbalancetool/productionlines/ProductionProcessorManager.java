@@ -346,7 +346,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<CarbonUnit> processAmountMap(Processor processor, int creationDate, AmountMap<Element> amountMap) {
 		List<ProcessUnit> inputUnits = new ArrayList<ProcessUnit>();
-		inputUnits.add(new CarbonUnit(creationDate, null, amountMap, amountMap.get(Element.Volume)));
+		inputUnits.add(new CarbonUnit(creationDate, null, amountMap));
 		Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
 		getCarbonUnitMap().add(processedUnits);
 		return processedUnits;

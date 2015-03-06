@@ -30,9 +30,8 @@ public class LandfillCarbonUnit extends CarbonUnit {
 	 */
 	protected LandfillCarbonUnit(int creationDate, 
 							LandfillCarbonUnitFeature landfillCarbonUnitFeature,
-							AmountMap<Element> amountMap,
-							double originalRawVolume) {
-		super(creationDate, landfillCarbonUnitFeature, amountMap, originalRawVolume);
+							AmountMap<Element> amountMap) {
+		super(creationDate, landfillCarbonUnitFeature, amountMap);
 	}
 	
 	@Override

@@ -109,7 +109,7 @@ public class ProductionLinesTest {
 			amountMap.put(Element.Biomass, volume * basicWoodDensity);
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
 
-			CarbonUnit carbonUnit = new CarbonUnit(2013, null, amountMap, amountMap.get(Element.Volume));
+			CarbonUnit carbonUnit = new CarbonUnit(2013, null, amountMap);
 			
 			int index = wpmm.getProductionLineNames().indexOf("Sawing");
 			if (index == -1) {
