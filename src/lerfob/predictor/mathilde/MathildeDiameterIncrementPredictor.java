@@ -97,7 +97,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
 				
 				subModule.getDefaultResidualError().put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
-				defaultResidualError.put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
 				
 				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
@@ -209,9 +208,9 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 			pred += subModule.getDefaultRandomEffects().get(HierarchicalLevel.Tree).getVariance().m_afData[0][0] * .5;
 		}
 		if (isResidualVariabilityEnabled) {
-			pred += getResidualError().m_afData[0][0];
+			pred += subModule.getResidualErrorForThisVersion().m_afData[0][0];
 		} else {
-			pred += this.defaultResidualError.get(ErrorTermGroup.Default).getVariance().m_afData[0][0] * .5;
+			pred += subModule.getDefaultResidualError().get(ErrorTermGroup.Default).getVariance().m_afData[0][0] * .5;
 		}
 		
 		double backtransformedPred = Math.exp(pred) - 1;
