@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,10 +112,13 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 	}
 
+	protected double getFixedEffectOnlyPrediction(MathildeDiameterIncrementStand stand, MathildeTree tree) {
+		Matrix currentBeta = subModules.get(0).getParameters(stand);
+		return getFixedEffectOnlyPrediction(currentBeta, stand, tree);
+	}
 	
-	protected synchronized double getFixedEffectOnlyPrediction(MathildeDiameterIncrementStand stand, MathildeTree tree) {
+	protected synchronized double getFixedEffectOnlyPrediction(Matrix currentBeta, MathildeDiameterIncrementStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
-		Matrix currentBeta = getParametersForThisRealization(stand);
 
 		double upcomingCut = 0d;
 		if (stand.isGoingToBeHarvested()) {
@@ -187,7 +191,20 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	@Override
 	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
-		double pred = getFixedEffectOnlyPrediction(stand, tree);
+		MathildeSubModule subModule;
+		if (parms.length > 0 && parms[0] instanceof Integer) {
+			subModule = subModules.get(parms[0]);
+			if (subModule == null) {
+				throw new InvalidParameterException("The integer in the parms parameter is not valid!");
+			} 
+		} else {
+			subModule = subModules.get(0);
+		}
+		
+		Matrix currentBeta = subModule.getParameters(stand);
+//		Matrix currentBeta = getParametersForThisRealization(stand);
+
+		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 		if (isRandomEffectsVariabilityEnabled) {
 			pred += getRandomEffectsForThisSubject(tree).m_afData[0][0];
 			pred += getRandomEffectsForThisSubject(stand).m_afData[0][0];
