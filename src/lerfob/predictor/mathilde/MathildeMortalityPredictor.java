@@ -18,11 +18,17 @@
  */
 package lerfob.predictor.mathilde;
 
+import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.Map;
+
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.EvaluableFunction;
 import repicea.math.Matrix;
 import repicea.simulation.LogisticModelBasedSimulator;
+import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
+import repicea.simulation.ParameterMap;
 import repicea.stats.LinearStatisticalExpression;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
@@ -52,12 +58,39 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 
 	}
 	
+	private final class MathildeMortalityPredictorSubModule extends ModelBasedSimulator {
+		protected MathildeMortalityPredictorSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled) {
+			super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, false);
+		}
+		
+		protected void setBeta(GaussianEstimate betaEstimate) {
+			this.defaultBeta = betaEstimate;
+		}
+		
+		protected void setRandomEffect(GaussianEstimate randomEffect) {
+			defaultRandomEffects.put(HierarchicalLevel.IntervalNestedInPlot, randomEffect);
+		}
+		
+		protected final Matrix getParameters(MathildeMortalityStand stand) {
+			return getParametersForThisRealization(stand);
+		}
+		
+		protected final Matrix getWindstormRandomEffect(IntervalNestedInPlotDefinition interval) {
+			return getRandomEffectsForThisSubject(interval);
+		}
+		
+		protected final Map<HierarchicalLevel,GaussianEstimate> getDefaultRandomEffects() {return defaultRandomEffects;}
+	}
+	
+	
+	private final Map<Integer, MathildeMortalityPredictorSubModule> subModules;
 	
 	private final LinkFunction linkFunction;
 	private final LinearStatisticalExpression eta;
 	private final LinkFunction embeddedLinkFunction;
 	private final LinearStatisticalExpression embeddedEta;
 	private final ExtendedLinkFunction extendedLinkFunction;
+	private int numberOfParameters;
 	protected GaussHermiteQuadrature ghq;
 
 	/**
@@ -67,8 +100,9 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 	 */
 	public MathildeMortalityPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);	
+		subModules = new HashMap<Integer, MathildeMortalityPredictorSubModule>();
 		init();
-		oXVector = new Matrix(1,defaultBeta.getMean().m_iRows);
+		oXVector = new Matrix(1,numberOfParameters);
 		linkFunction = new LinkFunction(Type.CLogLog);
 		eta = new LinearStatisticalExpression();
 		linkFunction.setParameterValue(LFParameter.Eta, eta);
@@ -90,18 +124,31 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 			String path = ObjectUtility.getRelativePackagePath(getClass());
 			String betaFilename = path + "0_MathildeMortalityBeta.csv";
 			String omegaFilename = path + "0_MathildeMortalityOmega.csv";
-//			String covparmsFilename = path + "0_MathildeMortalityCovParms.csv";
 
-			Matrix betaPrelim = ParameterLoader.loadVectorFromFile(betaFilename).get();
-			int nbParams = betaPrelim.m_iRows - 1;
-			Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, nbParams - 1, 0, 0);
-			Matrix randomEffectVariance = betaPrelim.getSubMatrix(nbParams, nbParams, 0, 0);
-			Matrix defaultBetaVariance = ParameterLoader.loadMatrixFromFile(omegaFilename).getSubMatrix(0, nbParams - 1, 0, nbParams - 1);
-			defaultBeta = new GaussianEstimate(defaultBetaMean, defaultBetaVariance);
+			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1,betaFilename);
+//			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);		// TODO change to this implementation
 			
-//			Matrix randomEffectVariance = ParameterLoader.loadVectorFromFile(covparmsFilename).get();
-			GaussianEstimate randomEffect = new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance);
-			defaultRandomEffects.put(HierarchicalLevel.IntervalNestedInPlot, randomEffect);
+			numberOfParameters = -1;
+			int numberOfExcludedGroups = 0;		// TODO change for 10
+			
+			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			//
+				Matrix betaPrelim = betaMap.get(excludedGroup);
+				if (numberOfParameters == -1) {
+					numberOfParameters = betaPrelim.m_iRows - 1;
+				}
+				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
+				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
+				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename).getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);
+//				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
+				MathildeMortalityPredictorSubModule subModule = new MathildeMortalityPredictorSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
+				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setRandomEffect(new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
+				subModules.put(excludedGroup, subModule);
+			}
+					
+////			Matrix randomEffectVariance = ParameterLoader.loadVectorFromFile(covparmsFilename).get();
+//			GaussianEstimate randomEffect = new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance);
+//			defaultRandomEffects.put(HierarchicalLevel.IntervalNestedInPlot, randomEffect);
 			
 		} catch (Exception e) {
 			System.out.println("MathildeMortalityPredictor.init() : Unable to initialize the MathildeMortalityPredictor module");
@@ -183,7 +230,17 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 			upcomingWindstorm = 1d;
 		} 
 		
-		Matrix beta = getParametersForThisRealization(stand);
+		MathildeMortalityPredictorSubModule subModule;
+		if (parms.length > 0 && parms[0] instanceof Integer) {
+			subModule = subModules.get(parms[0]);
+			if (subModule == null) {
+				throw new InvalidParameterException("The integer in the parms parameter is not valid!");
+			} 
+		} else {
+			subModule = subModules.get(0);
+		}
+		
+		Matrix beta = subModule.getParameters(stand);
 		eta.setParameterValue(1, upcomingWindstorm);
 		
 		double pred = getFixedEffectOnlyPrediction(beta, stand, tree);
@@ -193,13 +250,13 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		embeddedEta.setVariableValue(0, beta.m_afData[14][0]);
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
-			Matrix randomEffects = getRandomEffectsForThisSubject(interval);
+			Matrix randomEffects = subModule.getWindstormRandomEffect(interval);
 			embeddedEta.setVariableValue(1, randomEffects.m_afData[0][0]);
 			prob = extendedLinkFunction.getValue();
 		} else {
 			embeddedEta.setVariableValue(1, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
-				prob = ghq.getOneDimensionIntegral(extendedLinkFunction, embeddedEta, 1, defaultRandomEffects.get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getLowerCholeskyTriangle().m_afData[0][0]);
+				prob = ghq.getOneDimensionIntegral(extendedLinkFunction, embeddedEta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getLowerCholeskyTriangle().m_afData[0][0]);
 			} else {									// no need to evaluate the quadrature when there is no windstorm
 				prob = extendedLinkFunction.getValue();
 			}
