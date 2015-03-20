@@ -18,11 +18,15 @@
  */
 package lerfob.predictor.mathilde;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
+import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -37,6 +41,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 	protected double errorVariance; // for test purpose only
 	
+	private final Map<Integer, MathildeSubModule> subModules;
 	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
@@ -45,11 +50,9 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 * @param isRandomEffectsVariabilityEnabled a boolean
 	 * @param isResidualVariabilityEnabled a boolean
 	 */
-	public MathildeDiameterIncrementPredictor (boolean isParametersVariabilityEnabled,
-			boolean isRandomEffectsVariabilityEnabled,
-			boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled,
-				isResidualVariabilityEnabled);
+	public MathildeDiameterIncrementPredictor(boolean isParametersVariabilityEnabled,boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+		subModules = new HashMap<Integer, MathildeSubModule>();
 		init();
 	}
 
@@ -59,25 +62,50 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 			String betaFilename = path + "0_MathildeDbhIncBeta.csv";
 			String omegaFilename = path + "0_MathildeDbhIncOmega.csv";
 			String covparmsFilename = path + "0_MathildeDbhIncCovParms.csv";
+			
+			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1,betaFilename);
+			ParameterMap covparmsMap = ParameterLoader.loadVectorFromFile(1,covparmsFilename);
+//			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);		// TODO change to this implementation
+			
+			int numberOfParameters = -1;
+			int numberOfExcludedGroups = 0;		// TODO change for 10
+			
+			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			//
+				Matrix defaultBetaMean = betaMap.get(excludedGroup);
+				if (numberOfParameters == -1) {
+					numberOfParameters = defaultBetaMean.m_iRows - 1;
+				}
+				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
+//				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
 
-			Matrix defaultBetaMean = ParameterLoader.loadVectorFromFile(betaFilename).get();
-			Matrix defaultBetaVariance = ParameterLoader.loadMatrixFromFile(omegaFilename);
-			defaultBeta = new GaussianEstimate(defaultBetaMean, defaultBetaVariance);
-			Matrix covParms = ParameterLoader.loadVectorFromFile(covparmsFilename).get();
-			
-			Matrix meanPlotRandomEffect = new Matrix(1,1);
-			Matrix varPlotRandomEffect = covParms.getSubMatrix(0, 0, 0, 0);
-			this.defaultRandomEffects.put(HierarchicalLevel.Plot, new GaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
+				subModules.put(excludedGroup, subModule);
 
-			Matrix meanTreeRandomEffect = new Matrix(1,1);
-			Matrix varTreeRandomEffect = covParms.getSubMatrix(1, 1, 0, 0);
-			this.defaultRandomEffects.put(HierarchicalLevel.Tree, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
-			
-			Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
-			
-			this.defaultResidualError.put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
-			this.errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
-			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
+				GaussianEstimate beta = new GaussianEstimate(defaultBetaMean, omega);
+				defaultBeta = beta;
+				subModule.setBeta(beta);
+	
+				Matrix covParms = covparmsMap.get(excludedGroup);
+				
+				Matrix meanPlotRandomEffect = new Matrix(1,1);
+				Matrix varPlotRandomEffect = covParms.getSubMatrix(0, 0, 0, 0);
+				subModule.getDefaultRandomEffects().put(HierarchicalLevel.Plot, new GaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+				defaultRandomEffects.put(HierarchicalLevel.Plot, new GaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+				
+				Matrix meanTreeRandomEffect = new Matrix(1,1);
+				Matrix varTreeRandomEffect = covParms.getSubMatrix(1, 1, 0, 0);
+				subModule.getDefaultRandomEffects().put(HierarchicalLevel.Tree, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
+				defaultRandomEffects.put(HierarchicalLevel.Tree, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
+				
+				Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
+				
+				subModule.getDefaultResidualError().put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
+				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
+				defaultResidualError.put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
+				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
+			}
+
+			oXVector = new Matrix(1, numberOfParameters);
 		} catch (Exception e) {
 			System.out.println("MathildeDiameterIncrementPredictor.init() : Unable to initialize the MathildeDiameterIncrementPredictor module");
 		}
