@@ -82,9 +82,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
 
-				GaussianEstimate beta = new GaussianEstimate(defaultBetaMean, omega);
-				defaultBeta = beta;
-				subModule.setBeta(beta);
+				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
 	
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				
@@ -202,7 +200,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 		
 		Matrix currentBeta = subModule.getParameters(stand);
-//		Matrix currentBeta = getParametersForThisRealization(stand);
 
 		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 		if (isRandomEffectsVariabilityEnabled) {
