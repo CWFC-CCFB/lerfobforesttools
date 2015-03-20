@@ -26,7 +26,6 @@ import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.EvaluableFunction;
 import repicea.math.Matrix;
 import repicea.simulation.LogisticModelBasedSimulator;
-import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.LinearStatisticalExpression;
@@ -58,32 +57,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 
 	}
 	
-	private final class MathildeMortalityPredictorSubModule extends ModelBasedSimulator {
-		protected MathildeMortalityPredictorSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled) {
-			super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, false);
-		}
-		
-		protected void setBeta(GaussianEstimate betaEstimate) {
-			this.defaultBeta = betaEstimate;
-		}
-		
-		protected void setRandomEffect(GaussianEstimate randomEffect) {
-			defaultRandomEffects.put(HierarchicalLevel.IntervalNestedInPlot, randomEffect);
-		}
-		
-		protected final Matrix getParameters(MathildeMortalityStand stand) {
-			return getParametersForThisRealization(stand);
-		}
-		
-		protected final Matrix getWindstormRandomEffect(IntervalNestedInPlotDefinition interval) {
-			return getRandomEffectsForThisSubject(interval);
-		}
-		
-		protected final Map<HierarchicalLevel,GaussianEstimate> getDefaultRandomEffects() {return defaultRandomEffects;}
-	}
-	
-	
-	private final Map<Integer, MathildeMortalityPredictorSubModule> subModules;
+	private final Map<Integer, MathildeSubModule> subModules;
 	
 	private final LinkFunction linkFunction;
 	private final LinearStatisticalExpression eta;
@@ -100,7 +74,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 	 */
 	public MathildeMortalityPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);	
-		subModules = new HashMap<Integer, MathildeMortalityPredictorSubModule>();
+		subModules = new HashMap<Integer, MathildeSubModule>();
 		init();
 		oXVector = new Matrix(1,numberOfParameters);
 		linkFunction = new LinkFunction(Type.CLogLog);
@@ -140,16 +114,11 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
 				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename).getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);
 //				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
-				MathildeMortalityPredictorSubModule subModule = new MathildeMortalityPredictorSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
+				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
 				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
-				subModule.setRandomEffect(new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
+				subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
 				subModules.put(excludedGroup, subModule);
 			}
-					
-////			Matrix randomEffectVariance = ParameterLoader.loadVectorFromFile(covparmsFilename).get();
-//			GaussianEstimate randomEffect = new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance);
-//			defaultRandomEffects.put(HierarchicalLevel.IntervalNestedInPlot, randomEffect);
-			
 		} catch (Exception e) {
 			System.out.println("MathildeMortalityPredictor.init() : Unable to initialize the MathildeMortalityPredictor module");
 		}
@@ -230,7 +199,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 			upcomingWindstorm = 1d;
 		} 
 		
-		MathildeMortalityPredictorSubModule subModule;
+		MathildeSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = subModules.get(parms[0]);
 			if (subModule == null) {
@@ -250,7 +219,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		embeddedEta.setVariableValue(0, beta.m_afData[14][0]);
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
-			Matrix randomEffects = subModule.getWindstormRandomEffect(interval);
+			Matrix randomEffects = subModule.getRandomEffects(interval);
 			embeddedEta.setVariableValue(1, randomEffects.m_afData[0][0]);
 			prob = extendedLinkFunction.getValue();
 		} else {
