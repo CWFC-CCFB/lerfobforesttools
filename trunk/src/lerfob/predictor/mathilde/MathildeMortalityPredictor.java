@@ -114,7 +114,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
 				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename).getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);
 //				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
+				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
 				subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
 				subModules.put(excludedGroup, subModule);
