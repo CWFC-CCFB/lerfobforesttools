@@ -123,7 +123,8 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 			System.out.println("MathildeMortalityPredictor.init() : Unable to initialize the MathildeMortalityPredictor module");
 		}
 	}
-
+	
+	
 	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeMortalityStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 		
