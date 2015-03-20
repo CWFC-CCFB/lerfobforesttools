@@ -40,9 +40,9 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 	private static final long serialVersionUID = 20130627L;
 
-	protected double errorVariance; // for test purpose only
+//	protected double errorVariance; // for test purpose only
 	
-	private final Map<Integer, MathildeSubModule> subModules;
+	protected final Map<Integer, MathildeSubModule> subModules;
 	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
@@ -99,7 +99,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				subModule.getDefaultResidualError().put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
 				
 				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
-				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
+//				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 			}
 
 			oXVector = new Matrix(1, numberOfParameters);
