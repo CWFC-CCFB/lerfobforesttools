@@ -93,7 +93,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				Matrix meanTreeRandomEffect = new Matrix(1,1);
 				Matrix varTreeRandomEffect = covParms.getSubMatrix(1, 1, 0, 0);
 				subModule.getDefaultRandomEffects().put(HierarchicalLevel.Tree, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
-				defaultRandomEffects.put(HierarchicalLevel.Tree, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
 				
 				Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
 				
@@ -202,11 +201,11 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 		if (isRandomEffectsVariabilityEnabled) {
-			pred += getRandomEffectsForThisSubject(tree).m_afData[0][0];
+			pred += subModule.getRandomEffects(tree).m_afData[0][0];
 			pred += subModule.getRandomEffects(stand).m_afData[0][0];
 		} else {
 			pred += subModule.getDefaultRandomEffects().get(HierarchicalLevel.Plot).getVariance().m_afData[0][0] * .5;
-			pred += defaultRandomEffects.get(HierarchicalLevel.Tree).getVariance().m_afData[0][0] * .5;
+			pred += subModule.getDefaultRandomEffects().get(HierarchicalLevel.Tree).getVariance().m_afData[0][0] * .5;
 		}
 		if (isResidualVariabilityEnabled) {
 			pred += getResidualError().m_afData[0][0];
