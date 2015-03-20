@@ -14,8 +14,8 @@ final class MathildeSubModule extends ModelBasedSimulator {
 	double errorTotalVariance;
 	
 	
-	protected MathildeSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, false);
+	protected MathildeSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
 	protected void setBeta(GaussianEstimate betaEstimate) {

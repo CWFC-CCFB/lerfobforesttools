@@ -79,7 +79,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
 //				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
 
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled);
+				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
 
 				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
@@ -97,8 +97,9 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
 				
 				subModule.getDefaultResidualError().put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
-				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 				defaultResidualError.put(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
+				
+				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 			}
 
