@@ -31,8 +31,7 @@ import repicea.util.ObjectUtility;
  * This class contains the diameter increment module of Mathilde growth simulator.
  * @authors Mathieu Fortin and Rub�n Manso - August 2013
  */
-public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator 
-												implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree> {
+public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree> {
 
 	private static final long serialVersionUID = 20130627L;
 
@@ -159,7 +158,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	
 	@Override
-	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree) {
+	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
 		double pred = getFixedEffectOnlyPrediction(stand, tree);
 		if (isRandomEffectsVariabilityEnabled) {
 			pred += getRandomEffectsForThisSubject(tree).m_afData[0][0];
