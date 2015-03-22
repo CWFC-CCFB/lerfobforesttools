@@ -100,10 +100,10 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 			String omegaFilename = path + "0_MathildeMortalityOmega.csv";
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1,betaFilename);
-//			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);		// TODO change to this implementation
+			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);		
 			
 			numberOfParameters = -1;
-			int numberOfExcludedGroups = 0;		// TODO change for 10
+			int numberOfExcludedGroups = 10;		
 			
 			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			//
 				Matrix betaPrelim = betaMap.get(excludedGroup);
@@ -112,8 +112,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 				}
 				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
-				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename).getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);
-//				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
+				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
 				subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
