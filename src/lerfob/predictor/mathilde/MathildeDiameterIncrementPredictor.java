@@ -34,7 +34,7 @@ import repicea.util.ObjectUtility;
 
 /**
  * This class contains the diameter increment module of Mathilde growth simulator.
- * @authors Mathieu Fortin and Rub�n Manso - August 2013
+ * @authors Mathieu Fortin and Ruben Manso - August 2013
  */
 public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree> {
 
@@ -66,18 +66,18 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 			
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1,betaFilename);
 			ParameterMap covparmsMap = ParameterLoader.loadVectorFromFile(1,covparmsFilename);
-//			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);		// TODO change to this implementation
+			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);	
 			
 			int numberOfParameters = -1;
-			int numberOfExcludedGroups = 0;		// TODO change for 10
+			int numberOfExcludedGroups = 10;		
 			
 			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			//
 				Matrix defaultBetaMean = betaMap.get(excludedGroup);
 				if (numberOfParameters == -1) {
-					numberOfParameters = defaultBetaMean.m_iRows - 1;
+					numberOfParameters = defaultBetaMean.m_iRows;
 				}
-				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
-//				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, nbParams - 1, 0, nbParams - 1);		// TODO change to this implementation
+//				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
+				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
