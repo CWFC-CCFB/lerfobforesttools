@@ -72,12 +72,15 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
 		MathildeDiameterIncrementStand stand;
+		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 			double actual = predictor.getFixedEffectOnlyPrediction(stand, tree);
 			double expected = ((MathildeDiameterIncrementTreeImpl) tree).getPred();
 			assertEquals(expected, actual, 1E-10);
+			nbTrees++;
 		}
+		System.out.println("Trees succesfully compared : " + nbTrees);
 	}
 	
 	@Test
@@ -87,12 +90,15 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
 		MathildeDiameterIncrementStand stand;
+		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 			double actual = predictor.predictGrowth(stand, tree);
 			double expected = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
 			assertEquals(expected, actual, 1E-4);
+			nbTrees++;
 		}
+		System.out.println("Trees succesfully compared : " + nbTrees);
 	}
 	
 	@Test
@@ -141,7 +147,7 @@ public class MathildeDiameterIncrementTest {
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
 		double meanStochastic = dist.getMean().m_afData[0][0];
 		
-		assertEquals(meanDeterministic, meanStochastic, 0.03);			// subject to failure since the variability in the parameter estimates increases the error variance
+		assertEquals(meanDeterministic, meanStochastic, 0.04);			// subject to failure since the variability in the parameter estimates increases the error variance
 
 	}
 	
