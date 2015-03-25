@@ -127,7 +127,7 @@ public class MathildeMortalityTest {
 			double meanStochastic = dist.getMean().m_afData[0][0];
 
 			System.out.println("Deterministic : " + meanDeterministic + "; Stochastic : " + meanStochastic);			
-			assertEquals(meanDeterministic, meanStochastic, 0.008);
+			assertEquals(meanDeterministic, meanStochastic, 0.009);
 		}
 	}
 	
