@@ -40,17 +40,17 @@ public class MathildeMortalityTest {
 
 			try {
 				while ((record = reader.nextRecord()) != null) {
-					pred = Double.parseDouble(record[51].toString());
-					bal22 = Double.parseDouble(record[13].toString());
-					bal42 = Double.parseDouble(record[14].toString());
-					grEss = Integer.parseInt(record[18].toString());
-					diam0 = Double.parseDouble(record[11].toString());
-					int year0 = Integer.parseInt(record[9].toString());
-					int year1 = Integer.parseInt(record[17].toString());
+					pred = Double.parseDouble(record[14].toString());
+					bal22 = Double.parseDouble(record[5].toString());
+					bal42 = Double.parseDouble(record[6].toString());
+					grEss = Integer.parseInt(record[8].toString());
+					diam0 = Double.parseDouble(record[4].toString());
+					int year0 = Integer.parseInt(record[3].toString());
+					int year1 = Integer.parseInt(record[7].toString());
 					deltaT = year1 - year0;
-					upcomingCut = Integer.parseInt(record[36].toString());
-					upcomingDrought = Integer.parseInt(record[41].toString());
-					upcomingWindstorm = Integer.parseInt(record[39].toString());
+					upcomingCut = Integer.parseInt(record[9].toString());
+					upcomingDrought = Integer.parseInt(record[11].toString());
+					upcomingWindstorm = Integer.parseInt(record[10].toString());
 					tree = new MathildeMortalityTreeImpl(pred, 
 							diam0, 
 							grEss, 
