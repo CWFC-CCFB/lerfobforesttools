@@ -6,14 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.mathilde.MathildeDiameterIncrementPredictor;
-import lerfob.predictor.mathilde.MathildeDiameterIncrementStand;
-import lerfob.predictor.mathilde.MathildeTree;
-
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
-import repicea.math.Matrix;
 import repicea.stats.distributions.NonparametricDistribution;
 import repicea.util.ObjectUtility;
 
@@ -110,17 +105,16 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution dist = new NonparametricDistribution();
-		Matrix result;
+		NonparametricDistribution<Double> dist = new NonparametricDistribution<Double>();
+		double result;
 		for (int i = 0; i < nbReal; i++) {
 			tree.setMonteCarloRealizationId(i);
 			stand.setMonteCarloRealizationId(i);
-			result = new Matrix(1,1);
-			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
+			result = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean().m_afData[0][0];
+		double meanStochastic = dist.getMean();
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.02);
 		
@@ -135,17 +129,16 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution dist = new NonparametricDistribution();
-		Matrix result;
+		NonparametricDistribution<Double> dist = new NonparametricDistribution<Double>();
+		double result;
 		for (int i = 0; i < nbReal; i++) {
 			tree.setMonteCarloRealizationId(i);
 			stand.setMonteCarloRealizationId(i);
-			result = new Matrix(1,1);
-			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
+			result = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean().m_afData[0][0];
+		double meanStochastic = dist.getMean();
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.04);			// subject to failure since the variability in the parameter estimates increases the error variance
 

@@ -309,7 +309,7 @@ public class OakAndBeechStemProfileCalculator extends StemTaperModel {
 			return 0d; 	// no volume at all because the tree is too small
 		} else {
 			StemTaperEstimate taperEstimate = getPredictedTaperForTheseHeights(tree, heights);
-			Estimate<?> estimate = taperEstimate.getVolumeEstimate();
+			Estimate<Matrix, ?> estimate = taperEstimate.getVolumeEstimate();
 			double volume = estimate.getMean().getSumOfElements();
 			return volume;
 		}

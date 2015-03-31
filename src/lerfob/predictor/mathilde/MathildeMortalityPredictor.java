@@ -225,7 +225,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		} else {
 			embeddedEta.setVariableValue(1, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
-				prob = ghq.getOneDimensionIntegral(extendedLinkFunction, embeddedEta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getLowerCholeskyTriangle().m_afData[0][0]);
+				prob = ghq.getOneDimensionIntegral(extendedLinkFunction, embeddedEta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getStandardDeviation().m_afData[0][0]);
 			} else {									// no need to evaluate the quadrature when there is no windstorm
 				prob = extendedLinkFunction.getValue();
 			}
