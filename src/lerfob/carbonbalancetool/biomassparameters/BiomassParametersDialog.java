@@ -247,6 +247,8 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		carbonContentConiferous.addNumberFieldListener(this);
 		carbonContentBroadleaved.addNumberFieldListener(this);
 		reset.addActionListener(this);
+		close.addActionListener(this);
+		help.addActionListener(this);
 		branchFromModelChkBox.addItemListener(this);
 		rootFromModelChkBox.addItemListener(this);;
 		basicDensityFromModelChkBox.addItemListener(this);
@@ -265,7 +267,9 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		basicDensityFactorBroadleaved.removeNumberFieldListener(this);
 		carbonContentConiferous.removeNumberFieldListener(this);
 		carbonContentBroadleaved.removeNumberFieldListener(this);
-		reset.addActionListener(this);
+		reset.removeActionListener(this);
+		close.removeActionListener(this);
+		help.removeActionListener(this);
 		branchFromModelChkBox.removeItemListener(this);
 		rootFromModelChkBox.removeItemListener(this);;
 		basicDensityFromModelChkBox.removeItemListener(this);
@@ -379,7 +383,12 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		if (arg0.getSource().equals(reset)) {
 			getCaller().reset();
 			synchronizeUIWithOwner();
-		}
+		} else if (arg0.getSource().equals(close)) {
+			okAction();
+		} else if (arg0.getSource().equals(help)) {
+			helpAction();
+		} 
+
 	}
 
 
