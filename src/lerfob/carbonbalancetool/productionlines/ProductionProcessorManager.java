@@ -170,7 +170,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 	
 	public void resetCarbonUnitMap() {
-//		logCategoryProcessorIndices.clear();
+		logCategoryProcessorIndices.clear();
 		getCarbonUnitMap().clear();
 	}
 	
