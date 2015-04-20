@@ -16,7 +16,7 @@ License for more details.
 
 Please see the license at http://www.gnu.org/copyleft/lesser.html.
 
-This library requires the repicea libraries to work properly, which 
+This library requires the repicea library to work properly, which 
 are all protected by a GNU Lesser General Public License. It also requires 
 the JFreeChart library (http://www.jfree.org/jfreechart/) protected by a 
 GNU LGP license and py4j library (http://py4j.sourceforge.net/) protected by a BSD license. 
