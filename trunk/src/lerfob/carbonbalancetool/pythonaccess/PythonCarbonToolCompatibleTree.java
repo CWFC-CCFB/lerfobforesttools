@@ -25,8 +25,7 @@ import lerfob.carbonbalancetool.CarbonToolCompatibleTree;
  * This internal class is actually a wrapper for the trees that are sent to the PythonAccessPoint class.
  * @author Mathieu Fortin - May 2014
  */
-abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTree, 
-												BasicWoodDensityProvider  {
+abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTree, BasicWoodDensityProvider {
 
 	final SpeciesType speciesType; 
 	final AverageBasicDensity species;
@@ -36,13 +35,11 @@ abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTre
 	final double rootsVolume;
 	final double branchesVolume;
 	final double trunkVolume;
-	final double dbhCm;
 
 	PythonCarbonToolCompatibleTree(SpeciesType speciesType, 
 			AverageBasicDensity species, 
 			TreeStatusPriorToLogging treeStatusPriorToLogging,
 			StatusClass statusClass, 
-			double dbhCm,
 			double number, 
 			double biomassRoots,
 			double biomassTrunk,
@@ -51,7 +48,6 @@ abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTre
 		this.species = species;
 		this.treeStatusPriorToLogging = treeStatusPriorToLogging;
 		setStatusClass(statusClass);
-		this.dbhCm = dbhCm;
 		this.number = number;
 		this.branchesVolume = biomassBranches / species.getBasicDensity();
 		this.rootsVolume = biomassRoots / species.getBasicDensity();
@@ -72,9 +68,7 @@ abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTre
 	public String getSpeciesName() {return species.name();}
 
 	@Override
-	public void setStatusClass(StatusClass statusClass) {
-		this.statusClass = statusClass;
-	}
+	public void setStatusClass(StatusClass statusClass) {this.statusClass = statusClass;}
 
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
@@ -83,8 +77,6 @@ abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTre
 	public SpeciesType getSpeciesType() {return speciesType;}
 
 	@Override
-	public double getBasicWoodDensity() {
-		return species.getBasicDensity();
-	}
+	public double getBasicWoodDensity() {return species.getBasicDensity();}
 
 }
