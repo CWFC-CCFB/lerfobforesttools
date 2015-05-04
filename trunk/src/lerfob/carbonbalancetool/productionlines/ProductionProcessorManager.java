@@ -54,6 +54,8 @@ import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 
 /**
  * The ProductionProcessorManager class is an implementation of SystemManager for production
@@ -442,6 +444,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 
 	public static void main(String[] args) {
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 //		ProductionProcessorManager ppm = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		String filename = ObjectUtility.getPackagePath(ppm.getClass()) 

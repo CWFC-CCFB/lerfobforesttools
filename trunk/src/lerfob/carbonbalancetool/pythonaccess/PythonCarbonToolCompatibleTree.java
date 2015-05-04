@@ -18,14 +18,19 @@
  */
 package lerfob.carbonbalancetool.pythonaccess;
 
+import lerfob.carbonbalancetool.AboveGroundVolumeProvider;
 import lerfob.carbonbalancetool.BasicWoodDensityProvider;
+import lerfob.carbonbalancetool.BelowGroundVolumeProvider;
 import lerfob.carbonbalancetool.CarbonToolCompatibleTree;
 
 /**
  * This internal class is actually a wrapper for the trees that are sent to the PythonAccessPoint class.
  * @author Mathieu Fortin - May 2014
  */
-abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTree, BasicWoodDensityProvider {
+abstract class PythonCarbonToolCompatibleTree implements 	CarbonToolCompatibleTree, 
+															BasicWoodDensityProvider,
+															AboveGroundVolumeProvider, 
+															BelowGroundVolumeProvider {
 
 	final SpeciesType speciesType; 
 	final AverageBasicDensity species;
@@ -78,5 +83,11 @@ abstract class PythonCarbonToolCompatibleTree implements CarbonToolCompatibleTre
 
 	@Override
 	public double getBasicWoodDensity() {return species.getBasicDensity();}
+
+	@Override
+	public double getAboveGroundVolumeM3() {return branchesVolume + trunkVolume;}
+
+	@Override
+	public double getBelowGroundVolumeM3() {return rootsVolume;}
 
 }
