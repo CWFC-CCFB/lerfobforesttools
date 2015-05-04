@@ -134,10 +134,9 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			double mqd = Double.parseDouble(innerMap.get("DBHmy").toString());
 			double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
 			double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
-			@SuppressWarnings("unused")
 			double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
 			double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
-
+			
 			double nbTrees = nbTreesHa * stand.getAreaHa();
 			
 			if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
@@ -146,6 +145,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 						TreeStatusPriorToLogging.Alive,
 						StatusClass.cut,
 						mqd,
+						dbhStandardDeviation,
 						nbTrees,
 						getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 						getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
@@ -178,7 +178,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	}
 	
 	private double getAverageDryBiomassByTree(double kgM2, double nbTreesHa) {
-		return kgM2 * 10 / nbTreesHa;		// 10: 0.001 from kg to Mg times 10000 m2/ha
+		return kgM2 * 10d / nbTreesHa;		// 10: 0.001 from kg to Mg times 10000 m2/ha
 	}
 
 	@Override
