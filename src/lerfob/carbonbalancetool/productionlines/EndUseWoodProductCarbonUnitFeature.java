@@ -84,6 +84,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	 */
 	protected EndUseWoodProductCarbonUnitFeature(ProductionLineProcessor processor) {
 		super(processor);
+		useClass = UseClass.NONE;
 	}
 	
 	protected UseClass getUseClass() {return this.useClass;}
@@ -150,6 +151,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 			Object obj = ((JComboBox) evt.getSource()).getSelectedItem();
 			if (obj instanceof UseClass) {
 				useClass = (UseClass) obj;
+//				System.out.println("Use class changed for " + useClass.name());
 			} else if (obj instanceof LifeCycleAnalysis.ReferenceLCA) {
 				lca = (LifeCycleAnalysis) ((LifeCycleAnalysis.ReferenceLCA) obj).getLCA();
 			}
