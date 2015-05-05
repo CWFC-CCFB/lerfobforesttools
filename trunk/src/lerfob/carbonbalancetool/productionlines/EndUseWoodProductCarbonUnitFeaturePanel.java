@@ -117,15 +117,11 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		
 		useClassList = new JComboBox(UseClass.values());
 		UseClass useClass = (getCaller()).getUseClass();
-		if (useClass != null) {
-			for (int i = 0; i < UseClass.values().length; i++) {
-				if (useClass == UseClass.values()[i]) {
-					useClassList.setSelectedIndex(i);
-					break;
-				}
+		for (int i = 0; i < UseClass.values().length; i++) {
+			if (useClass == UseClass.values()[i]) {
+				useClassList.setSelectedIndex(i);
+				break;
 			}
-		} else {
-			useClassList.setSelectedIndex(0);
 		}
 		
 		lifeCycleAnalysisList = new JComboBox(LifeCycleAnalysis.ReferenceLCA.values());
@@ -157,21 +153,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		averageSubstitutionPanel.add(averageSubstitutionTextField, BorderLayout.CENTER);
 		averageSubstitutionPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 
-//		JPanel isDisposableCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//		isDisposableCheckBoxPanel.add(isDisposableCheckBox);
-//		isDisposableCheckBoxPanel.add(new JLabel(UIControlManager.getString(MessageID.LandfillSiteCheckBoxLabel)));
-//		
-//		JPanel disposableProportionSliderLabel = new JPanel(new BorderLayout());
-//		JPanel disposableProportionSliderSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//		disposableProportionSliderSubPanel.add(Box.createHorizontalStrut(10));
-//		disposableProportionSliderSubPanel.add(new JLabel(UIControlManager.getString(MessageID.PercentageSentToTheLandfill)));
-//		disposableProportionSliderSubPanel.add(disposableProportionLabel);
-//		disposableProportionSliderSubPanel.add(Box.createHorizontalStrut(10));
-//		disposableProportionSliderLabel.add(disposableProportionSliderSubPanel, BorderLayout.WEST);
-//		disposableProportionSliderLabel.add(disposableProportionSlider, BorderLayout.CENTER);
-//		disposableProportionSliderLabel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
-		
-				
 		JPanel useClassPanel = new JPanel(new BorderLayout());
 		JPanel useClassSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		useClassSubPanel.add(Box.createHorizontalStrut(10));
@@ -192,9 +173,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		
 		mainPanel.add(averageSubstitutionPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
-//		mainPanel.add(isDisposableCheckBoxPanel);
-//		mainPanel.add(disposableProportionSliderLabel);
-//		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(useClassPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(lifeCyclePanel);

@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.pythonaccess;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import java.util.Vector;
 
 import lerfob.carbonbalancetool.BasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CarbonAssessmentToolSimulationResult;
+import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CarbonToolCompatibleStand;
 import lerfob.carbonbalancetool.LERFoBCarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
@@ -99,12 +101,12 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			speciesForSimulation = speciesCode;
 			String filename;
 			if (speciesForSimulation.equals(AverageBasicDensity.MaritimePine)) {
-				filename = ObjectUtility.getRootPath(getClass()) + "maritimePineForever.prl";
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
 			} else {
 				filename = "TOBEDEFINED";
 			}
 			System.out.println("Loading settings : " + filename);
-			this.getCarbonToolSettings().getCurrentProductionProcessorManager().load(filename);
+			getCarbonToolSettings().getCurrentProductionProcessorManager().load(filename);
 		}
 	}
 
@@ -137,6 +139,10 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
 			double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
 			
+			if (mqd <= 0 || dbhStandardDeviation <= 0) {
+				throw new InvalidParameterException("Mean diameter or its standard deviation are equal to or smaller than 0");
+			}
+			
 			double nbTrees = nbTreesHa * stand.getAreaHa();
 			
 			if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
@@ -158,11 +164,15 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		calculateCarbon();
 		CarbonAssessmentToolSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
 		Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap = simulationResult.getProductEvolutionMap();
-
+		List<Integer> years = new ArrayList<Integer>();
+		years.addAll(productEvolutionMap.keySet());
+		Collections.sort(years);
+		
+		Double[] carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts);
 		
 		Map<Integer, Map<String, Double>> outputMap = new HashMap<Integer, Map<String, Double>>();
-
-		for (Integer year : productEvolutionMap.keySet()) {
+		
+		for (Integer year : years) {
 			if (!outputMap.containsKey(year)) {
 				outputMap.put(year, new HashMap<String, Double>());
 			}
@@ -170,8 +180,9 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			Map<UseClass, AmountMap<Element>> innerInputMap2 = productEvolutionMap.get(year);
 			for (UseClass useClass : innerInputMap2.keySet()) {
 				AmountMap<Element> amountMap = innerInputMap2.get(useClass);
-				innerOutputMap1.put("W" + useClass.name().toLowerCase(), amountMap.get(Element.Biomass));
+				innerOutputMap1.put("BiomassMgHa" + useClass.name().toUpperCase(), amountMap.get(Element.Biomass));
 			}
+			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP[years.indexOf(year)]);
 		}
 		System.out.println("Stand " + standID + " processed...");
 		return outputMap;

@@ -86,7 +86,6 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 	protected void createUI() {
 		setLayout(new BorderLayout());
 		JPanel setupPanel = new JPanel(new BorderLayout());
-//		setupPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(setupPanel, BorderLayout.CENTER);
 		mainPanel = new JPanel();
 		setupPanel.add(mainPanel, BorderLayout.NORTH);
