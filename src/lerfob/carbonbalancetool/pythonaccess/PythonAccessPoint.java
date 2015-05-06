@@ -112,7 +112,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 
 	
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
 		final String keyFirstInnerMap = "RECOLTE";
 		List<CarbonToolCompatibleStand> standList = new ArrayList<CarbonToolCompatibleStand>();
@@ -126,10 +126,15 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		} else {
 			throw new InvalidParameterException("The species has not been properly set!");
 		}
-		for (Object dateYr : inputMap.keySet()) {
+		
+		List<Integer> years = new ArrayList<Integer>();
+		years.addAll(inputMap.keySet());
+		Collections.sort(years);
+
+		for (Integer dateYr : years) {
 			Map innerMap = (Map) ((Map) inputMap.get(dateYr)).get(keyFirstInnerMap);
 			
-			stand = new PythonCarbonToolCompatibleStand(areaHa, standID, (Integer) dateYr);
+			stand = new PythonCarbonToolCompatibleStand(areaHa, standID, dateYr);
 			standList.add(stand);
 			
 			double nbTreesHa = Double.parseDouble(innerMap.get("NbTrees").toString());
@@ -138,25 +143,23 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
 			double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
 			double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
-			
-			if (mqd <= 0 || dbhStandardDeviation <= 0) {
-				throw new InvalidParameterException("Mean diameter or its standard deviation are equal to or smaller than 0");
-			}
-			
-			double nbTrees = nbTreesHa * stand.getAreaHa();
-			
-			if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
-				tree = new PythonMaritimePineTree(type, 
-						speciesForSimulation,
-						TreeStatusPriorToLogging.Alive,
-						StatusClass.cut,
-						mqd,
-						dbhStandardDeviation,
-						nbTrees,
-						getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
-						getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-						getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
-				stand.addTree(StatusClass.cut, tree);
+			boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && mqd > 0;
+			if (isProcessable) {
+				double nbTrees = nbTreesHa * stand.getAreaHa();
+				
+				if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
+					tree = new PythonMaritimePineTree(type, 
+							speciesForSimulation,
+							TreeStatusPriorToLogging.Alive,
+							StatusClass.cut,
+							mqd,
+							dbhStandardDeviation,
+							nbTrees,
+							getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
+							getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
+							getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+					stand.addTree(StatusClass.cut, tree);
+				}
 			}
 		}
 		
@@ -164,9 +167,6 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		calculateCarbon();
 		CarbonAssessmentToolSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
 		Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap = simulationResult.getProductEvolutionMap();
-		List<Integer> years = new ArrayList<Integer>();
-		years.addAll(productEvolutionMap.keySet());
-		Collections.sort(years);
 		
 		Double[] carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts);
 		
@@ -178,9 +178,14 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			}
 			Map<String, Double> innerOutputMap1 = outputMap.get(year);
 			Map<UseClass, AmountMap<Element>> innerInputMap2 = productEvolutionMap.get(year);
-			for (UseClass useClass : innerInputMap2.keySet()) {
-				AmountMap<Element> amountMap = innerInputMap2.get(useClass);
-				innerOutputMap1.put("BiomassMgHa" + useClass.name().toUpperCase(), amountMap.get(Element.Biomass));
+			for (UseClass useClass : UseClass.values()) {
+				String key = "BiomassMgHa" + useClass.name().toUpperCase();
+				if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
+					AmountMap<Element> amountMap = innerInputMap2.get(useClass);
+					innerOutputMap1.put(key, amountMap.get(Element.Biomass));
+				} else {
+					innerOutputMap1.put(key, 0d);
+				}
 			}
 			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP[years.indexOf(year)]);
 		}
