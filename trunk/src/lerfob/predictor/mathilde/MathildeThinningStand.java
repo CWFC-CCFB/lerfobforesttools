@@ -1,7 +1,7 @@
 /*
  * This file is part of the lerfob-forestools library.
  *
- * Copyright (C) 2010-2013 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ * Copyright (C) 2010-2015 Ruben Manso and Mathieu Fortin for LERFOB INRA/AgroParisTech, 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,25 +19,13 @@
 package lerfob.predictor.mathilde;
 
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
 /**
- * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
- * @author Mathieu Fortin - June 2013
+ * This interface ensures that the Stand instance is compatible with the MathildeStandThinningPredictor.
+ * @author Ruben Manso and Mathieu Fortin - June 2015
  */
-abstract interface MathildeStand extends MonteCarloSimulationCompliantObject {
+public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, DateYrProvider, MeanQuadraticDiameterCmProvider {
 
-	/**
-	 * This method returns true if a cut was planned in the upcoming growth interval.
-	 * @return a boolean
-	 */
-	public boolean isGoingToBeHarvested();
-	
-	
-	/**
-	 * This method returns the growth step length in years.
-	 * @return a double
-	 */
-	public double getGrowthStepLengthYrs();
-	
-	
 }

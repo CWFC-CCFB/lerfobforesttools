@@ -9,8 +9,7 @@ import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
-// final class MathildeSubModule extends ModelBasedSimulator {
-public class MathildeSubModule extends ModelBasedSimulator {
+final class MathildeSubModule extends ModelBasedSimulator {
 	
 	double errorTotalVariance;
 	
@@ -23,7 +22,7 @@ public class MathildeSubModule extends ModelBasedSimulator {
 		this.defaultBeta = betaEstimate;
 	}
 	
-	protected Matrix getParameters(MathildeStand stand) {
+	protected Matrix getParameters(MonteCarloSimulationCompliantObject stand) {
 		return getParametersForThisRealization(stand);
 	}
 	
