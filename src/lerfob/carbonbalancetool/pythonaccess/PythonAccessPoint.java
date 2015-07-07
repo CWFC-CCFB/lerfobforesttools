@@ -41,6 +41,7 @@ import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.LoggableTree.TreeStatusPriorToLogging;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
+import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
@@ -89,10 +90,12 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		this.areaHa = areaHa;
 	}
 	
+	@Override
 	protected void setTreeLoggerDescription() {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
 		getCarbonToolSettings().setTreeLoggerDescriptions(defaultTreeLoggerDescriptions);
 	}
 
