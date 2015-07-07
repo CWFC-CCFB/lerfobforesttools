@@ -126,7 +126,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = stand.getGrowthStepLengthYrs(); // timeInterval
+		oXVector.m_afData[0][pointer] = stand.getGrowthStepLengthYr(); // timeInterval
 
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;

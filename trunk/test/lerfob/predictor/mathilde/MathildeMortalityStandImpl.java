@@ -33,7 +33,7 @@ public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 	}
 
 	@Override
-	public double getGrowthStepLengthYrs() {
+	public double getGrowthStepLengthYr() {
 		return stepLengthYrs;
 	}
 
