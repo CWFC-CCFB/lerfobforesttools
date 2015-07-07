@@ -174,7 +174,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		b3 = currentBeta.m_afData[pointer++][0];
 		b32 = currentBeta.m_afData[pointer++][0];
 		
-		predUptoNow += b91 * stand.getGrowthStepLengthYrs();
+		predUptoNow += b91 * stand.getGrowthStepLengthYr();
 
 		predUptoNow += b81 * tIntervalVeg6 + b82 * tIntervalVeg6 * tIntervalVeg6;
 

@@ -113,8 +113,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				subModules.put(excludedGroup, subModule);
 			}
 		} catch (Exception e) {
-			System.out
-					.println("MathildeTreeThinningPredictor.init() : Unable to initialize the MathildeTreeThinningPredictor module for group: "
+			System.out.println("MathildeTreeThinningPredictor.init() : Unable to initialize the MathildeTreeThinningPredictor module for group: "
 							+ excludedGroup);
 			e.printStackTrace(System.out);
 		}
@@ -188,7 +187,8 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		} else {
 			if (isRandomEffectsVariabilityEnabled) {
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
-				Matrix randomEffects = getRandomEffectsForThisSubject(interval);
+				Matrix randomEffects = subModule.getRandomEffects(interval);
+//				Matrix randomEffects = getRandomEffectsForThisSubject(interval);	bug
 				eta.setVariableValue(1, randomEffects.m_afData[0][0]);
 				prob = linkFunction.getValue();
 			} else {	// i.e. deterministic mode

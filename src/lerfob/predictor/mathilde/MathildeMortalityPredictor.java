@@ -185,7 +185,7 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(upcomingCut), 0, pointer);
 		pointer += species.getDummyVariable().m_iCols;
 		
-		oXVector.m_afData[0][pointer] = Math.log(stand.getGrowthStepLengthYrs());
+		oXVector.m_afData[0][pointer] = Math.log(stand.getGrowthStepLengthYr());
 		pointer++;
 		
 		double result = oXVector.multiply(beta).m_afData[0][0];

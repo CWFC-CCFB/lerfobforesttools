@@ -54,7 +54,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 	}
 
 	@Override
-	public double getGrowthStepLengthYrs() {
+	public double getGrowthStepLengthYr() {
 		return deltaT;
 	}
 

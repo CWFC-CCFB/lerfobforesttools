@@ -19,25 +19,19 @@
 package lerfob.predictor.mathilde;
 
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
  * @author Mathieu Fortin - June 2013
  */
-abstract interface MathildeStand extends MonteCarloSimulationCompliantObject {
+abstract interface MathildeStand extends MonteCarloSimulationCompliantObject, GrowthStepLengthYrProvider {
 
 	/**
 	 * This method returns true if a cut was planned in the upcoming growth interval.
 	 * @return a boolean
 	 */
 	public boolean isGoingToBeHarvested();
-	
-	
-	/**
-	 * This method returns the growth step length in years.
-	 * @return a double
-	 */
-	public double getGrowthStepLengthYrs();
 	
 	
 }
