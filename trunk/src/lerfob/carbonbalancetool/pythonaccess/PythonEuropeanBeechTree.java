@@ -1,11 +1,11 @@
 package lerfob.carbonbalancetool.pythonaccess;
 
-import repicea.treelogger.maritimepine.MaritimePineBasicTree;
+import repicea.treelogger.europeanbeech.EuropeanBeechBasicTree;
 
-class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements MaritimePineBasicTree {
+public class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements EuropeanBeechBasicTree {
 
 	
-	PythonMaritimePineTree(SpeciesType speciesType,
+	PythonEuropeanBeechTree(SpeciesType speciesType,
 			AverageBasicDensity species,
 			TreeStatusPriorToLogging treeStatusPriorToLogging,
 			StatusClass statusClass, 
