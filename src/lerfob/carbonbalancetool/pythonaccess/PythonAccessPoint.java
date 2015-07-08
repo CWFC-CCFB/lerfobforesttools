@@ -106,7 +106,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			if (speciesForSimulation.equals(AverageBasicDensity.MaritimePine)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
 			} else {
-				filename = "TOBEDEFINED";
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
 			System.out.println("Loading settings : " + filename);
 			getCarbonToolSettings().getCurrentProductionProcessorManager().load(filename);
@@ -152,6 +152,18 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 				
 				if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
 					tree = new PythonMaritimePineTree(type, 
+							speciesForSimulation,
+							TreeStatusPriorToLogging.Alive,
+							StatusClass.cut,
+							mqd,
+							dbhStandardDeviation,
+							nbTrees,
+							getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
+							getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
+							getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+					stand.addTree(StatusClass.cut, tree);
+				} else {
+					tree = new PythonEuropeanBeechTree(type, 
 							speciesForSimulation,
 							TreeStatusPriorToLogging.Alive,
 							StatusClass.cut,
