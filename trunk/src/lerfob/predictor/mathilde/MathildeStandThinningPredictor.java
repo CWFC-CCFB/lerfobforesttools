@@ -22,9 +22,6 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.mathilde.MathildeMortalityStand;
-import lerfob.predictor.mathilde.MathildeSubModule;
-import lerfob.predictor.mathilde.MathildeTree;
 import repicea.math.Matrix;
 import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
@@ -42,7 +39,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeMortalityStand, MathildeTree> {
+public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeStand, Object> {
 
 	private final Map<Integer, MathildeSubModule> subModules;
 
@@ -116,7 +113,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		}
 	}
 
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeMortalityStand stand) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand) {
 		// protected double getFixedEffectOnlyPrediction(Matrix beta,
 		// MathildeMortalityStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
@@ -133,7 +130,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeStand stand, Object tree, Object... parms) {
 		MathildeSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = subModules.get(parms[0]);
