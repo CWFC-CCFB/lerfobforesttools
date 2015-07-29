@@ -40,7 +40,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 	private static final long serialVersionUID = 20130627L;
 
-//	protected double errorVariance; // for test purpose only
+	private static double MAX_ANNUAL_INCREMENT = 10.4 * .2;		// according to Manso et al. 2015 Forestry
 	
 	protected final Map<Integer, MathildeSubModule> subModules;
 	
@@ -214,6 +214,11 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 		
 		double backtransformedPred = Math.exp(pred) - 1;
+		if (backtransformedPred > MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr()) {
+			System.out.println("Max increment has been reached and truncated");
+			backtransformedPred = MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr();
+		}
+		
 		return backtransformedPred;
 	}
 

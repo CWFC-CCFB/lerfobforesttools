@@ -25,7 +25,7 @@ import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvid
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
  * @author Mathieu Fortin - June 2013
  */
-abstract interface MathildeStand extends MonteCarloSimulationCompliantObject, GrowthStepLengthYrProvider {
+public interface MathildeStand extends MonteCarloSimulationCompliantObject, GrowthStepLengthYrProvider {
 
 	/**
 	 * This method returns true if a cut was planned in the upcoming growth interval.
