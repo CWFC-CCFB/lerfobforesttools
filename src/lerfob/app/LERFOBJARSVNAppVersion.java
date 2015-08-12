@@ -29,10 +29,11 @@ public class LERFOBJARSVNAppVersion extends AbstractAppVersion {
 
 	private static LERFOBJARSVNAppVersion SINGLETON;
 	
-	private static final String FilenamePath = "revision.csv";
+	private static final String AppName = "lerfob";
+	protected static final String ShortFilename = AppName + "_revision.csv";
 	
 	private LERFOBJARSVNAppVersion() {
-		super(FilenamePath);
+		super(AppName, ShortFilename);
 	}
 
 	/**
