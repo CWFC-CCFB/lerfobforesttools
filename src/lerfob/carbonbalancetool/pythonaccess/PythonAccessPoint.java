@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.BasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CarbonAssessmentToolSimulationResult;
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
@@ -220,6 +221,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println(LERFOBJARSVNAppVersion.getInstance().getRevision());
 		String inputString = "";
 		for (String str : args) {
 			inputString = inputString + str + "; ";
