@@ -218,6 +218,17 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	protected void respondToWindowClosing() {}	// Do nothing to avoid the automatic shut down
 
 	/**
+	 * This method returns the version of the lerfob-cat application.
+	 * @return a String
+	 */
+	public String getRevision() {
+		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
+		return lerfobRevision;
+	}
+	
+	
+	
+	/**
 	 * Start method for connection to Python.
 	 * @param args
 	 */
