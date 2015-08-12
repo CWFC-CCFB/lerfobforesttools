@@ -36,6 +36,7 @@ import lerfob.carbonbalancetool.LERFoBCarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import py4j.GatewayServer;
+import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
@@ -221,7 +222,10 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(LERFOBJARSVNAppVersion.getInstance().getRevision());
+		String repiceaRevision = REpiceaJARSVNAppVersion.getInstance().getName() + "; " + REpiceaJARSVNAppVersion.getInstance().getRevision();
+		System.out.println(repiceaRevision);
+		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
+		System.out.println(lerfobRevision);
 		String inputString = "";
 		for (String str : args) {
 			inputString = inputString + str + "; ";
