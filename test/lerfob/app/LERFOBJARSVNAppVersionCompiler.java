@@ -9,7 +9,7 @@ import repicea.util.ObjectUtility;
 public class LERFOBJARSVNAppVersionCompiler extends AbstractAppVersionCompiler {
 
 	private static final String APP_URL = "https://svn.code.sf.net/p/lerfobforesttools/code/trunk";
-	private static String Version_Filename = ObjectUtility.getTrueRootPath(LERFOBJARSVNAppVersionCompiler.class) + LERFOBJARSVNAppVersion.ShortFilename;
+	private static String Version_Filename = ObjectUtility.getPackagePath(LERFOBJARSVNAppVersionCompiler.class).replace("bin", "src") + LERFOBJARSVNAppVersion.ShortFilename;
 	
 	public LERFOBJARSVNAppVersionCompiler() {
 		super();

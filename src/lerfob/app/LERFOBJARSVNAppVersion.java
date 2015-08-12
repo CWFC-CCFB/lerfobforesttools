@@ -19,6 +19,7 @@
 package lerfob.app;
 
 import repicea.app.AbstractAppVersion;
+import repicea.util.ObjectUtility;
 
 /**
  * This class retrieves information on the version and other features of the 
@@ -32,8 +33,10 @@ public class LERFOBJARSVNAppVersion extends AbstractAppVersion {
 	private static final String AppName = "lerfob";
 	protected static final String ShortFilename = AppName + "_revision.csv";
 	
+	protected static final String CompleteFilename = ObjectUtility.getRelativePackagePath(LERFOBJARSVNAppVersion.class) + ShortFilename;
+	
 	private LERFOBJARSVNAppVersion() {
-		super(AppName, ShortFilename);
+		super(AppName, CompleteFilename);
 	}
 
 	/**
