@@ -26,10 +26,12 @@ import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.ModelBasedSimulator;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.estimates.TruncatedGaussianEstimate;
 import repicea.util.ObjectUtility;
 
 /**
@@ -44,6 +46,21 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	protected final Map<Integer, MathildeSubModule> subModules;
 	
+	public static enum SiteIndexClass{
+		Unknown,
+		I,
+		II,
+		III;
+		
+		private GaussianEstimate estimate;
+		
+		private void setEstimate(GaussianEstimate estimate) {this.estimate = estimate;}
+		
+		private GaussianEstimate getEstimate() {return estimate;}
+	}
+	
+	private SiteIndexClass siteIndexClass = SiteIndexClass.Unknown;
+	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
 	 * LERFoB database.
@@ -57,6 +74,33 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		init();
 	}
 
+	/**
+	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
+	 * @param siteIndexClass a SiteIndexClass enum
+	 */
+	public void emulateSiteIndexClass(SiteIndexClass siteIndexClass) {
+		if (this.siteIndexClass != siteIndexClass) {
+			Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> blupsLibrary = getSubModule().getBlupsLibrary();
+			blupsLibrary.clear();	// we wipe off the former blups
+			// TODO FP it would be worth having a copy of original blups in case they exists
+		}
+	}
+	
+	/**
+	 * This method set the random effect predictor for emulation of site index class.
+	 * @param randomEffectPredictor
+	 */
+	private synchronized void setPlotBlups(MonteCarloSimulationCompliantObject plot) {
+		Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> blupsLibrary = getSubModule().getBlupsLibrary();
+		if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
+			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, GaussianEstimate>());
+		}
+		Map<Integer, GaussianEstimate> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
+		if (innerMap.containsKey(plot.getSubjectId())) {
+			innerMap.put(plot.getSubjectId(), siteIndexClass.getEstimate());
+		}
+	}
+	
 	private void init() {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
@@ -76,7 +120,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				if (numberOfParameters == -1) {
 					numberOfParameters = defaultBetaMean.m_iRows;
 				}
-//				Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
@@ -89,6 +132,17 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				Matrix meanPlotRandomEffect = new Matrix(1,1);
 				Matrix varPlotRandomEffect = covParms.getSubMatrix(0, 0, 0, 0);
 				subModule.getDefaultRandomEffects().put(HierarchicalLevel.Plot, new GaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+				
+				if (excludedGroup == 0) {	// the version that is going to be used in the simulations
+					Matrix stdMatrix = varPlotRandomEffect.elementwisePower(0.5);
+					SiteIndexClass.I.setEstimate(new TruncatedGaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+					((TruncatedGaussianEstimate) SiteIndexClass.I.getEstimate()).setLowerBound(stdMatrix.scalarMultiply(0.999));
+					SiteIndexClass.II.setEstimate(new TruncatedGaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+					((TruncatedGaussianEstimate) SiteIndexClass.II.getEstimate()).setUpperBound(stdMatrix.scalarMultiply(0.999));
+					((TruncatedGaussianEstimate) SiteIndexClass.II.getEstimate()).setLowerBound(stdMatrix.scalarMultiply(-0.7388));
+					SiteIndexClass.III.setEstimate(new TruncatedGaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
+					((TruncatedGaussianEstimate) SiteIndexClass.III.getEstimate()).setUpperBound(stdMatrix.scalarMultiply(-0.7388));
+				}
 				
 				Matrix meanTreeRandomEffect = new Matrix(1,1);
 				Matrix varTreeRandomEffect = covParms.getSubMatrix(1, 1, 0, 0);
@@ -108,6 +162,12 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 	}
 
+	/*
+	 * For tests only
+	 * @param stand
+	 * @param tree
+	 * @return
+	 */
 	protected double getFixedEffectOnlyPrediction(MathildeDiameterIncrementStand stand, MathildeTree tree) {
 		Matrix currentBeta = subModules.get(0).getParameters(stand);
 		return getFixedEffectOnlyPrediction(currentBeta, stand, tree);
@@ -183,18 +243,25 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		return predUptoNow;
 		
 	}
-	
+
+	private MathildeSubModule getSubModule(int subModuleVersion) {
+		return subModules.get(subModuleVersion);
+	}
+
+	private MathildeSubModule getSubModule() {
+		return getSubModule(0);
+	}
 	
 	@Override
 	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
 		MathildeSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
-			subModule = subModules.get(parms[0]);
+			subModule = getSubModule((Integer) parms[0]);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!");
 			} 
 		} else {
-			subModule = subModules.get(0);
+			subModule = getSubModule();
 		}
 		
 		Matrix currentBeta = subModule.getParameters(stand);
@@ -202,6 +269,9 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 		if (isRandomEffectsVariabilityEnabled) {
 			pred += subModule.getRandomEffects(tree).m_afData[0][0];
+			if (siteIndexClass != SiteIndexClass.Unknown) {
+				setPlotBlups(stand);		// then we set the false blups to emulate site index
+			}
 			pred += subModule.getRandomEffects(stand).m_afData[0][0];
 		} else {
 			pred += subModule.getDefaultRandomEffects().get(HierarchicalLevel.Plot).getVariance().m_afData[0][0] * .5;
