@@ -38,6 +38,10 @@ final class MathildeSubModule extends ModelBasedSimulator {
 		return defaultResidualError;
 	}
 	
+	protected Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> getBlupsLibrary() {
+		return blupsLibrary;
+	}
+	
 	protected Matrix getResidualErrorForThisVersion() {
 		return super.getResidualError();
 	}
