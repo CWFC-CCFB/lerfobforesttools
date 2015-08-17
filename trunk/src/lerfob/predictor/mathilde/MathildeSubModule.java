@@ -5,6 +5,7 @@ import java.util.Map;
 import repicea.math.Matrix;
 import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
@@ -38,7 +39,7 @@ final class MathildeSubModule extends ModelBasedSimulator {
 		return defaultResidualError;
 	}
 	
-	protected Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> getBlupsLibrary() {
+	protected Map<HierarchicalLevel, Map<Integer, Estimate<?>>> getBlupsLibrary() {
 		return blupsLibrary;
 	}
 	

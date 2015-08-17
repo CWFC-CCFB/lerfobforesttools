@@ -29,6 +29,7 @@ import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
@@ -46,17 +47,17 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	protected final Map<Integer, MathildeSubModule> subModules;
 	
-	public static enum SiteIndexClass{
+	public static enum SiteIndexClass {
 		Unknown,
 		I,
 		II,
 		III;
 		
-		private GaussianEstimate estimate;
+		private Estimate<?> estimate;
 		
-		private void setEstimate(GaussianEstimate estimate) {this.estimate = estimate;}
+		private void setEstimate(Estimate<?> estimate) {this.estimate = estimate;}
 		
-		private GaussianEstimate getEstimate() {return estimate;}
+		private Estimate<?> getEstimate() {return estimate;}
 	}
 	
 	private SiteIndexClass siteIndexClass = SiteIndexClass.Unknown;
@@ -80,7 +81,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 */
 	public void emulateSiteIndexClass(SiteIndexClass siteIndexClass) {
 		if (this.siteIndexClass != siteIndexClass) {
-			Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> blupsLibrary = getSubModule().getBlupsLibrary();
+			Map<HierarchicalLevel, Map<Integer, Estimate<?>>> blupsLibrary = getSubModule().getBlupsLibrary();
 			blupsLibrary.clear();	// we wipe off the former blups
 			// TODO FP it would be worth having a copy of original blups in case they exists
 		}
@@ -91,11 +92,11 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 * @param randomEffectPredictor
 	 */
 	private synchronized void setPlotBlups(MonteCarloSimulationCompliantObject plot) {
-		Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> blupsLibrary = getSubModule().getBlupsLibrary();
+		Map<HierarchicalLevel, Map<Integer, Estimate<?>>> blupsLibrary = getSubModule().getBlupsLibrary();
 		if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
-			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, GaussianEstimate>());
+			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, Estimate<?>>());
 		}
-		Map<Integer, GaussianEstimate> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
+		Map<Integer, Estimate<?>> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
 		if (innerMap.containsKey(plot.getSubjectId())) {
 			innerMap.put(plot.getSubjectId(), siteIndexClass.getEstimate());
 		}
@@ -267,11 +268,11 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		Matrix currentBeta = subModule.getParameters(stand);
 
 		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
+		if (siteIndexClass != SiteIndexClass.Unknown) {
+			setPlotBlups(stand);		// then we set the false blups to emulate site index
+		}
 		if (isRandomEffectsVariabilityEnabled) {
 			pred += subModule.getRandomEffects(tree).m_afData[0][0];
-			if (siteIndexClass != SiteIndexClass.Unknown) {
-				setPlotBlups(stand);		// then we set the false blups to emulate site index
-			}
 			pred += subModule.getRandomEffects(stand).m_afData[0][0];
 		} else {
 			pred += subModule.getDefaultRandomEffects().get(HierarchicalLevel.Plot).getVariance().m_afData[0][0] * .5;
