@@ -25,11 +25,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Predictor.SiteIndexClass;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.ModelBasedSimulator;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
 public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulator {
@@ -44,13 +48,19 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 	private List<Integer> effectList;
 	private List<Integer> blupEstimationDone;
 	private final FrenchHdSpecies species;
-
+	private final Map<SiteIndexClass, TruncatedGaussianEstimate> siteIndexClasses;
+	private Map<HierarchicalLevel, Map<Integer, Estimate<?>>> blupsLibraryBackup;
+	private SiteIndexClass currentSiteIndexClass;
+	
 	protected FrenchHDRelationship2014InternalPredictor(boolean isParametersVariabilityEnabled,	
 			boolean isRandomEffectsVariabilityEnabled, 
 			boolean isResidualVariabilityEnabled,
 			FrenchHdSpecies species) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 		this.species = species;
+		siteIndexClasses = new HashMap<SiteIndexClass, TruncatedGaussianEstimate>();
+		currentSiteIndexClass = SiteIndexClass.Unknown;
+		blupsLibraryBackup = new HashMap<HierarchicalLevel, Map<Integer, Estimate<?>>>();
 		blupEstimationDone = new ArrayList<Integer>();
 	}
 
@@ -62,6 +72,72 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 	
 	protected void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
 		defaultRandomEffects.put(level, estimate);
+		if (level == HierarchicalLevel.Plot) {
+			for (SiteIndexClass siteIndex : SiteIndexClass.values()) {
+				setSiteIndexGaussianEstimate(level, siteIndex);
+			}
+		}
+	}
+	
+	/**
+	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
+	 * @param siteIndexClass a SiteIndexClass enum
+	 */
+	protected void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass) {
+		if (this.currentSiteIndexClass != siteIndexClass) {
+			if (siteIndexClass == SiteIndexClass.Unknown) {		// we are going back to normal
+				blupsLibrary.clear();
+				blupsLibrary.putAll(blupsLibraryBackup);
+			} else if (currentSiteIndexClass == SiteIndexClass.Unknown) {	// we are setting a site index 
+				blupsLibraryBackup.clear();
+				blupsLibraryBackup.putAll(blupsLibrary);
+				blupsLibrary.clear();
+			}
+			currentSiteIndexClass = siteIndexClass;
+		}
+	}
+	
+	/**
+	 * This method set the random effect predictor for emulation of site index class.
+	 * @param randomEffectPredictor
+	 */
+	private synchronized void setPlotBlups(MonteCarloSimulationCompliantObject plot) {
+		if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
+			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, Estimate<?>>());
+		}
+		Map<Integer, Estimate<?>> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
+		if (innerMap.containsKey(plot.getSubjectId())) {
+			innerMap.put(plot.getSubjectId(), siteIndexClasses.get(currentSiteIndexClass));
+		}
+	}
+
+	
+	private void setSiteIndexGaussianEstimate(HierarchicalLevel level, SiteIndexClass siteIndex) {
+		GaussianEstimate levelRandomEffects = defaultRandomEffects.get(level);
+		TruncatedGaussianEstimate truncatedEstimate;
+		Matrix stdMatrix = levelRandomEffects.getVariance().elementwisePower(0.5);
+		switch(siteIndex) {
+		case I:
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(0.999));
+			siteIndexClasses.put(siteIndex, truncatedEstimate);
+			break;
+		case II:
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(-0.7388));
+			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(0.999));
+			siteIndexClasses.put(siteIndex, truncatedEstimate);
+			break;
+		case III:
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(-0.7388));
+			siteIndexClasses.put(siteIndex, truncatedEstimate);
+			break;
+		case Unknown:
+			break;
+		default:
+			break;
+		}
 	}
 	
 	protected void setResidualVariance(GaussianErrorTermEstimate estimate) {
@@ -95,6 +171,9 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 			double predictedHeight; 
 			RegressionElements regElement = fixedEffectsPrediction(stand, tree);
 			predictedHeight = regElement.fixedPred;
+			if (currentSiteIndexClass != SiteIndexClass.Unknown){
+				setPlotBlups(stand);
+			}
 			predictedHeight += blupImplementation(stand, regElement);
 
 			if (observedHeight > 1.3) {			// means that height was already observed
@@ -236,9 +315,9 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 			Matrix matV = matZ.multiply(matrixG).multiply(matZ.transpose()).add(matR);	// variance - covariance matrix
 			blups = matrixG.multiply(matZ.transpose()).multiply(matV.getInverseMatrix()).multiply(matRes);							// blup_essHD is redefined according to observed values
 			blupsVariance = matZ.transpose().multiply(matR.getInverseMatrix()).multiply(matZ).add(matrixG.getInverseMatrix()).getInverseMatrix();			// blup_essHDvar is redefined according to observed values
-			Map<Integer, GaussianEstimate> randomEffectsMap = blupsLibrary.get(HierarchicalLevel.Plot);
+			Map<Integer, Estimate<?>> randomEffectsMap = blupsLibrary.get(HierarchicalLevel.Plot);
 			if (randomEffectsMap == null) {
-				randomEffectsMap = new HashMap<Integer, GaussianEstimate>();
+				randomEffectsMap = new HashMap<Integer, Estimate<?>>();
 				blupsLibrary.put(HierarchicalLevel.Plot, randomEffectsMap);
 			}
 			randomEffectsMap.put(stand.getSubjectId(), new GaussianEstimate(blups, blupsVariance));
@@ -321,7 +400,5 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 			return null;
 		}
 	}
-
-	
 	
 }

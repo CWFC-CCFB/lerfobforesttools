@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.math.Matrix;
 import repicea.stats.distributions.NonparametricDistribution;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
@@ -113,16 +114,17 @@ public class MathildeMortalityTest {
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
 			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
-			NonparametricDistribution<Double> dist = new NonparametricDistribution<Double>();
-			double result;
+			NonparametricDistribution dist = new NonparametricDistribution();
+			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
 				stand.setMonteCarloRealizationId(i);
-				result = stochasticPredictor.predictEventProbability(stand, tree);
+				result = new Matrix(1,1);
+				result.m_afData[0][0] = stochasticPredictor.predictEventProbability(stand, tree);
 				dist.addRealization(result);
 			}
 
 			double meanDeterministic = deterministicPredictor.predictEventProbability(stand, tree);
-			double meanStochastic = dist.getMean();
+			double meanStochastic = dist.getMean().m_afData[0][0];
 
 			System.out.println("Deterministic : " + meanDeterministic + "; Stochastic : " + meanStochastic);			
 			assertEquals(meanDeterministic, meanStochastic, 0.009);

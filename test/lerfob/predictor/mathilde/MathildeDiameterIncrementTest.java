@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.math.Matrix;
 import repicea.stats.distributions.NonparametricDistribution;
 import repicea.util.ObjectUtility;
 
@@ -105,16 +106,17 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution<Double> dist = new NonparametricDistribution<Double>();
-		double result;
+		NonparametricDistribution dist = new NonparametricDistribution();
+		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
 			tree.setMonteCarloRealizationId(i);
 			stand.setMonteCarloRealizationId(i);
-			result = predictor.predictGrowth(stand, tree); 
+			result = new Matrix(1,1);
+			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean();
+		double meanStochastic = dist.getMean().m_afData[0][0];
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.02);
 		
@@ -129,16 +131,17 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution<Double> dist = new NonparametricDistribution<Double>();
-		double result;
+		NonparametricDistribution dist = new NonparametricDistribution();
+		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
 			tree.setMonteCarloRealizationId(i);
 			stand.setMonteCarloRealizationId(i);
-			result = predictor.predictGrowth(stand, tree); 
+			result = new Matrix(1,1);
+			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean();
+		double meanStochastic = dist.getMean().m_afData[0][0];
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.04);			// subject to failure since the variability in the parameter estimates increases the error variance
 
