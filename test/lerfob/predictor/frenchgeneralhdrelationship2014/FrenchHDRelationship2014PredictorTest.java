@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
@@ -40,6 +41,7 @@ public class FrenchHDRelationship2014PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 	
+	@Ignore
 	@Test
 	public void validation2BlupsPredictions() throws IOException {
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
@@ -77,6 +79,7 @@ public class FrenchHDRelationship2014PredictorTest {
 			double pred;
 			double mqd;
 			double htot;
+			double harvestInLastFiveYears;
 			Map<Integer, FrenchHDRelationship2014StandImpl> standMap = new HashMap<Integer, FrenchHDRelationship2014StandImpl>();
 			int counter = 0;
 			while ((record = reader.nextRecord()) != null) {
@@ -88,8 +91,9 @@ public class FrenchHDRelationship2014PredictorTest {
 				pred = Double.parseDouble(record[5].toString());
 				mqd = Double.parseDouble(record[6].toString());
 				htot = Double.parseDouble(record[7].toString());
+				harvestInLastFiveYears = Double.parseDouble(record[8].toString()); 
 				if (!standMap.containsKey(idp)) {
-					FrenchHDRelationship2014StandImpl stand = new FrenchHDRelationship2014StandImpl(counter++, idp, mqd, pent2);
+					FrenchHDRelationship2014StandImpl stand = new FrenchHDRelationship2014StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears);
 					standMap.put(idp, stand);
 				}
 				new FrenchHDRelationship2014TreeImpl(htot, d130, gOther, species, pred, standMap.get(idp));

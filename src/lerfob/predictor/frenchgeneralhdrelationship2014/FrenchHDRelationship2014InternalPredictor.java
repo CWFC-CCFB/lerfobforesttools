@@ -348,6 +348,11 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 		double socialIndex = tree.getDbhCm() - stand.getMeanQuadraticDiameterCm();
 		double lnDbh2 = tree.getSquaredLnDbhCmPlus1();
 
+		double harvested = 0d;
+		if (stand.isInterventionResult()) {
+			harvested = 1d;
+		}
+		
 		for (Integer integer : effectList) {
 			switch(integer) {
 			case 1:
@@ -363,14 +368,22 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 				pointer++;
 				break;
 			case 4:
-				oXVector.m_afData[0][pointer] = lnDbh * slope;
+				oXVector.m_afData[0][pointer] = harvested * lnDbh;
 				pointer++;
 				break;
 			case 5:
-				oXVector.m_afData[0][pointer] = socialIndex * lnDbh;
+				oXVector.m_afData[0][pointer] = lnDbh * slope;
 				pointer++;
 				break;
 			case 6:
+				oXVector.m_afData[0][pointer] = socialIndex * lnDbh;
+				pointer++;
+				break;
+			case 7:
+				oXVector.m_afData[0][pointer] = socialIndex * socialIndex * lnDbh;
+				pointer++;
+				break;
+			case 8:
 				oXVector.m_afData[0][pointer] = lnDbh2;
 				pointer++;
 				break;

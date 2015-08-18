@@ -12,16 +12,18 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	private int idp;
 	private double mqd;
 	private double pent2;
+	private double hasBeenHarvestedInLast5Years;
 	private final int index;
 	
 	private List<FrenchHDRelationship2014TreeImpl> treeList;
 	
 	
-	FrenchHDRelationship2014StandImpl(int index, int idp, double mqd, double pent2) {
+	FrenchHDRelationship2014StandImpl(int index, int idp, double mqd, double pent2, double hasBeenHarvestedInLast5Years) {
 		this.index = index;
 		this.idp = idp;
 		this.mqd = mqd;
 		this.pent2 = pent2;
+		this.hasBeenHarvestedInLast5Years = hasBeenHarvestedInLast5Years;
 		treeList = new ArrayList<FrenchHDRelationship2014TreeImpl>();
 	}
 		
@@ -68,5 +70,8 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 			return 1;
 		}
 	}
+
+	@Override
+	public boolean isInterventionResult() {return this.hasBeenHarvestedInLast5Years == 1d;}
 
 }
