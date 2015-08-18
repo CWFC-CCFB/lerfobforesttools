@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
@@ -41,7 +40,6 @@ public class FrenchHDRelationship2014PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 	
-	@Ignore
 	@Test
 	public void validation2BlupsPredictions() throws IOException {
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
