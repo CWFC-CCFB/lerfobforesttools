@@ -21,6 +21,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2014;
 import java.util.Collection;
 
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
 
@@ -29,7 +30,7 @@ import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmP
  * and the French general HD relationship.
  * @author Mathieu Fortin - May 2014
  */
-public interface FrenchHDRelationship2014Stand extends MonteCarloSimulationCompliantObject,	MeanQuadraticDiameterCmProvider {
+public interface FrenchHDRelationship2014Stand extends MonteCarloSimulationCompliantObject,	MeanQuadraticDiameterCmProvider, InterventionResultProvider {
 	
 	/**
 	 * This method returns a collection of trees that belong to the stand. Those trees do not have to implement
