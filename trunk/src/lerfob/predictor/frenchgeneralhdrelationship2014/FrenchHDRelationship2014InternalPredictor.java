@@ -226,6 +226,7 @@ public class FrenchHDRelationship2014InternalPredictor extends ModelBasedSimulat
 	 * @param normalizedResidual a normalized residual
 	 */
 	private synchronized void setSpecificResiduals(FrenchHDRelationship2014Tree tree, double normalizedResiduals) {
+		// TODO FP implement correlated error terms
 //		long id = getSubjectPlusMonteCarloSpecificId(tree);
 //		int date = tree.getYear();
 //		int dateIndex = measurementDates.indexOf(date);
