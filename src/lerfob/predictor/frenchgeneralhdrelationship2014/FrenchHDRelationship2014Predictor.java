@@ -66,37 +66,13 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 		this(false, false, false);
 	}
 
-//	/**
-//	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
-//	 * @param siteIndexClass a SiteIndexClass enum
-//	 */
-//	public void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass, FrenchHdSpecies species) {
-//		this.predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
-//	}
-
-//	/**
-//	 * This method set the random effect predictor for emulation of site index class.
-//	 * @param randomEffectPredictor
-//	 */
-//	private synchronized void setPlotBlups(MonteCarloSimulationCompliantObject plot) {
-//		Map<HierarchicalLevel, Map<Integer, GaussianEstimate>> blupsLibrary = getSubModule().getBlupsLibrary();
-//		if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
-//			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, GaussianEstimate>());
-//		}
-//		Map<Integer, GaussianEstimate> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
-//		if (innerMap.containsKey(plot.getSubjectId())) {
-//			innerMap.put(plot.getSubjectId(), siteIndexClass.getEstimate());
-//		}
-//	}
-
-//	private FrenchHDRelationship2014InternalPredictor getSpeciesPreSubModule(int subModuleVersion) {
-//		return predictorMap.get(subModuleVersion);
-//	}
-//
-//	private FrenchHDRelationship2014InternalPredictor getSubModule() {
-//		return getSubModule(0);
-//	}
-	
+	/**
+	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
+	 * @param siteIndexClass a SiteIndexClass enum
+	 */
+	public void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass, FrenchHdSpecies species) {
+		predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
+	}
 
 	private void init() {
 		try {
