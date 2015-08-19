@@ -64,10 +64,20 @@ class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 
 	protected double getPred() {return pred;}
 	protected double getGOther() {return gOther;}
+	
 	@Override
 	public int getYear() {
-		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int getErrorTermIndex() {
+		return 0;
+	}
+
+	@Override
+	public Enum<?> getHDRelationshipTreeErrorGroup() {
+		return null;
 	}
 
 }

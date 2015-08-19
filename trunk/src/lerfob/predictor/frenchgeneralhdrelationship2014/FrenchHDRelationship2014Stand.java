@@ -18,11 +18,10 @@
  */
 package lerfob.predictor.frenchgeneralhdrelationship2014;
 
-import java.util.Collection;
-
-import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
+import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
+import repicea.simulation.hdrelationships.HDRelationshipStand;
 
 
 /**
@@ -30,15 +29,11 @@ import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmP
  * and the French general HD relationship.
  * @author Mathieu Fortin - May 2014
  */
-public interface FrenchHDRelationship2014Stand extends MonteCarloSimulationCompliantObject,	MeanQuadraticDiameterCmProvider, InterventionResultProvider {
+public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
+														TreeStatusCollectionsProvider,
+														MeanQuadraticDiameterCmProvider, 
+														InterventionResultProvider {
 	
-	/**
-	 * This method returns a collection of trees that belong to the stand. Those trees do not have to implement
-	 * the HeightableTree interface. The GeneralHeightPredictor already includes a method to filter the trees.
-	 * @return a Collection instance
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection getTrees();
 	
 	/**
 	 * This method returns the basal area per hectare minus the basal area of the tree.
