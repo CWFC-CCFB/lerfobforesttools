@@ -26,7 +26,6 @@ import repicea.math.Matrix;
 import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -67,13 +66,13 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 		this(false, false, false);
 	}
 
-	/**
-	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
-	 * @param siteIndexClass a SiteIndexClass enum
-	 */
-	public void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass, FrenchHdSpecies species) {
-		this.predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
-	}
+//	/**
+//	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
+//	 * @param siteIndexClass a SiteIndexClass enum
+//	 */
+//	public void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass, FrenchHdSpecies species) {
+//		this.predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
+//	}
 
 //	/**
 //	 * This method set the random effect predictor for emulation of site index class.
@@ -131,7 +130,7 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 				internalPredictor.setDefaultRandomEffects(HierarchicalLevel.Plot, new GaussianEstimate(defaultRandomEffectsMean, matrixG));
 				
 				Matrix residualVariance = covparms.getSubMatrix(1, 1, 0, 0);
-				internalPredictor.setResidualVariance(new GaussianErrorTermEstimate(residualVariance));
+				internalPredictor.setResidualVariance(residualVariance);
 				
 				internalPredictor.setEffectList(effectList.get(index));
 				predictorMap.put(species, internalPredictor);

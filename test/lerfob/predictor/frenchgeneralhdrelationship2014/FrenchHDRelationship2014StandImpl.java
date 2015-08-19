@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import repicea.simulation.ModelBasedSimulator.HierarchicalLevel;
+import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand, Comparable<FrenchHDRelationship2014StandImpl> {
 
@@ -45,7 +46,7 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection getTrees() {return treeList;}
+	public Collection getTrees(StatusClass statusClass) {return treeList;}
 
 	@Override
 	public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2014Tree tree) {
