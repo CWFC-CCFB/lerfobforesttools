@@ -95,11 +95,4 @@ public interface FrenchHDRelationship2014Tree extends HDRelationshipTree,
 	 */
 	public FrenchHdSpecies getFrenchHDTreeSpecies();
 	
-	/**
-	 * This method returns the year of the measurement or prediction.
-	 * @return an Integer
-	 */
-	public int getYear();
-	
-	
 }
