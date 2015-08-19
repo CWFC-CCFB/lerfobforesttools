@@ -50,6 +50,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	private final FrenchHdSpecies species;
 	private final Map<SiteIndexClass, TruncatedGaussianEstimate> siteIndexClasses;
 	private Map<HierarchicalLevel, Map<Integer, Estimate<?>>> blupsLibraryBackup;
+	private List<Integer> blupEstimationDoneBackup;
 	private SiteIndexClass currentSiteIndexClass;
 	
 	protected FrenchHDRelationship2014InternalPredictor(boolean isParametersVariabilityEnabled,	
@@ -61,6 +62,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		siteIndexClasses = new HashMap<SiteIndexClass, TruncatedGaussianEstimate>();
 		currentSiteIndexClass = SiteIndexClass.Unknown;
 		blupsLibraryBackup = new HashMap<HierarchicalLevel, Map<Integer, Estimate<?>>>();
+		blupEstimationDoneBackup = new ArrayList<Integer>();
 	}
 
 	
@@ -87,29 +89,35 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 			if (siteIndexClass == SiteIndexClass.Unknown) {		// we are going back to normal
 				blupsLibrary.clear();
 				blupsLibrary.putAll(blupsLibraryBackup);
+				blupEstimationDone.clear();
+				blupEstimationDone.addAll(blupEstimationDoneBackup);
 			} else if (currentSiteIndexClass == SiteIndexClass.Unknown) {	// we are setting a site index 
 				blupsLibraryBackup.clear();
 				blupsLibraryBackup.putAll(blupsLibrary);
 				blupsLibrary.clear();
+				blupEstimationDoneBackup.clear();
+				blupEstimationDoneBackup.addAll(blupEstimationDone);
+				blupEstimationDone.clear();
 			}
 			currentSiteIndexClass = siteIndexClass;
 		}
 	}
 	
-//	/**
-//	 * This method set the random effect predictor for emulation of site index class.
-//	 * @param randomEffectPredictor
-//	 */
-//	private synchronized void setPlotBlups(MonteCarloSimulationCompliantObject plot) {
-//		if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
-//			blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, Estimate<?>>());
-//		}
-//		Map<Integer, Estimate<?>> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
-//		if (innerMap.containsKey(plot.getSubjectId())) {
-//			innerMap.put(plot.getSubjectId(), siteIndexClasses.get(currentSiteIndexClass));
-//		}
-//	}
-
+	@Override
+	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2014Stand stand) {
+		if (currentSiteIndexClass == SiteIndexClass.Unknown) {
+			super.predictHeightRandomEffects(stand);
+		} else {	// we have tweaked the plot random effect to account for the site index class
+			if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
+				blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, Estimate<?>>());
+			}
+			Map<Integer, Estimate<?>> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
+			if (!innerMap.containsKey(stand.getSubjectId())) {
+				innerMap.put(stand.getSubjectId(), siteIndexClasses.get(currentSiteIndexClass));
+				blupEstimationDone.add(stand.getSubjectId());
+			}
+		}
+	}
 	
 	private void setSiteIndexGaussianEstimate(HierarchicalLevel level, SiteIndexClass siteIndex) {
 		GaussianEstimate levelRandomEffects = defaultRandomEffects.get(level);
