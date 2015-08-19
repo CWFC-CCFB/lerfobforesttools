@@ -28,6 +28,8 @@ import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 
 /**
@@ -37,11 +39,23 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator {
 
-	public static enum SiteIndexClass {
-		Unknown,
-		I,
-		II,
-		III;
+	public static enum SiteIndexClass implements TextableEnum {
+		Unknown("Unknown", "Inconnu"),
+		I("Class I", "Classe I"),
+		II("Class II", "Classe II"),
+		III("Class III", "Classe III");
+
+		SiteIndexClass(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
 	private final Map<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor> predictorMap;
