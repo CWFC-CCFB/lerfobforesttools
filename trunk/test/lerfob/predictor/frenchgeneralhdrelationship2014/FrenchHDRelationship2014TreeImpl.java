@@ -66,11 +66,6 @@ class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 	protected double getGOther() {return gOther;}
 	
 	@Override
-	public int getYear() {
-		return 0;
-	}
-
-	@Override
 	public int getErrorTermIndex() {
 		return 0;
 	}
