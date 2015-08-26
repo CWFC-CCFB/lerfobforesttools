@@ -45,9 +45,7 @@ import repicea.util.REpiceaTranslator;
  * whether or not the residual from this processor can be used for energy.
  * @author M. Fortin - September 2010
  */
-@SuppressWarnings("deprecation")
-public class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, 
-											UserInterfaceableObject {
+public class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, UserInterfaceableObject {
 	
 	private static final long serialVersionUID = 20101018L;
 
@@ -300,7 +298,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		
 		if (somethingIsLoss) {
 			AmountMap<Element> lossAmountMap = amountMap.multiplyByAScalar(1 - averageYield);
-			CarbonUnitMap<CarbonUnitStatus> tmpMap = ProductionLineProcessor.getLossProcessor().processWoodPiece(creationDate, lossAmountMap);
+			CarbonUnitMap<CarbonUnitStatus> tmpMap = getLossProcessor().processWoodPiece(creationDate, lossAmountMap);
 			for (Collection<CarbonUnit> carbonUnits : tmpMap.values()) {
 				outputMap.get(CarbonUnitStatus.IndustrialLosses).addAll(carbonUnits);
 			}
@@ -389,8 +387,8 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		return leftInForestProcessor;
 	}
 
-	
-	private static ProductionLineProcessor getLossProcessor() {
+	@Deprecated
+	private ProductionLineProcessor getLossProcessor() {
 		if (LossProductionLineProcessor == null) {
 			LossProductionLineProcessor = new ProductionLineProcessor(null, 1, 1);	// with no market
 			EndUseWoodProductCarbonUnitFeature feature = (EndUseWoodProductCarbonUnitFeature) LossProductionLineProcessor.getEndProductFeature();
