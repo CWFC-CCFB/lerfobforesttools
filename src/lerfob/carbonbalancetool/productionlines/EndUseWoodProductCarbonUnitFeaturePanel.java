@@ -18,9 +18,7 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -35,6 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import lerfob.carbonbalancetool.productionlines.LifeCycleAnalysis.ReferenceLCA;
+import repicea.gui.UIControlManager;
 import repicea.gui.components.NumberFormatFieldFactory;
 import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
 import repicea.gui.components.NumberFormatFieldFactory.Range;
@@ -143,33 +142,19 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	@Override
 	protected void createUI() {
 		super.createUI();
-		
-		JPanel averageSubstitutionPanel = new JPanel(new BorderLayout());
-		JPanel averageSubstitutionSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		averageSubstitutionSubPanel.add(Box.createHorizontalStrut(10));
-		averageSubstitutionSubPanel.add(new JLabel(REpiceaTranslator.getString(MessageID.AverageSubstitution)));
-		averageSubstitutionSubPanel.add(Box.createHorizontalStrut(10));
-		averageSubstitutionPanel.add(averageSubstitutionSubPanel, BorderLayout.WEST);
-		averageSubstitutionPanel.add(averageSubstitutionTextField, BorderLayout.CENTER);
-		averageSubstitutionPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 
-		JPanel useClassPanel = new JPanel(new BorderLayout());
-		JPanel useClassSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		useClassSubPanel.add(Box.createHorizontalStrut(10));
-		useClassSubPanel.add(new JLabel(REpiceaTranslator.getString(MessageID.UseClassCategory)));
-		useClassSubPanel.add(Box.createHorizontalStrut(10));
-		useClassPanel.add(useClassSubPanel, BorderLayout.WEST);
-		useClassPanel.add(useClassList, BorderLayout.CENTER);
-		useClassPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 		
-		JPanel lifeCyclePanel = new JPanel(new BorderLayout());
-		JPanel lifeCycleSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		lifeCycleSubPanel.add(Box.createHorizontalStrut(10));
-		lifeCycleSubPanel.add(new JLabel(REpiceaTranslator.getString(MessageID.LifeCycleLibrary)));
-		lifeCycleSubPanel.add(Box.createHorizontalStrut(10));
-		lifeCyclePanel.add(lifeCycleSubPanel, BorderLayout.WEST);
-		lifeCyclePanel.add(lifeCycleAnalysisList, BorderLayout.CENTER);
-		lifeCyclePanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
+		JPanel averageSubstitutionPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.AverageSubstitution),
+				averageSubstitutionTextField, 
+				5);
+
+		JPanel useClassPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.UseClassCategory),
+				useClassList, 
+				5);
+		
+		JPanel lifeCyclePanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.LifeCycleLibrary),
+				lifeCycleAnalysisList, 
+				5);
 		
 		mainPanel.add(averageSubstitutionPanel);
 		mainPanel.add(Box.createVerticalStrut(5));

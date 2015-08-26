@@ -18,10 +18,6 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,6 +25,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import repicea.gui.UIControlManager;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -65,29 +62,21 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 		super.initializeFields();
 		
 		degradableOrganicCarbonFractionLabel = new JLabel();
-		Dimension dim = new Dimension(getFontMetrics(this.getFont()).getHeight() * 3 , getFontMetrics(this.getFont()).getHeight() * 2);
-		degradableOrganicCarbonFractionLabel.setPreferredSize(dim);
 
 		degradableOrganicCarbonFractionSlider = new JSlider(0,100);
 		degradableOrganicCarbonFractionSlider.setMajorTickSpacing(10);
 		degradableOrganicCarbonFractionSlider.setPaintTicks(true);
 		degradableOrganicCarbonFractionSlider.setPaintLabels(true);
 		degradableOrganicCarbonFractionSlider.setValue((int) (getCaller().getDegradableOrganicCarbonFraction() * 100));
-		degradableOrganicCarbonFractionLabel.setText(((Integer) degradableOrganicCarbonFractionSlider.getValue()).toString() + "%");
+		setSliderLabelText();
 	}	
 	
 	@Override
 	protected void createUI() {
 		super.createUI();
 
-		JPanel degradableOrganicCarbonFractionSliderLabel = new JPanel(new BorderLayout());
-		JPanel degradableOrganicCarbonFractionSliderSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		degradableOrganicCarbonFractionSliderSubPanel.add(Box.createHorizontalStrut(10));
-		degradableOrganicCarbonFractionSliderSubPanel.add(new JLabel(REpiceaTranslator.getString(MessageID.DegradableOrganicCarbonLabel)));
-		degradableOrganicCarbonFractionSliderSubPanel.add(degradableOrganicCarbonFractionLabel);
-		degradableOrganicCarbonFractionSliderLabel.add(degradableOrganicCarbonFractionSliderSubPanel, BorderLayout.WEST);
-		degradableOrganicCarbonFractionSliderLabel.add(degradableOrganicCarbonFractionSlider, BorderLayout.CENTER);
-		degradableOrganicCarbonFractionSliderLabel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
+		
+		JPanel degradableOrganicCarbonFractionSliderLabel = UIControlManager.createSimpleHorizontalPanel(degradableOrganicCarbonFractionLabel, degradableOrganicCarbonFractionSlider, 5);
 
 		mainPanel.add(degradableOrganicCarbonFractionSliderLabel);
 		mainPanel.add(Box.createVerticalStrut(5));
@@ -102,10 +91,16 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	@Override
 	public void stateChanged(ChangeEvent evt) {
 		if (evt.getSource().equals(degradableOrganicCarbonFractionSlider)) {
-			degradableOrganicCarbonFractionLabel.setText(((Integer) degradableOrganicCarbonFractionSlider.getValue()).toString() + "%");
+			setSliderLabelText();
 		}
 	}
 
+	private void setSliderLabelText() {
+		degradableOrganicCarbonFractionLabel.setText(MessageID.DegradableOrganicCarbonLabel.toString() + "    " + ((Integer) degradableOrganicCarbonFractionSlider.getValue()).toString() + "%");
+	}
+	
+	
+	
 	@Override
 	public void listenTo() {
 		super.listenTo();

@@ -20,14 +20,13 @@ package lerfob.carbonbalancetool.productionlines;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import repicea.gui.REpiceaPanel;
+import repicea.gui.UIControlManager;
 import repicea.gui.components.NumberFormatFieldFactory;
 import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
 import repicea.gui.components.NumberFormatFieldFactory.Range;
@@ -85,27 +84,18 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 	
 	protected void createUI() {
 		setLayout(new BorderLayout());
+		setBorder(UIControlManager.getTitledBorder(MessageID.WoodProductFeatureLabel.toString()));
 		JPanel setupPanel = new JPanel(new BorderLayout());
 		add(setupPanel, BorderLayout.CENTER);
 		mainPanel = new JPanel();
 		setupPanel.add(mainPanel, BorderLayout.NORTH);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		JLabel title = new JLabel(MessageID.WoodProductFeatureLabel.toString());
-		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		titlePanel.add(title);
 
-		JPanel averageLifetimePanel = new JPanel(new BorderLayout());
-		JPanel averageLifetimeSubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		averageLifetimeSubPanel.add(Box.createHorizontalStrut(10));
-		averageLifetimeSubPanel.add(new JLabel(REpiceaTranslator.getString(MessageID.AverageLifeTime)));
-		averageLifetimeSubPanel.add(Box.createHorizontalStrut(10));
-		averageLifetimePanel.add(averageLifetimeSubPanel, BorderLayout.WEST);
-		averageLifetimePanel.add(averageLifetimeTextField,BorderLayout.CENTER);
-		averageLifetimePanel.add(Box.createHorizontalStrut(10),BorderLayout.EAST);
+		JPanel averageLifetimePanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.AverageLifeTime),
+				averageLifetimeTextField, 
+				5);
 
 		mainPanel.add(Box.createVerticalStrut(5));
-		mainPanel.add(titlePanel);
-		mainPanel.add(Box.createVerticalStrut(20));
 		mainPanel.add(averageLifetimePanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 	}

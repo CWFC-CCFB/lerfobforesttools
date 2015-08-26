@@ -34,6 +34,11 @@ public abstract class AbstractProductionLineProcessor extends Processor {
 
 	protected CarbonUnitFeature getEndProductFeature() {return woodProductFeature;}
 
+	protected double functionUnitBiomass;
+	
+	protected double emissionsByFunctionalUnit;
+	
+	
 	@Override
 	protected REpiceaPanel getProcessFeaturesPanel() {
 		return getEndProductFeature().getGuiInterface();
