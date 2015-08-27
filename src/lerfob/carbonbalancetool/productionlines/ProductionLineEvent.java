@@ -32,6 +32,7 @@ public class ProductionLineEvent extends EventObject {
 	 * Protected constructor since this class is instantiated in this package only.
 	 * @param source a ProductionLineManager instance
 	 */
+	@Deprecated
 	protected ProductionLineEvent(ProductionLineManager source) {
 		super(source);
 	}
