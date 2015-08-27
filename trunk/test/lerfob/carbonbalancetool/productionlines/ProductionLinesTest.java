@@ -1,5 +1,6 @@
 package lerfob.carbonbalancetool.productionlines;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,7 +95,7 @@ public class ProductionLinesTest {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void testBiomassBalanceInProductionLinesWithNewImplementation() {
+	public void testBiomassBalanceInProductionLinesWithFormerNewImplementation() {
 		try {
 			String filename = ObjectUtility.getPackagePath(getClass()) + "oakProductionLines20121112.prl";
 			ProductionLineManager wpmm = new ProductionLineManager();
@@ -141,6 +142,88 @@ public class ProductionLinesTest {
 	}
 
 
+	/**
+	 * Tests if the amount in is equal to the amount out
+	 */
+	@Test
+	public void testBiomassBalanceInProductionLinesWithNewImplementation() {
+		try {
+			String filename = ObjectUtility.getPackagePath(getClass()) + File.separator 
+					+ "library" + File.separator 
+					+ "hardwood_simple_en.prl";
+			ProductionProcessorManager processorManager = new ProductionProcessorManager();
+			processorManager.load(filename);
 
+			double volume = 100d;
+			double carbonContent = .5;
+			double basicWoodDensity = .5;
+
+			AmountMap<Element> amountMap = new AmountMap<Element>();
+			amountMap.put(Element.Volume, volume);
+			amountMap.put(Element.Biomass, volume * basicWoodDensity);
+			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
+
+			List<Processor> processors = processorManager.getPrimaryProcessors();
+			LogCategoryProcessor sawingProcessor = (LogCategoryProcessor) processors.get(processors.size() - 1);
+			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+				
+			double totalVolume = 0d;
+			for (CarbonUnit unit : endProducts) {
+				totalVolume += unit.getAmountMap().get(Element.Volume);
+			}
+
+			Assert.assertEquals("Test for production line : " + "Sawing",
+					volume, 
+					totalVolume, 
+					1E-12);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} 
+
+	}
+
+	/**
+	 * Tests if the amount in is equal to the amount out
+	 */
+	@Test
+	public void testCumulativeEmissionsWithValueForEachProcess() {
+		try {
+			String filename = ObjectUtility.getPackagePath(getClass()) + File.separator 
+					+ "testHardwood_simple_enWithEmissions.prl";
+			ProductionProcessorManager processorManager = new ProductionProcessorManager();
+			processorManager.load(filename);
+
+			double volume = 100d;
+			double carbonContent = .5;
+			double basicWoodDensity = .5;
+
+			AmountMap<Element> amountMap = new AmountMap<Element>();
+			amountMap.put(Element.Volume, volume);
+			amountMap.put(Element.Biomass, volume * basicWoodDensity);
+			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
+
+			List<Processor> processors = processorManager.getPrimaryProcessors();
+			LogCategoryProcessor sawingProcessor = (LogCategoryProcessor) processors.get(processors.size() - 1);
+			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+				
+			double actualEmissions = 0d;
+			for (CarbonUnit unit : endProducts) {
+				actualEmissions += unit.getAmountMap().get(Element.EmissionsCO2Eq);
+			}
+
+			double expectedEmissions = 3.5;
+			Assert.assertEquals("Test for production line : " + "Sawing",
+					expectedEmissions, 
+					actualEmissions, 
+					1E-12);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} 
+
+	}
 
 }

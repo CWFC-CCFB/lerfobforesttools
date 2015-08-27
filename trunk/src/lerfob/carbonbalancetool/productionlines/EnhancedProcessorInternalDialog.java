@@ -5,6 +5,7 @@ import java.awt.Window;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
+import repicea.gui.CommonGuiUtility;
 import repicea.gui.UIControlManager;
 import repicea.gui.components.NumberFormatFieldFactory;
 import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
@@ -12,6 +13,8 @@ import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.Numbe
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
 import repicea.simulation.processsystem.ProcessorButton;
 import repicea.simulation.processsystem.ProcessorInternalDialog;
+import repicea.simulation.processsystem.SystemManager;
+import repicea.simulation.processsystem.SystemManagerDialog;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -57,6 +60,18 @@ public class EnhancedProcessorInternalDialog extends ProcessorInternalDialog imp
 		emissionsByFunctionUnit.setColumns(5);
 		emissionsByFunctionUnit.setText(((Double) getCaller().emissionsByFunctionalUnit).toString());
 	}
+	
+	@Override
+	public void setVisible(boolean bool) {
+		if (!isVisible() && bool) {
+			SystemManagerDialog dlg = (SystemManagerDialog) CommonGuiUtility.getParentComponent(this, SystemManagerDialog.class);
+			boolean isEnablingGranted = ((SystemManager) dlg.getWindowOwner()).getGUIPermission().isEnablingGranted();
+			functionUnitBiomass.setEnabled(isEnablingGranted);
+			emissionsByFunctionUnit.setEnabled(isEnablingGranted);
+		}
+		super.setVisible(bool);
+	}
+		
 	
 	@Override
 	protected AbstractProcessor getCaller() {
