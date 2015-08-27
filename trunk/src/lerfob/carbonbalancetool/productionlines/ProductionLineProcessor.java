@@ -209,6 +209,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	@Deprecated
 	protected boolean isSentToAnotherMarket() {return sentToAnotherMarket;}
 
+
 	@SuppressWarnings({ "rawtypes"})
 	@Override
 	protected List<ProcessUnit> createProcessUnitsFromThisProcessor(ProcessUnit unit, int intake) {
@@ -217,6 +218,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		
 		CarbonUnit carbonUnit = (CarbonUnit) unit;
 		int creationDate = carbonUnit.getCreationDate();
+			
 		AmountMap<Element> processedAmountMap = carbonUnit.getAmountMap().multiplyByAScalar(intake * .01);
 
 		CarbonUnit woodProduct;

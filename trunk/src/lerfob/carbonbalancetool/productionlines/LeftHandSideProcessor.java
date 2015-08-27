@@ -20,11 +20,10 @@ package lerfob.carbonbalancetool.productionlines;
 
 import repicea.gui.permissions.REpiceaGUIPermission;
 import repicea.simulation.processsystem.Processor;
-import repicea.simulation.processsystem.ProcessorButton;
 import repicea.simulation.processsystem.SystemPanel;
 
 @SuppressWarnings("serial")
-public abstract class LeftHandSideProcessor extends Processor {
+public abstract class LeftHandSideProcessor extends AbstractProcessor {
 
 	
 	protected static class CustomizedREpiceaGUIPermission implements REpiceaGUIPermission {
@@ -48,7 +47,7 @@ public abstract class LeftHandSideProcessor extends Processor {
 	
 	
 	
-	public static class LeftHandSideProcessorButton extends ProcessorButton {
+	public static class LeftHandSideProcessorButton extends AbstractProcessorButton {
 				
 		protected LeftHandSideProcessorButton(SystemPanel panel, Processor process) {
 			super(panel, process, new CustomizedREpiceaGUIPermission());

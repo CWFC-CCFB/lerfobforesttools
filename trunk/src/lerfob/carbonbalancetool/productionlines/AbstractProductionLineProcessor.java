@@ -19,7 +19,6 @@
 package lerfob.carbonbalancetool.productionlines;
 
 import repicea.gui.REpiceaPanel;
-import repicea.simulation.processsystem.Processor;
 
 /**
  * An abstract for all Processor-derived classes (except the LogCategoryProcessor), which ensures
@@ -28,15 +27,12 @@ import repicea.simulation.processsystem.Processor;
  * @author Mathieu Fortin - May 2014
  */
 @SuppressWarnings("serial")
-public abstract class AbstractProductionLineProcessor extends Processor {
+public abstract class AbstractProductionLineProcessor extends AbstractProcessor {
 
 	protected CarbonUnitFeature woodProductFeature;
 
 	protected CarbonUnitFeature getEndProductFeature() {return woodProductFeature;}
 
-	protected double functionUnitBiomass;
-	
-	protected double emissionsByFunctionalUnit;
 	
 	
 	@Override

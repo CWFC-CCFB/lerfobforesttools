@@ -60,7 +60,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		/** Phosphorus */
 		P, 
 		/** Potassium */
-		K;
+		K,
+		/** Emissions CO2 eq. **/
+		EmissionsCO2Eq;
 		
 		private static List<Element> nutrientList;
 		
@@ -248,4 +250,18 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	
 	protected CarbonUnitStatus getLastStatus() {return status.get(status.size() - 1);}
 	protected void addStatus(CarbonUnitStatus currentStatus) {status.add(currentStatus);}
+	
+	/**
+	 * This method returns the emissions in Mg of CO2 Eq.
+	 * @return a double
+	 */
+	public double getTotalNonRenewableCarbonEmissionsMgCO2Eq() {
+		Double emissions = getAmountMap().get(Element.EmissionsCO2Eq);
+		if (emissions == null) {
+			return 0d;
+		} else {
+			return emissions;
+		}
+	}
+	
 }
