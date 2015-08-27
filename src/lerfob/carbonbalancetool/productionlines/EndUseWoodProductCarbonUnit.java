@@ -175,12 +175,17 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * this end product.
 	 * @return the carbon emissions in tC Eq. (double) (emissions denoted by negative values)
 	 */
-	public double getTotalNonRenewableCarbonEmissions() {
-		double emission = 0d;
-		if (getCarbonUnitFeature().getLCA() != null) {		// lca is supposed to be instantiated at creation date
-			emission = - getCarbonUnitFeature().getLCA().getCarbonEmissionPerM3() * rawRoundWoodVolume;
+	@Override
+	public double getTotalNonRenewableCarbonEmissionsMgCO2Eq() {
+		if (getAmountMap().containsKey(Element.EmissionsCO2Eq)) {		// new implementation
+			return super.getTotalNonRenewableCarbonEmissionsMgCO2Eq();
+		} else {			// former implementation
+			double emission = 0d;
+			if (getCarbonUnitFeature().getLCA() != null) {		// lca is supposed to be instantiated at creation date
+				emission = - getCarbonUnitFeature().getLCA().getCarbonEmissionPerM3() * rawRoundWoodVolume;
+			}
+			return emission;
 		}
-		return emission;
 	}
 	
 

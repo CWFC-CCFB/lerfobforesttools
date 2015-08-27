@@ -120,7 +120,7 @@ public class CarbonCompartmentMethodLibrary {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						carbon[i] += ((EndUseWoodProductCarbonUnit) carbonUnit).getTotalNonRenewableCarbonEmissions();
+						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq();
 					}
 				}
 				integratedCarbon += carbon[i];
