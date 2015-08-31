@@ -81,11 +81,12 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	}
 	
 	/**
-	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
+	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index. Does nothing if 
+	 * the siteIndexClass parameter is null.
 	 * @param siteIndexClass a SiteIndexClass enum
 	 */
 	protected void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass) {
-		if (this.currentSiteIndexClass != siteIndexClass) {
+		if (siteIndexClass != null && this.currentSiteIndexClass != siteIndexClass) {
 			if (siteIndexClass == SiteIndexClass.Unknown) {		// we are going back to normal
 				blupsLibrary.clear();
 				blupsLibrary.putAll(blupsLibraryBackup);
