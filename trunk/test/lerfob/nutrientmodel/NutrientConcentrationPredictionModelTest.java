@@ -96,6 +96,7 @@ public class NutrientConcentrationPredictionModelTest {
 		}
 		
 //		UNCOMMENT THIS PART TO SAVE A NEW REFERENCE MAP
+//		dont forget to copy the "reflist.ser" created from the "class" path to the "src" path
 //		try {
 //			FileOutputStream fos = new FileOutputStream(referenceFilename);
 //			ObjectOutputStream out = new ObjectOutputStream(fos);
