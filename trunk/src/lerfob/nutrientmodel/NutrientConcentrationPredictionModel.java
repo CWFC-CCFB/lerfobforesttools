@@ -65,6 +65,12 @@ public class NutrientConcentrationPredictionModel implements Serializable {
 		P, 
 		/** Potassium */
 		K, 
+		/** Calcium*/
+		Ca, 
+		/** Magnesium*/
+		Mg, 
+		/** Manganese */
+		Mn, 
 	}
 
 	protected final static List<BiomassCompartment> BranchCompartments = new ArrayList<BiomassCompartment>();
@@ -96,6 +102,9 @@ public class NutrientConcentrationPredictionModel implements Serializable {
 		subversionMap.put(Nutrient.P, new NutrientSubversionP(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
 		subversionMap.put(Nutrient.K, new NutrientSubversionK(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
 		subversionMap.put(Nutrient.S, new NutrientSubversionS(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
+		subversionMap.put(Nutrient.Ca, new NutrientSubversionCa(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
+		subversionMap.put(Nutrient.Mg, new NutrientSubversionMg(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
+		subversionMap.put(Nutrient.Mn, new NutrientSubversionMn(this, isParametersVariabilityEnabled, isResidualVariabilityEnabled));
 	}
 
 	/**

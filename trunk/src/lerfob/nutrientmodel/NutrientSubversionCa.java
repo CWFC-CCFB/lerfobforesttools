@@ -22,8 +22,10 @@ import repicea.math.Matrix;
 import repicea.stats.estimates.GaussianEstimate;
 
 /**
- * The NutrientSubversionP is the concentration model for phosphorus. 
- * @author Mathieu Fortin - March 2013
+ * The NutrientSubversionCa is the concentration model for Calcium.
+ * These parameters are adjusted with an additive site effect that is to consider in the predictions
+ * 
+ * @author Nicolas Bilot - September 2015
  */
 class NutrientSubversionCa extends NutrientConcentrationSubversionModel {
 
@@ -37,10 +39,10 @@ class NutrientSubversionCa extends NutrientConcentrationSubversionModel {
 	@Override
 	protected void init() {
 		Matrix betaReference = new Matrix(6,1);
-		betaReference.m_afData[0][0] = 2.015423;
-		betaReference.m_afData[1][0] = -0.10898;
-		betaReference.m_afData[2][0] = 0.040655;
-		betaReference.m_afData[3][0] = 2.336979;
+		betaReference.m_afData[0][0] = 0.743; //a_wood
+		betaReference.m_afData[1][0] = 8.983; //a_bark
+		betaReference.m_afData[2][0] = -13.553; //b_bark
+		betaReference.m_afData[3][0] = -0.647; //c_bark
 		
 		defaultBeta = new GaussianEstimate(betaReference, null);
 		
@@ -53,8 +55,11 @@ class NutrientSubversionCa extends NutrientConcentrationSubversionModel {
 		Matrix y = new Matrix(3,1);
 		Matrix beta = defaultBeta.getMean();
 
-		y.m_afData[0][0] = beta.m_afData[0][0] * Math.exp(beta.m_afData[1][0] * midDiameterCm) + beta.m_afData[2][0] * midDiameterCm;
-		y.m_afData[1][0] = beta.m_afData[3][0];
+//		Wood concentration
+		y.m_afData[0][0] = beta.m_afData[0][0];
+//		Bark concentration
+		y.m_afData[1][0] = beta.m_afData[1][0] + beta.m_afData[2][0]* Math.exp(beta.m_afData[3][0] * midDiameterCm);
+//		Compartment concentration
 		y.m_afData[2][0] = (1 - barkRatio) * y.m_afData[0][0] + barkRatio * y.m_afData[1][0];
 
 		if (isResidualVariabilityEnabled) {
