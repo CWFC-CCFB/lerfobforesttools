@@ -21,8 +21,10 @@ package lerfob.nutrientmodel;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +98,6 @@ public class NutrientConcentrationPredictionModelTest {
 		}
 		
 //		UNCOMMENT THIS PART TO SAVE A NEW REFERENCE MAP
-//		dont forget to copy the "reflist.ser" created from the "class" path to the "src" path
 //		try {
 //			FileOutputStream fos = new FileOutputStream(referenceFilename);
 //			ObjectOutputStream out = new ObjectOutputStream(fos);
@@ -106,7 +107,7 @@ public class NutrientConcentrationPredictionModelTest {
 //			ex.printStackTrace();
 //			throw ex;
 //		}
-	
+//	
 		System.out.println("Loading reference map...");
 		List<Matrix> refList;
 		try {

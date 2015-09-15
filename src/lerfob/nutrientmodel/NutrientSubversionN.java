@@ -23,7 +23,13 @@ import repicea.stats.estimates.GaussianEstimate;
 
 /**
  * The NutrientSubversionN is the concentration model for nitrogen. 
+ * 
+ * This class is modified on september 2015 : previous parameters were adjusted without site effect. 
+ * Replacement parameters are those published in Forest ecology and Management (Wernsdörfer et al. 2014).
+ * These parameters are adjusted with an additive site effect that is to consider in the predictions 
+ * 
  * @author Mathieu Fortin - March 2013
+ * @author Nicolas Bilot - September 2015 (refaction setp 2015)
  */
 class NutrientSubversionN extends NutrientConcentrationSubversionModel {
 
@@ -37,12 +43,21 @@ class NutrientSubversionN extends NutrientConcentrationSubversionModel {
 	@Override
 	protected void init() {
 		Matrix betaReference = new Matrix(6,1);
-		betaReference.m_afData[0][0] = 0.908271;
-		betaReference.m_afData[1][0] = 1.590231;
-		betaReference.m_afData[2][0] = -0.20064;
-		betaReference.m_afData[3][0] = 9.651501;
-		betaReference.m_afData[4][0] = 0.021955;
-		betaReference.m_afData[5][0] = -0.40811;
+//		Parameters without site effect
+//		betaReference.m_afData[0][0] = 0.908271;
+//		betaReference.m_afData[1][0] = 1.590231;
+//		betaReference.m_afData[2][0] = -0.20064;
+//		betaReference.m_afData[3][0] = 9.651501;
+//		betaReference.m_afData[4][0] = 0.021955;
+//		betaReference.m_afData[5][0] = -0.40811;
+
+//		Parameters with site effect
+		betaReference.m_afData[0][0] = 0.748; // a_wood
+		betaReference.m_afData[1][0] = 2.275; // b_wood
+		betaReference.m_afData[2][0] = -0.240; // c_wood
+		betaReference.m_afData[3][0] = 10.459; // b_bark
+		betaReference.m_afData[4][0] = 0.023; // c_bark
+		betaReference.m_afData[5][0] = -0.456; // d_bark
 		
 		defaultBeta = new GaussianEstimate(betaReference, null);
 		
@@ -56,8 +71,11 @@ class NutrientSubversionN extends NutrientConcentrationSubversionModel {
 
 		Matrix beta = defaultBeta.getMean();
 
+//		Wood concentration
 		y.m_afData[0][0] = beta.m_afData[0][0] + beta.m_afData[1][0] * Math.exp(beta.m_afData[2][0] * midDiameterCm);
+//		Bark concentration
 		y.m_afData[1][0] = beta.m_afData[3][0] * Math.exp(beta.m_afData[4][0] * midDiameterCm) + beta.m_afData[5][0] * midDiameterCm;
+//		Compartment concentration
 		y.m_afData[2][0] = (1 - barkRatio) * y.m_afData[0][0] + barkRatio * y.m_afData[1][0];
 
 		if (isResidualVariabilityEnabled) {
