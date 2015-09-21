@@ -38,7 +38,7 @@ import repicea.math.Matrix;
  * beech only.
  * <br>
  * <br>
- * The nutrients that are considered in this model are : > N: Nitrogen > S: Sulfur > P: Phosphorus > K: Potassium 
+ * The nutrients that are considered in this model are : > N: Nitrogen > S: Sulfur > P: Phosphorus > K: Potassium > Ca: Calcium > Mg: Magnesium > Mn: Manganese 
  * <br>
  * @see <a href=http://www.sciencedirect.com/science/article/pii/S037811271400423X#> 
  * Wernsdorfer, H., Jonard, M., Genet, A., Legout, A., Nys, C., Saint-Andre, L., and Ponette, Q. 2014.
@@ -51,7 +51,7 @@ public class NutrientConcentrationPredictionModel implements Serializable {
 
 	private static final long serialVersionUID = 20130325L;
 	
-	private static boolean enabled = false;
+	private static boolean enabled = true;
 	
 	public static void setEnabled(boolean enabled) {NutrientConcentrationPredictionModel.enabled = enabled;}
 	public static boolean isEnabled() {return NutrientConcentrationPredictionModel.enabled;}
