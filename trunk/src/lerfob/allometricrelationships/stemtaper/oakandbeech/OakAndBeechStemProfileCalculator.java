@@ -313,7 +313,14 @@ public class OakAndBeechStemProfileCalculator extends StemTaperModel {
 			double volume = estimate.getMean().getSumOfElements();
 			return volume;
 		}
-	}	
+	}
+
+	/*
+	 * Useless for this class (non-Javadoc)
+	 * @see repicea.simulation.ModelBasedSimulator#init()
+	 */
+	@Override
+	protected void init() {}	
 	
 	
 }
