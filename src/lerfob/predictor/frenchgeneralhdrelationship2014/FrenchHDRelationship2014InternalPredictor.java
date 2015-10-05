@@ -266,5 +266,12 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		}
 		return treesToBeReturned;
 	}
+
+	/*
+	 * Useless for this class (non-Javadoc)
+	 * @see repicea.simulation.ModelBasedSimulator#init()
+	 */
+	@Override
+	protected void init() {}
 	
 }

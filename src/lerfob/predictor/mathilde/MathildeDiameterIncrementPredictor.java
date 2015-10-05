@@ -102,7 +102,8 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 	}
 	
-	private void init() {
+	@Override
+	protected final void init() {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
 			String betaFilename = path + "0_MathildeDbhIncBeta.csv";

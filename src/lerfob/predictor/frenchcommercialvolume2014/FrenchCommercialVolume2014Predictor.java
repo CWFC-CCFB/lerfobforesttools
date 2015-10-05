@@ -33,7 +33,8 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 		oXVector = new Matrix(1, defaultBeta.getMean().m_iRows);
 	}
 	
-	private void init() {
+	@Override
+	protected final void init() {
 		String path = ObjectUtility.getRelativePackagePath(getClass());
 		String betaFilename = path + "0_beta.csv";
 		String omegaFilename = path + "0_omega.csv";

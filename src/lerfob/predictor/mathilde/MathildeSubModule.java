@@ -46,5 +46,12 @@ final class MathildeSubModule extends ModelBasedSimulator {
 	protected Matrix getResidualErrorForThisVersion() {
 		return super.getResidualError();
 	}
+
+	/*
+	 * Useless for this class (non-Javadoc)
+	 * @see repicea.simulation.ModelBasedSimulator#init()
+	 */
+	@Override
+	protected void init() {}
 }
 

@@ -88,7 +88,8 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 		predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
 	}
 
-	private void init() {
+	@Override
+	protected final void init() {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
 			String betaFilename = path + "0_beta.csv";
