@@ -34,7 +34,7 @@ public class OakAndBeechStemProfileCalculator extends StemTaperModel {
 	public static class OakAndBeechStemTaperEstimate extends StemTaperEstimate {
 
 		public OakAndBeechStemTaperEstimate(List<Double> computedHeights) {
-			super(1, false, computedHeights);
+			super(false, computedHeights);
 		}
 
 		@Override
