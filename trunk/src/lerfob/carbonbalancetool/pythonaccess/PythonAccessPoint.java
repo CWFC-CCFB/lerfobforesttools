@@ -187,6 +187,10 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		
 		Double[] carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts);
 		
+		Double[] permanentSeqInLandfill = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillND);
+		Double[] landfillCarbonDegradable = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillDeg);
+		Double[] emissionDueToTransformation = simulationResult.getEvolutionMap().get(CompartmentInfo.CarbEmis);
+		
 		Map<Integer, Map<String, Double>> outputMap = new HashMap<Integer, Map<String, Double>>();
 		
 		for (Integer year : years) {
@@ -205,6 +209,10 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 				}
 			}
 			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP[years.indexOf(year)]);
+			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill[years.indexOf(year)]);
+			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable[years.indexOf(year)]);
+			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation[years.indexOf(year)]);
+			
 		}
 		System.out.println("Stand " + standID + " processed...");
 		return outputMap;
@@ -244,7 +252,9 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		System.out.println("Parameters received:" + inputString);
 		REpiceaSystem.setLanguageFromMain(args, Language.English);
 		System.out.println("Language set to: " + REpiceaTranslator.getCurrentLanguage().name());
-		GatewayServer gatewayServer = new GatewayServer(new PythonAccessPoint());
+		PythonAccessPoint pap = new PythonAccessPoint();
+//		pap.showInterface();
+		GatewayServer gatewayServer = new GatewayServer(pap);
 		gatewayServer.start();
 		System.out.println("Gateway Server Started");
 	}

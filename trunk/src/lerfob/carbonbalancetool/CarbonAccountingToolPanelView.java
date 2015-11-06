@@ -26,6 +26,8 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.security.InvalidParameterException;
 
 import javax.swing.BorderFactory;
@@ -43,7 +45,7 @@ import repicea.gui.REpiceaPanel;
 @SuppressWarnings("serial")
 class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListener {
 
-	protected class TabTitleComponent extends REpiceaPanel implements ActionListener {
+	protected class TabTitleComponent extends REpiceaPanel implements ActionListener, MouseListener {
 
 		private final JButton closeButton;
 		private final Component comp;
@@ -65,6 +67,7 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 			add(Box.createHorizontalStrut(2));
 			add(closeButton);
 			setOpaque(false);
+			closeButton.addMouseListener(this);
 		}
 		
 		@Override
@@ -86,6 +89,31 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 				CarbonAccountingToolPanelView.this.tabbedPane.remove(comp);
 				CarbonAccountingToolPanelView.this.checkIfExportAndComparisonShouldBeEnabled();
 			}
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			closeButton.setForeground(Color.RED);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			closeButton.setForeground(Color.BLACK);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
