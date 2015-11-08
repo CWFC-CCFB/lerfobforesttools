@@ -61,10 +61,6 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 		return HierarchicalLevel.Tree;
 	}
 
-	@Override
-	public void setMonteCarloRealizationId(int i) {
-		stand.setMonteCarloRealizationId(i);
-	}
 
 	@Override
 	public int getMonteCarloRealizationId() {

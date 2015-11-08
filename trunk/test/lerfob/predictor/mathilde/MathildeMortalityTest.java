@@ -117,7 +117,7 @@ public class MathildeMortalityTest {
 			NonparametricDistribution dist = new NonparametricDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
-				stand.setMonteCarloRealizationId(i);
+				((MathildeMortalityStandImpl) stand).setMonteCarloRealizationId(i);
 				result = new Matrix(1,1);
 				result.m_afData[0][0] = stochasticPredictor.predictEventProbability(stand, tree);
 				dist.addRealization(result);

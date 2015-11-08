@@ -37,9 +37,6 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.Tree;}
 
 	@Override
-	public void setMonteCarloRealizationId(int i) {}
-
-	@Override
 	public int getMonteCarloRealizationId() {return 0;}
 
 	@Override
