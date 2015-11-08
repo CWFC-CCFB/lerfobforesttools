@@ -40,7 +40,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 		COLORS.add(Color.GRAY);
 		COLORS.add(Color.YELLOW);
 		COLORS.add(Color.GREEN);
-		COLORS.add(Color.WHITE);
+		COLORS.add(Color.DARK_GRAY);
 		COLORS.add(Color.MAGENTA);
 		COLORS.add(Color.ORANGE);
 		COLORS.add(Color.PINK);
