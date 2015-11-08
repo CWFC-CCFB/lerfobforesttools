@@ -22,8 +22,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Vector;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
+
+import org.jfree.chart.ChartPanel;
 
 import repicea.gui.REpiceaPanel;
 
@@ -69,7 +70,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	 * This method returns the appropriate graph for the CarbonViewer instance.
 	 * @return a JComponent
 	 */
-	protected abstract JComponent createChart();
+	protected abstract ChartPanel createChart();
 	
 	protected String getPrefix() {return this.getClass().getSimpleName() + ".";}
 	
@@ -97,7 +98,8 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	@Override
 	public final void refreshInterface() {
 		viewer.removeAll();
-		viewer.add(createChart(), BorderLayout.CENTER);
+		ChartPanel panel = createChart();
+		viewer.add(panel, BorderLayout.CENTER);
 	}
 
 	@Override
