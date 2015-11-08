@@ -19,109 +19,30 @@
 package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.security.InvalidParameterException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
+import repicea.gui.components.REpiceaTabbedPane;
 
 @SuppressWarnings("serial")
 class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListener {
 
-	protected class TabTitleComponent extends REpiceaPanel implements ActionListener, MouseListener {
-
-		private final JButton closeButton;
-		private final Component comp;
-
-		protected TabTitleComponent(String title, Component comp, JTabbedPane tabPane) {
-			closeButton = new JButton("X");
-			closeButton.setForeground(Color.BLACK);
-			Font font = closeButton.getFont();
-			closeButton.setFont(font.deriveFont(Font.BOLD));
-			closeButton.setMargin(new Insets(1,1,1,1));
-			closeButton.setContentAreaFilled(false);
-			closeButton.setFocusPainted(false);
-			closeButton.setOpaque(false);
-			closeButton.setBorder(BorderFactory.createEmptyBorder());
-			this.comp = comp;
-			setLayout(new FlowLayout(FlowLayout.LEFT));
-			JLabel titleLabel = new JLabel(title);
-			add(titleLabel);
-			add(Box.createHorizontalStrut(2));
-			add(closeButton);
-			setOpaque(false);
-			closeButton.addMouseListener(this);
+	protected class CarbonTabbedPane extends REpiceaTabbedPane {
+		@Override
+		protected void postRemovalActions() {
+			CarbonAccountingToolPanelView.this.checkIfExportAndComparisonShouldBeEnabled();
 		}
-		
-		@Override
-		public void refreshInterface() {}
-
-		@Override
-		public void listenTo() {
-			closeButton.addActionListener(this);
-		}
-
-		@Override
-		public void doNotListenToAnymore() {
-			closeButton.removeActionListener(this);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(closeButton)) {
-				CarbonAccountingToolPanelView.this.tabbedPane.remove(comp);
-				CarbonAccountingToolPanelView.this.checkIfExportAndComparisonShouldBeEnabled();
-			}
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			closeButton.setForeground(Color.RED);
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			closeButton.setForeground(Color.BLACK);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
 	}
 	
 	
 	
 	private CarbonAccountingToolOptionPanel optionPanel;
-	protected JTabbedPane tabbedPane;
+	protected CarbonTabbedPane tabbedPane;
 	
 	/**	
 	 * Constructor
@@ -132,7 +53,7 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 			throw new InvalidParameterException("There is no option panel in the left panel!");
 		}
 		this.optionPanel = optionPanel;
-		this.tabbedPane = new JTabbedPane();
+		this.tabbedPane = new CarbonTabbedPane();
 		tabbedPane.addChangeListener(this);
 		setLayout (new BorderLayout());
 
@@ -151,7 +72,7 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 	protected void addSimulationResult(CarbonAssessmentToolSimulationResult summary, String simulationName) {
 		CarbonAccountingToolSingleViewPanel singleViewPanel = new CarbonAccountingToolSingleViewPanel(optionPanel, summary, simulationName);
 		tabbedPane.insertTab(simulationName, null, singleViewPanel, summary.toString(), 0);
-		tabbedPane.setTabComponentAt(0, new TabTitleComponent(simulationName, singleViewPanel, tabbedPane));
+//		tabbedPane.setTabComponentAt(0, new TabTitleComponent(simulationName, singleViewPanel, tabbedPane));
 		tabbedPane.setSelectedIndex(0);
 	}
 	
