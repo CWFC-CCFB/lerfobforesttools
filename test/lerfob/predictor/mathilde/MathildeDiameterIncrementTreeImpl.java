@@ -12,7 +12,7 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 	private MathildeTreeSpecies species;
 	private MathildeDiameterIncrementStand stand;
 	private double pred;
-	private int monteCarloRealization;
+//	private int monteCarloRealization;
 	
 	protected MathildeDiameterIncrementTreeImpl(double diam0,
 			double bal22,
@@ -28,11 +28,11 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 		this.bal42 = bal42;
 		species = MathildeTreeSpecies.getSpecies(grEss);
 		this.pred = pred;
-		this.setMonteCarloRealizationId(1);
+//		this.setMonteCarloRealizationId(1);
 		stand = new MathildeDiameterIncrementStandImpl(st, 
 				upcomingCut, 
 				deltaT, 
-				getMonteCarloRealizationId(), 
+				1, 
 				tIntervalVeg6);
 	}
 	
@@ -68,14 +68,14 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 		return HierarchicalLevel.Tree;
 	}
 
-	@Override
-	public void setMonteCarloRealizationId(int i) {
-		monteCarloRealization = i;
-	}
+//	@Override
+//	public void setMonteCarloRealizationId(int i) {
+//		monteCarloRealization = i;
+//	}
 
 	@Override
 	public int getMonteCarloRealizationId() {
-		return monteCarloRealization;
+		return stand.getMonteCarloRealizationId();
 	}
 
 	@Override

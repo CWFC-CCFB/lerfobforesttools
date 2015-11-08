@@ -38,8 +38,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 		return HierarchicalLevel.Plot;
 	}
 
-	@Override
-	public void setMonteCarloRealizationId(int i) {
+	protected void setMonteCarloRealizationId(int i) {
 		monteCarloRealization = i;
 	}
 

@@ -35,8 +35,6 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.Plot;}
 
-	@Override
-	public void setMonteCarloRealizationId(int i) {monteCarloId = i;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return monteCarloId;}

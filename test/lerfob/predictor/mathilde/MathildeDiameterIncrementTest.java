@@ -109,8 +109,8 @@ public class MathildeDiameterIncrementTest {
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
-			tree.setMonteCarloRealizationId(i);
-			stand.setMonteCarloRealizationId(i);
+//			tree.setMonteCarloRealizationId(i);
+			((MathildeDiameterIncrementStandImpl) stand).setMonteCarloRealizationId(i);
 			result = new Matrix(1,1);
 			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
@@ -134,8 +134,7 @@ public class MathildeDiameterIncrementTest {
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
-			tree.setMonteCarloRealizationId(i);
-			stand.setMonteCarloRealizationId(i);
+			((MathildeDiameterIncrementStandImpl) stand).setMonteCarloRealizationId(i);
 			result = new Matrix(1,1);
 			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
 			dist.addRealization(result);
