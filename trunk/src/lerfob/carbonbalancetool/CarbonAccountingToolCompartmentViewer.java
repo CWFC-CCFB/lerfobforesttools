@@ -24,8 +24,6 @@ import java.awt.Stroke;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JComponent;
-
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 
 import org.jfree.chart.ChartFactory;
@@ -70,7 +68,7 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 
 
 	@Override
-	protected JComponent createChart () {
+	protected ChartPanel createChart () {
 
 		XYSeriesCollection dataset = new XYSeriesCollection ();
 
@@ -98,6 +96,8 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 				);
 
 		XYPlot plot = (XYPlot) chart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setRangeGridlinePaint(Color.BLACK);
 		XYItemRenderer renderer = plot.getRenderer();
 		Stroke stroke = new BasicStroke(3f); // width of the lines
 

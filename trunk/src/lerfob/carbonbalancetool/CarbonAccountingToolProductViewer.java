@@ -21,8 +21,6 @@ package lerfob.carbonbalancetool;
 import java.awt.Color;
 import java.util.Map;
 
-import javax.swing.JComponent;
-
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -74,7 +72,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 	}
 	
 	@Override
-	protected final JComponent createChart () {
+	protected final ChartPanel createChart () {
 
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
 		Map<UseClass, AmountMap<Element>> oMap = getAppropriateMap();
@@ -102,6 +100,8 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 				);
 
 		CategoryPlot plot = (CategoryPlot) chart.getPlot ();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setRangeGridlinePaint(Color.BLACK);
 		BarRenderer renderer = (BarRenderer) plot.getRenderer ();
 
 		renderer.setShadowVisible (true);

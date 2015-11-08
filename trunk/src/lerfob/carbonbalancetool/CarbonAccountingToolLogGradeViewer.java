@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JComponent;
-
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 
 import org.jfree.chart.ChartFactory;
@@ -49,7 +47,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 	}
 
 	@Override
-	protected JComponent createChart () {
+	protected ChartPanel createChart () {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
 
 		List<String> logCategoryNames = new ArrayList<String>(summary.getLogGradeMap().keySet());
@@ -70,6 +68,8 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 				);
 
 		CategoryPlot plot = (CategoryPlot) chart.getPlot ();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setRangeGridlinePaint(Color.BLACK);
 		BarRenderer renderer = (BarRenderer) plot.getRenderer ();
 
 		renderer.setShadowVisible (true);

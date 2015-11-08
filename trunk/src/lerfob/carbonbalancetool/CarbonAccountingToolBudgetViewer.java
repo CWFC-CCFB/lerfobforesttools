@@ -20,8 +20,6 @@ package lerfob.carbonbalancetool;
 
 import java.awt.Color;
 
-import javax.swing.JComponent;
-
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 
 import org.jfree.chart.ChartFactory;
@@ -66,7 +64,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 
 
 	@Override
-	protected JComponent createChart() {
+	protected ChartPanel createChart() {
 
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
 
@@ -74,7 +72,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 			dataset.addValue(summary.getBudgetMap().get(compartmentID), compartmentID.toString(),	"");
 		}
 		
-		JFreeChart chart = ChartFactory.createBarChart (getTitle(), 
+		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 
 				getXAxisLabel(), 
 				getYAxisLabel(),
 				dataset, 
@@ -85,18 +83,20 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 				);
 
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setRangeGridlinePaint(Color.BLACK);
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
 
 		renderer.setShadowVisible(true);
 		renderer.setMaximumBarWidth(0.1);
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			Color color = getColor (compartmentID.ordinal());
+			Color color = getColor(compartmentID.ordinal());
 			int index = dataset.getRowKeys().indexOf(compartmentID.toString());
 			renderer.setSeriesPaint(index, color);
 		}
 
-		ChartPanel chartPanel = new ChartPanel (chart);
+		ChartPanel chartPanel = new ChartPanel(chart);
 		return chartPanel;
 
 	}
