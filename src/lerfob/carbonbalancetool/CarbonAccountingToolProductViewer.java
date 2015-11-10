@@ -112,7 +112,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		for (UseClass useClass : UseClass.values()) {
 			int index = dataset.getRowKeys().indexOf(useClass.toString());
 			if (index != -1) {
-				Color color = getColor (useClass.ordinal());
+				Color color = getColor(useClass.ordinal());
 				renderer.setSeriesPaint(index, color);
 			}
 		}

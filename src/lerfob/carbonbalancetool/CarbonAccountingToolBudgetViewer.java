@@ -91,9 +91,8 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 		renderer.setMaximumBarWidth(0.1);
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			Color color = getColor(compartmentID.ordinal());
 			int index = dataset.getRowKeys().indexOf(compartmentID.toString());
-			renderer.setSeriesPaint(index, color);
+			renderer.setSeriesPaint(index, compartmentID.getColor());
 		}
 
 		ChartPanel chartPanel = new ChartPanel(chart);

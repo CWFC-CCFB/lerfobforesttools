@@ -18,6 +18,7 @@
  */
 package lerfob.carbonbalancetool;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,70 +44,68 @@ public class CarbonCompartment implements Comparable {
 		/**
 		 * The compartment that contains the root biomass.
 		 */
-		Roots(false, "Belowground biomass", "Biomasse souterraine", false),
+		Roots(false, "Belowground biomass", "Biomasse souterraine", false, new Color(0,100,0)),
 		/**
 		 * The aboveground biomass (bole, branches and twigs).
 		 */
-		AbGround(false, "Aboveground biomass", "Biomasse a\u00E9rienne", false),
+		AbGround(false, "Aboveground biomass", "Biomasse a\u00E9rienne", false, new Color(0,150,0)),
 		/**
 		 * The dead biomass, i.e. the dead trees and the wood pieces left in the forest
 		 */
-		DeadBiom(false, "Dead organic matter", "Mati\u00E8re organique morte", false),
+		DeadBiom(false, "Dead organic matter", "Mati\u00E8re organique morte", false, new Color(0,50,0)),
 		/**
 		 * The wood products.
 		 */
-		Products(false, "Harvested wood products", "Produits bois", false),
+		Products(false, "Harvested wood products", "Produits bois", false, new Color(0,0,150)),
 		/**
 		 * The landfill degradable carbon pool.
 		 */
-		LfillDeg(false, "Landfill (DOCf)", "D\u00E9charge (DOCf)", false),
+		LfillDeg(false, "Landfill (DOCf)", "D\u00E9charge (DOCf)", false, new Color(0,0,100)),
 		/**
 		 * The carbon emissions due to fossil fuel consumption.
 		 */
-		CarbEmis(true, "Carbon emissions", "Emissions", false),
+		CarbEmis(true, "Carbon emissions", "Emissions", false, new Color(150,100,100)),
 		/**
 		 * The energy substitution.
 		 */
-		EnerSubs(true, "Energy and material substitution", "Substitution mat\u00E9rielle et \u00E9nerg\u00E9tique", false),
+		EnerSubs(true, "Energy and material substitution", "Substitution mat\u00E9rielle et \u00E9nerg\u00E9tique", false, new Color(0,100,100)),
 		/**
 		 * The landfill non degradable carbon pool.
 		 */
-		LfillND(true, "Landfill (Non degradable)", "D\u00E9charge (Non d\u00E9gradable)", false),
+		LfillND(true, "Landfill (Non degradable)", "D\u00E9charge (Non d\u00E9gradable)", false, new Color(0,150,150)),
 		/**
 		 * The Landfill GHG emissions (CH4)
 		 */
-		LfillEm(true, "Landfill (Methane emissions)", "D\u00E9charge (Emissions de m\u00E9thane)", false),
+		LfillEm(true, "Landfill (Methane emissions)", "D\u00E9charge (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
 		/**
 		 * The living biomass, i.e. the aboveground biomass + the roots.
 		 */
-		TotalBiomass(false, "Forest carbon pool", "Pool de carbone de la for\u00EAt", true),
+		TotalBiomass(false, "Forest carbon pool", "Pool de carbone de la for\u00EAt", true, new Color(0,200,0)),
 		/**
 		 * The sum of the living biomass and the wood products.
 		 */
-		TotalProducts(false, "HWP carbon pool", "Pool de carbone des produits du bois", true),
+		TotalProducts(false, "HWP carbon pool", "Pool de carbone des produits du bois", true, new Color(0,0,200)),
 		/**
 		 * The net substitution, i.e. the energy substitution less the carbon emissions.
 		 */
-		NetSubs(true, "Cumulative net flux", "Flux net cumulatif", true);
+		NetSubs(true, "Cumulative net flux", "Flux net cumulatif", true, new Color(200,0,0));
 
 		private static List<CompartmentInfo> naturalOrder;
 		
 		private boolean isFlux;
 		private boolean resultFromGrouping;
+		private Color color;
 
-		CompartmentInfo(boolean isFlux, String englishText, String frenchText, boolean resultFromGrouping) {
+		CompartmentInfo(boolean isFlux, String englishText, String frenchText, boolean resultFromGrouping, Color color) {
 			this.isFlux = isFlux;
 			this.resultFromGrouping = resultFromGrouping;
+			this.color = color;
 			setText(englishText, frenchText);
 		}
 		
-		protected boolean isFlux() {
-			return isFlux;
-		}
+		protected boolean isFlux() {return isFlux;}
 
-		protected boolean isResultFromGrouping() {
-			return resultFromGrouping;
-		}
+		protected boolean isResultFromGrouping() {return resultFromGrouping;}
 		
 		@Override
 		public void setText(String englishText, String frenchText) {
@@ -114,9 +113,7 @@ public class CarbonCompartment implements Comparable {
 		}
 		
 		@Override
-		public String toString() {
-			return REpiceaTranslator.getString(this);
-		}
+		public String toString() {return REpiceaTranslator.getString(this);}
 
 		/**
 		 * This method returns the natural order of this enum variable.
@@ -140,6 +137,12 @@ public class CarbonCompartment implements Comparable {
 			}
 			return naturalOrder;
 		}
+		
+		/**
+		 * This method returns the color of the compartment for rendering.
+		 * @return a Color instance
+		 */
+		public Color getColor() {return color;}
 	}
 
 	private CarbonCompartmentManager compartmentManager;
@@ -276,4 +279,21 @@ public class CarbonCompartment implements Comparable {
 			return 1;
 		}
 	}
+	
+	
+//	public static void main(String[] args) {
+//		JDialog dlg = new JDialog();
+//		dlg.setModal(true);
+//		dlg.setLayout(new GridLayout(6,6));
+//		for (int i = 0; i < 6; i++) {
+//			for (int j = 0; j < 6; j++) {
+//				JButton button = new JButton("Allo_" + i + "_" + j);
+//				button.setBackground(new Color(i * 50, 100, 100));
+//				dlg.add(button);
+//			}
+//		}
+//		dlg.setSize(new Dimension(100,100));
+//		dlg.setVisible(true);
+//		System.exit(0);
+//	}
 }

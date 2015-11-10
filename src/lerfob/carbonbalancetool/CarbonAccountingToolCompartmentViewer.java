@@ -102,8 +102,7 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 		Stroke stroke = new BasicStroke(3f); // width of the lines
 
 		for (int i = 0; i < optionPanel.getCompartmentToBeShown().size(); i++) {
-			Color color = getColor(optionPanel.getCompartmentToBeShown().get(i).ordinal());
-			renderer.setSeriesPaint(i, color);
+			renderer.setSeriesPaint(i, optionPanel.getCompartmentToBeShown().get(i).getColor());
 			renderer.setSeriesStroke(i, stroke);
 		}
 
