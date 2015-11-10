@@ -19,27 +19,99 @@
 package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 
+import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import lerfob.carbonbalancetool.CarbonAccountingToolDialog.MessageID;
+
+import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
+import repicea.gui.UIControlManager;
+import repicea.gui.UIControlManager.CommonControlID;
 import repicea.gui.components.REpiceaTabbedPane;
+import repicea.gui.popup.REpiceaPopupMenu;
+import repicea.net.BrowserCaller;
+import repicea.util.REpiceaTranslator;
 
 @SuppressWarnings("serial")
 class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListener {
 
-	protected class CarbonTabbedPane extends REpiceaTabbedPane {
-		@Override
-		protected void postRemovalActions() {
-			CarbonAccountingToolPanelView.this.checkIfExportAndComparisonShouldBeEnabled();
+	protected class CarbonTabbedPane extends REpiceaTabbedPane implements ChangeListener {
+
+		private JMenuItem exportMenuItem;
+		private JMenuItem compareScenarioMenuItem;
+		
+		protected CarbonTabbedPane() {
+			super();
+			addChangeListener(this);
 		}
+		
+		@Override
+		protected REpiceaPopupMenu setPopupMenu() {
+			exportMenuItem = UIControlManager.createCommonMenuItem(CommonControlID.Export);
+			compareScenarioMenuItem = new JMenuItem(MessageID.CompareScenario.toString());
+			ImageIcon compareScenariosIcon = CommonGuiUtility.retrieveIcon(getClass(), "compareScenariosIcon.png");
+			compareScenarioMenuItem.setIcon(compareScenariosIcon);
+			return new REpiceaPopupMenu(this, compareScenarioMenuItem, exportMenuItem, closeButton, closeAllButton, closeOtherButton);
+		}
+
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (arg0.getSource().equals(exportMenuItem)) {
+				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) getSelectedComponent();
+				CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
+				CarbonAccountingToolExport exportTool;
+				try {
+					exportTool = new CarbonAccountingToolExport(dlg.caller.getCarbonToolSettings(), panel.getSummary());
+					Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
+					String url = "http://www.inra.fr/capsis/help_"+ 
+							REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
+							"/capsis/extension/modeltool/carbonaccountingtool/export";
+					AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
+					exportTool.setHelper(helper);
+					exportTool.showInterface(dlg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (arg0.getSource().equals(compareScenarioMenuItem)) {
+				CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
+				dlg.compareDialog.setVisible(true);
+			} else {
+				super.actionPerformed(arg0);
+			} 
+		}
+		
+		
+		protected void checkIfComparisonShouldBeEnabled() {
+			int nbValidComponents = 0;
+			int nbTabs = tabbedPane.getTabCount();
+			for (int i = 0; i < nbTabs; i++) {
+				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) tabbedPane.getComponentAt(i);
+				if (panel != null && panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) {
+					nbValidComponents++;
+				}
+			}
+			compareScenarioMenuItem.setEnabled(nbValidComponents >= 2);
+		}
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			if (e.getSource().equals(this)) {
+				checkIfComparisonShouldBeEnabled();
+			}
+		}
+		
+		
 	}
-	
-	
 	
 	private CarbonAccountingToolOptionPanel optionPanel;
 	protected CarbonTabbedPane tabbedPane;
@@ -86,30 +158,10 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 	public void doNotListenToAnymore() {}
 
 	
-	protected void checkIfExportAndComparisonShouldBeEnabled() {
-		CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
-		if (tabbedPane.getTabCount() == 0) {
-			dlg.setExportEnabled(false);
-			dlg.setScenarioComparisonEnabled(false);
-		} else {
-			dlg.setExportEnabled(true);
-			boolean comparisonEnabled = false;
-			int nbTabs = tabbedPane.getTabCount();
-			for (int i = 0; i < nbTabs; i++) {
-				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) tabbedPane.getComponentAt(i);
-				if (panel != null && panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) {
-					comparisonEnabled = true;	// at least one simulation result
-					break;
-				}
-			}
-			dlg.setScenarioComparisonEnabled(comparisonEnabled);
-		}
-	}
 	
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource().equals(tabbedPane)) {
-			checkIfExportAndComparisonShouldBeEnabled();
 			if (tabbedPane.getSelectedComponent() instanceof CarbonAccountingToolSingleViewPanel) {
 				((CarbonAccountingToolSingleViewPanel) tabbedPane.getSelectedComponent()).refreshInterface();
 			}
