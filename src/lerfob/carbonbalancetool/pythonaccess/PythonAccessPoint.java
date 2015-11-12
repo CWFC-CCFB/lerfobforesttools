@@ -142,40 +142,42 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 			stand = new PythonCarbonToolCompatibleStand(areaHa, standID, dateYr);
 			standList.add(stand);
 			
-			double nbTreesHa = Double.parseDouble(innerMap.get("NbTrees").toString());
-			double mqd = Double.parseDouble(innerMap.get("DBHmy").toString());
-			double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
-			double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
-			double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
-			double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
-			boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && mqd > 0;
-			if (isProcessable) {
-				double nbTrees = nbTreesHa * stand.getAreaHa();
-				
-				if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
-					tree = new PythonMaritimePineTree(type, 
-							speciesForSimulation,
-							TreeStatusPriorToLogging.Alive,
-							StatusClass.cut,
-							mqd,
-							dbhStandardDeviation,
-							nbTrees,
-							getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
-							getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-							getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
-					stand.addTree(StatusClass.cut, tree);
-				} else {
-					tree = new PythonEuropeanBeechTree(type, 
-							speciesForSimulation,
-							TreeStatusPriorToLogging.Alive,
-							StatusClass.cut,
-							mqd,
-							dbhStandardDeviation,
-							nbTrees,
-							getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
-							getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-							getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
-					stand.addTree(StatusClass.cut, tree);
+			if (innerMap != null) {
+				double nbTreesHa = Double.parseDouble(innerMap.get("NbTrees").toString());
+				double mqd = Double.parseDouble(innerMap.get("DBHmy").toString());
+				double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
+				double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
+				double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
+				double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
+				boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && mqd > 0;
+				if (isProcessable) {
+					double nbTrees = nbTreesHa * stand.getAreaHa();
+					
+					if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
+						tree = new PythonMaritimePineTree(type, 
+								speciesForSimulation,
+								TreeStatusPriorToLogging.Alive,
+								StatusClass.cut,
+								mqd,
+								dbhStandardDeviation,
+								nbTrees,
+								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+						stand.addTree(StatusClass.cut, tree);
+					} else {
+						tree = new PythonEuropeanBeechTree(type, 
+								speciesForSimulation,
+								TreeStatusPriorToLogging.Alive,
+								StatusClass.cut,
+								mqd,
+								dbhStandardDeviation,
+								nbTrees,
+								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+						stand.addTree(StatusClass.cut, tree);
+					}
 				}
 			}
 		}
