@@ -66,8 +66,8 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
 		eta = new LinearStatisticalExpression();
 		linkFunction.setParameterValue(LFParameter.Eta, eta);
-		eta.setParameterValue(0, 1d);
-		eta.setParameterValue(1, 1d);
+		eta.setVariableValue(0, 1d);	// variable that multiplies the xBeta
+		eta.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);
 	}
 
@@ -179,7 +179,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 		double pred = getFixedEffectOnlyPrediction(beta, stand, tree);
 
-		eta.setVariableValue(0, pred);
+		eta.setParameterValue(0, pred);
 		double prob = 0d;
 		
 		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
@@ -189,10 +189,10 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 				Matrix randomEffects = subModule.getRandomEffects(interval);
 //				Matrix randomEffects = getRandomEffectsForThisSubject(interval);	bug
-				eta.setVariableValue(1, randomEffects.m_afData[0][0]);
+				eta.setParameterValue(1, randomEffects.m_afData[0][0]);
 				prob = linkFunction.getValue();
 			} else {	// i.e. deterministic mode
-				eta.setVariableValue(1, 0d);
+				eta.setParameterValue(1, 0d);
 				prob = ghq.getOneDimensionIntegral(linkFunction, eta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getStandardDeviation().m_afData[0][0]);
 			}
 			
