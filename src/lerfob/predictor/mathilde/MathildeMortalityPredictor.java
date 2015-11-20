@@ -85,8 +85,8 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		embeddedLinkFunction = new LinkFunction(Type.Log);
 		embeddedEta = new LinearStatisticalExpression();
 		embeddedLinkFunction.setParameterValue(LFParameter.Eta, embeddedEta);
-		embeddedEta.setParameterValue(0, 1d);
-		embeddedEta.setParameterValue(1, 1d);
+		embeddedEta.setVariableValue(0, 1d);	// variable that multiplies the fixed effect parameter
+		embeddedEta.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
 		
 		extendedLinkFunction = new ExtendedLinkFunction();
 		
@@ -216,14 +216,14 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		eta.setVariableValue(0, pred);
 
 		double prob;
-		embeddedEta.setVariableValue(0, beta.m_afData[14][0]);
+		embeddedEta.setParameterValue(0, beta.m_afData[14][0]);
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 			Matrix randomEffects = subModule.getRandomEffects(interval);
-			embeddedEta.setVariableValue(1, randomEffects.m_afData[0][0]);
+			embeddedEta.setParameterValue(1, randomEffects.m_afData[0][0]);
 			prob = extendedLinkFunction.getValue();
 		} else {
-			embeddedEta.setVariableValue(1, 0d);		// random effect arbitrarily set to 0
+			embeddedEta.setParameterValue(1, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
 				prob = ghq.getOneDimensionIntegral(extendedLinkFunction, embeddedEta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getStandardDeviation().m_afData[0][0]);
 			} else {									// no need to evaluate the quadrature when there is no windstorm
