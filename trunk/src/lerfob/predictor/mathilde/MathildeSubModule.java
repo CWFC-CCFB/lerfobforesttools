@@ -110,5 +110,10 @@ final class MathildeSubModule extends ModelBasedSimulator {
 	 */
 	@Override
 	protected void init() {}
+	
+	
+	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+		return super.simulateDeviatesForRandomEffectsOfThisSubject(subject, randomEffectsEstimate);
+	}
 }
 
