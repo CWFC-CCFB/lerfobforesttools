@@ -23,8 +23,6 @@ import java.util.List;
 
 import lerfob.carbonbalancetool.CarbonCompartmentManager;
 import lerfob.carbonbalancetool.DecayFunction;
-import lerfob.carbonbalancetool.DecayFunction.ParameterID;
-import lerfob.carbonbalancetool.DecayFunction.VariableID;
 import lerfob.carbonbalancetool.ExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import repicea.simulation.processsystem.AmountMap;
@@ -152,7 +150,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * @return the integrated carbon in tC (double)
 	 */
 	public double getIntegratedCarbon(ExponentialFunction decayFunction) {
-		decayFunction.setParameterValue(ParameterID.Lambda, getCarbonUnitFeature().getAverageLifetime());
+		decayFunction.setParameterValue(0, getCarbonUnitFeature().getAverageLifetime());
 		return getInitialCarbon() * decayFunction.getInfiniteIntegral(); //	0d : unnecessary parameter
 	}
 
@@ -182,8 +180,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 			date = timeScale[i];
 			if (date > getCreationDate() && currentCarbon > ProductionProcessorManager.VERY_SMALL) {
 				formerDate = timeScale[i - 1];
-				decayFunction.setParameterValue(ParameterID.Lambda, lambdaValue);
-				decayFunction.setVariableValue(VariableID.X, date - formerDate);
+				decayFunction.setParameterValue(0, lambdaValue);
+				decayFunction.setVariableValue(0, date - formerDate);
 				factor = decayFunction.getValue();	// last parameter is unnecessary			
 				formerCarbon = currentCarbonArray[i - 1];
 				currentCarbon =  formerCarbon * factor;

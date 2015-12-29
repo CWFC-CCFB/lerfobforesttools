@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import repicea.simulation.ModelBasedSimulator.HierarchicalLevel;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand, Comparable<FrenchHDRelationship2014StandImpl> {
@@ -33,7 +33,7 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	public int getSubjectId() {return idp;}
 
 	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.Plot;}
+	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 
 	@Override

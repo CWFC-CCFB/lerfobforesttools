@@ -20,8 +20,6 @@ package lerfob.carbonbalancetool;
 
 import java.io.Serializable;
 
-import lerfob.carbonbalancetool.DecayFunction.ParameterID;
-import lerfob.carbonbalancetool.DecayFunction.VariableID;
 import repicea.math.AbstractMathematicalFunction;
 
 /**
@@ -30,16 +28,12 @@ import repicea.math.AbstractMathematicalFunction;
  * @author Mathieu Fortin - October 2010
  */
 @SuppressWarnings("serial")
-public abstract class DecayFunction extends AbstractMathematicalFunction<ParameterID, Double, VariableID, Double> implements Serializable {
+public abstract class DecayFunction extends AbstractMathematicalFunction implements Serializable {
 
 	public static enum ParameterID {Lambda}
 	public static enum VariableID {X}
 
 	protected DecayFunction() {}
-	
-	@Override
-	public abstract Double getValue();
-	
 	
 	/**
 	 * This method returns the value of the infinite integral of the decay function.

@@ -19,20 +19,21 @@
 package lerfob.predictor.mathilde;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.stats.LinearStatisticalExpression;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
 import repicea.stats.model.glm.LinkFunction;
-import repicea.stats.model.glm.LinkFunction.LFParameter;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
 
@@ -49,7 +50,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	private final Map<Integer, MathildeSubModule> subModules;
 
 	private final LinkFunction linkFunction;
-	private final LinearStatisticalExpression eta;
+//	private final LinearStatisticalExpression eta;
 	
 	private int numberOfParameters;
 
@@ -64,10 +65,8 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
-		eta = new LinearStatisticalExpression();
-		linkFunction.setParameterValue(LFParameter.Eta, eta);
-		eta.setVariableValue(0, 1d);	// variable that multiplies the xBeta
-		eta.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
+		linkFunction.setVariableValue(0, 1d);	// variable that multiplies the xBeta
+		linkFunction.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);
 	}
 
@@ -103,12 +102,12 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
-				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				
 				Matrix meanIntervalRandomEffect = new Matrix(1,1);
-				subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot, new GaussianEstimate(meanIntervalRandomEffect, covParms));
+				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, covParms));
 			
 				subModules.put(excludedGroup, subModule);
 			}
@@ -179,7 +178,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 		double pred = getFixedEffectOnlyPrediction(beta, stand, tree);
 
-		eta.setParameterValue(0, pred);
+		linkFunction.setParameterValue(0, pred);
 		double prob = 0d;
 		
 		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
@@ -189,11 +188,13 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 				Matrix randomEffects = subModule.getRandomEffects(interval);
 //				Matrix randomEffects = getRandomEffectsForThisSubject(interval);	bug
-				eta.setParameterValue(1, randomEffects.m_afData[0][0]);
+				linkFunction.setParameterValue(1, randomEffects.m_afData[0][0]);
 				prob = linkFunction.getValue();
 			} else {	// i.e. deterministic mode
-				eta.setParameterValue(1, 0d);
-				prob = ghq.getOneDimensionIntegral(linkFunction, eta, 1, subModule.getDefaultRandomEffects().get(HierarchicalLevel.IntervalNestedInPlot).getDistribution().getStandardDeviation().m_afData[0][0]);
+				linkFunction.setParameterValue(1, 0d);
+				List<Integer> parameterIndices = new ArrayList<Integer>();
+				parameterIndices.add(1);
+				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
 			}
 			
 			if (thinningStandEvent instanceof Boolean) {

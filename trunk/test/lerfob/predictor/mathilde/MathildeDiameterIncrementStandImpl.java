@@ -1,7 +1,6 @@
 package lerfob.predictor.mathilde;
 
-import lerfob.predictor.mathilde.MathildeDiameterIncrementStand;
-import repicea.simulation.ModelBasedSimulator.HierarchicalLevel;
+import repicea.simulation.HierarchicalLevel;
 
 public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncrementStand {
 
@@ -35,7 +34,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.Plot;
+		return HierarchicalLevel.PLOT;
 	}
 
 	protected void setMonteCarloRealizationId(int i) {

@@ -33,27 +33,31 @@ public class ExponentialFunction extends DecayFunction {
 
 	@Override
 	public Double getValue() {
-		return Math.exp(- getVariableValue(VariableID.X) / getParameterValue(ParameterID.Lambda));
+		return Math.exp(- getX() / getLambda());
 	}
 
+	private double getX() {return getVariableValue(0);}
+	private double getLambda() {return getParameterValue(0);}
+	
+	
 	@Override
 	public double getInfiniteIntegral() {
-		return getParameterValue(ParameterID.Lambda);
+		return getLambda();
 	}
 
 	@Override
 	public Matrix getGradient() {
 		Matrix gradient = new Matrix(ParameterID.values().length, 1);
-		gradient.m_afData[0][0] = getValue() * getVariableValue(VariableID.X) / (getParameterValue(ParameterID.Lambda) * getParameterValue(ParameterID.Lambda));
+		gradient.m_afData[0][0] = getValue() * getX() / (getLambda() * getLambda());
 		return gradient;
 	}
 
 	@Override
 	public Matrix getHessian() {
 		Matrix hessian = new Matrix(ParameterID.values().length, ParameterID.values().length);
-		double derParam = getVariableValue(VariableID.X) / (getParameterValue(ParameterID.Lambda) * getParameterValue(ParameterID.Lambda));
+		double derParam = getX() / (getLambda() * getLambda());
 		double functionValue = getValue();
-		double der2Param = - 2 * getVariableValue(VariableID.X) / (getParameterValue(ParameterID.Lambda) * getParameterValue(ParameterID.Lambda) * getParameterValue(ParameterID.Lambda));
+		double der2Param = - 2 * getX() / (getLambda() * getLambda() * getLambda());
 		double result = functionValue * derParam * derParam + functionValue * der2Param;
 		hessian.m_afData[0][0] = result; 
 		return hessian;

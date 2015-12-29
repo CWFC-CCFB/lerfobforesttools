@@ -25,33 +25,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Predictor.SiteIndexClass;
+import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.hdrelationships.HDRelationshipModel;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
-import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
-public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipModel<FrenchHDRelationship2014Stand, FrenchHDRelationship2014Tree> {
+public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipModel<FrenchHDRelationship2014Stand, FrenchHDRelationship2014Tree> implements FertilityClassEmulator {
 
 	private static final Map<SpeciesType, Double> PhiParameters = new HashMap<SpeciesType, Double>();
 	static {
 		PhiParameters.put(SpeciesType.ConiferousSpecies, 0.02619872948641); // taken from Quebec HD relationships
 		PhiParameters.put(SpeciesType.BroadleavedSpecies, 0.04468342698978); // taken from Quebec HD relationships
 	}
-	
+
+	private static Map<FertilityClass, TruncatedGaussianEstimate> fertilityClassMap;
+
 	private List<Integer> effectList;
 	private final FrenchHdSpecies species;
-	private final Map<SiteIndexClass, TruncatedGaussianEstimate> siteIndexClasses;
-	private Map<HierarchicalLevel, Map<Integer, Estimate<?>>> blupsLibraryBackup;
-	private List<Integer> blupEstimationDoneBackup;
-	private SiteIndexClass currentSiteIndexClass;
+//	private Map<Integer, Estimate<? extends StandardGaussianDistribution>> plotBlupsLibraryBackup;
+//	private List<Integer> blupEstimationDoneBackup;
+	private FertilityClass currentFertilityClass;
 	
 	protected FrenchHDRelationship2014InternalPredictor(boolean isParametersVariabilityEnabled,	
 			boolean isRandomEffectsVariabilityEnabled, 
@@ -59,99 +60,78 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 			FrenchHdSpecies species) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 		this.species = species;
-		siteIndexClasses = new HashMap<SiteIndexClass, TruncatedGaussianEstimate>();
-		currentSiteIndexClass = SiteIndexClass.Unknown;
-		blupsLibraryBackup = new HashMap<HierarchicalLevel, Map<Integer, Estimate<?>>>();
-		blupEstimationDoneBackup = new ArrayList<Integer>();
+		currentFertilityClass = FertilityClass.Unknown;	// default value
+//		plotBlupsLibraryBackup = new HashMap<Integer, Estimate<? extends StandardGaussianDistribution>>();
+//		blupEstimationDoneBackup = new ArrayList<Integer>();
 	}
 
-	
-	protected void setDefaultBeta(GaussianEstimate defaultBeta) {
-		this.defaultBeta = defaultBeta;
-		oXVector = new Matrix(1, this.defaultBeta.getMean().m_iRows);
-	}
-	
-	protected void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
-		defaultRandomEffects.put(level, estimate);
-		if (level == HierarchicalLevel.Plot) {
-			for (SiteIndexClass siteIndex : SiteIndexClass.values()) {
-				setSiteIndexGaussianEstimate(level, siteIndex);
-			}
+
+	protected Map<FertilityClass, TruncatedGaussianEstimate> getFertilityClassMap() {
+		if (fertilityClassMap == null) {
+			fertilityClassMap = new HashMap<FertilityClass, TruncatedGaussianEstimate>();
+			
+			GaussianEstimate levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
+			TruncatedGaussianEstimate truncatedEstimate;
+			Matrix stdMatrix = levelRandomEffects.getVariance().getLowerCholTriangle();
+			
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(0.999));
+			fertilityClassMap.put(FertilityClass.I, truncatedEstimate);
+
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(-0.7388));
+			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(0.999));
+			fertilityClassMap.put(FertilityClass.II, truncatedEstimate);
+
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(-0.7388));
+			fertilityClassMap.put(FertilityClass.III, truncatedEstimate);
 		}
+		return fertilityClassMap;
 	}
 	
-	/**
-	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index. Does nothing if 
-	 * the siteIndexClass parameter is null.
-	 * @param siteIndexClass a SiteIndexClass enum
+	/*
+	 * For extended visibility
 	 */
-	protected void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass) {
-		if (siteIndexClass != null && this.currentSiteIndexClass != siteIndexClass) {
-			if (siteIndexClass == SiteIndexClass.Unknown) {		// we are going back to normal
-				blupsLibrary.clear();
-				blupsLibrary.putAll(blupsLibraryBackup);
-				blupEstimationDone.clear();
-				blupEstimationDone.addAll(blupEstimationDoneBackup);
-			} else if (currentSiteIndexClass == SiteIndexClass.Unknown) {	// we are setting a site index 
-				blupsLibraryBackup.clear();
-				blupsLibraryBackup.putAll(blupsLibrary);
-				blupsLibrary.clear();
-				blupEstimationDoneBackup.clear();
-				blupEstimationDoneBackup.addAll(blupEstimationDone);
-				blupEstimationDone.clear();
-			}
-			currentSiteIndexClass = siteIndexClass;
+	@Override
+	protected void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
+		super.setDefaultRandomEffects(level, estimate);
+	}
+	
+	
+	@Override
+	protected void setDefaultBeta(GaussianEstimate defaultBeta) {
+		super.setDefaultBeta(defaultBeta);
+		oXVector = new Matrix(1, getDefaultBeta().getMean().m_iRows);
+	}
+	
+	
+	@Override
+	public void emulateFertilityClass(FertilityClass fertilityClass) {
+		if (!blupEstimationDone.isEmpty()) {
+			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
+		} else if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
+			currentFertilityClass = fertilityClass;
 		}
 	}
 	
 	@Override
 	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2014Stand stand) {
-		if (currentSiteIndexClass == SiteIndexClass.Unknown) {
+		if (currentFertilityClass == FertilityClass.Unknown) {
 			super.predictHeightRandomEffects(stand);
 		} else {	// we have tweaked the plot random effect to account for the site index class
-			if (!blupsLibrary.containsKey(HierarchicalLevel.Plot)) {
-				blupsLibrary.put(HierarchicalLevel.Plot, new HashMap<Integer, Estimate<?>>());
-			}
-			Map<Integer, Estimate<?>> innerMap = blupsLibrary.get(HierarchicalLevel.Plot);
-			if (!innerMap.containsKey(stand.getSubjectId())) {
-				innerMap.put(stand.getSubjectId(), siteIndexClasses.get(currentSiteIndexClass));
+			if (getBlups(stand) == null) {
+				TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
+				setBlupsForThisSubject(stand, estimate);
 				blupEstimationDone.add(stand.getSubjectId());
 			}
-		}
-	}
-	
-	private void setSiteIndexGaussianEstimate(HierarchicalLevel level, SiteIndexClass siteIndex) {
-		GaussianEstimate levelRandomEffects = defaultRandomEffects.get(level);
-		TruncatedGaussianEstimate truncatedEstimate;
-		Matrix stdMatrix = levelRandomEffects.getVariance().elementwisePower(0.5);
-		switch(siteIndex) {
-		case I:
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(0.999));
-			siteIndexClasses.put(siteIndex, truncatedEstimate);
-			break;
-		case II:
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(-0.7388));
-			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(0.999));
-			siteIndexClasses.put(siteIndex, truncatedEstimate);
-			break;
-		case III:
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(-0.7388));
-			siteIndexClasses.put(siteIndex, truncatedEstimate);
-			break;
-		case Unknown:
-			break;
-		default:
-			break;
 		}
 	}
 	
 	protected void setResidualVariance(Matrix sigma2) {
 		double correlationParameters = PhiParameters.get(species.getSpeciesType());
 		GaussianErrorTermEstimate estimate = new GaussianErrorTermEstimate(sigma2, correlationParameters, TypeMatrixR.LINEAR);
-		defaultResidualError.put(ErrorTermGroup.Default, estimate);
+		setDefaultResidualError(ErrorTermGroup.Default, estimate);
 	}
 
 	protected void setEffectList(Matrix mat) {
@@ -242,11 +222,12 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 
 
 	protected Matrix getBlups(FrenchHDRelationship2014Stand stand) {
-		if (blupsLibrary.get(HierarchicalLevel.Plot) != null) {
-			return blupsLibrary.get(HierarchicalLevel.Plot).get(stand.getSubjectId()).getMean();
-		} else {
-			return null;
-		}
+		if (getBlupsAtThisLevel(HierarchicalLevel.PLOT) != null) {
+			if (getBlupsAtThisLevel(HierarchicalLevel.PLOT).containsKey(stand.getSubjectId())) {
+				return getBlupsAtThisLevel(HierarchicalLevel.PLOT).get(stand.getSubjectId()).getMean();
+			}
+		} 
+		return null;
 	}
 
 
@@ -273,5 +254,12 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	 */
 	@Override
 	protected void init() {}
+	
+	/**
+	 * This method returns the species of this HD relationship.
+	 * @return a FrenchHdSpecies instance
+	 */
+	public FrenchHdSpecies getSpecies() {return species;}
+	
 	
 }
