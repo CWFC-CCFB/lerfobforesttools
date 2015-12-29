@@ -1,7 +1,6 @@
 package lerfob.predictor.mathilde;
 
-import lerfob.predictor.mathilde.MathildeTree;
-import repicea.simulation.ModelBasedSimulator.HierarchicalLevel;
+import repicea.simulation.HierarchicalLevel;
 
 public final class MathildeMortalityTreeImpl implements MathildeTree {
 
@@ -58,7 +57,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.Tree;
+		return HierarchicalLevel.TREE;
 	}
 
 

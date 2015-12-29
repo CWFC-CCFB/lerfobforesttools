@@ -26,10 +26,8 @@ import repicea.math.Matrix;
 import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.stats.LinearStatisticalExpression;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.model.glm.LinkFunction;
-import repicea.stats.model.glm.LinkFunction.LFParameter;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
 
@@ -44,7 +42,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	private final Map<Integer, MathildeSubModule> subModules;
 
 	private final LinkFunction linkFunction;
-	private final LinearStatisticalExpression eta;
+//	private final LinearStatisticalExpression eta;
 	private int numberOfParameters;
 
 
@@ -61,9 +59,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
-		eta = new LinearStatisticalExpression();
-		linkFunction.setParameterValue(LFParameter.Eta, eta);
-		eta.setParameterValue(0, 1d);
+		linkFunction.setParameterValue(0, 1d);
 	}
 
 	protected void init() {
@@ -97,7 +93,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 
 
 				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-				subModule.setBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				// rm+fc-10.6.2015 No random effect for the thinning stand level
 				// model
 				// subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot,
@@ -145,7 +141,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 
 		double pred = getFixedEffectOnlyPrediction(beta, stand);
 
-		eta.setVariableValue(0, pred);
+		linkFunction.setVariableValue(0, pred);
 		double prob = linkFunction.getValue();
 
 

@@ -21,15 +21,16 @@ package lerfob.predictor.frenchgeneralhdrelationship2014;
 import java.util.HashMap;
 import java.util.Map;
 
+import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelBasedSimulator;
+import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
-import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.TextableEnum;
 
 
 /**
@@ -37,26 +38,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  * @author Mathieu Fortin - June 2012
  */
 @SuppressWarnings("serial")
-public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator {
+public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator implements FertilityClassEmulator {
 
-	public static enum SiteIndexClass implements TextableEnum {
-		Unknown("Unknown", "Inconnu"),
-		I("Class I", "Classe I"),
-		II("Class II", "Classe II"),
-		III("Class III", "Classe III");
-
-		SiteIndexClass(String englishText, String frenchText) {
-			setText(englishText, frenchText);
-		}
-		
-		@Override
-		public void setText(String englishText, String frenchText) {
-			REpiceaTranslator.setString(this, englishText, frenchText);
-		}
-		
-		@Override
-		public String toString() {return REpiceaTranslator.getString(this);}
-	}
 	
 	private final Map<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor> predictorMap;
 		
@@ -80,12 +63,11 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 		this(false, false, false);
 	}
 
-	/**
-	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
-	 * @param siteIndexClass a SiteIndexClass enum
-	 */
-	public void emulateSiteIndexClassForThisSpecies(SiteIndexClass siteIndexClass, FrenchHdSpecies species) {
-		predictorMap.get(species).emulateSiteIndexClassForThisSpecies(siteIndexClass);
+	@Override
+	public void emulateFertilityClass(FertilityClass fertilityClass) {
+		for (FrenchHDRelationship2014InternalPredictor internalPredictor : predictorMap.values()) {
+			internalPredictor.emulateFertilityClass(fertilityClass);
+		}
 	}
 
 	@Override
@@ -118,7 +100,7 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 				
 				Matrix matrixG = covparms.getSubMatrix(0, 0, 0, 0);
 				Matrix defaultRandomEffectsMean = new Matrix(1, 1);
-				internalPredictor.setDefaultRandomEffects(HierarchicalLevel.Plot, new GaussianEstimate(defaultRandomEffectsMean, matrixG));
+				internalPredictor.setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(defaultRandomEffectsMean, matrixG));
 				
 				Matrix residualVariance = covparms.getSubMatrix(1, 1, 0, 0);
 				internalPredictor.setResidualVariance(residualVariance);
@@ -155,6 +137,20 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 	protected Matrix getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
 		return internalPred.getBlups(stand);
+	}
+	
+	@Override
+	public void addModelBasedSimulatorListener(ModelBasedSimulatorListener listener) {
+		for (FrenchHDRelationship2014InternalPredictor internalPredictor : predictorMap.values()) {
+			internalPredictor.addModelBasedSimulatorListener(listener);
+		}
+	}
+	
+	@Override
+	public void removeModelBasedSimulatorListener(ModelBasedSimulatorListener listener) {
+		for (FrenchHDRelationship2014InternalPredictor internalPredictor : predictorMap.values()) {
+			internalPredictor.removeModelBasedSimulatorListener(listener);
+		}
 	}
 	
 }

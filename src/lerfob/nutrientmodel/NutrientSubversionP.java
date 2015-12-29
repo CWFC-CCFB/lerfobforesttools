@@ -25,7 +25,7 @@ import repicea.stats.estimates.GaussianEstimate;
  * The NutrientSubversionP is the concentration model for phosphorus. 
  * 
  This class is modified on september 2015 : previous parameters were adjusted without site effect. 
- * Replacement parameters are those published in Forest ecology and Management (Wernsdörfer et al. 2014).
+ * Replacement parameters are those published in Forest ecology and Management (Wernsdï¿½rfer et al. 2014).
  * These parameters are adjusted with an additive site effect that is to consider in the predictions 
  * 
  * @author Mathieu Fortin - March 2013
@@ -59,7 +59,7 @@ class NutrientSubversionP extends NutrientConcentrationSubversionModel {
 		betaReference.m_afData[4][0] = 0.031; // c_bark
 		betaReference.m_afData[5][0] = -0.029; // d_bark
 		
-		defaultBeta = new GaussianEstimate(betaReference, null);
+		setDefaultBeta(new GaussianEstimate(betaReference, null));
 		
 		// TODO implement the residual errors
 				
@@ -70,7 +70,7 @@ class NutrientSubversionP extends NutrientConcentrationSubversionModel {
 	protected Matrix getConcentrations(double midDiameterCm, double barkRatio) {
 		Matrix y = new Matrix(3,1);
 
-		Matrix beta = defaultBeta.getMean();
+		Matrix beta = getDefaultBeta().getMean();
 
 //		Wood concentration
 		y.m_afData[0][0] = beta.m_afData[0][0] + beta.m_afData[1][0] * Math.exp(beta.m_afData[2][0] * midDiameterCm);

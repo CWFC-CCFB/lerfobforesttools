@@ -1,8 +1,6 @@
 package lerfob.predictor.mathilde;
 
-import lerfob.predictor.mathilde.MathildeDiameterIncrementStand;
-import lerfob.predictor.mathilde.MathildeTree;
-import repicea.simulation.ModelBasedSimulator.HierarchicalLevel;
+import repicea.simulation.HierarchicalLevel;
 
 public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 
@@ -65,7 +63,7 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.Tree;
+		return HierarchicalLevel.TREE;
 	}
 
 //	@Override
