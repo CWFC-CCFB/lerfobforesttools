@@ -35,7 +35,6 @@ import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -53,14 +52,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	private static double CorrelationRandomEffectsHeightDiameterGrowth = 0.4;
 
-//	private static Map<FertilityClass, TruncatedGaussianEstimate> fertilityClassMap;
-
 	protected final Map<Integer, MathildeSubModule> subModules;
-	
-//	private Map<Integer, Estimate<? extends StandardGaussianDistribution>> plotBlupsLibraryBackup;
-//	private List<Integer> blupEstimationDoneBackup;
-
-//	private FertilityClass currentFertilityClass;
 	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
@@ -71,69 +63,10 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 */
 	public MathildeDiameterIncrementPredictor(boolean isParametersVariabilityEnabled,boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-//		currentFertilityClass = FertilityClass.Unknown; // default value
 		subModules = new HashMap<Integer, MathildeSubModule>();
-//		plotBlupsLibraryBackup = new HashMap<Integer, Estimate<? extends StandardGaussianDistribution>>();
-//		blupEstimationDoneBackup = new ArrayList<Integer>();
 		init();
 	}
 
-//	@Override
-//	public void emulateFertilityClass(FertilityClass fertilityClass) {
-//		if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
-//			if (fertilityClass == FertilityClass.Unknown) {		// we are going back to normal
-//				clearBlups();
-//				blupEstimationDone.clear();
-//				blupEstimationDone.addAll(blupEstimationDoneBackup);
-//			} else if (currentFertilityClass == FertilityClass.Unknown) {	// we are setting a site index 
-//				plotBlupsLibraryBackup.clear();
-//				if (getBlupsAtThisLevel(HierarchicalLevel.PLOT) != null) {
-//					plotBlupsLibraryBackup.putAll(getBlupsAtThisLevel(HierarchicalLevel.PLOT));
-//				}
-//				clearBlups();
-//				blupEstimationDoneBackup.clear();
-//				blupEstimationDoneBackup.addAll(blupEstimationDone);
-//				blupEstimationDone.clear();
-//			}
-//			currentFertilityClass = fertilityClass;
-//		}
-//	}
-	
-//	protected Map<FertilityClass, TruncatedGaussianEstimate> getFertilityClassMap() {
-//		if (fertilityClassMap == null) {
-//			fertilityClassMap = new HashMap<FertilityClass, TruncatedGaussianEstimate>();
-//			
-//			GaussianEstimate levelRandomEffects = getSubModule().getDefaultRandomEffects(HierarchicalLevel.PLOT);
-//			TruncatedGaussianEstimate truncatedEstimate;
-//			Matrix stdMatrix = levelRandomEffects.getVariance().getLowerCholTriangle();
-//			
-//			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-//			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(0.999));
-//			fertilityClassMap.put(FertilityClass.I, truncatedEstimate);
-//
-//			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-//			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(-0.7388));
-//			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(0.999));
-//			fertilityClassMap.put(FertilityClass.II, truncatedEstimate);
-//
-//			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-//			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(-0.7388));
-//			fertilityClassMap.put(FertilityClass.III, truncatedEstimate);
-//		}
-//		return fertilityClassMap;
-//	}
-	
-	
-//	/**
-//	 * This method set the random effect predictor for emulation of site index class.
-//	 * @param randomEffectPredictor
-//	 */
-//	private synchronized void predictPlotRandomEffects(MonteCarloSimulationCompliantObject plot) {
-//		if (currentFertilityClass != FertilityClass.Unknown) {
-//			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
-//			getSubModule().setBlupsAtThisLevel(plot.getHierarchicalLevel(), plot.getSubjectId(), estimate);
-//		}
-//	}
 	
 	@Override
 	protected final void init() {
@@ -279,10 +212,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	@Override
 	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
-//		if (currentFertilityClass != FertilityClass.Unknown && !blupEstimationDone.contains(stand.getSubjectId())) {
-//			predictPlotRandomEffects(stand);
-//			blupEstimationDone.add(stand.getSubjectId());
-//		}
 		MathildeSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = getSubModule((Integer) parms[0]);
@@ -325,7 +254,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		return backtransformedPred;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void modelBasedSimulatorDidThis(ModelBasedSimulatorEvent event) {
 		if (event.getSource() instanceof FrenchHDRelationship2014InternalPredictor) {
@@ -337,30 +265,41 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
 					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[0]; 
-					if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getBlupsForThisSubject(subject) == null) {
-						double varianceRandomEffectHeight = ((GaussianEstimate) newValue[1]).getVariance().m_afData[0][0];
-						double varianceRandomEffectDiameterGrowth = getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()).getVariance().m_afData[0][0];
-						double covariance = Math.sqrt(varianceRandomEffectHeight * varianceRandomEffectDiameterGrowth) * CorrelationRandomEffectsHeightDiameterGrowth; 
-						
-						Estimate<? extends StandardGaussianDistribution> blups = ((Estimate<? extends StandardGaussianDistribution>) newValue[2]);
-						
-						Matrix mean = new Matrix(1,1);
-						mean.m_afData[0][0] = covariance / varianceRandomEffectHeight * blups.getMean().m_afData[0][0];
-						Matrix variance = new Matrix(1,1);
-						variance.m_afData[0][0] = varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight;
-						
-						getSubModule().setBlupsForThisSubject(subject, new GaussianEstimate(mean, variance));
+					if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
+						GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate((GaussianEstimate) newValue[1],
+								getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
+								((Estimate<?>) newValue[2]).getMean()); 
+						getSubModule().setBlupsForThisSubject(subject, blupsForThisSubject);
 					}
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.RANDOM_EFFECT_DEVIATE_JUST_GENERATED.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
 					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[0]; 
 					if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT)) {
-						// TODO bypass the regular 
+						if (!doRandomDeviatesExistForThisSubject(subject)) {
+							GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate((GaussianEstimate) newValue[1],
+									getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
+									(Matrix) newValue[2]); 
+							getSubModule().simulateDeviatesForRandomEffectsOfThisSubject(subject, blupsForThisSubject);
+						}
 					}					
 				}
 			}
 		}
 	}
+	
+	
+	protected final GaussianEstimate setRandomEffectsAccordingToHeightDeviate(GaussianEstimate heightRandomEffect, GaussianEstimate diamIncRandomEffect, Matrix blupMean) {
+		double varianceRandomEffectHeight = heightRandomEffect.getVariance().m_afData[0][0];
+		double varianceRandomEffectDiameterGrowth = diamIncRandomEffect.getVariance().m_afData[0][0];
+		double covariance = Math.sqrt(varianceRandomEffectHeight * varianceRandomEffectDiameterGrowth) * CorrelationRandomEffectsHeightDiameterGrowth; 
+		
+		Matrix mean = new Matrix(1,1);
+		mean.m_afData[0][0] = covariance / varianceRandomEffectHeight * blupMean.m_afData[0][0];
+		Matrix variance = new Matrix(1,1);
+		variance.m_afData[0][0] = varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight;
+		return new GaussianEstimate(mean, variance);
+	}
+	
 
 
 //	public static void main(String[] args) {
