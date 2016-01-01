@@ -14,7 +14,6 @@ import org.junit.Test;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2014PredictorTest {
@@ -30,7 +29,7 @@ public class FrenchHDRelationship2014PredictorTest {
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbTrees = 0;
 		for (FrenchHDRelationship2014Stand stand : Stands) {
-			for (Object obj : stand.getTrees(StatusClass.alive)) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getPred();
@@ -47,7 +46,7 @@ public class FrenchHDRelationship2014PredictorTest {
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbBlups = 0;
 		for (FrenchHDRelationship2014Stand stand : Stands) {
-			for (Object obj : stand.getTrees(StatusClass.alive)) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
 				if (tree.getFrenchHDTreeSpecies().ordinal() <= 3) {
 					int index = tree.getFrenchHDTreeSpecies().ordinal() + 1;
