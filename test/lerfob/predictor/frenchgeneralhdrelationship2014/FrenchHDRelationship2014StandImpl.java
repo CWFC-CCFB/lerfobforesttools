@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand, Comparable<FrenchHDRelationship2014StandImpl> {
 
@@ -16,7 +15,7 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	private double hasBeenHarvestedInLast5Years;
 	private final int index;
 	
-	private List<FrenchHDRelationship2014TreeImpl> treeList;
+	private List<FrenchHDRelationship2014Tree> treeList;
 	
 	
 	FrenchHDRelationship2014StandImpl(int index, int idp, double mqd, double pent2, double hasBeenHarvestedInLast5Years) {
@@ -25,7 +24,7 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 		this.mqd = mqd;
 		this.pent2 = pent2;
 		this.hasBeenHarvestedInLast5Years = hasBeenHarvestedInLast5Years;
-		treeList = new ArrayList<FrenchHDRelationship2014TreeImpl>();
+		treeList = new ArrayList<FrenchHDRelationship2014Tree>();
 	}
 		
 	
@@ -42,9 +41,8 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	@Override
 	public double getMeanQuadraticDiameterCm() {return mqd;}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection getTrees(StatusClass statusClass) {return treeList;}
+	public Collection<FrenchHDRelationship2014Tree> getTreesForFrenchHDRelationship() {return treeList;}
 
 	@Override
 	public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2014Tree tree) {

@@ -30,7 +30,6 @@ import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
-import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.hdrelationships.HDRelationshipModel;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -234,7 +233,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	@Override
 	protected Collection<FrenchHDRelationship2014Tree> getTreesFromStand(FrenchHDRelationship2014Stand stand) {
 		Collection<FrenchHDRelationship2014Tree> treesToBeReturned = new ArrayList<FrenchHDRelationship2014Tree>();
-		Collection<?> trees = stand.getTrees(StatusClass.alive);
+		Collection<?> trees = stand.getTreesForFrenchHDRelationship();
 		if (trees != null && !trees.isEmpty()) {
 			for (Object tree : trees) {
 				if (tree instanceof FrenchHDRelationship2014Tree) {

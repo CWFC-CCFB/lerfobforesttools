@@ -18,9 +18,10 @@
  */
 package lerfob.predictor.frenchgeneralhdrelationship2014;
 
+import java.util.Collection;
+
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
-import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
 
 
@@ -30,7 +31,7 @@ import repicea.simulation.hdrelationships.HDRelationshipStand;
  * @author Mathieu Fortin - May 2014
  */
 public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
-														TreeStatusCollectionsProvider,
+//														TreeStatusCollectionsProvider,
 														MeanQuadraticDiameterCmProvider, 
 														InterventionResultProvider {
 	
@@ -47,4 +48,15 @@ public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
 	 * @return a double
 	 */
 	public double getSlopePercent();
+	
+	
+	/**
+	 * This method returns the trees that are available in the stand for height prediction. This method
+	 * is called when the blups of the random effects are initially estimated:
+	 * @return A collection of FrenchHDRelationship2014Tree instances
+	 */
+	public Collection<FrenchHDRelationship2014Tree> getTreesForFrenchHDRelationship();
+	
+	
+	
 }
