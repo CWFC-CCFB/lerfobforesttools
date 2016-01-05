@@ -231,7 +231,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		
 		if (!isRandomEffectsVariabilityEnabled) {
 			if (subModule.getBlupsForThisSubject(stand) != null) {
-				pred += getBlupsForThisSubject(stand).getVariance().m_afData[0][0] * .5;
+				pred += subModule.getBlupsForThisSubject(stand).getVariance().m_afData[0][0] * .5;
 			} else {
 				pred += subModule.getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().m_afData[0][0] * .5;
 			}
