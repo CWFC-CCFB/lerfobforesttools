@@ -47,7 +47,7 @@ public class CarbonCompartmentManager {
 	private Integer[] timeScale;
 
 	private boolean isSimulationValid;
-
+	
 	/**
 	 * Constructor for this class
 	 * @param tool a CarbonAccountingTool instance
