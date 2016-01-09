@@ -22,9 +22,9 @@ class CarbonToolCompatibleTreeImpl implements CarbonToolCompatibleTree, Cloneabl
 	@Override
 	public double getNumber() {return number;}
 
-	@Override
+/*	@Override
 	public TreeStatusPriorToLogging getTreeStatusPriorToLogging() {return TreeStatusPriorToLogging.Alive;}
-
+*/
 	@Override
 	public double getCommercialVolumeM3() {return volM3;}
 

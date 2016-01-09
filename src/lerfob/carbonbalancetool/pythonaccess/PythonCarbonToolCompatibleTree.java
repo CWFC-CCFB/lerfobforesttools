@@ -34,7 +34,6 @@ abstract class PythonCarbonToolCompatibleTree implements 	CarbonToolCompatibleTr
 
 	final SpeciesType speciesType; 
 	final AverageBasicDensity species;
-	final TreeStatusPriorToLogging treeStatusPriorToLogging;
 	StatusClass statusClass; 
 	final double number; 
 	final double rootsVolume;
@@ -45,7 +44,6 @@ abstract class PythonCarbonToolCompatibleTree implements 	CarbonToolCompatibleTr
 
 	PythonCarbonToolCompatibleTree(SpeciesType speciesType, 
 			AverageBasicDensity species, 
-			TreeStatusPriorToLogging treeStatusPriorToLogging,
 			StatusClass statusClass, 
 			double number, 
 			double biomassRoots,
@@ -55,7 +53,6 @@ abstract class PythonCarbonToolCompatibleTree implements 	CarbonToolCompatibleTr
 			double dbhCmStandardDeviation) {
 		this.speciesType = speciesType;
 		this.species = species;
-		this.treeStatusPriorToLogging = treeStatusPriorToLogging;
 		setStatusClass(statusClass);
 		this.number = number;
 		this.branchesVolume = biomassBranches / species.getBasicDensity();
@@ -68,9 +65,6 @@ abstract class PythonCarbonToolCompatibleTree implements 	CarbonToolCompatibleTr
 	
 	@Override
 	public double getNumber() {return number;}
-
-	@Override
-	public TreeStatusPriorToLogging getTreeStatusPriorToLogging() {return treeStatusPriorToLogging;}
 
 	@Override
 	public double getCommercialVolumeM3() {return trunkVolume;}
