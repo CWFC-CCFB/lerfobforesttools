@@ -32,6 +32,7 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import repicea.simulation.covariateproviders.standlevel.StochasticInformationProvider;
 
 @SuppressWarnings("deprecation")
 public class CarbonCompartmentManager {
@@ -47,6 +48,8 @@ public class CarbonCompartmentManager {
 	private Integer[] timeScale;
 
 	private boolean isSimulationValid;
+	protected boolean isStochastic;
+	protected int nRealizations;
 	
 	/**
 	 * Constructor for this class
@@ -59,9 +62,8 @@ public class CarbonCompartmentManager {
 		isSimulationValid = false;
 		initializeCompartments();
 	}
-	
-	
-	public void setSimulationValid(boolean isSimulationValid) {
+		
+	protected void setSimulationValid(boolean isSimulationValid) {
 		this.isSimulationValid = isSimulationValid;
 	}
 	
@@ -70,7 +72,15 @@ public class CarbonCompartmentManager {
 		if (stands != null) {
 			CarbonToolCompatibleStand lastStand = stands.get(stands.size() - 1);
 			isEvenAged = lastStand instanceof CarbonToolCompatibleEvenAgedStand;
-			
+			isStochastic = false;
+			nRealizations = 1;
+			if (lastStand instanceof StochasticInformationProvider) {
+				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
+				if (stochProv.isStochastic() && stochProv.getRealization(0) instanceof CarbonToolCompatibleStand) {
+					isStochastic = true;
+					nRealizations = stochProv.getNumberRealizations();
+				}
+			}
 			int nbExtraYears = 0;
 			if (isEvenAged) {
 				rotationLength = ((CarbonToolCompatibleEvenAgedStand) lastStand).getAgeYr();
@@ -97,6 +107,16 @@ public class CarbonCompartmentManager {
 				}
 			}
 		}
+/*		resetCompartments();
+		if (getCarbonToolSettings().formerImplementation) {
+			ProductionLineManager productionLines = carbonAccountingToolSettings.getProductionLines();
+			productionLines.resetCarbonUnitMap();
+		} else {
+			getCarbonToolSettings().getCurrentProductionProcessorManager().resetCarbonUnitMap();
+		}
+*/	}
+	
+	protected void resetManager() {
 		resetCompartments();
 		if (getCarbonToolSettings().formerImplementation) {
 			ProductionLineManager productionLines = carbonAccountingToolSettings.getProductionLines();
@@ -105,8 +125,6 @@ public class CarbonCompartmentManager {
 			getCarbonToolSettings().getCurrentProductionProcessorManager().resetCarbonUnitMap();
 		}
 	}
-	
-
 
 	/**
 	 * This method provides the duration of the time step

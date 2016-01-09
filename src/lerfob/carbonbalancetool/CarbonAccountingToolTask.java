@@ -53,7 +53,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		SHUT_DOWN(false),
 		SET_STANDLIST(false),
 		UNLOCK_ENGINE(false),
-		SHOW_INTERFACE(false);
+		SHOW_INTERFACE(false),
+		RESET_MANAGER(false);
 	
 		private boolean longTask;
 		private static int NumberOfLongTasks = -1;	
@@ -94,6 +95,9 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 	@Override
 	protected void doThisJob() throws Exception {
 		switch (currentTask) {
+		case RESET_MANAGER:
+			caller.getCarbonCompartmentManager().resetManager();
+			break;
 		case SHOW_INTERFACE:
 			caller.showInterface();
 			break;
