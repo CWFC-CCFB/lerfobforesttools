@@ -237,7 +237,11 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		if (!carbonCompartmentManager.getCarbonToolSettings().isValid()) {
 			throw new InvalidParameterException("The settings of the carbon accounting tool are invalid. Please check!");
 		} else {
-			for (int i = 0; i < carbonCompartmentManager.nRealizations; i++) {
+			int nbReals = carbonCompartmentManager.nRealizations;
+			if (nbReals < 1) {
+				nbReals = 1;
+			}
+			for (int i = 0; i < nbReals; i++) {
 				addTask(new CarbonAccountingToolTask(Task.RESET_MANAGER, this));
 				addTask(new CarbonAccountingToolTask(Task.LOG_AND_BUCK_TREES, this));
 				addTask(new CarbonAccountingToolTask(Task.GENERATE_WOODPRODUCTS, this));

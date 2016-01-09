@@ -7,7 +7,6 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 	
 	PythonMaritimePineTree(SpeciesType speciesType,
 			AverageBasicDensity species,
-			TreeStatusPriorToLogging treeStatusPriorToLogging,
 			StatusClass statusClass, 
 			double dbhCm,
 			double dbhCmStandardDeviation,
@@ -15,7 +14,7 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 			double biomassRoots,
 			double biomassTrunk, 
 			double biomassBranches) {
-		super(speciesType, species, treeStatusPriorToLogging, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
+		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
 
 	}
 

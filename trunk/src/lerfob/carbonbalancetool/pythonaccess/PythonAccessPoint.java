@@ -40,7 +40,6 @@ import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
-import repicea.simulation.treelogger.LoggableTree.TreeStatusPriorToLogging;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
@@ -156,7 +155,6 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 					if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
 						tree = new PythonMaritimePineTree(type, 
 								speciesForSimulation,
-								TreeStatusPriorToLogging.Alive,
 								StatusClass.cut,
 								mqd,
 								dbhStandardDeviation,
@@ -168,7 +166,6 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 					} else {
 						tree = new PythonEuropeanBeechTree(type, 
 								speciesForSimulation,
-								TreeStatusPriorToLogging.Alive,
 								StatusClass.cut,
 								mqd,
 								dbhStandardDeviation,
