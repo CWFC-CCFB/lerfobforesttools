@@ -195,7 +195,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {return hwpContentByUseClass;}
 	
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa() {return logGradeMap;}
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {return logGradeMap;}
 
 	@Override
 	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {return productEvolutionMap;}

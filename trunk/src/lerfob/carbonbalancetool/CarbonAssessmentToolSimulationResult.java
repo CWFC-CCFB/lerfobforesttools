@@ -74,7 +74,7 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * This method returns the volume and biomass by log grade categories.
 	 * @return a Map of String and VolumeBiomassCarrier
 	 */
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa();
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa();
 	
 	/**
 	 * This method returns the HWPs by use class at the different steps of the simulation.
