@@ -86,20 +86,20 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass() {
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap() {
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap() {
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {
 		// TODO Auto-generated method stub
 		return null;
 	}

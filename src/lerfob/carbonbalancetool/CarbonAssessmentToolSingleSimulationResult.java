@@ -98,8 +98,6 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		
 		hwpContentByUseClass = new HashMap<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
 		productEvolutionMap = new HashMap<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
-//		hwpContentByUseClass = productCompartment.getHWPContentByUseClassPerHa(true);
-//		productEvolutionMap = productCompartment.getWoodProductEvolutionPerHa();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -110,7 +108,8 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
 			compartment = manager.getCompartments().get(compartmentID);
 			
-			value = compartment.getIntegratedCarbon(plotAreaHa);
+			value = new Matrix(1,1);
+			value.m_afData[0][0] = compartment.getIntegratedCarbon(plotAreaHa);
 			if (!budgetMap.containsKey(compartmentID)) {
 				budgetMap.put(compartmentID, new MonteCarloEstimate());
 			}
@@ -193,12 +192,12 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	public Map<CompartmentInfo, MonteCarloEstimate> getEvolutionMap() {return evolutionMap;}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass() {return hwpContentByUseClass;}
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {return hwpContentByUseClass;}
 	
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap() {return logGradeMap;}
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa() {return logGradeMap;}
 
 	@Override
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap() {return productEvolutionMap;}
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {return productEvolutionMap;}
 	
 }

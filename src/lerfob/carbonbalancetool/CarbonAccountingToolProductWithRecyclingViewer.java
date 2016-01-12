@@ -62,8 +62,8 @@ class CarbonAccountingToolProductWithRecyclingViewer extends CarbonAccountingToo
 	@Override
 	protected Map<UseClass, Map<Element, MonteCarloEstimate>> getAppropriateMap() {
 		Map<UseClass, Map<Element, MonteCarloEstimate>> outputMap = new TreeMap<UseClass, Map<Element, MonteCarloEstimate>>();
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapProduct = summary.getHWPContentByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapRecycling = summary.getHWPContentByUseClass().get(CarbonUnitStatus.Recycled);
+		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapProduct = summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
+		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapRecycling = summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.Recycled);
 		for (UseClass useClass : oMapProduct.keySet()) {
 			Map<Element, MonteCarloEstimate> carrier = oMapProduct.get(useClass);
 			Map<Element, MonteCarloEstimate> newCarrier = new HashMap<Element, MonteCarloEstimate>();
