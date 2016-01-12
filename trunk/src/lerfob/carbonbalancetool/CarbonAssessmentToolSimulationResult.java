@@ -67,20 +67,20 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * This method returns the amount of harvested wood products (HWPs) by use class and type (recycled, residues, etc...)
 	 * @return a Map with CarbonUnitType and Maps as keys and values
 	 */
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass();
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass();
 	
 	
 	/**
 	 * This method returns the volume and biomass by log grade categories.
 	 * @return a Map of String and VolumeBiomassCarrier
 	 */
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap();
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa();
 	
 	/**
 	 * This method returns the HWPs by use class at the different steps of the simulation.
 	 * @return a Map of integer and maps.
 	 */
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap();
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa();
 	
 
 }

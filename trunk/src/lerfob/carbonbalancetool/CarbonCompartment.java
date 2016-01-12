@@ -213,13 +213,11 @@ public class CarbonCompartment implements Comparable {
 	/**
 	 * This method returns a random variable that contains the integrated carbon.
 	 * @param plotArea the plot area in ha (double) 
-	 * @return a Matrix instance
+	 * @return a double 
 	 */
-	protected Matrix getIntegratedCarbon(double plotAreaHa) {
+	public double getIntegratedCarbon(double plotAreaHa) {
 		double areaFactor = 1d / plotAreaHa;
-		Matrix value = new Matrix(1,1);
-		value.m_afData[0][0] = integratedCarbon * areaFactor;
-		return value;
+		return integratedCarbon * areaFactor;
 	}
 	
 	protected void setCarbonIntoArray(int indexDate, double d) {

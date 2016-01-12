@@ -183,7 +183,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		setStandList(standList);
 		calculateCarbon();
 		CarbonAssessmentToolSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
-		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionMap();
+		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
 		
 		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 		

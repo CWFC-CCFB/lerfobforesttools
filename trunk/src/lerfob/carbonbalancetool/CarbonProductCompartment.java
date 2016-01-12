@@ -150,7 +150,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 	 * @param withRecycling a boolean that takes the value true if recycled products are to be included
 	 * @return a TreeMap instance
 	 */
-	public TreeMap<UseClass, Double> getProductProportions(boolean withRecycling) {
+	protected TreeMap<UseClass, Double> getProductProportions(boolean withRecycling) {
 		TreeMap<UseClass, Double> outputMap = new TreeMap<UseClass, Double>();
 		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> tmpMap = getAmountByUseClass(withRecycling);
 
@@ -204,7 +204,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 	 * @param plotArea the plot area in m2 in order to scale the result at the hectare level.
 	 * @return a Map instance
 	 */
-	public Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClassPerHa(boolean withRecycling) {
+	protected Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClassPerHa(boolean withRecycling) {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
 		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> outputMap = getAmountByUseClass(withRecycling);
 		for (CarbonUnitStatus type : outputMap.keySet()) {
@@ -222,7 +222,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 	 * This method returns the list of the different log grades and their associated volumes and biomasses.
 	 * @return a TreeMap instance
 	 */
-	public TreeMap<String, AmountMap<Element>> getVolumeByLogGradePerHa() {
+	protected TreeMap<String, AmountMap<Element>> getVolumeByLogGradePerHa() {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
 
 		BiomassParameters biomassParameters = getCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
@@ -254,7 +254,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 		return volumeByLogGrade;
 	}
 
-	public Map<Integer, Map<UseClass, AmountMap<Element>>> getWoodProductEvolutionPerHa() {
+	protected Map<Integer, Map<UseClass, AmountMap<Element>>> getWoodProductEvolutionPerHa() {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
 
 		Map<Integer, Map<UseClass, AmountMap<Element>>> outerMap = getWoodProductEvolution();

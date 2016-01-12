@@ -115,7 +115,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportRecord r;
 			
 			
-			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionMap();
+			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionPerHa();
 			
 			String standID = caller.summary.getStandID();
 			if (standID == null || standID.isEmpty()) {
@@ -213,7 +213,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GRecordSet recordSet = new GRecordSet();
 			GExportRecord r;
 			
-			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPContentByUseClass();		// no recycling
+			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -261,7 +261,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportRecord r;
 			double annualFactor = 1d / caller.summary.getRotationLength();
 			
-			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPContentByUseClass();
+			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -313,11 +313,11 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 			Map<Element, MonteCarloEstimate> carrier;
 			
-			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradeMap().keySet());
+			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradeByHa().keySet());
 			Collections.sort(logNames);
 			
 			for (String logName : logNames) {
-				carrier = caller.summary.getLogGradeMap().get(logName);
+				carrier = caller.summary.getLogGradeByHa().get(logName);
 				r = new GExportRecord();
 				r.addField(standIDField);
 				r.addField(new GExportFieldDetails("LogCategory", logName));

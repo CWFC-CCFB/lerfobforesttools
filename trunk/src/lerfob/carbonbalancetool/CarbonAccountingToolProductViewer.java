@@ -68,7 +68,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 	}
 
 	protected Map<UseClass, Map<Element, MonteCarloEstimate>> getAppropriateMap() {
-		return summary.getHWPContentByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
+		return summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
 	}
 	
 	@Override

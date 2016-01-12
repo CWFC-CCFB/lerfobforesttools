@@ -50,11 +50,11 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 	protected ChartPanel createChart () {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
 
-		List<String> logCategoryNames = new ArrayList<String>(summary.getLogGradeMap().keySet());
+		List<String> logCategoryNames = new ArrayList<String>(summary.getLogGradeByHa().keySet());
 		Collections.sort(logCategoryNames);
 		
 		for (String logCategoryName : logCategoryNames) {
-			dataset.addValue(summary.getLogGradeMap().get(logCategoryName).get(Element.Volume).getMean().m_afData[0][0], logCategoryName, "");
+			dataset.addValue(summary.getLogGradeByHa().get(logCategoryName).get(Element.Volume).getMean().m_afData[0][0], logCategoryName, "");
 		}
 
 		JFreeChart chart = ChartFactory.createBarChart (getTitle(), 
@@ -75,7 +75,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		renderer.setShadowVisible (true);
 		renderer.setMaximumBarWidth (0.1);
 
-		for (int index = 0; index < summary.getLogGradeMap().size(); index++) {
+		for (int index = 0; index < summary.getLogGradeByHa().size(); index++) {
 			Color color = getColor(index);
 			renderer.setSeriesPaint (index, color);
 		}
