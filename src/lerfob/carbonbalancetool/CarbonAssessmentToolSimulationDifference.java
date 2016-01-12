@@ -93,7 +93,7 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeByHa() {
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {
 		// TODO Auto-generated method stub
 		return null;
 	}

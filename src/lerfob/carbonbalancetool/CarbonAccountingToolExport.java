@@ -313,11 +313,11 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 			Map<Element, MonteCarloEstimate> carrier;
 			
-			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradeByHa().keySet());
+			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradePerHa().keySet());
 			Collections.sort(logNames);
 			
 			for (String logName : logNames) {
-				carrier = caller.summary.getLogGradeByHa().get(logName);
+				carrier = caller.summary.getLogGradePerHa().get(logName);
 				r = new GExportRecord();
 				r.addField(standIDField);
 				r.addField(new GExportFieldDetails("LogCategory", logName));
