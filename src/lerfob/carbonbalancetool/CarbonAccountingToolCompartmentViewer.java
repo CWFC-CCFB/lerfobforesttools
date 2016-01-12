@@ -35,6 +35,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import repicea.math.Matrix;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -75,10 +76,10 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 		Map<CompartmentInfo, XYSeries> indexMap = new HashMap<CompartmentInfo, XYSeries> ();
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			Double[] randomVariables = summary.getEvolutionMap().get(compartmentID);
+			Matrix randomVariables = summary.getEvolutionMap().get(compartmentID).getMean();
 			XYSeries s = new XYSeries(compartmentID.toString());
 			for (int i = 0; i < summary.getTimeScale().length; i++) {
-				s.add ((double) summary.getTimeScale()[i], randomVariables[i]);
+				s.add ((double) summary.getTimeScale()[i], randomVariables.m_afData[i][0]);
 			}
 
 			dataset.addSeries(s);

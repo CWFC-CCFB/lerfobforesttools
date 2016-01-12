@@ -39,6 +39,7 @@ public class CarbonCompartmentManager {
 
 	private static int NumberOfExtraYrs = 80;	// number of years after the final cut
 	
+	private List<CarbonToolCompatibleStand> currentStands;	
 	private List<CarbonToolCompatibleStand> stands;
 	private CarbonAccountingToolSettings carbonAccountingToolSettings;		// reference to the extractor settings
 	
@@ -49,7 +50,11 @@ public class CarbonCompartmentManager {
 
 	private boolean isSimulationValid;
 	protected boolean isStochastic;
+	protected int currentRealization;
 	protected int nRealizations;
+	
+	private CarbonAssessmentToolSingleSimulationResult summary;
+	
 	
 	/**
 	 * Constructor for this class
@@ -153,6 +158,7 @@ public class CarbonCompartmentManager {
 
 	@SuppressWarnings({ "unchecked"})
 	public void resetCompartmentsAndSetCarbonUnitCollections() {
+		summary = null;		// reset the summary as well
 		CarbonUnitList joinEndUseProductRecyclageList = new CarbonUnitList();
 		CarbonUnitList leftInForestList;
 		CarbonUnitList degradableLandfillList;
@@ -266,7 +272,13 @@ public class CarbonCompartmentManager {
 		}
 	}
 	
-	protected List<CarbonToolCompatibleStand> getStandList() {return stands;}
+	protected List<CarbonToolCompatibleStand> getStandList() {
+		if (currentStands != null) {
+			return currentStands;
+		} else {
+			return stands;
+		}
+	}
 
 	
 	
@@ -308,13 +320,34 @@ public class CarbonCompartmentManager {
 	 */
 	public CarbonAssessmentToolSingleSimulationResult getSimulationSummary() {
 		if (isSimulationValid) {
-			return new CarbonAssessmentToolSingleSimulationResult(this);
+			if (summary == null) {
+				summary = new CarbonAssessmentToolSingleSimulationResult(this);
+			}
+			return summary; 
 		} else {
 			return null;
 		}
 	}
 
+	protected void storeResults() {
+		getSimulationSummary().updateResult(this);
+	}
+		
 	protected boolean isEvenAged() {return isEvenAged;}
+
+	@SuppressWarnings("unchecked")
+	protected void setRealization(int realizationID) {
+		if (isStochastic && nRealizations > 1) {
+			currentStands = new ArrayList<CarbonToolCompatibleStand>();
+			for (CarbonToolCompatibleStand stand : stands) {
+				currentRealization = realizationID;
+				currentStands.add(((StochasticInformationProvider<? extends CarbonToolCompatibleStand>) stand).getRealization(realizationID));
+			}
+		} else {
+			currentRealization = 1;
+			currentStands = stands;
+		}
+	}
 
 	
 }

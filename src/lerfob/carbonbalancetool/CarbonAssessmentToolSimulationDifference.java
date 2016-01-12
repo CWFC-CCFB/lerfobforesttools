@@ -25,7 +25,7 @@ import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
-import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
  * The CarbonAssessmentToolSimulationDifference class handles differences between two scenarios and provides the results.
@@ -44,18 +44,19 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	
 	
 	@Override
-	public Map<CompartmentInfo, Double> getBudgetMap() {
-		Map<CompartmentInfo, Double> outputMap = new HashMap<CompartmentInfo, Double>();
+	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap() {
+		Map<CompartmentInfo, MonteCarloEstimate> outputMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
 		for (CompartmentInfo comp : scenToCompare.getBudgetMap().keySet()) {
 			if (baseline.getBudgetMap().containsKey(comp)) {
-				outputMap.put(comp, scenToCompare.getBudgetMap().get(comp) - baseline.getBudgetMap().get(comp));
+				MonteCarloEstimate diffEst = MonteCarloEstimate.subtract(scenToCompare.getBudgetMap().get(comp), baseline.getBudgetMap().get(comp));
+				outputMap.put(comp, diffEst);
 			} else {
 				outputMap.put(comp, scenToCompare.getBudgetMap().get(comp));
 			}
 		}
 		for (CompartmentInfo comp : baseline.getBudgetMap().keySet()) {
 			if (!outputMap.containsKey(comp)) {
-				outputMap.put(comp, - baseline.getBudgetMap().get(comp));
+				outputMap.put(comp, MonteCarloEstimate.multiply(baseline.getBudgetMap().get(comp), -1d));
 			} 
 		}
 		return outputMap;
@@ -80,26 +81,25 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	}
 
 	@Override
-	public Map<CompartmentInfo, Double[]> getEvolutionMap() {
+	public Map<CompartmentInfo, MonteCarloEstimate> getEvolutionMap() {
+		return null;
+	}
+
+	@Override
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Map<String, AmountMap<Element>> getLogGradeMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<Integer, Map<UseClass, AmountMap<Element>>> getProductEvolutionMap() {
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap() {
 		// TODO Auto-generated method stub
 		return null;
 	}

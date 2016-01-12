@@ -34,7 +34,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -67,7 +67,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		super(summary);
 	}
 
-	protected Map<UseClass, AmountMap<Element>> getAppropriateMap() {
+	protected Map<UseClass, Map<Element, MonteCarloEstimate>> getAppropriateMap() {
 		return summary.getHWPContentByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
 	}
 	
@@ -75,16 +75,16 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 	protected final ChartPanel createChart () {
 
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
-		Map<UseClass, AmountMap<Element>> oMap = getAppropriateMap();
+		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = getAppropriateMap();
 		
 		double sum = 0;
-		for (AmountMap<Element> carrier : oMap.values()) {
-			sum += carrier.get(Element.Volume);
+		for (Map<Element, MonteCarloEstimate> carrier : oMap.values()) {
+			sum += carrier.get(Element.Volume).getMean().m_afData[0][0];
 		}
 		
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				dataset.addValue (oMap.get(useClass).get(Element.Volume) / sum * 100, 
+				dataset.addValue (oMap.get(useClass).get(Element.Volume).getMean().m_afData[0][0] / sum * 100, 
 						useClass.toString(), "");
 			}
 		}

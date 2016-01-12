@@ -24,7 +24,7 @@ import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
-import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
  * The CarbonAssessmentToolSimulationResult interface ensures the object can provide the results of a carbon simulation.
@@ -37,7 +37,7 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * This method returns the "rotation-averaged" carbon stocks in each compartment.
 	 * @return a Map with CompartmentInfo and Double as keys and values
 	 */
-	public Map<CompartmentInfo, Double> getBudgetMap();
+	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap();
 	
 	/**
 	 * This method return the identifier of the stand.
@@ -61,26 +61,26 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * This method returns the carbon stock evolution in each compartment.
 	 * @return a Map with CompartmentInfo and array of Doubles as keys and values 
 	 */
-	public Map<CompartmentInfo, Double[]> getEvolutionMap();
+	public Map<CompartmentInfo, MonteCarloEstimate> getEvolutionMap();
 	
 	/**
 	 * This method returns the amount of harvested wood products (HWPs) by use class and type (recycled, residues, etc...)
 	 * @return a Map with CarbonUnitType and Maps as keys and values
 	 */
-	public Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClass();
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass();
 	
 	
 	/**
 	 * This method returns the volume and biomass by log grade categories.
 	 * @return a Map of String and VolumeBiomassCarrier
 	 */
-	public Map<String, AmountMap<Element>> getLogGradeMap();
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap();
 	
 	/**
 	 * This method returns the HWPs by use class at the different steps of the simulation.
 	 * @return a Map of integer and maps.
 	 */
-	public Map<Integer, Map<UseClass, AmountMap<Element>>> getProductEvolutionMap();
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap();
 	
 
 }
