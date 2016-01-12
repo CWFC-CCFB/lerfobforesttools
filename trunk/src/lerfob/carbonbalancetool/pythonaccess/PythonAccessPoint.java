@@ -37,10 +37,11 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
+import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
-import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.TreeLoggerDescription;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
@@ -182,13 +183,13 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		setStandList(standList);
 		calculateCarbon();
 		CarbonAssessmentToolSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
-		Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap = simulationResult.getProductEvolutionMap();
+		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionMap();
 		
-		Double[] carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts);
+		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 		
-		Double[] permanentSeqInLandfill = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillND);
-		Double[] landfillCarbonDegradable = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillDeg);
-		Double[] emissionDueToTransformation = simulationResult.getEvolutionMap().get(CompartmentInfo.CarbEmis);
+		Matrix permanentSeqInLandfill = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillND).getMean();
+		Matrix landfillCarbonDegradable = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillDeg).getMean();
+		Matrix emissionDueToTransformation = simulationResult.getEvolutionMap().get(CompartmentInfo.CarbEmis).getMean();
 		
 		Map<Integer, Map<String, Double>> outputMap = new HashMap<Integer, Map<String, Double>>();
 		
@@ -197,20 +198,20 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 				outputMap.put(year, new HashMap<String, Double>());
 			}
 			Map<String, Double> innerOutputMap1 = outputMap.get(year);
-			Map<UseClass, AmountMap<Element>> innerInputMap2 = productEvolutionMap.get(year);
+			Map<UseClass, Map<Element, MonteCarloEstimate>> innerInputMap2 = productEvolutionMap.get(year);
 			for (UseClass useClass : UseClass.values()) {
 				String key = "BiomassMgHa" + useClass.name().toUpperCase();
 				if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
-					AmountMap<Element> amountMap = innerInputMap2.get(useClass);
-					innerOutputMap1.put(key, amountMap.get(Element.Biomass));
+					Map<Element, MonteCarloEstimate> amountMap = innerInputMap2.get(useClass);
+					innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().m_afData[0][0]);
 				} else {
 					innerOutputMap1.put(key, 0d);
 				}
 			}
-			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP[years.indexOf(year)]);
-			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill[years.indexOf(year)]);
-			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable[years.indexOf(year)]);
-			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation[years.indexOf(year)]);
+			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.m_afData[years.indexOf(year)][0]);
+			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill.m_afData[years.indexOf(year)][0]);
+			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable.m_afData[years.indexOf(year)][0]);
+			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.m_afData[years.indexOf(year)][0]);
 			
 		}
 		System.out.println("Stand " + standID + " processed...");

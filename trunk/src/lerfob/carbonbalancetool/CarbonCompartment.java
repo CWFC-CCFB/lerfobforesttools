@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
+import repicea.math.Matrix;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -193,29 +194,32 @@ public class CarbonCompartment implements Comparable {
 	/**
 	 * This method return a Map object whose keys are the steps and values are
 	 * the carbon mass.
+	 * @param plotAreaHa the area of the plot in ha
+	 * @return a Matrix instance
 	 */
-	public Double[] getCarbonEvolution(double plotAreaHa) {
+	protected Matrix getCarbonEvolution(double plotAreaHa) {
 		double areaFactor = 1d / plotAreaHa;
 		
-		Double[] outputArray = new Double[getTimeScale().length];
+		Matrix value = new Matrix(getTimeScale().length,1);
 		
-		
-		for (int i = 0; i < getTimeScale().length; i++) {
-			outputArray[i] = calculatedCarbonArray[i] * areaFactor;
+		for (int i = 0; i < value.m_iRows; i++) {
+			value.m_afData[i][0] = calculatedCarbonArray[i] * areaFactor;
 		}
 		
-		return outputArray;
+		return value;
 	}
 	
 	
 	/**
 	 * This method returns a random variable that contains the integrated carbon.
 	 * @param plotArea the plot area in ha (double) 
-	 * @return a double instance
+	 * @return a Matrix instance
 	 */
-	public double getIntegratedCarbon(double plotAreaHa) {
+	protected Matrix getIntegratedCarbon(double plotAreaHa) {
 		double areaFactor = 1d / plotAreaHa;
-		return integratedCarbon * areaFactor;
+		Matrix value = new Matrix(1,1);
+		value.m_afData[0][0] = integratedCarbon * areaFactor;
+		return value;
 	}
 	
 	protected void setCarbonIntoArray(int indexDate, double d) {

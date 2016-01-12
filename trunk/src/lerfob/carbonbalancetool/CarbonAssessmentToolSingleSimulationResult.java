@@ -26,7 +26,9 @@ import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import repicea.math.Matrix;
 import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -64,18 +66,21 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 			productionLinesName = carbonToolSettings.processorManagers.get(carbonToolSettings.currentProcessorManagerIndex).toString();
 		}
 	}
-
 			
 	private final int rotationLength;
 	private final String standID;
 	private final Integer[] timeScale;
-	private final Map<CompartmentInfo, Double> budgetMap;
-	private final Map<String, AmountMap<Element>> logGradeMap;
-	private final Map<CompartmentInfo, Double[]> evolutionMap;
-	private final Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> hwpContentByUseClass;
-	private final Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap;
+	private final Map<CompartmentInfo, MonteCarloEstimate> budgetMap;
+//	private final Map<String, AmountMap<Element>> logGradeMap;
+	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
+	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
+//	private final Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> hwpContentByUseClass;
+	private final Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> hwpContentByUseClass;
+//	private final Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap;
+	private final Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap;
 	private final ParameterSetup setup;
 	
+		
 	CarbonAssessmentToolSingleSimulationResult(CarbonCompartmentManager manager) {
 
 		setup = new ParameterSetup(manager.getCarbonToolSettings());
@@ -83,35 +88,86 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		rotationLength = manager.getRotationLength();
 		standID = manager.getLastStand().getStandIdentification();
 		
-		double plotAreaHa = manager.getLastStand().getAreaHa();
 		timeScale = manager.getTimeScale();
+		
+		budgetMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
+		evolutionMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
+		logGradeMap = new TreeMap<String, Map<Element, MonteCarloEstimate>>();
+		
+		
+		
+		hwpContentByUseClass = new HashMap<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
+		productEvolutionMap = new HashMap<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
+//		hwpContentByUseClass = productCompartment.getHWPContentByUseClassPerHa(true);
+//		productEvolutionMap = productCompartment.getWoodProductEvolutionPerHa();
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected void updateResult(CarbonCompartmentManager manager) {
 		CarbonCompartment compartment;
-		
-		budgetMap = new HashMap<CompartmentInfo, Double>();
-		evolutionMap = new HashMap<CompartmentInfo, Double[]>();
-		
+		Matrix value;
+		double plotAreaHa = manager.getLastStand().getAreaHa();
 		for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
 			compartment = manager.getCompartments().get(compartmentID);
-			double value = compartment.getIntegratedCarbon(plotAreaHa);
-			budgetMap.put(compartmentID, value);
-			Double[] values = compartment.getCarbonEvolution(plotAreaHa);
-			evolutionMap.put(compartmentID, values);
+			
+			value = compartment.getIntegratedCarbon(plotAreaHa);
+			if (!budgetMap.containsKey(compartmentID)) {
+				budgetMap.put(compartmentID, new MonteCarloEstimate());
+			}
+			budgetMap.get(compartmentID).addRealization(value);
+			
+			value = compartment.getCarbonEvolution(plotAreaHa);
+			if (!evolutionMap.containsKey(compartmentID)) {
+				evolutionMap.put(compartmentID, new MonteCarloEstimate());
+			}
+			evolutionMap.get(compartmentID).addRealization(value);
 		}
-		
-		logGradeMap = new TreeMap<String, AmountMap<Element>>();
 
 		CarbonProductCompartment productCompartment = (CarbonProductCompartment) manager.getCompartments().get(CompartmentInfo.Products);
 		Map<String, AmountMap<Element>> volumes = productCompartment.getVolumeByLogGradePerHa();
-		AmountMap<Element> carrier;
-		for (String logCategoryName : volumes.keySet()) {
-			carrier = volumes.get(logCategoryName);
-			logGradeMap.put(logCategoryName, carrier);
+		addOneLevelMapToRealization((Map) logGradeMap, (Map) volumes);
+		
+		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> hWPMap = productCompartment.getHWPContentByUseClassPerHa(true);		
+		for (CarbonUnitStatus type : hWPMap.keySet()) {
+			if (!hwpContentByUseClass.containsKey(type)) {
+				hwpContentByUseClass.put(type, new HashMap<UseClass, Map<Element, MonteCarloEstimate>>());
+			}
+			Map<UseClass, AmountMap<Element>> innerHWPMap = hWPMap.get(type);
+			Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = hwpContentByUseClass.get(type);
+			addOneLevelMapToRealization((Map) innerMap, (Map) innerHWPMap);
 		}
-
-		hwpContentByUseClass = productCompartment.getHWPContentByUseClassPerHa(true);
-		productEvolutionMap = productCompartment.getWoodProductEvolutionPerHa();
+		
+		Map<Integer, Map<UseClass, AmountMap<Element>>> tmpMap = productCompartment.getWoodProductEvolutionPerHa();
+		for (Integer year : tmpMap.keySet()) {
+			if (!productEvolutionMap.containsKey(year)) {
+				productEvolutionMap.put(year, new HashMap<UseClass, Map<Element, MonteCarloEstimate>>());
+			}
+			Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productEvolutionMap.get(year);
+			Map<UseClass, AmountMap<Element>> innerTmpMap = tmpMap.get(year);
+			addOneLevelMapToRealization((Map) innerMap, (Map) innerTmpMap);
+		}
 	}
-
+	
+	private void addAmountMapToRealization(Map<Element, MonteCarloEstimate> receivingMap, AmountMap<Element> amountMap) {
+		Matrix value;
+		for (Element element : amountMap.keySet()) {
+			value = new Matrix(1,1);
+			value.m_afData[0][0] = amountMap.get(element);
+			if (!receivingMap.containsKey(element)) {
+				receivingMap.put(element, new MonteCarloEstimate());
+			}
+			receivingMap.get(element).addRealization(value);
+		}
+	}
+	
+	private void addOneLevelMapToRealization(Map<Object, Map<Element, MonteCarloEstimate>> receivingMap, Map<Object, AmountMap<Element>> oMap) {
+		for (Object key : oMap.keySet()) {
+			if (!receivingMap.containsKey(key)) {
+				receivingMap.put(key, new HashMap<Element, MonteCarloEstimate>());
+			}
+			addAmountMapToRealization(receivingMap.get(key), oMap.get(key));
+		}
+	}
 	
 	@Override
 	public String toString() {
@@ -122,7 +178,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 
 
 	@Override
-	public Map<CompartmentInfo, Double> getBudgetMap() {return budgetMap;}
+	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap() {return budgetMap;}
 
 	@Override
 	public String getStandID() {return standID;}
@@ -134,15 +190,15 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	public int getRotationLength() {return rotationLength;}
 
 	@Override
-	public Map<CompartmentInfo, Double[]> getEvolutionMap() {return evolutionMap;}
+	public Map<CompartmentInfo, MonteCarloEstimate> getEvolutionMap() {return evolutionMap;}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClass() {return hwpContentByUseClass;}
+	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPContentByUseClass() {return hwpContentByUseClass;}
 	
 	@Override
-	public Map<String, AmountMap<Element>> getLogGradeMap() {return logGradeMap;}
+	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradeMap() {return logGradeMap;}
 
 	@Override
-	public Map<Integer, Map<UseClass, AmountMap<Element>>> getProductEvolutionMap() {return productEvolutionMap;}
+	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionMap() {return productEvolutionMap;}
 	
 }

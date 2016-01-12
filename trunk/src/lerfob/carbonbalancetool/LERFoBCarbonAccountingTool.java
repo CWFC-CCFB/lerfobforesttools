@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.SwingUtilities;
+
+import lerfob.carbonbalancetool.CarbonAccountingToolTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.SettingMemory;
@@ -243,6 +246,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 			}
 			for (int i = 0; i < nbReals; i++) {
 				addTask(new CarbonAccountingToolTask(Task.RESET_MANAGER, this));
+				addTask(new SetProperRealizationTask(this, i));
 				addTask(new CarbonAccountingToolTask(Task.LOG_AND_BUCK_TREES, this));
 				addTask(new CarbonAccountingToolTask(Task.GENERATE_WOODPRODUCTS, this));
 				addTask(new CarbonAccountingToolTask(Task.ACTUALIZE_CARBON, this));
@@ -251,6 +255,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 			addTask(new CarbonAccountingToolTask(Task.UNLOCK_ENGINE, this));
 			if (!isGuiEnabled()) {
 				lockEngine();
+			} else {
+				addTask(new CarbonAccountingToolTask(Task.DISPLAY_RESULT, this));
 			}
 		}
 	}
@@ -316,11 +322,30 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		
 	}
 
+	protected void showResult() {
+		if (guiInterface != null && guiInterface.isVisible()) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				Runnable job = new Runnable() {
+					@Override
+					public void run() {
+						getGuiInterface().displayResult();
+					}
+				};
+				SwingUtilities.invokeLater(job);
+			} else {
+				getGuiInterface().displayResult();
+			}
+		}
+	}
+
+	
+	
 	public static void main(String[] args) {
 		LERFoBCarbonAccountingTool tool = new LERFoBCarbonAccountingTool();
 		tool.initializeTool(true, null);
 //		System.exit(0);
 	}
+
 
 	
 }

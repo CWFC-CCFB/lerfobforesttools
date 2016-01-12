@@ -69,7 +69,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			dataset.addValue(summary.getBudgetMap().get(compartmentID), compartmentID.toString(),	"");
+			dataset.addValue(summary.getBudgetMap().get(compartmentID).getMean().m_afData[0][0], compartmentID.toString(),	"");
 		}
 		
 		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 

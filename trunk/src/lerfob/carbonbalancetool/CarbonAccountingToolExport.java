@@ -37,7 +37,7 @@ import repicea.io.GExportRecord;
 import repicea.io.GRecordSet;
 import repicea.io.tools.ExportTool;
 import repicea.io.tools.ExportToolDialog;
-import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -115,7 +115,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportRecord r;
 			
 			
-			Map<Integer, Map<UseClass, AmountMap<Element>>> productMap = caller.summary.getProductEvolutionMap();
+			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionMap();
 			
 			String standID = caller.summary.getStandID();
 			if (standID == null || standID.isEmpty()) {
@@ -129,8 +129,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 			
 			for (Integer date : dates) {
 				GExportFieldDetails dateIDField = new GExportFieldDetails("Date", date);
-				Map<UseClass, AmountMap<Element>> innerMap = productMap.get(date);
-				AmountMap<Element> carrier;
+				Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productMap.get(date);
+				Map<Element, MonteCarloEstimate> carrier;
 				for (UseClass useClass : UseClass.values()) {
 					if (innerMap.containsKey(useClass)) {
 						carrier = innerMap.get(useClass);
@@ -138,8 +138,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 						r.addField(standIDField);
 						r.addField(dateIDField);
 						r.addField(new GExportFieldDetails("UseClass", useClass.name()));
-						r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume)));
-						r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass) * 1000));
+						r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
+						r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
 						recordSet.add(r);
 					}
 				}
@@ -162,7 +162,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
 				for (int i = 0; i < timeScale.length; i++) {
-					double value = caller.summary.getEvolutionMap().get(compartmentInfo)[i];
+					double value = caller.summary.getEvolutionMap().get(compartmentInfo).getMean().m_afData[i][0];
 					if (i == 0) {
 						r = new GExportRecord();
 						r.addField(standIDField);
@@ -196,7 +196,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 			
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
-				double value = caller.summary.getBudgetMap().get(compartmentInfo);
+				double value = caller.summary.getBudgetMap().get(compartmentInfo).getMean().m_afData[0][0];
 				r = new GExportRecord();
 				r.addField(standIDField);
 				r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
@@ -213,7 +213,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GRecordSet recordSet = new GRecordSet();
 			GExportRecord r;
 			
-			Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> volumeProducts = caller.summary.getHWPContentByUseClass();		// no recycling
+			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPContentByUseClass();		// no recycling
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -224,8 +224,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 			
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) {
 				if (volumeProducts.containsKey(type)) {
-					Map<UseClass, AmountMap<Element>> innerVolumeMap = volumeProducts.get(type);
-					AmountMap<Element> carrier;
+					Map<UseClass, Map<Element, MonteCarloEstimate>> innerVolumeMap = volumeProducts.get(type);
+					Map<Element, MonteCarloEstimate> carrier;
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
@@ -234,12 +234,12 @@ public class CarbonAccountingToolExport extends ExportTool {
 							r.addField(standIDField);
 							r.addField(new GExportFieldDetails("Type", type.name()));
 							r.addField(new GExportFieldDetails("Class", useClass.toString()));
-							r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume)));
-							r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass) * 1000));
+							r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
+							r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
 							for (Element nutrient : Element.getNutrients()) {
 								nutrientKg = 0d;
 								if (carrier != null && carrier.containsKey(nutrient)) {
-									nutrientKg = carrier.get(nutrient);
+									nutrientKg = carrier.get(nutrient).getMean().m_afData[0][0];
 								}
 								if (nutrient.equals(Element.C)) {
 									nutrientKg *= 1000;
@@ -261,7 +261,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 			GExportRecord r;
 			double annualFactor = 1d / caller.summary.getRotationLength();
 			
-			Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> volumeProducts = caller.summary.getHWPContentByUseClass();
+			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPContentByUseClass();
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -272,8 +272,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 			
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) { 
 				if (volumeProducts.containsKey(type)) {
-					Map<UseClass, AmountMap<Element>> innerVolumeMap = volumeProducts.get(type);
-					AmountMap<Element> carrier;
+					Map<UseClass, Map<Element, MonteCarloEstimate>> innerVolumeMap = volumeProducts.get(type);
+					Map<Element, MonteCarloEstimate> carrier;
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
@@ -282,12 +282,12 @@ public class CarbonAccountingToolExport extends ExportTool {
 							r.addField(standIDField);
 							r.addField(new GExportFieldDetails("Type", type.name()));
 							r.addField(new GExportFieldDetails("Class", useClass.toString()));
-							r.addField(new GExportFieldDetails("Volume_m3hayr", carrier.get(Element.Volume) * annualFactor));
-							r.addField(new GExportFieldDetails("Biomass_kghayr", carrier.get(Element.Biomass) * 1000 * annualFactor));
+							r.addField(new GExportFieldDetails("Volume_m3hayr", carrier.get(Element.Volume).getMean().m_afData[0][0] * annualFactor));
+							r.addField(new GExportFieldDetails("Biomass_kghayr", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000 * annualFactor));
 							for (Element nutrient : Element.getNutrients()) {
 								nutrientKg = 0d;
 								if (carrier != null && carrier.containsKey(nutrient)) {
-									nutrientKg = carrier.get(nutrient);
+									nutrientKg = carrier.get(nutrient).getMean().m_afData[0][0];
 								}
 								if (nutrient.equals(Element.C)) {
 									nutrientKg *= 1000;
@@ -311,7 +311,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 				standID = "Unknown";
 			}
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
-			AmountMap<Element> carrier;
+			Map<Element, MonteCarloEstimate> carrier;
 			
 			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradeMap().keySet());
 			Collections.sort(logNames);
@@ -321,8 +321,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 				r = new GExportRecord();
 				r.addField(standIDField);
 				r.addField(new GExportFieldDetails("LogCategory", logName));
-				r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume)));
-				r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass) * 1000));
+				r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
+				r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
 		
 				recordSet.add(r);
 			}

@@ -50,11 +50,13 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		GENERATE_WOODPRODUCTS(true), 
 		ACTUALIZE_CARBON(true), 
 		COMPILE_CARBON(true),
+		SET_REALIZATION(false),
 		SHUT_DOWN(false),
 		SET_STANDLIST(false),
 		UNLOCK_ENGINE(false),
 		SHOW_INTERFACE(false),
-		RESET_MANAGER(false);
+		RESET_MANAGER(false), 
+		DISPLAY_RESULT(false);
 	
 		private boolean longTask;
 		private static int NumberOfLongTasks = -1;	
@@ -78,6 +80,17 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 	
 	}
 
+	protected static class SetProperRealizationTask extends CarbonAccountingToolTask {
+
+		private final int realizationID;
+		
+		protected SetProperRealizationTask(LERFoBCarbonAccountingTool caller, int realizationID) {
+			super(Task.SET_REALIZATION, caller);
+			this.realizationID = realizationID;
+		}
+		
+	}
+	
 	private Task currentTask;
 	
 	private LERFoBCarbonAccountingTool caller;
@@ -97,6 +110,12 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		switch (currentTask) {
 		case RESET_MANAGER:
 			caller.getCarbonCompartmentManager().resetManager();
+			break;
+		case SET_REALIZATION:
+			caller.getCarbonCompartmentManager().setRealization(((SetProperRealizationTask) this).realizationID);
+			break;
+		case DISPLAY_RESULT:
+			caller.showResult();
 			break;
 		case SHOW_INTERFACE:
 			caller.showInterface();
@@ -420,6 +439,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			setProgress((int) (compIter * progressFactor + (double) (currentTask.ordinal() * 100 / Task.getNumberOfLongTasks())));
 		}
 		manager.setSimulationValid(true);
+		manager.storeResults();
 	}
 
 	private Collection<CarbonToolCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {

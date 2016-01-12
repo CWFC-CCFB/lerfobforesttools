@@ -54,7 +54,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		Collections.sort(logCategoryNames);
 		
 		for (String logCategoryName : logCategoryNames) {
-			dataset.addValue(summary.getLogGradeMap().get(logCategoryName).get(Element.Volume), logCategoryName, "");
+			dataset.addValue(summary.getLogGradeMap().get(logCategoryName).get(Element.Volume).getMean().m_afData[0][0], logCategoryName, "");
 		}
 
 		JFreeChart chart = ChartFactory.createBarChart (getTitle(), 

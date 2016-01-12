@@ -160,6 +160,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		DOCf("Degredable Organic Carbon fraction (DOCf)", "Proportion d\u00E9composable du carbone organique (DOCf)"),
 		AverageDecompositionTime("Average degradation time (yrs)", "Dur\u00E9e de d\u00E9composition moyenne (ann\u00E9es)"),
 		ImportStandList("You are about to import this new stand list. Do you want to proceed?", "Vous \u00EAtes sur le point d'importer cette nouvelle liste de placettes. Voulez-vous continuer ?"),
+		NumberOfRunsToDo("Analysing the realizations", "Analyses des r\u00E9alisation"),
 //		CarboneBalance("Carbon balance", "Bilan de carbone")
 		;
 		
@@ -188,20 +189,18 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	protected final REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper> hwpComboBox;
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
 	
-//	private final JMenuItem exportMenuItem;
 	private final JMenuItem calculateCarbonMenuItem;
 	private final JMenuItem close; // after confirmation
 	private final JMenuItem help;
 	
-//	private final JMenuItem compareScenarioMenuItem;
 
 	private final JButton calculateCarbonButton;
-//	private final JButton exportButton;
-//	private final JButton compareScenarioButton;
 	
-	private JProgressBar progressBar;
-	private final JLabel progressBarMessage;
-	private final JLabel statusLabel;
+	private JProgressBar majorProgressBar;
+	private final JLabel majorProgressBarMessage;
+
+	private JProgressBar minorProgressBar;
+	private final JLabel minorProgressBarMessage;
 
 	protected final CarbonCompareScenarioDialog compareDialog;
 	private int nbSimulations = 0;
@@ -221,8 +220,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		
 		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_LINK);
 		
-		statusLabel = UIControlManager.getLabel("");
-		progressBarMessage = UIControlManager.getLabel(MessageID.WaitingTask.toString()); // default operation for now
+		minorProgressBarMessage = UIControlManager.getLabel(MessageID.WaitingTask.toString()); // default operation for now
+		
+		majorProgressBarMessage = UIControlManager.getLabel(MessageID.NumberOfRunsToDo.toString()); // default operation for now
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -230,14 +230,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		JMenu file = UIControlManager.createCommonMenu(CommonMenuTitle.File);
 		menuBar.add(file);
 		
-//		exportMenuItem = UIControlManager.createCommonMenuItem(CommonControlID.Export);
-//		exportButton = UIControlManager.createCommonButton(CommonControlID.Export);
-//		exportButton.setText("");
-//		exportButton.setMargin(new Insets(2,2,2,2));
-//		exportButton.setToolTipText(CommonControlID.Export.toString());
-//		setExportEnabled(false);
-		
-//		file.add(exportMenuItem);
 		close = UIControlManager.createCommonMenuItem(CommonControlID.Quit);
 		file.add(close);
 
@@ -254,18 +246,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonButton.setIcon(carbonIcon);
 		calculateCarbonButton.setMargin(new Insets(2,2,2,2));
 		calculateCarbonButton.setToolTipText(MessageID.CalculateCarbonBalance.toString());
-		
-		
-//		compareScenarioMenuItem = new JMenuItem(MessageID.CompareScenario.toString());
-//		ImageIcon compareScenariosIcon = CommonGuiUtility.retrieveIcon(getClass(), "compareScenariosIcon.png");
-//		compareScenarioMenuItem.setIcon(compareScenariosIcon);
-//		actionMenu.add(compareScenarioMenuItem);
-
-//		compareScenarioButton = new JButton();
-//		compareScenarioButton.setIcon(compareScenariosIcon);
-//		compareScenarioButton.setMargin(new Insets(2,2,2,2));
-//		compareScenarioButton.setToolTipText(MessageID.CompareScenario.toString());
-//		setScenarioComparisonEnabled(false);
 		
 		JMenu about = UIControlManager.createCommonMenu(CommonMenuTitle.About);
 		menuBar.add(about);
@@ -288,17 +268,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		setMinimumSize(getSize());
 	}
 
-
-//	protected void setExportEnabled(boolean bool) {
-//		exportMenuItem.setEnabled(bool);
-//		exportButton.setEnabled(bool);
-//	}
-	
-//	protected void setScenarioComparisonEnabled(boolean bool) {
-//		compareScenarioMenuItem.setEnabled(bool);
-//		compareScenarioButton.setEnabled(bool);
-//	}
-	
 	/*
 	 * For extended visibility (non-Javadoc)
 	 * @see repicea.gui.REpiceaFrame#anchorLocation(java.awt.Point)
@@ -326,21 +295,28 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	
 	private JPanel createStatusAndProgressBarPanel() {
-		JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		statusPanel.add(statusLabel);
 		
 		JPanel progressBarPanel = new JPanel();
 		progressBarPanel.setLayout(new BoxLayout(progressBarPanel, BoxLayout.Y_AXIS));
+		progressBarPanel.add(Box.createVerticalStrut(10));
 		
-		progressBarPanel.add(statusPanel);
-		progressBarPanel.add(Box.createVerticalStrut(10));
 		JPanel progressBarTaskLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		progressBarTaskLabelPanel.add(progressBarMessage);
+		progressBarTaskLabelPanel.add(minorProgressBarMessage);
 		progressBarPanel.add(progressBarTaskLabelPanel);
-		progressBar = new JProgressBar();
-		progressBar.setStringPainted(true);
-		progressBarPanel.add(progressBar);
+		minorProgressBar = new JProgressBar();
+		minorProgressBar.setStringPainted(true);
+		progressBarPanel.add(minorProgressBar);
 		progressBarPanel.add(Box.createVerticalStrut(10));
+		
+		JPanel progressRealizationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		progressRealizationPanel.add(majorProgressBarMessage);
+		progressBarPanel.add(progressBarTaskLabelPanel);
+		majorProgressBar = new JProgressBar();
+		majorProgressBar.setStringPainted(true);
+		progressBarPanel.add(majorProgressBar);
+		progressBarPanel.add(Box.createVerticalStrut(10));
+		
+		
 		return progressBarPanel;
 	}
 
@@ -349,40 +325,10 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	 * Buttons management.
 	 */
 	public void actionPerformed(ActionEvent evt) {
-//		if (evt.getSource().equals(compareScenarioMenuItem) || evt.getSource().equals(compareScenarioButton)) {
-//			compareDialog.setVisible(true);
-//		} else 
 		if (evt.getSource().equals(close)) {
 			okAction();
 		} else if (evt.getSource().equals(help)) {
 			UIControlManager.getHelper(getClass()).callHelp();
-//		} else if (evt.getSource().equals(exportMenuItem) || evt.getSource().equals(exportButton)) {
-//			try {
-//				Vector<String> tabTitles = new Vector<String>();
-//				
-//				for (int i = 0; i < graphicPanel.tabbedPane.getTabCount(); i++) {
-//					tabTitles.add(graphicPanel.tabbedPane.getTitleAt(i));
-//				}
-//				REpiceaSimpleListDialog chooseWhichTabDialog = new REpiceaSimpleListDialog(this,
-//						tabTitles,
-//						UIControlManager.InformationMessageTitle.Information.toString(),
-//						MessageID.YouAboutToExport.toString(),
-//						false);		// no sorting since we can have twice the same name
-//				if (chooseWhichTabDialog.isValidated()) {
-//					int index = chooseWhichTabDialog.getSelectedIndex();
-//					CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) graphicPanel.tabbedPane.getComponentAt(index);
-//					CarbonAccountingToolExport exportTool = new CarbonAccountingToolExport(caller.getCarbonToolSettings(), panel.getSummary());
-//					Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-//					String url = "http://www.inra.fr/capsis/help_"+ 
-//							REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-//							"/capsis/extension/modeltool/carbonaccountingtool/export";
-//					AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
-//					exportTool.setHelper(helper);
-//					exportTool.showInterface(this);
-//				}
-//			} catch (Exception e) {
-//				System.out.println("CarbonAccountingToolDialog.actionPerformed() - An error occurred in the CarbonAccountingToolExport object");
-//			}
 		} else if (evt.getSource().equals(calculateCarbonMenuItem) || evt.getSource().equals(calculateCarbonButton)) {
 			try {
 				caller.calculateCarbon();
@@ -405,11 +351,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		graphicPanel = new CarbonAccountingToolPanelView(new CarbonAccountingToolOptionPanel());
 		JPanel parameterPanel  = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		parameterPanel.add(Box.createHorizontalStrut(5));
-//		parameterPanel.add(exportButton);
-//		parameterPanel.add(Box.createHorizontalStrut(5));
 		parameterPanel.add(calculateCarbonButton);
-//		parameterPanel.add(Box.createHorizontalStrut(5));
-//		parameterPanel.add(compareScenarioButton);
 		parameterPanel.add(Box.createHorizontalStrut(10));
 		parameterPanel.add(biomassComboBox);
 		parameterPanel.add(Box.createHorizontalStrut(10));
@@ -422,6 +364,12 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		getContentPane().add(createStatusAndProgressBarPanel(), BorderLayout.SOUTH);
 	}
 
+	protected void displayResult() {
+		graphicPanel.addSimulationResult(caller.getCarbonCompartmentManager().getSimulationSummary(), "Sim " + ++nbSimulations);
+		refreshInterface();
+	}
+	
+	
 	/**
 	 * Listens to the progress of the TreeLogger, the WoodPieceProcessorWorker and the CarbonCompartmentManager. Also
 	 * refreshes the Graphic panel when the carbon compartment manager is done.
@@ -433,11 +381,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 				CarbonAccountingToolTask task = (CarbonAccountingToolTask) evt.getSource();
 				if (task.getFailureReason () == null) {
 					if (task.getName().equals(CarbonAccountingToolTask.Task.COMPILE_CARBON.name())) {
-						progressBarMessage.setText(REpiceaTranslator.getString(MessageID.JobDone));
-						progressBar.setValue(100);
-						graphicPanel.addSimulationResult(caller.getCarbonCompartmentManager().getSimulationSummary(), "Sim " + ++nbSimulations);
-//						compareScenarioMenuItem.setEnabled(true);
-						refreshInterface();
+						minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.JobDone));
+						minorProgressBar.setValue(100);
 					}
 				}
 				setEnabled(true);
@@ -445,21 +390,30 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 				setEnabled(false);
 			}
 		} else if (evt.getPropertyName().equals("progress")) {
-			progressBar.setValue((Integer) evt.getNewValue());
+			minorProgressBar.setValue((Integer) evt.getNewValue());
 		} else if (evt.getPropertyName().equals("OngoingTask")) {
 			Task task = (Task) evt.getNewValue();
 			switch (task) {
 				case LOG_AND_BUCK_TREES:
-					progressBarMessage.setText(REpiceaTranslator.getString(MessageID.LoggingJob));
+					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.LoggingJob));
+					majorProgressBar.setValue(caller.getCarbonCompartmentManager().currentRealization);
+					majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMinimum());
 					break;
 				case GENERATE_WOODPRODUCTS:
-					progressBarMessage.setText(REpiceaTranslator.getString(MessageID.WoodPieceJob));
+					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.WoodPieceJob));
 					break;
 				case ACTUALIZE_CARBON:
-					progressBarMessage.setText(REpiceaTranslator.getString(MessageID.ActualizingCarbon));
+					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.ActualizingCarbon));
 					break;
 				case COMPILE_CARBON:
-					progressBarMessage.setText(REpiceaTranslator.getString(MessageID.CarbonCompartmentJob));
+					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.CarbonCompartmentJob));
+					break;
+				case SET_STANDLIST:
+					majorProgressBar.setMinimum(0);
+					majorProgressBar.setMaximum(caller.getCarbonCompartmentManager().nRealizations);
+					break;
+				case DISPLAY_RESULT:
+					majorProgressBar.setValue(majorProgressBar.getMaximum());
 					break;
 			}
 		} else if (evt.getPropertyName().equals(REpiceaAWTProperty.WindowAcceptedConfirmed.name()) || evt.getPropertyName().equals(REpiceaAWTProperty.WindowCancelledConfirmed.name())) {
@@ -470,12 +424,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	@Override
 	public void listenTo() {
-//		compareScenarioMenuItem.addActionListener(this);
-//		compareScenarioButton.addActionListener(this);
 		close.addActionListener(this);
 		help.addActionListener(this);
-//		exportMenuItem.addActionListener(this);
-//		exportButton.addActionListener(this);
 		calculateCarbonMenuItem.addActionListener(this);
 		calculateCarbonButton.addActionListener(this);
 		biomassComboBox.getComboBox().addItemListener(this);
@@ -485,12 +435,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	@Override
 	public void doNotListenToAnymore() {
-//		compareScenarioMenuItem.removeActionListener(this);
-//		compareScenarioButton.removeActionListener(this);
 		close.removeActionListener(this);
 		help.removeActionListener(this);
-//		exportMenuItem.removeActionListener(this);
-//		exportButton.removeActionListener(this);
 		calculateCarbonMenuItem.removeActionListener(this);
 		calculateCarbonButton.removeActionListener(this);
 		biomassComboBox.getComboBox().removeItemListener(this);
