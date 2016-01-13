@@ -53,7 +53,7 @@ public class CarbonCompartmentManager {
 	protected int currentRealization;
 	protected int nRealizations;
 	
-	private CarbonAssessmentToolSingleSimulationResult summary;
+	protected CarbonAssessmentToolSingleSimulationResult summary;
 	
 	
 	/**
@@ -158,7 +158,6 @@ public class CarbonCompartmentManager {
 
 	@SuppressWarnings({ "unchecked"})
 	public void resetCompartmentsAndSetCarbonUnitCollections() {
-		summary = null;		// reset the summary as well
 		CarbonUnitList joinEndUseProductRecyclageList = new CarbonUnitList();
 		CarbonUnitList leftInForestList;
 		CarbonUnitList degradableLandfillList;
