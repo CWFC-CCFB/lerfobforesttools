@@ -160,7 +160,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		DOCf("Degredable Organic Carbon fraction (DOCf)", "Proportion d\u00E9composable du carbone organique (DOCf)"),
 		AverageDecompositionTime("Average degradation time (yrs)", "Dur\u00E9e de d\u00E9composition moyenne (ann\u00E9es)"),
 		ImportStandList("You are about to import this new stand list. Do you want to proceed?", "Vous \u00EAtes sur le point d'importer cette nouvelle liste de placettes. Voulez-vous continuer ?"),
-		NumberOfRunsToDo("Analysing the realizations", "Analyses des r\u00E9alisation"),
+		NumberOfRunsToDo("Analysing the realizations", "Analyse des r\u00E9alisations"),
 //		CarboneBalance("Carbon balance", "Bilan de carbone")
 		;
 		
@@ -196,7 +196,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	private final JButton calculateCarbonButton;
 	
-	private JProgressBar majorProgressBar;
+	protected JProgressBar majorProgressBar;
 	private final JLabel majorProgressBarMessage;
 
 	private JProgressBar minorProgressBar;
@@ -223,7 +223,11 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		minorProgressBarMessage = UIControlManager.getLabel(MessageID.WaitingTask.toString()); // default operation for now
 		
 		majorProgressBarMessage = UIControlManager.getLabel(MessageID.NumberOfRunsToDo.toString()); // default operation for now
-
+		minorProgressBar = new JProgressBar();
+		majorProgressBar = new JProgressBar();
+		if (caller.getCarbonCompartmentManager().nRealizations > 0) {
+			majorProgressBar.setMaximum(caller.getCarbonCompartmentManager().nRealizations);
+		}
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -303,16 +307,15 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		JPanel progressBarTaskLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		progressBarTaskLabelPanel.add(minorProgressBarMessage);
 		progressBarPanel.add(progressBarTaskLabelPanel);
-		minorProgressBar = new JProgressBar();
 		minorProgressBar.setStringPainted(true);
 		progressBarPanel.add(minorProgressBar);
 		progressBarPanel.add(Box.createVerticalStrut(10));
 		
 		JPanel progressRealizationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		progressRealizationPanel.add(majorProgressBarMessage);
-		progressBarPanel.add(progressBarTaskLabelPanel);
-		majorProgressBar = new JProgressBar();
+		progressBarPanel.add(progressRealizationPanel);
 		majorProgressBar.setStringPainted(true);
+		majorProgressBar.setString("");
 		progressBarPanel.add(majorProgressBar);
 		progressBarPanel.add(Box.createVerticalStrut(10));
 		
@@ -380,9 +383,12 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
 				CarbonAccountingToolTask task = (CarbonAccountingToolTask) evt.getSource();
 				if (task.getFailureReason () == null) {
-					if (task.getName().equals(CarbonAccountingToolTask.Task.COMPILE_CARBON.name())) {
+					String taskName = task.getName();
+					if (taskName.equals(CarbonAccountingToolTask.Task.COMPILE_CARBON.name())) {
 						minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.JobDone));
 						minorProgressBar.setValue(100);
+					} else if (taskName.equals(CarbonAccountingToolTask.Task.DISPLAY_RESULT.name())) {
+						majorProgressBar.setValue(majorProgressBar.getMaximum());
 					}
 				}
 				setEnabled(true);
@@ -397,7 +403,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 				case LOG_AND_BUCK_TREES:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.LoggingJob));
 					majorProgressBar.setValue(caller.getCarbonCompartmentManager().currentRealization);
-					majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMinimum());
+					majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMaximum());
 					break;
 				case GENERATE_WOODPRODUCTS:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.WoodPieceJob));
@@ -407,13 +413,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 					break;
 				case COMPILE_CARBON:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.CarbonCompartmentJob));
-					break;
-				case SET_STANDLIST:
-					majorProgressBar.setMinimum(0);
-					majorProgressBar.setMaximum(caller.getCarbonCompartmentManager().nRealizations);
-					break;
-				case DISPLAY_RESULT:
-					majorProgressBar.setValue(majorProgressBar.getMaximum());
 					break;
 			}
 		} else if (evt.getPropertyName().equals(REpiceaAWTProperty.WindowAcceptedConfirmed.name()) || evt.getPropertyName().equals(REpiceaAWTProperty.WindowCancelledConfirmed.name())) {

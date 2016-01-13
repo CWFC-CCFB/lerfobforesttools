@@ -184,6 +184,18 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		carbonCompartmentManager.init(waitingStandList);
 		setReferentForBiomassParameters(carbonCompartmentManager.getStandList());
 		setTreeLoggerDescription();
+		if (isGuiEnabled()) {
+			Runnable doRun = new Runnable() {
+				@Override
+				public void run() {
+					getGuiInterface().majorProgressBar.setMinimum(0);
+					getGuiInterface().majorProgressBar.setMaximum(getCarbonCompartmentManager().nRealizations);
+					getGuiInterface().refreshInterface();
+				}
+			};
+			SwingUtilities.invokeLater(doRun);
+		}
+
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -218,7 +230,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		getCarbonToolSettings().setTreeLoggerDescriptions(defaultTreeLoggerDescriptions);
 	}
 	
-	public CarbonCompartmentManager getCarbonCompartmentManager() {return carbonCompartmentManager;}
+	@Override
+	protected void firstTasksToDo() {}
 
 	@Override
 	protected void decideWhatToDo(String taskName, Exception failureReason) {
@@ -227,10 +240,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	}
 
 	
-	@Override
-	protected void firstTasksToDo() {}
+	public CarbonCompartmentManager getCarbonCompartmentManager() {return carbonCompartmentManager;}
 
-	
 	/**
 	 * This method launches the calculation of the different carbon compartments.
 	 * @throws InterruptedException if the engine lock is interrupted
@@ -323,18 +334,14 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	}
 
 	protected void showResult() {
-		if (guiInterface != null && guiInterface.isVisible()) {
-			if (!SwingUtilities.isEventDispatchThread()) {
-				Runnable job = new Runnable() {
-					@Override
-					public void run() {
-						getGuiInterface().displayResult();
-					}
-				};
-				SwingUtilities.invokeLater(job);
-			} else {
-				getGuiInterface().displayResult();
-			}
+		if (isGuiEnabled()) {
+			Runnable job = new Runnable() {
+				@Override
+				public void run() {
+					getGuiInterface().displayResult();
+				}
+			};
+			SwingUtilities.invokeLater(job);
 		}
 	}
 
