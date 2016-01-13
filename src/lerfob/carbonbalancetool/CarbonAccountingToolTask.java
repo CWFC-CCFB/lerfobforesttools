@@ -193,8 +193,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			} 
 		}
 		// TODO deal with dead trees MF2013-05-07
+		TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
 		if (!caller.loggableTrees.isEmpty()) {
-			TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
 			if (caller.guiInterface != null) {
 				logger.addTreeLoggerListener(caller.getGuiInterface()); 
 			}
@@ -204,7 +204,9 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 				logger.removeTreeLoggerListener(caller.getGuiInterface()); 
 			}			
 			setProgress((int) (100 * (double) 1 / Task.getNumberOfLongTasks()));
-		} 
+		} else {
+			logger.getWoodPieces().clear();
+		}
 	}
 	
 
@@ -262,8 +264,12 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.treeRegister.get(tree).getDateYr(), amountMap);		
-							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
+							try {
+								Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.treeRegister.get(tree).getDateYr(), amountMap);		
+								totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
+							} catch (NullPointerException e) {
+								int u = 0;
+							}
 						}
 						
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);
