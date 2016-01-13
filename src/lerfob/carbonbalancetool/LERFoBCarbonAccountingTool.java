@@ -255,6 +255,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 			if (nbReals < 1) {
 				nbReals = 1;
 			}
+			carbonCompartmentManager.summary = null; // reset the summary before going on
 			for (int i = 0; i < nbReals; i++) {
 				addTask(new CarbonAccountingToolTask(Task.RESET_MANAGER, this));
 				addTask(new SetProperRealizationTask(this, i));
