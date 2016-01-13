@@ -122,9 +122,6 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			break;
 		case SET_STANDLIST:
 			caller.setStandList();
-			if (caller.isGuiEnabled()) {
-				caller.getGuiInterface().refreshInterface();
-			}
 			break;
 		case LOG_AND_BUCK_TREES:
 			firePropertyChange("OngoingTask", null, currentTask);
