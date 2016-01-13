@@ -373,6 +373,11 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	}
 	
 	
+	private void updateMajorProgressBarValue(int i) {
+		majorProgressBar.setValue(i);
+		majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMaximum());
+	}
+	
 	/**
 	 * Listens to the progress of the TreeLogger, the WoodPieceProcessorWorker and the CarbonCompartmentManager. Also
 	 * refreshes the Graphic panel when the carbon compartment manager is done.
@@ -388,7 +393,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 						minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.JobDone));
 						minorProgressBar.setValue(100);
 					} else if (taskName.equals(CarbonAccountingToolTask.Task.DISPLAY_RESULT.name())) {
-						majorProgressBar.setValue(majorProgressBar.getMaximum());
+						updateMajorProgressBarValue(majorProgressBar.getMaximum());
 					}
 				}
 				setEnabled(true);
@@ -402,8 +407,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			switch (task) {
 				case LOG_AND_BUCK_TREES:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.LoggingJob));
-					majorProgressBar.setValue(caller.getCarbonCompartmentManager().currentRealization);
-					majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMaximum());
+					updateMajorProgressBarValue(caller.getCarbonCompartmentManager().currentRealization);
 					break;
 				case GENERATE_WOODPRODUCTS:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.WoodPieceJob));
