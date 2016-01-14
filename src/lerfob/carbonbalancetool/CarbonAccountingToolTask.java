@@ -264,12 +264,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							try {
-								Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.treeRegister.get(tree).getDateYr(), amountMap);		
-								totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
-							} catch (NullPointerException e) {
-								int u = 0;
-							}
+							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.treeRegister.get(tree).getDateYr(), amountMap);		
+							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
 						}
 						
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);

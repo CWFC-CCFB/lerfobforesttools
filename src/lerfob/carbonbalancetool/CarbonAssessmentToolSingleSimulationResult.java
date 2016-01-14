@@ -35,10 +35,13 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentToolSimulationResult {
 
 	protected static enum MessageID implements TextableEnum {
-		FinalAge("Final date or age", "Age ou date finale"),
+		StandIdentification("Project name", "Nom du projet"),
+		FinalAge("Projection length", "Dur\u00E9e de la projection"),
 		EstimateCarbonBiomass("Carbon estimation in biomass", "Estimation du carbone de la biomasse"),
 		ProductionLinesLabel("Production lines", "Lignes de production"),
-		Workspace("Workspace: ", "R\u00E9pertoire de travail : ");
+		Workspace("Workspace: ", "R\u00E9pertoire de travail : "),
+		DifferenceBetween("Difference between ", "Difference entre "),
+		And(" and ", " et ");
 
 		
 		MessageID(String englishText, String frenchText) {
@@ -170,7 +173,8 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	
 	@Override
 	public String toString() {
-		return "<html>" + CarbonAssessmentToolSingleSimulationResult.MessageID.FinalAge.toString() + ": " + rotationLength + "<br>" +
+		return "<html>" + CarbonAssessmentToolSingleSimulationResult.MessageID.StandIdentification.toString() + ": " + standID + "<br>" +
+					CarbonAssessmentToolSingleSimulationResult.MessageID.FinalAge.toString() + ": " + rotationLength + "<br>" +
 					MessageID.EstimateCarbonBiomass.toString() + ": " + setup.biomassParametersName + "<br>" +
 					MessageID.ProductionLinesLabel.toString() + ": " + setup.productionLinesName + "</html>";
 	}
