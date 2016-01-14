@@ -104,4 +104,10 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "<html>" + CarbonAssessmentToolSingleSimulationResult.MessageID.DifferenceBetween.toString() + ": " + scenToCompare.getStandID() + "<br>" +
+					CarbonAssessmentToolSingleSimulationResult.MessageID.And.toString() + baseline.getStandID() + "</html>";
+	}
+
 }
