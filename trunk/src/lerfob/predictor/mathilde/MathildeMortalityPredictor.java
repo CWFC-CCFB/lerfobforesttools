@@ -31,6 +31,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
@@ -44,7 +45,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Mathieu Fortin - October 2013
  */
 @SuppressWarnings("serial")
-public final class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeMortalityStand, MathildeTree> {
+public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeMortalityStand, MathildeTree> {
 
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	
@@ -96,14 +97,10 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 
 	}
 	
-	private final Map<Integer, MathildeSubModule> subModules;
+	protected final Map<Integer, MathildeSubModule> subModules;
 	
-	private final LinkFunction linkFunction;
-//	private final LinearStatisticalExpression eta;
-//	private final LinkFunction embeddedLinkFunction;
-//	private final LinearStatisticalExpression embeddedEta;
-//	private final ExtendedLinkFunction extendedLinkFunction;
-	private int numberOfParameters;
+	protected final LinkFunction linkFunction;
+	protected int numberOfParameters;
 	protected GaussHermiteQuadrature ghq;
 
 	/**
@@ -119,17 +116,10 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		linkFunction = new LinkFunction(Type.CLogLog, new InternalMathematicalFunction());
 		linkFunction.setVariableValue(0, 1d);
 		
-//		embeddedLinkFunction = new LinkFunction(Type.Log);
-//		embeddedEta = new LinearStatisticalExpression();
-//		embeddedLinkFunction.setParameterValue(LFParameter.Eta, embeddedEta);
-//		embeddedEta.setVariableValue(0, 1d);	// variable that multiplies the fixed effect parameter
-//		embeddedEta.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
-//		
-//		extendedLinkFunction = new ExtendedLinkFunction();
-		
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);		
 	}
 	
+	@Override
 	protected void init() {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
@@ -231,8 +221,12 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 	
 	@Override
 	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+		boolean windstormDisabledOverride = false;
+		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
+			windstormDisabledOverride = (Boolean) parms[0];
+		}
 		double upcomingWindstorm = 0d;
-		if (stand.isAWindstormGoingToOccur()) {
+		if (stand.isAWindstormGoingToOccur() && !windstormDisabledOverride) {
 			upcomingWindstorm = 1d;
 		} 
 		
@@ -247,24 +241,19 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 		}
 		
 		Matrix beta = subModule.getParameters(stand);
-//		eta.setParameterValue(1, upcomingWindstorm);
 		linkFunction.setVariableValue(1, upcomingWindstorm);
 		
 		double pred = getFixedEffectOnlyPrediction(beta, stand, tree);
 		linkFunction.setParameterValue(0, pred);
 
 		double prob;
-//		embeddedEta.setParameterValue(0, beta.m_afData[14][0]);
 		linkFunction.setParameterValue(1, beta.m_afData[14][0]);
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 			Matrix randomEffects = subModule.getRandomEffects(interval);
-//			embeddedEta.setParameterValue(1, randomEffects.m_afData[0][0]);
 			linkFunction.setParameterValue(2, randomEffects.m_afData[0][0]);
-//			prob = extendedLinkFunction.getValue();
 			prob = linkFunction.getValue();
 		} else {
-//			embeddedEta.setParameterValue(1, 0d);		// random effect arbitrarily set to 0
 			linkFunction.setParameterValue(2, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
 				List<Integer> parameterIndices = new ArrayList<Integer>();
@@ -274,8 +263,43 @@ public final class MathildeMortalityPredictor extends LogisticModelBasedSimulato
 				prob = linkFunction.getValue();
 			}
 		}
-		
 		return prob;
+	}
+
+	
+	
+	/**
+	 * This method returns either a boolean if isResidualVariabilityEnabled was set to true
+	 * or the probability otherwise.
+	 * @param stand a S-derived instance
+	 * @param tree a T-derived instance
+	 * @param parms some additional parameters
+	 * @return a Boolean or a double
+	 */
+	@Override
+	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+		double eventProbability = predictEventProbability(stand, tree, parms);
+		if (eventProbability < 0 || eventProbability > 1) {
+			return null;
+		} else if (isResidualVariabilityEnabled) {
+			double residualError = random.nextDouble();
+			if (residualError < eventProbability) {
+				if (stand.isAWindstormGoingToOccur()) {
+					double eventProbabilityWithoutWindstorm = predictEventProbability(stand, tree, new Object[]{true}); // to disable the windstorm
+					if (random.nextDouble() < eventProbabilityWithoutWindstorm/eventProbability) {
+						return StatusClass.dead;
+					} else {
+						return StatusClass.windfall;
+					}
+				} else {
+					return StatusClass.dead;
+				}
+			} else {
+				return StatusClass.alive;
+			}
+		} else {
+			return eventProbability;
+		}
 	}
 
 	
