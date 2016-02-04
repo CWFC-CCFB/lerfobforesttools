@@ -111,18 +111,18 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
 				int creationDate = compartmentManager.getTimeScale()[i];
 				Processor disposedToProcessor = ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
-				if (disposedToProcessor != null && updatedMap.get(Element.Volume) > 0) { // new implementation
-					List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
-					disposedUnits.add(new CarbonUnit(creationDate, null, updatedMap));
-					Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
-					for (CarbonUnit carbonUnit : processedUnits) {
-						if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
-							carbonUnit.addStatus(CarbonUnitStatus.Recycled);
+				if (updatedMap.get(Element.Volume) > 0) {
+					if (disposedToProcessor != null) { // new implementation
+						List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
+						disposedUnits.add(new CarbonUnit(creationDate, null, updatedMap));
+						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
+						for (CarbonUnit carbonUnit : processedUnits) {
+							if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
+								carbonUnit.addStatus(CarbonUnitStatus.Recycled);
+							}
 						}
-					}
-					compartmentManager.getCarbonToolSettings().getCurrentProductionProcessorManager().getCarbonUnitMap().add(processedUnits);
-				} else {	// former implementation
-					if (updatedMap.get(Element.Volume) > 0) {
+						compartmentManager.getCarbonToolSettings().getCurrentProductionProcessorManager().getCarbonUnitMap().add(processedUnits);
+					} else {	// former implementation
 						((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).getProductionLine().getManager().sendToTheLandfill(creationDate, updatedMap);	
 					}
 				}
@@ -131,12 +131,20 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	}
 	
 	
+	private boolean isNewImplementation() {
+		return rawRoundWoodVolume == 0d;
+	}
+	
 	/**
 	 * This method returns the total substitution effect of this product. NOTE: substitution is given in terms of tC eq. / raw volume
 	 * @return the substitution in tC (double)
 	 */
 	public double getTotalCarbonSubstitution() {
-		return getSubstitutionForAGivenRawVolume(rawRoundWoodVolume);
+		if (isNewImplementation()) {
+			return getSubstitutionForAGivenVolume(getProcessedVolumeAtCreationDate());
+		} else {
+			return getSubstitutionForAGivenVolume(rawRoundWoodVolume);
+		}
 	}
 
 	/**
@@ -152,8 +160,11 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			double[] outputArray = new double[getTimeScale().length];
 			double volume;
 			for (int i = 0; i < getTimeScale().length; i++) {
-				volume = releasedCarbonArray[i] * volumeFactor * ratioToGetRawRoundWoodVolume;
-				outputArray[i] = getSubstitutionForAGivenRawVolume(volume);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
+				volume = releasedCarbonArray[i] * volumeFactor;
+				if (!isNewImplementation()) {
+					volume *= ratioToGetRawRoundWoodVolume;
+				}
+				outputArray[i] = getSubstitutionForAGivenVolume(volume);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
 			}
 			return outputArray;
 		} else {
@@ -200,7 +211,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param volume = a volume of this product
 	 * @return the substitution in eq. tC (double)
 	 */
-	private double getSubstitutionForAGivenRawVolume(double volume) {
+	private double getSubstitutionForAGivenVolume(double volume) {
 		return volume * getCarbonUnitFeature().getAverageSubstitution();
 	}
 
