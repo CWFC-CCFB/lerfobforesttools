@@ -451,7 +451,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		String filename = ObjectUtility.getPackagePath(ppm.getClass()) 
 				+ File.separator + "library"
-				+ File.separator + "hardwood_simple_en.prl";
+				+ File.separator + "hardwood_recycling_fr.prl";
 		try {
 			ppm.load(filename);
 			ppm.showInterface(null);
