@@ -247,7 +247,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		
 		double backtransformedPred = Math.exp(pred) - 1;
 		if (backtransformedPred > MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr()) {
-			System.out.println("Max increment has been reached and truncated");
+		//	System.out.println("Max increment has been reached and truncated");
 			backtransformedPred = MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr();
 		}
 		
