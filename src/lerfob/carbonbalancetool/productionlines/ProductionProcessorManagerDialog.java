@@ -63,53 +63,6 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UIControlManager.setTitle(ProductionProcessorManagerDialog.class, "Harvested Wood Products", "Bois recolt\u00E9s");
 	}
 
-//	public static enum MessageID implements TextableEnum {
-//		ProductionLine("Production lines", "Sous-fili\u00E8res"),
-//		Unnamed("Unnamed", "SansNom"),
-//		Default("Default", "D\u00E9fauts"),
-//		WarningForProductionLineRemoval1("You are about to delete the following production line : ", 
-//				"Vous vous \u00EAtes sur le point d'effacer la ligne de production suivante : "),
-//				WarningForProductionLineRemoval2("Are you sure to proceed? ", 
-//						"Etes-vous certain de vouloir continuer ? ")
-//						;
-//
-//		MessageID(String englishText, String frenchText) {
-//			setText(englishText, frenchText);
-//		}
-//
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//
-//		@Override
-//		public String toString() {
-//			return REpiceaTranslator.getString(this);
-//		}
-//	}
-
-//	public static enum MessageID implements TextableEnum {
-//		LandFillMarketLabel("Landfill", "D\u00E9charge"),
-//		LeftInForestLabel("Dead organic matter", "Mati\u00E8re organique morte"),
-//		OutletName("Outlet", "D\u00E9bouch\u00E9"),
-//		AddProcessor("Add processor", "Ajouter processus"),
-//		DeleteProcessor("Remove processor", "Effacer processus")
-//		;
-//
-//		MessageID(String englishText, String frenchText) {
-//			setText(englishText, frenchText);
-//		}
-//
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//
-//		@Override
-//		public String toString() {
-//			return REpiceaTranslator.getString(this);
-//		}
-//	}
 
 	public static enum MessageID implements TextableEnum {
 		LandFillMarketLabel("Landfill", "D\u00E9charge"),
@@ -117,9 +70,9 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		ProductionLineFileExtension("production lines file (*.prl)", "fichier de lignes de production (*.prl)"),
 		Default("Default","D\u00E9faut"),
 		BuckingModelLabel("Bucking model", "Mod\u00E8le de billonnage"),
-		ProcessorButtonToolTip("Create a processor", "Cr\u00E9 un transformateur"),
-		LandfillButtonToolTip("Landfill site", "D\u00E9charge"),
-		LeftInForestButtonToolTip("Left on forest floor", "Laiss\u00E9 en for\u00EAt"),
+		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un transformateur"),
+		LandfillButtonToolTip("Create a landfill site", "Cr\u00E9er une d\u00E9charge"),
+		LeftInForestButtonToolTip("Leave on forest floor", "Laisser en for\u00EAt"),
 		EndOfLifeLinkButtonToolTip("End of life destination", "Destination en fin de vie"),
 		;
 		
