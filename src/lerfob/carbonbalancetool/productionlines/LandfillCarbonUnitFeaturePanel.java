@@ -44,6 +44,9 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 		public void setText(String englishText, String frenchText) {
 			REpiceaTranslator.setString(this, englishText, frenchText);
 		}
+		
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
 	private JLabel degradableOrganicCarbonFractionLabel;
