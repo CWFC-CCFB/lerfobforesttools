@@ -113,7 +113,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		Component("Component", "Composante"),
 		DefaultParameters("Default parameters", "Param\u00E8tres par d\u00e9faut"),
 		Name("Name", "Nom"),
-		CompareScenario("Compare scenarios", "Comparaison de sc\u00E9nario"),
+		CompareScenario("Compare scenarios", "Comparaison de sc\u00E9narios"),
 		Status("Status", "Etat"),
 		HWP_Parameters("Harvested Wood products", "Produits bois"),
 		Biomass("Biomass parameters", "Param\u00E8tres biomasse"),
