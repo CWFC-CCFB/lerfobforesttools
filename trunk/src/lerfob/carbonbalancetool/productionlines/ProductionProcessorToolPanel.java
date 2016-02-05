@@ -102,7 +102,7 @@ public class ProductionProcessorToolPanel extends ToolPanel {
 		dndButtons.add(createLandfillProcessorButton);
 		
 		createEndOfLifeLinkButton = new CreateEndOfLifeLinkButton(getGUIPermission());
-		selectableButtons.add(createEndOfLifeLinkButton);
+		addSelectableButton(createEndOfLifeLinkButton);
 	}
 	
 	
