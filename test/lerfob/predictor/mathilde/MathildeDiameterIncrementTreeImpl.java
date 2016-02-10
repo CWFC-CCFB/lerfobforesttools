@@ -8,7 +8,7 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 	private double bal42;
 	private double bal22;
 	private MathildeTreeSpecies species;
-	private MathildeDiameterIncrementStand stand;
+	private MathildeStand stand;
 	private double pred;
 //	private int monteCarloRealization;
 	
@@ -42,7 +42,7 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 		return Math.exp(getPred() + variance * .5) - 1;
 	}
 	
-	protected MathildeDiameterIncrementStand getStand() {
+	protected MathildeStand getStand() {
 		return stand;
 	}
 	

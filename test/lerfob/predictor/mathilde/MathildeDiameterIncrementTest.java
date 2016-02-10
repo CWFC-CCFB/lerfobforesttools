@@ -67,7 +67,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
-		MathildeDiameterIncrementStand stand;
+		MathildeStand stand;
 		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
@@ -85,7 +85,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
-		MathildeDiameterIncrementStand stand;
+		MathildeStand stand;
 		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
@@ -105,7 +105,7 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, true, true);
 		
 		MathildeTree tree = trees.get(0);
-		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
+		MathildeStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
@@ -130,7 +130,7 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(true, true, true);
 		
 		MathildeTree tree = trees.get(0);
-		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
+		MathildeStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {

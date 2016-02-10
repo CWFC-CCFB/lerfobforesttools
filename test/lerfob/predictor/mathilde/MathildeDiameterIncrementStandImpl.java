@@ -2,7 +2,7 @@ package lerfob.predictor.mathilde;
 
 import repicea.simulation.HierarchicalLevel;
 
-public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncrementStand {
+public class MathildeDiameterIncrementStandImpl implements MathildeStand {
 
 	private double st;
 	private boolean isGoingToBeHarvested;
@@ -59,6 +59,30 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 	@Override
 	public double getMeanAnnualTempAbove6C() {
 		return tIntervalVeg6;
+	}
+
+	@Override
+	public int getDateYr() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMeanQuadraticDiameterCm() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isADroughtGoingToOccur() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAWindstormGoingToOccur() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 
