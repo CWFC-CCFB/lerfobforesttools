@@ -1,4 +1,4 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.diameterincrement;
 
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -10,11 +10,11 @@ import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
-public final class MathildeSubModule extends ModelBasedSimulator {
+final class MathildeDiameterIncrementSubModule extends ModelBasedSimulator {
 	
 	double errorTotalVariance;
 	
-	public MathildeSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+	protected MathildeDiameterIncrementSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
