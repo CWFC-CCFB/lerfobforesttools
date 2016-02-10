@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.thinning;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
@@ -37,9 +37,9 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeStand, Object> {
+public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, Object> {
 
-	private final Map<Integer, MathildeSubModule> subModules;
+	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
 //	private final LinearStatisticalExpression eta;
@@ -55,7 +55,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	public MathildeStandThinningPredictor(boolean isParametersVariabilityEnabled,
 			boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
-		subModules = new HashMap<Integer, MathildeSubModule>();
+		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
@@ -92,7 +92,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 
 
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				// rm+fc-10.6.2015 No random effect for the thinning stand level
 				// model
@@ -109,7 +109,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		}
 	}
 
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeThinningStand stand) {
 		// protected double getFixedEffectOnlyPrediction(Matrix beta,
 		// MathildeMortalityStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
@@ -126,8 +126,8 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeStand stand, Object tree, Object... parms) {
-		MathildeSubModule subModule;
+	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Object... parms) {
+		MathildeThinningSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = subModules.get(parms[0]);
 			if (subModule == null) {

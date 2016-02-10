@@ -16,14 +16,24 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.thinning;
 
+import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
+import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeStandThinningPredictor.
  * @author Ruben Manso and Mathieu Fortin - June 2015
  */
-public interface MathildeThinningStand extends MathildeStand {
+public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
+												GrowthStepLengthYrProvider, 
+												DateYrProvider,
+												BasalAreaM2HaProvider,
+												MeanQuadraticDiameterCmProvider,
+												GeographicalCoordinatesProvider {
 
 }
