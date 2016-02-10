@@ -1,9 +1,28 @@
-package lerfob.predictor.mathilde;
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2013 Ruben Manso for LERFOB INRA/AgroParisTech, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
+package lerfob.predictor.mathilde.mortality;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ParameterLoader;
@@ -39,7 +58,7 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
 				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+				MathildeMortalitySubModule subModule = new MathildeMortalitySubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
 				subModules.put(excludedGroup, subModule);
@@ -50,7 +69,7 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
 		boolean windstormDisabledOverride = false;
 		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
 			windstormDisabledOverride = (Boolean) parms[0];
@@ -60,7 +79,7 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 			upcomingWindstorm = 1d;
 		} 
 		
-		MathildeSubModule subModule;
+		MathildeMortalitySubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = subModules.get(parms[0]);
 			if (subModule == null) {
