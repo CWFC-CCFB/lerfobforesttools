@@ -42,6 +42,8 @@ class MathildeClimateStandImpl implements MathildeStand {
 		return meanAnnualTempAbove6C;
 	}
 
+	protected double getPrediction() {return pred;}
+	
 	@Override
 	public double getBasalAreaM2Ha() {return 0;}
 
