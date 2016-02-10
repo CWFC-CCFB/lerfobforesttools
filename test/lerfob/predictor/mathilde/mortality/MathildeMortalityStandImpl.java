@@ -1,8 +1,8 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.mortality;
 
 import repicea.simulation.HierarchicalLevel;
 
-public class MathildeMortalityStandImpl implements MathildeStand {
+public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 
 	private boolean isGoingToBeHarvested;
 	private double stepLengthYrs;

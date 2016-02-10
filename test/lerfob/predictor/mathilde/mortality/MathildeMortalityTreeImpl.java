@@ -1,5 +1,6 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.mortality;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import repicea.simulation.HierarchicalLevel;
 
 public final class MathildeMortalityTreeImpl implements MathildeTree {
@@ -9,7 +10,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 	private MathildeTreeSpecies species;
 	private double bal22;
 	private double bal42;
-	private MathildeStand stand;
+	private MathildeMortalityStand stand;
 	private double pred;	
 	
 	protected MathildeMortalityTreeImpl(double pred, 
@@ -32,7 +33,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 				upcomingWindstorm);
 	}
 
-	protected MathildeStand getStand() {
+	protected MathildeMortalityStand getStand() {
 		return stand;
 	}
 		

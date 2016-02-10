@@ -1,10 +1,12 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.mortality;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import lerfob.predictor.mathilde.MathildeTree;
 
 import org.junit.Test;
 
@@ -125,7 +127,7 @@ public class MathildeMortalityTest {
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
-		MathildeStand stand;
+		MathildeMortalityStand stand;
 		for (MathildeTree tree : treesOriginalModel) {
 			stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			double actual = predictor.predictEventProbability(stand, tree);
@@ -162,7 +164,7 @@ public class MathildeMortalityTest {
 		MathildeMortalityPredictor deterministicPredictor = new MathildeMortalityPredictor(false, false, false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
-			MathildeStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
+			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			NonparametricDistribution dist = new NonparametricDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
@@ -188,7 +190,7 @@ public class MathildeMortalityTest {
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
-		MathildeStand stand;
+		MathildeMortalityStand stand;
 		for (MathildeTree tree : treesImprovedModel) {
 			stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			double actual = predictor.predictEventProbability(stand, tree);
@@ -227,7 +229,7 @@ public class MathildeMortalityTest {
 		MathildeImprovedMortalityPredictor deterministicPredictor = new MathildeImprovedMortalityPredictor(false, false, false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
-			MathildeStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
+			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			NonparametricDistribution dist = new NonparametricDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
