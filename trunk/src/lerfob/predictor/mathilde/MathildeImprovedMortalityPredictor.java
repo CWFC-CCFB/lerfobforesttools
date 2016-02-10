@@ -50,7 +50,7 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
 		boolean windstormDisabledOverride = false;
 		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
 			windstormDisabledOverride = (Boolean) parms[0];

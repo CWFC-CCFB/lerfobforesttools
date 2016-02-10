@@ -44,7 +44,7 @@ import repicea.util.ObjectUtility;
  * This class contains the diameter increment module of Mathilde growth simulator.
  * @authors Mathieu Fortin and Ruben Manso - August 2013
  */
-public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, ModelBasedSimulatorListener {
+public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeStand, MathildeTree>, ModelBasedSimulatorListener {
 
 	private static final long serialVersionUID = 20130627L;
 
@@ -126,12 +126,12 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 * @param tree
 	 * @return
 	 */
-	protected double getFixedEffectOnlyPrediction(MathildeDiameterIncrementStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(MathildeStand stand, MathildeTree tree) {
 		Matrix currentBeta = subModules.get(0).getParameters(stand);
 		return getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 	}
 	
-	protected synchronized double getFixedEffectOnlyPrediction(Matrix currentBeta, MathildeDiameterIncrementStand stand, MathildeTree tree) {
+	protected synchronized double getFixedEffectOnlyPrediction(Matrix currentBeta, MathildeStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 
 		double upcomingCut = 0d;
@@ -211,7 +211,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	}
 	
 	@Override
-	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
+	public double predictGrowth(MathildeStand stand, MathildeTree tree, Object... parms) {
 		MathildeSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = getSubModule((Integer) parms[0]);

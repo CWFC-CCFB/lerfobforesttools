@@ -18,13 +18,12 @@
  */
 package lerfob.predictor.mathilde;
 
-import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeStandThinningPredictor.
  * @author Ruben Manso and Mathieu Fortin - June 2015
  */
-public interface MathildeThinningStand extends MathildeStand, DateYrProvider, MeanQuadraticDiameterCmProvider {
+public interface MathildeThinningStand extends MathildeStand {
 
 }

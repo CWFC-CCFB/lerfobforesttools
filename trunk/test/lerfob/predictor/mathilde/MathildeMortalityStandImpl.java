@@ -2,7 +2,7 @@ package lerfob.predictor.mathilde;
 
 import repicea.simulation.HierarchicalLevel;
 
-public class MathildeMortalityStandImpl implements MathildeMortalityStand {
+public class MathildeMortalityStandImpl implements MathildeStand {
 
 	private boolean isGoingToBeHarvested;
 	private double stepLengthYrs;
