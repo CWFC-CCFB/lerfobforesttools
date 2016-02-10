@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.mortality;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.AbstractMathematicalFunction;
 import repicea.math.Matrix;
@@ -45,7 +46,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Mathieu Fortin - October 2013
  */
 @SuppressWarnings("serial")
-public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeStand, MathildeTree> {
+public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeMortalityStand, MathildeTree> {
 
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	
@@ -97,7 +98,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 
 	}
 	
-	protected final Map<Integer, MathildeSubModule> subModules;
+	protected final Map<Integer, MathildeMortalitySubModule> subModules;
 	
 	protected final LinkFunction linkFunction;
 	protected int numberOfParameters;
@@ -110,7 +111,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	 */
 	public MathildeMortalityPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);	
-		subModules = new HashMap<Integer, MathildeSubModule>();
+		subModules = new HashMap<Integer, MathildeMortalitySubModule>();
 		init();
 		oXVector = new Matrix(1,numberOfParameters);
 		linkFunction = new LinkFunction(Type.CLogLog, new InternalMathematicalFunction());
@@ -140,7 +141,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
 				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+				MathildeMortalitySubModule subModule = new MathildeMortalitySubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
 				subModules.put(excludedGroup, subModule);
@@ -151,7 +152,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	}
 	
 	
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeMortalityStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 		
 		double dbh = tree.getDbhCm();
@@ -220,7 +221,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	}
 	
 	@Override
-	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
 		boolean windstormDisabledOverride = false;
 		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
 			windstormDisabledOverride = (Boolean) parms[0];
@@ -230,7 +231,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 			upcomingWindstorm = 1d;
 		} 
 		
-		MathildeSubModule subModule;
+		MathildeMortalitySubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = subModules.get(parms[0]);
 			if (subModule == null) {
@@ -277,7 +278,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	 * @return a Boolean or a double
 	 */
 	@Override
-	public Object predictEvent(MathildeStand stand, MathildeTree tree, Object... parms) {
+	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
 		double eventProbability = predictEventProbability(stand, tree, parms);
 		if (eventProbability < 0 || eventProbability > 1) {
 			return null;
