@@ -71,46 +71,4 @@ public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 		return isAWindstormGoingToOccur;
 	}
 
-
-	@Override
-	public double getBasalAreaM2Ha() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getMeanQuadraticDiameterCm() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getMeanAnnualTempAbove6C() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getElevationM() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }
