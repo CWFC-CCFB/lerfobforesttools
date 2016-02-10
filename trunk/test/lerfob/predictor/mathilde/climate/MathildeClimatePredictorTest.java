@@ -1,4 +1,4 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.climate;
 
 import org.junit.Assert;
 import org.junit.Test;
