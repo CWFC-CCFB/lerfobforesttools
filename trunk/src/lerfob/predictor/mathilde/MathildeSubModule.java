@@ -10,11 +10,11 @@ import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
-public final class MathildeSubModule extends ModelBasedSimulator {
+public abstract class MathildeSubModule extends ModelBasedSimulator {
 	
 	double errorTotalVariance;
 	
-	public MathildeSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+	protected MathildeSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
@@ -23,7 +23,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	protected void setDefaultBeta(GaussianEstimate betaEstimate) {
+	public void setDefaultBeta(GaussianEstimate betaEstimate) {
 		super.setDefaultBeta(betaEstimate);
 	}
 	
@@ -32,7 +32,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	protected void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
+	public void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
 		super.setDefaultRandomEffects(level, estimate);
 	}
 	
@@ -40,7 +40,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * For extended visibility (non-Javadoc)
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
-	protected Matrix getParameters(MonteCarloSimulationCompliantObject stand) {
+	public Matrix getParameters(MonteCarloSimulationCompliantObject stand) {
 		return super.getParametersForThisRealization(stand);
 	}
 
@@ -48,7 +48,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * For extended visibility (non-Javadoc)
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
-	protected Matrix getRandomEffects(MonteCarloSimulationCompliantObject subject) {
+	public Matrix getRandomEffects(MonteCarloSimulationCompliantObject subject) {
 		return getRandomEffectsForThisSubject(subject);
 	}
 
@@ -57,7 +57,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	protected GaussianEstimate getDefaultRandomEffects(HierarchicalLevel level) {
+	public GaussianEstimate getDefaultRandomEffects(HierarchicalLevel level) {
 		return super.getDefaultRandomEffects(level);
 	}
 
@@ -67,7 +67,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	protected void setDefaultResidualError(Enum<?> enumVar, GaussianErrorTermEstimate estimate) {
+	public void setDefaultResidualError(Enum<?> enumVar, GaussianErrorTermEstimate estimate) {
 		super.setDefaultResidualError(enumVar, estimate);
 	}
 
@@ -77,11 +77,11 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	protected GaussianErrorTermEstimate  getDefaultResidualError(Enum<?> enumVar) {
+	public GaussianErrorTermEstimate  getDefaultResidualError(Enum<?> enumVar) {
 		return super.getDefaultResidualError(enumVar);
 	}
 	
-	protected Matrix getResidualErrorForThisVersion() {
+	public Matrix getResidualErrorForThisVersion() {
 		return super.getResidualError();
 	}
 
@@ -90,7 +90,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	protected void setBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<? extends StandardGaussianDistribution> blups) {
+	public void setBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<? extends StandardGaussianDistribution> blups) {
 		super.setBlupsForThisSubject(subject, blups);
 	}
 	
@@ -100,7 +100,7 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 
@@ -109,10 +109,10 @@ public final class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#init()
 	 */
 	@Override
-	protected void init() {}
+	public final void init() {}
 	
-	
-	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+	@Override
+	public Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
 		return super.simulateDeviatesForRandomEffectsOfThisSubject(subject, randomEffectsEstimate);
 	}
 }
