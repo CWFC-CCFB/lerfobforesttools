@@ -34,12 +34,10 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends ModelBasedSimulator {
 	
-	protected final List<MathildeClimateStandImpl> referenceStands;
-	
+	private static List<MathildeClimateStandImpl> referenceStands;
 	
 	public MathildeClimatePredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-		referenceStands = new ArrayList<MathildeClimateStandImpl>();
 		init();
 	}
 
@@ -67,21 +65,46 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			Matrix varianceRandomEffect = covparms.getSubMatrix(0, 0, 0, 0);
 			setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(meanRandomEffect, varianceRandomEffect));
 			
-			String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
-			CSVReader reader = new CSVReader(referenceStandsFilename);
-			Object[] record;
- 			while ((record = reader.nextRecord()) != null) {
- 				String experimentName = record[0].toString();
- 				double x_resc = Double.parseDouble(record[1].toString());
- 				double y_resc = Double.parseDouble(record[2].toString());
- 				int dateYr = Integer.parseInt(record[3].toString());
- 				double meanTempGrowthSeason = Double.parseDouble(record[5].toString());
- 				double predicted = Double.parseDouble(record[6].toString());
- 				MathildeClimateStandImpl stand = new MathildeClimateStandImpl(experimentName, x_resc, y_resc, dateYr, meanTempGrowthSeason, predicted);
- 				referenceStands.add(stand);
- 			}
 		} catch (Exception e) {
 			System.out.println("MathildeClimateModel.init() : Unable to initialize the MathildeClimateModel module");
+		}
+	}
+
+	/**
+	 * This method returns a copy of static member referenceStands.
+	 * @return a List of MathildeClimateStandImpl instances
+	 */
+	protected static List<MathildeClimateStandImpl> getReferenceStands() {
+		if (referenceStands == null) {
+			instantiateReferenceStands();
+		} 
+		List<MathildeClimateStandImpl> copyList = new ArrayList<MathildeClimateStandImpl>();
+		copyList.addAll(referenceStands);
+		return copyList;
+	}
+	
+	
+	private synchronized static void instantiateReferenceStands() {
+		try {
+			if (referenceStands == null) {
+				referenceStands = new ArrayList<MathildeClimateStandImpl>();
+				String path = ObjectUtility.getRelativePackagePath(MathildeClimatePredictor.class);
+				String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
+				CSVReader reader = new CSVReader(referenceStandsFilename);
+				Object[] record;
+	 			while ((record = reader.nextRecord()) != null) {
+	 				String experimentName = record[0].toString();
+	 				double x_resc = Double.parseDouble(record[1].toString());
+	 				double y_resc = Double.parseDouble(record[2].toString());
+	 				int dateYr = Integer.parseInt(record[3].toString());
+	 				double meanTempGrowthSeason = Double.parseDouble(record[5].toString());
+	 				double predicted = Double.parseDouble(record[6].toString());
+	 				MathildeClimateStandImpl stand = new MathildeClimateStandImpl(experimentName, x_resc, y_resc, dateYr, meanTempGrowthSeason, predicted);
+	 				referenceStands.add(stand);
+	 			}
+			}
+		} catch (Exception e) {
+			System.out.println("Unable to instantiate the reference stand list in MathildeClimatePredictor class!");
 		}
 	}
 
