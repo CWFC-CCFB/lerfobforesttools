@@ -85,5 +85,23 @@ public class MathildeDiameterIncrementStandImpl implements MathildeStand {
 		return false;
 	}
 
+	@Override
+	public double getLatitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getLongitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getElevationM() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }
