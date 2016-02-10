@@ -65,4 +65,19 @@ class MathildeClimateStandImpl implements MathildeStand {
 	@Override
 	public double getGrowthStepLengthYr() {return 0;}
 
+	@Override
+	public double getLatitude() {
+		return x_resc * 100000;
+	}
+
+	@Override
+	public double getLongitude() {
+		return y_resc * 100000;
+	}
+
+	@Override
+	public double getElevationM() {
+		return 0;
+	}
+
 }

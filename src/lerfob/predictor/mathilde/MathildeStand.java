@@ -21,6 +21,7 @@ package lerfob.predictor.mathilde;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
@@ -32,7 +33,8 @@ public interface MathildeStand extends MonteCarloSimulationCompliantObject,
 										GrowthStepLengthYrProvider, 
 										DateYrProvider,
 										BasalAreaM2HaProvider,
-										MeanQuadraticDiameterCmProvider {
+										MeanQuadraticDiameterCmProvider,
+										GeographicalCoordinatesProvider {
 
 	/**
 	 * This method returns true if a cut was planned in the upcoming growth interval.

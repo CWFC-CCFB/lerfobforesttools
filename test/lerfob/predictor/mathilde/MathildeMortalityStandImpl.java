@@ -92,4 +92,25 @@ public class MathildeMortalityStandImpl implements MathildeStand {
 		return 0;
 	}
 
+
+	@Override
+	public double getLatitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double getLongitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double getElevationM() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
