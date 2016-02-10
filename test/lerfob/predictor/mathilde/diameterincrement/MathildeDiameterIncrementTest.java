@@ -1,10 +1,12 @@
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.diameterincrement;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import lerfob.predictor.mathilde.MathildeTree;
 
 import org.junit.Test;
 
@@ -67,7 +69,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
-		MathildeStand stand;
+		MathildeDiameterIncrementStand stand;
 		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
@@ -85,7 +87,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
 		
-		MathildeStand stand;
+		MathildeDiameterIncrementStand stand;
 		int nbTrees = 0;
 		for (MathildeTree tree : trees) {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
@@ -105,7 +107,7 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, true, true);
 		
 		MathildeTree tree = trees.get(0);
-		MathildeStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
+		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
@@ -130,7 +132,7 @@ public class MathildeDiameterIncrementTest {
 		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(true, true, true);
 		
 		MathildeTree tree = trees.get(0);
-		MathildeStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
+		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 		NonparametricDistribution dist = new NonparametricDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
