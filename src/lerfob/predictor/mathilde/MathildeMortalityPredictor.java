@@ -45,7 +45,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Mathieu Fortin - October 2013
  */
 @SuppressWarnings("serial")
-public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeMortalityStand, MathildeTree> {
+public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<MathildeStand, MathildeTree> {
 
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	
@@ -151,7 +151,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	}
 	
 	
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeMortalityStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 		
 		double dbh = tree.getDbhCm();
@@ -220,7 +220,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	}
 	
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
 		boolean windstormDisabledOverride = false;
 		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
 			windstormDisabledOverride = (Boolean) parms[0];
@@ -277,7 +277,7 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 	 * @return a Boolean or a double
 	 */
 	@Override
-	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public Object predictEvent(MathildeStand stand, MathildeTree tree, Object... parms) {
 		double eventProbability = predictEventProbability(stand, tree, parms);
 		if (eventProbability < 0 || eventProbability > 1) {
 			return null;

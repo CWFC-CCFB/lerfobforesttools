@@ -9,7 +9,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 	private MathildeTreeSpecies species;
 	private double bal22;
 	private double bal42;
-	private MathildeMortalityStand stand;
+	private MathildeStand stand;
 	private double pred;	
 	
 	protected MathildeMortalityTreeImpl(double pred, 
@@ -32,7 +32,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 				upcomingWindstorm);
 	}
 
-	protected MathildeMortalityStand getStand() {
+	protected MathildeStand getStand() {
 		return stand;
 	}
 		

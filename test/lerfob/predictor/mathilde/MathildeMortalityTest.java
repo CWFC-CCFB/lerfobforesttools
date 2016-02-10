@@ -125,7 +125,7 @@ public class MathildeMortalityTest {
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
-		MathildeMortalityStand stand;
+		MathildeStand stand;
 		for (MathildeTree tree : treesOriginalModel) {
 			stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			double actual = predictor.predictEventProbability(stand, tree);
@@ -162,7 +162,7 @@ public class MathildeMortalityTest {
 		MathildeMortalityPredictor deterministicPredictor = new MathildeMortalityPredictor(false, false, false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
-			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
+			MathildeStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			NonparametricDistribution dist = new NonparametricDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
@@ -188,7 +188,7 @@ public class MathildeMortalityTest {
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
-		MathildeMortalityStand stand;
+		MathildeStand stand;
 		for (MathildeTree tree : treesImprovedModel) {
 			stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			double actual = predictor.predictEventProbability(stand, tree);
@@ -227,7 +227,7 @@ public class MathildeMortalityTest {
 		MathildeImprovedMortalityPredictor deterministicPredictor = new MathildeImprovedMortalityPredictor(false, false, false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
-			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
+			MathildeStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
 			NonparametricDistribution dist = new NonparametricDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {

@@ -19,13 +19,20 @@
 package lerfob.predictor.mathilde;
 
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
+import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
+import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
  * @author Mathieu Fortin - June 2013
  */
-public interface MathildeStand extends MonteCarloSimulationCompliantObject, GrowthStepLengthYrProvider {
+public interface MathildeStand extends MonteCarloSimulationCompliantObject, 
+										GrowthStepLengthYrProvider, 
+										DateYrProvider,
+										BasalAreaM2HaProvider,
+										MeanQuadraticDiameterCmProvider {
 
 	/**
 	 * This method returns true if a cut was planned in the upcoming growth interval.
@@ -33,5 +40,22 @@ public interface MathildeStand extends MonteCarloSimulationCompliantObject, Grow
 	 */
 	public boolean isGoingToBeHarvested();
 	
-	
+	/**
+	 * This method returns true if a drought is to occur in the upcoming time step.
+	 * @return a boolean
+	 */
+	public boolean isADroughtGoingToOccur();
+
+	/**
+	 * This method returns true if a catastrophic windstorm is to occur in the upcoming time step.
+	 * @return a boolean
+	 */
+	public boolean isAWindstormGoingToOccur();
+
+	/**
+	 * This method returns the monthly mean temperature above 6 degrees Celsius.
+	 * @return a double
+	 */
+	public double getMeanAnnualTempAbove6C();
+
 }
