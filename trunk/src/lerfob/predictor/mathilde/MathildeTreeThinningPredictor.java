@@ -43,7 +43,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
+public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 
@@ -118,7 +118,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		}
 	}
 
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeThinningStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 		
 		MathildeTreeSpecies species = tree.getMathildeTreeSpecies();
@@ -157,7 +157,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
 		MathildeSubModule subModule;
 		if (parms == null || parms.length < 1) {
 			throw new InvalidParameterException("The probability at stand level is missing!");
