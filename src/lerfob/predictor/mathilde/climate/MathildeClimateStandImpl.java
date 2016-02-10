@@ -19,6 +19,7 @@
 package lerfob.predictor.mathilde.climate;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import repicea.simulation.HierarchicalLevel;
 
@@ -75,6 +76,11 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	@Override
 	public double getElevationM() {
 		return 0;
+	}
+
+	@Override
+	public List<MathildeClimateStand> getAllMathildeClimateStands() {
+		return null;
 	}
 
 }

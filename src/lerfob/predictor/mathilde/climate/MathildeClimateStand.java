@@ -18,6 +18,8 @@
  */
 package lerfob.predictor.mathilde.climate;
 
+import java.util.List;
+
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
@@ -30,4 +32,12 @@ public interface MathildeClimateStand extends MonteCarloSimulationCompliantObjec
 										DateYrProvider,
 										GeographicalCoordinatesProvider {
 
+	/**
+	 * This method returns all the stand of the sample so that it is possible
+	 * to generate the blups with respect to the reference stands in the 
+	 * MathildeClimatePredictor class.
+	 * @return a List of MathildeClimateStand which will be concatenated with the reference stands.
+	 */
+	public List<MathildeClimateStand> getAllMathildeClimateStands();
+	
 }
