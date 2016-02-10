@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.diameterincrement;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
@@ -24,6 +24,7 @@ import java.util.Map;
 
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014InternalPredictor;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
+import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
@@ -44,7 +45,7 @@ import repicea.util.ObjectUtility;
  * This class contains the diameter increment module of Mathilde growth simulator.
  * @authors Mathieu Fortin and Ruben Manso - August 2013
  */
-public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeStand, MathildeTree>, ModelBasedSimulatorListener {
+public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, ModelBasedSimulatorListener {
 
 	private static final long serialVersionUID = 20130627L;
 
@@ -52,7 +53,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	private static double CorrelationRandomEffectsHeightDiameterGrowth = 0.4;
 
-	protected final Map<Integer, MathildeSubModule> subModules;
+	protected final Map<Integer, MathildeDiameterIncrementSubModule> subModules;
 	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
@@ -63,7 +64,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 */
 	public MathildeDiameterIncrementPredictor(boolean isParametersVariabilityEnabled,boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-		subModules = new HashMap<Integer, MathildeSubModule>();
+		subModules = new HashMap<Integer, MathildeDiameterIncrementSubModule>();
 		init();
 	}
 
@@ -90,7 +91,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				}
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+				MathildeDiameterIncrementSubModule subModule = new MathildeDiameterIncrementSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
 
 				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
@@ -126,12 +127,12 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	 * @param tree
 	 * @return
 	 */
-	protected double getFixedEffectOnlyPrediction(MathildeStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(MathildeDiameterIncrementStand stand, MathildeTree tree) {
 		Matrix currentBeta = subModules.get(0).getParameters(stand);
 		return getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 	}
 	
-	protected synchronized double getFixedEffectOnlyPrediction(Matrix currentBeta, MathildeStand stand, MathildeTree tree) {
+	protected synchronized double getFixedEffectOnlyPrediction(Matrix currentBeta, MathildeDiameterIncrementStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 
 		double upcomingCut = 0d;
@@ -202,17 +203,17 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		
 	}
 
-	private MathildeSubModule getSubModule(int subModuleVersion) {
+	private MathildeDiameterIncrementSubModule getSubModule(int subModuleVersion) {
 		return subModules.get(subModuleVersion);
 	}
 
-	private MathildeSubModule getSubModule() {
+	private MathildeDiameterIncrementSubModule getSubModule() {
 		return getSubModule(0);
 	}
 	
 	@Override
-	public double predictGrowth(MathildeStand stand, MathildeTree tree, Object... parms) {
-		MathildeSubModule subModule;
+	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
+		MathildeDiameterIncrementSubModule subModule;
 		if (parms.length > 0 && parms[0] instanceof Integer) {
 			subModule = getSubModule((Integer) parms[0]);
 			if (subModule == null) {
