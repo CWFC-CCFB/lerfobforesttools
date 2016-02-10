@@ -1,10 +1,28 @@
-package lerfob.predictor.mathilde;
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2016 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
+package lerfob.predictor.mathilde.climate;
 
 import java.math.BigInteger;
 
 import repicea.simulation.HierarchicalLevel;
 
-class MathildeClimateStandImpl implements MathildeStand {
+class MathildeClimateStandImpl implements MathildeClimateStand {
 
 	final String name;
 	final int id;
@@ -37,34 +55,13 @@ class MathildeClimateStandImpl implements MathildeStand {
 		return dateYr;
 	}
 
-	@Override
-	public double getMeanAnnualTempAbove6C() {
-		return meanAnnualTempAbove6C;
-	}
 
 	protected double getPrediction() {return pred;}
-	
-	@Override
-	public double getBasalAreaM2Ha() {return 0;}
-
-	@Override
-	public double getMeanQuadraticDiameterCm() {return 0;}
-
-	@Override
-	public boolean isGoingToBeHarvested() {return false;}
-
-	@Override
-	public boolean isADroughtGoingToOccur() {return false;}
-
-	@Override
-	public boolean isAWindstormGoingToOccur() {return false;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return 0;}
 
-	@Override
-	public double getGrowthStepLengthYr() {return 0;}
-
+	
 	@Override
 	public double getLatitude() {
 		return x_resc * 100000;
