@@ -1,4 +1,4 @@
-package lerfob.predictor.mathilde.mortality;
+package lerfob.predictor.mathilde.thinning;
 
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -10,11 +10,11 @@ import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
-final class MathildeMortalitySubModule extends ModelBasedSimulator {
+final class MathildeThinningSubModule extends ModelBasedSimulator {
 	
 	double errorTotalVariance;
 	
-	protected MathildeMortalitySubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+	protected MathildeThinningSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
