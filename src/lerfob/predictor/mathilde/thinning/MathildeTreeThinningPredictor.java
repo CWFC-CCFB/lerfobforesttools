@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde;
+package lerfob.predictor.mathilde.thinning;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -43,11 +44,11 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeStand, MathildeTree> {
+public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 
-	private final Map<Integer, MathildeSubModule> subModules;
+	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
 //	private final LinearStatisticalExpression eta;
@@ -61,7 +62,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	 */
 	public MathildeTreeThinningPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
-		subModules = new HashMap<Integer, MathildeSubModule>();
+		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
@@ -100,7 +101,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 
-				MathildeSubModule subModule = new MathildeSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
 				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 				
@@ -118,7 +119,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		}
 	}
 
-	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeStand stand, MathildeTree tree) {
+	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeThinningStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 		
 		MathildeTreeSpecies species = tree.getMathildeTreeSpecies();
@@ -157,8 +158,8 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeStand stand, MathildeTree tree, Object... parms) {
-		MathildeSubModule subModule;
+	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
+		MathildeThinningSubModule subModule;
 		if (parms == null || parms.length < 1) {
 			throw new InvalidParameterException("The probability at stand level is missing!");
 		} 
