@@ -5,6 +5,7 @@ import java.util.List;
 
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -15,7 +16,7 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends ModelBasedSimulator {
 	
-	private final List<MathildeClimateStandImpl> referenceStands;
+	protected final List<MathildeClimateStandImpl> referenceStands;
 	
 	
 	public MathildeClimatePredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
@@ -43,6 +44,10 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms.getSubMatrix(2, 2, 0, 0)));
 			setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
+			
+			Matrix meanRandomEffect = new Matrix(1,1);
+			Matrix varianceRandomEffect = covparms.getSubMatrix(0, 0, 0, 0);
+			setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(meanRandomEffect, varianceRandomEffect));
 			
 			String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
 			CSVReader reader = new CSVReader(referenceStandsFilename);
