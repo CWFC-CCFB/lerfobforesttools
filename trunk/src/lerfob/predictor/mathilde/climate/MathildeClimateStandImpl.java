@@ -19,7 +19,10 @@
 package lerfob.predictor.mathilde.climate;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import repicea.simulation.HierarchicalLevel;
 
@@ -80,7 +83,15 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 
 	@Override
 	public List<MathildeClimateStand> getAllMathildeClimateStands() {
-		return null;
+		Map<Integer, MathildeClimateStand> standMap = new HashMap<Integer, MathildeClimateStand>(); 
+		for (MathildeClimateStand stand : MathildeClimatePredictor.getReferenceStands()) {
+			if (!standMap.containsKey(stand.getSubjectId())) {
+				standMap.put(stand.getSubjectId(), stand);
+			}
+		}
+		List<MathildeClimateStand> stands = new ArrayList<MathildeClimateStand>();
+		stands.addAll(standMap.values());
+		return stands;
 	}
 
 }
