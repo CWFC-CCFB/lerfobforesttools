@@ -20,6 +20,7 @@ public class LERFOBJARSVNAppVersionCompiler extends AbstractAppVersionCompiler {
 		LERFOBJARSVNAppVersionCompiler compiler = new LERFOBJARSVNAppVersionCompiler();
 		try {
 			compiler.createRevisionFile(APP_URL, Version_Filename);
+			System.out.println("Revision file successfully updated!");
 		} catch (Exception e) {
 			Assert.fail("Failed to compile revision number");
 		}
