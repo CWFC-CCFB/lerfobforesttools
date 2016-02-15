@@ -34,7 +34,9 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends ModelBasedSimulator {
 	
-	private static List<MathildeClimateStandImpl> referenceStands;
+	private static List<MathildeClimateStand> referenceStands;
+
+	private double rho;
 	
 	public MathildeClimatePredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
@@ -60,7 +62,8 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms.getSubMatrix(2, 2, 0, 0)));
 			setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
 			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
-			
+	
+			rho = covparms.m_afData[1][0];
 			Matrix meanRandomEffect = new Matrix(1,1);
 			Matrix varianceRandomEffect = covparms.getSubMatrix(0, 0, 0, 0);
 			setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(meanRandomEffect, varianceRandomEffect));
@@ -74,11 +77,11 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	 * This method returns a copy of static member referenceStands.
 	 * @return a List of MathildeClimateStandImpl instances
 	 */
-	protected static List<MathildeClimateStandImpl> getReferenceStands() {
+	protected static List<MathildeClimateStand> getReferenceStands() {
 		if (referenceStands == null) {
 			instantiateReferenceStands();
 		} 
-		List<MathildeClimateStandImpl> copyList = new ArrayList<MathildeClimateStandImpl>();
+		List<MathildeClimateStand> copyList = new ArrayList<MathildeClimateStand>();
 		copyList.addAll(referenceStands);
 		return copyList;
 	}
@@ -87,7 +90,7 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	private synchronized static void instantiateReferenceStands() {
 		try {
 			if (referenceStands == null) {
-				referenceStands = new ArrayList<MathildeClimateStandImpl>();
+				referenceStands = new ArrayList<MathildeClimateStand>();
 				String path = ObjectUtility.getRelativePackagePath(MathildeClimatePredictor.class);
 				String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
 				CSVReader reader = new CSVReader(referenceStandsFilename);
@@ -111,10 +114,6 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	protected final synchronized double getFixedEffectPrediction(MathildeClimateStand stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
 
-//		double upcomingDrought = 0d;
-//		if (stand.isADroughtGoingToOccur()) {
-//			upcomingDrought = 1d;
-//		}
 		double dateMinus1950 = stand.getDateYr() - 1950;
 		
 		int pointer = 0;
@@ -122,8 +121,6 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 		pointer++;
 		oXVector.m_afData[0][pointer] = dateMinus1950;
 		pointer++;
-//		oXVector.m_afData[0][pointer] = upcomingDrought;
-//		pointer++;
 		
 		double pred = oXVector.multiply(currentBeta).m_afData[0][0];
 		
@@ -136,6 +133,9 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	 * @return
 	 */
 	public double getMeanTemperatureForGrowthInterval(MathildeClimateStand stand) {
+		if (!blupEstimationDone.contains(stand.getSubjectId())) {
+			predictBlups(stand);
+		}
 		Matrix currentBeta = getParametersForThisRealization(stand);
 		double pred = getFixedEffectPrediction(stand, currentBeta);
 		double randomEffect = getRandomEffectsForThisSubject(stand).m_afData[0][0];
@@ -145,6 +145,59 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 		return pred;
 	}
 	
+	/*
+	 * For test purpose. 
+	 * @param stand
+	 * @return
+	 */
+	protected final double getFixedEffectPrediction(MathildeClimateStand stand) {
+		return getFixedEffectPrediction(stand, getDefaultBeta().getMean());
+	}
+	
+	private synchronized void predictBlups(MathildeClimateStand stand) {
+		if (!blupEstimationDone.contains(stand.getSubjectId())) {
+			List<MathildeClimateStand> stands = getReferenceStands();
+			int knownStandIndex = stands.size();
+			stands.addAll(stand.getAllMathildeClimateStands());
+			Matrix matG = new Matrix(stands.size(), stands.size());
+			for (int i = 0; i < matG.m_iRows; i++) {
+				for (int j = i; j < matG.m_iRows; j++) {
+					if (i == j) {
+						matG.m_afData[i][j] = 1d;
+					} else {
+						MathildeClimateStand stand1 = stands.get(i);
+						MathildeClimateStand stand2 = stands.get(j);
+						double y_resc1 = stand1.getLatitude() * .00001;
+						double x_resc1 = stand1.getLongitude() * .00001;
+						double y_resc2 = stand2.getLatitude() * .00001;
+						double x_resc2 = stand2.getLongitude() * .00001;
+						double y_diff = y_resc1 - y_resc2;
+						double x_diff = x_resc1 - x_resc2;
+						double d = Math.sqrt(y_diff * y_diff + x_diff * x_diff);
+						double correlation = 1 - 3d/(2*rho) + d*d*d/(2*rho*rho*rho);
+						matG.m_afData[i][j] = correlation;
+						matG.m_afData[j][i] = correlation;
+					}
+				}
+			}
+			matG = matG.scalarMultiply(getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().m_afData[0][0]);
+			Matrix matV = matG.add(Matrix.getIdentityMatrix(matG.m_iRows).scalarMultiply(getDefaultResidualError(ErrorTermGroup.Default).getVariance().m_afData[0][0])); 
+			
+			Matrix defaultBeta = getDefaultBeta().getMean();
+			Matrix residuals = new Matrix(knownStandIndex,1);
+			for (int i = 0; i < knownStandIndex; i++) {
+				MathildeClimateStandImpl standImpl = (MathildeClimateStandImpl) stands.get(i);
+				residuals.m_afData[i][0] = standImpl.meanAnnualTempAbove6C - getFixedEffectPrediction(standImpl, defaultBeta);
+			}
+
+			Matrix invV = matV.getSubMatrix(0, knownStandIndex-1, 0, knownStandIndex-1).getInverseMatrix();
+			Matrix covV = matV.getSubMatrix(knownStandIndex, matV.m_iRows-1, 0, knownStandIndex-1);
+			Matrix blups = covV.multiply(invV.multiply(residuals));
+			int u = 0;
+			// TODO check if the blups are properly implemented
+		}
+	}
+
 	public static void main(String[] args) {
 		new MathildeClimatePredictor(false, false, false);
 	}
