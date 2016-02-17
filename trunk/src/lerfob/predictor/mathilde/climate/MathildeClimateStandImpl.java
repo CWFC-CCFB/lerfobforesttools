@@ -18,18 +18,16 @@
  */
 package lerfob.predictor.mathilde.climate;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import repicea.simulation.HierarchicalLevel;
 
 class MathildeClimateStandImpl implements MathildeClimateStand {
 
 	final String name;
-	final int id;
 	final double meanAnnualTempAbove6C;
 	final int dateYr;
 	final double x_resc;
@@ -38,7 +36,6 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	
 	MathildeClimateStandImpl(String name, double x_resc, double y_resc, int dateYr, double meanAnnualTempAbove6C, double pred) {
 		this.name = name;
-		id = new BigInteger(name.getBytes()).intValue();
 		this.x_resc = x_resc;
 		this.y_resc = y_resc;
 		this.dateYr = dateYr;
@@ -47,8 +44,8 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	}
 	
 	@Override
-	public int getSubjectId() {
-		return id;
+	public String getSubjectId() {
+		return name;
 	}
 
 	@Override
@@ -83,15 +80,17 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 
 	@Override
 	public List<MathildeClimateStand> getAllMathildeClimateStands() {
-		Map<Integer, MathildeClimateStand> standMap = new HashMap<Integer, MathildeClimateStand>(); 
-		for (MathildeClimateStand stand : MathildeClimatePredictor.getReferenceStands()) {
-			if (!standMap.containsKey(stand.getSubjectId())) {
-				standMap.put(stand.getSubjectId(), stand);
+		Map<String, MathildeClimateStand> standMap = new TreeMap<String, MathildeClimateStand>(); 
+		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
+			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
+			if (!standMap.containsKey(stand.name)) {
+				standMap.put(stand.name, stand);
 			}
 		}
 		List<MathildeClimateStand> stands = new ArrayList<MathildeClimateStand>();
 		stands.addAll(standMap.values());
 		return stands;
 	}
+
 
 }

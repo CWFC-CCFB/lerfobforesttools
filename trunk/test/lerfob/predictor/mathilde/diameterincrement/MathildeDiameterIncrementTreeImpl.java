@@ -58,8 +58,8 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 	}
 
 	@Override
-	public int getSubjectId() {
-		return this.hashCode();
+	public String getSubjectId() {
+		return ((Integer) hashCode()).toString();
 	}
 
 	@Override

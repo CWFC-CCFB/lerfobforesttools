@@ -21,8 +21,6 @@ package lerfob.carbonbalancetool;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
-import java.util.HashMap;
-import java.util.Map;
 
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 
@@ -73,19 +71,7 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 
 		XYSeriesCollection dataset = new XYSeriesCollection ();
 
-		Map<CompartmentInfo, XYSeries> indexMap = new HashMap<CompartmentInfo, XYSeries> ();
-
-		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			Matrix randomVariables = summary.getEvolutionMap().get(compartmentID).getMean();
-			XYSeries s = new XYSeries(compartmentID.toString());
-			for (int i = 0; i < summary.getTimeScale().length; i++) {
-				s.add ((double) summary.getTimeScale()[i], randomVariables.m_afData[i][0]);
-			}
-
-			dataset.addSeries(s);
-			indexMap.put (compartmentID, s);
-		}
-
+//		Map<CompartmentInfo, XYSeries> indexMap = new HashMap<CompartmentInfo, XYSeries> ();
 		JFreeChart chart = ChartFactory.createXYLineChart (getTitle(), 
 				getXAxisLabel(), 
 				getYAxisLabel(),
@@ -95,6 +81,18 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 				true, // tooltips?
 				false // URLs?
 				);
+
+		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
+			Matrix randomVariables = summary.getEvolutionMap().get(compartmentID).getMean();
+			XYSeries s = new XYSeries(compartmentID.toString());
+			for (int i = 0; i < summary.getTimeScale().length; i++) {
+				s.add((double) summary.getTimeScale()[i], randomVariables.m_afData[i][0]);
+			}
+
+			dataset.addSeries(s);
+//			indexMap.put (compartmentID, s);
+		}
+
 
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);

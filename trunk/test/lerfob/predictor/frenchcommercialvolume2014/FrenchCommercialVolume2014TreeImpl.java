@@ -31,7 +31,7 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	public double getHeightM() {return heightM;}
 
 	@Override
-	public int getSubjectId() {return id;}
+	public String getSubjectId() {return ((Integer) id).toString();}
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}

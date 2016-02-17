@@ -52,8 +52,8 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 	}
 
 	@Override
-	public int getSubjectId() {
-		return 0;
+	public String getSubjectId() {
+		return "0";
 	}
 
 	@Override
