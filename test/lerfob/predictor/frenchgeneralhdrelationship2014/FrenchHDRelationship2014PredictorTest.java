@@ -52,7 +52,8 @@ public class FrenchHDRelationship2014PredictorTest {
 					int index = tree.getFrenchHDTreeSpecies().ordinal() + 1;
 					predictor.predictHeightM(stand, tree);
 					double actualBlup = predictor.getBlups(stand, tree).m_afData[0][0];
-					double expectedBlup = Blups.get(index, stand.getSubjectId()).m_afData[0][0];
+					int convertedIndex = Integer.parseInt(stand.getSubjectId());
+					double expectedBlup = Blups.get(index, convertedIndex).m_afData[0][0];
 					Assert.assertEquals("Comparing blups for species = " + tree.getFrenchHDTreeSpecies().name() + " in plot " + stand.getSubjectId(), 
 							expectedBlup, 
 							actualBlup,

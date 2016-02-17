@@ -29,7 +29,7 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 		
 	
 	@Override
-	public int getSubjectId() {return idp;}
+	public String getSubjectId() {return ((Integer) idp).toString();}
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}

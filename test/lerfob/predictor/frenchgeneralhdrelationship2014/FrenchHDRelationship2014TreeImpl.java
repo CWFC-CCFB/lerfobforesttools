@@ -24,7 +24,7 @@ class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 	}
 	
 	@Override
-	public int getSubjectId() {return stand.getMonteCarloRealizationId();}
+	public String getSubjectId() {return ((Integer) stand.getMonteCarloRealizationId()).toString();}
 
 	@Override
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
