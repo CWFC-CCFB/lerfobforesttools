@@ -2,7 +2,6 @@ package lerfob.predictor.frenchgeneralhdrelationship2014;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ import repicea.util.ObjectUtility;
 public class FrenchHDRelationship2014PredictorTest {
 
 	static List<String> speciesList = new ArrayList<String>();
-	static Collection<FrenchHDRelationship2014StandImpl> Stands = readTrees();
+	static List<FrenchHDRelationship2014StandImpl> Stands = readTrees();
 	static ParameterMap Blups = readBlups();
 	
 
@@ -45,7 +44,15 @@ public class FrenchHDRelationship2014PredictorTest {
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbBlups = 0;
-		for (FrenchHDRelationship2014Stand stand : Stands) {
+
+		FrenchHDRelationship2014StandImpl s = Stands.get(0);
+		List<FrenchHDRelationship2014StandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		for (int i = 0; i < 400; i++) {
+			retainedPlots.add(s.standList.get(i));
+		}
+		s.standList.retainAll(retainedPlots);
+		
+		for (FrenchHDRelationship2014Stand stand : s.standList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
 				if (tree.getFrenchHDTreeSpecies().ordinal() <= 3) {
@@ -65,8 +72,9 @@ public class FrenchHDRelationship2014PredictorTest {
 		System.out.println("Successfully compared " + nbBlups + " blups.");
 	}
 
-	private static Collection<FrenchHDRelationship2014StandImpl> readTrees() {
+	private static List<FrenchHDRelationship2014StandImpl> readTrees() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2014PredictorTest.class) + "testData.csv";
+		List<FrenchHDRelationship2014StandImpl> standList = new ArrayList<FrenchHDRelationship2014StandImpl>();
 		try {
 			CSVReader reader = new CSVReader(filename);
 			Object[] record;
@@ -92,7 +100,7 @@ public class FrenchHDRelationship2014PredictorTest {
 				htot = Double.parseDouble(record[7].toString());
 				harvestInLastFiveYears = Double.parseDouble(record[8].toString()); 
 				if (!standMap.containsKey(idp)) {
-					FrenchHDRelationship2014StandImpl stand = new FrenchHDRelationship2014StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears);
+					FrenchHDRelationship2014StandImpl stand = new FrenchHDRelationship2014StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears, standList);
 					standMap.put(idp, stand);
 				}
 				new FrenchHDRelationship2014TreeImpl(htot, d130, gOther, species, pred, standMap.get(idp));
@@ -101,7 +109,6 @@ public class FrenchHDRelationship2014PredictorTest {
 				}
 			}
 			Collections.sort(speciesList);
-			List<FrenchHDRelationship2014StandImpl> standList = new ArrayList<FrenchHDRelationship2014StandImpl>();
 			standList.addAll(standMap.values());
 			Collections.sort(standList);
 			return standList;

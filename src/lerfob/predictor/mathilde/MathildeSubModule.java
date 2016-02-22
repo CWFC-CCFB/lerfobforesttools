@@ -23,8 +23,8 @@ public abstract class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public void setDefaultBeta(GaussianEstimate betaEstimate) {
-		super.setDefaultBeta(betaEstimate);
+	public void setParameterEstimates(GaussianEstimate betaEstimate) {
+		super.setParameterEstimates(betaEstimate);
 	}
 	
 	/*
@@ -32,7 +32,7 @@ public abstract class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
+	public void setDefaultRandomEffects(HierarchicalLevel level, Estimate<? extends StandardGaussianDistribution> estimate) {
 		super.setDefaultRandomEffects(level, estimate);
 	}
 	
@@ -57,7 +57,7 @@ public abstract class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public GaussianEstimate getDefaultRandomEffects(HierarchicalLevel level) {
+	public Estimate<? extends StandardGaussianDistribution> getDefaultRandomEffects(HierarchicalLevel level) {
 		return super.getDefaultRandomEffects(level);
 	}
 
@@ -85,14 +85,14 @@ public abstract class MathildeSubModule extends ModelBasedSimulator {
 		return super.getResidualError();
 	}
 
-	/*
-	 * For extended visibility (non-Javadoc)
-	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
-	 */
-	@Override
-	public void setBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<? extends StandardGaussianDistribution> blups) {
-		super.setBlupsForThisSubject(subject, blups);
-	}
+//	/*
+//	 * For extended visibility (non-Javadoc)
+//	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
+//	 */
+//	@Override
+//	public void setBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<? extends StandardGaussianDistribution> blups) {
+//		super.setBlupsForThisSubject(subject, blups);
+//	}
 	
 
 	/*
@@ -100,7 +100,7 @@ public abstract class MathildeSubModule extends ModelBasedSimulator {
 	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	public GaussianEstimate getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 

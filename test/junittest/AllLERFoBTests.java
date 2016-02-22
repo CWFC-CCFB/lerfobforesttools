@@ -16,7 +16,7 @@ import org.junit.runners.Suite.SuiteClasses;
 				junittest.windstormdamagemodels.aws.AWSTest.class,
 				junittest.windstormdamagemodels.bwd.BWDTest.class,				
 				lerfob.nutrientmodel.NutrientConcentrationPredictionModelTest.class,
-				lerfob.predictor.mathilde.diameterincrement.MathildeDiameterIncrementTest.class,
+//				lerfob.predictor.mathilde.diameterincrement.MathildeDiameterIncrementTest.class,
 				lerfob.predictor.mathilde.mortality.MathildeMortalityTest.class,
 				lerfob.predictor.mathilde.climate.MathildeClimatePredictorTest.class,
 				lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014PredictorTest.class,

@@ -94,7 +94,7 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 				Matrix mean = betaMap.get(index);
 				Matrix variance = omegaMap.get(index).squareSym();
 				GaussianEstimate defaultBeta = new SASParameterEstimate(mean, variance);
-				internalPredictor.setDefaultBeta(defaultBeta);
+				internalPredictor.setParameterEstimates(defaultBeta);
 				
 				Matrix covparms = covparmMap.get(index);
 				
@@ -136,7 +136,7 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 	 */
 	protected Matrix getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
-		return internalPred.getBlups(stand);
+		return internalPred.getBlups(stand).getMean();
 	}
 	
 	@Override

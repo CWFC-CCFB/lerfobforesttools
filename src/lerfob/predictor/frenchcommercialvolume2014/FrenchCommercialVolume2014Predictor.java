@@ -30,7 +30,7 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 	public FrenchCommercialVolume2014Predictor(boolean isParametersVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, false, isResidualVariabilityEnabled);	 // no random effect
 		init();
-		oXVector = new Matrix(1, getDefaultBeta().getMean().m_iRows);
+		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 			Matrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
 			Matrix covparms = ParameterLoader.loadVectorFromFile(covparmsFilename).get().matrixDiagonal();
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms));
-			setDefaultBeta(new SASParameterEstimate(beta, omega));
+			setParameterEstimates(new SASParameterEstimate(beta, omega));
 		} catch (Exception e) {
 			System.out.println("Unable to load parameters of the FrenchCommercialVolume2014Predictor class");
 		}

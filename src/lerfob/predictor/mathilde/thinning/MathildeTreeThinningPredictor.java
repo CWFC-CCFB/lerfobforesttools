@@ -103,7 +103,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
-				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
 				
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				

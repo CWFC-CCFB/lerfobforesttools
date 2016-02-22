@@ -62,7 +62,7 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			Matrix covparms = covparmsMap.get();
 
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms.getSubMatrix(2, 2, 0, 0)));
-			setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
+			setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
 			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
 	
 			rho = covparms.m_afData[1][0];
@@ -135,8 +135,9 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	 * @return
 	 */
 	public double getMeanTemperatureForGrowthInterval(MathildeClimateStand stand) {
-		if (!blupEstimationDone.contains(stand.getSubjectId())) {
+		if (!areBlupsEstimated) {
 			predictBlups(stand);
+			areBlupsEstimated = true;
 		}
 		Matrix currentBeta = getParametersForThisRealization(stand);
 		double pred = getFixedEffectPrediction(stand, currentBeta);
@@ -153,11 +154,11 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	 * @return
 	 */
 	protected final double getFixedEffectPrediction(MathildeClimateStand stand) {
-		return getFixedEffectPrediction(stand, getDefaultBeta().getMean());
+		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
 	}
 	
 	private synchronized void predictBlups(MathildeClimateStand stand) {
-		if (!blupEstimationDone.contains(stand.getSubjectId())) {
+		if (!areBlupsEstimated) {
 			List<MathildeClimateStand> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
 			stands.addAll(stand.getAllMathildeClimateStands());
@@ -171,8 +172,8 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 				}
 			}
 
-			Matrix defaultBeta = getDefaultBeta().getMean();
-			Matrix omega = getDefaultBeta().getVariance();
+			Matrix defaultBeta = getParameterEstimates().getMean();
+			Matrix omega = getParameterEstimates().getVariance();
 			Matrix residuals = new Matrix(knownStandIndex,1);
 			Matrix matX = new Matrix(stands.size(),2);
 			
@@ -229,9 +230,9 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			Matrix covV = matV.getSubMatrix(knownStandIndex, matV.m_iRows - 1, 0, knownStandIndex-1);
 			Matrix blups = covV.multiply(invVk).multiply(residuals);
 			
-			Matrix varBlupsFirstTerm = matZk.transpose().multiply(matRk.getInverseMatrix()).multiply(matZk).add(matG.getInverseMatrix()).getInverseMatrix();
-			Matrix varBlupsSecondTerm = matG.multiply(matZk.transpose()).multiply(invVk).multiply(matXk).multiply(omega).multiply(matXk.transpose()).multiply(invVk).multiply(matZk).multiply(matG);
-			Matrix varBlups = varBlupsFirstTerm.add(varBlupsSecondTerm);
+//			Matrix varBlupsFirstTerm = matZk.transpose().multiply(matRk.getInverseMatrix()).multiply(matZk).add(matG.getInverseMatrix()).getInverseMatrix();
+//			Matrix varBlupsSecondTerm = matG.multiply(matZk.transpose()).multiply(invVk).multiply(matXk).multiply(omega).multiply(matXk.transpose()).multiply(invVk).multiply(matZk).multiply(matG);
+//			Matrix varBlups = varBlupsFirstTerm.add(varBlupsSecondTerm);
 			
 			Matrix matZu = matZ.getSubMatrix(knownStandIndex, matZ.m_iRows - 1, 0, matZ.m_iCols - 1);
 			Matrix matXu = matX.getSubMatrix(knownStandIndex, matX.m_iRows - 1, 0, matX.m_iCols - 1);

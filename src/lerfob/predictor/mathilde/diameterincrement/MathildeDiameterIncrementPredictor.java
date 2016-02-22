@@ -19,7 +19,9 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014InternalPredictor;
@@ -36,9 +38,11 @@ import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.estimates.TruncatedGaussianEstimate;
 import repicea.util.ObjectUtility;
 
 /**
@@ -94,7 +98,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				MathildeDiameterIncrementSubModule subModule = new MathildeDiameterIncrementSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
 
-				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
 	
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				
@@ -211,6 +215,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		return getSubModule(0);
 	}
 	
+
 	@Override
 	public double predictGrowth(MathildeDiameterIncrementStand stand, MathildeTree tree, Object... parms) {
 		MathildeDiameterIncrementSubModule subModule;
@@ -255,6 +260,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		return backtransformedPred;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void modelBasedSimulatorDidThis(ModelBasedSimulatorEvent event) {
 		if (event.getSource() instanceof FrenchHDRelationship2014InternalPredictor) {
@@ -263,14 +269,22 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 			if (species == FrenchHdSpecies.CHENE_SESSILE || 
 					species == FrenchHdSpecies.CHENE_PEDONCULE || 
 					species == FrenchHdSpecies.HETRE) {
-				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
+				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
-					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[0]; 
-					if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
-						GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate((GaussianEstimate) newValue[1],
-								getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
-								((Estimate<?>) newValue[2]).getMean()); 
-						getSubModule().setBlupsForThisSubject(subject, blupsForThisSubject);
+					Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects = (Map) newValue[0];
+					Matrix blups = (Matrix) newValue[1];
+					List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[2];
+					setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, blups);
+				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.DEFAULT_RANDOM_EFFECT_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
+					Object[] newValue = (Object[]) event.getNewValue();
+					HierarchicalLevel level = (HierarchicalLevel) newValue[0];
+					Estimate<? extends StandardGaussianDistribution> formerEstimate = (Estimate) newValue[1];
+					Estimate<? extends StandardGaussianDistribution> newEstimate = (Estimate) newValue[2];
+					if (newEstimate instanceof TruncatedGaussianEstimate) {
+						GaussianEstimate newDiamRandomEffect = setRandomEffectsAccordingToHeightDeviate(formerEstimate,
+								getSubModule().getDefaultRandomEffects(level),
+								newEstimate.getMean());
+						getSubModule().setDefaultRandomEffects(level, newDiamRandomEffect);
 					}
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.RANDOM_EFFECT_DEVIATE_JUST_GENERATED.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
@@ -288,8 +302,38 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 	}
 	
+	private void setDiameterBlupsFromHeightBlups(List<MonteCarloSimulationCompliantObject> subjectList,
+			Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects,
+			Matrix blups) {
+		List<MonteCarloSimulationCompliantObject> newSubjectList = new ArrayList<MonteCarloSimulationCompliantObject>();
+		Matrix mean = null;
+		Matrix variance = null;
+		for (MonteCarloSimulationCompliantObject subject : subjectList) {
+			if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
+				GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(defaultHeightRandomEffects.get(subject.getHierarchicalLevel().toString()),
+						getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
+						blups); 
+				if (mean == null) {
+					mean = blupsForThisSubject.getMean();
+				} else {
+					mean = mean.matrixStack(blupsForThisSubject.getMean(), true);
+				}
+				if (variance == null) {
+					variance = blupsForThisSubject.getVariance();
+				} else {
+					variance = variance.matrixDiagBlock(blupsForThisSubject.getVariance());
+				}
+				newSubjectList.add(subject);
+			}
+		}
+		int numberFixedEffectParameters = getSubModule().getParameterEstimates().getNumberOfFixedEffectParameters();
+		Matrix covariance = new Matrix(variance.m_iRows, numberFixedEffectParameters);
+		getSubModule().registerBlups(mean, variance, covariance, newSubjectList);
+	}
 	
-	protected final GaussianEstimate setRandomEffectsAccordingToHeightDeviate(GaussianEstimate heightRandomEffect, GaussianEstimate diamIncRandomEffect, Matrix blupMean) {
+	protected final GaussianEstimate setRandomEffectsAccordingToHeightDeviate(Estimate<? extends StandardGaussianDistribution> heightRandomEffect,
+			Estimate<? extends StandardGaussianDistribution> diamIncRandomEffect, 
+			Matrix blupMean) {
 		double varianceRandomEffectHeight = heightRandomEffect.getVariance().m_afData[0][0];
 		double varianceRandomEffectDiameterGrowth = diamIncRandomEffect.getVariance().m_afData[0][0];
 		double covariance = Math.sqrt(varianceRandomEffectHeight * varianceRandomEffectDiameterGrowth) * CorrelationRandomEffectsHeightDiameterGrowth; 
