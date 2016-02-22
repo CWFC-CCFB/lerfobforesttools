@@ -44,7 +44,7 @@ class NutrientSubversionCa extends NutrientConcentrationSubversionModel {
 		betaReference.m_afData[2][0] = -13.553; //b_bark
 		betaReference.m_afData[3][0] = -0.647; //c_bark
 		
-		setDefaultBeta(new GaussianEstimate(betaReference, null));
+		setParameterEstimates(new GaussianEstimate(betaReference, null));
 		
 		// TODO implement the residual errors
 				
@@ -53,7 +53,7 @@ class NutrientSubversionCa extends NutrientConcentrationSubversionModel {
 	@Override
 	protected Matrix getConcentrations(double midDiameterCm, double barkRatio) {
 		Matrix y = new Matrix(3,1);
-		Matrix beta = getDefaultBeta().getMean();
+		Matrix beta = getParameterEstimates().getMean();
 
 //		Wood concentration
 		y.m_afData[0][0] = beta.m_afData[0][0];

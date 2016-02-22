@@ -32,6 +32,8 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.hdrelationships.HDRelationshipModel;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
+import repicea.stats.distributions.StandardGaussianDistribution;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
@@ -49,8 +51,6 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 
 	private List<Integer> effectList;
 	private final FrenchHdSpecies species;
-//	private Map<Integer, Estimate<? extends StandardGaussianDistribution>> plotBlupsLibraryBackup;
-//	private List<Integer> blupEstimationDoneBackup;
 	private FertilityClass currentFertilityClass;
 	
 	protected FrenchHDRelationship2014InternalPredictor(boolean isParametersVariabilityEnabled,	
@@ -60,8 +60,6 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 		this.species = species;
 		currentFertilityClass = FertilityClass.Unknown;	// default value
-//		plotBlupsLibraryBackup = new HashMap<Integer, Estimate<? extends StandardGaussianDistribution>>();
-//		blupEstimationDoneBackup = new ArrayList<Integer>();
 	}
 
 
@@ -69,7 +67,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		if (fertilityClassMap == null) {
 			fertilityClassMap = new HashMap<FertilityClass, TruncatedGaussianEstimate>();
 			
-			GaussianEstimate levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
+			Estimate<? extends StandardGaussianDistribution> levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
 			TruncatedGaussianEstimate truncatedEstimate;
 			Matrix stdMatrix = levelRandomEffects.getVariance().getLowerCholTriangle();
 			
@@ -93,21 +91,21 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	 * For extended visibility
 	 */
 	@Override
-	protected void setDefaultRandomEffects(HierarchicalLevel level, GaussianEstimate estimate) {
+	protected void setDefaultRandomEffects(HierarchicalLevel level, Estimate<? extends StandardGaussianDistribution> estimate) {
 		super.setDefaultRandomEffects(level, estimate);
 	}
 	
 	
 	@Override
-	protected void setDefaultBeta(GaussianEstimate defaultBeta) {
-		super.setDefaultBeta(defaultBeta);
-		oXVector = new Matrix(1, getDefaultBeta().getMean().m_iRows);
+	protected void setParameterEstimates(GaussianEstimate defaultBeta) {
+		super.setParameterEstimates(defaultBeta);
+		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}
 	
 	
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
-		if (!blupEstimationDone.isEmpty()) {
+		if (areBlupsEstimated) {
 			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
 		} else if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
 			currentFertilityClass = fertilityClass;
@@ -119,11 +117,8 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		if (currentFertilityClass == FertilityClass.Unknown) {
 			super.predictHeightRandomEffects(stand);
 		} else {	// we have tweaked the plot random effect to account for the site index class
-			if (getBlups(stand) == null) {
-				TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
-				setBlupsForThisSubject(stand, estimate);
-				blupEstimationDone.add(stand.getSubjectId());
-			}
+			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
+			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
 		}
 	}
 	
@@ -149,8 +144,9 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	 * @return a RegressionElement instance
 	 */
 	@Override
-	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
-		Matrix modelParameters = getParametersForThisRealization(stand);
+	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree, Matrix beta) {
+//		Matrix modelParameters = getParametersForThisRealization(stand);
+		Matrix modelParameters = beta;
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
 		double slope = stand.getSlopePercent();
@@ -214,19 +210,14 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		RegressionElements regElements = new RegressionElements();
 		
 		regElements.fixedPred = fResult;
-		regElements.Z_tree = Z_i;
+		regElements.vectorZ = Z_i;
 
 		return regElements;
 	}
 
 
-	protected Matrix getBlups(FrenchHDRelationship2014Stand stand) {
-		if (getBlupsAtThisLevel(HierarchicalLevel.PLOT) != null) {
-			if (getBlupsAtThisLevel(HierarchicalLevel.PLOT).containsKey(stand.getSubjectId())) {
-				return getBlupsAtThisLevel(HierarchicalLevel.PLOT).get(stand.getSubjectId()).getMean();
-			}
-		} 
-		return null;
+	protected GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand) {
+		return getBlupsForThisSubject(stand);
 	}
 
 

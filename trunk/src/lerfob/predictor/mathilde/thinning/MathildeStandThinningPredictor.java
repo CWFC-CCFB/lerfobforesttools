@@ -93,7 +93,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-				subModule.setDefaultBeta(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
 				// rm+fc-10.6.2015 No random effect for the thinning stand level
 				// model
 				// subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot,
