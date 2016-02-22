@@ -29,6 +29,7 @@ import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.SASParameterEstimates;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -93,7 +94,7 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 				
 				Matrix mean = betaMap.get(index);
 				Matrix variance = omegaMap.get(index).squareSym();
-				GaussianEstimate defaultBeta = new SASParameterEstimate(mean, variance);
+				GaussianEstimate defaultBeta = new SASParameterEstimates(mean, variance);
 				internalPredictor.setParameterEstimates(defaultBeta);
 				
 				Matrix covparms = covparmMap.get(index);

@@ -21,6 +21,7 @@ package lerfob.predictor.frenchcommercialvolume2014;
 import repicea.math.Matrix;
 import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
+import repicea.simulation.SASParameterEstimates;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.util.ObjectUtility;
 
@@ -45,7 +46,7 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 			Matrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
 			Matrix covparms = ParameterLoader.loadVectorFromFile(covparmsFilename).get().matrixDiagonal();
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms));
-			setParameterEstimates(new SASParameterEstimate(beta, omega));
+			setParameterEstimates(new SASParameterEstimates(beta, omega));
 		} catch (Exception e) {
 			System.out.println("Unable to load parameters of the FrenchCommercialVolume2014Predictor class");
 		}

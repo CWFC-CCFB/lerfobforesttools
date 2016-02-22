@@ -2,9 +2,10 @@ package lerfob.predictor.mathilde.diameterincrement;
 
 import java.util.List;
 
-import repicea.math.Matrix;
-import repicea.simulation.MonteCarloSimulationCompliantObject;
 import lerfob.predictor.mathilde.MathildeSubModule;
+import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 
 @SuppressWarnings("serial")
 final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
@@ -21,7 +22,7 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 	}
 
 	@Override
-	protected ParameterEstimates getParameterEstimates() {
+	protected ModelParameterEstimates getParameterEstimates() {
 		return super.getParameterEstimates();
 	}
 }
