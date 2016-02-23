@@ -278,33 +278,13 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
-				createCoarseWoodyDebris(caller.getTrees(StatusClass.cut), false);
-				createCoarseWoodyDebris(caller.getTrees(StatusClass.dead), true);
-				createCoarseWoodyDebris(caller.getTrees(StatusClass.windfall), true);
-				
-				createFineWoodyDebris(caller.getTrees(StatusClass.dead));
-				createFineWoodyDebris(caller.getTrees(StatusClass.windfall));
-				
-//				if (!caller.getHarvestedTrees().isEmpty()) {	// The belowground biomass of the logged trees must be considered as left in the forest as coarse woody debris
-//					for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
-//						if (isCancelled) {
-//							break;
-//						}
-//						int creationDate = stand.getDateYr();
-//						Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
-//						double volume = biomassParameters.getBelowGroundVolumeM3(trees);
-//						double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
-//						double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
-//
-//						AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
-//						amountMap.put(Element.Volume, volume);
-//						amountMap.put(Element.Biomass, biomass);	
-//						amountMap.put(Element.C, carbonContent);	
-//						
-//						getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
-//					}
-//				}
 			}
+			createCoarseWoodyDebris(caller.getTrees(StatusClass.cut), false);
+			createCoarseWoodyDebris(caller.getTrees(StatusClass.dead), true);
+			createCoarseWoodyDebris(caller.getTrees(StatusClass.windfall), true);
+			
+			createFineWoodyDebris(caller.getTrees(StatusClass.dead));
+			createFineWoodyDebris(caller.getTrees(StatusClass.windfall));
 		} else {
 			ProductionLineManager productionLineManager = caller.getCarbonToolSettings().getProductionLines();
 			productionLineManager.resetCarbonUnitMap();							// reinitialize the land fill carbon unit and left in forest carbon unit collections
