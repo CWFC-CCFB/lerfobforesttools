@@ -1,7 +1,6 @@
 package lerfob.app;
 
 import org.junit.Assert;
-import org.junit.Test;
 
 import repicea.app.AbstractAppVersionCompiler;
 import repicea.util.ObjectUtility;
@@ -15,8 +14,7 @@ public class LERFOBJARSVNAppVersionCompiler extends AbstractAppVersionCompiler {
 		super();
 	}
 	
-	@Test
-	public void createRevisionFile() {
+	protected void createRevisionFile() {
 		LERFOBJARSVNAppVersionCompiler compiler = new LERFOBJARSVNAppVersionCompiler();
 		try {
 			compiler.createRevisionFile(APP_URL, Version_Filename);
@@ -24,6 +22,10 @@ public class LERFOBJARSVNAppVersionCompiler extends AbstractAppVersionCompiler {
 		} catch (Exception e) {
 			Assert.fail("Failed to compile revision number");
 		}
+	}
+	
+	public static void main(String[] args) {
+		new LERFOBJARSVNAppVersionCompiler().createRevisionFile();
 	}
 
 }
