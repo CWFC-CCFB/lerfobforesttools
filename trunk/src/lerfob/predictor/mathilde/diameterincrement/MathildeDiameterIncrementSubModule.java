@@ -25,5 +25,12 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 	protected ModelParameterEstimates getParameterEstimates() {
 		return super.getParameterEstimates();
 	}
+	
+	protected boolean areBlupsEstimated() {
+		return areBlupsEstimated;
+	}
+	
+	protected void setBlupsEstimated(boolean bool) {areBlupsEstimated = bool;}
+	
 }
 

@@ -271,10 +271,13 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 					species == FrenchHdSpecies.CHENE_PEDONCULE || 
 					species == FrenchHdSpecies.HETRE) {
 				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_JUST_SET.getPropertyName())) {
-					Object[] newValue = (Object[]) event.getNewValue();
-					Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects = (Map) newValue[0];
-					List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[1]; // TODO CHange THIS!!!!!!!!!!!!!!!!!
-					setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, hdPredictor);
+					if (!getSubModule().areBlupsEstimated()) {
+						Object[] newValue = (Object[]) event.getNewValue();
+						Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects = (Map) newValue[0];
+						List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[1]; 
+						setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, hdPredictor);
+						getSubModule().setBlupsEstimated(true);
+					}
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.DEFAULT_RANDOM_EFFECT_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
 					HierarchicalLevel level = (HierarchicalLevel) newValue[0];
