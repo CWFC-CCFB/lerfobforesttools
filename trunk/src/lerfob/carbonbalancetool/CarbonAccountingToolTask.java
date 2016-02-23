@@ -187,9 +187,9 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 				}
 			}
 		}
-		// TODO deal with dead trees MF2013-05-07
+
 		TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
-		if (!caller.getHarvestedTrees().isEmpty()) {
+		if (!caller.getTrees(StatusClass.cut).isEmpty()) {
 			if (caller.guiInterface != null) {
 				logger.addTreeLoggerListener(caller.getGuiInterface()); 
 			}
@@ -278,25 +278,32 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
-				if (!caller.getHarvestedTrees().isEmpty()) {	// The belowground biomass of the logged trees must be considered as left in the forest as coarse woody debris
-					for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
-						if (isCancelled) {
-							break;
-						}
-						int creationDate = stand.getDateYr();
-						Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
-						double volume = biomassParameters.getBelowGroundVolumeM3(trees);
-						double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
-						double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
-
-						AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
-						amountMap.put(Element.Volume, volume);
-						amountMap.put(Element.Biomass, biomass);	
-						amountMap.put(Element.C, carbonContent);	
-						
-						getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
-					}
-				}
+				createCoarseWoodyDebris(caller.getTrees(StatusClass.cut), false);
+				createCoarseWoodyDebris(caller.getTrees(StatusClass.dead), true);
+				createCoarseWoodyDebris(caller.getTrees(StatusClass.windfall), true);
+				
+				createFineWoodyDebris(caller.getTrees(StatusClass.dead));
+				createFineWoodyDebris(caller.getTrees(StatusClass.windfall));
+				
+//				if (!caller.getHarvestedTrees().isEmpty()) {	// The belowground biomass of the logged trees must be considered as left in the forest as coarse woody debris
+//					for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
+//						if (isCancelled) {
+//							break;
+//						}
+//						int creationDate = stand.getDateYr();
+//						Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
+//						double volume = biomassParameters.getBelowGroundVolumeM3(trees);
+//						double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
+//						double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
+//
+//						AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
+//						amountMap.put(Element.Volume, volume);
+//						amountMap.put(Element.Biomass, biomass);	
+//						amountMap.put(Element.C, carbonContent);	
+//						
+//						getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
+//					}
+//				}
 			}
 		} else {
 			ProductionLineManager productionLineManager = caller.getCarbonToolSettings().getProductionLines();
@@ -376,13 +383,13 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 
 			// The belowground biomass of the logged trees must be considered as left in the forest
-			if (!caller.getHarvestedTrees().isEmpty()) {
-				for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
+			if (!caller.getTrees(StatusClass.cut).isEmpty()) {
+				for (CarbonToolCompatibleStand stand : caller.getTrees(StatusClass.cut).keySet()) {
 					if (isCancelled) {
 						break;
 					}
 					int creationDate = stand.getDateYr();
-					Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
+					Collection<CarbonToolCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
 					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
@@ -398,6 +405,56 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		}
 	}
 
+	private void createCoarseWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap, boolean includeCommercialPart) {
+		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
+		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
+			if (isCancelled) {
+				break;
+			}
+			int creationDate = stand.getDateYr();
+			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
+			double volume = biomassParameters.getBelowGroundVolumeM3(trees);
+			double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
+			double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
+			
+			if (includeCommercialPart) {
+				volume += biomassParameters.getCommercialVolumeM3(trees);
+				biomass += biomassParameters.getCommercialBiomassMg(trees);
+				carbonContent += biomassParameters.getCommercialCarbonMg(trees);
+			}
+			
+			AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
+			amountMap.put(Element.Volume, volume);
+			amountMap.put(Element.Biomass, biomass);	
+			amountMap.put(Element.C, carbonContent);	
+
+			getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
+		}
+	}
+	
+	
+	private void createFineWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap) {
+		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
+		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
+			if (isCancelled) {
+				break;
+			}
+			int creationDate = stand.getDateYr();
+			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
+			double volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
+			double biomass = biomassParameters.getAboveGroundBiomassMg(trees) - biomassParameters.getCommercialBiomassMg(trees);
+			double carbonContent = biomassParameters.getAboveGroundCarbonMg(trees) - biomassParameters.getCommercialCarbonMg(trees);
+
+			AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
+			amountMap.put(Element.Volume, volume);
+			amountMap.put(Element.Biomass, biomass);	
+			amountMap.put(Element.C, carbonContent);	
+
+			getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
+		}
+	}
+
+	
 	/**
 	 * Task no 3 : actualize the carbon units through time
 	 * @throws Exception
@@ -438,7 +495,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 	private Collection<CarbonToolCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
 		Collection<CarbonToolCompatibleTree> loggableTreesCollection = new ArrayList<CarbonToolCompatibleTree>();
-		for (Collection<CarbonToolCompatibleTree> oColl : caller.getHarvestedTrees().values()) {
+		for (Collection<CarbonToolCompatibleTree> oColl : caller.getTrees(StatusClass.cut).values()) {
 			loggableTreesCollection.addAll(oColl);
 		}
 		return loggableTreesCollection;

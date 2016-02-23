@@ -191,28 +191,6 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 		}
 	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (!(obj instanceof BiomassParameters)) {
-//			return false;
-//		} else {
-//			BiomassParameters bp = (BiomassParameters) obj;
-//			if (getContent().size() != bp.getContent().size()) {
-//				return false;
-//			} else {
-//				for (int i = 0; i < getContent().size(); i++) {
-//					BiomassCompartmentParameters thisCompartment = getContent().get(i);
-//					BiomassCompartmentParameters thatCompartment = bp.getContent().get(i);
-//					if (!thisCompartment.equals(thatCompartment)) {
-//						return false;
-//					}
-//				}
-//				return true;
-//			}
-//		}
-//	}
-
-	
 	@Override
 	public Component getGuiInterface(Container parent) {
 		if (guiInterface == null) {
@@ -404,6 +382,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 		return getAboveGroundVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree);
 	}
 
+	
 	/**
 	 * This method returns the aboveground volume of a particular tree in M3.
 	 * @param tree a CarbonCompatibleTree
@@ -413,11 +392,40 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 		if (branchExpansionFactorFromModel) {
 			return ((AboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber();
 		} else {
-			return tree.getCommercialVolumeM3() * tree.getNumber() * branchExpansionFactors.get(tree.getSpeciesType());
+			return getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getSpeciesType());
 		}
 	}
 
+	/**
+	 * This method returns the commercial volume of the tree weighted by the expansion factor.
+	 * @param tree a CarbonCompatibleTree
+	 * @return a double
+	 */
+	public double getCommercialVolumeM3(CarbonToolCompatibleTree tree) {
+		return tree.getCommercialVolumeM3() * tree.getNumber();
+	}
 	
+
+	/**
+	 * This method returns the commercial biomass of the tree weighted by the expansion factor.
+	 * @param tree a CarbonCompatibleTree
+	 * @return a double
+	 */
+	public double getCommercialBiomassMg(CarbonToolCompatibleTree tree) {
+		return getCommercialVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree);
+	}
+
+	/**
+	 * This method returns the commercial biomass of the tree weighted by the expansion factor.
+	 * @param tree a CarbonCompatibleTree
+	 * @return a double
+	 */
+	public double getCommercialCarbonMg(CarbonToolCompatibleTree tree) {
+		return getCommercialVolumeM3(tree) * getCarbonContentFromThisTree(tree);
+	}
+	
+
+
 	/**
 	 * This method returns the aboveground volume for a collection of trees.
 	 * @param trees a Collection of CarbonToolCompatibleTree instances
@@ -493,6 +501,39 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 		return totalBelowGroundVolumeM3;
 	}
 
+	
+	public double getCommercialVolumeM3(Collection<CarbonToolCompatibleTree> trees) {
+		double commercialVolumeM3 = 0d;
+		if (trees != null) {
+			for (CarbonToolCompatibleTree tree : trees) {
+				commercialVolumeM3 += getCommercialVolumeM3(tree);
+			}
+		}
+		return commercialVolumeM3;
+	}
+	
+
+	public double getCommercialBiomassMg(Collection<CarbonToolCompatibleTree> trees) {
+		double commercialBiomassMg = 0d;
+		if (trees != null) {
+			for (CarbonToolCompatibleTree tree : trees) {
+				commercialBiomassMg += getCommercialBiomassMg(tree);
+			}
+		}
+		return commercialBiomassMg;
+	}
+
+	public double getCommercialCarbonMg(Collection<CarbonToolCompatibleTree> trees) {
+		double commercialCarbonMg = 0d;
+		if (trees != null) {
+			for (CarbonToolCompatibleTree tree : trees) {
+				commercialCarbonMg += getCommercialCarbonMg(tree);
+			}
+		}
+		return commercialCarbonMg;
+	}
+
+	
 	public static void main(String[] args) {
 		BiomassParameters bp = new BiomassParameters();
 		bp.showInterface(null);
