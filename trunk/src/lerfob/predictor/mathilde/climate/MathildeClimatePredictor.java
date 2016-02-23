@@ -27,6 +27,7 @@ import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelBasedSimulator;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -157,11 +158,13 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private synchronized void predictBlups(MathildeClimateStand stand) {
 		if (!areBlupsEstimated) {
 			List<MathildeClimateStand> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
-			stands.addAll(stand.getAllMathildeClimateStands());
+			List<MathildeClimateStand> standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimateStands();
+			stands.addAll(standsForWhichBlupsWillBePredicted);
 			
 			List<String> listStandID = new ArrayList<String>();
 			Map<String, MathildeClimateStand> uniqueStandMap = new HashMap<String, MathildeClimateStand>();
@@ -224,34 +227,31 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			Matrix matV = matZ.multiply(matG).multiply(matZ.transpose()).add(matR); 
 
 			Matrix invVk = matV.getSubMatrix(0, knownStandIndex - 1, 0, knownStandIndex-1).getInverseMatrix();
-			Matrix matZk = matZ.getSubMatrix(0, knownStandIndex - 1, 0, matZ.m_iCols - 1);
-			Matrix matRk = matR.getSubMatrix(0, knownStandIndex - 1, 0, knownStandIndex - 1);
 			Matrix matXk = matX.getSubMatrix(0, knownStandIndex - 1, 0, matX.m_iCols - 1);
 			Matrix covV = matV.getSubMatrix(knownStandIndex, matV.m_iRows - 1, 0, knownStandIndex-1);
 			Matrix blups = covV.multiply(invVk).multiply(residuals);
 			
-//			Matrix varBlupsFirstTerm = matZk.transpose().multiply(matRk.getInverseMatrix()).multiply(matZk).add(matG.getInverseMatrix()).getInverseMatrix();
-//			Matrix varBlupsSecondTerm = matG.multiply(matZk.transpose()).multiply(invVk).multiply(matXk).multiply(omega).multiply(matXk.transpose()).multiply(invVk).multiply(matZk).multiply(matG);
-//			Matrix varBlups = varBlupsFirstTerm.add(varBlupsSecondTerm);
-			
-			Matrix matZu = matZ.getSubMatrix(knownStandIndex, matZ.m_iRows - 1, 0, matZ.m_iCols - 1);
-			Matrix matXu = matX.getSubMatrix(knownStandIndex, matX.m_iRows - 1, 0, matX.m_iCols - 1);
 			Matrix matVu = matV.getSubMatrix(knownStandIndex, matV.m_iRows - 1, knownStandIndex, matV.m_iCols - 1);
-			Matrix invVu = matVu.getInverseMatrix();
 			Matrix matRu = matR.getSubMatrix(knownStandIndex, matR.m_iRows - 1, knownStandIndex, matR.m_iCols - 1);
 			
-			Matrix varBlupsFirstTerm2 = matVu.subtract(covV.multiply(invVk).multiply(covV.transpose())).subtract(matRu);
-			Matrix tmpMatX = covV.multiply(invVk).multiply(matXk);
-			Matrix varBlupsSecondTerm2 = tmpMatX.multiply(omega).multiply(tmpMatX.transpose());
-			Matrix varBlups2 = varBlupsFirstTerm2.add(varBlupsSecondTerm2);
+			Matrix varBlupsFirstTerm = matVu.subtract(covV.multiply(invVk).multiply(covV.transpose())).subtract(matRu);
+			Matrix covariance = covV.multiply(invVk).multiply(matXk).multiply(omega).scalarMultiply(-1d);
+			Matrix varBlupsSecondTerm = covariance.multiply(matXk.transpose()).multiply(invVk).multiply(covV.transpose());
+			Matrix varBlups = varBlupsFirstTerm.subtract(varBlupsSecondTerm);
 			
-			
-			Matrix stderr = varBlups2.diagonalVector().elementwisePower(.5);
-			int u = 0;
-			// TODO check if the variance of the blups are properly implemented
+			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
 		}
 	}
 
+	/*
+	 * For extended visibility (non-Javadoc)
+	 * @see repicea.simulation.ModelBasedSimulator#getBlupsForThisSubject(repicea.simulation.MonteCarloSimulationCompliantObject)
+	 */
+	@Override
+	protected GaussianEstimate getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+		return super.getBlupsForThisSubject(subject);
+	}
+	
 	public static void main(String[] args) {
 		new MathildeClimatePredictor(false, false, false);
 	}
