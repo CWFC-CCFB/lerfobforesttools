@@ -216,7 +216,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	}
 
 
-	protected GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand) {
+	public GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand) {
 		return getBlupsForThisSubject(stand);
 	}
 

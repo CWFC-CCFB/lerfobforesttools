@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014InternalPredictor;
+import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Stand;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
@@ -272,9 +273,8 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
 					Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects = (Map) newValue[0];
-					Matrix blups = (Matrix) newValue[1];
-					List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[2];
-					setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, blups);
+					List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[1]; // TODO CHange THIS!!!!!!!!!!!!!!!!!
+					setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, hdPredictor);
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.DEFAULT_RANDOM_EFFECT_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
 					HierarchicalLevel level = (HierarchicalLevel) newValue[0];
@@ -304,26 +304,29 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 	
 	private void setDiameterBlupsFromHeightBlups(List<MonteCarloSimulationCompliantObject> subjectList,
 			Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects,
-			Matrix blups) {
+			FrenchHDRelationship2014InternalPredictor hdPredictor) {
 		List<MonteCarloSimulationCompliantObject> newSubjectList = new ArrayList<MonteCarloSimulationCompliantObject>();
 		Matrix mean = null;
 		Matrix variance = null;
 		for (MonteCarloSimulationCompliantObject subject : subjectList) {
-			if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
-				GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(defaultHeightRandomEffects.get(subject.getHierarchicalLevel().toString()),
-						getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
-						blups); 
-				if (mean == null) {
-					mean = blupsForThisSubject.getMean();
-				} else {
-					mean = mean.matrixStack(blupsForThisSubject.getMean(), true);
+			if (subject instanceof FrenchHDRelationship2014Stand) {
+				if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
+					GaussianEstimate heightBlups = hdPredictor.getBlups((FrenchHDRelationship2014Stand) subject);
+					GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(defaultHeightRandomEffects.get(subject.getHierarchicalLevel().toString()),
+							getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
+							heightBlups.getMean()); 
+					if (mean == null) {
+						mean = blupsForThisSubject.getMean();
+					} else {
+						mean = mean.matrixStack(blupsForThisSubject.getMean(), true);
+					}
+					if (variance == null) {
+						variance = blupsForThisSubject.getVariance();
+					} else {
+						variance = variance.matrixDiagBlock(blupsForThisSubject.getVariance());
+					}
+					newSubjectList.add(subject);
 				}
-				if (variance == null) {
-					variance = blupsForThisSubject.getVariance();
-				} else {
-					variance = variance.matrixDiagBlock(blupsForThisSubject.getVariance());
-				}
-				newSubjectList.add(subject);
 			}
 		}
 		int numberFixedEffectParameters = getSubModule().getParameterEstimates().getNumberOfFixedEffectParameters();
