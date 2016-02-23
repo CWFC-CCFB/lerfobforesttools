@@ -192,9 +192,9 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		treeRegister.put(tree, stand);
 	}
 	
-	protected Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> getHarvestedTrees() {
-		if (treeCollections.containsKey(StatusClass.cut)) {
-			return treeCollections.get(StatusClass.cut);
+	protected Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> getTrees(StatusClass statusClass) {
+		if (treeCollections.containsKey(statusClass)) {
+			return treeCollections.get(statusClass);
 		} else {
 			return new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>();
 		}
