@@ -7,7 +7,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({	junittest.LanguageSettings.class,
-				lerfob.app.LERFOBJARSVNAppVersionCompiler.class,
 				lerfob.biomassmodel.BiomassPredictionModelTest.class,
 				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
 				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,

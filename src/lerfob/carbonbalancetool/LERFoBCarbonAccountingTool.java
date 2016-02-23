@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Window;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -82,8 +83,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	
 	private CarbonCompartmentManager carbonCompartmentManager;	
 	protected boolean finalCutHadToBeCarriedOut;
-	protected Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> loggableTrees;
-	protected Map<CarbonToolCompatibleTree, CarbonToolCompatibleStand> treeRegister;
+	private final Map<StatusClass, Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>> treeCollections;
+	private final Map<CarbonToolCompatibleTree, CarbonToolCompatibleStand> treeRegister;
 	
 	protected Window parentFrame;
 	protected List<CarbonToolCompatibleStand> waitingStandList;
@@ -98,7 +99,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
-		loggableTrees = new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>();
+		treeCollections = new HashMap<StatusClass, Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>>();
 		treeRegister = new HashMap<CarbonToolCompatibleTree, CarbonToolCompatibleStand>();
 		
 		Runnable toBeRun = new Runnable () {
@@ -114,6 +115,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		
 		new Thread(toBeRun, "CarbonAccountingTool").start();
 	}
+	
 	
 	/**
 	 * This method returns the settings of the carbon accounting tool.
@@ -177,10 +179,43 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		addTask(new CarbonAccountingToolTask(Task.SET_STANDLIST, this));
 	}
 	
+	protected void registerTree(StatusClass statusClass, CarbonToolCompatibleStand stand, CarbonToolCompatibleTree tree) {
+		if (!treeCollections.containsKey(statusClass)) {
+			treeCollections.put(statusClass, new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>());
+		}
+		Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> innerMap = treeCollections.get(statusClass);
+		if (!innerMap.containsKey(stand)) {
+			innerMap.put(stand, new ArrayList<CarbonToolCompatibleTree>());
+		}
+		Collection<CarbonToolCompatibleTree> trees = innerMap.get(stand);
+		trees.add(tree);
+		treeRegister.put(tree, stand);
+	}
+	
+	protected Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> getHarvestedTrees() {
+		if (treeCollections.containsKey(StatusClass.cut)) {
+			return treeCollections.get(StatusClass.cut);
+		} else {
+			return new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>();
+		}
+	}
+	
+	protected int getDateForThisTree(CarbonToolCompatibleTree tree) {
+		if (treeRegister.containsKey(tree)) {
+			return treeRegister.get(tree).getDateYr();
+		} else {
+			return -1;
+		}
+	}
+	
+	protected void clearTreeCollections() {
+		treeCollections.clear();
+		treeRegister.clear();
+	}
+	
 	protected void setStandList() {
 		finalCutHadToBeCarriedOut = false;
-		loggableTrees.clear();
-		treeRegister.clear();
+		clearTreeCollections();
 		carbonCompartmentManager.init(waitingStandList);
 		setReferentForBiomassParameters(carbonCompartmentManager.getStandList());
 		setTreeLoggerDescription();

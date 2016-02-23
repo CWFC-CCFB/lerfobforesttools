@@ -174,27 +174,22 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 		// retrieve the loggable trees
 		Collection<CarbonToolCompatibleTree> retrievedTreesFromStep;
-		caller.loggableTrees.clear();
-		caller.treeRegister.clear();
+		caller.clearTreeCollections();
 		for (CarbonToolCompatibleStand stand : manager.getStandList()) {
-			retrievedTreesFromStep = stand.getTrees(StatusClass.cut);
-			Collection<CarbonToolCompatibleTree> windfallTrees = stand.getTrees(StatusClass.windfall); 
-			if (windfallTrees != null) {
-				retrievedTreesFromStep.addAll(windfallTrees);
-			}
-			if (!retrievedTreesFromStep.isEmpty()) {
-				for (CarbonToolCompatibleTree t : retrievedTreesFromStep) {
-					if (!caller.loggableTrees.containsKey(stand)) {
-						caller.loggableTrees.put(stand, new ArrayList<CarbonToolCompatibleTree>());
-					}
-					caller.loggableTrees.get(stand).add(t);
-					caller.treeRegister.put(t, stand);
+			for (StatusClass statusClass : StatusClass.values()) {
+				if (statusClass != StatusClass.alive) {
+					retrievedTreesFromStep = stand.getTrees(statusClass);
+					if (!retrievedTreesFromStep.isEmpty()) {
+						for (CarbonToolCompatibleTree t : retrievedTreesFromStep) {
+							caller.registerTree(statusClass, stand, t);
+						}
+					} 
 				}
-			} 
+			}
 		}
 		// TODO deal with dead trees MF2013-05-07
 		TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
-		if (!caller.loggableTrees.isEmpty()) {
+		if (!caller.getHarvestedTrees().isEmpty()) {
 			if (caller.guiInterface != null) {
 				logger.addTreeLoggerListener(caller.getGuiInterface()); 
 			}
@@ -264,7 +259,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.treeRegister.get(tree).getDateYr(), amountMap);		
+							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateForThisTree(tree), amountMap);		
 							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
 						}
 						
@@ -278,18 +273,18 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
 							
-							getProcessorManager().processFineWoodyDebris(caller.treeRegister.get(tree).getDateYr(), amountMap);
+							getProcessorManager().processFineWoodyDebris(caller.getDateForThisTree(tree), amountMap);
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
-				if (!caller.loggableTrees.isEmpty()) {	// The belowground biomass of the logged trees must be considered as left in the forest as coarse woody debris
-					for (CarbonToolCompatibleStand stand : caller.loggableTrees.keySet()) {
+				if (!caller.getHarvestedTrees().isEmpty()) {	// The belowground biomass of the logged trees must be considered as left in the forest as coarse woody debris
+					for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
 						if (isCancelled) {
 							break;
 						}
 						int creationDate = stand.getDateYr();
-						Collection<CarbonToolCompatibleTree> trees = caller.loggableTrees.get(stand);
+						Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
 						double volume = biomassParameters.getBelowGroundVolumeM3(trees);
 						double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
 						double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
@@ -359,7 +354,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 								}
 
-								productionLineManager.processWoodPiece(productionLineName, caller.treeRegister.get(tree).getDateYr(), amountMap);		
+								productionLineManager.processWoodPiece(productionLineName, caller.getDateForThisTree(tree), amountMap);		
 							}
 						}
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);
@@ -371,7 +366,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							amountMap.put(Element.Volume, volume);
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
-							productionLineManager.leftThisPieceInTheForest(caller.treeRegister.get(tree).getDateYr(), amountMap);		
+							productionLineManager.leftThisPieceInTheForest(caller.getDateForThisTree(tree), amountMap);		
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
@@ -381,13 +376,13 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 
 			// The belowground biomass of the logged trees must be considered as left in the forest
-			if (!caller.loggableTrees.isEmpty()) {
-				for (CarbonToolCompatibleStand stand : caller.loggableTrees.keySet()) {
+			if (!caller.getHarvestedTrees().isEmpty()) {
+				for (CarbonToolCompatibleStand stand : caller.getHarvestedTrees().keySet()) {
 					if (isCancelled) {
 						break;
 					}
 					int creationDate = stand.getDateYr();
-					Collection<CarbonToolCompatibleTree> trees = caller.loggableTrees.get(stand);
+					Collection<CarbonToolCompatibleTree> trees = caller.getHarvestedTrees().get(stand);
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
 					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
@@ -443,7 +438,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 	private Collection<CarbonToolCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
 		Collection<CarbonToolCompatibleTree> loggableTreesCollection = new ArrayList<CarbonToolCompatibleTree>();
-		for (Collection<CarbonToolCompatibleTree> oColl : caller.loggableTrees.values()) {
+		for (Collection<CarbonToolCompatibleTree> oColl : caller.getHarvestedTrees().values()) {
 			loggableTreesCollection.addAll(oColl);
 		}
 		return loggableTreesCollection;
