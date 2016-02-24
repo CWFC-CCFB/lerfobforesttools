@@ -19,6 +19,8 @@
 package lerfob.predictor.mathilde.climate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends ModelBasedSimulator {
 	
+	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimateStand> referenceStands;
 
 	private double rho;
@@ -116,8 +119,10 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 
 	protected final synchronized double getFixedEffectPrediction(MathildeClimateStand stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
-
 		double dateMinus1950 = stand.getDateYr() - 1950;
+		if (dateMinus1950 < 0) {
+			dateMinus1950 = SystemDate.get(Calendar.YEAR) - 1950;
+		}
 		
 		int pointer = 0;
 		oXVector.m_afData[0][pointer] = 1d;
