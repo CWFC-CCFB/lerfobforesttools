@@ -1,7 +1,10 @@
 package lerfob.predictor.mathilde.climate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import lerfob.predictor.mathilde.climate.LambertCoordinatesGenerator.PlotCoordinates;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +17,9 @@ public class MathildeClimatePredictorTest {
 
 	static Map<String, Double> blupMean;
 	static Map<String, Double> blupStdErr;
-
+	static Map<String, Double> meanLongitude;
+	static Map<String, Double> meanLatitude;
+	
 	protected static void readBlups() throws Exception {
 		blupMean = new HashMap<String, Double>();
 		blupStdErr = new HashMap<String, Double>();
@@ -30,6 +35,20 @@ public class MathildeClimatePredictorTest {
 		}
 	}
 	
+	protected static void readMeanPlotCoordinates() throws IOException {
+		meanLongitude = new HashMap<String, Double>();
+		meanLatitude = new HashMap<String, Double>();
+		String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "meanPlotCoordinates.csv";
+		CSVReader reader = new CSVReader(filename);
+		Object[] record;
+		while ((record = reader.nextRecord()) != null) {
+			String department = record[0].toString();
+			double longitude = Double.parseDouble(record[1].toString());
+			double latitude = Double.parseDouble(record[2].toString());
+			meanLongitude.put(department, longitude);
+			meanLatitude.put(department, latitude);
+		}
+	}
 	
 	@Test
 	public void testDeterministicPredictionsWithReferenceStands() {
@@ -78,5 +97,26 @@ public class MathildeClimatePredictorTest {
 			nbStands++;
 		}
 		System.out.println("MathildeClimatePredictorTest, Number of stands successfully tested : " + nbStands);
+	}
+	
+	@Test
+	public void testMeanPlotCoordinates() throws IOException {
+		readMeanPlotCoordinates();
+		int i = 0;
+		for (String department : meanLongitude.keySet()) {
+			double expectedLongitude = meanLongitude.get(department);
+			double expectedLatitude = meanLatitude.get(department);
+			PlotCoordinates coord = LambertCoordinatesGenerator.getInstance().getMeanCoordinatesForThisDepartment(department);
+			Assert.assertEquals("Comparing mean longitude for department : " + department,
+					expectedLongitude, 
+					coord.longitude, 
+					1E-6);
+			Assert.assertEquals("Comparing mean latitude for department : " + department,
+					expectedLatitude, 
+					coord.latitude, 
+					1E-6);
+			i++;
+		}
+		System.out.println("Successful comparison of mean plot coordinates:" + i);
 	}
 }
