@@ -291,12 +291,14 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 					}
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.RANDOM_EFFECT_DEVIATE_JUST_GENERATED.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
-					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[0]; 
+					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[0];
+					Estimate<? extends StandardGaussianDistribution> originalHeightRandomEffect = (Estimate) newValue[1];
+					Matrix deviates = (Matrix) newValue[2];
 					if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT)) {
 						if (!doRandomDeviatesExistForThisSubject(subject)) {
-							GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate((GaussianEstimate) newValue[1],
+							GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(originalHeightRandomEffect,
 									getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
-									(Matrix) newValue[2]); 
+									deviates); 
 							getSubModule().simulateDeviatesForRandomEffectsOfThisSubject(subject, blupsForThisSubject);
 						}
 					}					
