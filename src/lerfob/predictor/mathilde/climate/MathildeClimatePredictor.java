@@ -103,12 +103,12 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 				Object[] record;
 	 			while ((record = reader.nextRecord()) != null) {
 	 				String experimentName = record[0].toString();
-	 				double x_resc = Double.parseDouble(record[1].toString());
-	 				double y_resc = Double.parseDouble(record[2].toString());
+	 				double xCoord = Double.parseDouble(record[1].toString());
+	 				double yCoord = Double.parseDouble(record[2].toString());
 	 				int dateYr = Integer.parseInt(record[3].toString());
 	 				double meanTempGrowthSeason = Double.parseDouble(record[5].toString());
 	 				double predicted = Double.parseDouble(record[6].toString());
-	 				MathildeClimateStandImpl stand = new MathildeClimateStandImpl(experimentName, x_resc, y_resc, dateYr, meanTempGrowthSeason, predicted);
+	 				MathildeClimateStandImpl stand = new MathildeClimateStandImpl(experimentName, xCoord, yCoord, dateYr, meanTempGrowthSeason, predicted);
 	 				referenceStands.add(stand);
 	 			}
 			}
@@ -211,10 +211,10 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 					} else {
 						MathildeClimateStand stand1 = uniqueStandMap.get(listStandID.get(i));
 						MathildeClimateStand stand2 = uniqueStandMap.get(listStandID.get(j));
-						double y_resc1 = stand1.getLatitude() * .00001;
-						double x_resc1 = stand1.getLongitude() * .00001;
-						double y_resc2 = stand2.getLatitude() * .00001;
-						double x_resc2 = stand2.getLongitude() * .00001;
+						double y_resc1 = stand1.getLatitudeDeg();
+						double x_resc1 = stand1.getLongitudeDeg();
+						double y_resc2 = stand2.getLatitudeDeg();
+						double x_resc2 = stand2.getLongitudeDeg();
 						double y_diff = y_resc1 - y_resc2;
 						double x_diff = x_resc1 - x_resc2;
 						double d = Math.sqrt(y_diff * y_diff + x_diff * x_diff);

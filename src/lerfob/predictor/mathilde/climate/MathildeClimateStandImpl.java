@@ -30,14 +30,14 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	final String name;
 	final double meanAnnualTempAbove6C;
 	final int dateYr;
-	final double x_resc;
-	final double y_resc;
+	final double xCoord;
+	final double yCoord;
 	final double pred;
 	
-	MathildeClimateStandImpl(String name, double x_resc, double y_resc, int dateYr, double meanAnnualTempAbove6C, double pred) {
+	MathildeClimateStandImpl(String name, double xCoord, double yCoord, int dateYr, double meanAnnualTempAbove6C, double pred) {
 		this.name = name;
-		this.x_resc = x_resc;
-		this.y_resc = y_resc;
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
 		this.dateYr = dateYr;
 		this.meanAnnualTempAbove6C = meanAnnualTempAbove6C;
 		this.pred = pred;
@@ -64,14 +64,10 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 
 	
 	@Override
-	public double getLatitude() {
-		return x_resc * 100000;
-	}
+	public double getLatitudeDeg() {return yCoord;}
 
 	@Override
-	public double getLongitude() {
-		return y_resc * 100000;
-	}
+	public double getLongitudeDeg() {return xCoord;}
 
 	@Override
 	public double getElevationM() {
