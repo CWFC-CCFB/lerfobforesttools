@@ -57,7 +57,7 @@ public final class LambertCoordinatesGenerator {
 			Object[] record;
 			
 			while ((record = reader.nextRecord()) != null) {
-				String department = record[4].toString();
+				String department = record[6].toString();
 				double latitude = Double.parseDouble(record[2].toString());
 				double longitude = Double.parseDouble(record[1].toString());
 				if (!coordinateMap.containsKey(department)) {
