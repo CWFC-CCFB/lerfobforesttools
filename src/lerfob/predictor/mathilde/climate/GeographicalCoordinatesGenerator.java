@@ -12,11 +12,11 @@ import java.util.Random;
 import repicea.io.javacsv.CSVReader;
 import repicea.util.ObjectUtility;
 
-public final class LambertCoordinatesGenerator {
+public final class GeographicalCoordinatesGenerator {
 
 	private final static Random RandomGenerator = new Random();
 
-	private static LambertCoordinatesGenerator Singleton;
+	private static GeographicalCoordinatesGenerator Singleton;
 
 	public static class PlotCoordinates implements Comparable<PlotCoordinates> {
 		public final double longitude;
@@ -48,7 +48,7 @@ public final class LambertCoordinatesGenerator {
 	private final Map<String, List<PlotCoordinates>> coordinateMap;
 	private final Map<String, PlotCoordinates> departmentMean;
 		
-	private LambertCoordinatesGenerator() {
+	private GeographicalCoordinatesGenerator() {
 		coordinateMap = new HashMap<String, List<PlotCoordinates>>();
 		departmentMean = new HashMap<String, PlotCoordinates>();
 		try {
@@ -123,9 +123,9 @@ public final class LambertCoordinatesGenerator {
 	}
 
 
-	public static LambertCoordinatesGenerator getInstance() {
+	public static GeographicalCoordinatesGenerator getInstance() {
 		if (Singleton == null) {
-			Singleton = new LambertCoordinatesGenerator();
+			Singleton = new GeographicalCoordinatesGenerator();
 		} 
 		return Singleton;
 	}
