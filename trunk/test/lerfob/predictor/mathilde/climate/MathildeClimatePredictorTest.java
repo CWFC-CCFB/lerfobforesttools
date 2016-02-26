@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.mathilde.climate.LambertCoordinatesGenerator.PlotCoordinates;
+import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -106,7 +106,7 @@ public class MathildeClimatePredictorTest {
 		for (String department : meanLongitude.keySet()) {
 			double expectedLongitude = meanLongitude.get(department);
 			double expectedLatitude = meanLatitude.get(department);
-			PlotCoordinates coord = LambertCoordinatesGenerator.getInstance().getMeanCoordinatesForThisDepartment(department);
+			PlotCoordinates coord = GeographicalCoordinatesGenerator.getInstance().getMeanCoordinatesForThisDepartment(department);
 			Assert.assertEquals("Comparing mean longitude for department : " + department,
 					expectedLongitude, 
 					coord.longitude, 
