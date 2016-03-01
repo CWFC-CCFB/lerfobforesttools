@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde.thinning;
+package lerfob.predictor.mathilde.thinningbeta;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;

@@ -11,11 +11,13 @@ class MathildeThinningTreeImpl implements MathildeTree {
 	private final double predicted;
 	private final MathildeThinningStandImpl stand;
 	private final double linearTreePred; 
+	private final int cutPlot;
 	
-	MathildeThinningTreeImpl(String id, double dbhCm, int speciesCode, double linearTreePred, double predicted, MathildeThinningStandImpl stand) {
+	MathildeThinningTreeImpl(String id, double dbhCm, int speciesCode, int cutPlot, double linearTreePred, double predicted, MathildeThinningStandImpl stand) {
 		this.id = id;
 		this.dbhCm = dbhCm;
 		species = MathildeTreeSpecies.getSpecies(speciesCode);
+		this.cutPlot = cutPlot;
 		this.predicted = predicted;
 		this.stand = stand;
 		this.linearTreePred = linearTreePred;
@@ -47,4 +49,5 @@ class MathildeThinningTreeImpl implements MathildeTree {
 	protected MathildeThinningStandImpl getStand() {return stand;}
 	protected double getPrediction() {return predicted;}
 	protected double getLinearTreePred() {return linearTreePred;}
+	protected boolean isCutPlot() {return cutPlot == 1;}
 }

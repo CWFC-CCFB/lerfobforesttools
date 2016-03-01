@@ -18,6 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.mathilde.diameterincrement.MathildeDiameterIncrementTest.class,
 				lerfob.predictor.mathilde.mortality.MathildeMortalityTest.class,
 				lerfob.predictor.mathilde.climate.MathildeClimatePredictorTest.class,
+				lerfob.predictor.mathilde.thinning.MathildeThinningPredictorTest.class,
 				lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014PredictorTest.class,
 				lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014PredictorTest.class})
 public class AllLERFoBTests {}
