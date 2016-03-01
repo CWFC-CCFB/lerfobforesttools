@@ -8,11 +8,17 @@ class MathildeThinningTreeImpl implements MathildeTree {
 	private final double dbhCm;
 	private final String id;
 	private final MathildeTreeSpecies species;
+	private final double predicted;
+	private final MathildeThinningStandImpl stand;
+	private final double linearTreePred; 
 	
-	MathildeThinningTreeImpl(String id, double dbhCm, int speciesCode) {
+	MathildeThinningTreeImpl(String id, double dbhCm, int speciesCode, double linearTreePred, double predicted, MathildeThinningStandImpl stand) {
 		this.id = id;
 		this.dbhCm = dbhCm;
 		species = MathildeTreeSpecies.getSpecies(speciesCode);
+		this.predicted = predicted;
+		this.stand = stand;
+		this.linearTreePred = linearTreePred;
 	}
 	
 	@Override
@@ -37,5 +43,8 @@ class MathildeThinningTreeImpl implements MathildeTree {
 	public double getBasalAreaLargerThanSubjectM2Ha(MathildeTreeSpecies species) {
 		return 0;
 	}
-
+	protected int getExcludedGroup() {return getStand().getExcludedGroup();}
+	protected MathildeThinningStandImpl getStand() {return stand;}
+	protected double getPrediction() {return predicted;}
+	protected double getLinearTreePred() {return linearTreePred;}
 }
