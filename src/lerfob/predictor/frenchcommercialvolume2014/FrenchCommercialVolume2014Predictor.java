@@ -76,6 +76,9 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 			double residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).m_afData[0][0];
 			volume += residualError;
 		}
+		if (volume < 0) {		// protected to avoid negative volumes
+			volume = 0;
+		}
 		return volume;
 	}
 
