@@ -42,8 +42,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
-//	private final LinearStatisticalExpression eta;
-	private int numberOfParameters;
+	protected static final int NumberOfParameters = 3;
 
 
 	/**
@@ -52,12 +51,11 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	 * @param isParametersVariabilityEnabled
 	 * @param isResidualVariabilityEnabled
 	 */
-	public MathildeStandThinningPredictor(boolean isParametersVariabilityEnabled,
-			boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
+	public MathildeStandThinningPredictor(boolean isParametersVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParametersVariabilityEnabled, false, isResidualVariabilityEnabled);
 		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
-		oXVector = new Matrix(1, numberOfParameters);
+		oXVector = new Matrix(1, NumberOfParameters);
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
 		linkFunction.setParameterValue(0, 1d);
 	}
@@ -66,13 +64,13 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		int excludedGroup = 0;
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
-			String betaFilename = path + "0_MathildeStandThinningBeta.csv";
-			String omegaFilename = path + "0_MathildeStandThinningOmega.csv";
+			String betaFilename = path + "0_MathildeThinningBeta.csv";
+			String omegaFilename = path + "0_MathildeThinningOmega.csv";
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1, betaFilename);
 			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);
 
-			numberOfParameters = -1;
+			
 			int numberOfExcludedGroups = 10; // at max
 
 			for (excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {
@@ -84,22 +82,12 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 
 				// // rm+fc-10.6.2015 for the thining model, betaMap contains
 				// only fixed effects
-				Matrix defaultBetaMean = betaMap.get(excludedGroup);
-				// Matrix betaPrelim = betaMap.get(excludedGroup);
-				if (numberOfParameters == -1) {
-					numberOfParameters = defaultBetaMean.m_iRows;
-				}
-				Matrix omega = omegaMap.get(excludedGroup).squareSym();
-
+				Matrix defaultBetaMean = betaMap.get(excludedGroup).getSubMatrix(0, NumberOfParameters - 1, 0, 0);
+				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, NumberOfParameters - 1, 0, NumberOfParameters - 1);
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
-				// rm+fc-10.6.2015 No random effect for the thinning stand level
-				// model
-				// subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot,
-				// new GaussianEstimate(new
-				// Matrix(randomEffectVariance.m_iRows,1),
-				// randomEffectVariance));
+				
 				subModules.put(excludedGroup, subModule);
 			}
 		} catch (Exception e) {
@@ -110,16 +98,19 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	}
 
 	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeThinningStand stand) {
-		// protected double getFixedEffectOnlyPrediction(Matrix beta,
-		// MathildeMortalityStand stand, MathildeTree tree) {
 		oXVector.resetMatrix();
 
+		double timeSinceLastCutYr = stand.getTimeSinceLastCutYr();
+		
 		int pointer = 0;
 
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = stand.getGrowthStepLengthYr(); // timeInterval
+		oXVector.m_afData[0][pointer] = timeSinceLastCutYr;
+		pointer++;
+
+		oXVector.m_afData[0][pointer] = Math.log(timeSinceLastCutYr);
 
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;
@@ -149,7 +140,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	}
 
 	public static void main(String[] args) {
-		new MathildeStandThinningPredictor(false, false, false);
+		new MathildeStandThinningPredictor(false, false);
 	}
 
 }

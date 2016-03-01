@@ -57,6 +57,14 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 	protected GaussHermiteQuadrature ghq;
 
+	private static final List<MathildeTreeSpecies> SpeciesList = new ArrayList<MathildeTreeSpecies>();
+	static {
+		SpeciesList.add(MathildeTreeSpecies.FAGUS);
+		SpeciesList.add(MathildeTreeSpecies.QUERCUS);
+		SpeciesList.add(MathildeTreeSpecies.CARPINUS);
+		SpeciesList.add(MathildeTreeSpecies.OTHERS);
+	}
+	
 	/**
 	 * Constructor.
 	 */
@@ -75,13 +83,11 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		int excludedGroup = 0;
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
-			String betaFilename = path + "0_MathildeTreeThinningBeta.csv";
-			String omegaFilename = path + "0_MathildeTreeThinningOmega.csv";
-			String covparmsFilename = path + "0_MathildeThinningCovParms.csv";
+			String betaFilename = path + "0_MathildeThinningBeta.csv";
+			String omegaFilename = path + "0_MathildeThinningOmega.csv";
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(1, betaFilename);
 			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(1, omegaFilename);
-			ParameterMap covparmsMap = ParameterLoader.loadVectorFromFile(1,covparmsFilename);
 
 			numberOfParameters = -1;
 			int numberOfExcludedGroups = 10; // at max
@@ -95,20 +101,27 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 				// // rm+fc-10.6.2015 for the thining model, betaMap contains
 				Matrix defaultBetaMean = betaMap.get(excludedGroup);
+				Matrix randomEffectVariance = defaultBetaMean.getSubMatrix(defaultBetaMean.m_iRows - 1, defaultBetaMean.m_iRows - 1, 0, 0); // last element
+				defaultBetaMean = defaultBetaMean.getSubMatrix(MathildeStandThinningPredictor.NumberOfParameters, 
+						defaultBetaMean.m_iRows - 2, 
+						0, 
+						0);
 				if (numberOfParameters == -1) {
 					numberOfParameters = defaultBetaMean.m_iRows;
 				}
 				
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
-
+				omega = omega.getSubMatrix(MathildeStandThinningPredictor.NumberOfParameters, 
+						defaultBetaMean.m_iRows - 2, 
+						MathildeStandThinningPredictor.NumberOfParameters, 
+						defaultBetaMean.m_iRows - 2);
+				
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
 				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
 				
-				Matrix covParms = covparmsMap.get(excludedGroup);
-				
 				Matrix meanIntervalRandomEffect = new Matrix(1,1);
-				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, covParms));
+				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, randomEffectVariance));
 			
 				subModules.put(excludedGroup, subModule);
 			}
@@ -126,32 +139,25 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		double scaledDbhDg = tree.getDbhCm() / stand.getMeanQuadraticDiameterCm() - 0.9;
 		double dbhDgBelow09 = 0;
 		if (scaledDbhDg < 0) {
-			dbhDgBelow09 = 1;
+			dbhDgBelow09 = 1d;
 		}
-		double dbh_m = tree.getDbhCm() / 100d;
-		
+//		double dbh_m = tree.getDbhCm() / 100d;
+		int pointerSpeciesOffset = SpeciesList.indexOf(species);
 		int pointer = 0;
 
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.m_afData[0][pointer + pointerSpeciesOffset] = scaledDbhDg;
+		pointer += SpeciesList.size();
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.m_afData[0][pointer + pointerSpeciesOffset] = scaledDbhDg * dbhDgBelow09;
+		pointer += SpeciesList.size();
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(scaledDbhDg * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
-		
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.m_afData[0][pointer] = scaledDbhDg * scaledDbhDg;
+		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbh_m), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
-
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbh_m * dbh_m), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.m_afData[0][pointer] = scaledDbhDg * scaledDbhDg * dbhDgBelow09;
 		
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;
@@ -188,7 +194,6 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 			if (isRandomEffectsVariabilityEnabled) {
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 				Matrix randomEffects = subModule.getRandomEffects(interval);
-//				Matrix randomEffects = getRandomEffectsForThisSubject(interval);	bug
 				linkFunction.setParameterValue(1, randomEffects.m_afData[0][0]);
 				prob = linkFunction.getValue();
 			} else {	// i.e. deterministic mode
