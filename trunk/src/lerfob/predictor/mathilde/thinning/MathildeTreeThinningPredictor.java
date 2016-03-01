@@ -112,9 +112,9 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				
 				Matrix omega = omegaMap.get(excludedGroup).squareSym();
 				omega = omega.getSubMatrix(MathildeStandThinningPredictor.NumberOfParameters, 
-						defaultBetaMean.m_iRows - 2, 
+						omega.m_iRows - 2, 
 						MathildeStandThinningPredictor.NumberOfParameters, 
-						defaultBetaMean.m_iRows - 2);
+						omega.m_iRows - 2);
 				
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
@@ -173,15 +173,15 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		Object thinningStandEvent = parms[0];
 			
 		if (parms.length > 1 && parms[1] instanceof Integer) {
-			subModule = subModules.get(parms[1]);
+			subModule = getSubModule((Integer) parms[1]);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + parms[1]);
 			}
 		} else {
-			subModule = subModules.get(0);
+			subModule = getSubModule(0);
 		}
 
-		Matrix beta = subModule.getParameters(stand);
+		Matrix beta = subModule.getParameters(tree);
 
 		double pred = getFixedEffectOnlyPrediction(beta, stand, tree);
 
@@ -211,6 +211,11 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		}
 	}
 
+	protected final MathildeThinningSubModule getSubModule(int subModuleId) {
+		return subModules.get(subModuleId);
+	}
+	
+	
 	public static void main(String[] args) {
 		new MathildeTreeThinningPredictor(false, false, false);
 	}
