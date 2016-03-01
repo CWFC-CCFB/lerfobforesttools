@@ -73,7 +73,7 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 		double volume = fixedEffectPrediction(tree);
 
 		if (isResidualVariabilityEnabled) {
-			double residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm * dbhCm).m_afData[0][0];
+			double residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).m_afData[0][0];
 			volume += residualError;
 		}
 		return volume;
@@ -84,7 +84,6 @@ public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulat
 		Matrix beta = getParametersForThisRealization(tree);
 		
 		double hdratio = tree.getHeightM() / tree.getDbhCm();
-//		double cylinder = Math.PI * tree.getSquaredDbhCm() * tree.getHeightM() * .025;
 		double cylinder = 3.14159 * tree.getSquaredDbhCm() * tree.getHeightM() * .025;		// the value of 3.14159 has been used in SAS and not the PI
 		
 		int pointer = 0;
