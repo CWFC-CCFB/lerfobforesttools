@@ -141,9 +141,8 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	 * @return
 	 */
 	public double getMeanTemperatureForGrowthInterval(MathildeClimateStand stand) {
-		if (!areBlupsEstimated) {
+		if (!areBlupsEstimated()) {
 			predictBlups(stand);
-			areBlupsEstimated = true;
 		}
 		Matrix currentBeta = getParametersForThisRealization(stand);
 		double pred = getFixedEffectPrediction(stand, currentBeta);
@@ -165,7 +164,7 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private synchronized void predictBlups(MathildeClimateStand stand) {
-		if (!areBlupsEstimated) {
+		if (!areBlupsEstimated()) {
 			List<MathildeClimateStand> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
 			List<MathildeClimateStand> standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimateStands();
@@ -246,6 +245,7 @@ public class MathildeClimatePredictor extends ModelBasedSimulator {
 			
 			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
 		}
+		setBlupsEstimated(true);
 	}
 
 	/*

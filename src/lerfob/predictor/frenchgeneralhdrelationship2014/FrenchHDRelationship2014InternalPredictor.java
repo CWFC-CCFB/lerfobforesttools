@@ -105,7 +105,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
-		if (areBlupsEstimated) {
+		if (areBlupsEstimated()) {
 			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
 		} else if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
 			currentFertilityClass = fertilityClass;

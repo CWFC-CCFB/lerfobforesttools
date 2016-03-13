@@ -27,10 +27,10 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 	}
 	
 	protected boolean areBlupsEstimated() {
-		return areBlupsEstimated;
+		return super.areBlupsEstimated();
 	}
 	
-	protected void setBlupsEstimated(boolean bool) {areBlupsEstimated = bool;}
+	protected void setBlupsEstimated(boolean bool) {super.setBlupsEstimated(bool);}
 	
 }
 

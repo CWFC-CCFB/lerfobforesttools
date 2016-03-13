@@ -34,12 +34,43 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import repicea.math.Matrix;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
 class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 
+	private static class XYSeriesWithRenderer extends XYSeries {
+
+		private static final Stroke MeanStroke = new BasicStroke(3f); // width of the lines
+		private static final Stroke BoundStroke = new BasicStroke(1f); // width of the lines
+
+		
+		private final boolean isMean;
+		private final CompartmentInfo compartmentInfo;
+		private final XYSeriesCollection dataset;
+		
+		public XYSeriesWithRenderer(XYSeriesCollection dataset, String title, CompartmentInfo compartmentInfo, boolean isMean) {
+			super(title);
+			this.isMean = isMean;
+			this.compartmentInfo = compartmentInfo;
+			this.dataset = dataset;
+			dataset.addSeries(this);
+		}
+		
+		protected void setStrokeAndColor(XYItemRenderer renderer) {
+			int indexOfThisSeries = dataset.getSeries().indexOf(this);
+			renderer.setSeriesPaint(indexOfThisSeries, compartmentInfo.getColor());
+			if (isMean) {
+				renderer.setSeriesStroke(indexOfThisSeries, MeanStroke);
+			} else {
+				renderer.setSeriesStroke(indexOfThisSeries, BoundStroke);
+			}
+		}
+	}
+	
+	
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon stock evolution", "Evolution des stocks de carbone"),
 		YAxis("Carbon (Mg C/ha)", "Carbone (Mg C/ha)"),
@@ -71,7 +102,6 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 
 		XYSeriesCollection dataset = new XYSeriesCollection ();
 
-//		Map<CompartmentInfo, XYSeries> indexMap = new HashMap<CompartmentInfo, XYSeries> ();
 		JFreeChart chart = ChartFactory.createXYLineChart (getTitle(), 
 				getXAxisLabel(), 
 				getYAxisLabel(),
@@ -83,14 +113,18 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 				);
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			Matrix randomVariables = summary.getEvolutionMap().get(compartmentID).getMean();
-			XYSeries s = new XYSeries(compartmentID.toString());
+			MonteCarloEstimate estimate = summary.getEvolutionMap().get(compartmentID);
+			Matrix mean = estimate.getMean();
+			Matrix lowerBound = estimate.getPercentile(0.025);
+			Matrix upperBound = estimate.getPercentile(0.975);
+			XYSeriesWithRenderer meanSeries = new XYSeriesWithRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true);
+			XYSeriesWithRenderer lowerSeries = new XYSeriesWithRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false);
+			XYSeriesWithRenderer upperSeries = new XYSeriesWithRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false);
 			for (int i = 0; i < summary.getTimeScale().length; i++) {
-				s.add((double) summary.getTimeScale()[i], randomVariables.m_afData[i][0]);
+				meanSeries.add((double) summary.getTimeScale()[i], mean.m_afData[i][0]);
+				lowerSeries.add((double) summary.getTimeScale()[i], lowerBound.m_afData[i][0]);
+				upperSeries.add((double) summary.getTimeScale()[i], upperBound.m_afData[i][0]);
 			}
-
-			dataset.addSeries(s);
-//			indexMap.put (compartmentID, s);
 		}
 
 
@@ -98,16 +132,15 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
 		XYItemRenderer renderer = plot.getRenderer();
-		Stroke stroke = new BasicStroke(3f); // width of the lines
-
-		for (int i = 0; i < optionPanel.getCompartmentToBeShown().size(); i++) {
-			renderer.setSeriesPaint(i, optionPanel.getCompartmentToBeShown().get(i).getColor());
-			renderer.setSeriesStroke(i, stroke);
+		
+		for (Object obj : dataset.getSeries()) {
+			if (obj instanceof XYSeriesWithRenderer) {
+				((XYSeriesWithRenderer) obj).setStrokeAndColor(renderer);
+			}
 		}
-
+		
 		ChartPanel chartPanel = new ChartPanel (chart);
 		return chartPanel;
-
 	}
 
 
