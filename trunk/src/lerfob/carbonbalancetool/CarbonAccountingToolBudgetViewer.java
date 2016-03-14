@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool;
 import java.awt.Color;
 
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -28,8 +29,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -66,10 +67,11 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 	@Override
 	protected ChartPanel createChart() {
 
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			dataset.addValue(summary.getBudgetMap().get(compartmentID).getMean().m_afData[0][0], compartmentID.toString(),	"");
+			MonteCarloEstimate estimate = summary.getBudgetMap().get(compartmentID);
+			dataset.add(estimate, compartmentID.toString(), "");
 		}
 		
 		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 
