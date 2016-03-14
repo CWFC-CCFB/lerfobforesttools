@@ -22,13 +22,13 @@ import java.awt.Color;
 
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
 
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
@@ -87,8 +87,9 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
-		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
+		plot.setRenderer(new EnhancedStatisticalBarRenderer());
+		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer();
+		
 		renderer.setShadowVisible(true);
 		renderer.setMaximumBarWidth(0.1);
 
