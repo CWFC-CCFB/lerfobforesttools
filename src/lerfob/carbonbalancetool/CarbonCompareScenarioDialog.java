@@ -202,7 +202,7 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		CarbonAssessmentToolSingleSimulationResult scen = (CarbonAssessmentToolSingleSimulationResult) scenToCompare.getSummary();
 		CarbonAssessmentToolSingleSimulationResult base = (CarbonAssessmentToolSingleSimulationResult) baseline.getSummary();
 		
-		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(scen, base), simulationName);
+		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(simulationName, scen, base));
 		selectionCompared = scenToCompare.toString();
 		selectionBaseline = baseline.toString();
 		super.okAction();

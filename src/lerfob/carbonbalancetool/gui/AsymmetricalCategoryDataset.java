@@ -32,7 +32,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.IntervalCategoryDataset;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
@@ -50,34 +49,45 @@ import repicea.stats.estimates.MonteCarloEstimate;
 @SuppressWarnings("rawtypes")
 public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, IntervalCategoryDataset {
 
+	class MonteCarloEstimateWrapper {
+		
+		private final MonteCarloEstimate estimate;
+		private final Color color;
+		
+		MonteCarloEstimateWrapper(MonteCarloEstimate estimate, Color color) {
+			this.estimate = estimate;
+			this.color = color;
+		}
+	}
+	
 	private final double percentile;
 
 	private final List<Comparable> rowKeys; 
 	private final List<Comparable> columnKeys;
-	private final Map<Comparable, Map<Comparable, MonteCarloEstimate>> estimateMap;
+	private final Map<Comparable, Map<Comparable, MonteCarloEstimateWrapper>> estimateMap;
 	
 	public AsymmetricalCategoryDataset(double percentile) {
 		super();
 		this.percentile = percentile;
 		rowKeys = new ArrayList<Comparable>();
 		columnKeys = new ArrayList<Comparable>();
-		estimateMap = new HashMap<Comparable, Map<Comparable, MonteCarloEstimate>>();
+		estimateMap = new HashMap<Comparable, Map<Comparable, MonteCarloEstimateWrapper>>();
 	}
 
-	public void add(MonteCarloEstimate estimate, Comparable arg1, Comparable arg2) {
+	public void add(MonteCarloEstimate estimate, Color color, Comparable arg1, Comparable arg2) {
 		if (!estimateMap.containsKey(arg1)) {
 			if (!rowKeys.contains(arg1)) {
 				rowKeys.add(arg1);
 			}
-			estimateMap.put(arg1, new HashMap<Comparable, MonteCarloEstimate>());
+			estimateMap.put(arg1, new HashMap<Comparable, MonteCarloEstimateWrapper>());
 		}
-		Map<Comparable, MonteCarloEstimate> innerMap = estimateMap.get(arg1);
+		Map<Comparable, MonteCarloEstimateWrapper> innerMap = estimateMap.get(arg1);
 		if (!innerMap.containsKey(arg2)) {
 			if (!columnKeys.contains(arg2)) {
 				columnKeys.add(arg2);
 			}
 		}
-		innerMap.put(arg2, estimate);
+		innerMap.put(arg2, new MonteCarloEstimateWrapper(estimate, color));
 	}
 	
 	@Override
@@ -157,7 +167,15 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		return null;
 	}
 	
-	private MonteCarloEstimate getMonteCarloEstimate(Comparable arg0, Comparable arg1) {
+	protected final MonteCarloEstimate getMonteCarloEstimate(Comparable arg0, Comparable arg1) {
+		MonteCarloEstimateWrapper wrapper = getWrapper(arg0, arg1);
+		if (wrapper != null) { 
+			return wrapper.estimate;
+		}
+		return null;
+	}
+
+	private MonteCarloEstimateWrapper getWrapper(Comparable arg0, Comparable arg1) {
 		if (estimateMap.containsKey(arg0)) {
 			if (estimateMap.get(arg0).containsKey(arg1)) {
 				return estimateMap.get(arg0).get(arg1);
@@ -165,6 +183,16 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		}
 		return null;
 	}
+	
+	protected final Color getColor(Comparable arg0, Comparable arg1) {
+		MonteCarloEstimateWrapper wrapper = getWrapper(arg0, arg1);
+		if (wrapper != null) { 
+			return wrapper.color;
+		}
+		return null;
+	}
+	
+	
 	
 	@Override
 	public int getColumnCount() {return columnKeys.size();}
@@ -207,58 +235,8 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		// TODO Auto-generated method stub
 		
 	}
-	
 
-	public static void main(String[] arg) {
-		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
-		Random random = new Random();
-		
-		MonteCarloEstimate estimate1 = new MonteCarloEstimate();
-		MonteCarloEstimate estimate2 = new MonteCarloEstimate();
-		
-		Matrix mat1;
-		Matrix mat2;
-		for (int i = 0; i < 10000; i++) {
-			mat1 = new Matrix(1,1);
-			mat1.m_afData[0][0] = random.nextDouble();
-			estimate1.addRealization(mat1);
-			mat2 = new Matrix(1,1);
-			mat2.m_afData[0][0] = random.nextDouble() + 2;
-			estimate2.addRealization(mat2);
-		}
-		
-		dataset.add(estimate1, "Estimate1", "group1");		
-		dataset.add(estimate2, "Estimate2", "group1");		
-		dataset.add(estimate2, "Estimate2", "group2");		
-		
-		JFreeChart chart = ChartFactory.createBarChart("My title", 
-				"Labels", 
-				"Values",
-				dataset, 
-				PlotOrientation.VERTICAL, // orientation
-				true, // include legend
-				true, // tooltips?
-				false // URLs?
-				);
 
-		CategoryPlot plot = (CategoryPlot) chart.getPlot();
-		plot.setBackgroundPaint(Color.WHITE);
-		plot.setRangeGridlinePaint(Color.BLACK);
-		plot.setRenderer(new EnhancedStatisticalBarRenderer());
-		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
-		renderer.setShadowVisible(true);
-		renderer.setMaximumBarWidth(0.1);
-
-		ChartPanel chartPanel = new ChartPanel(chart);
-		
-		JDialog dialog = new JDialog();
-		dialog.setModal(true);
-		dialog.getContentPane().add(chartPanel);
-		dialog.pack();
-		dialog.setVisible(true);
-		System.exit(0);
-	}
 
 	@Override
 	public Number getMeanValue(int arg0, int arg1) {
@@ -280,6 +258,57 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		return .1;
 	}
 	
-	
+	public static void main(String[] arg) {
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
+		Random random = new Random();
+		
+		MonteCarloEstimate estimate1 = new MonteCarloEstimate();
+		MonteCarloEstimate estimate2 = new MonteCarloEstimate();
+		
+		Matrix mat1;
+		Matrix mat2;
+		for (int i = 0; i < 10000; i++) {
+			mat1 = new Matrix(1,1);
+			mat1.m_afData[0][0] = random.nextDouble();
+			estimate1.addRealization(mat1);
+			mat2 = new Matrix(1,1);
+			mat2.m_afData[0][0] = random.nextDouble() + 2;
+			estimate2.addRealization(mat2);
+		}
+		
+		dataset.add(estimate1, Color.RED, "Estimate1", "group1");		
+		dataset.add(estimate2, Color.GREEN, "Estimate2", "group1");		
+		dataset.add(estimate2, Color.BLUE, "Estimate2", "group2");		
+		
+		JFreeChart chart = ChartFactory.createBarChart("My title", 
+				"Labels", 
+				"Values",
+				dataset, 
+				PlotOrientation.VERTICAL, // orientation
+				true, // include legend
+				true, // tooltips?
+				false // URLs?
+				);
+
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setRangeGridlinePaint(Color.BLACK);
+		plot.setRenderer(new EnhancedStatisticalBarRenderer());
+		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer();
+
+		renderer.setShadowVisible(true);
+		renderer.setMaximumBarWidth(0.1);
+		renderer.setColors(dataset);
+
+		ChartPanel chartPanel = new ChartPanel(chart);
+		
+		JDialog dialog = new JDialog();
+		dialog.setModal(true);
+		dialog.getContentPane().add(chartPanel);
+		dialog.pack();
+		dialog.setVisible(true);
+		System.exit(0);
+	}
+
 
 }

@@ -74,17 +74,14 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	private final String standID;
 	private final Integer[] timeScale;
 	private final Map<CompartmentInfo, MonteCarloEstimate> budgetMap;
-//	private final Map<String, AmountMap<Element>> logGradeMap;
 	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
 	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
-//	private final Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> hwpContentByUseClass;
 	private final Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> hwpContentByUseClass;
-//	private final Map<Integer, Map<UseClass, AmountMap<Element>>> productEvolutionMap;
 	private final Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap;
 	private final ParameterSetup setup;
-	
+	private final String resultId;
 		
-	CarbonAssessmentToolSingleSimulationResult(CarbonCompartmentManager manager) {
+	CarbonAssessmentToolSingleSimulationResult(String resultId, CarbonCompartmentManager manager) {
 
 		setup = new ParameterSetup(manager.getCarbonToolSettings());
 		
@@ -97,10 +94,10 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		evolutionMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
 		logGradeMap = new TreeMap<String, Map<Element, MonteCarloEstimate>>();
 		
-		
-		
 		hwpContentByUseClass = new HashMap<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
 		productEvolutionMap = new HashMap<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
+		
+		this.resultId = resultId;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -204,4 +201,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	@Override
 	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {return productEvolutionMap;}
 	
+	@Override
+	public String getResultId() {return resultId;}
+
 }

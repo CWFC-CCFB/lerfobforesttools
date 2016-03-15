@@ -18,6 +18,7 @@
  */
 package lerfob.carbonbalancetool.gui;
 
+import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -45,7 +46,30 @@ import org.jfree.ui.RectangleEdge;
 @SuppressWarnings("serial")
 public class EnhancedStatisticalBarRenderer extends StatisticalBarRenderer {
 
-
+	public EnhancedStatisticalBarRenderer() {
+		super();
+		setErrorIndicatorStroke(XYSeriesWithIntegratedRenderer.MajorStroke);
+		setErrorIndicatorPaint(Color.BLACK);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void setColors(AsymmetricalCategoryDataset dataset) {
+		for (Object rowKey : dataset.getRowKeys()) {
+			for (Object columnKey : dataset.getColumnKeys()) {
+				int index = dataset.getRowIndex((Comparable) rowKey);
+				Color color = dataset.getColor((Comparable) rowKey , (Comparable) columnKey);
+				if (color != null) {
+					setSeriesPaint(index, color);
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
 	@Override
 	protected void drawVerticalItem(Graphics2D g2, 
 			CategoryItemRendererState state, 
@@ -122,16 +146,8 @@ public class EnhancedStatisticalBarRenderer extends StatisticalBarRenderer {
 		if (lowerBound != null && upperBound != null) {
 			double highVal = rangeAxis.valueToJava2D(upperBound.doubleValue(), dataArea, yAxisLocation);
 			double lowVal = rangeAxis.valueToJava2D(lowerBound.doubleValue(), dataArea, yAxisLocation);
-//			if (this.errorIndicatorPaint != null) {
-//				g2.setPaint(getErrorIndicatorPaint());
-//			} else {
-				g2.setPaint(getItemOutlinePaint(row, column));
-//			}
-//			if (this.errorIndicatorStroke != null) {
-//				g2.setStroke(this.errorIndicatorStroke);
-//			} else {
-				g2.setStroke(getItemOutlineStroke(row, column));
-//			}
+			g2.setPaint(getErrorIndicatorPaint());
+			g2.setStroke(getErrorIndicatorStroke());
 			Line2D line = null;
 			line = new Line2D.Double(rectX + rectWidth / 2.0d, lowVal, rectX + rectWidth / 2.0d, highVal);
 			g2.draw(line);

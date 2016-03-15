@@ -203,7 +203,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	private final JLabel minorProgressBarMessage;
 
 	protected final CarbonCompareScenarioDialog compareDialog;
-	private int nbSimulations = 0;
 	
 	
 	/**
@@ -368,7 +367,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	}
 
 	protected void displayResult() {
-		graphicPanel.addSimulationResult(caller.getCarbonCompartmentManager().getSimulationSummary(), "Sim " + ++nbSimulations);
+		graphicPanel.addSimulationResult(caller.getCarbonCompartmentManager().getSimulationSummary());
 		refreshInterface();
 	}
 	

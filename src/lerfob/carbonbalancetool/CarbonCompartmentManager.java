@@ -52,6 +52,8 @@ public class CarbonCompartmentManager {
 	protected boolean isStochastic;
 	protected int currentRealization;
 	protected int nRealizations;
+	private int nbSimulations = 0;
+
 	
 	protected CarbonAssessmentToolSingleSimulationResult summary;
 	
@@ -314,7 +316,7 @@ public class CarbonCompartmentManager {
 	public CarbonAssessmentToolSingleSimulationResult getSimulationSummary() {
 		if (isSimulationValid) {
 			if (summary == null) {
-				summary = new CarbonAssessmentToolSingleSimulationResult(this);
+				summary = new CarbonAssessmentToolSingleSimulationResult("Sim " + ++nbSimulations, this);
 			}
 			return summary; 
 		} else {

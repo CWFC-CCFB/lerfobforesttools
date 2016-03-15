@@ -71,7 +71,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
 			MonteCarloEstimate estimate = summary.getBudgetMap().get(compartmentID);
-			dataset.add(estimate, compartmentID.toString(), "");
+			dataset.add(estimate, compartmentID.getColor(), compartmentID.toString(), summary.getResultId());
 		}
 		
 		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 
@@ -92,17 +92,12 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 		
 		renderer.setShadowVisible(true);
 		renderer.setMaximumBarWidth(0.1);
-
-		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			int index = dataset.getRowKeys().indexOf(compartmentID.toString());
-			renderer.setSeriesPaint(index, compartmentID.getColor());
-		}
+		renderer.setColors(dataset);
 
 		ChartPanel chartPanel = new ChartPanel(chart);
 		return chartPanel;
 
 	}
-
 
 	@Override
 	protected String getTitle() {return REpiceaTranslator.getString(MessageID.Title);}
