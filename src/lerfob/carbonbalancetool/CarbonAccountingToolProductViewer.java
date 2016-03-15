@@ -88,12 +88,15 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 			i++;
 		}
 		
-		MonteCarloEstimate relativeEstimate = new MonteCarloEstimate();
+		MonteCarloEstimate relativeEstimate;
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
+				relativeEstimate = new MonteCarloEstimate();
 				MonteCarloEstimate basicEstimate = oMap.get(useClass).get(Element.Volume);
 				for (i = 0; i < basicEstimate.getNumberOfRealizations(); i++) {
 					double sumValueForThisRealization = sum.getRealizations().get(i).m_afData[0][0];
+//					double absoluteValue = basicEstimate.getRealizations().get(i).m_afData[0][0];
+//					System.out.println("Class " + useClass.name() + " Sum = " + sumValueForThisRealization + " Value = " + absoluteValue);
 					relativeEstimate.addRealization(basicEstimate.getRealizations().get(i).scalarMultiply(100d / sumValueForThisRealization));
 				}
 				dataset.add(relativeEstimate,
