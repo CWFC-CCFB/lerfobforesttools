@@ -76,7 +76,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
 		plot.setRenderer(new EnhancedStatisticalBarRenderer());
-		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer ();
+		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer();
 
 		renderer.setShadowVisible (true);
 		renderer.setMaximumBarWidth (0.1);
