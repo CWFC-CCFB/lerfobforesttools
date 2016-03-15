@@ -72,26 +72,39 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 	}
 	
 	@Override
-	protected final ChartPanel createChart () {
+	protected final ChartPanel createChart() {
 
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
 		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = getAppropriateMap();
 		
-		double sum = 0;
+		MonteCarloEstimate sum = null;
+		int i = 0;
 		for (Map<Element, MonteCarloEstimate> carrier : oMap.values()) {
-			sum += carrier.get(Element.Volume).getMean().m_afData[0][0];
+			if (i == 0) {
+				sum = carrier.get(Element.Volume);
+			} else {
+				sum = MonteCarloEstimate.add(sum, carrier.get(Element.Volume));
+			}
+			i++;
 		}
 		
+		MonteCarloEstimate relativeEstimate = new MonteCarloEstimate();
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				dataset.add(MonteCarloEstimate.multiply(oMap.get(useClass).get(Element.Volume), 100d / sum),
+				MonteCarloEstimate basicEstimate = oMap.get(useClass).get(Element.Volume);
+				for (i = 0; i < basicEstimate.getNumberOfRealizations(); i++) {
+					double sumValueForThisRealization = sum.getRealizations().get(i).m_afData[0][0];
+					relativeEstimate.addRealization(basicEstimate.getRealizations().get(i).scalarMultiply(100d / sumValueForThisRealization));
+				}
+				dataset.add(relativeEstimate,
 						getColor(useClass.ordinal()),
 						useClass.toString(), 
 						summary.getResultId());
 			}
 		}
-
-		JFreeChart chart = ChartFactory.createBarChart (getTitle(), 
+		
+		
+		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 
 				getXAxisLabel(), 
 				getYAxisLabel(),
 				dataset, 
@@ -101,7 +114,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 				false // URLs?
 				);
 
-		CategoryPlot plot = (CategoryPlot) chart.getPlot ();
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
 		plot.setRenderer(new EnhancedStatisticalBarRenderer());
@@ -114,9 +127,8 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		axis.setRange(0, 100);
 
 		
-		ChartPanel chartPanel = new ChartPanel (chart);
+		ChartPanel chartPanel = new ChartPanel(chart);
 		return chartPanel;
-
 	}
 
 	@Override

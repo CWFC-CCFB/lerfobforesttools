@@ -301,7 +301,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		renderer.setColors(dataset);
 
 		ChartPanel chartPanel = new ChartPanel(chart);
-		
+//		chartPanel.setPopupMenu(new REpiceaPopupMenu(dataset, new JMenuItem("Test")));
 		JDialog dialog = new JDialog();
 		dialog.setModal(true);
 		dialog.getContentPane().add(chartPanel);
@@ -309,6 +309,5 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		dialog.setVisible(true);
 		System.exit(0);
 	}
-
 
 }
