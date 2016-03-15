@@ -71,7 +71,10 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
 			MonteCarloEstimate estimate = summary.getBudgetMap().get(compartmentID);
-			dataset.add(estimate, compartmentID.getColor(), compartmentID.toString(), summary.getResultId());
+			dataset.add(estimate, 
+					compartmentID.getColor(), 
+					compartmentID.toString(), 
+					summary.getResultId());
 		}
 		
 		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 

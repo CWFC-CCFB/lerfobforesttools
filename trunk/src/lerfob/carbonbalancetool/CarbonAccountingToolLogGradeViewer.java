@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 
 import org.jfree.chart.ChartFactory;
@@ -12,8 +14,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -48,13 +48,18 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 
 	@Override
 	protected ChartPanel createChart () {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
+		
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
 
 		List<String> logCategoryNames = new ArrayList<String>(summary.getLogGradePerHa().keySet());
 		Collections.sort(logCategoryNames);
 		
 		for (String logCategoryName : logCategoryNames) {
-			dataset.addValue(summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume).getMean().m_afData[0][0], logCategoryName, "");
+			int index = logCategoryNames.indexOf(logCategoryName);
+			dataset.add(summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume),
+					getColor(index),
+					logCategoryName, 
+					summary.getResultId());
 		}
 
 		JFreeChart chart = ChartFactory.createBarChart (getTitle(), 
@@ -70,16 +75,13 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		CategoryPlot plot = (CategoryPlot) chart.getPlot ();
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
-		BarRenderer renderer = (BarRenderer) plot.getRenderer ();
+		plot.setRenderer(new EnhancedStatisticalBarRenderer());
+		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer ();
 
 		renderer.setShadowVisible (true);
 		renderer.setMaximumBarWidth (0.1);
-
-		for (int index = 0; index < summary.getLogGradePerHa().size(); index++) {
-			Color color = getColor(index);
-			renderer.setSeriesPaint (index, color);
-		}
-
+		renderer.setColors(dataset);
+		
 		ChartPanel chartPanel = new ChartPanel (chart);
 		return chartPanel;
 	}
