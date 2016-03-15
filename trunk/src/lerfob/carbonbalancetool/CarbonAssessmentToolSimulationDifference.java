@@ -35,11 +35,12 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 	private final CarbonAssessmentToolSingleSimulationResult scenToCompare;
 	private final CarbonAssessmentToolSingleSimulationResult baseline;
+	private final String resultId;
 	
-	CarbonAssessmentToolSimulationDifference(CarbonAssessmentToolSingleSimulationResult scenToCompare,
-			CarbonAssessmentToolSingleSimulationResult baseline) {
+	CarbonAssessmentToolSimulationDifference(String resultId, CarbonAssessmentToolSingleSimulationResult scenToCompare, CarbonAssessmentToolSingleSimulationResult baseline) {
 		this.scenToCompare = scenToCompare;
 		this.baseline = baseline;
+		this.resultId = resultId;
 	}
 	
 	
@@ -109,5 +110,9 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 		return "<html>" + CarbonAssessmentToolSingleSimulationResult.MessageID.DifferenceBetween.toString() + ": " + scenToCompare.getStandID() + "<br>" +
 					CarbonAssessmentToolSingleSimulationResult.MessageID.And.toString() + baseline.getStandID() + "</html>";
 	}
+
+
+	@Override
+	public String getResultId() {return resultId;}
 
 }

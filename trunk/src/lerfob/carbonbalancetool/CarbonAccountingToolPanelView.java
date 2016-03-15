@@ -141,9 +141,9 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 		add(mainPanel);
 	}
 
-	protected void addSimulationResult(CarbonAssessmentToolSimulationResult summary, String simulationName) {
-		CarbonAccountingToolSingleViewPanel singleViewPanel = new CarbonAccountingToolSingleViewPanel(optionPanel, summary, simulationName);
-		tabbedPane.insertTab(simulationName, null, singleViewPanel, summary.toString(), 0);
+	protected void addSimulationResult(CarbonAssessmentToolSimulationResult summary) {
+		CarbonAccountingToolSingleViewPanel singleViewPanel = new CarbonAccountingToolSingleViewPanel(optionPanel, summary);
+		tabbedPane.insertTab(summary.getResultId(), null, singleViewPanel, summary.toString(), 0);
 		tabbedPane.setSelectedIndex(0);
 	}
 	

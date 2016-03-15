@@ -82,5 +82,10 @@ public interface CarbonAssessmentToolSimulationResult {
 	 */
 	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa();
 	
-
+	/**
+	 * This method returns the result id for this instance. For example, it could be "sim1".
+	 * @return a String
+	 */
+	public String getResultId();
+	
 }

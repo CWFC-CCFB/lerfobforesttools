@@ -40,13 +40,11 @@ class CarbonAccountingToolSingleViewPanel extends REpiceaPanel implements ItemLi
 	private final String name;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	CarbonAccountingToolSingleViewPanel(CarbonAccountingToolOptionPanel optionPanel, 
-			CarbonAssessmentToolSimulationResult summary,
-			String name) {
+	CarbonAccountingToolSingleViewPanel(CarbonAccountingToolOptionPanel optionPanel, CarbonAssessmentToolSimulationResult summary) {
 		super();
 		this.summary = summary;
 		this.optionPanel = optionPanel;
-		this.name = name;
+		this.name = summary.getResultId();
 		selector = new JComboBox();
 		viewerScrollPane = new JScrollPane();
 		setLayout(new BorderLayout());
