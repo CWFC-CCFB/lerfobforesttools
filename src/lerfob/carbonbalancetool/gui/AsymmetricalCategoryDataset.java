@@ -74,20 +74,20 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		estimateMap = new HashMap<Comparable, Map<Comparable, MonteCarloEstimateWrapper>>();
 	}
 
-	public void add(MonteCarloEstimate estimate, Color color, Comparable arg1, Comparable arg2) {
-		if (!estimateMap.containsKey(arg1)) {
-			if (!rowKeys.contains(arg1)) {
-				rowKeys.add(arg1);
+	public void add(MonteCarloEstimate estimate, Color color, Comparable category, Comparable group) {
+		if (!estimateMap.containsKey(category)) {
+			if (!rowKeys.contains(category)) {
+				rowKeys.add(category);
 			}
-			estimateMap.put(arg1, new HashMap<Comparable, MonteCarloEstimateWrapper>());
+			estimateMap.put(category, new HashMap<Comparable, MonteCarloEstimateWrapper>());
 		}
-		Map<Comparable, MonteCarloEstimateWrapper> innerMap = estimateMap.get(arg1);
-		if (!innerMap.containsKey(arg2)) {
-			if (!columnKeys.contains(arg2)) {
-				columnKeys.add(arg2);
+		Map<Comparable, MonteCarloEstimateWrapper> innerMap = estimateMap.get(category);
+		if (!innerMap.containsKey(group)) {
+			if (!columnKeys.contains(group)) {
+				columnKeys.add(group);
 			}
 		}
-		innerMap.put(arg2, new MonteCarloEstimateWrapper(estimate, color));
+		innerMap.put(group, new MonteCarloEstimateWrapper(estimate, color));
 	}
 	
 	@Override

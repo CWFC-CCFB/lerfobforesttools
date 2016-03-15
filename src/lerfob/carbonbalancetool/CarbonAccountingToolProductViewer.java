@@ -21,6 +21,8 @@ package lerfob.carbonbalancetool;
 import java.awt.Color;
 import java.util.Map;
 
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -31,8 +33,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
@@ -74,7 +74,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 	@Override
 	protected final ChartPanel createChart () {
 
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset ();
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
 		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = getAppropriateMap();
 		
 		double sum = 0;
@@ -84,8 +84,10 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				dataset.addValue (oMap.get(useClass).get(Element.Volume).getMean().m_afData[0][0] / sum * 100, 
-						useClass.toString(), "");
+				dataset.add(MonteCarloEstimate.multiply(oMap.get(useClass).get(Element.Volume), 100d / sum),
+						getColor(useClass.ordinal()),
+						useClass.toString(), 
+						summary.getResultId());
 			}
 		}
 
@@ -102,20 +104,15 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		CategoryPlot plot = (CategoryPlot) chart.getPlot ();
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setRangeGridlinePaint(Color.BLACK);
-		BarRenderer renderer = (BarRenderer) plot.getRenderer ();
+		plot.setRenderer(new EnhancedStatisticalBarRenderer());
+		EnhancedStatisticalBarRenderer renderer = (EnhancedStatisticalBarRenderer) plot.getRenderer();
 
-		renderer.setShadowVisible (true);
-		renderer.setMaximumBarWidth (0.1);
+		renderer.setShadowVisible(true);
+		renderer.setMaximumBarWidth(0.1);
+		renderer.setColors(dataset);
 		ValueAxis axis = plot.getRangeAxis();
 		axis.setRange(0, 100);
 
-		for (UseClass useClass : UseClass.values()) {
-			int index = dataset.getRowKeys().indexOf(useClass.toString());
-			if (index != -1) {
-				Color color = getColor(useClass.ordinal());
-				renderer.setSeriesPaint(index, color);
-			}
-		}
 		
 		ChartPanel chartPanel = new ChartPanel (chart);
 		return chartPanel;
