@@ -29,8 +29,13 @@ public abstract class LeftHandSideProcessor extends AbstractProcessor {
 	protected static class CustomizedREpiceaGUIPermission implements REpiceaGUIPermission {
 
 		@Override
-		public boolean isDragAndDropGranted() {
+		public boolean isDragGranted() {
 			return true;
+		}
+
+		@Override
+		public boolean isDropGranted() {
+			return false;
 		}
 
 		@Override
