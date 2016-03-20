@@ -74,7 +74,7 @@ public class LandfillProcessor extends AbstractProductionLineProcessor {
 		List<ProcessUnit> outputUnits = new ArrayList<ProcessUnit>();
 		
 		CarbonUnit carbonUnit = (CarbonUnit) unit;
-		int creationDate = carbonUnit.getCreationDate();
+		int dateIndex = carbonUnit.getIndexInTimeScale();
 		AmountMap<Element> processedAmountMap = carbonUnit.getAmountMap().multiplyByAScalar(intake * .01);
 
 		CarbonUnit woodProduct;
@@ -83,13 +83,11 @@ public class LandfillProcessor extends AbstractProductionLineProcessor {
 		double docf = lfcuf.getDegradableOrganicCarbonFraction();
 
 		AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-		woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp);
-		woodProduct.addStatus(CarbonUnitStatus.LandFillDegradable);
+		woodProduct = new LandfillCarbonUnit(dateIndex, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillDegradable);
 		outputUnits.add(woodProduct);
 
 		landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-		woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp); 
-		woodProduct.addStatus(CarbonUnitStatus.LandFillNonDegradable);
+		woodProduct = new LandfillCarbonUnit(dateIndex, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillNonDegradable); 
 		outputUnits.add(woodProduct);
 		return outputUnits;
 	}

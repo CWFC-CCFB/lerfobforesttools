@@ -53,6 +53,8 @@ public class CarbonAccountingToolTest {
 		try {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
 			tool.calculateCarbon();
+			CarbonAssessmentToolSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
+			Assert.assertTrue(result != null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail("Unable to calculate carbon!");

@@ -217,21 +217,20 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		List<ProcessUnit> outputUnits = new ArrayList<ProcessUnit>();
 		
 		CarbonUnit carbonUnit = (CarbonUnit) unit;
-		int creationDate = carbonUnit.getCreationDate();
+		int dateIndex = carbonUnit.getIndexInTimeScale();
 			
 		AmountMap<Element> processedAmountMap = carbonUnit.getAmountMap().multiplyByAScalar(intake * .01);
 
 		CarbonUnit woodProduct;
 		
 		if (!isFinalProcessor()) {
-			woodProduct = new CarbonUnit(creationDate, null, processedAmountMap);
+			woodProduct = new CarbonUnit(dateIndex, null, processedAmountMap);
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
-			woodProduct = new EndUseWoodProductCarbonUnit(creationDate, 
+			woodProduct = new EndUseWoodProductCarbonUnit(dateIndex, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 					processedAmountMap);
-			woodProduct.addStatus(CarbonUnitStatus.EndUseWoodProduct);
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		}
@@ -247,9 +246,6 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	@Deprecated
 	protected CarbonUnitMap<CarbonUnitStatus> processWoodPiece(int creationDate, AmountMap<Element> amountMap) throws Exception {
 
-//		int creationDate = carbonUnit.getCreationDate();
-//		AmountMap<Element> amountMap = carbonUnit.getAmountMap();
-		
 		CarbonUnitMap<CarbonUnitStatus> outputMap = new CarbonUnitMap<CarbonUnitStatus>(CarbonUnitStatus.EndUseWoodProduct);
 
 		CarbonUnit woodProduct;
@@ -260,10 +256,9 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 			
 		if (processedAmountMap.get(Element.C) > ProductionProcessorManager.VERY_SMALL) {		// to avoid looping indefinitely
 			if (isFinalProcessor()) {
-//				Collection<ProcessUnit> processedUnits = this.createProcessUnitFromThisUnit(unit, intake)
 				if (!isLandfillProcessor() && !isLeftInForestProcessor()) {
 					woodProduct = new EndUseWoodProductCarbonUnit(
-							getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)),		// TODO simplify this method 
+							getInitialVolumeBeforeFirstTransformation(processedAmountMap.get(Element.Volume)),		
 							creationDate, 
 							(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 							processedAmountMap);
@@ -274,16 +269,16 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 					double docf = lfcuf.getDegradableOrganicCarbonFraction();
 					
 					AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp);
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillDegradable);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 					landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp); 
+					woodProduct = new LandfillCarbonUnit(creationDate, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillNonDegradable); 
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 				} else {				// is left in the forest
 					woodProduct = new CarbonUnit(creationDate, woodProductFeature, processedAmountMap);
-					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LeftInForest).add(woodProduct);
+					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.HarvestResidues).add(woodProduct);
 				}
 
 			} else if (hasSubProcessors()) {

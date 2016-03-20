@@ -319,38 +319,38 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * The main method for this class. The different kinds of produced carbon units are stored in the carbon unit map, which is accessible
 	 * through the getCarbonUnits(CarbonUnitType) method.
 	 * @param treeLogCategory a TreeLogCategory instance
-	 * @param creationDate the date at which the wood log is processed
+	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory, int creationDate,	AmountMap<Element> amountMap) {
+	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
 		Processor processor = findLeftHandSideProcessor(treeLogCategory);
-		return processAmountMap(processor, creationDate, amountMap);
+		return processAmountMap(processor, dateIndex, amountMap);
 	}
 
 	/**
 	 * This method calculates the carbon units in the fine woody debris. 
-	 * @param creationDate the date at which the wood log is processed
+	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public void processFineWoodyDebris(int creationDate, AmountMap<Element> amountMap) {
+	public void processFineWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
 		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.FineWoodyDebris);
-		processAmountMap(processor, creationDate, amountMap);
+		processAmountMap(processor, dateIndex, amountMap);
 	}
 	
 	/**
 	 * This method calculates the carbon units in the coarse woody debris. 
-	 * @param creationDate the date at which the wood log is processed
+	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public void processCoarseWoodyDebris(int creationDate, AmountMap<Element> amountMap) {
+	public void processCoarseWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
 		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris);
-		processAmountMap(processor, creationDate, amountMap);
+		processAmountMap(processor, dateIndex, amountMap);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection<CarbonUnit> processAmountMap(Processor processor, int creationDate, AmountMap<Element> amountMap) {
+	private Collection<CarbonUnit> processAmountMap(Processor processor, int dateIndex, AmountMap<Element> amountMap) {
 		List<ProcessUnit> inputUnits = new ArrayList<ProcessUnit>();
-		inputUnits.add(new CarbonUnit(creationDate, null, amountMap));
+		inputUnits.add(new CarbonUnit(dateIndex, null, amountMap));
 		Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
 		getCarbonUnitMap().add(processedUnits);
 		return processedUnits;
@@ -366,7 +366,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @throws Exception
 	 */
 	public void actualizeCarbonUnits(CarbonCompartmentManager compartmentManager) throws Exception {
-		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LeftInForest, compartmentManager);
+		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.HarvestResidues, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.EndUseWoodProduct, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.Recycled, compartmentManager);

@@ -19,7 +19,6 @@
 package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -162,14 +161,14 @@ public class CarbonCompartmentManager {
 			ProductionProcessorManager productionLineManager = getCarbonToolSettings().getCurrentProductionProcessorManager();
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct));
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.Recycled));
-			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LeftInForest);
+			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.HarvestResidues);
 			degradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillDegradable);
 			nonDegradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable);
 		} else {
 			ProductionLineManager productionLineManager = getCarbonToolSettings().getProductionLines();
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct));
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.Recycled));
-			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LeftInForest);
+			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.HarvestResidues);
 			degradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillDegradable);
 			nonDegradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable);
 			
@@ -297,12 +296,9 @@ public class CarbonCompartmentManager {
 			outputArray[i] = new ArrayList<CarbonUnit>();
 		}
 		
-		List<Integer> years = (List<Integer>) Arrays.asList(timeScale);
-
 		if (carbonProducts!= null && !carbonProducts.isEmpty()) {
 			for (CarbonUnit carbonUnit : carbonProducts) {
-				int index = years.lastIndexOf(carbonUnit.getCreationDate());
-				outputArray[index].add(carbonUnit);
+				outputArray[carbonUnit.getIndexInTimeScale()].add(carbonUnit);
 			}
 		}
 	

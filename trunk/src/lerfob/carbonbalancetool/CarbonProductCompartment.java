@@ -120,7 +120,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 	}
 
 	private Map<Integer, Map<UseClass, AmountMap<Element>>> summarizeWoodProductEvolution(CarbonUnitList carbonUnits) {
-		this.getCompartmentManager ().getTimeScale ();
+	    Integer[] timeScale = getCompartmentManager ().getTimeScale ();
 		Map<Integer, Map<UseClass, AmountMap<Element>>> outputMap = new HashMap<Integer, Map<UseClass, AmountMap<Element>>>();
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
 			int date;
@@ -128,7 +128,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 			for (CarbonUnit carbonUnit : carbonUnits) {
 				EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit; 
 				UseClass useClass = endProduct.getUseClass();
-				date = endProduct.getCreationDate();
+				date = timeScale[endProduct.getIndexInTimeScale()];
 				if (!outputMap.containsKey(date)) {
 					outputMap.put(date, new HashMap<UseClass,AmountMap<Element>>());
 				}

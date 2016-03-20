@@ -259,7 +259,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateForThisTree(tree), amountMap);		
+							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), amountMap);		
 							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
 						}
 						
@@ -273,7 +273,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
 							
-							getProcessorManager().processFineWoodyDebris(caller.getDateForThisTree(tree), amountMap);
+							getProcessorManager().processFineWoodyDebris(caller.getDateIndexForThisTree(tree), amountMap);
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
@@ -391,7 +391,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			if (isCancelled) {
 				break;
 			}
-			int creationDate = stand.getDateYr();
+			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
 			double volume = biomassParameters.getBelowGroundVolumeM3(trees);
 			double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
@@ -408,7 +408,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			amountMap.put(Element.Biomass, biomass);	
 			amountMap.put(Element.C, carbonContent);	
 
-			getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
+			getProcessorManager().processCoarseWoodyDebris(dateIndex, amountMap);
 		}
 	}
 	
@@ -419,7 +419,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			if (isCancelled) {
 				break;
 			}
-			int creationDate = stand.getDateYr();
+			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
 			double volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
 			double biomass = biomassParameters.getAboveGroundBiomassMg(trees) - biomassParameters.getCommercialBiomassMg(trees);
@@ -430,7 +430,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			amountMap.put(Element.Biomass, biomass);	
 			amountMap.put(Element.C, carbonContent);	
 
-			getProcessorManager().processCoarseWoodyDebris(creationDate, amountMap);
+			getProcessorManager().processCoarseWoodyDebris(dateIndex, amountMap);
 		}
 	}
 

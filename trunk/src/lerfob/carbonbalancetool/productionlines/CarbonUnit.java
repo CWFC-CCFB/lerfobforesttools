@@ -41,9 +41,24 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		LandFillDegradable,
 		LandFillNonDegradable,
 		Recycled, 
-		LeftInForest, 
+		HarvestResidues, 
+		DeadWood,
 		IndustrialLosses,
-		RecycledLosses};
+		RecycledLosses;
+		
+		private static List<CarbonUnitStatus> PotentialInterventionResultStatus;
+		
+		protected static List<CarbonUnitStatus> getPotentialInterventionResultStatus() {
+			if (PotentialInterventionResultStatus == null) {
+				PotentialInterventionResultStatus = new ArrayList<CarbonUnitStatus>();
+				PotentialInterventionResultStatus.add(CarbonUnitStatus.EndUseWoodProduct);
+				PotentialInterventionResultStatus.add(CarbonUnitStatus.HarvestResidues);
+			}
+			return PotentialInterventionResultStatus;
+		}
+	
+	
+	};
 
 	
 	public static enum Element {
@@ -80,8 +95,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	}
 	
 	private Integer[] timeScale;
-	private int creationDate;
-	private boolean isActualized; 
+//	private int creationDate;
+	private final int dateIndex;
 	private final List<CarbonUnitStatus> status; 
 	
 	/**
@@ -90,20 +105,22 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	private double[] currentCarbonArray;
 	
 	private CarbonUnitFeature carbonUnitFeature;
+	private boolean actualized;
 
 	/**
 	 * General constructor.
-	 * @param creationDate the creation date (year)
+	 * @param dateIndex the creation date index of the time scale
 	 * @param carbonUnitFeature a CarbonUnitFeature instance
 	 * @param initialAmounts a map that contains the amount of each element to be processed
 	 */
-	protected CarbonUnit(int creationDate, 
+	protected CarbonUnit(int dateIndex, 
 			CarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> initialAmounts) {
 		super(initialAmounts);
-		this.creationDate = creationDate;
+		this.dateIndex = dateIndex;
 		this.carbonUnitFeature = carbonUnitFeature;
 		status = new ArrayList<CarbonUnitStatus>();
+		actualized = false;
 	}
 
 
@@ -113,14 +130,13 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	}
 
 	
-	protected boolean isActualized() {return isActualized;}
-	protected void setActualized(boolean isActualized) {this.isActualized = isActualized;}
+	protected boolean isActualized() {return actualized;}
 
 	/**
 	 * This method returns the creation date of the product
 	 * @return an integer
 	 */
-	public int getCreationDate() {return creationDate;}
+	protected int getCreationDate() {return timeScale[dateIndex];}
 	
 	protected void setTimeScale(Integer[] timeScale) {this.timeScale = timeScale;}
 	protected Integer[] getTimeScale() {return timeScale;}
@@ -175,8 +191,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		double factor;
 		int date;
 		double formerDate;
-
-		for (int i = 0; i < timeScale.length; i++) {
+		
+		for (int i = dateIndex; i < timeScale.length; i++) {
 			date = timeScale[i];
 			if (date > getCreationDate() && currentCarbon > ProductionProcessorManager.VERY_SMALL) {
 				formerDate = timeScale[i - 1];
@@ -186,17 +202,16 @@ public class CarbonUnit extends ProcessUnit<Element> {
 				formerCarbon = currentCarbonArray[i - 1];
 				currentCarbon =  formerCarbon * factor;
 				currentCarbonArray[i] = currentCarbon;
-			} else {
-				if (date == getCreationDate()) {						
-					if (i == timeScale.length - 1 || timeScale[i + 1] > getCreationDate()) {	// we want to have the second step with its date equal to the creation date to ensure this is an intervention result
-						currentCarbonArray[i] = getInitialCarbon();
-					}
-				} 
+			} else if (date == getCreationDate()) {
+				currentCarbonArray[i] = getInitialCarbon();
 			}
 		}
-		setActualized(true);
+		actualized = true;
 	}
 	
+	protected boolean isFromIntervention() {
+		return status.size() == 1 && CarbonUnitStatus.getPotentialInterventionResultStatus().contains(status.get(0));
+	}
 
 	/**
 	 * This method returns the released carbon along in time given the product has been actualized. Otherwise it returns null.
@@ -227,7 +242,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		if (obj != null && obj instanceof CarbonUnit) {
 			CarbonUnit otherUnit = (CarbonUnit) obj;
 			if (carbonUnitFeature.equals(otherUnit.carbonUnitFeature)) {
-				if (creationDate == otherUnit.creationDate) {
+				if (dateIndex == otherUnit.dateIndex) {
 					if (status.equals(otherUnit.status)) {
 						return true;
 					}
@@ -247,6 +262,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	}
 	
 	protected CarbonUnitStatus getLastStatus() {return status.get(status.size() - 1);}
+	
 	protected void addStatus(CarbonUnitStatus currentStatus) {status.add(currentStatus);}
 	
 	/**
@@ -261,5 +277,12 @@ public class CarbonUnit extends ProcessUnit<Element> {
 			return emissions;
 		}
 	}
+	
+	/** 
+	 * This method returns the index on the time scale at which the product has been created.
+	 * @return an Integer
+	 */
+	public int getIndexInTimeScale() {return dateIndex;}
+	
 	
 }
