@@ -200,6 +200,16 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		}
 	}
 	
+	protected int getDateIndexForThisTree(CarbonToolCompatibleTree tree) {
+		if (treeRegister.containsKey(tree)) {
+			CarbonToolCompatibleStand stand = treeRegister.get(tree);
+			return getCarbonCompartmentManager().getStandList().indexOf(stand);
+		} else {
+			return -1;
+		}
+	}
+	
+	@Deprecated
 	protected int getDateForThisTree(CarbonToolCompatibleTree tree) {
 		if (treeRegister.containsKey(tree)) {
 			return treeRegister.get(tree).getDateYr();
@@ -207,7 +217,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 			return -1;
 		}
 	}
-	
+
 	protected void clearTreeCollections() {
 		treeCollections.clear();
 		treeRegister.clear();

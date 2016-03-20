@@ -56,8 +56,6 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			AmountMap<Element> amountMap) {
 		super(creationDate, carbonUnitFeature, amountMap);
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
-	
-		reinitProduct();
 	}
 	
 	/**
@@ -66,18 +64,18 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param creationDate the creation date (integer) (yr)
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
-	protected EndUseWoodProductCarbonUnit(int creationDate,
+	protected EndUseWoodProductCarbonUnit(int dateIndex,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap) {
-		super(creationDate, carbonUnitFeature, amountMap);
-		reinitProduct();
+		super(dateIndex, carbonUnitFeature, amountMap);
+		addStatus(CarbonUnitStatus.EndUseWoodProduct);
 	}
 
-	/**
-	 * This method makes sure that the derived subproducts won't pile up in the collection. It is called at
-	 * the beginning of the actualizeProduct method. 
-	 */
-	protected void reinitProduct() {setActualized(false);}
+//	/**
+//	 * This method makes sure that the derived subproducts won't pile up in the collection. It is called at
+//	 * the beginning of the actualizeProduct method. 
+//	 */
+//	protected void reinitProduct() {firstIndex = -1;}
 	
 	/**
 	 * This method returns the volume of the product as it was created.
@@ -106,15 +104,15 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 		if (getCarbonUnitFeature().isDisposed()) {
 			double[] releasedCarbonArray = getReleasedCarbonArray();
 			double proportion;
-			for (int i = 0; i < getTimeScale().length; i++) {
+			for (int i = getIndexInTimeScale(); i < getTimeScale().length; i++) {
 				proportion = releasedCarbonArray[i] / getInitialCarbon();
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
-				int creationDate = compartmentManager.getTimeScale()[i];
+//				int creationDate = compartmentManager.getTimeScale()[i];
 				Processor disposedToProcessor = ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
 						List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
-						disposedUnits.add(new CarbonUnit(creationDate, null, updatedMap));
+						disposedUnits.add(new CarbonUnit(i, null, updatedMap));
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
 						for (CarbonUnit carbonUnit : processedUnits) {
 							if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
@@ -123,6 +121,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 						}
 						compartmentManager.getCarbonToolSettings().getCurrentProductionProcessorManager().getCarbonUnitMap().add(processedUnits);
 					} else {	// former implementation
+						int creationDate = compartmentManager.getTimeScale()[i];
 						((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).getProductionLine().getManager().sendToTheLandfill(creationDate, updatedMap);	
 					}
 				}
