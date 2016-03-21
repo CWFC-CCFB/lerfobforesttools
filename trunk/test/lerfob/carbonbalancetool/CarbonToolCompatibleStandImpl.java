@@ -64,4 +64,9 @@ class CarbonToolCompatibleStandImpl implements CarbonToolCompatibleEvenAgedStand
 		return newStand;
 	}
 
+	@Override
+	public boolean isInterventionResult() {
+		return false;
+	}
+
 }

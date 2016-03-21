@@ -95,6 +95,17 @@ class PythonCarbonToolCompatibleStand implements CarbonToolCompatibleStand, Comp
 	
 	@Override
 	public String toString() {return "Stand " + getDateYr();}
+
+
+
+	/*
+	 * Useless for this class (non-Javadoc)
+	 * @see repicea.simulation.covariateproviders.standlevel.InterventionResultProvider#isInterventionResult()
+	 */
+	@Override
+	public boolean isInterventionResult() {
+		return false;
+	}
 	
 	
 }

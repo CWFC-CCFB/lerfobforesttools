@@ -368,7 +368,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 					if (isCancelled) {
 						break;
 					}
-					int creationDate = stand.getDateYr();
+					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CarbonToolCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
@@ -379,7 +379,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 					amountMap.put(Element.Biomass, biomass);	
 					amountMap.put(Element.C, carbonContent);	
 
-					productionLineManager.leftThisPieceInTheForest(creationDate, amountMap);
+					productionLineManager.leftThisPieceInTheForest(dateIndex, amountMap);
 				}
 			}
 		}
