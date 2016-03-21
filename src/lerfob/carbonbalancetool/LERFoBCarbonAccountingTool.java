@@ -66,15 +66,18 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 			if (arg0.getDateYr() < arg1.getDateYr()) {
 				return -1;
 			} else if (arg0.getDateYr() == arg1.getDateYr()) {
-				return 0;
+				if (arg0.isInterventionResult()) {
+					return 1;
+				} else if (arg1.isInterventionResult()) {
+					return -1;
+				} else {
+					return 0;
+				}
 			} else {
 				return 1;
 			}
 		}
-		
 	}
-	
-	
 	
 	protected static final String englishTitle = "LERFoB Carbon Accounting Tool (LERFoB-CAT)";
 	protected static final String frenchTitle = "Outil d'\u00E9valuation du carbone LERFoB (LERFoB-CAT)";

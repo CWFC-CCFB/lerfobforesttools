@@ -19,13 +19,14 @@
 package lerfob.carbonbalancetool;
 
 import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
+import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
 
 /**
  * This method ensures the stand is compatible with LERFoB-CAT
  * @author Mathieu Fortin - August 2013
  */
-public interface CarbonToolCompatibleStand extends AreaHaProvider, TreeStatusCollectionsProvider {
+public interface CarbonToolCompatibleStand extends AreaHaProvider, TreeStatusCollectionsProvider, InterventionResultProvider {
 
 	
 	/**
@@ -40,5 +41,5 @@ public interface CarbonToolCompatibleStand extends AreaHaProvider, TreeStatusCol
 	 * @return an integer
 	 */
 	public int getDateYr();
-	
+
 }
