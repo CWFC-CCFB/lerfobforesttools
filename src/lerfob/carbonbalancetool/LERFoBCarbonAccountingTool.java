@@ -209,14 +209,14 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		}
 	}
 	
-	@Deprecated
-	protected int getDateForThisTree(CarbonToolCompatibleTree tree) {
-		if (treeRegister.containsKey(tree)) {
-			return treeRegister.get(tree).getDateYr();
-		} else {
-			return -1;
-		}
-	}
+//	@Deprecated
+//	protected int getDateForThisTree(CarbonToolCompatibleTree tree) {
+//		if (treeRegister.containsKey(tree)) {
+//			return treeRegister.get(tree).getDateYr();
+//		} else {
+//			return -1;
+//		}
+//	}
 
 	protected void clearTreeCollections() {
 		treeCollections.clear();

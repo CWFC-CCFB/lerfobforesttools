@@ -95,7 +95,6 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	}
 	
 	private Integer[] timeScale;
-//	private int creationDate;
 	private final int dateIndex;
 	private final List<CarbonUnitStatus> status; 
 	
@@ -113,9 +112,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * @param carbonUnitFeature a CarbonUnitFeature instance
 	 * @param initialAmounts a map that contains the amount of each element to be processed
 	 */
-	protected CarbonUnit(int dateIndex, 
-			CarbonUnitFeature carbonUnitFeature,
-			AmountMap<Element> initialAmounts) {
+	protected CarbonUnit(int dateIndex, CarbonUnitFeature carbonUnitFeature, AmountMap<Element> initialAmounts) {
 		super(initialAmounts);
 		this.dateIndex = dateIndex;
 		this.carbonUnitFeature = carbonUnitFeature;

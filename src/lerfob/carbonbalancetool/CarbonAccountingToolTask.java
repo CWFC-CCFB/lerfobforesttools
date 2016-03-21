@@ -341,7 +341,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 								}
 
-								productionLineManager.processWoodPiece(productionLineName, caller.getDateForThisTree(tree), amountMap);		
+								productionLineManager.processWoodPiece(productionLineName, caller.getDateIndexForThisTree(tree), amountMap);		
 							}
 						}
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);
@@ -353,7 +353,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							amountMap.put(Element.Volume, volume);
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
-							productionLineManager.leftThisPieceInTheForest(caller.getDateForThisTree(tree), amountMap);		
+							productionLineManager.leftThisPieceInTheForest(caller.getDateIndexForThisTree(tree), amountMap);		
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));

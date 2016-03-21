@@ -46,22 +46,22 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	/**
 	 * The constructor of this class.
 	 * @param initialVolumeBeforeFirstTransformation the volume before the processing (double) (m3)
-	 * @param creationDate the creation date (integer) (yr)
+	 * @param dateIndex the creation date index of the time scale
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
 	@Deprecated
 	protected EndUseWoodProductCarbonUnit(double initialVolumeBeforeFirstTransformation,
-			int creationDate,
+			int dateIndex,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap) {
-		super(creationDate, carbonUnitFeature, amountMap);
+		super(dateIndex, carbonUnitFeature, amountMap);
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	}
 	
 	/**
 	 * The constructor of this class.
 	 * @param initialVolumeBeforeFirstTransformation the volume before the processing (double) (m3)
-	 * @param creationDate the creation date (integer) (yr)
+	 * @param dateIndex the creation date index of the time scale
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
 	protected EndUseWoodProductCarbonUnit(int dateIndex,
@@ -121,8 +121,8 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 						}
 						compartmentManager.getCarbonToolSettings().getCurrentProductionProcessorManager().getCarbonUnitMap().add(processedUnits);
 					} else {	// former implementation
-						int creationDate = compartmentManager.getTimeScale()[i];
-						((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).getProductionLine().getManager().sendToTheLandfill(creationDate, updatedMap);	
+//						int creationDate = compartmentManager.getTimeScale()[i];
+						((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).getProductionLine().getManager().sendToTheLandfill(i, updatedMap);	
 					}
 				}
 			}

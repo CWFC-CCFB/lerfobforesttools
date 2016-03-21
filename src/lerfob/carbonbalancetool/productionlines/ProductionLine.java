@@ -91,8 +91,8 @@ public class ProductionLine implements 	Serializable {
 //	}
 
 	
-	protected CarbonUnitMap<CarbonUnitStatus> createCarbonUnitFromAWoodPiece(int creationDate, AmountMap<Element> amountMap) throws Exception {
-		return primaryProcessor.processWoodPiece(creationDate, amountMap);
+	protected CarbonUnitMap<CarbonUnitStatus> createCarbonUnitFromAWoodPiece(int dateIndex, AmountMap<Element> amountMap) throws Exception {
+		return primaryProcessor.processWoodPiece(dateIndex, amountMap);
 	}
 	
 	@Override
