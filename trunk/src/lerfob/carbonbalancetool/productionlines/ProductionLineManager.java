@@ -276,7 +276,7 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 	 * @return a Collection of carbon unit that comes from this log
 	 * @throws Exception
 	 */
-	protected CarbonUnitMap<CarbonUnitStatus> processWoodPieceIntoThisProductionLine(String productionLineName, int creationDate,	AmountMap<Element> amountMap) throws Exception {
+	protected CarbonUnitMap<CarbonUnitStatus> processWoodPieceIntoThisProductionLine(String productionLineName, int dateIndex, AmountMap<Element> amountMap) throws Exception {
 		CarbonUnitMap<CarbonUnitStatus> carbonUnits = new CarbonUnitMap<CarbonUnitStatus>(CarbonUnitStatus.EndUseWoodProduct);
 		try {
 			int index = getProductionLineNames().indexOf(productionLineName);
@@ -285,11 +285,11 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 			} else {
 				ProductionLine model = getContent().get(index);
 				if (model.isLandfillSite()) {
-					sendToTheLandfill(creationDate, amountMap);
+					sendToTheLandfill(dateIndex, amountMap);
 				} else if (model.isLeftInForestModel()) {
-					leftThisPieceInTheForest(creationDate, amountMap);
+					leftThisPieceInTheForest(dateIndex, amountMap);
 				} else {
-					carbonUnits.add(model.createCarbonUnitFromAWoodPiece(creationDate, amountMap));
+					carbonUnits.add(model.createCarbonUnitFromAWoodPiece(dateIndex, amountMap));
 				}
 				return carbonUnits;
 			}
@@ -300,12 +300,12 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 	
 	/**
 	 * This method sends a piece of wood to the landfill site. 
-	 * @param creationDate the date at which the product was sent to the landfill
+	 * @param dateIndex the date at which the product was sent to the landfill
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 * @throws Exception
 	 */
-	protected void sendToTheLandfill(int creationDate, AmountMap<Element> amountMap) throws Exception {
-		CarbonUnitMap<CarbonUnitStatus> carbonUnits = landfillModel.createCarbonUnitFromAWoodPiece(creationDate, amountMap);
+	protected void sendToTheLandfill(int dateIndex, AmountMap<Element> amountMap) throws Exception {
+		CarbonUnitMap<CarbonUnitStatus> carbonUnits = landfillModel.createCarbonUnitFromAWoodPiece(dateIndex, amountMap);
 
 		for (CarbonUnitStatus type : carbonUnits.keySet()) {
 			if (type != CarbonUnitStatus.EndUseWoodProduct && type != CarbonUnitStatus.IndustrialLosses) {
@@ -320,12 +320,12 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 
 	/**
 	 * This method leaves a wood piece in the forest (for instance the roots). 
-	 * @param creationDate the date at which the piece was left in the forest
+	 * @param dateIndex the index of the date at which the piece was left in the forest
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 * @throws Exception
 	 */
-	public void leftThisPieceInTheForest(int creationDate, AmountMap<Element> amountMap) throws Exception {
-		leftInTheForestModel.createCarbonUnitFromAWoodPiece(creationDate, amountMap);
+	public void leftThisPieceInTheForest(int dateIndex, AmountMap<Element> amountMap) throws Exception {
+		leftInTheForestModel.createCarbonUnitFromAWoodPiece(dateIndex, amountMap);
 	}
 	
 	@Override
