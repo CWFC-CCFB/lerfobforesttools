@@ -67,7 +67,7 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
 		linkFunction.setVariableValue(0, 1d);	// variable that multiplies the xBeta
 		linkFunction.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
-		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);
+		ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 	}
 
 	protected void init() {
@@ -156,14 +156,14 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 	@Override
 	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
 		MathildeThinningSubModule subModule;
-		if (parms == null || parms.length < 1) {
-			throw new InvalidParameterException("The probability at stand level is missing!");
-		} 
-		
-		Object thinningStandEvent = parms[0];
+//		if (parms == null || parms.length < 1) {
+//			throw new InvalidParameterException("The probability at stand level is missing!");
+//		} 
+//		
+//		Object thinningStandEvent = parms[0];
 			
-		if (parms.length > 1 && parms[1] instanceof Integer) {
-			subModule = getSubModule((Integer) parms[1]);
+		if (parms.length >= 1 && parms[0] instanceof Integer) {
+			subModule = getSubModule((Integer) parms[0]);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + parms[1]);
 			}
@@ -178,9 +178,9 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 		linkFunction.setParameterValue(0, pred);
 		double prob = 0d;
 		
-		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
-			return prob;
-		} else {
+//		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
+//			return prob;
+//		} else {
 			if (isRandomEffectsVariabilityEnabled) {
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 				Matrix randomEffects = subModule.getRandomEffects(interval);
@@ -193,12 +193,12 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
 			}
 			
-			if (thinningStandEvent instanceof Boolean) {
-				return prob;
-			} else {
-				return prob * (Double) thinningStandEvent;
-			}
-		}
+//			if (thinningStandEvent instanceof Boolean) {
+			return prob;
+//			} else {
+//				return prob * (Double) thinningStandEvent;
+//			}
+//		}
 	}
 
 	protected final MathildeThinningSubModule getSubModule(int subModuleId) {

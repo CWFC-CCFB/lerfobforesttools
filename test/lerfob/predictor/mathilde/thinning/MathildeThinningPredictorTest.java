@@ -1,13 +1,11 @@
 package lerfob.predictor.mathilde.thinning;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
@@ -17,8 +15,6 @@ import repicea.util.ObjectUtility;
 public class MathildeThinningPredictorTest {
 
 	private static List<MathildeThinningTreeImpl> Trees;
-	
-	
 	
 	private static void ReadTrees() {
 		if (Trees == null) {
@@ -68,22 +64,18 @@ public class MathildeThinningPredictorTest {
 		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false, false);
 		int nbTested = 0;
 		for (MathildeThinningTreeImpl tree : Trees) {
-			if (nbTested == 39260) {
-				int u = 0;
-			}
 			MathildeThinningStandImpl stand = tree.getStand();
 			double standProb = standPredictor.predictEventProbability(stand, null, stand.getExcludedGroup());
 			double actualLinearPred = Math.log(standProb/(1-standProb));
-			if (Math.abs(stand.getLinearPlotPred() - actualLinearPred) > 1E-8) {
-				int u = 0;
-			}
+//			if (Math.abs(stand.getLinearPlotPred() - actualLinearPred) > 1E-8) {
+//				int u = 0;
+//			}
 			Assert.assertEquals(stand.getLinearPlotPred(), actualLinearPred, 1E-8);
 			nbTested++;
 		}
 		System.out.println("Number of plot predictions successfully tested: " + nbTested);
 	}
 	
-	@Ignore
 	@Test
 	public void TreePredictionsFixedEffectsOnlyTest() {
 		ReadTrees();
@@ -104,5 +96,27 @@ public class MathildeThinningPredictorTest {
 		}
 		System.out.println("Number of tree predictions successfully tested: " + nbTested);
 	}
+	
+	@Test
+	public void completeMarginalPredictionsTest() {
+		ReadTrees();
+		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false, false);
+		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false, false, false);
+		int nbTested = 0;
+		for (MathildeThinningTreeImpl tree : Trees) {
+//			if (nbTested == 176423) {
+//				int u = 0;
+//			}
+			MathildeThinningStandImpl stand = tree.getStand();
+			double standPred = standPredictor.predictEventProbability(stand, tree, stand.getExcludedGroup());
+			double treePred = treePredictor.predictEventProbability(stand, tree, tree.getExcludedGroup());
+			double marginalPred = standPred * treePred;
+			Assert.assertEquals("Testing obs " + ++nbTested, tree.getPrediction(), marginalPred, 1E-6);
+		}
+		System.out.println("Number of tree predictions successfully tested: " + nbTested);
+	}
+	
+	
+	
 
 }
