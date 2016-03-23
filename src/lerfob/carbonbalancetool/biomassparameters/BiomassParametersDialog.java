@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.lang.reflect.Method;
 
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
@@ -36,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import repicea.app.SettingMemory;
+import repicea.gui.AutomatedHelper;
 import repicea.gui.OwnedWindow;
 import repicea.gui.REpiceaDialog;
 import repicea.gui.UIControlManager;
@@ -48,6 +50,7 @@ import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
 import repicea.gui.components.NumberFormatFieldFactory.Range;
 import repicea.io.IOUserInterface;
 import repicea.io.REpiceaIOFileHandlerUI;
+import repicea.net.BrowserCaller;
 import repicea.serial.Memorizable;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.util.REpiceaTranslator;
@@ -57,6 +60,15 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 
 	static {
 		UIControlManager.setTitle(BiomassParametersDialog.class, "Carbon estimation in biomass", "Estimation du carbone de la biomasse");
+
+		try {
+			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
+			String url = "http://www.inra.fr/capsis/help_"+ 
+					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
+					"/capsis/extension/modeltool/biomassparameter";
+			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
+			UIControlManager.setHelpMethod(BiomassParametersDialog.class, helper);
+		} catch (Exception e) {}
 	}
 	
 	protected static enum MessageID implements TextableEnum {

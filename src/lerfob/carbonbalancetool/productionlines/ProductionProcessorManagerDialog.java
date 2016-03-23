@@ -24,6 +24,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -36,11 +37,13 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.Cre
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateLandfillProcessorButton;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateLeftInForestProcessorButton;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateProductionLineProcessorButton;
+import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.OwnedWindow;
 import repicea.gui.REpiceaAWTProperty;
 import repicea.gui.UIControlManager;
 import repicea.gui.components.REpiceaComboBoxOpenButton;
+import repicea.net.BrowserCaller;
 import repicea.simulation.processsystem.SystemLayout;
 import repicea.simulation.processsystem.SystemManagerDialog;
 import repicea.simulation.processsystem.SystemPanel;
@@ -61,6 +64,16 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UISetup.Icons.put(CreateEndOfLifeLinkButton.class.getName(),CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "endOfLifelinkIcon.png"));
 		UISetup.Icons.put(LogCategoryProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "logIcon.png"));
 		UIControlManager.setTitle(ProductionProcessorManagerDialog.class, "Harvested Wood Products", "Bois recolt\u00E9s");
+		
+		try {
+			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
+			String url = "http://www.inra.fr/capsis/help_"+ 
+					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
+					"/capsis/extension/modeltool/productionprocessormanager";
+			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
+			UIControlManager.setHelpMethod(ProductionProcessorManagerDialog.class, helper);
+		} catch (Exception e) {}
+
 	}
 
 

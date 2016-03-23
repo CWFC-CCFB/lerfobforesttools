@@ -51,19 +51,10 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
-//	private final LinearStatisticalExpression eta;
 	
 	private int numberOfParameters;
 
 	protected GaussHermiteQuadrature ghq;
-
-	private static final List<MathildeTreeSpecies> SpeciesList = new ArrayList<MathildeTreeSpecies>();
-	static {
-		SpeciesList.add(MathildeTreeSpecies.FAGUS);
-		SpeciesList.add(MathildeTreeSpecies.QUERCUS);
-		SpeciesList.add(MathildeTreeSpecies.CARPINUS);
-		SpeciesList.add(MathildeTreeSpecies.OTHERS);
-	}
 	
 	/**
 	 * Constructor.
@@ -141,23 +132,22 @@ final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<Ma
 		if (scaledDbhDg < 0) {
 			dbhDgBelow09 = 1d;
 		}
-//		double dbh_m = tree.getDbhCm() / 100d;
-		int pointerSpeciesOffset = SpeciesList.indexOf(species);
 		int pointer = 0;
 
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 
-		oXVector.m_afData[0][pointer + pointerSpeciesOffset] = scaledDbhDg;
-		pointer += SpeciesList.size();
+		oXVector.setSubMatrix(species.getLongDummyVariable().scalarMultiply(scaledDbhDg), 0, pointer);
+		pointer += species.getLongDummyVariable().m_iCols;
 
-		oXVector.m_afData[0][pointer + pointerSpeciesOffset] = scaledDbhDg * dbhDgBelow09;
-		pointer += SpeciesList.size();
+		oXVector.setSubMatrix(species.getLongDummyVariable().scalarMultiply(scaledDbhDg * dbhDgBelow09), 0, pointer);
+		pointer += species.getLongDummyVariable().m_iCols;
 
 		oXVector.m_afData[0][pointer] = scaledDbhDg * scaledDbhDg;
 		pointer++;
 
 		oXVector.m_afData[0][pointer] = scaledDbhDg * scaledDbhDg * dbhDgBelow09;
+		pointer++;
 		
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;

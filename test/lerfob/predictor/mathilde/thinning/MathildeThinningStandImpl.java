@@ -10,14 +10,16 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	private final int timeSinceLastCut;
 	private final double linearPlotPred;
 	private final int excludedGroup;
+	private final double basalAreaM2Ha;
 	
-	MathildeThinningStandImpl(String id, double mqdCm, int dateYr, int timeSinceLastCut, int excludedGroup, double linearPlotPred) {
+	MathildeThinningStandImpl(String id, double mqdCm, double basalAreaM2Ha, int dateYr, int timeSinceLastCut, int excludedGroup, double linearPlotPred) {
 		this.id = id;
 		this.mqdCm = mqdCm;
 		this.dateYr = dateYr;
 		this.timeSinceLastCut = timeSinceLastCut;
 		this.linearPlotPred = linearPlotPred;
 		this.excludedGroup = excludedGroup;
+		this.basalAreaM2Ha = basalAreaM2Ha;
 	}
 	
 	@Override
@@ -41,4 +43,9 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	protected double getLinearPlotPred() {return linearPlotPred;}
 
 	protected int getExcludedGroup() {return excludedGroup;}
+
+	@Override
+	public double getBasalAreaM2Ha() {
+		return basalAreaM2Ha;
+	}
 }

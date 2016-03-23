@@ -181,8 +181,8 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 		
-		oXVector.setSubMatrix(species.getDummyVariable(), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable(), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
 		oXVector.m_afData[0][pointer] = dbh;
 		pointer++;
@@ -190,8 +190,8 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 		oXVector.m_afData[0][pointer] = logDbh * gr17;
 		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(logDbh), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(logDbh), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 		
 		oXVector.m_afData[0][pointer] = bal42;
 		pointer++;
@@ -199,8 +199,8 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 		oXVector.m_afData[0][pointer] = bal22 * gr17;
 		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(bal22), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(bal22), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
 		pointer++; // to skip b14
 		
@@ -210,8 +210,8 @@ public class MathildeMortalityPredictor extends LogisticModelBasedSimulator<Math
 		oXVector.m_afData[0][pointer] = upcomingCut * gr17;
 		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(upcomingCut), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(upcomingCut), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 		
 		oXVector.m_afData[0][pointer] = Math.log(stand.getGrowthStepLengthYr());
 		pointer++;
