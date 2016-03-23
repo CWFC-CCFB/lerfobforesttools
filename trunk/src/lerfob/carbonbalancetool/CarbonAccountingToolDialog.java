@@ -41,8 +41,6 @@ import javax.swing.SwingWorker;
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.BiomassParametersWrapper;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.ProductionProcessorManagerWrapper;
-import lerfob.carbonbalancetool.biomassparameters.BiomassParametersDialog;
-import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaAWTProperty;
@@ -81,25 +79,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 			UIControlManager.setHelpMethod(CarbonAccountingToolDialog.class, helper);
 		} catch (Exception e) {}
-
-		try {
-			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-			String url = "http://www.inra.fr/capsis/help_"+ 
-					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-					"/capsis/extension/modeltool/productionprocessormanager";
-			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
-			UIControlManager.setHelpMethod(ProductionProcessorManagerDialog.class, helper);
-		} catch (Exception e) {}
-
-		try {
-			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-			String url = "http://www.inra.fr/capsis/help_"+ 
-					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-					"/capsis/extension/modeltool/biomassparameter";
-			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
-			UIControlManager.setHelpMethod(BiomassParametersDialog.class, helper);
-		} catch (Exception e) {}
-
 	}
 
 	public static enum MessageID implements TextableEnum {

@@ -13,10 +13,10 @@ class MathildeThinningTreeImpl implements MathildeTree {
 	private final double linearTreePred; 
 	private final int cutPlot;
 	
-	MathildeThinningTreeImpl(String id, double dbhCm, int speciesCode, int cutPlot, double linearTreePred, double predicted, MathildeThinningStandImpl stand) {
+	MathildeThinningTreeImpl(String id, double dbhCm, MathildeTreeSpecies species, int cutPlot, double linearTreePred, double predicted, MathildeThinningStandImpl stand) {
 		this.id = id;
 		this.dbhCm = dbhCm;
-		species = MathildeTreeSpecies.getSpecies(speciesCode);
+		this.species = species;
 		this.cutPlot = cutPlot;
 		this.predicted = predicted;
 		this.stand = stand;

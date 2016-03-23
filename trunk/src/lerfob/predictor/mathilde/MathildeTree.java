@@ -48,7 +48,8 @@ public interface MathildeTree extends DbhCmProvider,
 		
 		private static Map<Integer, MathildeTreeSpecies> speciesMap;
 
-		private Matrix dummyVariable;
+		private Matrix shortDummyVariable;
+		private Matrix longDummyVariable;
 		
 		/**
 		 * This method returns the species enum according to the code.
@@ -68,10 +69,12 @@ public interface MathildeTree extends DbhCmProvider,
 
 		MathildeTreeSpecies(String englishText, String frenchText) {
 			setText(englishText, frenchText);
-			dummyVariable = new Matrix(1,3);
-			if (this.ordinal() > 0) {
-				dummyVariable.m_afData[0][this.ordinal() - 1] = 1d;
+			shortDummyVariable = new Matrix(1,3);
+			if (ordinal() > 0) {
+				shortDummyVariable.m_afData[0][ordinal() - 1] = 1d;
 			}
+			longDummyVariable = new Matrix(1,4);
+			longDummyVariable.m_afData[0][ordinal()] = 1d;
 		}
 		
 		@Override
@@ -86,7 +89,15 @@ public interface MathildeTree extends DbhCmProvider,
 		 * This method returns a 1x3 row vector of dummy variables which represent the species effect.
 		 * @return a Matrix instance
 		 */
-		public Matrix getDummyVariable() {return dummyVariable;}
+		public Matrix getShortDummyVariable() {return shortDummyVariable;}
+		
+		/**
+		 * This method returns a 1x4 row vector of dummy variables which represent the species effect.
+		 * @return a Matrix instance
+		 */
+		public Matrix getLongDummyVariable() {return longDummyVariable;}
+		
+		
 	}
 	
 	/**

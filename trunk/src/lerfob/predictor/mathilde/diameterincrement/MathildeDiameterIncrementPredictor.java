@@ -144,7 +144,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		if (stand.isGoingToBeHarvested()) {
 			upcomingCut = 1d;
 		}
-		Matrix dummySpecies = tree.getMathildeTreeSpecies().getDummyVariable();
+		Matrix dummySpecies = tree.getMathildeTreeSpecies().getShortDummyVariable();
 		
 		double bal22 = tree.getBasalAreaLargerThanSubjectM2Ha(MathildeTreeSpecies.QUERCUS);
 		double bal42 = tree.getBasalAreaLargerThanSubjectM2Ha(MathildeTreeSpecies.FAGUS); 

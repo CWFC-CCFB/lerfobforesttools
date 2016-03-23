@@ -135,23 +135,23 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(scaledDbhDg), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(scaledDbhDg * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(scaledDbhDg * scaledDbhDg), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 		
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg * scaledDbhDg), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(dbhDgBelow09 * scaledDbhDg * scaledDbhDg), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbh_m), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(dbh_m), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 
-		oXVector.setSubMatrix(species.getDummyVariable().scalarMultiply(dbh_m * dbh_m), 0, pointer);
-		pointer += species.getDummyVariable().m_iCols;
+		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(dbh_m * dbh_m), 0, pointer);
+		pointer += species.getShortDummyVariable().m_iCols;
 		
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;

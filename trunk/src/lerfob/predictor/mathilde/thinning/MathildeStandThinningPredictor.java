@@ -42,7 +42,7 @@ final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<M
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
-	protected static final int NumberOfParameters = 3;
+	protected static final int NumberOfParameters = 4;
 
 
 	/**
@@ -101,17 +101,27 @@ final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<M
 		oXVector.resetMatrix();
 
 		double timeSinceLastCutYr = stand.getTimeSinceLastCutYr();
+		int alreadyCut = 1;
+		if (timeSinceLastCutYr < 0) {
+			alreadyCut = 0;
+		}
+		
+		int notYetCut = 1 - alreadyCut;
 		
 		int pointer = 0;
 
-		oXVector.m_afData[0][pointer] = 1d;
+		oXVector.m_afData[0][pointer] = notYetCut;
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = timeSinceLastCutYr;
+		oXVector.m_afData[0][pointer] = notYetCut * stand.getBasalAreaM2Ha();
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = Math.log(timeSinceLastCutYr);
-
+		oXVector.m_afData[0][pointer] = alreadyCut;
+		pointer++;
+		
+		oXVector.m_afData[0][pointer] = alreadyCut * stand.getTimeSinceLastCutYr();
+		pointer++;
+		
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;
 	}
