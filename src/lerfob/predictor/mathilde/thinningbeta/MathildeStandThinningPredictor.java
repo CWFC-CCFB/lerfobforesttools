@@ -38,7 +38,7 @@ import repicea.util.ObjectUtility;
  */
 @SuppressWarnings({ "serial", "deprecation" })
 @Deprecated
-final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, Object> {
+public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, Object> {
 
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 

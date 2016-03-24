@@ -45,7 +45,7 @@ import repicea.util.ObjectUtility;
  */
 @SuppressWarnings({ "serial", "deprecation" })
 @Deprecated
-final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
+public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 

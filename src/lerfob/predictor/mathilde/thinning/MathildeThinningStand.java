@@ -21,6 +21,7 @@ package lerfob.predictor.mathilde.thinning;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 import repicea.simulation.covariateproviders.standlevel.TimeSinceLastCutYrProvider;
 
@@ -30,6 +31,7 @@ import repicea.simulation.covariateproviders.standlevel.TimeSinceLastCutYrProvid
  */
 public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
 												TimeSinceLastCutYrProvider,
+												GrowthStepLengthYrProvider,
 												BasalAreaM2HaProvider,
 												MeanQuadraticDiameterCmProvider,
 												DateYrProvider {

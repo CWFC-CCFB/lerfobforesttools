@@ -28,7 +28,7 @@ import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmP
  * @author Ruben Manso and Mathieu Fortin - June 2015
  */
 @Deprecated
-interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
+public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
 												GrowthStepLengthYrProvider, 
 												DateYrProvider,
 												MeanQuadraticDiameterCmProvider {
