@@ -36,11 +36,11 @@ public class MathildeThinningPredictorTest {
 					double dbhCm = Double.parseDouble(record[10].toString());
 					int alreadyCut = Integer.parseInt(record[11].toString());
 					int cutPlot = Integer.parseInt(record[13].toString());
-					int timeSinceLastCut;
+					double timeSinceLastCut;
 					if (alreadyCut == 1) {
-						timeSinceLastCut = Integer.parseInt(record[18].toString());
+						timeSinceLastCut = Double.parseDouble(record[18].toString());
 					} else {
-						timeSinceLastCut = -1;
+						timeSinceLastCut = Double.POSITIVE_INFINITY;
 					}
 					int excludedGroup = Integer.parseInt(record[24].toString());
 					double linearPlotPred = Double.parseDouble(record[25].toString());

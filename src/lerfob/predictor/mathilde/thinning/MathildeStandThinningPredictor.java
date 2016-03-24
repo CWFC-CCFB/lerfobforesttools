@@ -102,7 +102,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 
 		double timeSinceLastCutYr = stand.getTimeSinceLastCutYr();
 		int alreadyCut = 1;
-		if (timeSinceLastCutYr < 0) {
+		if (Double.isInfinite(timeSinceLastCutYr)) {
 			alreadyCut = 0;
 		}
 		
@@ -116,11 +116,13 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		oXVector.m_afData[0][pointer] = notYetCut * stand.getBasalAreaM2Ha();
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = alreadyCut;
-		pointer++;
-		
-		oXVector.m_afData[0][pointer] = alreadyCut * stand.getTimeSinceLastCutYr();
-		pointer++;
+		if (alreadyCut != 0) {
+			oXVector.m_afData[0][pointer] = alreadyCut;
+			pointer++;
+			
+			oXVector.m_afData[0][pointer] = alreadyCut * timeSinceLastCutYr;
+			pointer++;
+		}
 		
 		double result = oXVector.multiply(beta).m_afData[0][0];
 		return result;
