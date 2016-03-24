@@ -48,4 +48,9 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	public double getBasalAreaM2Ha() {
 		return basalAreaM2Ha;
 	}
+
+	@Override
+	public double getGrowthStepLengthYr() {
+		return 0;
+	}
 }

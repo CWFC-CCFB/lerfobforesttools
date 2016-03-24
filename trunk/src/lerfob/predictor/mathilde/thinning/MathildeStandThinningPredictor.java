@@ -100,7 +100,7 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 	protected double getFixedEffectOnlyPrediction(Matrix beta, MathildeThinningStand stand) {
 		oXVector.resetMatrix();
 
-		double timeSinceLastCutYr = stand.getTimeSinceLastCutYr();
+		double timeSinceLastCutYr = stand.getTimeSinceLastCutYr() + stand.getGrowthStepLengthYr();
 		int alreadyCut = 1;
 		if (Double.isInfinite(timeSinceLastCutYr)) {
 			alreadyCut = 0;
