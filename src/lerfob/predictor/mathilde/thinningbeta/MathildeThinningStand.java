@@ -27,7 +27,8 @@ import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmP
  * This interface ensures that the Stand instance is compatible with the MathildeStandThinningPredictor.
  * @author Ruben Manso and Mathieu Fortin - June 2015
  */
-public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
+@Deprecated
+interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
 												GrowthStepLengthYrProvider, 
 												DateYrProvider,
 												MeanQuadraticDiameterCmProvider {

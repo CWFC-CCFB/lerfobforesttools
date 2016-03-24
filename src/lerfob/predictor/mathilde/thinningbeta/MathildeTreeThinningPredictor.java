@@ -43,8 +43,9 @@ import repicea.util.ObjectUtility;
  * 
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
-@SuppressWarnings("serial")
-public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
+@SuppressWarnings({ "serial", "deprecation" })
+@Deprecated
+final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 
