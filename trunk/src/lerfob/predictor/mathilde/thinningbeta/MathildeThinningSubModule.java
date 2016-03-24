@@ -21,6 +21,7 @@ package lerfob.predictor.mathilde.thinningbeta;
 import lerfob.predictor.mathilde.MathildeSubModule;
 
 @SuppressWarnings("serial")
+@Deprecated
 final class MathildeThinningSubModule extends MathildeSubModule {
 	
 	protected MathildeThinningSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
