@@ -28,7 +28,7 @@ import repicea.simulation.covariateproviders.standlevel.TimeSinceLastCutYrProvid
  * This interface ensures that the Stand instance is compatible with the MathildeStandThinningPredictor.
  * @author Ruben Manso and Mathieu Fortin - June 2015
  */
-interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
+public interface MathildeThinningStand extends MonteCarloSimulationCompliantObject, 
 												TimeSinceLastCutYrProvider,
 												BasalAreaM2HaProvider,
 												MeanQuadraticDiameterCmProvider,
