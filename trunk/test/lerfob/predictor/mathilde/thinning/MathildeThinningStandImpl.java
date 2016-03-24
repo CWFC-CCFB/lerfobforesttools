@@ -7,12 +7,12 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	private final String id;
 	private final double mqdCm;
 	private final int dateYr;
-	private final int timeSinceLastCut;
+	private final double timeSinceLastCut;
 	private final double linearPlotPred;
 	private final int excludedGroup;
 	private final double basalAreaM2Ha;
 	
-	MathildeThinningStandImpl(String id, double mqdCm, double basalAreaM2Ha, int dateYr, int timeSinceLastCut, int excludedGroup, double linearPlotPred) {
+	MathildeThinningStandImpl(String id, double mqdCm, double basalAreaM2Ha, int dateYr, double timeSinceLastCut, int excludedGroup, double linearPlotPred) {
 		this.id = id;
 		this.mqdCm = mqdCm;
 		this.dateYr = dateYr;
