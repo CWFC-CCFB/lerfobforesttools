@@ -178,9 +178,6 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 		linkFunction.setParameterValue(0, pred);
 		double prob = 0d;
 		
-//		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
-//			return prob;
-//		} else {
 			if (isRandomEffectsVariabilityEnabled) {
 				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 				Matrix randomEffects = subModule.getRandomEffects(interval);
@@ -193,12 +190,7 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
 			}
 			
-//			if (thinningStandEvent instanceof Boolean) {
-			return prob;
-//			} else {
-//				return prob * (Double) thinningStandEvent;
-//			}
-//		}
+		return prob;
 	}
 
 	protected final MathildeThinningSubModule getSubModule(int subModuleId) {
@@ -206,8 +198,8 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	}
 	
 	
-	public static void main(String[] args) {
-		new MathildeTreeThinningPredictor(false, false, false);
-	}
+//	public static void main(String[] args) {
+//		new MathildeTreeThinningPredictor(false, false, false);
+//	}
 
 }

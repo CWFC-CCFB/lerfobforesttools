@@ -151,8 +151,8 @@ public final class MathildeStandThinningPredictor extends LogisticModelBasedSimu
 		return prob;
 	}
 
-	public static void main(String[] args) {
-		new MathildeStandThinningPredictor(false, false);
-	}
+//	public static void main(String[] args) {
+//		new MathildeStandThinningPredictor(false, false);
+//	}
 
 }
