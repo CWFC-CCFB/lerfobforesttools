@@ -161,14 +161,9 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 	@Override
 	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
 		MathildeThinningSubModule subModule;
-		if (parms == null || parms.length < 1) {
-			throw new InvalidParameterException("The probability at stand level is missing!");
-		} 
 		
-		Object thinningStandEvent = parms[0];
-			
-		if (parms.length > 1 && parms[1] instanceof Integer) {
-			subModule = subModules.get(parms[1]);
+		if (parms.length >= 1 && parms[0] instanceof Integer) {
+			subModule = subModules.get(parms[0]);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + parms[1]);
 			}
@@ -182,33 +177,24 @@ public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimul
 
 		linkFunction.setParameterValue(0, pred);
 		double prob = 0d;
-		
-		if (thinningStandEvent instanceof Boolean && !((Boolean) thinningStandEvent)) {
-			return prob;
-		} else {
-			if (isRandomEffectsVariabilityEnabled) {
-				IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
-				Matrix randomEffects = subModule.getRandomEffects(interval);
-//				Matrix randomEffects = getRandomEffectsForThisSubject(interval);	bug
-				linkFunction.setParameterValue(1, randomEffects.m_afData[0][0]);
-				prob = linkFunction.getValue();
-			} else {	// i.e. deterministic mode
-				linkFunction.setParameterValue(1, 0d);
-				List<Integer> parameterIndices = new ArrayList<Integer>();
-				parameterIndices.add(1);
-				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
-			}
-			
-			if (thinningStandEvent instanceof Boolean) {
-				return prob;
-			} else {
-				return prob * (Double) thinningStandEvent;
-			}
+
+		if (isRandomEffectsVariabilityEnabled) {
+			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
+			Matrix randomEffects = subModule.getRandomEffects(interval);
+			linkFunction.setParameterValue(1, randomEffects.m_afData[0][0]);
+			prob = linkFunction.getValue();
+		} else {	// i.e. deterministic mode
+			linkFunction.setParameterValue(1, 0d);
+			List<Integer> parameterIndices = new ArrayList<Integer>();
+			parameterIndices.add(1);
+			prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
 		}
+
+		return prob;
 	}
 
-	public static void main(String[] args) {
-		new MathildeTreeThinningPredictor(false, false, false);
-	}
+//	public static void main(String[] args) {
+//		new MathildeTreeThinningPredictor(false, false, false);
+//	}
 
 }
