@@ -86,7 +86,6 @@ class CarbonAccountingToolProductWithRecyclingViewer extends CarbonAccountingToo
 						}
 					}
 				}
-				newCarrier.putAll(carrier);
 			} else {
 				newCarrier = new HashMap<Element, MonteCarloEstimate>();
 				outputMap.put(useClass, newCarrier);
