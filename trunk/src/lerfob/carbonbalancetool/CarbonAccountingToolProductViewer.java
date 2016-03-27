@@ -30,7 +30,6 @@ import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeatu
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
@@ -43,7 +42,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Harvested Wood Products Distribution without recycling", "R\u00E9partition des produits bois sans recyclage"),
-		YAxis("Percentage (%)", "Pourcentage (%)"),
+		YAxis("Volume (m3/ha/yr)", "Volume (m3/ha/an)"),
 		XAxis("Product class", "Cat\u00E9gorie de produits");
 
 		MessageID(String englishText, String frenchText) {
@@ -77,35 +76,15 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
 		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = getAppropriateMap();
 		
-		MonteCarloEstimate sum = null;
-		int i = 0;
-		for (Map<Element, MonteCarloEstimate> carrier : oMap.values()) {
-			if (i == 0) {
-				sum = carrier.get(Element.Volume);
-			} else {
-				sum = MonteCarloEstimate.add(sum, carrier.get(Element.Volume));
-			}
-			i++;
-		}
-		
-		MonteCarloEstimate relativeEstimate;
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				relativeEstimate = new MonteCarloEstimate();
 				MonteCarloEstimate basicEstimate = oMap.get(useClass).get(Element.Volume);
-				for (i = 0; i < basicEstimate.getNumberOfRealizations(); i++) {
-					double sumValueForThisRealization = sum.getRealizations().get(i).m_afData[0][0];
-//					double absoluteValue = basicEstimate.getRealizations().get(i).m_afData[0][0];
-//					System.out.println("Class " + useClass.name() + " Sum = " + sumValueForThisRealization + " Value = " + absoluteValue);
-					relativeEstimate.addRealization(basicEstimate.getRealizations().get(i).scalarMultiply(100d / sumValueForThisRealization));
-				}
-				dataset.add(relativeEstimate,
+				dataset.add(MonteCarloEstimate.multiply(basicEstimate, 1d / summary.getRotationLength()),
 						getColor(useClass.ordinal()),
 						useClass.toString(), 
 						summary.getResultId());
 			}
 		}
-		
 		
 		JFreeChart chart = ChartFactory.createBarChart(getTitle(), 
 				getXAxisLabel(), 
@@ -126,9 +105,6 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		renderer.setShadowVisible(true);
 		renderer.setMaximumBarWidth(0.1);
 		renderer.setColors(dataset);
-		ValueAxis axis = plot.getRangeAxis();
-		axis.setRange(0, 100);
-
 		
 		ChartPanel chartPanel = new ChartPanel(chart);
 		return chartPanel;

@@ -277,8 +277,12 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	
 	private JPanel createStatusAndProgressBarPanel() {
-		
+
+		JPanel wrapperPanel = new JPanel(new BorderLayout());
+		wrapperPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
+		wrapperPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 		JPanel progressBarPanel = new JPanel();
+		wrapperPanel.add(progressBarPanel, BorderLayout.CENTER);
 		progressBarPanel.setLayout(new BoxLayout(progressBarPanel, BoxLayout.Y_AXIS));
 		progressBarPanel.add(Box.createVerticalStrut(10));
 		
@@ -298,7 +302,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		progressBarPanel.add(Box.createVerticalStrut(10));
 		
 		
-		return progressBarPanel;
+		return wrapperPanel;
 	}
 
 	/**	

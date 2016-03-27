@@ -15,6 +15,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -23,7 +24,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Log Category Volumes", "Volumes des cat\u00E9gories de billons"),
-		YAxis("Volume (m3/ha)", "Volume (m3/ha)"),
+		YAxis("Volume (m3/ha/yr)", "Volume (m3/ha/an)"),
 		XAxis("Log Category", "Cat\u00E9gorie de billons");
 
 		MessageID(String englishText, String frenchText) {
@@ -56,7 +57,8 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		
 		for (String logCategoryName : logCategoryNames) {
 			int index = logCategoryNames.indexOf(logCategoryName);
-			dataset.add(summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume),
+			MonteCarloEstimate estimate = summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume);
+			dataset.add(MonteCarloEstimate.multiply(estimate, 1d / summary.getRotationLength()),
 					getColor(index),
 					logCategoryName, 
 					summary.getResultId());

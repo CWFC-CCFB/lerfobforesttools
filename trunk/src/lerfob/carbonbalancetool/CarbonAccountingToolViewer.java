@@ -35,7 +35,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	private static Vector<Color> COLORS = new Vector<Color>();
 	static {
 		COLORS.add(Color.BLUE);
-		COLORS.add(Color.BLACK);
+		COLORS.add(Color.LIGHT_GRAY);
 		COLORS.add(Color.RED);
 		COLORS.add(Color.GRAY);
 		COLORS.add(Color.YELLOW);
