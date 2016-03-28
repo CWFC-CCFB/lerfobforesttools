@@ -67,10 +67,7 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	public String getStandID() {return scenToCompare.getStandID() + " - " + baseline.getStandID();}
 
 	@Override
-	public Integer[] getTimeScale() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Integer[] getTimeScale() {return null;}
 
 	@Override
 	public int getRotationLength() {
@@ -88,20 +85,18 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 	@Override
 	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
 	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {
-		// TODO Auto-generated method stub
+		// TODO FP add the proper method
 		return null;
 	}
 
 	@Override
 	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -114,5 +109,12 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 	@Override
 	public String getResultId() {return resultId;}
+
+
+	@Override
+	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling) {
+		// TODO FP add the proper method
+		return null;
+	}
 
 }

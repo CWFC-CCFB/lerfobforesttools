@@ -65,11 +65,11 @@ public interface CarbonAssessmentToolSimulationResult {
 	
 	/**
 	 * This method returns the amount of harvested wood products (HWPs) by use class and type (recycled, residues, etc...)
+	 * @param includeRecycling a boolean true to include the recycled products into the map
 	 * @return a Map with CarbonUnitType and Maps as keys and values
 	 */
 	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass();
-	
-	
+
 	/**
 	 * This method returns the volume and biomass by log grade categories.
 	 * @return a Map of String and VolumeBiomassCarrier
@@ -87,5 +87,12 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * @return a String
 	 */
 	public String getResultId();
-	
+
+	/**
+	 * This method returns the summary of the HWP with or without recycling.
+	 * @param includeRecycling a boolean
+	 * @return a Map of Useclass and Map instances
+	 */
+	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling);
+
 }
