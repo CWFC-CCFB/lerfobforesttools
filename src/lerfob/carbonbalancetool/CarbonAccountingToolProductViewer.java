@@ -23,7 +23,6 @@ import java.util.Map;
 
 import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
 import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 
@@ -61,20 +60,21 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		
 	}
 
+	private final boolean includeRecycling;
 	
 	protected CarbonAccountingToolProductViewer(CarbonAssessmentToolSimulationResult summary) {
-		super(summary);
+		this(summary, false);
 	}
 
-	protected Map<UseClass, Map<Element, MonteCarloEstimate>> getAppropriateMap() {
-		return summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
+	protected CarbonAccountingToolProductViewer(CarbonAssessmentToolSimulationResult summary, boolean includeRecycling) {
+		super(summary);
+		this.includeRecycling = includeRecycling;
 	}
-	
+
 	@Override
 	protected final ChartPanel createChart() {
-
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = getAppropriateMap();
+		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = ((CarbonAssessmentToolSingleSimulationResult) summary).getHWPSummaryPerHa(includeRecycling);
 		
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {

@@ -18,14 +18,6 @@
  */
 package lerfob.carbonbalancetool;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
-import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -52,49 +44,11 @@ class CarbonAccountingToolProductWithRecyclingViewer extends CarbonAccountingToo
 	}
 
 	protected CarbonAccountingToolProductWithRecyclingViewer(CarbonAssessmentToolSimulationResult summary) {
-		super(summary);
+		super(summary, true);
 	}
 
 
 	@Override
 	protected String getTitle() {return REpiceaTranslator.getString(MessageID.Title);}
 
-	@Override
-	protected Map<UseClass, Map<Element, MonteCarloEstimate>> getAppropriateMap() {
-		Map<UseClass, Map<Element, MonteCarloEstimate>> outputMap = new TreeMap<UseClass, Map<Element, MonteCarloEstimate>>();
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapProduct = summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMapRecycling = summary.getHWPPerHaByUseClass().get(CarbonUnitStatus.Recycled);
-		for (UseClass useClass : oMapProduct.keySet()) {
-			Map<Element, MonteCarloEstimate> carrier = oMapProduct.get(useClass);
-			Map<Element, MonteCarloEstimate> newCarrier = new HashMap<Element, MonteCarloEstimate>();
-			outputMap.put(useClass, newCarrier);
-			newCarrier.putAll(carrier);
-		}
-
-		for (UseClass useClass : oMapRecycling.keySet()) {
-			Map<Element, MonteCarloEstimate> carrier = oMapRecycling.get(useClass);
-			Map<Element, MonteCarloEstimate> newCarrier = outputMap.get(useClass);
-			if (newCarrier != null) {
-				for (Element element : Element.values()) {
-					MonteCarloEstimate estimate1 = carrier.get(element);
-					MonteCarloEstimate estimate2 = newCarrier.get(element);
-					if (estimate1 != null) {
-						if (estimate2 == null) {
-							newCarrier.put(element, estimate1);
-						} else {
-							newCarrier.put(element, MonteCarloEstimate.add(estimate1, estimate2));
-						}
-					}
-				}
-			} else {
-				newCarrier = new HashMap<Element, MonteCarloEstimate>();
-				outputMap.put(useClass, newCarrier);
-				newCarrier.putAll(carrier);
-			}
-		}
-
-		return outputMap;
-	}
-
-	
 }
