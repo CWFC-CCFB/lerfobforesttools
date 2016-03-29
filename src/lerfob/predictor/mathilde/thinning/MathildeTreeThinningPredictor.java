@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree;
-import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
+import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.LogisticModelBasedSimulator;

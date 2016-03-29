@@ -1,3 +1,21 @@
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2016 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
 package lerfob.treelogger.mathilde;
 
 import java.awt.BorderLayout;
@@ -9,6 +27,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
@@ -84,11 +103,20 @@ public class MathildeTreeLogCategoryPanel extends TreeLogCategoryPanel<MathildeT
 		}
 		textField.setEditable(false);
 		featurePanel.add(textField);
-		featurePanel.add(Box.createHorizontalStrut(5));
-		
-		
-		
 		panel.add(featurePanel);
+		panel.add(Box.createHorizontalStrut(5));
+
+		JPanel explanationPanel = new JPanel(new BorderLayout());
+		JTextArea textArea = new JTextArea();
+		explanationPanel.add(Box.createHorizontalStrut(5), BorderLayout.WEST);
+		explanationPanel.add(textArea, BorderLayout.CENTER);
+		explanationPanel.add(Box.createHorizontalStrut(5), BorderLayout.EAST);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setBackground(getBackground());
+		textArea.setText(logCategory.explanation.toString());
+		panel.add(explanationPanel);
+		
 	}
 	
 }

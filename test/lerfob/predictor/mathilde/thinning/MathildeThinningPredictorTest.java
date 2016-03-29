@@ -3,7 +3,7 @@ package lerfob.predictor.mathilde.thinning;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
+import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 
 import org.junit.Assert;
 import org.junit.Test;
