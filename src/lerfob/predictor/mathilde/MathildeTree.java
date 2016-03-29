@@ -29,7 +29,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
- * This interface ensures that the Tree instance is compatible with the MathildeDiameterIncrementPredictor.
+ * This interface ensures that the Tree instance is compatible with all Mathilde predictors.
  * @author Mathieu Fortin - June 2013
  */
 public interface MathildeTree extends DbhCmProvider, 
