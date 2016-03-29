@@ -54,7 +54,13 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 	private static final long serialVersionUID = 20130627L;
 
-	private static double MAX_ANNUAL_INCREMENT = 10.4 * .2;		// according to Manso et al. 2015 Forestry
+	private static final Map<MathildeTreeSpecies,Double> MAX_ANNUAL_INCREMENT = new HashMap<MathildeTreeSpecies, Double>();		// according to Manso et al. 2015 Forestry
+	static {
+		MAX_ANNUAL_INCREMENT.put(MathildeTreeSpecies.FAGUS, 10.5 * .2);
+		MAX_ANNUAL_INCREMENT.put(MathildeTreeSpecies.QUERCUS, 8.0 * .2);
+		MAX_ANNUAL_INCREMENT.put(MathildeTreeSpecies.CARPINUS, 4.2 * .2);
+		MAX_ANNUAL_INCREMENT.put(MathildeTreeSpecies.OTHERS, 1.2 * .2);
+	}
 	
 	private static double CorrelationRandomEffectsHeightDiameterGrowth = 0.4;
 
@@ -253,9 +259,10 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		}
 		
 		double backtransformedPred = Math.exp(pred) - 1;
-		if (backtransformedPred > MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr()) {
+		double limit = MAX_ANNUAL_INCREMENT.get(tree.getMathildeTreeSpecies()) * stand.getGrowthStepLengthYr();
+		if (backtransformedPred > limit) {
 		//	System.out.println("Max increment has been reached and truncated");
-			backtransformedPred = MAX_ANNUAL_INCREMENT * stand.getGrowthStepLengthYr();
+			backtransformedPred = limit;
 		}
 		
 		return backtransformedPred;
