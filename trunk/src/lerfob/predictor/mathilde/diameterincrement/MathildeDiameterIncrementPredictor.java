@@ -28,7 +28,7 @@ import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Stand;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import lerfob.predictor.mathilde.MathildeTree;
-import lerfob.predictor.mathilde.MathildeTree.MathildeTreeSpecies;
+import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;

@@ -18,10 +18,14 @@
  */
 package lerfob.treelogger.mathilde;
 
-import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider;
-import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
-import repicea.simulation.treelogger.LoggableTree;
+import repicea.simulation.treelogger.WoodPiece;
 
-public interface MathildeLoggableTree extends LoggableTree, MathildeTreeSpeciesProvider, DbhCmProvider {
+@SuppressWarnings("serial")
+public class MathildeWoodPiece extends WoodPiece {
+
+	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree) {
+		super(logCategory, tree);
+		setVolumeM3(tree.getCommercialVolumeM3() * logCategory.conversionFactor);
+	}
 
 }
