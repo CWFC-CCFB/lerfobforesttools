@@ -82,7 +82,7 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 	}
 
 	@Override
-	public boolean matchWith(Object referent) {
+	public boolean isCompatibleWith(Object referent) {
 		return referent instanceof MathildeLoggableTree;
 	}
 
