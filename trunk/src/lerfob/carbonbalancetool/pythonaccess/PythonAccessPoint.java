@@ -93,7 +93,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	}
 	
 	@Override
-	protected void setTreeLoggerDescription() {
+	protected void setTreeLoggerDescription(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
