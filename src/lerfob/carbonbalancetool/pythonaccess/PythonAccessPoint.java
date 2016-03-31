@@ -93,12 +93,12 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	}
 	
 	@Override
-	protected void setTreeLoggerDescription(Object referent) {
+	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
-		getCarbonToolSettings().setTreeLoggerDescriptions(defaultTreeLoggerDescriptions);
+		return defaultTreeLoggerDescriptions;
 	}
 
 	private void setSpeciesAndSettings(AverageBasicDensity speciesCode) throws IOException {
