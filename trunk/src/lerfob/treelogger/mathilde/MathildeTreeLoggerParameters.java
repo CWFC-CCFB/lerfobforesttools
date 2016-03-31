@@ -29,7 +29,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class MathildeTreeLoggerParameters extends TreeLoggerParameters<MathildeTreeLogCategory> {
+public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<MathildeTreeLogCategory> {
 
 	public static enum Grade implements TextableEnum {
 		EnergyWood("Industry and energy wood", "Bois d'industrie et bois \u00E9nergie (BIBE)"),

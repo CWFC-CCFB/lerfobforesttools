@@ -24,7 +24,7 @@ import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class MathildeTreeLogCategory extends TreeLogCategory {
+class MathildeTreeLogCategory extends TreeLogCategory {
 
 	protected final double minimumDbhCm;
 	private transient MathildeTreeLogCategoryPanel guiInterface;

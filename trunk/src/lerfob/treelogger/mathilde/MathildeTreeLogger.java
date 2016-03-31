@@ -24,7 +24,7 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
 
-public class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParameters, MathildeLoggableTree> {
+public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParameters, MathildeLoggableTree> {
 
 
 	@Override

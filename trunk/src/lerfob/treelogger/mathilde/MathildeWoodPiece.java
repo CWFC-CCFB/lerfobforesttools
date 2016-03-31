@@ -21,7 +21,7 @@ package lerfob.treelogger.mathilde;
 import repicea.simulation.treelogger.WoodPiece;
 
 @SuppressWarnings("serial")
-public class MathildeWoodPiece extends WoodPiece {
+class MathildeWoodPiece extends WoodPiece {
 
 	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree) {
 		super(logCategory, tree);
