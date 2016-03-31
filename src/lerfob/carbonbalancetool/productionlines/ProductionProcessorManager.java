@@ -51,8 +51,6 @@ import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -141,18 +139,18 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		availableTreeLoggerParameters = new Vector<TreeLoggerParameters<?>>();
 
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
-		try {
-			Class<?> petroTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.petrotreelogger.PetroTreeLogger");
-			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(petroTreeLoggerClass.getName()));
-		} catch (ClassNotFoundException e) {}
-		
-		try {
-			Class<?> sybilleTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.sybille.SybilleTreeLogger");
-			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(sybilleTreeLoggerClass.getName()));
-		} catch (ClassNotFoundException e) {}
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+//		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
+//		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
+//		try {
+//			Class<?> petroTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.petrotreelogger.PetroTreeLogger");
+//			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(petroTreeLoggerClass.getName()));
+//		} catch (ClassNotFoundException e) {}
+//		
+//		try {
+//			Class<?> sybilleTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.sybille.SybilleTreeLogger");
+//			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(sybilleTreeLoggerClass.getName()));
+//		} catch (ClassNotFoundException e) {}
 		
 		setAvailableTreeLoggers(defaultTreeLoggerDescriptions);
 	}

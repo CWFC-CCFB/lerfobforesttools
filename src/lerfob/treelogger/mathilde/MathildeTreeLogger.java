@@ -27,10 +27,6 @@ import repicea.simulation.treelogger.TreeLogger;
 
 public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParameters, MathildeLoggableTree> {
 
-	static {
-		TreeLogger.registerTreeLogger(MathildeTreeLogger.class);
-	}
-
 	@Override
 	public void setTreeLoggerParameters() {
 		MathildeTreeLoggerParameters params = createDefaultTreeLoggerParameters();
