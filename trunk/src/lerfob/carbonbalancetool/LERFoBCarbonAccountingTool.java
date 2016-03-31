@@ -245,7 +245,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		clearTreeCollections();
 		carbonCompartmentManager.init(waitingStandList);
 		setReferentForBiomassParameters(carbonCompartmentManager.getStandList());
-		setTreeLoggerDescription(getAReferentTree());
+		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(getAReferentTree()));
 		if (isGuiEnabled()) {
 			Runnable doRun = new Runnable() {
 				@Override
@@ -286,7 +286,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		getCarbonToolSettings().setReferentForBiomassParameters(referent);
 	}
 
-	protected void setTreeLoggerDescription(Object referent) {
+	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		if (referent != null) {
 			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLogger.getCompatibleTreeLoggers(referent);
@@ -294,7 +294,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		} else {
 			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		}
-		getCarbonToolSettings().setTreeLoggerDescriptions(defaultTreeLoggerDescriptions);
+		return defaultTreeLoggerDescriptions;
 	}
 	
 	@Override
