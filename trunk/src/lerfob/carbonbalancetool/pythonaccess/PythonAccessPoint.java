@@ -63,6 +63,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	public PythonAccessPoint() {
 		super();
 		initializeTool(false, null);
+		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(null));
 	}
 	
 	/**
@@ -95,9 +96,9 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	@Override
 	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		return defaultTreeLoggerDescriptions;
 	}
 
@@ -111,7 +112,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
 			System.out.println("Loading settings : " + filename);
-			getCarbonToolSettings().getCurrentProductionProcessorManager().load(filename);
+			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
 		}
 	}
 

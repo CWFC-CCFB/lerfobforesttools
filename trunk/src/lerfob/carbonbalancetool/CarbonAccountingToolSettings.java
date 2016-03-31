@@ -73,6 +73,8 @@ public final class CarbonAccountingToolSettings {
 	protected int currentProcessorManagerIndex = 0;
 	protected int currentBiomassParametersIndex = 0; 
 	
+	protected ProductionProcessorManager customizedManager;
+	
 	/**
 	 * Constructor.
 	 */
@@ -112,6 +114,7 @@ public final class CarbonAccountingToolSettings {
 			if (processorManagerName == ProductionManagerName.customized) {
 				productionProcessorManager = new ProductionProcessorManager();
 				processorManagers.add(new ProductionProcessorManagerWrapper(processorManagerName, productionProcessorManager));
+				customizedManager = processorManagers.get(processorManagers.size() - 1).manager;
 			} else {
 				try {
 					productionProcessorManager = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
@@ -125,6 +128,12 @@ public final class CarbonAccountingToolSettings {
 		}
 	}
 
+	/**
+	 * This method returns the customizable production manager.
+	 * @return a ProductionProcessorManager instance
+	 */
+	public ProductionProcessorManager getCustomizableProductionProcessorManager() {return customizedManager;}
+	
 	/**
 	 * This method returns the currently selected ProductionProcessorManager instance.
 	 * @return a ProductionProcessorManager instance

@@ -42,8 +42,8 @@ import repicea.gui.ShowableObjectWithParent;
 import repicea.gui.genericwindows.GeneralLicenseWindow;
 import repicea.gui.genericwindows.GenericSplashWindow;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
-import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
+import repicea.simulation.treelogger.TreeLoggerManager;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
@@ -289,7 +289,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		if (referent != null) {
-			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLogger.getCompatibleTreeLoggers(referent);
+			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLoggerManager.getInstance().getCompatibleTreeLoggers(referent);
 			defaultTreeLoggerDescriptions.addAll(availableCompatibleTreeLoggerDescription);
 		} else {
 			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
@@ -361,7 +361,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	 * @throws Exception 
 	 */
 	public CarbonAccountingToolExport createExportTool() throws Exception {
-		return new CarbonAccountingToolExport(getCarbonCompartmentManager().getCarbonToolSettings (), getCarbonCompartmentManager().getSimulationSummary());
+		return new CarbonAccountingToolExport(getCarbonCompartmentManager().getCarbonToolSettings(), getCarbonCompartmentManager().getSimulationSummary());
 	}
 	
 	/**
@@ -413,8 +413,6 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		}
 	}
 
-	
-	
 	public static void main(String[] args) {
 		LERFoBCarbonAccountingTool tool = new LERFoBCarbonAccountingTool();
 		tool.initializeTool(true, null);
