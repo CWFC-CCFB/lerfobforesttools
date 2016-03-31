@@ -38,7 +38,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class MathildeTreeLogCategoryPanel extends TreeLogCategoryPanel<MathildeTreeLogCategory> {
+class MathildeTreeLogCategoryPanel extends TreeLogCategoryPanel<MathildeTreeLogCategory> {
 
 	private static enum MessageID implements TextableEnum {
 		MinimumTreeDiameter("Minimum tree dbh (cm)", "d130 minimum (cm)");
