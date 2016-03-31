@@ -42,6 +42,7 @@ import repicea.gui.ShowableObjectWithParent;
 import repicea.gui.genericwindows.GeneralLicenseWindow;
 import repicea.gui.genericwindows.GenericSplashWindow;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
+import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.util.ObjectUtility;
@@ -225,13 +226,26 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		treeCollections.clear();
 		treeRegister.clear();
 	}
+
+	@SuppressWarnings("rawtypes")
+	private Object getAReferentTree() {
+		for (CarbonToolCompatibleStand stand : carbonCompartmentManager.getStandList()) {
+			for (StatusClass status : StatusClass.values()) {
+				Collection coll = stand.getTrees(status);
+				if (coll != null && !coll.isEmpty()) {
+					return coll.iterator().next();
+				}
+			}
+		}
+		return null;
+	}
 	
 	protected void setStandList() {
 		finalCutHadToBeCarriedOut = false;
 		clearTreeCollections();
 		carbonCompartmentManager.init(waitingStandList);
 		setReferentForBiomassParameters(carbonCompartmentManager.getStandList());
-		setTreeLoggerDescription();
+		setTreeLoggerDescription(getAReferentTree());
 		if (isGuiEnabled()) {
 			Runnable doRun = new Runnable() {
 				@Override
@@ -272,9 +286,14 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		getCarbonToolSettings().setReferentForBiomassParameters(referent);
 	}
 
-	protected void setTreeLoggerDescription() {
+	protected void setTreeLoggerDescription(Object referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class.getName()));
+		if (referent != null) {
+			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLogger.getCompatibleTreeLoggers(referent);
+			defaultTreeLoggerDescriptions.addAll(availableCompatibleTreeLoggerDescription);
+		} else {
+			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		}
 		getCarbonToolSettings().setTreeLoggerDescriptions(defaultTreeLoggerDescriptions);
 	}
 	

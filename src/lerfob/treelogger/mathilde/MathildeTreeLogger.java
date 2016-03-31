@@ -21,11 +21,15 @@ package lerfob.treelogger.mathilde;
 import java.util.List;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
+import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
 
 public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParameters, MathildeLoggableTree> {
 
+	static {
+		TreeLogger.registerTreeLogger(MathildeTreeLogger.class);
+	}
 
 	@Override
 	public void setTreeLoggerParameters() {
@@ -56,11 +60,17 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 		List<MathildeTreeLogCategory> logCategories = params.getLogCategories().get(species.name());
 		double volume = tree.getCommercialVolumeM3();
 		MathildeWoodPiece woodPiece;
+		boolean largeLumberProduced = false;
 		for (MathildeTreeLogCategory logCategory : logCategories) {
 			if (volume > 0d && logCategory.isEligible(tree)) {
-				woodPiece = new MathildeWoodPiece(logCategory, tree);
-				addWoodPiece(tree, woodPiece);
-				volume -= woodPiece.getVolumeM3();
+				if (!logCategory.getName().equals(Grade.SmallLumberWood.name()) || !largeLumberProduced) {
+					woodPiece = new MathildeWoodPiece(logCategory, tree);
+					addWoodPiece(tree, woodPiece);
+					if (logCategory.getName().equals(Grade.LargeLumberWood.name())) {
+						largeLumberProduced = true;
+					}
+					volume -= woodPiece.getVolumeM3();
+				}
 			}
 		}
 	}
@@ -69,6 +79,11 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 		MathildeTreeLogger treeLogger = new MathildeTreeLogger();
 		MathildeTreeLoggerParameters params = treeLogger.createDefaultTreeLoggerParameters();
 		params.showInterface(null);
+	}
+
+	@Override
+	public boolean matchWith(Object referent) {
+		return referent instanceof MathildeLoggableTree;
 	}
 
 }
