@@ -205,7 +205,16 @@ public class ProductionLinesTest {
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
 
 			List<Processor> processors = processorManager.getPrimaryProcessors();
-			LogCategoryProcessor sawingProcessor = (LogCategoryProcessor) processors.get(processors.size() - 1);
+			int i = processors.size() - 1;
+			LogCategoryProcessor sawingProcessor = null;
+			while (i >= 0) {
+				Processor p = processors.get(i);
+				if (p instanceof LogCategoryProcessor) {
+					sawingProcessor = (LogCategoryProcessor) p;
+					break;
+				}
+				i--;
+			}
 			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
 				
 			double actualEmissions = 0d;

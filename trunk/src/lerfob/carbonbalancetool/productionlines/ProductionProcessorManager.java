@@ -98,11 +98,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	}
 
 	
-	protected static List<LeftHandSideProcessor> DefaultLeftHandSideProcessors = new ArrayList<LeftHandSideProcessor>();
-	static {
-		DefaultLeftHandSideProcessors.add(new WoodyDebrisProcessor(WoodyDebrisProcessorID.FineWoodyDebris));
-		DefaultLeftHandSideProcessors.add(new WoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris));
-	}
+	protected static List<LeftHandSideProcessor> DefaultLeftHandSideProcessors;
 	
 	protected static final ProductionLineFileFilter MyFileFilter = new ProductionLineFileFilter();
 	
@@ -210,7 +206,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		List<LeftHandSideProcessor> formerProcessorList = new ArrayList<LeftHandSideProcessor>();
 		formerProcessorList.addAll(logCategoryProcessors);
 		List<LeftHandSideProcessor> newProcessorList = new ArrayList<LeftHandSideProcessor>();
-		newProcessorList.addAll(DefaultLeftHandSideProcessors);
+		newProcessorList.addAll(getDefaultLeftHandSideProcessors());
 		for (Object species : selectedTreeLoggerParameters.getLogCategories().keySet()) {
 			List<TreeLogCategory> innerList = (List) selectedTreeLoggerParameters.getLogCategories().get(species);
  			for (TreeLogCategory logCategory : innerList) {
@@ -231,6 +227,16 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		}
 	}
 	
+	private Collection<? extends LeftHandSideProcessor> getDefaultLeftHandSideProcessors() {
+		if (DefaultLeftHandSideProcessors == null) {
+			DefaultLeftHandSideProcessors = new ArrayList<LeftHandSideProcessor>();
+			DefaultLeftHandSideProcessors.add(new WoodyDebrisProcessor(WoodyDebrisProcessorID.FineWoodyDebris));
+			DefaultLeftHandSideProcessors.add(new WoodyDebrisProcessor(WoodyDebrisProcessorID.CommercialWoodyDebris));
+			DefaultLeftHandSideProcessors.add(new WoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris));
+		}
+		return DefaultLeftHandSideProcessors;
+	}
+
 	protected boolean isGuiVisible() {
 		return guiInterface != null && guiInterface.isVisible();
 	}
@@ -326,24 +332,25 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	}
 
 	/**
-	 * This method calculates the carbon units in the fine woody debris. 
+	 * This method calculates the carbon units in the woody debris. 
 	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
+	 * @param type a WoodyDebrisProcessorID enum variable
 	 */
-	public void processFineWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
-		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.FineWoodyDebris);
+	public void processWoodyDebris(int dateIndex, AmountMap<Element> amountMap, WoodyDebrisProcessorID type) {
+		Processor processor = findWoodyDebrisProcessor(type);
 		processAmountMap(processor, dateIndex, amountMap);
 	}
 	
-	/**
-	 * This method calculates the carbon units in the coarse woody debris. 
-	 * @param dateIndex the index of the date in the time scale
-	 * @param amountMap a Map which contains the amounts of the different elements
-	 */
-	public void processCoarseWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
-		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris);
-		processAmountMap(processor, dateIndex, amountMap);
-	}
+//	/**
+//	 * This method calculates the carbon units in the coarse woody debris. 
+//	 * @param dateIndex the index of the date in the time scale
+//	 * @param amountMap a Map which contains the amounts of the different elements
+//	 */
+//	public void processCoarseWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
+//		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris);
+//		processAmountMap(processor, dateIndex, amountMap);
+//	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<CarbonUnit> processAmountMap(Processor processor, int dateIndex, AmountMap<Element> amountMap) {
@@ -403,6 +410,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 				}
 			}
 		}
+		if (processorID == WoodyDebrisProcessorID.CommercialWoodyDebris) {
+			return findWoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris);		// in case commercial does not exist
+		} 
 		return null;
 	}
 	
@@ -444,12 +454,12 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 
 	public static void main(String[] args) {
-		REpiceaTranslator.setCurrentLanguage(Language.French);
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 //		ProductionProcessorManager ppm = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		String filename = ObjectUtility.getPackagePath(ppm.getClass()) 
 				+ File.separator + "library"
-				+ File.separator + "hardwood_recycling_fr.prl";
+				+ File.separator + "hardwood_recycling_en.prl";
 		try {
 			ppm.load(filename);
 			ppm.showInterface(null);

@@ -12,8 +12,9 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class WoodyDebrisProcessor extends LeftHandSideProcessor {
 
 	
-	protected static enum WoodyDebrisProcessorID implements TextableEnum {
+	public static enum WoodyDebrisProcessorID implements TextableEnum {
 		CoarseWoodyDebris("Coarse Woody Debris", "Gros d\u00E9bris ligneux"),
+		CommercialWoodyDebris("Merchantable Woody Debris", "D\u00E9bris ligneux marchands"),
 		FineWoodyDebris("Fine Woody Debris", "Petit d\u00E9bris ligneux");
 
 		

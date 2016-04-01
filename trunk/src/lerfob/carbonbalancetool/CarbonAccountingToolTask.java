@@ -28,6 +28,7 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
 import lerfob.nutrientmodel.NutrientConcentrationPredictionModel.Nutrient;
 import lerfob.nutrientmodel.NutrientConcentrationProviderObject;
 import repicea.app.AbstractGenericTask;
@@ -76,8 +77,6 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			}
 			return NumberOfLongTasks;
 		}
-		
-	
 	}
 
 	protected static class SetProperRealizationTask extends CarbonAccountingToolTask {
@@ -273,18 +272,19 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
 							
-							getProcessorManager().processFineWoodyDebris(caller.getDateIndexForThisTree(tree), amountMap);
+							getProcessorManager().processWoodyDebris(caller.getDateIndexForThisTree(tree), amountMap, WoodyDebrisProcessorID.FineWoodyDebris);
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
 			}
-			createCoarseWoodyDebris(caller.getTrees(StatusClass.cut), false);
-			createCoarseWoodyDebris(caller.getTrees(StatusClass.dead), true);
-			createCoarseWoodyDebris(caller.getTrees(StatusClass.windfall), true);
-			
-			createFineWoodyDebris(caller.getTrees(StatusClass.dead));
-			createFineWoodyDebris(caller.getTrees(StatusClass.windfall));
+			createWoodyDebris(caller.getTrees(StatusClass.cut), WoodyDebrisProcessorID.CoarseWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CoarseWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CommercialWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.FineWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CoarseWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CommercialWoodyDebris);
+			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.FineWoodyDebris);
 		} else {
 			ProductionLineManager productionLineManager = caller.getCarbonToolSettings().getProductionLines();
 			productionLineManager.resetCarbonUnitMap();							// reinitialize the land fill carbon unit and left in forest carbon unit collections
@@ -385,7 +385,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		}
 	}
 
-	private void createCoarseWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap, boolean includeCommercialPart) {
+	
+	private void createWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap, WoodyDebrisProcessorID type) {
 		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
 		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
 			if (isCancelled) {
@@ -393,47 +394,34 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			}
 			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
-			double volume = biomassParameters.getBelowGroundVolumeM3(trees);
-			double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
-			double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
-			
-			if (includeCommercialPart) {
-				volume += biomassParameters.getCommercialVolumeM3(trees);
-				biomass += biomassParameters.getCommercialBiomassMg(trees);
-				carbonContent += biomassParameters.getCommercialCarbonMg(trees);
-			}
-			
-			AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
-			amountMap.put(Element.Volume, volume);
-			amountMap.put(Element.Biomass, biomass);	
-			amountMap.put(Element.C, carbonContent);	
-
-			getProcessorManager().processCoarseWoodyDebris(dateIndex, amountMap);
-		}
-	}
-	
-	
-	private void createFineWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap) {
-		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
-		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
-			if (isCancelled) {
+			double volume = 0d;
+			double biomass = 0d;
+			double carbonContent = 0d;
+			switch(type) {
+			case FineWoodyDebris:
+				volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
+				biomass = biomassParameters.getAboveGroundBiomassMg(trees) - biomassParameters.getCommercialBiomassMg(trees);
+				carbonContent = biomassParameters.getAboveGroundCarbonMg(trees) - biomassParameters.getCommercialCarbonMg(trees);
+				break;
+			case CommercialWoodyDebris:
+				volume = biomassParameters.getCommercialVolumeM3(trees);
+				biomass = biomassParameters.getCommercialBiomassMg(trees);
+				carbonContent = biomassParameters.getCommercialCarbonMg(trees);
+				break;
+			case CoarseWoodyDebris:
+				volume = biomassParameters.getBelowGroundVolumeM3(trees);
+				biomass = biomassParameters.getBelowGroundBiomassMg(trees);
+				carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
 				break;
 			}
-			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
-			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
-			double volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
-			double biomass = biomassParameters.getAboveGroundBiomassMg(trees) - biomassParameters.getCommercialBiomassMg(trees);
-			double carbonContent = biomassParameters.getAboveGroundCarbonMg(trees) - biomassParameters.getCommercialCarbonMg(trees);
-
 			AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
 			amountMap.put(Element.Volume, volume);
 			amountMap.put(Element.Biomass, biomass);	
 			amountMap.put(Element.C, carbonContent);	
 
-			getProcessorManager().processCoarseWoodyDebris(dateIndex, amountMap);
+			getProcessorManager().processWoodyDebris(dateIndex, amountMap, type);
 		}
 	}
-
 	
 	/**
 	 * Task no 3 : actualize the carbon units through time
