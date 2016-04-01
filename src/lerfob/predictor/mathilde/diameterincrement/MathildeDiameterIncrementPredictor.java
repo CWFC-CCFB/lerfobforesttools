@@ -123,7 +123,6 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 				subModule.setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
 				
 				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
-//				errorVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
 			}
 
 			oXVector = new Matrix(1, numberOfParameters);
@@ -261,8 +260,11 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 		double backtransformedPred = Math.exp(pred) - 1;
 		double limit = MAX_ANNUAL_INCREMENT.get(tree.getMathildeTreeSpecies()) * stand.getGrowthStepLengthYr();
 		if (backtransformedPred > limit) {
-		//	System.out.println("Max increment has been reached and truncated");
 			backtransformedPred = limit;
+		}
+		
+		if (backtransformedPred < 0) {
+			backtransformedPred = 0;
 		}
 		
 		return backtransformedPred;
