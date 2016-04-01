@@ -93,6 +93,9 @@ public class MathildeDiameterIncrementTest {
 			stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
 			double actual = predictor.predictGrowth(stand, tree);
 			double expected = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
+			if (expected < 0) {
+				expected = 0;
+			}
 			assertEquals(expected, actual, 1E-4);
 			nbTrees++;
 		}
