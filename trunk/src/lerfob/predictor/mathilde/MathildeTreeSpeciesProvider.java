@@ -14,15 +14,17 @@ public abstract interface MathildeTreeSpeciesProvider {
 	 * @author Mathieu Fortin - June 2013
 	 */
 	public static enum MathildeTreeSpecies implements TextableEnum {
-		CARPINUS("Hornbeam", "Charme"),   // code 17
-		QUERCUS("Oak", "Ch\u00EAne"),  // code 22
-		FAGUS("Beech", "H\u00EAtre"), // code 42
-		OTHERS("Others", "Autres");
+		CARPINUS("Hornbeam", "Charme", 0.63),   // code 17
+		QUERCUS("Oak", "Ch\u00EAne", 0.58),  // code 22
+		FAGUS("Beech", "H\u00EAtre", 0.58), // code 42
+		OTHERS("Others", "Autres", 0.51);
 		
 		private static Map<Integer, MathildeTreeSpecies> speciesMap;
 
 		private Matrix shortDummyVariable;
 		private Matrix longDummyVariable;
+	
+		private final double basicWoodDensity;
 		
 		/**
 		 * This method returns the species enum according to the code.
@@ -40,7 +42,7 @@ public abstract interface MathildeTreeSpeciesProvider {
 			return speciesMap.get(code);
 		}
 
-		MathildeTreeSpecies(String englishText, String frenchText) {
+		MathildeTreeSpecies(String englishText, String frenchText, double basicWoodDensity) {
 			setText(englishText, frenchText);
 			shortDummyVariable = new Matrix(1,3);
 			if (ordinal() > 0) {
@@ -48,6 +50,7 @@ public abstract interface MathildeTreeSpeciesProvider {
 			}
 			longDummyVariable = new Matrix(1,4);
 			longDummyVariable.m_afData[0][ordinal()] = 1d;
+			this.basicWoodDensity = basicWoodDensity;
 		}
 		
 		@Override
@@ -69,6 +72,12 @@ public abstract interface MathildeTreeSpeciesProvider {
 		 * @return a Matrix instance
 		 */
 		public Matrix getLongDummyVariable() {return longDummyVariable;}
+		
+		/**
+		 * This method returns the basic wood density of the species (Mg dry matter/m3 green)
+		 * @return a double
+		 */
+		public double getBasicWoodDensity() {return basicWoodDensity;}
 	}
 
 	

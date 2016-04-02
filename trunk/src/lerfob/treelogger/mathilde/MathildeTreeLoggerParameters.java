@@ -75,8 +75,8 @@ public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<Mat
 			if (species == MathildeTreeSpecies.QUERCUS) {
 				largeLumberWoodLimit = 47.5;
 			}
-			categories.add(new MathildeTreeLogCategory(species, Grade.LargeLumberWood.name(), Grade.LargeLumberWoodExplanations, largeLumberWoodLimit, 0.84 ));
-			categories.add(new MathildeTreeLogCategory(species, Grade.SmallLumberWood.name(), Grade.SmallLumberWoodExplanations, 27.5, 0.84 ));
+			categories.add(new MathildeTreeLogCategory(species, Grade.LargeLumberWood.name(), Grade.LargeLumberWoodExplanations, largeLumberWoodLimit, 0.84));
+			categories.add(new MathildeTreeLogCategory(species, Grade.SmallLumberWood.name(), Grade.SmallLumberWoodExplanations, 27.5, 0.50));
 			categories.add(new MathildeTreeLogCategory(species, Grade.EnergyWood.name(), Grade.EnergyWoodExplanation, 7d, 1d));
 		}
 	}
