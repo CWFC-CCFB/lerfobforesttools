@@ -23,9 +23,9 @@ import repicea.simulation.treelogger.WoodPiece;
 @SuppressWarnings("serial")
 class MathildeWoodPiece extends WoodPiece {
 
-	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree) {
+	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree, double volumeRemainder) {
 		super(logCategory, tree);
-		setVolumeM3(tree.getCommercialVolumeM3() * logCategory.conversionFactor);
+		setVolumeM3(volumeRemainder * logCategory.conversionFactor);
 	}
 
 }
