@@ -58,13 +58,6 @@ public class ProductionLinesTest {
 				System.out.println("Testing " + productionLine);
 				wpmm.resetCarbonUnitMap();
 				wpmm.processWoodPiece(productionLine, 2010, amountMap);
-				//				wpmm.processWoodPiece(productionLine, 
-				//						volume, 
-				//						carbonContent, 
-				//						basicWoodDensity, 
-				//						2010, 
-				//						null);
-
 				CarbonUnitList list = new CarbonUnitList();
 				for (CarbonUnitStatus type : CarbonUnitStatus.values()) {
 					list.addAll(wpmm.getCarbonUnits(type));
@@ -164,7 +157,17 @@ public class ProductionLinesTest {
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
 
 			List<Processor> processors = processorManager.getPrimaryProcessors();
-			LogCategoryProcessor sawingProcessor = (LogCategoryProcessor) processors.get(processors.size() - 1);
+			int i = processors.size() - 1;
+			LogCategoryProcessor sawingProcessor = null;
+			while (i >= 0) {
+				Processor p = processors.get(i);
+				if (p instanceof LogCategoryProcessor) {
+					sawingProcessor = (LogCategoryProcessor) p;
+					break;
+				}
+				i--;
+			}
+
 			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
 				
 			double totalVolume = 0d;
