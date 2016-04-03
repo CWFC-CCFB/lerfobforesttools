@@ -21,24 +21,21 @@ package lerfob.treelogger.mathilde;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.simulation.treelogger.TreeLogCategory;
 import repicea.simulation.treelogger.WoodPiece;
-import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
 class MathildeTreeLogCategory extends TreeLogCategory {
 
 	protected final double minimumDbhCm;
 	private transient MathildeTreeLogCategoryPanel guiInterface;
-	protected final TextableEnum explanation;
-	protected final double conversionFactor; 
+	protected double conversionFactor; 
+	protected double downgradingProportion;
 	
-	protected MathildeTreeLogCategory(MathildeTreeSpecies species, String name, TextableEnum explanation, double minimumDiameter, double conversionFactor) {
+	protected MathildeTreeLogCategory(MathildeTreeSpecies species, String name, double minimumDiameter, double conversionFactor) {
 		super(name);
 		setSpecies(species.name());
 		this.minimumDbhCm = minimumDiameter;
-		this.explanation = explanation;
 		this.conversionFactor = conversionFactor;
 	}
-	
 	
 	@Override
 	public MathildeTreeLogCategoryPanel getGuiInterface() {
@@ -54,4 +51,5 @@ class MathildeTreeLogCategory extends TreeLogCategory {
 	protected boolean isEligible(MathildeLoggableTree tree) {
 		return tree.getDbhCm() >= minimumDbhCm;
 	}
+	
 }
