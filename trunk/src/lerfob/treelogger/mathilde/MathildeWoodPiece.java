@@ -25,7 +25,7 @@ class MathildeWoodPiece extends WoodPiece {
 
 	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree, double volumeRemainder) {
 		super(logCategory, tree);
-		setVolumeM3(volumeRemainder * logCategory.conversionFactor);
+		setVolumeM3(volumeRemainder * logCategory.conversionFactor * (1 - logCategory.downgradingProportion));
 	}
 
 }
