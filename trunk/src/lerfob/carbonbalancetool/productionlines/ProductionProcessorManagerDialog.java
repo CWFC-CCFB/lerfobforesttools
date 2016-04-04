@@ -194,6 +194,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 	public void synchronizeUIWithOwner() {
 		super.synchronizeUIWithOwner();
 		doNotListenToAnymore();
+		initTreeLoggerComboBox();
 		treeLoggerComboBox.setSelectedItem(getCaller().getSelectedTreeLoggerParameters());
 		listenTo();
 	}
