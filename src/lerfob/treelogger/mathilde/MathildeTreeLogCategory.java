@@ -52,4 +52,31 @@ class MathildeTreeLogCategory extends TreeLogCategory {
 		return tree.getDbhCm() >= minimumDbhCm;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) {
+			return false;
+		}
+		
+		if (obj instanceof MathildeTreeLogCategory) {
+			MathildeTreeLogCategory refCategory = (MathildeTreeLogCategory) obj;
+			
+			if (refCategory.minimumDbhCm != this.minimumDbhCm) {
+				return false;
+			}
+			
+			if (refCategory.conversionFactor != this.conversionFactor) {
+				return false;
+			}
+			
+			if (refCategory.downgradingProportion != this.downgradingProportion) {
+				return false;
+			}
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

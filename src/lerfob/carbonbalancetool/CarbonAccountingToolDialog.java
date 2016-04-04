@@ -139,7 +139,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		DOCf("Degredable Organic Carbon fraction (DOCf)", "Proportion d\u00E9composable du carbone organique (DOCf)"),
 		AverageDecompositionTime("Average degradation time (yrs)", "Dur\u00E9e de d\u00E9composition moyenne (ann\u00E9es)"),
 		ImportStandList("You are about to import this new stand list. Do you want to proceed?", "Vous \u00EAtes sur le point d'importer cette nouvelle liste de placettes. Voulez-vous continuer ?"),
-		NumberOfRunsToDo("Analysing the realizations", "Analyse des r\u00E9alisations"),
+		NumberOfRunsToDo("Analysing the realizations", "Analyse des r\u00E9alisations"), 
+		PanickButton("Stop the simulation", "Arr\u00EAter la simulation"),
 //		CarboneBalance("Carbon balance", "Bilan de carbone")
 		;
 		
@@ -174,7 +175,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	private final JMenuItem help;
 	
 	private final JButton calculateCarbonButton;
-//	private final JButton stopButton;
+	private final JButton stopButton;
 	
 	protected JProgressBar majorProgressBar;
 	private final JLabel majorProgressBarMessage;
@@ -199,7 +200,11 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		
 		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_LINK);
 		
-//		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
+		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
+		stopButton.setText("");
+		stopButton.setMargin(new Insets(2,2,2,2));
+		stopButton.setToolTipText(MessageID.PanickButton.toString());
+
 		stopMenuItem = UIControlManager.createCommonMenuItem(CommonControlID.Stop);
 		
 		minorProgressBarMessage = UIControlManager.getLabel(MessageID.WaitingTask.toString()); // default operation for now
@@ -250,6 +255,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		biomassComboBox .getComboBox().setSelectedIndex(caller.getCarbonToolSettings().currentBiomassParametersIndex);
 		
 		refreshInterface();
+		setSimulationRunning(false);
 		createUI();
 		compareDialog = new CarbonCompareScenarioDialog(this, graphicPanel);
 		pack();
@@ -283,7 +289,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 
 	
 	private JPanel createStatusAndProgressBarPanel() {
-
+	
 		JPanel wrapperPanel = new JPanel(new BorderLayout());
 		wrapperPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
 		wrapperPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
@@ -333,7 +339,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 				}
 				setSimulationRunning(false);
 			} 
-		} else if (evt.getSource().equals(stopMenuItem)) {
+		} else if (evt.getSource().equals(stopMenuItem) || evt.getSource().equals(stopButton)) {
 			caller.cancelRunningTask();
 		}
 	}
@@ -355,6 +361,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		JPanel parameterPanel  = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		parameterPanel.add(Box.createHorizontalStrut(5));
 		parameterPanel.add(calculateCarbonButton);
+		parameterPanel.add(Box.createHorizontalStrut(10));
+		parameterPanel.add(stopButton);
 		parameterPanel.add(Box.createHorizontalStrut(10));
 		parameterPanel.add(biomassComboBox);
 		parameterPanel.add(Box.createHorizontalStrut(10));
@@ -378,6 +386,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonMenuItem.setEnabled(!b);
 		calculateCarbonButton.setEnabled(!b);
 		stopMenuItem.setEnabled(b);
+		stopButton.setEnabled(b);
 	}
 
 	private void updateMajorProgressBarValue(int i) {
@@ -437,6 +446,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		close.addActionListener(this);
 		help.addActionListener(this);
 		stopMenuItem.addActionListener(this);
+		stopButton.addActionListener(this);
 		calculateCarbonMenuItem.addActionListener(this);
 		calculateCarbonButton.addActionListener(this);
 		biomassComboBox.getComboBox().addItemListener(this);
@@ -449,6 +459,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		close.removeActionListener(this);
 		help.removeActionListener(this);
 		stopMenuItem.removeActionListener(this);
+		stopButton.removeActionListener(this);
 		calculateCarbonMenuItem.removeActionListener(this);
 		calculateCarbonButton.removeActionListener(this);
 		biomassComboBox.getComboBox().removeItemListener(this);

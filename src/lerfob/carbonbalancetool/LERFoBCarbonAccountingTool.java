@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CarbonAccountingToolTask.SetProperRealizationTas
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
+import repicea.app.GenericTask;
 import repicea.app.SettingMemory;
 import repicea.gui.ShowableObject;
 import repicea.gui.ShowableObjectWithParent;
@@ -302,8 +303,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	protected void firstTasksToDo() {}
 
 	@Override
-	protected void decideWhatToDo(String taskName, Exception failureReason) {
-		super.decideWhatToDo(taskName, failureReason);
+	protected void decideWhatToDoInCaseOfFailure(GenericTask task) {
+		super.decideWhatToDoInCaseOfFailure(task);
 		unlockEngine();
 		if (isGuiEnabled()) {
 			getGuiInterface().setSimulationRunning(false);
