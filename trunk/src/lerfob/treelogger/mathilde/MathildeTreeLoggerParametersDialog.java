@@ -33,8 +33,8 @@ class MathildeTreeLoggerParametersDialog extends TreeLoggerParametersDialog<Math
 	protected MathildeTreeLoggerParametersDialog(Window window,	MathildeTreeLoggerParameters params) {
 		super(window, params);
 		logGradePriorityChangeEnabled = false; 
-		mnFile.setEnabled(false);
-		mnEdit.setEnabled(false);
+		mnFile.setEnabled(true);
+		mnEdit.setEnabled(true);
 		mnSpecies.setEnabled(false);			//	the species cannot be changed 
 		mnLogGrade.setEnabled(false);			// the log grade cannot be changed either
 		mnTools.setEnabled(false);
