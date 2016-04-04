@@ -169,11 +169,12 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
 	
 	private final JMenuItem calculateCarbonMenuItem;
+	private final JMenuItem stopMenuItem;
 	private final JMenuItem close; // after confirmation
 	private final JMenuItem help;
 	
-
 	private final JButton calculateCarbonButton;
+//	private final JButton stopButton;
 	
 	protected JProgressBar majorProgressBar;
 	private final JLabel majorProgressBarMessage;
@@ -182,7 +183,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	private final JLabel minorProgressBarMessage;
 
 	protected final CarbonCompareScenarioDialog compareDialog;
-	
+	private boolean vetoEnabled;
 	
 	/**
 	 * General constructor of this class.
@@ -197,6 +198,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		addPropertyChangeListener(this);
 		
 		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_LINK);
+		
+//		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
+		stopMenuItem = UIControlManager.createCommonMenuItem(CommonControlID.Stop);
 		
 		minorProgressBarMessage = UIControlManager.getLabel(MessageID.WaitingTask.toString()); // default operation for now
 		
@@ -224,6 +228,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
 		actionMenu.add(calculateCarbonMenuItem);
 		
+		actionMenu.add(stopMenuItem);
+	
 		calculateCarbonButton = new JButton();
 		calculateCarbonButton.setIcon(carbonIcon);
 		calculateCarbonButton.setMargin(new Insets(2,2,2,2));
@@ -317,6 +323,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		} else if (evt.getSource().equals(calculateCarbonMenuItem) || evt.getSource().equals(calculateCarbonButton)) {
 			try {
 				caller.calculateCarbon();
+				setSimulationRunning(true);
 			} catch (Exception e) {
 				if (e instanceof InvalidParameterException) {
 					JOptionPane.showMessageDialog(this, 
@@ -324,8 +331,19 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 							REpiceaTranslator.getString(UIControlManager.InformationMessageTitle.Error),
 							JOptionPane.ERROR_MESSAGE);
 				}
+				setSimulationRunning(false);
 			} 
-		} 
+		} else if (evt.getSource().equals(stopMenuItem)) {
+			caller.cancelRunningTask();
+		}
+	}
+	
+	
+	@Override
+	public void okAction() {
+		if (!vetoEnabled) {
+			super.okAction();
+		}
 	}
 	
 
@@ -350,11 +368,18 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	}
 
 	protected void displayResult() {
+		setSimulationRunning(false);
 		graphicPanel.addSimulationResult(caller.getCarbonCompartmentManager().getSimulationSummary());
 		refreshInterface();
 	}
 	
-	
+	protected void setSimulationRunning(boolean b) {
+		vetoEnabled = b;
+		calculateCarbonMenuItem.setEnabled(!b);
+		calculateCarbonButton.setEnabled(!b);
+		stopMenuItem.setEnabled(b);
+	}
+
 	private void updateMajorProgressBarValue(int i) {
 		majorProgressBar.setValue(i);
 		majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMaximum());
@@ -411,6 +436,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	public void listenTo() {
 		close.addActionListener(this);
 		help.addActionListener(this);
+		stopMenuItem.addActionListener(this);
 		calculateCarbonMenuItem.addActionListener(this);
 		calculateCarbonButton.addActionListener(this);
 		biomassComboBox.getComboBox().addItemListener(this);
@@ -422,6 +448,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	public void doNotListenToAnymore() {
 		close.removeActionListener(this);
 		help.removeActionListener(this);
+		stopMenuItem.removeActionListener(this);
 		calculateCarbonMenuItem.removeActionListener(this);
 		calculateCarbonButton.removeActionListener(this);
 		biomassComboBox.getComboBox().removeItemListener(this);

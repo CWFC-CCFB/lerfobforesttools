@@ -305,6 +305,9 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	protected void decideWhatToDo(String taskName, Exception failureReason) {
 		super.decideWhatToDo(taskName, failureReason);
 		unlockEngine();
+		if (isGuiEnabled()) {
+			getGuiInterface().setSimulationRunning(false);
+		}
 	}
 
 	
@@ -333,10 +336,10 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 				addTask(new CarbonAccountingToolTask(Task.COMPILE_CARBON, this));
 			} 
 			addTask(new CarbonAccountingToolTask(Task.UNLOCK_ENGINE, this));
-			if (!isGuiEnabled()) {
-				lockEngine();
-			} else {
+			if (isGuiEnabled()) {
 				addTask(new CarbonAccountingToolTask(Task.DISPLAY_RESULT, this));
+			} else {
+				lockEngine();
 			}
 		}
 	}
