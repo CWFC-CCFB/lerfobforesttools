@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
+import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.SettingMemory;
 import repicea.gui.ShowableObject;
@@ -413,9 +414,16 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		}
 	}
 
+	/*
+	 * Entry point for FCBA in GESFOR project
+	 */
 	public static void main(String[] args) {
 		LERFoBCarbonAccountingTool tool = new LERFoBCarbonAccountingTool();
 		tool.initializeTool(true, null);
+		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
+		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
+		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
 //		System.exit(0);
 	}
 
