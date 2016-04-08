@@ -1,0 +1,108 @@
+%------ FONTS ------
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsfonts}
+\RequirePackage{mathptmx}
+
+%----- PAGE LAYOUT ---------
+
+\setlength\oddsidemargin{0.5in}
+\setlength\evensidemargin{0.5in}
+\renewcommand{\baselinestretch}{1.2}
+\setlength{\parskip}{1pt plus 1pt minus 0pt}
+\setlength{\textfloatsep}{0pt}
+
+
+%----- HEADERS, RUNNING TITLES, PAGENUMBERS --------
+
+\RequirePackage{fancyhdr}
+
+ \pagestyle{fancy}
+ \fancyhf{} % clear all fields
+ \fancyheadoffset[RO,LE]{0mm}
+ \fancyhead[RO,LE]{\thepage}
+ \fancyhead[CE]{\sc\authorlist}
+ \fancyhead[CO]{\sc\runninghead}
+% \fancyfoot{}
+\renewcommand\headrule{}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\setlength{\textwidth}{14cm}
+\setlength{\textheight}{22.5cm}
+\setlength{\skip\footins}{3ex}
+\setlength{\footnotesep}{3ex}
+
+%----- TITLE PAGE ----------
+\newcommand\ps@title{%
+  \addtolength{\textheight}{-6cm}%
+  \addtolength{\topmargin}{2cm}%
+  \setlength{\footskip}{1.5cm}%
+  \renewcommand\@oddfoot{\parbox{\textwidth}{\it\scriptsize%
+    \copyright{}XXXX %
+      American Statistical Association and the International Biometric Society\\
+      Journal of Agricultural, Biological and Environmental Statistics,
+      Volume XX, Number X, Pages xx--xx\\
+      DOI:~\newline\vspace*{2ex}}
+      \hfil\normalfont\textrm{\thepage}\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+
+%----- SECTION HEADINGS -------
+
+\RequirePackage{titlesec}
+
+% \titleformat{\section}[block]{\Large\bfseries\centering\MakeUppercase}%
+% {\thesection.}{10pt}{}
+% \titlespacing{\section}{0pt}{-.75\baselineskip}{0.25\baselineskip}
+
+% \titleformat{\subsection}[block]{\bfseries\scshape}{\thesubsection}{10pt}{}
+% \titlespacing{\subsection}{0pt}{0.5\baselineskip}{0.25\baselineskip}
+
+\renewcommand\section{\@startsection%
+  {section}{1}{0mm}{1.0\baselineskip}{0.25\baselineskip}%
+  {\Large\scshape\bfseries\centering\uppercase}}
+\renewcommand\subsection{\@startsection%
+{subsection}{2}{0mm}{0.5\baselineskip}{0.25\baselineskip}%
+{\normalsize\scshape\bfseries}}
+
+\@addtoreset{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+%------ FIGURES AND TABLES ------
+
+\RequirePackage{graphicx}
+
+\setlength\doublerulesep{2.5pt}
+\RequirePackage[singlelinecheck=true]{caption}
+%\RequirePackage{setspace}
+
+\DeclareCaptionFont{singlespacing}{\renewcommand\baselinestretch{1.0}}
+
+\DeclareCaptionStyle{fortables}[justification=centering]
+                               {format=hang,
+                                font={sf,singlespacing,small},
+                                position=top,
+                                aboveskip=1ex,
+                                belowskip=0ex,
+                                labelsep=period}
+\DeclareCaptionStyle{forfigures}[justification=centering]
+                               {font={it,small},
+                                position=bottom,
+                                labelsep=period}
+\captionsetup[table]{style=fortables}
+\captionsetup[figure]{style=forfigures}
+%\captionsetup[table]{font={sf,singlespacing,small}, position=top, labelsep=period}
+%\captionsetup[figure]{font={it,small}, position=bottom, labelsep=period}
+
+%------ MATHEMATICS ------
+
+\RequirePackage{bm}
+
+%------ CITATIONS AND BIBLIOGRAPHY ------
+
+\RequirePackage[longnamesfirst]{natbib} % full author list on first citation
+\bibpunct{(}{)}{;}{a}{}{,}
+\setlength{\bibsep}{2pt}
+
+
