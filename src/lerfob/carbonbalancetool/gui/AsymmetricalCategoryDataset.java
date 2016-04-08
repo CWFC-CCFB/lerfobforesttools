@@ -61,14 +61,16 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 	
 	private final double percentile;
+	private final double carbonFactor;
 
 	private final List<Comparable> rowKeys; 
 	private final List<Comparable> columnKeys;
 	private final Map<Comparable, Map<Comparable, MonteCarloEstimateWrapper>> estimateMap;
 	
-	public AsymmetricalCategoryDataset(double percentile) {
+	public AsymmetricalCategoryDataset(double carbonFactor, double percentile) {
 		super();
 		this.percentile = percentile;
+		this.carbonFactor = carbonFactor;
 		rowKeys = new ArrayList<Comparable>();
 		columnKeys = new ArrayList<Comparable>();
 		estimateMap = new HashMap<Comparable, Map<Comparable, MonteCarloEstimateWrapper>>();
@@ -87,7 +89,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 				columnKeys.add(group);
 			}
 		}
-		innerMap.put(group, new MonteCarloEstimateWrapper(estimate, color));
+		innerMap.put(group, new MonteCarloEstimateWrapper(MonteCarloEstimate.multiply(estimate, carbonFactor), color));
 	}
 	
 	@Override
@@ -259,7 +261,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 	
 	public static void main(String[] arg) {
-		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(1d, 0.95);
 		Random random = new Random();
 		
 		MonteCarloEstimate estimate1 = new MonteCarloEstimate();

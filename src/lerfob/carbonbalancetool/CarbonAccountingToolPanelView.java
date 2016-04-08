@@ -20,6 +20,8 @@ package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 
@@ -30,19 +32,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.CarbonAccountingToolDialog.MessageID;
-
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
 import repicea.gui.UIControlManager;
 import repicea.gui.UIControlManager.CommonControlID;
+import repicea.gui.components.REpiceaSlider;
 import repicea.gui.components.REpiceaTabbedPane;
 import repicea.gui.popup.REpiceaPopupMenu;
 import repicea.net.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 
 @SuppressWarnings("serial")
-class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListener {
+class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListener, PropertyChangeListener {
 
 	protected class CarbonTabbedPane extends REpiceaTabbedPane implements ChangeListener {
 
@@ -149,22 +151,31 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 	
 	
 	@Override
-	public void refreshInterface() {}
+	public void refreshInterface() {
+		if (tabbedPane.getSelectedComponent() != null && tabbedPane.getSelectedComponent() instanceof CarbonAccountingToolSingleViewPanel) {
+			((CarbonAccountingToolSingleViewPanel) tabbedPane.getSelectedComponent()).refreshInterface();
+		}
+	}
 
 	@Override
 	public void listenTo () {}
 
 	@Override
 	public void doNotListenToAnymore() {}
-
-	
 	
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource().equals(tabbedPane)) {
-			if (tabbedPane.getSelectedComponent() instanceof CarbonAccountingToolSingleViewPanel) {
-				((CarbonAccountingToolSingleViewPanel) tabbedPane.getSelectedComponent()).refreshInterface();
-			}
+			refreshInterface();
+		} else if (e.getSource() instanceof JMenuItem) {
+			refreshInterface();
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		if (arg0.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
+			refreshInterface();
 		}
 	}
 	

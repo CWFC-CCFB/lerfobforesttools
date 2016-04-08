@@ -73,7 +73,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 
 	@Override
 	protected final ChartPanel createChart() {
-		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(1d, getCICoverage());
 		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = ((CarbonAssessmentToolSingleSimulationResult) summary).getHWPSummaryPerHa(includeRecycling);
 		
 		for (UseClass useClass : UseClass.values()) {

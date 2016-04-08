@@ -34,12 +34,14 @@ public class XYSeriesWithIntegratedRenderer extends XYSeries {
 	public static final Stroke MinorStroke = new BasicStroke(1,	BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,	1, new float[]{12,12}, 0); // width of the lines
 	
 	private final boolean isMean;
+	private final double carbonFactor;
 	private final CompartmentInfo compartmentInfo;
 	private final XYSeriesCollection dataset;
 	
-	public XYSeriesWithIntegratedRenderer(XYSeriesCollection dataset, String title, CompartmentInfo compartmentInfo, boolean isMean) {
+	public XYSeriesWithIntegratedRenderer(XYSeriesCollection dataset, String title, CompartmentInfo compartmentInfo, boolean isMean, double carbonFactor) {
 		super(title);
 		this.isMean = isMean;
+		this.carbonFactor = carbonFactor;
 		this.compartmentInfo = compartmentInfo;
 		this.dataset = dataset;
 		dataset.addSeries(this);
@@ -53,5 +55,10 @@ public class XYSeriesWithIntegratedRenderer extends XYSeries {
 		} else {
 			renderer.setSeriesStroke(indexOfThisSeries, MinorStroke);
 		}
+	}
+	
+	@Override
+	public void add(double xValue, double yValue) {
+		super.add(xValue, yValue * carbonFactor);
 	}
 }

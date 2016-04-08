@@ -20,12 +20,14 @@ package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.util.Vector;
 
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 
+import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
 
 abstract class CarbonAccountingToolViewer extends REpiceaPanel { 
@@ -94,7 +96,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 
 	@Override
 	public String toString() {return getTitle();}
-	
+		
 	@Override
 	public final void refreshInterface() {
 		viewer.removeAll();
@@ -108,5 +110,34 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	@Override
 	public void doNotListenToAnymore () {}
 
+	protected double getCarbonFactor() {
+		CarbonAccountingToolDialog dlg = getMainDialog();
+		if (dlg != null && dlg.calculateInCO2.isSelected()) {
+			return CarbonAccountingToolSettings.C_C02_FACTOR;
+		} else {
+			return 1d;
+		}
+	}
 	
+	private CarbonAccountingToolDialog getMainDialog() {
+		Container window = CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
+		if (window != null) {
+			return (CarbonAccountingToolDialog) window;
+		} else {
+			return null;
+		}
+	}
+	
+	protected boolean isInCO2() {
+		return getCarbonFactor() == CarbonAccountingToolSettings.C_C02_FACTOR;
+	}
+	
+	protected double getCICoverage() {
+		CarbonAccountingToolDialog dlg = getMainDialog();
+		if (dlg != null) {
+			return dlg.confidenceIntervalSlider.getValue() *.01;
+		} else {
+			return .95;
+		}
+	}
 }

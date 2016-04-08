@@ -54,8 +54,12 @@ public final class CarbonAccountingToolSettings {
 
 	private final ExponentialFunction decayFunction = new ExponentialFunction();
 	private final SettingMemory settings;
-//	private final BiomassParameters biomassParameters;
 	protected boolean formerImplementation;
+
+	public static final double CH4_CO2_EQUIVALENT = 25;	// taken from IPCC(2007, Table 2.14)
+	public static final double N2O_CO2_EQUIVALENT = 298;	// taken from IPCC(2007, Table 2.14)
+	public static final double CO2_C_FACTOR = 12d / 44;
+	public static final double C_C02_FACTOR = 44d / 12;
 
 	
 	@Deprecated

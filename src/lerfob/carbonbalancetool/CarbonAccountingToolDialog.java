@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
@@ -50,6 +52,8 @@ import repicea.gui.UIControlManager;
 import repicea.gui.UIControlManager.CommonControlID;
 import repicea.gui.UIControlManager.CommonMenuTitle;
 import repicea.gui.components.REpiceaComboBoxOpenButton;
+import repicea.gui.components.REpiceaSlider;
+import repicea.gui.components.REpiceaSlider.Position;
 import repicea.gui.dnd.AcceptableDropComponent;
 import repicea.gui.dnd.DropTargetImpl;
 import repicea.net.BrowserCaller;
@@ -139,9 +143,13 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		DOCf("Degredable Organic Carbon fraction (DOCf)", "Proportion d\u00E9composable du carbone organique (DOCf)"),
 		AverageDecompositionTime("Average degradation time (yrs)", "Dur\u00E9e de d\u00E9composition moyenne (ann\u00E9es)"),
 		ImportStandList("You are about to import this new stand list. Do you want to proceed?", "Vous \u00EAtes sur le point d'importer cette nouvelle liste de placettes. Voulez-vous continuer ?"),
-		NumberOfRunsToDo("Analysing the realizations", "Analyse des r\u00E9alisations"), 
+		NumberOfRunsToDo("Analyzing the realizations", "Analyse des r\u00E9alisations"), 
 		PanickButton("Stop the simulation", "Arr\u00EAter la simulation"),
 //		CarboneBalance("Carbon balance", "Bilan de carbone")
+		CO2Eq("CO2 Eq.", "CO2 Eq."),
+		CEq("C Eq.", "C Eq."),
+		Units("Units", "Unit\u00E9s"),
+		CI("Confidence intervals", "Intervalles de confiance")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -169,10 +177,15 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	protected final REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper> hwpComboBox;
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
 	
+	private final JMenu file;
+	private final JMenu options;
 	private final JMenuItem calculateCarbonMenuItem;
 	private final JMenuItem stopMenuItem;
 	private final JMenuItem close; // after confirmation
 	private final JMenuItem help;
+	private final JRadioButtonMenuItem calculateInCarbon;
+	protected final JRadioButtonMenuItem calculateInCO2;
+	protected final REpiceaSlider confidenceIntervalSlider;
 	
 	private final JButton calculateCarbonButton;
 	private final JButton stopButton;
@@ -218,7 +231,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu file = UIControlManager.createCommonMenu(CommonMenuTitle.File);
+		file = UIControlManager.createCommonMenu(CommonMenuTitle.File);
 		menuBar.add(file);
 		
 		close = UIControlManager.createCommonMenuItem(CommonControlID.Quit);
@@ -232,13 +245,33 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonMenuItem.setIcon(carbonIcon);
 		calculateCarbonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
 		actionMenu.add(calculateCarbonMenuItem);
-		
 		actionMenu.add(stopMenuItem);
 	
 		calculateCarbonButton = new JButton();
 		calculateCarbonButton.setIcon(carbonIcon);
 		calculateCarbonButton.setMargin(new Insets(2,2,2,2));
 		calculateCarbonButton.setToolTipText(MessageID.CalculateCarbonBalance.toString());
+	
+		options = UIControlManager.createCommonMenu(CommonMenuTitle.Options);
+		menuBar.add(options);
+		JMenu units = new JMenu(MessageID.Units.toString());
+		options.add(units);
+		calculateInCarbon = new JRadioButtonMenuItem(MessageID.CEq.toString());
+		units.add(calculateInCarbon);
+		calculateInCO2 = new JRadioButtonMenuItem(MessageID.CO2Eq.toString());
+		units.add(calculateInCO2);
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(calculateInCarbon);
+		bg.add(calculateInCO2);
+
+		calculateInCarbon.setSelected(true); // default value;
+		
+		confidenceIntervalSlider = new REpiceaSlider(Position.North);
+		confidenceIntervalSlider.setValue((int) (.95 * 100));
+		JMenu ciMenu = new JMenu(MessageID.CI.toString());
+		ciMenu.add(confidenceIntervalSlider);
+		options.add(ciMenu);
+		
 		
 		JMenu about = UIControlManager.createCommonMenu(CommonMenuTitle.About);
 		menuBar.add(about);
@@ -281,8 +314,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			try {
 				iconImage = ImageIO.read(in);
 			}
-			catch (IOException e) {
-			}
+			catch (IOException e) {}
 		}
 		return iconImage;
 	}
@@ -387,6 +419,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonButton.setEnabled(!b);
 		stopMenuItem.setEnabled(b);
 		stopButton.setEnabled(b);
+		options.setEnabled(!b);
+		file.setEnabled(!b);
 	}
 
 	private void updateMajorProgressBarValue(int i) {
@@ -451,6 +485,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonButton.addActionListener(this);
 		biomassComboBox.getComboBox().addItemListener(this);
 		hwpComboBox.getComboBox().addItemListener(this);
+		calculateInCO2.addChangeListener(graphicPanel);
+		calculateInCarbon.addChangeListener(graphicPanel);
+		confidenceIntervalSlider.addPropertyChangeListener(graphicPanel);
 	}
 
 
@@ -464,6 +501,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateCarbonButton.removeActionListener(this);
 		biomassComboBox.getComboBox().removeItemListener(this);
 		hwpComboBox.getComboBox().removeItemListener(this);
+		calculateInCO2.removeChangeListener(graphicPanel);
+		calculateInCarbon.removeChangeListener(graphicPanel);
+		confidenceIntervalSlider.removePropertyChangeListener(graphicPanel);
 	}
 
 	@Override

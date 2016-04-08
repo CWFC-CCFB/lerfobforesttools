@@ -106,7 +106,11 @@ public class CarbonCompartmentMethodLibrary {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
-			carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
+			if (isEvenAged(carbonCompartment)) {
+				carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
+			} else {
+				carbonCompartment.setIntegratedCarbon(integrateCarbonOverHorizon(carbonCompartment) / revolutionPeriod);
+			}
 		
 			break;
 
@@ -231,6 +235,10 @@ public class CarbonCompartmentMethodLibrary {
 	
 	}
 	
+	private boolean isEvenAged(CarbonCompartment carbonCompartment) {
+		return carbonCompartment.getCompartmentManager().isEvenAged();
+	}
+	
 	/**
 	 * This method computes a numerical approximation of the integral based on the trapezoidal rule.
 	 * @param carbonCompartment = a carbon compartment (CarbonCompartment object)
@@ -238,7 +246,7 @@ public class CarbonCompartmentMethodLibrary {
 	 */
 	private double integrateCarbonOverHorizon(CarbonCompartment carbonCompartment) {
 		Integer[] timeScale = carbonCompartment.getCompartmentManager().getTimeScale();
-		boolean isEvenAged = carbonCompartment.getCompartmentManager().isEvenAged();
+		boolean isEvenAged = isEvenAged(carbonCompartment);
 		double previousValue;
 		double currentValue;
 		double totalCarbon = 0d;
