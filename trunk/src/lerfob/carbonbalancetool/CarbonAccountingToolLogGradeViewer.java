@@ -50,7 +50,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 	@Override
 	protected ChartPanel createChart () {
 		
-		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(1d, getCICoverage());
 
 		List<String> logCategoryNames = new ArrayList<String>(summary.getLogGradePerHa().keySet());
 		Collections.sort(logCategoryNames);

@@ -41,7 +41,8 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon stock evolution", "Evolution des stocks de carbone"),
-		YAxis("Carbon (Mg C/ha)", "Carbone (Mg C/ha)"),
+		YAxis("Carbon (Mg/ha of C)", "Carbone (Mg/ha de C)"),
+		YCO2Axis("Carbon (Mg/ha of CO2 Eq.)", "Carbone (Mg/ha de CO2 Eq.)"),
 		XAxis("Year", "Ann\u00E9e");
 
 		MessageID(String englishText, String frenchText) {
@@ -79,15 +80,18 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 				true, // tooltips?
 				false // URLs?
 				);
-
+		double ciCoverage = getCICoverage();
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
 			MonteCarloEstimate estimate = summary.getEvolutionMap().get(compartmentID);
 			Matrix mean = estimate.getMean();
-			Matrix lowerBound = estimate.getPercentile(0.025);
-			Matrix upperBound = estimate.getPercentile(0.975);
-			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true);
-			XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false);
-			XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false);
+			double lowerPercentile = (1d - ciCoverage) * .5;
+			double upperPercentile = 1d - lowerPercentile;
+//			System.out.println("Lower and upper percentiles set to : " + lowerPercentile + "; " + upperPercentile);
+			Matrix lowerBound = estimate.getPercentile(lowerPercentile);
+			Matrix upperBound = estimate.getPercentile(upperPercentile);
+			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true, getCarbonFactor());
+			XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false, getCarbonFactor());
+			XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false, getCarbonFactor());
 			for (int i = 0; i < summary.getTimeScale().length; i++) {
 				meanSeries.add((double) summary.getTimeScale()[i], mean.m_afData[i][0]);
 				lowerSeries.add((double) summary.getTimeScale()[i], lowerBound.m_afData[i][0]);
@@ -119,7 +123,13 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 	protected String getXAxisLabel() {return REpiceaTranslator.getString(MessageID.XAxis);}
 
 	@Override
-	protected String getYAxisLabel() {return REpiceaTranslator.getString(MessageID.YAxis);}
+	protected String getYAxisLabel() {
+		if (isInCO2()) {
+			return REpiceaTranslator.getString(MessageID.YCO2Axis);
+		} else {
+			return REpiceaTranslator.getString(MessageID.YAxis);
+		}
+	}
 
 
 }

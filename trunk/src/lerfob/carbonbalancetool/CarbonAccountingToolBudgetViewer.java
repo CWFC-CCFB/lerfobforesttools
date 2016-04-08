@@ -39,7 +39,8 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 	
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon budget", "Bilan carbone"),
-		YAxis("Average Carbon (Mg C/ha or Mg C/ha/yr)", "Carbone moyen (Mg C/ha ou Mg C/ha/an)"),
+		YAxis("Average Carbon (Mg/ha or Mg/ha/yr of C)", "Carbone moyen (Mg/ha ou Mg/ha/an de C)"),
+		YCO2Axis("Average Carbon (Mg/ha or Mg/ha/yr of CO2 Eq.)", "Carbone moyen (Mg/ha ou Mg/ha/an de CO2 Eq.)"),
 		XAxis("Compartment", "Compartiment");
 
 		MessageID(String englishText, String frenchText) {
@@ -67,7 +68,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 	@Override
 	protected ChartPanel createChart() {
 
-		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(0.95);
+		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(getCarbonFactor(), getCICoverage());
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
 			MonteCarloEstimate estimate = summary.getBudgetMap().get(compartmentID);
@@ -109,7 +110,13 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 	protected String getXAxisLabel() {return REpiceaTranslator.getString(MessageID.XAxis);}
 
 	@Override
-	protected String getYAxisLabel() {return REpiceaTranslator.getString(MessageID.YAxis);}
+	protected String getYAxisLabel() {
+		if (isInCO2()) {
+			return REpiceaTranslator.getString(MessageID.YCO2Axis);
+		} else {
+			return REpiceaTranslator.getString(MessageID.YAxis);
+		}
+	}
 
 
 

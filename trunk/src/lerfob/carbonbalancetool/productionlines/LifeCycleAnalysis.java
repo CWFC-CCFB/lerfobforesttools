@@ -20,6 +20,8 @@ package lerfob.carbonbalancetool.productionlines;
 
 import java.io.Serializable;
 
+import lerfob.carbonbalancetool.CarbonAccountingToolSettings;
+
 /**
  * This class handles the life cycle analysis. The lca are embedded in an enum variable 
  * which controls the availability of the lca. 
@@ -82,10 +84,7 @@ public class LifeCycleAnalysis implements Serializable {
 		}
 	}
 	
-	public static final double CH4_CO2_EQUIVALENT = 25;	// taken from IPCC(2007, Table 2.14)
-	private static final double N2O_CO2_EQUIVALENT = 298;	// taken from IPCC(2007, Table 2.14)
-	private static final double CO2_C_FACTOR = 12d / 44;
-		
+
 	private String strActivity;
 	private double dCO2EmissionPerUnit;
 	private double dCH4EmissionPerUnit;
@@ -127,10 +126,10 @@ public class LifeCycleAnalysis implements Serializable {
 	 */
 	private double getCarbonEquivalentEmissionPerM3() {
 		double CO2 = dCO2EmissionPerUnit 
-		 		+ (dCH4EmissionPerUnit * CH4_CO2_EQUIVALENT)
-				+ (dN2OEmissionPerUnit * N2O_CO2_EQUIVALENT)
+		 		+ (dCH4EmissionPerUnit * CarbonAccountingToolSettings.CH4_CO2_EQUIVALENT)
+				+ (dN2OEmissionPerUnit * CarbonAccountingToolSettings.N2O_CO2_EQUIVALENT)
 				;
-		return CO2 * CO2_C_FACTOR;
+		return CO2 * CarbonAccountingToolSettings.CO2_C_FACTOR;
 	}
 
 	public double getCarbonEmissionPerM3() {
