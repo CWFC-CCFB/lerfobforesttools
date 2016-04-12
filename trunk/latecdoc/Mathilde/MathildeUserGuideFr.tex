@@ -216,18 +216,41 @@ Les peuplements gérés sont habituellement récoltés lorsqu'ils atteignent un 
 
 \subsection{Evaluation du simulateur}
 
-Chacun des modules du simulateur a été évalué par validation croisée. Une fois que ces évaluations se sont avérées satisfaisantes, ils ont été assemblés pour former MATHILDE (Figure~\ref{figureOrganigramme}). Le comportement global du simulateur a aussi été évalué par validation croisée. Des statistiques comme les biais et erreurs quadratiques moyennes des prévisions en surface terrière et en nombre de tiges à l'hectare ont été calculées.
+Chacun des modules du simulateur a été évalué par validation croisée. Une fois que ces évaluations se sont avérées satisfaisantes, ils ont été assemblés pour former MATHILDE (Figure~\ref{figureOrganigramme}). Le comportement global du simulateur a aussi été évalué par validation croisée. Des statistiques comme les biais et les racines des erreurs quadratiques moyennes des prévisions en surface terrière et en nombre de tiges à l'hectare ont été calculées (Tableau~\ref{TableEvaluationLERFoB}). Les valeurs observées ont également été comparées aux valeurs prédites (Figure~\ref{figureComparObsPred}).
 
-\q{Ajouter les figures}
+\begin{table}[!h]
+\begin{center}
+\caption{Evaluation de MATHILDE par validation croisée ($n$: nombre d'intervalles de croissance, REQM: racine de l'erreur quadratique moyenne, les valeurs relatives sont entre parenthèses).}
+\label{TableEvaluationLERFoB}
+\begin{tabular}{llccc}
+\hline
+Variable & Contexte & $n$ & Biais & REQM \\
+\hline
+Densité de tiges (tiges ha$^{-1}$) & Sans coupe & 204 & 9,1 (2,2\%) & 48.7 (11,7\%) \\
+				& Avec coupe & 175 & 11,7 (3,9\%) & 40,0 (13,5\%) \\
+Surface terrière (m$^2$ha$^{-1}$) & Sans coupe & 204 & 0,2 (0,7\%) & 6,8 (20,9\%) \\
+ 				& Avec coupe & 175 & 1,5 (5,3\%) & 4,5 (16,1\%) \\
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[width=7cm]{./figures/stochasticEvaluationGraphfr}
+\caption{Comparaison entre les valeurs observées et prédites par MATHILDE.}
+\label{figureComparObsPred}
+\end{center}
+\end{figure}
+
 
 \subsection{Contributions}
 
-Les concepteurs du modèle tiennent à remercier François Morneau (ONF-IGN), François Ningre (LERFoB), Christine Deleuze (ONF), Quentin Girard (ONF), Didier François (ONF) et Philippe Dreyfus (ONF) pour leurs suggestions lors des ajustements des modules de mortalité et d'accroissement en diamètre de MATHILDE et de l'évaluation du simulateur. 
+Les auteurs de ce document tiennent à remercier François Morneau (ONF-IGN), François Ningre (LERFoB), Christine Deleuze (ONF), Quentin Girard (ONF), Didier François (ONF) et Philippe Dreyfus (ONF) pour leurs suggestions lors des ajustements des modules de mortalité et d'accroissement en diamètre de MATHILDE et de l'évaluation du simulateur. 
 
 \section{Initialiser une simulation}
 
 Le menu d'initialisation de MATHILDE est présenté à la Figure~\ref{figureInitialMenu}. Ce menu vous permet de lire votre fichier d'inventaire et de spécifier l'année de départ de votre simulation.
-
 
 \begin{figure}[h]
 \begin{center}
