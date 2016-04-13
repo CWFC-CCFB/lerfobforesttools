@@ -34,15 +34,15 @@ import repicea.gui.AutomatedHelper;
 import repicea.gui.UIControlManager;
 import repicea.io.GExportFieldDetails;
 import repicea.io.GExportRecord;
-import repicea.io.GRecordSet;
-import repicea.io.tools.ExportTool;
-import repicea.io.tools.ExportToolDialog;
+import repicea.io.REpiceaRecordSet;
+import repicea.io.tools.REpiceaExportTool;
+import repicea.io.tools.REpiceaExportToolDialog;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class CarbonAccountingToolExport extends ExportTool {
+public class CarbonAccountingToolExport extends REpiceaExportTool {
 
 	protected static enum MessageID implements TextableEnum {
 		Year("Year", "Annee"),
@@ -76,8 +76,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 		private CarbonAccountingToolExport caller;
 		
 		@SuppressWarnings("rawtypes")
-		protected InternalSwingWorker(CarbonAccountingToolExport caller, Enum selectedOption) {
-			super(selectedOption);
+		protected InternalSwingWorker(CarbonAccountingToolExport caller, Enum selectedOption, REpiceaRecordSet recordSet) {
+			super(selectedOption, recordSet);
 			this.caller = caller;
 		}
 
@@ -85,22 +85,22 @@ public class CarbonAccountingToolExport extends ExportTool {
 		protected void doThisJob() throws Exception {
 			switch ((ExportOption) getExportOption()) {
 			case CarbonStockEvolution:
-				setRecordSet(createCarbonStockEvolutionRecordSet());
+				createCarbonStockEvolutionRecordSet();
 				break;
 			case AverageCarbonStock:
-				setRecordSet(createAverageCarbonStockRecordSet());
+				createAverageCarbonStockRecordSet();
 				break;
 			case ProductProportion:
-				setRecordSet(createWoodProductProportionRecordSet());
+				createWoodProductProportionRecordSet();
 				break;
 			case AnnualVolumeNutrientFluxes:
-				setRecordSet(createNutrientFluxRecordSet());
+				createNutrientFluxRecordSet();
 				break;
 			case LogCategoryVolume:
-				setRecordSet(createLogCategoryVolumeRecordSet());
+				createLogCategoryVolumeRecordSet();
 				break;
 			case WoodProductEvolution:
-				setRecordSet(createWoodProductEvolutionRecordSet());
+				createWoodProductEvolutionRecordSet();
 				break;
 			default:
 				throw new Exception("Unrecognized Export Format");
@@ -110,11 +110,9 @@ public class CarbonAccountingToolExport extends ExportTool {
 		
 		
 		
-		private GRecordSet createWoodProductEvolutionRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createWoodProductEvolutionRecordSet() throws Exception {
 			GExportRecord r;
-			
-			
+						
 			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionPerHa();
 			
 			String standID = caller.summary.getStandID();
@@ -140,16 +138,13 @@ public class CarbonAccountingToolExport extends ExportTool {
 						r.addField(new GExportFieldDetails("UseClass", useClass.name()));
 						r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
 						r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
-						recordSet.add(r);
+						addRecord(r);
 					}
 				}
 			}
-			
-			return recordSet;
 		}
 
-		private GRecordSet createCarbonStockEvolutionRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createCarbonStockEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 			
 			Integer[] timeScale = caller.summary.getTimeScale();
@@ -169,7 +164,7 @@ public class CarbonAccountingToolExport extends ExportTool {
 						r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), (Double) 0d));
-						recordSet.add(r);
+						addRecord(r);
 					}
 					r = new GExportRecord();
 					r.addField(standIDField);
@@ -177,16 +172,13 @@ public class CarbonAccountingToolExport extends ExportTool {
 					r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 			
-					recordSet.add(r);
+					addRecord(r);
 				}
 			}
-			
-			return recordSet;
 		}
 		
 		
-		private GRecordSet createAverageCarbonStockRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createAverageCarbonStockRecordSet() throws Exception {
 			GExportRecord r;
 
 			String standID = caller.summary.getStandID();
@@ -202,15 +194,12 @@ public class CarbonAccountingToolExport extends ExportTool {
 				r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 				r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 			
-				recordSet.add(r);
+				addRecord(r);
 			}
-			
-			return recordSet;
 		}
 		
 
-		private GRecordSet createWoodProductProportionRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createWoodProductProportionRecordSet() throws Exception {
 			GExportRecord r;
 			
 			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
@@ -246,18 +235,16 @@ public class CarbonAccountingToolExport extends ExportTool {
 								}
 								r.addField(new GExportFieldDetails(nutrient.name() + "_kg_ha", (Double) nutrientKg));
 							}
-							recordSet.add(r);
+							addRecord(r);
 						}
 					}
 					
 				}
 			}
-			return recordSet;
 		}
 
 		
-		private GRecordSet createNutrientFluxRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createNutrientFluxRecordSet() throws Exception {
 			GExportRecord r;
 			double annualFactor = 1d / caller.summary.getRotationLength();
 			
@@ -294,16 +281,14 @@ public class CarbonAccountingToolExport extends ExportTool {
 								}
 								r.addField(new GExportFieldDetails(nutrient.name() + "_kghayr", (Double) (nutrientKg * annualFactor)));
 							}
-							recordSet.add(r);
+							addRecord(r);
 						}
 					}
 				}
 			}
-			return recordSet;
 		}
 
-		private GRecordSet createLogCategoryVolumeRecordSet() {
-			GRecordSet recordSet = new GRecordSet();
+		private void createLogCategoryVolumeRecordSet() throws Exception {
 			GExportRecord r;
 			
 			String standID = caller.summary.getStandID();
@@ -324,9 +309,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 				r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
 				r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
 		
-				recordSet.add(r);
+				addRecord(r);
 			}
-			return recordSet;
 		}
 	}
 	
@@ -382,13 +366,13 @@ public class CarbonAccountingToolExport extends ExportTool {
 	 * @param helper an AutomatedHelper instance
 	 */
 	protected void setHelper(AutomatedHelper helper) {
-		UIControlManager.setHelpMethod(ExportToolDialog.class, helper);
+		UIControlManager.setHelpMethod(REpiceaExportToolDialog.class, helper);
 	}
 	
 
 	@Override
-	public void save() throws Exception {
-		super.save();
+	public void exportRecordSets() throws Exception {
+		super.exportRecordSets();
 		settings.setProperty("CarbonBudgetExportDialog.defaultPath", getFilename());
 	}
 	
@@ -417,8 +401,8 @@ public class CarbonAccountingToolExport extends ExportTool {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected InternalSwingWorkerForRecordSet instantiateInternalSwingWorkerForRecordSet(Enum selectedOption) {
-		return new InternalSwingWorker(this, selectedOption);
+	protected InternalSwingWorkerForRecordSet instantiateInternalSwingWorkerForRecordSet(Enum selectedOption, REpiceaRecordSet recordSet) {
+		return new InternalSwingWorker(this, selectedOption, recordSet);
 	}
 
 }
