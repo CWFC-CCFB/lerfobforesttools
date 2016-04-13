@@ -370,10 +370,12 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 	}
 	
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void exportRecordSets() throws Exception {
-		super.exportRecordSets();
+	public Map<Enum, REpiceaRecordSet> exportRecordSets() throws Exception {
+		Map<Enum, REpiceaRecordSet> outputMap =	super.exportRecordSets();
 		settings.setProperty("CarbonBudgetExportDialog.defaultPath", getFilename());
+		return outputMap;
 	}
 	
 	
