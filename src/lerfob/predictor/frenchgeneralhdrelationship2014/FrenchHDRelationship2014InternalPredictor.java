@@ -72,16 +72,16 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 			Matrix stdMatrix = levelRandomEffects.getVariance().getLowerCholTriangle();
 			
 			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(0.999));
+			truncatedEstimate.setLowerBoundValue(stdMatrix.scalarMultiply(0.999));
 			fertilityClassMap.put(FertilityClass.I, truncatedEstimate);
 
 			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setLowerBound(stdMatrix.scalarMultiply(-0.7388));
-			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(0.999));
+			truncatedEstimate.setLowerBoundValue(stdMatrix.scalarMultiply(-0.7388));
+			truncatedEstimate.setUpperBoundValue(stdMatrix.scalarMultiply(0.999));
 			fertilityClassMap.put(FertilityClass.II, truncatedEstimate);
 
 			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
-			truncatedEstimate.setUpperBound(stdMatrix.scalarMultiply(-0.7388));
+			truncatedEstimate.setUpperBoundValue(stdMatrix.scalarMultiply(-0.7388));
 			fertilityClassMap.put(FertilityClass.III, truncatedEstimate);
 		}
 		return fertilityClassMap;

@@ -266,7 +266,6 @@ public final class CarbonAccountingToolSettings {
 		} else {
 			loadFromParameter(productionLines, selectedItem.toString());
 		}
-//		productionLines.setDecayFunction(getDecayFunction());
 	}
 
 	/**

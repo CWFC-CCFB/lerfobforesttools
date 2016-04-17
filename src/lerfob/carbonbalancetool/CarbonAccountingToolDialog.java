@@ -144,12 +144,13 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		AverageDecompositionTime("Average degradation time (yrs)", "Dur\u00E9e de d\u00E9composition moyenne (ann\u00E9es)"),
 		ImportStandList("You are about to import this new stand list. Do you want to proceed?", "Vous \u00EAtes sur le point d'importer cette nouvelle liste de placettes. Voulez-vous continuer ?"),
 		NumberOfRunsToDo("Analyzing the realizations", "Analyse des r\u00E9alisations"), 
-		PanickButton("Stop the simulation", "Arr\u00EAter la simulation"),
+		PanicButton("Stop the simulation", "Arr\u00EAter la simulation"),
 //		CarboneBalance("Carbon balance", "Bilan de carbone")
 		CO2Eq("CO2 Eq.", "CO2 Eq."),
 		CEq("C Eq.", "C Eq."),
 		Units("Units", "Unit\u00E9s"),
-		CI("Confidence intervals", "Intervalles de confiance")
+		CI("Confidence intervals", "Intervalles de confiance"),
+		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -179,6 +180,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	
 	private final JMenu file;
 	private final JMenu options;
+	private final JMenuItem sensitivityAnalysisMenuItem;
 	private final JMenuItem calculateCarbonMenuItem;
 	private final JMenuItem stopMenuItem;
 	private final JMenuItem close; // after confirmation
@@ -216,7 +218,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
 		stopButton.setText("");
 		stopButton.setMargin(new Insets(2,2,2,2));
-		stopButton.setToolTipText(MessageID.PanickButton.toString());
+		stopButton.setToolTipText(MessageID.PanicButton.toString());
 
 		stopMenuItem = UIControlManager.createCommonMenuItem(CommonControlID.Stop);
 		
@@ -271,7 +273,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		JMenu ciMenu = new JMenu(MessageID.CI.toString());
 		ciMenu.add(confidenceIntervalSlider);
 		options.add(ciMenu);
-		
+		sensitivityAnalysisMenuItem = new JMenuItem(MessageID.SensitivityAnalysis.toString());
+		options.add(sensitivityAnalysisMenuItem);
 		
 		JMenu about = UIControlManager.createCommonMenu(CommonMenuTitle.About);
 		menuBar.add(about);
