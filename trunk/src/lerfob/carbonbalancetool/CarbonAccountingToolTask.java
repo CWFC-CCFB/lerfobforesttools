@@ -212,7 +212,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes"})
 	private void createEndUseWoodProductsFromWoodPieces() throws Exception {
-		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
+		CarbonCompartmentManager manager = caller.getCarbonCompartmentManager();
+		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		if (!caller.getCarbonToolSettings().formerImplementation) {
 			getProcessorManager().resetCarbonUnitMap();
 			if (!caller.getCarbonToolSettings().getTreeLogger().getWoodPieces().isEmpty()) {
@@ -225,8 +226,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 						MemoryWatchDog.checkAvailableMemory();		// memory check before going further on
 
 						CarbonToolCompatibleTree tree = (CarbonToolCompatibleTree) t;
-						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree);
-						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree);
+						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
+						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
 						Collection<WoodPiece> woodPieces = (Collection<WoodPiece>) treeLogger.getWoodPieces().get(t);
 						double totalWoodPieceCarbon = 0d;
@@ -262,7 +263,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
 						}
 						
-						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);
+						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
 						double unconsideredAboveGroundCarbon = totalAboveGroundCarbon - totalWoodPieceCarbon; 				// the difference between the carbon in the wood piece and the total aboveground carbon is the part that is left in the forest
 						if (unconsideredAboveGroundCarbon > 0) {		// those branches are sent to the fine woody debris
 							double biomass = unconsideredAboveGroundCarbon / carbonContentRatio;
@@ -299,8 +300,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 						MemoryWatchDog.checkAvailableMemory();		// memory check before going further on
 
 						CarbonToolCompatibleTree tree = (CarbonToolCompatibleTree) t;
-						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree);
-						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree);
+						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
+						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
 						Collection<WoodPiece> woodPieces = (Collection<WoodPiece>) treeLogger.getWoodPieces().get(t);
 						double totalWoodPieceCarbon = 0d;
@@ -344,7 +345,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 								productionLineManager.processWoodPiece(productionLineName, caller.getDateIndexForThisTree(tree), amountMap);		
 							}
 						}
-						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree);
+						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
 						double unconsideredAboveGroundCarbon = totalAboveGroundCarbon - totalWoodPieceCarbon; 				// the difference between the carbon in the wood piece and the total aboveground carbon is the part that is left in the forest
 						if (unconsideredAboveGroundCarbon > 0) {
 							double biomass = unconsideredAboveGroundCarbon / carbonContentRatio;
@@ -371,8 +372,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CarbonToolCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees);
-					double biomass = biomassParameters.getBelowGroundBiomassMg(trees);
-					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
+					double biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
+					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
 
 					AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
 					amountMap.put(Element.Volume, volume);
@@ -387,7 +388,8 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 	
 	private void createWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap, WoodyDebrisProcessorID type) {
-		BiomassParameters biomassParameters = caller.getCarbonCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
+		CarbonCompartmentManager manager = caller.getCarbonCompartmentManager();
+		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
 			if (isCancelled) {
 				break;
@@ -400,18 +402,18 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			switch(type) {
 			case FineWoodyDebris:
 				volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
-				biomass = biomassParameters.getAboveGroundBiomassMg(trees) - biomassParameters.getCommercialBiomassMg(trees);
-				carbonContent = biomassParameters.getAboveGroundCarbonMg(trees) - biomassParameters.getCommercialCarbonMg(trees);
+				biomass = biomassParameters.getAboveGroundBiomassMg(trees, manager) - biomassParameters.getCommercialBiomassMg(trees, manager);
+				carbonContent = biomassParameters.getAboveGroundCarbonMg(trees, manager) - biomassParameters.getCommercialCarbonMg(trees, manager);
 				break;
 			case CommercialWoodyDebris:
 				volume = biomassParameters.getCommercialVolumeM3(trees);
-				biomass = biomassParameters.getCommercialBiomassMg(trees);
-				carbonContent = biomassParameters.getCommercialCarbonMg(trees);
+				biomass = biomassParameters.getCommercialBiomassMg(trees, manager);
+				carbonContent = biomassParameters.getCommercialCarbonMg(trees, manager);
 				break;
 			case CoarseWoodyDebris:
 				volume = biomassParameters.getBelowGroundVolumeM3(trees);
-				biomass = biomassParameters.getBelowGroundBiomassMg(trees);
-				carbonContent = biomassParameters.getBelowGroundCarbonMg(trees);
+				biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
+				carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
 				break;
 			}
 			AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here

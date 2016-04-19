@@ -31,10 +31,12 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.StochasticInformationProvider;
 
 @SuppressWarnings("deprecation")
-public class CarbonCompartmentManager {
+public class CarbonCompartmentManager implements MonteCarloSimulationCompliantObject {
 
 	private static int NumberOfExtraYrs = 80;	// number of years after the final cut
 	
@@ -49,7 +51,7 @@ public class CarbonCompartmentManager {
 
 	private boolean isSimulationValid;
 	protected boolean isStochastic;
-	protected int currentRealization;
+	private int currentRealization;
 	protected int nRealizations;
 	private int nbSimulations = 0;
 
@@ -339,6 +341,26 @@ public class CarbonCompartmentManager {
 			currentStands = stands;
 		}
 	}
+
+	@Override
+	public int getMonteCarloRealizationId() {
+		return currentRealization;
+	}
+	
+	/*
+	 * Useless for sensitivity analysis (non-Javadoc)
+	 * @see repicea.simulation.MonteCarloSimulationCompliantObject#getSubjectId()
+	 */
+	@Override
+	public String getSubjectId() {return null;}
+
+	/*
+	 * Useless for sensitivity analysis (non-Javadoc)
+	 * @see repicea.simulation.MonteCarloSimulationCompliantObject#getHierarchicalLevel()
+	 */
+	@Override
+	public HierarchicalLevel getHierarchicalLevel() {return null;}
+
 
 	
 }

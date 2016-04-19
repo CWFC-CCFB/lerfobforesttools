@@ -39,6 +39,8 @@ import lerfob.carbonbalancetool.BelowGroundVolumeProvider;
 import lerfob.carbonbalancetool.CarbonContentRatioProvider;
 import lerfob.carbonbalancetool.CarbonToolCompatibleTree;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParametersDialog.MessageID;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.Resettable;
 import repicea.gui.ShowableObjectWithParent;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
@@ -50,6 +52,7 @@ import repicea.serial.xml.XmlDeserializer;
 import repicea.serial.xml.XmlMarshallException;
 import repicea.serial.xml.XmlSerializer;
 import repicea.serial.xml.XmlSerializerChangeMonitor;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
@@ -289,11 +292,17 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonToolCompatibleTree
 	 * @return a double
 	 */
-	public double getBasicWoodDensityFromThisTree(CarbonToolCompatibleTree tree) {
+	public double getBasicWoodDensityFromThisTree(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+		double value;
 		if (basicWoodDensityFromModel) {
-			return ((BasicWoodDensityProvider) tree).getBasicWoodDensity();
+			value = ((BasicWoodDensityProvider) tree).getBasicWoodDensity();
 		} else {
-			return basicWoodDensityFactors.get(tree.getSpeciesType());
+			value = basicWoodDensityFactors.get(tree.getSpeciesType());
+		}
+		if (subject != null) {
+			return value * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject);
+		} else {
+			return value;
 		}
 	}
 
@@ -302,27 +311,32 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonToolCompatibleTree
 	 * @return a double
 	 */
-	public double getCarbonContentFromThisTree(CarbonToolCompatibleTree tree) {
+	public double getCarbonContentFromThisTree(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+		double value;
 		if (carbonContentFromModel) {
-			return ((CarbonContentRatioProvider) tree).getCarbonContentRatio();
+			value = ((CarbonContentRatioProvider) tree).getCarbonContentRatio();
 		} else {
-			return carbonContentFactors.get(tree.getSpeciesType());
+			value = carbonContentFactors.get(tree.getSpeciesType());
+		}
+		if (subject != null) {
+			return value * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.CarbonContent, subject);
+		} else {
+			return value;
 		}
 	}
-
 	
 	/**
 	 * This method returns the belowground carbon content of a particular instance
 	 * @param tree a CarbonToolCompatibleTree instance
 	 * @return the carbon content (Mg)
 	 */
-	public double getBelowGroundCarbonMg(CarbonToolCompatibleTree tree) {
+	public double getBelowGroundCarbonMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		if (carbonContentFromModel) {
 			if (tree instanceof BelowGroundCarbonProvider) {
 				return ((BelowGroundCarbonProvider) tree).getBelowGroundCarbonMg() * tree.getNumber();
 			} 
 		}
-		return getBelowGroundBiomassMg(tree) * getCarbonContentFromThisTree(tree);
+		return getBelowGroundBiomassMg(tree, subject) * getCarbonContentFromThisTree(tree, subject);
 	}
 	
 	/**
@@ -330,13 +344,13 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonToolCompatibleTree instance
 	 * @return the biomass (Mg)
 	 */
-	public double getBelowGroundBiomassMg(CarbonToolCompatibleTree tree) {
+	public double getBelowGroundBiomassMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		if (basicWoodDensityFromModel) {
 			if (tree instanceof BelowGroundBiomassProvider) {
 				return ((BelowGroundBiomassProvider) tree).getBelowGroundBiomassMg() * tree.getNumber();
 			}
 		}
-		return getBelowGroundVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree);
+		return getBelowGroundVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
 	}
 
 	/**
@@ -359,13 +373,13 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	public double getAboveGroundCarbonMg(CarbonToolCompatibleTree tree) {
+	public double getAboveGroundCarbonMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		if (carbonContentFromModel) {
 			if (tree instanceof AboveGroundCarbonProvider) {
 				return ((AboveGroundCarbonProvider) tree).getAboveGroundCarbonMg() * tree.getNumber();
 			} 
 		} 
-		return getAboveGroundBiomassMg(tree) * getCarbonContentFromThisTree(tree);
+		return getAboveGroundBiomassMg(tree, subject) * getCarbonContentFromThisTree(tree, subject);
 	}
 	
 	/**
@@ -373,13 +387,13 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	public double getAboveGroundBiomassMg(CarbonToolCompatibleTree tree) {
+	public double getAboveGroundBiomassMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		if (basicWoodDensityFromModel) {
 			if (tree instanceof AboveGroundBiomassProvider) {
 				return ((AboveGroundBiomassProvider) tree).getAboveGroundBiomassMg() * tree.getNumber();
 			} 
 		} 
-		return getAboveGroundVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree);
+		return getAboveGroundVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
 	}
 
 	
@@ -411,8 +425,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	public double getCommercialBiomassMg(CarbonToolCompatibleTree tree) {
-		return getCommercialVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree);
+	public double getCommercialBiomassMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+		return getCommercialVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
 	}
 
 	/**
@@ -420,8 +434,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	public double getCommercialCarbonMg(CarbonToolCompatibleTree tree) {
-		return getCommercialVolumeM3(tree) * getCarbonContentFromThisTree(tree);
+	public double getCommercialCarbonMg(CarbonToolCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+		return getCommercialVolumeM3(tree) * getCarbonContentFromThisTree(tree, subject);
 	}
 	
 
@@ -446,11 +460,11 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param trees a Collection of CarbonToolCompatibleTree instances
 	 * @return a double
 	 */
-	public double getAboveGroundBiomassMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getAboveGroundBiomassMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double totalAboveGroundBiomassMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				totalAboveGroundBiomassMg += getAboveGroundBiomassMg(tree);
+				totalAboveGroundBiomassMg += getAboveGroundBiomassMg(tree, subject);
 			}
 		}
 		return totalAboveGroundBiomassMg;
@@ -461,31 +475,31 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @param trees a Collection of CarbonToolCompatibleTree instances
 	 * @return a double
 	 */
-	public double getAboveGroundCarbonMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getAboveGroundCarbonMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double totalAboveGroundCarbonMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				totalAboveGroundCarbonMg += getAboveGroundCarbonMg(tree);
+				totalAboveGroundCarbonMg += getAboveGroundCarbonMg(tree, subject);
 			}
 		}
 		return totalAboveGroundCarbonMg;
 	}
 
-	public double getBelowGroundCarbonMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getBelowGroundCarbonMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double totalBelowGroundCarbonMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				totalBelowGroundCarbonMg += getBelowGroundCarbonMg(tree);
+				totalBelowGroundCarbonMg += getBelowGroundCarbonMg(tree, subject);
 			}
 		}
 		return totalBelowGroundCarbonMg;
 	}
 
-	public double getBelowGroundBiomassMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getBelowGroundBiomassMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double totalBelowGroundBiomassMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				totalBelowGroundBiomassMg += getBelowGroundBiomassMg(tree);
+				totalBelowGroundBiomassMg += getBelowGroundBiomassMg(tree, subject);
 			}
 		}
 		return totalBelowGroundBiomassMg;
@@ -513,21 +527,21 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	}
 	
 
-	public double getCommercialBiomassMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getCommercialBiomassMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double commercialBiomassMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				commercialBiomassMg += getCommercialBiomassMg(tree);
+				commercialBiomassMg += getCommercialBiomassMg(tree, subject);
 			}
 		}
 		return commercialBiomassMg;
 	}
 
-	public double getCommercialCarbonMg(Collection<CarbonToolCompatibleTree> trees) {
+	public double getCommercialCarbonMg(Collection<CarbonToolCompatibleTree> trees, MonteCarloSimulationCompliantObject subject) {
 		double commercialCarbonMg = 0d;
 		if (trees != null) {
 			for (CarbonToolCompatibleTree tree : trees) {
-				commercialCarbonMg += getCommercialCarbonMg(tree);
+				commercialCarbonMg += getCommercialCarbonMg(tree, subject);
 			}
 		}
 		return commercialCarbonMg;

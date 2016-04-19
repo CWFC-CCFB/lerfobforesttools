@@ -28,6 +28,7 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -35,7 +36,7 @@ import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettin
 import repicea.gui.REpiceaPanel;
 import repicea.gui.UserInterfaceableObject;
 import repicea.gui.components.REpiceaSlider;
-import repicea.simulation.SensitivityAnalysisParameter;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.Distribution;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -43,7 +44,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 
 	private static enum MessageID implements TextableEnum {
-		ErrorMargin("Error margin", "Marge d'erreur");
+		ErrorMargin("Error margin", "Marge d'erreur"),
+		Enable("Enabled", "Activ\u00E9");
 
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -61,10 +63,13 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 	@SuppressWarnings("serial")
 	class CATSensitivityParameterWrapperPanel extends REpiceaPanel implements ItemListener, PropertyChangeListener{
 		
+		private final JCheckBox enabled;
 		private final JComboBox<Distribution.Type> distributionComboBox;
 		private final REpiceaSlider variabilitySlider;
 		
 		CATSensitivityParameterWrapperPanel() {
+			enabled = new JCheckBox(MessageID.Enable.toString());
+			enabled.setSelected(CATSensitivityParameterWrapper.this.isEnabled);
 			Vector<Distribution.Type> dist = new Vector<Distribution.Type>();
 			dist.add(Distribution.Type.UNIFORM);
 			dist.add(Distribution.Type.GAUSSIAN);
@@ -75,12 +80,15 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 			
 			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), CATSensitivityParameterWrapper.this.source.toString()));
 			add(Box.createHorizontalStrut(5));
+			add(enabled);
+			add(Box.createHorizontalStrut(10));
 			add(new JLabel("Distribution"));
 			add(distributionComboBox);
 			add(Box.createHorizontalStrut(10));
 			add(new JLabel(MessageID.ErrorMargin.toString()));
 			add(variabilitySlider);
 			add(Box.createHorizontalStrut(5));
+			setEnabled(enabled.isSelected());
 		}
 		
 		
@@ -94,12 +102,14 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 		public void listenTo() {
 			distributionComboBox.addItemListener(this);
 			variabilitySlider.addPropertyChangeListener(this);
+			enabled.addItemListener(this);
 		}
 
 		@Override
 		public void doNotListenToAnymore() {
 			distributionComboBox.removeItemListener(this);
 			variabilitySlider.removePropertyChangeListener(this);
+			enabled.removeItemListener(this);
 		}
 
 		@Override
@@ -107,8 +117,10 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 			if (arg0.getSource().equals(distributionComboBox)) {
 				CATSensitivityParameterWrapper.this.selectedDistributionType = (Distribution.Type) distributionComboBox.getSelectedItem();
 //				System.out.println("Selected distribution is " + (Distribution.Type) distributionComboBox.getSelectedItem());
+			} else if (arg0.getSource().equals(enabled)) {
+				CATSensitivityParameterWrapper.this.isEnabled = enabled.isSelected();
+				setEnabled(enabled.isSelected());
 			}
-			
 		}
 
 		@Override
@@ -130,7 +142,8 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 	private final VariabilitySource source;
 	
 	@SuppressWarnings("rawtypes")
-	private final Map<Distribution.Type, SensitivityAnalysisParameter> parameterMap;
+	private final Map<Distribution.Type, CATSensitivityAnalysisParameter> parameterMap;
+	private boolean isEnabled;
 	private Distribution.Type selectedDistributionType = Distribution.Type.UNIFORM; // default value
 	private double modulator = 0d;
 	private transient REpiceaPanel guiInterface;
@@ -138,7 +151,7 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 	@SuppressWarnings({ "incomplete-switch", "rawtypes" })
 	protected CATSensitivityParameterWrapper(VariabilitySource source) {
 		this.source = source;
-		parameterMap = new HashMap<Distribution.Type, SensitivityAnalysisParameter>();
+		parameterMap = new HashMap<Distribution.Type, CATSensitivityAnalysisParameter>();
 		for (Distribution.Type type : Distribution.Type.values()) {
 			switch(type) {
 			case UNIFORM:
@@ -159,6 +172,11 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 		return guiInterface;
 	}
 
+	
+	protected double getValue(MonteCarloSimulationCompliantObject subject) {
+		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(subject).m_afData[0][0];
+	}
+	
 //	public static void main(String args[]) {
 //		CATSensitivityParameterWrapper wrapper = new CATSensitivityParameterWrapper(VariabilitySource.BiomassExpansionFactor);
 //		JDialog dialog = new JDialog();

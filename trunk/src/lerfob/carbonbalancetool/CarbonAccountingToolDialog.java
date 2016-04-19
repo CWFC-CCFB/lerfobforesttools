@@ -43,6 +43,7 @@ import javax.swing.SwingWorker;
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.BiomassParametersWrapper;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.ProductionProcessorManagerWrapper;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaAWTProperty;
@@ -376,6 +377,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			} 
 		} else if (evt.getSource().equals(stopMenuItem) || evt.getSource().equals(stopButton)) {
 			caller.cancelRunningTask();
+		} else if (evt.getSource().equals(sensitivityAnalysisMenuItem)) {
+			CATSensitivityAnalysisSettings.getInstance().showInterface(this);
 		}
 	}
 	
@@ -460,7 +463,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			switch (task) {
 				case LOG_AND_BUCK_TREES:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.LoggingJob));
-					updateMajorProgressBarValue(caller.getCarbonCompartmentManager().currentRealization);
+					updateMajorProgressBarValue(caller.getCarbonCompartmentManager().getMonteCarloRealizationId());
 					break;
 				case GENERATE_WOODPRODUCTS:
 					minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.WoodPieceJob));
@@ -491,6 +494,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateInCO2.addChangeListener(graphicPanel);
 		calculateInCarbon.addChangeListener(graphicPanel);
 		confidenceIntervalSlider.addPropertyChangeListener(graphicPanel);
+		sensitivityAnalysisMenuItem.addActionListener(this);
 	}
 
 
@@ -507,6 +511,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateInCO2.removeChangeListener(graphicPanel);
 		calculateInCarbon.removeChangeListener(graphicPanel);
 		confidenceIntervalSlider.removePropertyChangeListener(graphicPanel);
+		sensitivityAnalysisMenuItem.removeActionListener(this);
 	}
 
 	@Override
