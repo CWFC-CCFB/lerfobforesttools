@@ -25,15 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import repicea.gui.ShowableObjectWithParent;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent {
-
+	
+	
+	private static CATSensitivityAnalysisSettings settings; 
 	
 	private transient CATSensitivityAnalysisSettingsDlg guiInterface;
 	
-	protected static enum VariabilitySource implements TextableEnum {
+	public static enum VariabilitySource implements TextableEnum {
 		BiomassExpansionFactor("Biomass expansion factors", "Facteur d'expansion de biomasse"),
 		BasicDensity("Wood basic densities", "Infradensit\u00E9s"),
 		CarbonContent("Carbon content", "Teneur en carbone");
@@ -55,7 +58,7 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 	protected final Map<VariabilitySource, CATSensitivityParameterWrapper> sensitivityParameterMap;
 	
 	
-	protected CATSensitivityAnalysisSettings() {
+	private CATSensitivityAnalysisSettings() {
 		sensitivityParameterMap = new HashMap<VariabilitySource, CATSensitivityParameterWrapper>();
 		for (VariabilitySource source : VariabilitySource.values()) {
 			sensitivityParameterMap.put(source, new CATSensitivityParameterWrapper(source));
@@ -75,6 +78,28 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 		getGuiInterface(parent).setVisible(true);
 	}
 
+	/**
+	 * This method returns the singleton instance of the CATSensitivityAnalysisSettings class.
+	 * @return a CATSensitivityAnalysisSettings instance
+	 */
+	public static CATSensitivityAnalysisSettings getInstance() {
+		if (settings == null) {
+			settings = new CATSensitivityAnalysisSettings();
+		}
+		return settings;
+	}
+
+	/**
+	 * This method returns the multiplicative modifier for sensitivity analysis.
+	 * @param source the source of variability (a VariabilitySource enum)
+	 * @param subject a MonteCarloSimulationCompliantObject instance
+	 * @return a double
+	 */
+	public double getModifier(VariabilitySource source, MonteCarloSimulationCompliantObject subject) {
+		return sensitivityParameterMap.get(source).getValue(subject);
+	}
+	
+	
 	public static void main(String[] args) {
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();
 		settings.showInterface(null);

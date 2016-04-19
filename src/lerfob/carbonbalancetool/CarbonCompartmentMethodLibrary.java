@@ -58,7 +58,7 @@ public class CarbonCompartmentMethodLibrary {
 				double carbonContent = 0d;
 				if (i < stands.size()) {
 					CarbonToolCompatibleStand stand = stands.get(i);
-					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive));
+					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
 				}
 				carbonCompartment.setCarbonIntoArray(i, carbonContent);
 			}
@@ -73,7 +73,7 @@ public class CarbonCompartmentMethodLibrary {
 				double carbonContent = 0d;
 				if (i < stands.size()) {
 					CarbonToolCompatibleStand stand = stands.get(i);
-					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive));
+					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
 				}
 				carbonCompartment.setCarbonIntoArray(i, carbonContent);
 			}			

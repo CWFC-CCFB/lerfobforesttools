@@ -20,11 +20,10 @@ package lerfob.carbonbalancetool.sensitivityanalysis;
 
 import repicea.math.Matrix;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.SensitivityAnalysisParameter;
 import repicea.stats.estimates.UniformEstimate;
 
 @SuppressWarnings("serial")
-public class CATUniformSensitivityAnalysisParameter extends SensitivityAnalysisParameter<UniformEstimate> {
+public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalysisParameter<UniformEstimate> {
 
 	private double multiplier;
 	
@@ -43,6 +42,7 @@ public class CATUniformSensitivityAnalysisParameter extends SensitivityAnalysisP
 		upperBoundValue.m_afData[0][0] = 1 + multiplier;
 	}
 	
+	@Override
 	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return this.getParametersForThisRealization(subject).scalarMultiply(multiplier);
 	}

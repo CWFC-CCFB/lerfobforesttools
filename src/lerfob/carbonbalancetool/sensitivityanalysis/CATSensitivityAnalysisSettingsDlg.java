@@ -18,87 +18,42 @@
  */
 package lerfob.carbonbalancetool.sensitivityanalysis;
 
-import java.awt.Component;
 import java.awt.Window;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.REpiceaDialog;
-import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.TextableEnum;
+import repicea.gui.UIControlManager;
 
 @SuppressWarnings("serial")
-public class CATSensitivityAnalysisSettingsDlg extends REpiceaDialog implements ItemListener {
+public class CATSensitivityAnalysisSettingsDlg extends REpiceaDialog {
 
-	private static enum MessageID implements TextableEnum {
-		EnableSensitivityAnalysis("Enable sensitivity analysis", "Activer l'analyse de sensibilit\u00E9");
-
-		MessageID(String englishText, String frenchText) {
-			setText(englishText, frenchText);
-		}
-		
-		@Override
-		public void setText(String englishText, String frenchText) {
-			REpiceaTranslator.setString(this, englishText, frenchText);
-		}
-
-		@Override
-		public String toString() {return REpiceaTranslator.getString(this);}
+	static {
+		UIControlManager.setTitle(CATSensitivityAnalysisSettingsDlg.class, "Sensitivity analysis", "Analyse de sensibilit\u00E9");
 	}
-	
-	private final JCheckBox enableSensitivityAnalysis;
 	
 	private final CATSensitivityAnalysisSettings caller;
 	
 	protected CATSensitivityAnalysisSettingsDlg(CATSensitivityAnalysisSettings catSensitivityAnalysisSettings, Window parent) {
 		super(parent);
 		this.caller = catSensitivityAnalysisSettings;
-		enableSensitivityAnalysis = new JCheckBox(MessageID.EnableSensitivityAnalysis.toString());
 		initUI();
-		checkWhichFeaturesShouldBeEnabled();
 		pack();
 	}
 
-	private void checkWhichFeaturesShouldBeEnabled() {
-		for (Component comp : getContentPane().getComponents()) {
-			if (comp instanceof CATSensitivityParameterWrapper.CATSensitivityParameterWrapperPanel) {
-				((CATSensitivityParameterWrapper.CATSensitivityParameterWrapperPanel) comp).setEnabled(enableSensitivityAnalysis.isSelected());
-			}
-		}
-	}
+	@Override
+	public void listenTo() {}
 
 	@Override
-	public void listenTo() {
-		enableSensitivityAnalysis.addItemListener(this);
-	}
-
-	@Override
-	public void doNotListenToAnymore() {
-		enableSensitivityAnalysis.removeItemListener(this);
-	}
+	public void doNotListenToAnymore() {}
 
 	@Override
 	protected void initUI() {
+		setTitle(UIControlManager.getTitle(getClass()));
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		JPanel pane = new JPanel();
-		pane.add(this.enableSensitivityAnalysis);
-		pane.add(Box.createGlue());
-		getContentPane().add(pane);
 		for (VariabilitySource source : VariabilitySource.values()) {
 			getContentPane().add(caller.sensitivityParameterMap.get(source).getGuiInterface());
-		}
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent arg0) {
-		if (arg0.getSource().equals(enableSensitivityAnalysis)) {
-			checkWhichFeaturesShouldBeEnabled();
 		}
 	}
 	
