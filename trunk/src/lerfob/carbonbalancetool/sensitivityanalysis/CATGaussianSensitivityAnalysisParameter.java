@@ -18,26 +18,19 @@
  */
 package lerfob.carbonbalancetool.sensitivityanalysis;
 
-import repicea.math.Matrix;
-import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
 public class CATGaussianSensitivityAnalysisParameter extends CATSensitivityAnalysisParameter<GaussianEstimate> {
 
-	private double multiplier;
-	
 	protected CATGaussianSensitivityAnalysisParameter() {
 		super(false);
 		setParameterEstimates(new GaussianEstimate());
 	}
 	
+	@Override
 	protected void setMultiplier(double multiplier) {
-		this.multiplier = multiplier / 1.96; 		// 1.96 to ensure the 0.95 confidence interval 
+		super.setMultiplier(multiplier / 1.96); 		// 1.96 to ensure the 0.95 confidence interval 
 	}
 	
-	@Override
-	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
-		return getParametersForThisRealization(subject).scalarMultiply(multiplier).scalarAdd(1d);
-	}
 }

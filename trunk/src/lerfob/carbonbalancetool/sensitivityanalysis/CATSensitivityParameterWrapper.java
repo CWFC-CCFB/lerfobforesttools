@@ -69,7 +69,7 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 		
 		CATSensitivityParameterWrapperPanel() {
 			enabled = new JCheckBox(MessageID.Enable.toString());
-			enabled.setSelected(CATSensitivityParameterWrapper.this.isEnabled);
+			enabled.setSelected(false);	// default value
 			Vector<Distribution.Type> dist = new Vector<Distribution.Type>();
 			dist.add(Distribution.Type.UNIFORM);
 			dist.add(Distribution.Type.GAUSSIAN);
@@ -95,7 +95,8 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 		@Override
 		public void refreshInterface() {
 			distributionComboBox.setSelectedItem(CATSensitivityParameterWrapper.this.selectedDistributionType);
-			variabilitySlider.setValue((int) (CATSensitivityParameterWrapper.this.modulator * 100));
+			CATSensitivityAnalysisParameter<?> param = CATSensitivityParameterWrapper.this.parameterMap.get(CATSensitivityParameterWrapper.this.selectedDistributionType);
+			variabilitySlider.setValue((int) (param.getMultiplier() * 100));
 		}
 
 		@Override
@@ -118,7 +119,10 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 				CATSensitivityParameterWrapper.this.selectedDistributionType = (Distribution.Type) distributionComboBox.getSelectedItem();
 //				System.out.println("Selected distribution is " + (Distribution.Type) distributionComboBox.getSelectedItem());
 			} else if (arg0.getSource().equals(enabled)) {
-				CATSensitivityParameterWrapper.this.isEnabled = enabled.isSelected();
+//				CATSensitivityParameterWrapper.this.isEnabled = enabled.isSelected();
+				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityParameterWrapper.this.parameterMap.values()) {
+					param.setParametersVariabilityEnabled(enabled.isSelected());
+				}
 				setEnabled(enabled.isSelected());
 			}
 		}
@@ -126,7 +130,10 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 		@Override
 		public void propertyChange(PropertyChangeEvent arg0) {
 			if (arg0.getSource().equals(variabilitySlider)) {
-				CATSensitivityParameterWrapper.this.modulator = variabilitySlider.getValue() * .01;
+				double multiplier = variabilitySlider.getValue() * .01;
+				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityParameterWrapper.this.parameterMap.values()) {
+					param.setMultiplier(multiplier);
+				}
 //				System.out.println("Slider value set to " + variabilitySlider.getValue());
 			}
 		}
@@ -143,9 +150,9 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 	
 	@SuppressWarnings("rawtypes")
 	private final Map<Distribution.Type, CATSensitivityAnalysisParameter> parameterMap;
-	private boolean isEnabled;
+//	private boolean isEnabled;
 	private Distribution.Type selectedDistributionType = Distribution.Type.UNIFORM; // default value
-	private double modulator = 0d;
+//	private double modulator = 0d;
 	private transient REpiceaPanel guiInterface;
 		
 	@SuppressWarnings({ "incomplete-switch", "rawtypes" })
