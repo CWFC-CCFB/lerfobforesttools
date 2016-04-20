@@ -25,6 +25,7 @@ import lerfob.carbonbalancetool.CarbonCompartmentManager;
 import lerfob.carbonbalancetool.DecayFunction;
 import lerfob.carbonbalancetool.ExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
 
@@ -162,8 +163,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * this product over its lifetime.
 	 * @return the integrated carbon in tC (double)
 	 */
-	public double getIntegratedCarbon(ExponentialFunction decayFunction) {
-		decayFunction.setParameterValue(0, getCarbonUnitFeature().getAverageLifetime());
+	public double getIntegratedCarbon(ExponentialFunction decayFunction, MonteCarloSimulationCompliantObject subject) {
+		decayFunction.setParameterValue(0, getCarbonUnitFeature().getAverageLifetime(subject));
 		return getInitialCarbon() * decayFunction.getInfiniteIntegral(); //	0d : unnecessary parameter
 	}
 
@@ -181,7 +182,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		setTimeScale(timeScale);
 		currentCarbonArray = new double[timeScale.length];
 
-		double lambdaValue = getCarbonUnitFeature().getAverageLifetime();
+		double lambdaValue = getCarbonUnitFeature().getAverageLifetime(compartmentManager);
 		double currentCarbon = getInitialCarbon();
 
 		double formerCarbon;

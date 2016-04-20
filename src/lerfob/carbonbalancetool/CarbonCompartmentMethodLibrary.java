@@ -97,7 +97,7 @@ public class CarbonCompartmentMethodLibrary {
 						for (int j = 0; j < timeScale.length; j++) {
 							carbon[j] += actualizedCarbon[j];
 						}
-						integratedCarbon += carbonUnit.getIntegratedCarbon(decayFunction);
+						integratedCarbon += carbonUnit.getIntegratedCarbon(decayFunction, manager);
 					}
 				}
 			}

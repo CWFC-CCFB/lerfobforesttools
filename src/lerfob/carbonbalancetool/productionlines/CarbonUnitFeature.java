@@ -20,10 +20,13 @@ package lerfob.carbonbalancetool.productionlines;
 
 import java.io.Serializable;
 
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 
 import repicea.gui.UserInterfaceableObject;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
+import repicea.simulation.MonteCarloSimulationCompliantObject;
 
 public class CarbonUnitFeature implements Serializable, 
 										UserInterfaceableObject, 
@@ -44,7 +47,14 @@ public class CarbonUnitFeature implements Serializable,
 	/*
 	 * Accessors
 	 */
-	protected double getAverageLifetime() {return averageLifetime;}
+	protected double getAverageLifetime(MonteCarloSimulationCompliantObject subject) {
+		if (subject != null) {
+			return averageLifetime * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.Lifetime, subject);
+		} else {
+			return averageLifetime;
+		}
+	}
+	
 	protected void setAverageLifetime(double d) {averageLifetime = d;}
 	
 	protected CarbonUnitFeaturePanel getUserInterfacePanel() {return userInterfacePanel;}

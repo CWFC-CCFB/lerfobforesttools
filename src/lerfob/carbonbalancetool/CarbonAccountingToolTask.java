@@ -371,7 +371,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 					}
 					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CarbonToolCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
-					double volume = biomassParameters.getBelowGroundVolumeM3(trees);
+					double volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
 					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
 
@@ -401,7 +401,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 			double carbonContent = 0d;
 			switch(type) {
 			case FineWoodyDebris:
-				volume = biomassParameters.getAboveGroundVolumeM3(trees) - biomassParameters.getCommercialVolumeM3(trees);
+				volume = biomassParameters.getAboveGroundVolumeM3(trees, manager) - biomassParameters.getCommercialVolumeM3(trees);
 				biomass = biomassParameters.getAboveGroundBiomassMg(trees, manager) - biomassParameters.getCommercialBiomassMg(trees, manager);
 				carbonContent = biomassParameters.getAboveGroundCarbonMg(trees, manager) - biomassParameters.getCommercialCarbonMg(trees, manager);
 				break;
@@ -411,7 +411,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 				carbonContent = biomassParameters.getCommercialCarbonMg(trees, manager);
 				break;
 			case CoarseWoodyDebris:
-				volume = biomassParameters.getBelowGroundVolumeM3(trees);
+				volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
 				biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
 				carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
 				break;

@@ -25,8 +25,6 @@ import repicea.stats.estimates.UniformEstimate;
 @SuppressWarnings("serial")
 public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalysisParameter<UniformEstimate> {
 
-	private double multiplier;
-	
 	protected CATUniformSensitivityAnalysisParameter() {
 		super(false);
 		Matrix lowerBoundValue = new Matrix(1,1);
@@ -34,16 +32,20 @@ public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalys
 		setParameterEstimates(new UniformEstimate(lowerBoundValue, upperBoundValue));
 		setMultiplier(.1);
 	}
-	
+
+	@Override
 	protected void setMultiplier(double multiplier) {
+		super.setMultiplier(multiplier);
 		Matrix lowerBoundValue = new Matrix(1,1);
 		lowerBoundValue.m_afData[0][0] = 1 - multiplier;
+		getParameterEstimates().setLowerBoundValue(lowerBoundValue);
 		Matrix upperBoundValue = new Matrix(1,1);
 		upperBoundValue.m_afData[0][0] = 1 + multiplier;
+		getParameterEstimates().setUpperBoundValue(upperBoundValue);
 	}
 	
 	@Override
 	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
-		return this.getParametersForThisRealization(subject).scalarMultiply(multiplier);
+		return this.getParametersForThisRealization(subject);
 	}
 }

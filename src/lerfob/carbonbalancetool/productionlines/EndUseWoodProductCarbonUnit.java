@@ -121,7 +121,6 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 						}
 						compartmentManager.getCarbonToolSettings().getCurrentProductionProcessorManager().getCarbonUnitMap().add(processedUnits);
 					} else {	// former implementation
-//						int creationDate = compartmentManager.getTimeScale()[i];
 						((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).getProductionLine().getManager().sendToTheLandfill(i, updatedMap);	
 					}
 				}
