@@ -117,4 +117,8 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 		return null;
 	}
 
+
+	@Override
+	public boolean isEvenAged() {return baseline.isEvenAged();}
+
 }

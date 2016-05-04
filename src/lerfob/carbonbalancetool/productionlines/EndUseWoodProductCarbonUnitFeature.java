@@ -26,6 +26,9 @@ import javax.swing.JComboBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import lerfob.carbonbalancetool.CarbonCompartmentManager;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -98,7 +101,14 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		return getUserInterfacePanel();
 	}
 
-	protected double getAverageSubstitution() {return averageSubstitution;}
+	protected double getAverageSubstitution(CarbonCompartmentManager manager) {
+		if (manager != null) {
+			return averageSubstitution * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.SubstitutionFactors, manager);
+		} else {
+			return averageSubstitution;
+		}
+	}
+		
 	protected void setAverageSubstitution(double d) {averageSubstitution = d;}
 	
 	/**

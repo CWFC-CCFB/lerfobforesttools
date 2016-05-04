@@ -111,7 +111,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		disposableProportionLabel.setText(((Integer) disposableProportionSlider.getValue()).toString() + "%");
 
 		averageSubstitutionTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
-		averageSubstitutionTextField.setText(((Double) getCaller().getAverageSubstitution()).toString());
+		averageSubstitutionTextField.setText(((Double) getCaller().getAverageSubstitution(null)).toString());
 		averageSubstitutionTextField.setPreferredSize(new Dimension(100, averageSubstitutionTextField.getFontMetrics(averageSubstitutionTextField.getFont()).getHeight() + 2));
 		
 		useClassList = new JComboBox(UseClass.values());
