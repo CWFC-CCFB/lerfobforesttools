@@ -136,7 +136,7 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		controlPanel.add(help);
 		add(controlPanel, BorderLayout.SOUTH);
 		
-		JPanel mainPanel = new JPanel(new GridLayout(2,1));
+		JPanel mainPanel = new JPanel(new GridLayout(1,1));
 		add(mainPanel, BorderLayout.NORTH);
 		
 		Border etched = BorderFactory.createEtchedBorder();
