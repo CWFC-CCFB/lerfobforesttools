@@ -26,9 +26,7 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	}
 	
 	private static enum MessageID implements TextableEnum {
-		Scenario("Scenario to be compared", "Sc\u00E9nario \u00E0 comparer"),
-		Baseline("Baseline", "Sc\u00E9nario de r\u00E9f\u00E9rence");
-
+		Scenario("Alternative scenario", "Sc\u00E9nario alternatif");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -52,15 +50,12 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	
 	@SuppressWarnings("rawtypes")
 	private final JComboBox scenarioToCompareComboBox;
-	@SuppressWarnings("rawtypes")
-	private final JComboBox baselineComboBox;
 
 	private final JButton ok;
 	private final JButton cancel;
 	private final JButton help;
 	
 	private String selectionCompared;
-	private String selectionBaseline;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -71,7 +66,6 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		cancel = UIControlManager.createCommonButton(CommonControlID.Cancel);
 		help = UIControlManager.createCommonButton(CommonControlID.Help);
 		scenarioToCompareComboBox = new JComboBox();
-		baselineComboBox = new JComboBox();
 		initUI();
 		pack();
 		setMinimumSize(getSize());
@@ -81,18 +75,15 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	@SuppressWarnings("unchecked")
 	private void setComboBoxValues() {
 		scenarioToCompareComboBox.removeAllItems();
-		baselineComboBox.removeAllItems();
 		for (int i = 0; i < panelView.tabbedPane.getTabCount(); i++) {
 			CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
 			if (panel != null) {
 				if (panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) { // to avoid comparing a difference with a scenario
 					scenarioToCompareComboBox.addItem(panel);
-					baselineComboBox.addItem(panel);
 				}
 			}
 		}
 		checkCorrespondanceWith(scenarioToCompareComboBox, selectionCompared);
-		checkCorrespondanceWith(baselineComboBox, selectionBaseline);
 	}
 
 
@@ -148,36 +139,11 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		JPanel mainPanel = new JPanel(new GridLayout(2,1));
 		add(mainPanel, BorderLayout.NORTH);
 		
-		
 		Border etched = BorderFactory.createEtchedBorder();
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder(etched, MessageID.Scenario.toString()));
 		panel.add(scenarioToCompareComboBox, BorderLayout.CENTER);
-//		panel.add(Box.createHorizontalStrut(5));
-//		panel.add(UIControlManager.getLabel(MessageID.Scenario));
-//		panel.add(Box.createGlue());
 		mainPanel.add(panel);
-		
-//		JPanel subPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//		subPanel.add(Box.createHorizontalStrut(5));
-//		subPanel.add(scenarioToCompareComboBox);
-//		subPanel.add(Box.createGlue());
-//		mainPanel.add(subPanel);
-		
-		panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(etched, MessageID.Baseline.toString()));
-		panel.add(baselineComboBox, BorderLayout.CENTER);
-//		panel.add(Box.createHorizontalStrut(5));
-//		panel.add(UIControlManager.getLabel(MessageID.Baseline));
-//		panel.add(Box.createGlue());
-		mainPanel.add(panel);
-		
-//		subPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//		subPanel.add(Box.createHorizontalStrut(5));
-//		subPanel.add(baselineComboBox);
-//		panel.add(subPanel);
-//		subPanel.add(Box.createGlue());
-//		mainPanel.add(subPanel);
 	}
 
 	@Override
@@ -196,7 +162,7 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	@Override
 	public void okAction() {
 		CarbonAccountingToolSingleViewPanel scenToCompare = ((CarbonAccountingToolSingleViewPanel) scenarioToCompareComboBox.getSelectedItem());
-		CarbonAccountingToolSingleViewPanel baseline = ((CarbonAccountingToolSingleViewPanel) baselineComboBox.getSelectedItem());
+		CarbonAccountingToolSingleViewPanel baseline = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
 		String simulationName = scenToCompare.toString() + " - " + baseline.toString();
 
 		CarbonAssessmentToolSingleSimulationResult scen = (CarbonAssessmentToolSingleSimulationResult) scenToCompare.getSummary();
@@ -204,7 +170,6 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		
 		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(simulationName, scen, base));
 		selectionCompared = scenToCompare.toString();
-		selectionBaseline = baseline.toString();
 		super.okAction();
 	}
 
