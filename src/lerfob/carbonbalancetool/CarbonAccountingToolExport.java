@@ -126,20 +126,27 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			Collections.sort(dates);
 			
 			for (Integer date : dates) {
-				// TODO add mc implementation
 				GExportFieldDetails dateIDField = new GExportFieldDetails("Date", date);
 				Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productMap.get(date);
 				Map<Element, MonteCarloEstimate> carrier;
 				for (UseClass useClass : UseClass.values()) {
 					if (innerMap.containsKey(useClass)) {
 						carrier = innerMap.get(useClass);
-						r = new GExportRecord();
-						r.addField(standIDField);
-						r.addField(dateIDField);
-						r.addField(new GExportFieldDetails("UseClass", useClass.name()));
-						r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
-						r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
-						addRecord(r);
+						MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
+						MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+						int nbRealizations = volumeEstimate.getNumberOfRealizations();
+						for (int j = 0; j < nbRealizations; j++) {
+							r = new GExportRecord();
+							r.addField(standIDField);
+							r.addField(dateIDField);
+							r.addField(new GExportFieldDetails("UseClass", useClass.name()));
+							r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+							r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+							if (nbRealizations > 0) {
+								r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+							}
+							addRecord(r);
+						}
 					}
 				}
 			}
@@ -169,7 +176,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 							r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 							r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), (Double) 0d));
 							if (nbRealizations > 0) {
-								r.addField(new GExportFieldDetails("RealizationID", j));
+								r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 							}
 							addRecord(r);
 						}
@@ -179,7 +186,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 						if (nbRealizations > 0) {
-							r.addField(new GExportFieldDetails("RealizationID", j));
+							r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 						}
 				
 						addRecord(r);
@@ -208,7 +215,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 					if (nbRealizations > 0) {
-						r.addField(new GExportFieldDetails("RealizationID", j));
+						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 					}
 				
 					addRecord(r);
@@ -237,27 +244,33 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
-							// TODO add mc implementation
-							r = new GExportRecord();
-							r.addField(standIDField);
-							r.addField(new GExportFieldDetails("Type", type.name()));
-							r.addField(new GExportFieldDetails("Class", useClass.toString()));
-							r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
-							r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
-							for (Element nutrient : Element.getNutrients()) {
-								nutrientKg = 0d;
-								if (carrier != null && carrier.containsKey(nutrient)) {
-									nutrientKg = carrier.get(nutrient).getMean().m_afData[0][0];
+							MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
+							MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+							int nbRealizations = volumeEstimate.getNumberOfRealizations();
+							for (int j = 0; j < nbRealizations; j++) {
+								r = new GExportRecord();
+								r.addField(standIDField);
+								r.addField(new GExportFieldDetails("Type", type.name()));
+								r.addField(new GExportFieldDetails("Class", useClass.toString()));
+								r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+								r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+								for (Element nutrient : Element.getNutrients()) {
+									nutrientKg = 0d;
+									if (carrier != null && carrier.containsKey(nutrient)) {
+										nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+									}
+									if (nutrient.equals(Element.C)) {
+										nutrientKg *= 1000;
+									}
+									r.addField(new GExportFieldDetails(nutrient.name() + "_kg_ha", (Double) nutrientKg));
 								}
-								if (nutrient.equals(Element.C)) {
-									nutrientKg *= 1000;
+								if (nbRealizations > 0) {
+									r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 								}
-								r.addField(new GExportFieldDetails(nutrient.name() + "_kg_ha", (Double) nutrientKg));
+								addRecord(r);
 							}
-							addRecord(r);
 						}
 					}
-					
 				}
 			}
 		}
@@ -283,25 +296,31 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
-							// TODO add mc implementation
-	
-							r = new GExportRecord();
-							r.addField(standIDField);
-							r.addField(new GExportFieldDetails("Type", type.name()));
-							r.addField(new GExportFieldDetails("Class", useClass.toString()));
-							r.addField(new GExportFieldDetails("Volume_m3hayr", carrier.get(Element.Volume).getMean().m_afData[0][0] * annualFactor));
-							r.addField(new GExportFieldDetails("Biomass_kghayr", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000 * annualFactor));
-							for (Element nutrient : Element.getNutrients()) {
-								nutrientKg = 0d;
-								if (carrier != null && carrier.containsKey(nutrient)) {
-									nutrientKg = carrier.get(nutrient).getMean().m_afData[0][0];
+							MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
+							MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+							int nbRealizations = volumeEstimate.getNumberOfRealizations();
+							for (int j = 0; j < nbRealizations; j++) {
+								r = new GExportRecord();
+								r.addField(standIDField);
+								r.addField(new GExportFieldDetails("Type", type.name()));
+								r.addField(new GExportFieldDetails("Class", useClass.toString()));
+								r.addField(new GExportFieldDetails("Volume_m3hayr", volumeEstimate.getRealizations().get(j).m_afData[0][0] * annualFactor));
+								r.addField(new GExportFieldDetails("Biomass_kghayr", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000 * annualFactor));
+								for (Element nutrient : Element.getNutrients()) {
+									nutrientKg = 0d;
+									if (carrier != null && carrier.containsKey(nutrient)) {
+										nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+									}
+									if (nutrient.equals(Element.C)) {
+										nutrientKg *= 1000;
+									}
+									r.addField(new GExportFieldDetails(nutrient.name() + "_kghayr", (Double) (nutrientKg * annualFactor)));
 								}
-								if (nutrient.equals(Element.C)) {
-									nutrientKg *= 1000;
+								if (nbRealizations > 0) {
+									r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 								}
-								r.addField(new GExportFieldDetails(nutrient.name() + "_kghayr", (Double) (nutrientKg * annualFactor)));
+								addRecord(r);
 							}
-							addRecord(r);
 						}
 					}
 				}
@@ -333,7 +352,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
 					r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
 					if (nbRealizations > 0) {
-						r.addField(new GExportFieldDetails("RealizationID", j));
+						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 					}
 			
 					addRecord(r);
