@@ -97,11 +97,13 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 			int nbValidComponents = 0;
 			int nbTabs = tabbedPane.getTabCount();
 			for (int i = 0; i < nbTabs; i++) {
-				if (isASingleResultSummary(i)) {
-					nbValidComponents++;
+				if (i != tabbedPane.getSelectedIndex()) {		// is there anything to compare with
+	 				if (isASingleResultSummary(i)) {
+						nbValidComponents++;
+					}
 				}
 			}
-			compareScenarioMenuItem.setEnabled(nbValidComponents >= 2 && isASingleResultSummary(tabbedPane.getSelectedIndex()));
+			compareScenarioMenuItem.setEnabled(nbValidComponents >= 1 && isASingleResultSummary(tabbedPane.getSelectedIndex()));
 		}
 
 		private boolean isASingleResultSummary(int selectedIndex) {
