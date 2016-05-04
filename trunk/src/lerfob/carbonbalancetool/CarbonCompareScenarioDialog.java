@@ -76,10 +76,12 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	private void setComboBoxValues() {
 		scenarioToCompareComboBox.removeAllItems();
 		for (int i = 0; i < panelView.tabbedPane.getTabCount(); i++) {
-			CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
-			if (panel != null) {
-				if (panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) { // to avoid comparing a difference with a scenario
-					scenarioToCompareComboBox.addItem(panel);
+			if (i != panelView.tabbedPane.getSelectedIndex()) {
+				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
+				if (panel != null) {
+					if (panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) { // to avoid comparing a difference with a scenario
+						scenarioToCompareComboBox.addItem(panel);
+					}
 				}
 			}
 		}
