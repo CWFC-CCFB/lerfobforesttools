@@ -126,6 +126,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			Collections.sort(dates);
 			
 			for (Integer date : dates) {
+				// TODO add mc implementation
 				GExportFieldDetails dateIDField = new GExportFieldDetails("Date", date);
 				Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productMap.get(date);
 				Map<Element, MonteCarloEstimate> carrier;
@@ -167,6 +168,9 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 							r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
 							r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 							r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), (Double) 0d));
+							if (nbRealizations > 0) {
+								r.addField(new GExportFieldDetails("RealizationID", j));
+							}
 							addRecord(r);
 						}
 						r = new GExportRecord();
@@ -174,6 +178,9 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale[i]));
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
+						if (nbRealizations > 0) {
+							r.addField(new GExportFieldDetails("RealizationID", j));
+						}
 				
 						addRecord(r);
 					}
@@ -190,15 +197,23 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 				standID = "Unknown";
 			}
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
-			
+
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
-				double value = caller.summary.getBudgetMap().get(compartmentInfo).getMean().m_afData[0][0];
-				r = new GExportRecord();
-				r.addField(standIDField);
-				r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
-				r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
-			
-				addRecord(r);
+				MonteCarloEstimate estimate = caller.summary.getBudgetMap().get(compartmentInfo);
+				int nbRealizations = estimate.getNumberOfRealizations();
+				for (int j = 0; j < nbRealizations; j++) {
+					double value = estimate.getRealizations().get(j).m_afData[0][0];
+					r = new GExportRecord();
+					r.addField(standIDField);
+					r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
+					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
+					if (nbRealizations > 0) {
+						r.addField(new GExportFieldDetails("RealizationID", j));
+					}
+				
+					addRecord(r);
+					
+				}
 			}
 		}
 		
@@ -222,7 +237,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
-							
+							// TODO add mc implementation
 							r = new GExportRecord();
 							r.addField(standIDField);
 							r.addField(new GExportFieldDetails("Type", type.name()));
@@ -268,7 +283,8 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
 							carrier = innerVolumeMap.get(useClass);
-							
+							// TODO add mc implementation
+	
 							r = new GExportRecord();
 							r.addField(standIDField);
 							r.addField(new GExportFieldDetails("Type", type.name()));
@@ -307,13 +323,21 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			
 			for (String logName : logNames) {
 				carrier = caller.summary.getLogGradePerHa().get(logName);
-				r = new GExportRecord();
-				r.addField(standIDField);
-				r.addField(new GExportFieldDetails("LogCategory", logName));
-				r.addField(new GExportFieldDetails("Volume_m3ha", carrier.get(Element.Volume).getMean().m_afData[0][0]));
-				r.addField(new GExportFieldDetails("Biomass_kgha", carrier.get(Element.Biomass).getMean().m_afData[0][0] * 1000));
-		
-				addRecord(r);
+				MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
+				MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+				int nbRealizations = volumeEstimate.getNumberOfRealizations();
+				for (int j = 0; j < nbRealizations; j++) {
+					r = new GExportRecord();
+					r.addField(standIDField);
+					r.addField(new GExportFieldDetails("LogCategory", logName));
+					r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+					r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+					if (nbRealizations > 0) {
+						r.addField(new GExportFieldDetails("RealizationID", j));
+					}
+			
+					addRecord(r);
+				}
 			}
 		}
 	}
