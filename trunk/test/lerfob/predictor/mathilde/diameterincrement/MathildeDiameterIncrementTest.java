@@ -147,7 +147,7 @@ public class MathildeDiameterIncrementTest {
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
 		double meanStochastic = dist.getMean().m_afData[0][0];
 		
-		assertEquals(meanDeterministic, meanStochastic, 0.04);			// subject to failure since the variability in the parameter estimates increases the error variance
+		assertEquals(meanDeterministic, meanStochastic, 0.05);			// subject to failure since the variability in the parameter estimates increases the error variance
 
 	}
 	
