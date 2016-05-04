@@ -73,6 +73,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	private final int rotationLength;
 	private final String standID;
 	private final Integer[] timeScale;
+	private final boolean isEvenAged;
 	private final Map<CompartmentInfo, MonteCarloEstimate> budgetMap;
 	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
 	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
@@ -83,6 +84,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		
 	CarbonAssessmentToolSingleSimulationResult(String resultId, CarbonCompartmentManager manager) {
 
+		isEvenAged = manager.isEvenAged();
 		setup = new ParameterSetup(manager.getCarbonToolSettings());
 		
 		rotationLength = manager.getRotationLength();
@@ -243,5 +245,8 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 			return getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
 		}
 	}
+
+	@Override
+	public boolean isEvenAged() {return isEvenAged;}
 
 }

@@ -40,7 +40,8 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 		BiomassExpansionFactor("Biomass expansion factors", "Facteur d'expansion de biomasse"),
 		BasicDensity("Wood basic densities", "Infradensit\u00E9s"),
 		CarbonContent("Carbon content", "Teneur en carbone"),
-		Lifetime("HWP lifetimes", "Dur\u00E9es de vie des produits");
+		Lifetime("HWP lifetimes", "Dur\u00E9es de vie des produits"),
+		SubstitutionFactors("Substitution factors", "Facteurs de substitution");
 		
 		VariabilitySource(String englishText, String frenchText) {
 			setText(englishText, frenchText);

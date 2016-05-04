@@ -95,4 +95,10 @@ public interface CarbonAssessmentToolSimulationResult {
 	 */
 	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling);
 
+	/**
+	 * This method returns the nature of the CarbonToolCompatibleStand stand. The summary of even-aged stands can be
+	 * based on infinite sequence.  
+	 * @return a boolean
+	 */
+	public boolean isEvenAged();
 }

@@ -155,11 +155,11 @@ public class CarbonCompartmentMethodLibrary {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit;
 						
-						double[] substitutedCarbon = endProduct.getCurrentCarbonSubstitution();	
+						double[] substitutedCarbon = endProduct.getCurrentCarbonSubstitution(manager);	
 						for (int j = 0; j < timeScale.length; j++) {
 							carbon[j] += substitutedCarbon[j];
 						}
-						integratedCarbon += endProduct.getTotalCarbonSubstitution();
+						integratedCarbon += endProduct.getTotalCarbonSubstitution(manager);
 					}
 				}
 			}

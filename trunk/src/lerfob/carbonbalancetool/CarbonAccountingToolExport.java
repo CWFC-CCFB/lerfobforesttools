@@ -156,23 +156,27 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
+				MonteCarloEstimate estimate = caller.summary.getEvolutionMap().get(compartmentInfo);
+				int nbRealizations = estimate.getNumberOfRealizations();
 				for (int i = 0; i < timeScale.length; i++) {
-					double value = caller.summary.getEvolutionMap().get(compartmentInfo).getMean().m_afData[i][0];
-					if (i == 0) {
+					for (int j = 0; j < nbRealizations; j++) {
+						double value = estimate.getRealizations().get(j).m_afData[i][0];
+						if (caller.summary.isEvenAged() && i == 0) {
+							r = new GExportRecord();
+							r.addField(standIDField);
+							r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
+							r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
+							r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), (Double) 0d));
+							addRecord(r);
+						}
 						r = new GExportRecord();
 						r.addField(standIDField);
-						r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
+						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale[i]));
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
-						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), (Double) 0d));
+						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
+				
 						addRecord(r);
 					}
-					r = new GExportRecord();
-					r.addField(standIDField);
-					r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale[i]));
-					r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
-					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
-			
-					addRecord(r);
 				}
 			}
 		}

@@ -135,22 +135,24 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	
 	/**
 	 * This method returns the total substitution effect of this product. NOTE: substitution is given in terms of tC eq. / raw volume
+	 * @param manager the CarbonCompartmentManager instance
 	 * @return the substitution in tC (double)
 	 */
-	public double getTotalCarbonSubstitution() {
+	public double getTotalCarbonSubstitution(CarbonCompartmentManager manager) {
 		if (isNewImplementation()) {
-			return getSubstitutionForAGivenVolume(getProcessedVolumeAtCreationDate());
+			return getSubstitutionForAGivenVolume(getProcessedVolumeAtCreationDate(), manager);
 		} else {
-			return getSubstitutionForAGivenVolume(rawRoundWoodVolume);
+			return getSubstitutionForAGivenVolume(rawRoundWoodVolume, manager);
 		}
 	}
 
 	/**
 	 * This method returns an array that contains the substitution for specific lost volumes. NOTE : returns
 	 * null if the product is not actualized.
+	 * @param manager the CarbonCompartmentManager instance
 	 * @return an array of double
 	 */
-	public double[] getCurrentCarbonSubstitution() {
+	public double[] getCurrentCarbonSubstitution(CarbonCompartmentManager manager) {
 		if (isActualized()) {
 			double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
 			double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
@@ -162,7 +164,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				if (!isNewImplementation()) {
 					volume *= ratioToGetRawRoundWoodVolume;
 				}
-				outputArray[i] = getSubstitutionForAGivenVolume(volume);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
+				outputArray[i] = getSubstitutionForAGivenVolume(volume, manager);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
 			}
 			return outputArray;
 		} else {
@@ -207,10 +209,11 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	/**
 	 * This method returns the substitution in eq tC obtained from a volume of this product.
 	 * @param volume = a volume of this product
+	 * @param subject the CarbonCompartmentManager instance
 	 * @return the substitution in eq. tC (double)
 	 */
-	private double getSubstitutionForAGivenVolume(double volume) {
-		return volume * getCarbonUnitFeature().getAverageSubstitution();
+	private double getSubstitutionForAGivenVolume(double volume, CarbonCompartmentManager subject) {
+		return volume * getCarbonUnitFeature().getAverageSubstitution(subject);
 	}
 
 	@Override
