@@ -214,7 +214,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		this.caller = caller;
 		addPropertyChangeListener(this);
 		
-		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_LINK);
+		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_REFERENCE);
 		
 		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
 		stopButton.setText("");
@@ -427,6 +427,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		stopButton.setEnabled(b);
 		options.setEnabled(!b);
 		file.setEnabled(!b);
+		hwpComboBox.setEnabled(!b);
+		biomassComboBox.setEnabled(!b);
 	}
 
 	private void updateMajorProgressBarValue(int i) {
