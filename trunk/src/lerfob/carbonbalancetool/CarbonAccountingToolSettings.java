@@ -112,7 +112,7 @@ public final class CarbonAccountingToolSettings {
 	public static final double CO2_C_FACTOR = 12d / 44;
 	public static final double C_C02_FACTOR = 44d / 12;
 
-	protected static AssessmentReport selectedAR = AssessmentReport.Fourth;
+	protected static AssessmentReport selectedAR = AssessmentReport.Fifth;
 	
 	@Deprecated
 	private TreeLoggerWrapper treeLoggerWrapper;
