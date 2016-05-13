@@ -126,8 +126,8 @@ public class LifeCycleAnalysis implements Serializable {
 	 */
 	private double getCarbonEquivalentEmissionPerM3() {
 		double CO2 = dCO2EmissionPerUnit 
-		 		+ (dCH4EmissionPerUnit * CarbonAccountingToolSettings.CH4_CO2_EQUIVALENT)
-				+ (dN2OEmissionPerUnit * CarbonAccountingToolSettings.N2O_CO2_EQUIVALENT)
+		 		+ (dCH4EmissionPerUnit * CarbonAccountingToolSettings.getGlobalWarmingPotential().getCH4Factor())
+				+ (dN2OEmissionPerUnit * CarbonAccountingToolSettings.getGlobalWarmingPotential().getN2OFactor())
 				;
 		return CO2 * CarbonAccountingToolSettings.CO2_C_FACTOR;
 	}

@@ -19,6 +19,8 @@
 package lerfob.carbonbalancetool;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.BiomassParametersName;
@@ -42,6 +44,7 @@ import repicea.treelogger.basictreelogger.BasicTreeLoggerParameters;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * The CarbonAccountingToolSettings class handles the production lines, the wood piece dispatcher
@@ -51,16 +54,65 @@ import repicea.util.REpiceaTranslator;
 @SuppressWarnings("deprecation")
 public final class CarbonAccountingToolSettings {
 
+	public static enum AssessmentReport implements TextableEnum {
+		Second("Second Assessment Report", "Deuxi\u00E8me rapport d'\u00E9valuation"),
+		Fourth("Fourth Assessment Report", "Quatri\u00E8me rapport d'\u00E9valuation"),
+		Fifth("Fifth Assessment Report", "Cinqui\u00E8me rapport d'\u00E9valuation");
 
+		AssessmentReport(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+	}
+	
+	public static class GWP {
+		
+		private final double ch4ToCo2Eq;
+		private final double n2oToCo2Eq;
+		
+		GWP(double ch4ToCo2Eq, double n2oToCo2Eq) {
+			this.ch4ToCo2Eq = ch4ToCo2Eq;
+			this.n2oToCo2Eq = n2oToCo2Eq;
+		}
+		
+		/**
+		 * This method returns the CO2 eq of the CH4 gaz
+		 * @return a double
+		 */
+		public double getCH4Factor() {return ch4ToCo2Eq;}
+		
+		/**
+		 * This method returns the CO2 eq of the N2O gaz
+		 * @return a double
+		 */
+		public double getN2OFactor() {return n2oToCo2Eq;}
+	}
+
+	private static Map<AssessmentReport, GWP> GlobalWarmingPotentialMap = new HashMap<AssessmentReport, GWP>();
+	static {
+		GlobalWarmingPotentialMap.put(AssessmentReport.Second, new GWP(21, 310));
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fourth, new GWP(25, 298));
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265));
+	}
+
+	
 	private final ExponentialFunction decayFunction = new ExponentialFunction();
 	private final SettingMemory settings;
 	protected boolean formerImplementation;
 
-	public static final double CH4_CO2_EQUIVALENT = 25;	// taken from IPCC(2007, Table 2.14)
-	public static final double N2O_CO2_EQUIVALENT = 298;	// taken from IPCC(2007, Table 2.14)
+//	public static final double CH4_CO2_EQUIVALENT = 25;	// taken from IPCC(2007, Table 2.14)
+//	public static final double N2O_CO2_EQUIVALENT = 298;	// taken from IPCC(2007, Table 2.14)
 	public static final double CO2_C_FACTOR = 12d / 44;
 	public static final double C_C02_FACTOR = 44d / 12;
 
+	protected static AssessmentReport selectedAR = AssessmentReport.Fourth;
 	
 	@Deprecated
 	private TreeLoggerWrapper treeLoggerWrapper;
@@ -91,6 +143,20 @@ public final class CarbonAccountingToolSettings {
 		treeLoggerWrapper = new TreeLoggerWrapper();
 		woodSupply = new WoodPieceDispatcher(treeLoggerWrapper, productionLines);
 		treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
+	}
+	
+
+	/**
+	 * This method returns the Global Warming Potential according
+	 * to the selected assessment report.
+	 * @return a GWP instance
+	 */
+	public static GWP getGlobalWarmingPotential() {
+		return GlobalWarmingPotentialMap.get(selectedAR);
+	}
+	
+	protected static void setAssessmentReportForGWP(AssessmentReport aR) {
+		selectedAR = aR;
 	}
 	
 	private void readBiomassParametersVector() {
