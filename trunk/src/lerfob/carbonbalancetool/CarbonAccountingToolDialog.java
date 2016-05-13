@@ -40,6 +40,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 
+import lerfob.carbonbalancetool.CarbonAccountingToolSettings.AssessmentReport;
 import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.BiomassParametersWrapper;
 import lerfob.carbonbalancetool.CarbonAccountingToolUtility.ProductionProcessorManagerWrapper;
@@ -151,7 +152,8 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		CEq("C Eq.", "C Eq."),
 		Units("Units", "Unit\u00E9s"),
 		CI("Confidence intervals", "Intervalles de confiance"),
-		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9")
+		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9"),
+		GlobalWarmingPotential("Global Warming Potential", "Potentiel de r\u00E9chauffement global")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -189,6 +191,10 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	private final JRadioButtonMenuItem calculateInCarbon;
 	protected final JRadioButtonMenuItem calculateInCO2;
 	protected final REpiceaSlider confidenceIntervalSlider;
+	
+	private final JRadioButtonMenuItem aR2;
+	private final JRadioButtonMenuItem aR4;
+	private final JRadioButtonMenuItem aR5;
 	
 	private final JButton calculateCarbonButton;
 	private final JButton stopButton;
@@ -266,6 +272,33 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(calculateInCarbon);
 		bg.add(calculateInCO2);
+		
+		JMenu assessmentReport = new JMenu(MessageID.GlobalWarmingPotential.toString());
+		options.add(assessmentReport);
+		aR2 = new JRadioButtonMenuItem(AssessmentReport.Second.toString());
+		assessmentReport.add(aR2);
+		aR4 = new JRadioButtonMenuItem(AssessmentReport.Fourth.toString());
+		assessmentReport.add(aR4);
+		aR5 = new JRadioButtonMenuItem(AssessmentReport.Fifth.toString());
+		assessmentReport.add(aR5);
+		ButtonGroup bg2 = new ButtonGroup();
+		bg2.add(aR2);
+		bg2.add(aR4);
+		bg2.add(aR5);
+		
+		switch(CarbonAccountingToolSettings.selectedAR) {
+		case Second:
+			aR2.setSelected(true);
+			break;
+		case Fourth:
+			aR4.setSelected(true);
+			break;
+		case Fifth:
+			aR5.setSelected(true);
+			break;
+		}
+		
+		
 
 		calculateInCarbon.setSelected(true); // default value;
 		
@@ -379,6 +412,12 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			caller.cancelRunningTask();
 		} else if (evt.getSource().equals(sensitivityAnalysisMenuItem)) {
 			CATSensitivityAnalysisSettings.getInstance().showInterface(this);
+		} else if (evt.getSource().equals(aR2)) {
+			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Second);
+		} else if (evt.getSource().equals(aR4)) {
+			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Fourth);
+		} else if (evt.getSource().equals(aR5)) {
+			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
 		}
 	}
 	
@@ -479,7 +518,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			}
 		} else if (evt.getPropertyName().equals(REpiceaAWTProperty.WindowAcceptedConfirmed.name()) || evt.getPropertyName().equals(REpiceaAWTProperty.WindowCancelledConfirmed.name())) {
 			caller.respondToWindowClosing();
-		}
+		} 
 	}
 
 
@@ -497,6 +536,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateInCarbon.addChangeListener(graphicPanel);
 		confidenceIntervalSlider.addPropertyChangeListener(graphicPanel);
 		sensitivityAnalysisMenuItem.addActionListener(this);
+		aR2.addActionListener(this);
+		aR4.addActionListener(this);
+		aR5.addActionListener(this);
 	}
 
 
@@ -514,6 +556,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		calculateInCarbon.removeChangeListener(graphicPanel);
 		confidenceIntervalSlider.removePropertyChangeListener(graphicPanel);
 		sensitivityAnalysisMenuItem.removeActionListener(this);
+		aR2.removeActionListener(this);
+		aR4.removeActionListener(this);
+		aR5.removeActionListener(this);
 	}
 
 	@Override
@@ -550,5 +595,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 			caller.getCarbonToolSettings().currentProcessorManagerIndex = hwpComboBox.getComboBox().getSelectedIndex();
 		}
 	}
+
+	
 }
 

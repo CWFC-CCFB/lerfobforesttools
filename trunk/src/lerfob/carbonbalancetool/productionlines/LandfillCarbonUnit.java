@@ -72,7 +72,7 @@ public class LandfillCarbonUnit extends CarbonUnit {
 		final double CH4_part = .5;
 		final double CH4_CO2_conversion = 16d / 44;		// the relation between the different GHG is in term of weight. More methane is needed to get the same weight. 
 		
-		return - carbon * CH4_part * CH4_CO2_conversion * (CarbonAccountingToolSettings.CH4_CO2_EQUIVALENT - 1);		// -1 to account for the carbon that is already lost by the piece of wood (as if it were CO2)
+		return - carbon * CH4_part * CH4_CO2_conversion * (CarbonAccountingToolSettings.getGlobalWarmingPotential().getCH4Factor() - 1);		// -1 to account for the carbon that is already lost by the piece of wood (as if it were CO2)
 	}
 	
 }
