@@ -155,7 +155,11 @@ public final class CarbonAccountingToolSettings {
 		return GlobalWarmingPotentialMap.get(selectedAR);
 	}
 	
-	protected static void setAssessmentReportForGWP(AssessmentReport aR) {
+	/**
+	 * This method set the assessment report for the Global Warming Potential factors.
+	 * @param aR an AssessmentReport enum variable
+	 */
+	public static void setAssessmentReportForGWP(AssessmentReport aR) {
 		selectedAR = aR;
 	}
 	
