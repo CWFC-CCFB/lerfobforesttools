@@ -18,13 +18,16 @@
  */
 package lerfob.carbonbalancetool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
@@ -36,32 +39,72 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	private final CarbonAssessmentToolSingleSimulationResult scenToCompare;
 	private final CarbonAssessmentToolSingleSimulationResult baseline;
 	private final String resultId;
+	private final Map<CompartmentInfo, Estimate<?>> budgetMap;
+	private Integer refDate;
+	private Integer altDate;
 	
-	CarbonAssessmentToolSimulationDifference(String resultId, CarbonAssessmentToolSingleSimulationResult scenToCompare, CarbonAssessmentToolSingleSimulationResult baseline) {
+	CarbonAssessmentToolSimulationDifference(String resultId, 
+			CarbonAssessmentToolSingleSimulationResult baseline,
+			Integer refDate,
+			CarbonAssessmentToolSingleSimulationResult scenToCompare, 
+			Integer altDate) {
 		this.scenToCompare = scenToCompare;
 		this.baseline = baseline;
 		this.resultId = resultId;
+		budgetMap = new HashMap<CompartmentInfo, Estimate<?>>();
+		setBudgetMap();
 	}
 	
 	
-	@Override
-	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap() {
-		Map<CompartmentInfo, MonteCarloEstimate> outputMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
-		for (CompartmentInfo comp : scenToCompare.getBudgetMap().keySet()) {
-			if (baseline.getBudgetMap().containsKey(comp)) {
-				MonteCarloEstimate diffEst = MonteCarloEstimate.subtract(scenToCompare.getBudgetMap().get(comp), baseline.getBudgetMap().get(comp));
-				outputMap.put(comp, diffEst);
+	private void setBudgetMap() {
+		Map<CompartmentInfo, Estimate<?>> refMap;
+		if (refDate == null) {
+			refMap = baseline.getBudgetMap();
+		} else {
+			refMap = new HashMap<CompartmentInfo, Estimate<?>>();
+			refMap.putAll(getEstimateForThisDate(baseline, refDate));
+			System.out.println("Just extracted date " + refDate + " in baseline");
+		}
+		
+		Map<CompartmentInfo, Estimate<?>> altMap;
+		if (altDate == null) {
+			altMap = scenToCompare.getBudgetMap();
+		} else {
+			altMap = new HashMap<CompartmentInfo, Estimate<?>>();
+			altMap.putAll(getEstimateForThisDate(scenToCompare, altDate));
+			System.out.println("Just extracted date " + altDate + " in alternative scenario");
+		}
+		
+		for (CompartmentInfo comp : altMap.keySet()) {
+			if (refMap.containsKey(comp)) {
+				Estimate<?> diffEst = altMap.get(comp).getDifferenceEstimate(refMap.get(comp));
+				budgetMap.put(comp, diffEst);
 			} else {
-				outputMap.put(comp, scenToCompare.getBudgetMap().get(comp));
+				budgetMap.put(comp, altMap.get(comp));
 			}
 		}
-		for (CompartmentInfo comp : baseline.getBudgetMap().keySet()) {
-			if (!outputMap.containsKey(comp)) {
-				outputMap.put(comp, MonteCarloEstimate.multiply(baseline.getBudgetMap().get(comp), -1d));
+		
+		for (CompartmentInfo comp : refMap.keySet()) {
+			if (!budgetMap.containsKey(comp)) {
+				budgetMap.put(comp, refMap.get(comp).getProductEstimate(-1d));
 			} 
+		}
+	}
+
+	private Map<CompartmentInfo, MonteCarloEstimate> getEstimateForThisDate(CarbonAssessmentToolSingleSimulationResult result, int date) {
+		Map<CompartmentInfo, MonteCarloEstimate> outputMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
+		int index = result.getTimeTable().lastIndexOf(date);
+		List<Integer> indices = new ArrayList<Integer>();
+		indices.add(index);
+		for (CompartmentInfo comp : result.getEvolutionMap().keySet()) {
+			MonteCarloEstimate currentEstimate = result.getEvolutionMap().get(comp);
+			outputMap.put(comp, currentEstimate.extractSubEstimate(indices));
 		}
 		return outputMap;
 	}
+		
+	@Override
+	public Map<CompartmentInfo, Estimate<?>> getBudgetMap() {return budgetMap;}
 
 	@Override
 	public String getStandID() {return scenToCompare.getStandID() + " - " + baseline.getStandID();}
@@ -91,7 +134,6 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 	@Override
 	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {
-		// TODO FP add the proper method
 		return null;
 	}
 
@@ -113,7 +155,6 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 
 	@Override
 	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling) {
-		// TODO FP add the proper method
 		return null;
 	}
 

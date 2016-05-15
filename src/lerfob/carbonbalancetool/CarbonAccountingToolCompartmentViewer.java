@@ -32,6 +32,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import repicea.math.Matrix;
+import repicea.stats.estimates.ConfidenceInterval;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -84,11 +85,10 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
 			MonteCarloEstimate estimate = summary.getEvolutionMap().get(compartmentID);
 			Matrix mean = estimate.getMean();
-			double lowerPercentile = (1d - ciCoverage) * .5;
-			double upperPercentile = 1d - lowerPercentile;
-//			System.out.println("Lower and upper percentiles set to : " + lowerPercentile + "; " + upperPercentile);
-			Matrix lowerBound = estimate.getPercentile(lowerPercentile);
-			Matrix upperBound = estimate.getPercentile(upperPercentile);
+			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(ciCoverage);
+			
+			Matrix lowerBound = ci.getLowerLimit();
+			Matrix upperBound = ci.getUpperLimit();
 			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false, getCarbonFactor());

@@ -79,7 +79,7 @@ class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
 				MonteCarloEstimate basicEstimate = oMap.get(useClass).get(Element.Volume);
-				dataset.add(MonteCarloEstimate.multiply(basicEstimate, 1d / summary.getRotationLength()),
+				dataset.add((MonteCarloEstimate) basicEstimate.getProductEstimate(1d / summary.getRotationLength()),
 						getColor(useClass.ordinal()),
 						useClass.toString(), 
 						summary.getResultId());
