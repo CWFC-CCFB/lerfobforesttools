@@ -28,6 +28,7 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.math.Matrix;
 import repicea.simulation.processsystem.AmountMap;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -74,7 +75,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	private final String standID;
 	private final CarbonAccountingToolTimeTable timeTable;
 	private final boolean isEvenAged;
-	private final Map<CompartmentInfo, MonteCarloEstimate> budgetMap;
+	private final Map<CompartmentInfo, Estimate<?>> budgetMap;
 	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
 	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
 	private final Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> hwpContentByUseClass;
@@ -92,7 +93,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		
 		timeTable = manager.getTimeTable();
 		
-		budgetMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
+		budgetMap = new HashMap<CompartmentInfo, Estimate<?>>();
 		evolutionMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
 		logGradeMap = new TreeMap<String, Map<Element, MonteCarloEstimate>>();
 		
@@ -115,7 +116,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 			if (!budgetMap.containsKey(compartmentID)) {
 				budgetMap.put(compartmentID, new MonteCarloEstimate());
 			}
-			budgetMap.get(compartmentID).addRealization(value);
+			((MonteCarloEstimate) budgetMap.get(compartmentID)).addRealization(value);
 			
 			value = compartment.getCarbonEvolution(plotAreaHa);
 			if (!evolutionMap.containsKey(compartmentID)) {
@@ -180,7 +181,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 
 
 	@Override
-	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap() {return budgetMap;}
+	public Map<CompartmentInfo, Estimate<?>> getBudgetMap() {return budgetMap;}
 
 	@Override
 	public String getStandID() {return standID;}
@@ -230,7 +231,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 							if (estimate2 == null) {
 								newCarrier.put(element, estimate1);
 							} else {
-								newCarrier.put(element, MonteCarloEstimate.add(estimate1, estimate2));
+								newCarrier.put(element, (MonteCarloEstimate) estimate1.getSumEstimate(estimate2));
 							}
 						}
 					}

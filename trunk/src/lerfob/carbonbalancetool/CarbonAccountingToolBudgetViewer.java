@@ -30,7 +30,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
-import repicea.stats.estimates.MonteCarloEstimate;
+import repicea.stats.estimates.Estimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -71,7 +71,7 @@ class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(getCarbonFactor(), getCICoverage());
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
-			MonteCarloEstimate estimate = summary.getBudgetMap().get(compartmentID);
+			Estimate<?> estimate = summary.getBudgetMap().get(compartmentID);
 			dataset.add(estimate, 
 					compartmentID.getColor(), 
 					compartmentID.toString(), 

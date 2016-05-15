@@ -37,6 +37,7 @@ import repicea.io.GExportRecord;
 import repicea.io.REpiceaRecordSet;
 import repicea.io.tools.REpiceaExportTool;
 import repicea.io.tools.REpiceaExportToolDialog;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -53,7 +54,8 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 		ProductProportionOption("Proportions of the different wood product classes", "Proportions des diff\u00E9rentes classes de produits"),
 		AnnualFluxOption("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
 		LogCategoryVolume("Log category volumes", "Volumes des cat\u00E9gories de billons"),
-		WoodProductEvolution("Wood product evolution", "Evolution des produits bois");
+		WoodProductEvolution("Wood product evolution", "Evolution des produits bois"),
+		Variance("Variance", "Variance");
 			
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -206,20 +208,26 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
 
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
-				MonteCarloEstimate estimate = caller.summary.getBudgetMap().get(compartmentInfo);
-				int nbRealizations = estimate.getNumberOfRealizations();
-				for (int j = 0; j < nbRealizations; j++) {
-					double value = estimate.getRealizations().get(j).m_afData[0][0];
+				Estimate<?> estimate = caller.summary.getBudgetMap().get(compartmentInfo);
+				if (estimate instanceof MonteCarloEstimate) {
+					int nbRealizations = ((MonteCarloEstimate) estimate).getNumberOfRealizations();
+					for (int j = 0; j < nbRealizations; j++) {
+						double value = ((MonteCarloEstimate) estimate).getRealizations().get(j).m_afData[0][0];
+						r = new GExportRecord();
+						r.addField(standIDField);
+						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
+						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
+						if (nbRealizations > 0) {
+							r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+						}
+						addRecord(r);
+					}
+				} else {
 					r = new GExportRecord();
 					r.addField(standIDField);
 					r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
-					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
-					if (nbRealizations > 0) {
-						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
-					}
-				
-					addRecord(r);
-					
+					r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), estimate.getMean().m_afData[0][0]));
+					r.addField(new GExportFieldDetails(MessageID.Variance.toString(), estimate.getVariance().m_afData[0][0]));
 				}
 			}
 		}

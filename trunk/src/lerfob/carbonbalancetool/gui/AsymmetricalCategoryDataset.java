@@ -38,6 +38,8 @@ import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 
 import repicea.math.Matrix;
+import repicea.stats.estimates.ConfidenceInterval;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
@@ -49,12 +51,12 @@ import repicea.stats.estimates.MonteCarloEstimate;
 @SuppressWarnings("rawtypes")
 public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, IntervalCategoryDataset {
 
-	class MonteCarloEstimateWrapper {
+	class EstimateWrapper {
 		
-		private final MonteCarloEstimate estimate;
+		private final Estimate<?> estimate;
 		private final Color color;
 		
-		MonteCarloEstimateWrapper(MonteCarloEstimate estimate, Color color) {
+		EstimateWrapper(Estimate<?> estimate, Color color) {
 			this.estimate = estimate;
 			this.color = color;
 		}
@@ -65,7 +67,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 
 	private final List<Comparable> rowKeys; 
 	private final List<Comparable> columnKeys;
-	private final Map<Comparable, Map<Comparable, MonteCarloEstimateWrapper>> estimateMap;
+	private final Map<Comparable, Map<Comparable, EstimateWrapper>> estimateMap;
 	
 	public AsymmetricalCategoryDataset(double carbonFactor, double percentile) {
 		super();
@@ -73,23 +75,23 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		this.carbonFactor = carbonFactor;
 		rowKeys = new ArrayList<Comparable>();
 		columnKeys = new ArrayList<Comparable>();
-		estimateMap = new HashMap<Comparable, Map<Comparable, MonteCarloEstimateWrapper>>();
+		estimateMap = new HashMap<Comparable, Map<Comparable, EstimateWrapper>>();
 	}
 
-	public void add(MonteCarloEstimate estimate, Color color, Comparable category, Comparable group) {
+	public void add(Estimate<?> estimate, Color color, Comparable category, Comparable group) {
 		if (!estimateMap.containsKey(category)) {
 			if (!rowKeys.contains(category)) {
 				rowKeys.add(category);
 			}
-			estimateMap.put(category, new HashMap<Comparable, MonteCarloEstimateWrapper>());
+			estimateMap.put(category, new HashMap<Comparable, EstimateWrapper>());
 		}
-		Map<Comparable, MonteCarloEstimateWrapper> innerMap = estimateMap.get(category);
+		Map<Comparable, EstimateWrapper> innerMap = estimateMap.get(category);
 		if (!innerMap.containsKey(group)) {
 			if (!columnKeys.contains(group)) {
 				columnKeys.add(group);
 			}
 		}
-		innerMap.put(group, new MonteCarloEstimateWrapper(MonteCarloEstimate.multiply(estimate, carbonFactor), color));
+		innerMap.put(group, new EstimateWrapper(estimate.getProductEstimate(carbonFactor), color));
 	}
 	
 	@Override
@@ -106,9 +108,12 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 
 	@Override
 	public Number getEndValue(Comparable arg0, Comparable arg1) {
-		MonteCarloEstimate estimate = getMonteCarloEstimate(arg0, arg1);
+		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
-			return estimate.getPercentile(1d - .5 * (1d - percentile)).m_afData[0][0];
+			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
+			if (ci != null) {
+				return ci.getUpperLimit().m_afData[0][0];
+			}
 		}
 		return null;
 	}
@@ -127,9 +132,12 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 
 	@Override
 	public Number getStartValue(Comparable arg0, Comparable arg1) {
-		MonteCarloEstimate estimate = getMonteCarloEstimate(arg0, arg1);
+		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
-			return estimate.getPercentile(.5 * (1d - percentile)).m_afData[0][0];
+			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
+			if (ci != null) {
+				return ci.getLowerLimit().m_afData[0][0];
+			}
 		}
 		return null;
 	}
@@ -162,22 +170,22 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 
 	@Override
 	public Number getValue(Comparable arg0, Comparable arg1) {
-		MonteCarloEstimate estimate = getMonteCarloEstimate(arg0, arg1);
+		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
 			return estimate.getMean().m_afData[0][0];
 		}
 		return null;
 	}
 	
-	protected final MonteCarloEstimate getMonteCarloEstimate(Comparable arg0, Comparable arg1) {
-		MonteCarloEstimateWrapper wrapper = getWrapper(arg0, arg1);
+	protected final Estimate<?> getEstimate(Comparable arg0, Comparable arg1) {
+		EstimateWrapper wrapper = getWrapper(arg0, arg1);
 		if (wrapper != null) { 
 			return wrapper.estimate;
 		}
 		return null;
 	}
 
-	private MonteCarloEstimateWrapper getWrapper(Comparable arg0, Comparable arg1) {
+	private EstimateWrapper getWrapper(Comparable arg0, Comparable arg1) {
 		if (estimateMap.containsKey(arg0)) {
 			if (estimateMap.get(arg0).containsKey(arg1)) {
 				return estimateMap.get(arg0).get(arg1);
@@ -187,7 +195,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 	
 	protected final Color getColor(Comparable arg0, Comparable arg1) {
-		MonteCarloEstimateWrapper wrapper = getWrapper(arg0, arg1);
+		EstimateWrapper wrapper = getWrapper(arg0, arg1);
 		if (wrapper != null) { 
 			return wrapper.color;
 		}

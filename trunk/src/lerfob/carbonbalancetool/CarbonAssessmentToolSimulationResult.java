@@ -24,6 +24,7 @@ import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
@@ -37,7 +38,7 @@ public interface CarbonAssessmentToolSimulationResult {
 	 * This method returns the "rotation-averaged" carbon stocks in each compartment.
 	 * @return a Map with CompartmentInfo and Double as keys and values
 	 */
-	public Map<CompartmentInfo, MonteCarloEstimate> getBudgetMap();
+	public Map<CompartmentInfo, Estimate<?>> getBudgetMap();
 	
 	/**
 	 * This method return the identifier of the stand.

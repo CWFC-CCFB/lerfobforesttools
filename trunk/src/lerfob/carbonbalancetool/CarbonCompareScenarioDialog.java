@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -222,8 +223,10 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		add(controlPanel, BorderLayout.SOUTH);
 
 		JPanel comparisonModePanel = UIControlManager.createSimpleHorizontalPanel(MessageID.ComparisonMode, comparisonModeComboBox, 5, true);
+		add(Box.createHorizontalStrut(5), BorderLayout.NORTH);
 		add(comparisonModePanel, BorderLayout.NORTH);
-		
+		add(Box.createHorizontalStrut(5), BorderLayout.NORTH);
+				
 		JPanel mainPanel = new JPanel(new GridLayout(1,2));
 		add(mainPanel, BorderLayout.CENTER);
 
@@ -267,10 +270,13 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		CarbonAccountingToolSingleViewPanel scenToCompare = ((CarbonAccountingToolSingleViewPanel) scenarioToCompareComboBox.getSelectedItem());
 		String simulationName = scenToCompare.toString() + " - " + baselinePanel.toString();
 
-		CarbonAssessmentToolSingleSimulationResult scen = (CarbonAssessmentToolSingleSimulationResult) scenToCompare.getSummary();
 		CarbonAssessmentToolSingleSimulationResult base = (CarbonAssessmentToolSingleSimulationResult) baselinePanel.getSummary();
-		
-		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(simulationName, scen, base));
+		Integer baseDate = (Integer) dateRefComboBox.getSelectedItem();
+
+		CarbonAssessmentToolSingleSimulationResult altScen = (CarbonAssessmentToolSingleSimulationResult) scenToCompare.getSummary();
+		Integer altScenDate = (Integer) dateAltComboBox.getSelectedItem();
+				
+		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(simulationName, base, baseDate, altScen, altScenDate));
 		selectionCompared = scenToCompare.toString();
 		super.okAction();
 	}

@@ -58,7 +58,7 @@ class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
 		for (String logCategoryName : logCategoryNames) {
 			int index = logCategoryNames.indexOf(logCategoryName);
 			MonteCarloEstimate estimate = summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume);
-			dataset.add(MonteCarloEstimate.multiply(estimate, 1d / summary.getRotationLength()),
+			dataset.add((MonteCarloEstimate) estimate.getProductEstimate(1d / summary.getRotationLength()),
 					getColor(index),
 					logCategoryName, 
 					summary.getResultId());
