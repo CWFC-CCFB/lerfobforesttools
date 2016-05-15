@@ -86,7 +86,7 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 				}
 			} else if (arg0.getSource().equals(compareScenarioMenuItem)) {
 				CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
-				dlg.compareDialog.setVisible(true);
+				new CarbonCompareScenarioDialog(dlg, CarbonAccountingToolPanelView.this);
 			} else {
 				super.actionPerformed(arg0);
 			} 
@@ -97,11 +97,11 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 			int nbValidComponents = 0;
 			int nbTabs = tabbedPane.getTabCount();
 			for (int i = 0; i < nbTabs; i++) {
-				if (i != tabbedPane.getSelectedIndex()) {		// is there anything to compare with
+//				if (i != tabbedPane.getSelectedIndex()) {		// is there anything to compare with
 	 				if (isASingleResultSummary(i)) {
 						nbValidComponents++;
 					}
-				}
+//				}
 			}
 			compareScenarioMenuItem.setEnabled(nbValidComponents >= 1 && isASingleResultSummary(tabbedPane.getSelectedIndex()));
 		}

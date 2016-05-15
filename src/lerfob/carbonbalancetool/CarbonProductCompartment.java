@@ -30,11 +30,11 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
-//import lerfob.carbonbalancetool.productionlines.ProductionLineManager.CarbonUnitType;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
+//import lerfob.carbonbalancetool.productionlines.ProductionLineManager.CarbonUnitType;
 
 /**
  * This method takes in charge the evolution of the carbon in the wood products
@@ -120,7 +120,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 	}
 
 	private Map<Integer, Map<UseClass, AmountMap<Element>>> summarizeWoodProductEvolution(CarbonUnitList carbonUnits) {
-	    Integer[] timeScale = getCompartmentManager ().getTimeScale ();
+		CarbonAccountingToolTimeTable timeScale = getCompartmentManager().getTimeTable();
 		Map<Integer, Map<UseClass, AmountMap<Element>>> outputMap = new HashMap<Integer, Map<UseClass, AmountMap<Element>>>();
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
 			int date;
@@ -128,7 +128,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 			for (CarbonUnit carbonUnit : carbonUnits) {
 				EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit; 
 				UseClass useClass = endProduct.getUseClass();
-				date = timeScale[endProduct.getIndexInTimeScale()];
+				date = timeScale.get(endProduct.getIndexInTimeScale());
 				if (!outputMap.containsKey(date)) {
 					outputMap.put(date, new HashMap<UseClass,AmountMap<Element>>());
 				}

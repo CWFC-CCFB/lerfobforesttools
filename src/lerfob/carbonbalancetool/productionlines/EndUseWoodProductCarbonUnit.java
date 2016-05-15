@@ -104,7 +104,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 		if (getCarbonUnitFeature().isDisposed()) {
 			double[] releasedCarbonArray = getReleasedCarbonArray();
 			double proportion;
-			for (int i = getIndexInTimeScale(); i < getTimeScale().length; i++) {
+			for (int i = getIndexInTimeScale(); i < getTimeTable().size(); i++) {
 				proportion = releasedCarbonArray[i] / getInitialCarbon();
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
 //				int creationDate = compartmentManager.getTimeScale()[i];
@@ -157,9 +157,9 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
 			double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
 			double[] releasedCarbonArray = getReleasedCarbonArray();
-			double[] outputArray = new double[getTimeScale().length];
+			double[] outputArray = new double[getTimeTable().size()];
 			double volume;
-			for (int i = 0; i < getTimeScale().length; i++) {
+			for (int i = 0; i < getTimeTable().size(); i++) {
 				volume = releasedCarbonArray[i] * volumeFactor;
 				if (!isNewImplementation()) {
 					volume *= ratioToGetRawRoundWoodVolume;

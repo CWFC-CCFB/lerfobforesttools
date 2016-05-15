@@ -92,10 +92,10 @@ class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
 			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false, getCarbonFactor());
-			for (int i = 0; i < summary.getTimeScale().length; i++) {
-				meanSeries.add((double) summary.getTimeScale()[i], mean.m_afData[i][0]);
-				lowerSeries.add((double) summary.getTimeScale()[i], lowerBound.m_afData[i][0]);
-				upperSeries.add((double) summary.getTimeScale()[i], upperBound.m_afData[i][0]);
+			for (int i = 0; i < summary.getTimeTable().size(); i++) {
+				meanSeries.add((double) summary.getTimeTable().get(i), mean.m_afData[i][0]);
+				lowerSeries.add((double) summary.getTimeTable().get(i), lowerBound.m_afData[i][0]);
+				upperSeries.add((double) summary.getTimeTable().get(i), upperBound.m_afData[i][0]);
 			}
 		}
 

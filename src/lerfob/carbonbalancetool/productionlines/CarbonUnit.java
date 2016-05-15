@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.productionlines;
 import java.util.ArrayList;
 import java.util.List;
 
+import lerfob.carbonbalancetool.CarbonAccountingToolTimeTable;
 import lerfob.carbonbalancetool.CarbonCompartmentManager;
 import lerfob.carbonbalancetool.DecayFunction;
 import lerfob.carbonbalancetool.ExponentialFunction;
@@ -95,7 +96,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		
 	}
 	
-	private Integer[] timeScale;
+	private CarbonAccountingToolTimeTable timeTable;
 	private final int dateIndex;
 	private final List<CarbonUnitStatus> status; 
 	
@@ -134,10 +135,10 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * This method returns the creation date of the product
 	 * @return an integer
 	 */
-	protected int getCreationDate() {return timeScale[dateIndex];}
+	protected int getCreationDate() {return timeTable.get(dateIndex);}
 	
-	protected void setTimeScale(Integer[] timeScale) {this.timeScale = timeScale;}
-	protected Integer[] getTimeScale() {return timeScale;}
+	protected void setTimeTable(CarbonAccountingToolTimeTable timeTable) {this.timeTable = timeTable;}
+	protected CarbonAccountingToolTimeTable getTimeTable() {return timeTable;}
 	protected CarbonUnitFeature getCarbonUnitFeature() {return carbonUnitFeature;}
 	/**
 	 * This method returns the carbon (tC) at the creation date. NOTE: For the landfill carbon, only
@@ -178,9 +179,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 */
 	protected void actualizeCarbon(CarbonCompartmentManager compartmentManager) throws Exception {
 		DecayFunction decayFunction = compartmentManager.getCarbonToolSettings().getDecayFunction();
-		Integer[] timeScale = compartmentManager.getTimeScale();
-		setTimeScale(timeScale);
-		currentCarbonArray = new double[timeScale.length];
+		CarbonAccountingToolTimeTable timeScale = compartmentManager.getTimeTable();
+		setTimeTable(timeScale);
+		currentCarbonArray = new double[timeScale.size()];
 
 		double lambdaValue = getCarbonUnitFeature().getAverageLifetime(compartmentManager);
 		double currentCarbon = getInitialCarbon();
@@ -190,10 +191,10 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		int date;
 		double formerDate;
 		
-		for (int i = dateIndex; i < timeScale.length; i++) {
-			date = timeScale[i];
+		for (int i = dateIndex; i < timeScale.size(); i++) {
+			date = timeScale.get(i);
 			if (date > getCreationDate() && currentCarbon > ProductionProcessorManager.VERY_SMALL) {
-				formerDate = timeScale[i - 1];
+				formerDate = timeScale.get(i - 1);
 				decayFunction.setParameterValue(0, lambdaValue);
 				decayFunction.setVariableValue(0, date - formerDate);
 				factor = decayFunction.getValue();	// last parameter is unnecessary			
@@ -220,7 +221,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 			double[] releasedCarbonArray = new double[currentCarbonArray.length];
 			int date;
 			for (int i = 1; i < currentCarbonArray.length; i++) {
-				date = getTimeScale()[i];
+				date = getTimeTable().get(i);
 				if (date > getCreationDate()) {
 					releasedCarbonArray[i] = currentCarbonArray[i - 1] - currentCarbonArray[i];
 				}

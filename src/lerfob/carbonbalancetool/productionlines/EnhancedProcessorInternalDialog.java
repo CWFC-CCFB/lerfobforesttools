@@ -82,15 +82,11 @@ public class EnhancedProcessorInternalDialog extends ProcessorInternalDialog imp
 	protected JPanel setTopComponent() {
 		JPanel topComponent = super.setTopComponent();
 		if (getCaller().hasSubProcessors()) {
-			JPanel panel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.FunctionalUnitBiomassLabel),
-					functionUnitBiomass, 
-					5);
+			JPanel panel = UIControlManager.createSimpleHorizontalPanel(MessageID.FunctionalUnitBiomassLabel, functionUnitBiomass, 5, true);
 			topComponent.add(panel);
 			topComponent.add(Box.createVerticalStrut(5));
 
-			panel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.EmissionsLabel),
-					emissionsByFunctionUnit,
-					5);
+			panel = UIControlManager.createSimpleHorizontalPanel(MessageID.EmissionsLabel, emissionsByFunctionUnit, 5, true);
 			topComponent.add(panel);
 			topComponent.add(Box.createVerticalStrut(5));
 		} else {

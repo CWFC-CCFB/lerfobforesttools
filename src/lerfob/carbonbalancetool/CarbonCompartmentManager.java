@@ -39,7 +39,7 @@ import repicea.simulation.covariateproviders.standlevel.StochasticInformationPro
 public class CarbonCompartmentManager implements MonteCarloSimulationCompliantObject {
 
 	private static int NumberOfExtraYrs = 80;	// number of years after the final cut
-	
+
 	private List<CarbonToolCompatibleStand> currentStands;	
 	private List<CarbonToolCompatibleStand> stands;
 	private CarbonAccountingToolSettings carbonAccountingToolSettings;		// reference to the extractor settings
@@ -47,7 +47,8 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 	private Map<CompartmentInfo, CarbonCompartment> carbonCompartments;
 	private int rotationLength;
 	private boolean isEvenAged;
-	private Integer[] timeScale;
+	private CarbonAccountingToolTimeTable timeTable;
+//	private Integer[] timeScale;
 
 	private boolean isSimulationValid;
 	protected boolean isStochastic;
@@ -102,19 +103,34 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 			if (averageTimeStep == 0) {
 				averageTimeStep = 5;	// default value in case there is a single step
 			}
-			timeScale = new Integer[stands.size() + nbExtraYears / averageTimeStep];
-
-			for (int i = 0; i < timeScale.length; i++) {
+//			timeScale = new Integer[stands.size() + nbExtraYears / averageTimeStep];
+//
+//			for (int i = 0; i < timeScale.length; i++) {
+//				if (i < stands.size()) {
+//					if (isEvenAged) {
+//						timeScale[i] = ((CarbonToolCompatibleEvenAgedStand) stands.get(i)).getAgeYr();
+//					} else {
+//						timeScale[i] = stands.get(i).getDateYr();
+//					}
+//				} else  {
+//					timeScale[i] = timeScale[i - 1] + averageTimeStep;
+//				}
+//			}
+			timeTable = new CarbonAccountingToolTimeTable(lastStand.getDateYr());
+			
+			int size = stands.size() + nbExtraYears / averageTimeStep;
+			for (int i = 0; i < size; i++) {
 				if (i < stands.size()) {
 					if (isEvenAged) {
-						timeScale[i] = ((CarbonToolCompatibleEvenAgedStand) stands.get(i)).getAgeYr();
+						timeTable.add(((CarbonToolCompatibleEvenAgedStand) stands.get(i)).getAgeYr());
 					} else {
-						timeScale[i] = stands.get(i).getDateYr();
+						timeTable.add(stands.get(i).getDateYr());
 					}
 				} else  {
-					timeScale[i] = timeScale[i - 1] + averageTimeStep;
+					timeTable.add(timeTable.get(i - 1) + averageTimeStep);
 				}
 			}
+
 		}
 	}
 	
@@ -149,7 +165,11 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 		return (int) Math.round(averageTimeStep / nbHits);
 	}
 	
-	public Integer[] getTimeScale() {return timeScale;}
+	/**
+	 * This method returns the TimeScale instance the simulation has been run with.
+	 * @return
+	 */
+	public CarbonAccountingToolTimeTable getTimeTable() {return timeTable;}
 	
 	public CarbonAccountingToolSettings getCarbonToolSettings() {return carbonAccountingToolSettings;}
 
@@ -175,10 +195,10 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 			nonDegradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable);
 			
 		}
-		Collection<EndUseWoodProductCarbonUnit>[] endUseWoodProductCarbonUnits = (Collection<EndUseWoodProductCarbonUnit>[]) formatCarbonUnits(getTimeScale(), joinEndUseProductRecyclageList);
-		Collection<CarbonUnit>[] leftInForestCarbonUnits = formatCarbonUnits(getTimeScale(), leftInForestList);
-		Collection<CarbonUnit>[] degradableLandfillCarbonUnits = formatCarbonUnits(getTimeScale(), degradableLandfillList);
-		Collection<CarbonUnit>[] nonDegradableLandfillCarbonUnits = formatCarbonUnits(getTimeScale(), nonDegradableLandfillList);
+		Collection<EndUseWoodProductCarbonUnit>[] endUseWoodProductCarbonUnits = (Collection<EndUseWoodProductCarbonUnit>[]) formatCarbonUnits(getTimeTable(), joinEndUseProductRecyclageList);
+		Collection<CarbonUnit>[] leftInForestCarbonUnits = formatCarbonUnits(getTimeTable(), leftInForestList);
+		Collection<CarbonUnit>[] degradableLandfillCarbonUnits = formatCarbonUnits(getTimeTable(), degradableLandfillList);
+		Collection<CarbonUnit>[] nonDegradableLandfillCarbonUnits = formatCarbonUnits(getTimeTable(), nonDegradableLandfillList);
 
 
 		resetCompartments();
@@ -287,13 +307,13 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 
 	/**
 	 * This method format the end products into an array of collection of end products. The array has the time scale as index.
-	 * @param timeScale an Array of Integer instances
+	 * @param timeScale a TimeScale instance
 	 * @param endProductsCollections a Collection of Collections of EndProduct instances
 	 * @return an array of Collections of EndProduct instances
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Collection[] formatCarbonUnits(Integer[] timeScale, Collection<? extends CarbonUnit> carbonProducts) {
-		Collection<CarbonUnit>[] outputArray = new Collection[timeScale.length];
+	private Collection[] formatCarbonUnits(CarbonAccountingToolTimeTable timeScale, Collection<? extends CarbonUnit> carbonProducts) {
+		Collection<CarbonUnit>[] outputArray = new Collection[timeScale.size()];
 		for (int i = 0; i < outputArray.length; i++) {
 			outputArray[i] = new ArrayList<CarbonUnit>();
 		}

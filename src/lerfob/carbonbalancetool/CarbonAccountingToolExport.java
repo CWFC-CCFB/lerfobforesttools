@@ -155,7 +155,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 		private void createCarbonStockEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 			
-			Integer[] timeScale = caller.summary.getTimeScale();
+			CarbonAccountingToolTimeTable timeScale = caller.summary.getTimeTable();
 			
 			String standID = caller.summary.getStandID();
 			if (standID == null || standID.isEmpty()) {
@@ -166,7 +166,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 			for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
 				MonteCarloEstimate estimate = caller.summary.getEvolutionMap().get(compartmentInfo);
 				int nbRealizations = estimate.getNumberOfRealizations();
-				for (int i = 0; i < timeScale.length; i++) {
+				for (int i = 0; i < timeScale.size(); i++) {
 					for (int j = 0; j < nbRealizations; j++) {
 						double value = estimate.getRealizations().get(j).m_afData[i][0];
 						if (caller.summary.isEvenAged() && i == 0) {
@@ -182,7 +182,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 						}
 						r = new GExportRecord();
 						r.addField(standIDField);
-						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale[i]));
+						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.get(i)));
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 						if (nbRealizations > 0) {

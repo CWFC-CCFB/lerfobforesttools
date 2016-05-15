@@ -42,8 +42,8 @@ public class CarbonCompartmentMethodLibrary {
 	public void selectCalculatorFunction(CarbonCompartment carbonCompartment) throws Exception {
 		Collection<? extends CarbonUnit> carbonUnits;
 		CarbonCompartmentManager manager = carbonCompartment.getCompartmentManager();
-		Integer[] timeScale = manager.getTimeScale();
-		double[] carbon = new double[timeScale.length];
+		CarbonAccountingToolTimeTable timeScale = manager.getTimeTable();
+		double[] carbon = new double[timeScale.size()];
 		double integratedCarbon = 0d;
 		int revolutionPeriod = manager.getRotationLength();
 		ExponentialFunction decayFunction;
@@ -54,7 +54,7 @@ public class CarbonCompartmentMethodLibrary {
 		
 		case Roots:
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				double carbonContent = 0d;
 				if (i < stands.size()) {
 					CarbonToolCompatibleStand stand = stands.get(i);
@@ -69,7 +69,7 @@ public class CarbonCompartmentMethodLibrary {
 			
 		case AbGround:
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				double carbonContent = 0d;
 				if (i < stands.size()) {
 					CarbonToolCompatibleStand stand = stands.get(i);
@@ -89,12 +89,12 @@ public class CarbonCompartmentMethodLibrary {
 			
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						double[] actualizedCarbon = carbonUnit.getCurrentCarbonArray();	
-						for (int j = 0; j < timeScale.length; j++) {
+						for (int j = 0; j < timeScale.size(); j++) {
 							carbon[j] += actualizedCarbon[j];
 						}
 						integratedCarbon += carbonUnit.getIntegratedCarbon(decayFunction, manager);
@@ -102,7 +102,7 @@ public class CarbonCompartmentMethodLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -117,10 +117,10 @@ public class CarbonCompartmentMethodLibrary {
 			
 		case CarbEmis:
 			
-			carbon = new double[timeScale.length];
+			carbon = new double[timeScale.size()];
 			
 			// evolution
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
@@ -131,13 +131,13 @@ public class CarbonCompartmentMethodLibrary {
 				
 			}
 
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -149,14 +149,14 @@ public class CarbonCompartmentMethodLibrary {
 			
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit;
 						
 						double[] substitutedCarbon = endProduct.getCurrentCarbonSubstitution(manager);	
-						for (int j = 0; j < timeScale.length; j++) {
+						for (int j = 0; j < timeScale.size(); j++) {
 							carbon[j] += substitutedCarbon[j];
 						}
 						integratedCarbon += endProduct.getTotalCarbonSubstitution(manager);
@@ -164,13 +164,13 @@ public class CarbonCompartmentMethodLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -180,7 +180,7 @@ public class CarbonCompartmentMethodLibrary {
 
 		case LfillND:
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
@@ -197,14 +197,14 @@ public class CarbonCompartmentMethodLibrary {
 		case LfillEm:
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						LandfillCarbonUnit landfillCarbonProduct = (LandfillCarbonUnit) carbonUnit;
 
 						double[] currentEmission = landfillCarbonProduct.getCarbonEquivalentMethaneEmissionsArray();	
-						for (int j = 0; j < timeScale.length; j++) {
+						for (int j = 0; j < timeScale.size(); j++) {
 							carbon[j] += currentEmission[j];
 						}
 						integratedCarbon += landfillCarbonProduct.getTotalNonRenewableCarbonEmissions();
@@ -212,13 +212,13 @@ public class CarbonCompartmentMethodLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.length; i++) {
+			for (int i = 0; i < timeScale.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -245,7 +245,7 @@ public class CarbonCompartmentMethodLibrary {
 	 * @return the total carbon (double)
 	 */
 	private double integrateCarbonOverHorizon(CarbonCompartment carbonCompartment) {
-		Integer[] timeScale = carbonCompartment.getCompartmentManager().getTimeScale();
+		CarbonAccountingToolTimeTable timeScale = carbonCompartment.getCompartmentManager().getTimeTable();
 		boolean isEvenAged = isEvenAged(carbonCompartment);
 		double previousValue;
 		double currentValue;
@@ -253,18 +253,18 @@ public class CarbonCompartmentMethodLibrary {
 		int currentDate;
 		int previousDate;
 		
-		for (int i = 1; i < timeScale.length; i++) {
+		for (int i = 1; i < timeScale.size(); i++) {
 			
 			if (i == 1 &&  isEvenAged) {
-				currentDate = timeScale[i - 1];
+				currentDate = timeScale.get(i - 1);
 				currentValue = carbonCompartment.getCalculatedCarbonArray()[i - 1];
 				totalCarbon += calculateCarbonForThisPeriod(0, currentDate, 0, currentValue);
 			}
 			
-			currentDate = timeScale[i];
+			currentDate = timeScale.get(i);
 			currentValue = carbonCompartment.getCalculatedCarbonArray()[i];
 
-			previousDate = timeScale[i - 1];
+			previousDate = timeScale.get(i - 1);
 			previousValue = carbonCompartment.getCalculatedCarbonArray()[i - 1];
 		
 			totalCarbon += calculateCarbonForThisPeriod(previousDate, 

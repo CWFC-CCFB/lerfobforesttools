@@ -91,9 +91,7 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 		setupPanel.add(mainPanel, BorderLayout.NORTH);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-		JPanel averageLifetimePanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.AverageLifeTime),
-				averageLifetimeTextField, 
-				5);
+		JPanel averageLifetimePanel = UIControlManager.createSimpleHorizontalPanel(MessageID.AverageLifeTime, averageLifetimeTextField, 5, true);
 
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(averageLifetimePanel);

@@ -72,7 +72,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 			
 	private final int rotationLength;
 	private final String standID;
-	private final Integer[] timeScale;
+	private final CarbonAccountingToolTimeTable timeTable;
 	private final boolean isEvenAged;
 	private final Map<CompartmentInfo, MonteCarloEstimate> budgetMap;
 	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
@@ -90,7 +90,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 		rotationLength = manager.getRotationLength();
 		standID = manager.getLastStand().getStandIdentification();
 		
-		timeScale = manager.getTimeScale();
+		timeTable = manager.getTimeTable();
 		
 		budgetMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
 		evolutionMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
@@ -186,7 +186,7 @@ class CarbonAssessmentToolSingleSimulationResult implements CarbonAssessmentTool
 	public String getStandID() {return standID;}
 
 	@Override
-	public Integer[] getTimeScale() {return timeScale;}
+	public CarbonAccountingToolTimeTable getTimeTable() {return timeTable;}
 
 	@Override
 	public int getRotationLength() {return rotationLength;}

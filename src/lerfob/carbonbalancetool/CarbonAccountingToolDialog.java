@@ -205,7 +205,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	private JProgressBar minorProgressBar;
 	private final JLabel minorProgressBarMessage;
 
-	protected final CarbonCompareScenarioDialog compareDialog;
+//	protected final CarbonCompareScenarioDialog compareDialog;
 	private boolean vetoEnabled;
 	
 	/**
@@ -327,7 +327,6 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 		refreshInterface();
 		setSimulationRunning(false);
 		createUI();
-		compareDialog = new CarbonCompareScenarioDialog(this, graphicPanel);
 		pack();
 		setMinimumSize(getSize());
 	}
