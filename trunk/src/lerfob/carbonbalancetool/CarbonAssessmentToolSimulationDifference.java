@@ -67,7 +67,7 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	public String getStandID() {return scenToCompare.getStandID() + " - " + baseline.getStandID();}
 
 	@Override
-	public Integer[] getTimeScale() {return null;}
+	public CarbonAccountingToolTimeTable getTimeTable() {return null;}
 
 	@Override
 	public int getRotationLength() {

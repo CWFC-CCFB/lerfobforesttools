@@ -47,9 +47,9 @@ public interface CarbonAssessmentToolSimulationResult {
 	
 	/**
 	 * This method returns an array with the date or age of the carbon simulation.
-	 * @return an array of integers
+	 * @return a TimeScale instance
 	 */
-	public Integer[] getTimeScale();
+	public CarbonAccountingToolTimeTable getTimeTable();
 	
 	/**
 	 * This method returns either the rotation length (to the final cut) or the projection length in case of uneven-aged stand.

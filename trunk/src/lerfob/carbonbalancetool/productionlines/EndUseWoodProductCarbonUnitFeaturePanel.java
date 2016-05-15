@@ -146,15 +146,18 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		
 		JPanel averageSubstitutionPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.AverageSubstitution),
 				averageSubstitutionTextField, 
-				5);
+				5,
+				true);
 
 		JPanel useClassPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.UseClassCategory),
 				useClassList, 
-				5);
+				5,
+				true);
 		
 		JPanel lifeCyclePanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.LifeCycleLibrary),
 				lifeCycleAnalysisList, 
-				5);
+				5,
+				true);
 		
 		mainPanel.add(averageSubstitutionPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
