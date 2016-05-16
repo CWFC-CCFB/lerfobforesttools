@@ -40,17 +40,19 @@ class CarbonAssessmentToolSimulationDifference implements CarbonAssessmentToolSi
 	private final CarbonAssessmentToolSingleSimulationResult baseline;
 	private final String resultId;
 	private final Map<CompartmentInfo, Estimate<?>> budgetMap;
-	private Integer refDate;
-	private Integer altDate;
+	private final Integer refDate;
+	private final Integer altDate;
 	
 	CarbonAssessmentToolSimulationDifference(String resultId, 
 			CarbonAssessmentToolSingleSimulationResult baseline,
 			Integer refDate,
 			CarbonAssessmentToolSingleSimulationResult scenToCompare, 
 			Integer altDate) {
-		this.scenToCompare = scenToCompare;
-		this.baseline = baseline;
 		this.resultId = resultId;
+		this.baseline = baseline;
+		this.refDate = refDate;
+		this.scenToCompare = scenToCompare;
+		this.altDate = altDate;
 		budgetMap = new HashMap<CompartmentInfo, Estimate<?>>();
 		setBudgetMap();
 	}

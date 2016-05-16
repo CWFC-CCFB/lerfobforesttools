@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -222,11 +223,14 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 		controlPanel.add(help);
 		add(controlPanel, BorderLayout.SOUTH);
 
+		JPanel compPane = new JPanel();
+		compPane.setLayout(new BoxLayout(compPane, BoxLayout.Y_AXIS));
 		JPanel comparisonModePanel = UIControlManager.createSimpleHorizontalPanel(MessageID.ComparisonMode, comparisonModeComboBox, 5, true);
-		add(Box.createHorizontalStrut(5), BorderLayout.NORTH);
-		add(comparisonModePanel, BorderLayout.NORTH);
-		add(Box.createHorizontalStrut(5), BorderLayout.NORTH);
-				
+		compPane.add(Box.createVerticalStrut(5));
+		compPane.add(comparisonModePanel);
+		compPane.add(Box.createVerticalStrut(5));
+		add(compPane, BorderLayout.NORTH);	
+		
 		JPanel mainPanel = new JPanel(new GridLayout(1,2));
 		add(mainPanel, BorderLayout.CENTER);
 
