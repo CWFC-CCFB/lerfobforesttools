@@ -3,7 +3,8 @@ package lerfob.carbonbalancetool.soil;
 import java.util.List;
 
 import repicea.io.tools.ImportFieldElement;
-import repicea.io.tools.RecordReader;
+import repicea.io.tools.REpiceaRecordReader;
+import repicea.io.tools.REpiceaRecordReader.VariableValueException;
 
 /**
  * This record reader makes it possible to create the reference data base for carbon sequestration
@@ -11,7 +12,7 @@ import repicea.io.tools.RecordReader;
  * @author Mathieu Fortin - January 2014
  */
 @SuppressWarnings("serial")
-public class SoilCarbonDataBaseRecordReader extends RecordReader {
+public class SoilCarbonDataBaseRecordReader extends REpiceaRecordReader {
 
 	@Override
 	protected List<ImportFieldElement> defineFieldsToImport() throws Exception {

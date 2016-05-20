@@ -28,9 +28,9 @@ import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
@@ -44,7 +44,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeTreeThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, MathildeTree> {
+public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredictor<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 

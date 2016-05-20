@@ -28,16 +28,16 @@ import java.util.Map;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.REpiceaPredictor;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
 @SuppressWarnings("serial")
-public class MathildeClimatePredictor extends ModelBasedSimulator {
+public class MathildeClimatePredictor extends REpiceaPredictor {
 	
 	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimateStand> referenceStands;

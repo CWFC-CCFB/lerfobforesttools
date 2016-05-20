@@ -25,10 +25,10 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.ModelBasedSimulator;
-import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.REpiceaPredictor;
+import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -39,7 +39,7 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - June 2012
  */
 @SuppressWarnings("serial")
-public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator implements FertilityClassEmulator {
+public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor implements FertilityClassEmulator {
 
 	
 	private final Map<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor> predictorMap;
@@ -141,14 +141,14 @@ public final class FrenchHDRelationship2014Predictor extends ModelBasedSimulator
 	}
 	
 	@Override
-	public void addModelBasedSimulatorListener(ModelBasedSimulatorListener listener) {
+	public void addModelBasedSimulatorListener(REpiceaPredictorListener listener) {
 		for (FrenchHDRelationship2014InternalPredictor internalPredictor : predictorMap.values()) {
 			internalPredictor.addModelBasedSimulatorListener(listener);
 		}
 	}
 	
 	@Override
-	public void removeModelBasedSimulatorListener(ModelBasedSimulatorListener listener) {
+	public void removeModelBasedSimulatorListener(REpiceaPredictorListener listener) {
 		for (FrenchHDRelationship2014InternalPredictor internalPredictor : predictorMap.values()) {
 			internalPredictor.removeModelBasedSimulatorListener(listener);
 		}

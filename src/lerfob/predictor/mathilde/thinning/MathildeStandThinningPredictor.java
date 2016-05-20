@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import repicea.math.Matrix;
-import repicea.simulation.LogisticModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
@@ -37,7 +37,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeStandThinningPredictor extends LogisticModelBasedSimulator<MathildeThinningStand, Object> {
+public final class MathildeStandThinningPredictor extends REpiceaLogisticPredictor<MathildeThinningStand, Object> {
 
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 

@@ -2,15 +2,15 @@ package lerfob.predictor.mathilde;
 
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.REpiceaPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
-public abstract class MathildeSubModule extends ModelBasedSimulator {
+public abstract class MathildeSubModule extends REpiceaPredictor {
 	
 	double errorTotalVariance;
 	
