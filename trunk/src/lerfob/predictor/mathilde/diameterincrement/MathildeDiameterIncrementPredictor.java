@@ -32,13 +32,13 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.ModelBasedSimulator;
-import repicea.simulation.ModelBasedSimulatorEvent;
-import repicea.simulation.ModelBasedSimulatorEvent.ModelBasedSimulatorEventProperty;
-import repicea.simulation.ModelBasedSimulatorListener;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
+import repicea.simulation.REpiceaPredictor;
+import repicea.simulation.REpiceaPredictorEvent;
+import repicea.simulation.REpiceaPredictorEvent.ModelBasedSimulatorEventProperty;
+import repicea.simulation.REpiceaPredictorListener;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -50,7 +50,7 @@ import repicea.util.ObjectUtility;
  * This class contains the diameter increment module of Mathilde growth simulator.
  * @authors Mathieu Fortin and Ruben Manso - August 2013
  */
-public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulator implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, ModelBasedSimulatorListener {
+public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, REpiceaPredictorListener {
 
 	private static final long serialVersionUID = 20130627L;
 
@@ -272,7 +272,7 @@ public final class MathildeDiameterIncrementPredictor extends ModelBasedSimulato
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void modelBasedSimulatorDidThis(ModelBasedSimulatorEvent event) {
+	public void modelBasedSimulatorDidThis(REpiceaPredictorEvent event) {
 		if (event.getSource() instanceof FrenchHDRelationship2014InternalPredictor) {
 			FrenchHDRelationship2014InternalPredictor hdPredictor = (FrenchHDRelationship2014InternalPredictor) event.getSource();
 			FrenchHdSpecies species = hdPredictor.getSpecies();

@@ -19,14 +19,14 @@
 package lerfob.predictor.frenchcommercialvolume2014;
 
 import repicea.math.Matrix;
-import repicea.simulation.ModelBasedSimulator;
 import repicea.simulation.ParameterLoader;
+import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.SASParameterEstimates;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.util.ObjectUtility;
 
 @SuppressWarnings("serial")
-public final class FrenchCommercialVolume2014Predictor extends ModelBasedSimulator {
+public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor {
 
 	public FrenchCommercialVolume2014Predictor(boolean isParametersVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, false, isResidualVariabilityEnabled);	 // no random effect

@@ -20,13 +20,13 @@ package lerfob.nutrientmodel;
 
 import lerfob.biomassmodel.BiomassPredictionModel.BiomassCompartment;
 import repicea.math.Matrix;
-import repicea.simulation.ModelBasedSimulator;
+import repicea.simulation.REpiceaPredictor;
 
 /**
  * This abstract class defines a sub model of the NutrientConcentration simulator.
  * @author Mathieu Fortin - March 2013
  */
-abstract class NutrientConcentrationSubversionModel extends ModelBasedSimulator {
+abstract class NutrientConcentrationSubversionModel extends REpiceaPredictor {
 
 	private static final long serialVersionUID = 20130325L;
 	
