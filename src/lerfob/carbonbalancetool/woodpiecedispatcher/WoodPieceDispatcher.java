@@ -29,7 +29,7 @@ import java.util.Vector;
 import javax.swing.filechooser.FileFilter;
 
 import lerfob.carbonbalancetool.AbstractDesigner;
-import lerfob.carbonbalancetool.CarbonAccountingToolDialog;
+import lerfob.carbonbalancetool.CATFrame;
 import lerfob.carbonbalancetool.productionlines.ProductionLineEvent;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManagerChangeListener;
@@ -139,14 +139,14 @@ public final class WoodPieceDispatcher extends AbstractDesigner<LogCategoryDispa
 		
 		LogCategoryDispatcher lcd = new LogCategoryDispatcher(this, BasicTreeLoggerParameters.MessageID.ShortLived.toString());
 		LogCategoryToMarketMatch match = lcd.getMatches().get(0);
-		match.setMarketName(CarbonAccountingToolDialog.MessageID.ShortLived.toString());
+		match.setMarketName(CATFrame.MessageID.ShortLived.toString());
 		match.setProportion(1d);
 		dispatchers.add(lcd);
 		logCategoryNames.add(BasicTreeLoggerParameters.MessageID.ShortLived.toString());
 
 		lcd = new LogCategoryDispatcher(this, BasicTreeLoggerParameters.MessageID.LongLived.toString());
 		match = lcd.getMatches().get(0);
-		match.setMarketName(CarbonAccountingToolDialog.MessageID.LongLived.toString());
+		match.setMarketName(CATFrame.MessageID.LongLived.toString());
 		match.setProportion(1d);
 		dispatchers.add(lcd);
 		logCategoryNames.add(BasicTreeLoggerParameters.MessageID.LongLived.toString());

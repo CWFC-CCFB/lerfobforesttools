@@ -35,7 +35,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-class CarbonAccountingToolBudgetViewer extends CarbonAccountingToolViewer {
+class CarbonAccountingToolBudgetViewer extends CATResultPanel {
 	
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon budget", "Bilan carbone"),

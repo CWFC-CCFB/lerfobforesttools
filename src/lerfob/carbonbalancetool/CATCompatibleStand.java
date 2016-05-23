@@ -26,7 +26,7 @@ import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsPro
  * This method ensures the stand is compatible with LERFoB-CAT
  * @author Mathieu Fortin - August 2013
  */
-public interface CarbonToolCompatibleStand extends AreaHaProvider, TreeStatusCollectionsProvider, InterventionResultProvider {
+public interface CATCompatibleStand extends AreaHaProvider, TreeStatusCollectionsProvider, InterventionResultProvider {
 
 	
 	/**

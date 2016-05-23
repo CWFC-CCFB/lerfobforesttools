@@ -30,7 +30,7 @@ import org.jfree.chart.ChartPanel;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
 
-abstract class CarbonAccountingToolViewer extends REpiceaPanel { 
+abstract class CATResultPanel extends REpiceaPanel { 
 	
 	private static final long serialVersionUID = 20130911L;
 	
@@ -52,7 +52,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	private JPanel viewer;
 	protected CarbonAssessmentToolSimulationResult summary;
 	
-	protected CarbonAccountingToolViewer(CarbonAssessmentToolSimulationResult summary) {
+	protected CATResultPanel(CarbonAssessmentToolSimulationResult summary) {
 		super();
 		this.summary = summary;
 		createUI();
@@ -111,7 +111,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	public void doNotListenToAnymore () {}
 
 	protected double getCarbonFactor() {
-		CarbonAccountingToolDialog dlg = getMainDialog();
+		CATFrame dlg = getMainDialog();
 		if (dlg != null && dlg.calculateInCO2.isSelected()) {
 			return CarbonAccountingToolSettings.C_C02_FACTOR;
 		} else {
@@ -119,10 +119,10 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 		}
 	}
 	
-	private CarbonAccountingToolDialog getMainDialog() {
-		Container window = CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
+	private CATFrame getMainDialog() {
+		Container window = CommonGuiUtility.getParentComponent(this, CATFrame.class);
 		if (window != null) {
-			return (CarbonAccountingToolDialog) window;
+			return (CATFrame) window;
 		} else {
 			return null;
 		}
@@ -133,7 +133,7 @@ abstract class CarbonAccountingToolViewer extends REpiceaPanel {
 	}
 	
 	protected double getCICoverage() {
-		CarbonAccountingToolDialog dlg = getMainDialog();
+		CATFrame dlg = getMainDialog();
 		if (dlg != null) {
 			return dlg.confidenceIntervalSlider.getValue() *.01;
 		} else {

@@ -43,7 +43,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class CarbonAccountingToolExport extends REpiceaExportTool {
+public class CATExportTool extends REpiceaExportTool {
 
 	protected static enum MessageID implements TextableEnum {
 		Year("Year", "Annee"),
@@ -75,10 +75,10 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 	
 	private static class InternalSwingWorker extends InternalSwingWorkerForRecordSet {
 
-		private CarbonAccountingToolExport caller;
+		private CATExportTool caller;
 		
 		@SuppressWarnings("rawtypes")
-		protected InternalSwingWorker(CarbonAccountingToolExport caller, Enum selectedOption, REpiceaRecordSet recordSet) {
+		protected InternalSwingWorker(CATExportTool caller, Enum selectedOption, REpiceaRecordSet recordSet) {
 			super(selectedOption, recordSet);
 			this.caller = caller;
 		}
@@ -408,7 +408,7 @@ public class CarbonAccountingToolExport extends REpiceaExportTool {
 	 * @param summary a CarbonAccountingToolExportSummary instance
 	 * @throws Exception 
 	 */
-	protected CarbonAccountingToolExport(CarbonAccountingToolSettings carbonSettings, CarbonAssessmentToolSimulationResult summary) throws Exception { 
+	protected CATExportTool(CarbonAccountingToolSettings carbonSettings, CarbonAssessmentToolSimulationResult summary) throws Exception { 
 		super(true);			// enables multiple selection 
 		this.summary = summary;
 		this.settings = carbonSettings.getSettingMemory();

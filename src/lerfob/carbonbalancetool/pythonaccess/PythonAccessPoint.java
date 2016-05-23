@@ -31,7 +31,7 @@ import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.BasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CarbonAssessmentToolSimulationResult;
 import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.CarbonToolCompatibleStand;
+import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.LERFoBCarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -121,7 +121,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
 		final String keyFirstInnerMap = "RECOLTE";
-		List<CarbonToolCompatibleStand> standList = new ArrayList<CarbonToolCompatibleStand>();
+		List<CATCompatibleStand> standList = new ArrayList<CATCompatibleStand>();
 		PythonCarbonToolCompatibleStand stand;
 		PythonCarbonToolCompatibleTree tree;
 		SpeciesType type;

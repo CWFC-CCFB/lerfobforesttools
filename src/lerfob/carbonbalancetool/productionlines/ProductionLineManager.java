@@ -28,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.filechooser.FileFilter;
 
 import lerfob.carbonbalancetool.AbstractDesigner;
-import lerfob.carbonbalancetool.CarbonAccountingToolDialog;
+import lerfob.carbonbalancetool.CATFrame;
 import lerfob.carbonbalancetool.CarbonCompartmentManager;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
@@ -163,9 +163,9 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 		addMarketModel(leftInTheForestModel);
 		
 		ProductionLine shortLived = new ProductionLine(this);
-		shortLived.setMarketName(CarbonAccountingToolDialog.MessageID.ShortLived.toString());
+		shortLived.setMarketName(CATFrame.MessageID.ShortLived.toString());
 		ProductionLineProcessor primaryProcessor = new ProductionLineProcessor(shortLived, 1d, 1d);
-		primaryProcessor.setName(CarbonAccountingToolDialog.MessageID.ShortLived.toString());
+		primaryProcessor.setName(CATFrame.MessageID.ShortLived.toString());
 		shortLived.setPrimaryProcessor(primaryProcessor);
 		EndUseWoodProductCarbonUnitFeature carbonUnitFeature = (EndUseWoodProductCarbonUnitFeature) primaryProcessor.getEndProductFeature();
 		carbonUnitFeature.setAverageLifetime(2d);						// default value
@@ -175,9 +175,9 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 		addMarketModel(shortLived);
 		
 		ProductionLine longLived = new ProductionLine(this);
-		longLived.setMarketName(CarbonAccountingToolDialog.MessageID.LongLived.toString());
+		longLived.setMarketName(CATFrame.MessageID.LongLived.toString());
 		primaryProcessor = new ProductionLineProcessor(longLived, 1d, 1d);
-		primaryProcessor.setName(CarbonAccountingToolDialog.MessageID.LongLived.toString());
+		primaryProcessor.setName(CATFrame.MessageID.LongLived.toString());
 		longLived.setPrimaryProcessor(primaryProcessor);
 		carbonUnitFeature = (EndUseWoodProductCarbonUnitFeature) primaryProcessor.getEndProductFeature();
 		carbonUnitFeature.setAverageLifetime(30d);							// default value

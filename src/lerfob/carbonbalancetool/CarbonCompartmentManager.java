@@ -40,8 +40,8 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 
 	private static int NumberOfExtraYrs = 80;	// number of years after the final cut
 
-	private List<CarbonToolCompatibleStand> currentStands;	
-	private List<CarbonToolCompatibleStand> stands;
+	private List<CATCompatibleStand> currentStands;	
+	private List<CATCompatibleStand> stands;
 	private CarbonAccountingToolSettings carbonAccountingToolSettings;		// reference to the extractor settings
 	
 	private Map<CompartmentInfo, CarbonCompartment> carbonCompartments;
@@ -76,17 +76,17 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 		this.isSimulationValid = isSimulationValid;
 	}
 	
-	public void init(List<CarbonToolCompatibleStand> stands) {
+	public void init(List<CATCompatibleStand> stands) {
 		this.stands = stands;
 		this.currentStands = null;
 		if (stands != null) {
-			CarbonToolCompatibleStand lastStand = stands.get(stands.size() - 1);
+			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 			isEvenAged = lastStand instanceof CarbonToolCompatibleEvenAgedStand;
 			isStochastic = false;
 			nRealizations = 1;
 			if (lastStand instanceof StochasticInformationProvider) {
 				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
-				if (stochProv.isStochastic() && stochProv.getRealization(0) instanceof CarbonToolCompatibleStand) {
+				if (stochProv.isStochastic() && stochProv.getRealization(0) instanceof CATCompatibleStand) {
 					isStochastic = true;
 					nRealizations = stochProv.getNumberRealizations();
 				}
@@ -149,7 +149,7 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 	 * @param steps a Vector of Step instances
 	 * @return an integer 
 	 */
-	private int retrieveAverageTimeStep(List<CarbonToolCompatibleStand> stands) {
+	private int retrieveAverageTimeStep(List<CATCompatibleStand> stands) {
 		double averageTimeStep = 0;		// default time step
 		int nbHits = 0;
 		int date;
@@ -280,7 +280,7 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 	 * This method returns the last stand from the list of stands.
 	 * @return a CarbonToolCompatibleStand or null if the list is null or empty
 	 */
-	public CarbonToolCompatibleStand getLastStand() {
+	public CATCompatibleStand getLastStand() {
 		if (getStandList() != null && !getStandList().isEmpty()) {
 			return getStandList().get(getStandList().size() - 1);
 		} else {
@@ -288,7 +288,7 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 		}
 	}
 	
-	protected List<CarbonToolCompatibleStand> getStandList() {
+	protected List<CATCompatibleStand> getStandList() {
 		if (currentStands != null) {
 			return currentStands;
 		} else {
@@ -351,10 +351,10 @@ public class CarbonCompartmentManager implements MonteCarloSimulationCompliantOb
 	@SuppressWarnings("unchecked")
 	protected void setRealization(int realizationID) {
 		if (isStochastic && nRealizations > 1) {
-			currentStands = new ArrayList<CarbonToolCompatibleStand>();
-			for (CarbonToolCompatibleStand stand : stands) {
+			currentStands = new ArrayList<CATCompatibleStand>();
+			for (CATCompatibleStand stand : stands) {
 				currentRealization = realizationID;
-				currentStands.add(((StochasticInformationProvider<? extends CarbonToolCompatibleStand>) stand).getRealization(realizationID));
+				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(realizationID));
 			}
 		} else {
 			currentRealization = 1;

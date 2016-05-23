@@ -37,7 +37,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-class CarbonAccountingToolProductViewer extends CarbonAccountingToolViewer {
+class CarbonAccountingToolProductViewer extends CATResultPanel {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Harvested Wood Products Distribution without recycling", "R\u00E9partition des produits bois sans recyclage"),

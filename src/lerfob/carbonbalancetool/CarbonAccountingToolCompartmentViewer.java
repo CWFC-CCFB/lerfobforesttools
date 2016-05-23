@@ -38,7 +38,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-class CarbonAccountingToolCompartmentViewer extends CarbonAccountingToolViewer {
+class CarbonAccountingToolCompartmentViewer extends CATResultPanel {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon stock evolution", "Evolution des stocks de carbone"),

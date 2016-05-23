@@ -300,7 +300,7 @@ public final class CarbonAccountingToolSettings {
 		if (selectedItem instanceof TreeLoggerDescription) {
 			treeLogger = ((TreeLoggerDescription) selectedItem).instantiateTreeLogger(true);
 			treeLoggerWrapper.setTreeLogger(treeLogger);
-		} else if (selectedItem.toString().equals(CarbonAccountingToolDialog.MessageID.Default.toString())) {
+		} else if (selectedItem.toString().equals(CATFrame.MessageID.Default.toString())) {
 			treeLogger = new BasicTreeLogger();
 			TreeLoggerParameters params = new BasicTreeLoggerParameters();
 			((BasicTreeLogger) treeLogger).setTreeLoggerParameters((BasicTreeLoggerParameters) params);
@@ -317,7 +317,7 @@ public final class CarbonAccountingToolSettings {
 	@Deprecated
 	public void setWoodSupply(Object selectedItem) {
 		formerImplementation = true;
-		if (selectedItem.equals(CarbonAccountingToolDialog.MessageID.Default.toString())) {
+		if (selectedItem.equals(CATFrame.MessageID.Default.toString())) {
 			woodSupply.reset();
 		} else {
 			loadFromParameter(woodSupply, selectedItem.toString());
@@ -331,7 +331,7 @@ public final class CarbonAccountingToolSettings {
 	@Deprecated
 	public void setProductionLines(Object selectedItem) {
 		formerImplementation = true;
-		if (selectedItem.equals(CarbonAccountingToolDialog.MessageID.Default.toString())) {
+		if (selectedItem.equals(CATFrame.MessageID.Default.toString())) {
 			productionLines.setToDefaultValue();
 		} else {
 			loadFromParameter(productionLines, selectedItem.toString());
