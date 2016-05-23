@@ -50,9 +50,9 @@ abstract class CATResultPanel extends REpiceaPanel {
 	}
 
 	private JPanel viewer;
-	protected CarbonAssessmentToolSimulationResult summary;
+	protected CATSimulationResult summary;
 	
-	protected CATResultPanel(CarbonAssessmentToolSimulationResult summary) {
+	protected CATResultPanel(CATSimulationResult summary) {
 		super();
 		this.summary = summary;
 		createUI();
@@ -113,7 +113,7 @@ abstract class CATResultPanel extends REpiceaPanel {
 	protected double getCarbonFactor() {
 		CATFrame dlg = getMainDialog();
 		if (dlg != null && dlg.calculateInCO2.isSelected()) {
-			return CarbonAccountingToolSettings.C_C02_FACTOR;
+			return CATSettings.C_C02_FACTOR;
 		} else {
 			return 1d;
 		}
@@ -129,7 +129,7 @@ abstract class CATResultPanel extends REpiceaPanel {
 	}
 	
 	protected boolean isInCO2() {
-		return getCarbonFactor() == CarbonAccountingToolSettings.C_C02_FACTOR;
+		return getCarbonFactor() == CATSettings.C_C02_FACTOR;
 	}
 	
 	protected double getCICoverage() {

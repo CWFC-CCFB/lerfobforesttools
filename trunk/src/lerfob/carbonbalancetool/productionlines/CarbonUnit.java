@@ -21,10 +21,10 @@ package lerfob.carbonbalancetool.productionlines;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.carbonbalancetool.CarbonAccountingToolTimeTable;
-import lerfob.carbonbalancetool.CarbonCompartmentManager;
-import lerfob.carbonbalancetool.DecayFunction;
-import lerfob.carbonbalancetool.ExponentialFunction;
+import lerfob.carbonbalancetool.CATTimeTable;
+import lerfob.carbonbalancetool.CATCompartmentManager;
+import lerfob.carbonbalancetool.CATDecayFunction;
+import lerfob.carbonbalancetool.CATExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.processsystem.AmountMap;
@@ -96,7 +96,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		
 	}
 	
-	private CarbonAccountingToolTimeTable timeTable;
+	private CATTimeTable timeTable;
 	private final int dateIndex;
 	private final List<CarbonUnitStatus> status; 
 	
@@ -137,8 +137,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 */
 	protected int getCreationDate() {return timeTable.get(dateIndex);}
 	
-	protected void setTimeTable(CarbonAccountingToolTimeTable timeTable) {this.timeTable = timeTable;}
-	protected CarbonAccountingToolTimeTable getTimeTable() {return timeTable;}
+	protected void setTimeTable(CATTimeTable timeTable) {this.timeTable = timeTable;}
+	protected CATTimeTable getTimeTable() {return timeTable;}
 	protected CarbonUnitFeature getCarbonUnitFeature() {return carbonUnitFeature;}
 	/**
 	 * This method returns the carbon (tC) at the creation date. NOTE: For the landfill carbon, only
@@ -164,7 +164,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * this product over its lifetime.
 	 * @return the integrated carbon in tC (double)
 	 */
-	public double getIntegratedCarbon(ExponentialFunction decayFunction, MonteCarloSimulationCompliantObject subject) {
+	public double getIntegratedCarbon(CATExponentialFunction decayFunction, MonteCarloSimulationCompliantObject subject) {
 		decayFunction.setParameterValue(0, getCarbonUnitFeature().getAverageLifetime(subject));
 		return getInitialCarbon() * decayFunction.getInfiniteIntegral(); //	0d : unnecessary parameter
 	}
@@ -177,9 +177,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * @param timeScale an array of integers that indicates the dates
 	 * @throws Exception
 	 */
-	protected void actualizeCarbon(CarbonCompartmentManager compartmentManager) throws Exception {
-		DecayFunction decayFunction = compartmentManager.getCarbonToolSettings().getDecayFunction();
-		CarbonAccountingToolTimeTable timeScale = compartmentManager.getTimeTable();
+	protected void actualizeCarbon(CATCompartmentManager compartmentManager) throws Exception {
+		CATDecayFunction decayFunction = compartmentManager.getCarbonToolSettings().getDecayFunction();
+		CATTimeTable timeScale = compartmentManager.getTimeTable();
 		setTimeTable(timeScale);
 		currentCarbonArray = new double[timeScale.size()];
 

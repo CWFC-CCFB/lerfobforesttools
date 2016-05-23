@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -157,7 +157,7 @@ public class CATExportTool extends REpiceaExportTool {
 		private void createCarbonStockEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 			
-			CarbonAccountingToolTimeTable timeScale = caller.summary.getTimeTable();
+			CATTimeTable timeScale = caller.summary.getTimeTable();
 			
 			String standID = caller.summary.getStandID();
 			if (standID == null || standID.isEmpty()) {
@@ -371,7 +371,7 @@ public class CATExportTool extends REpiceaExportTool {
 	
 	
 	
-	private final CarbonAssessmentToolSimulationResult summary;
+	private final CATSimulationResult summary;
 	private final SettingMemory settings;
 	
 	public enum ExportOption {
@@ -408,7 +408,7 @@ public class CATExportTool extends REpiceaExportTool {
 	 * @param summary a CarbonAccountingToolExportSummary instance
 	 * @throws Exception 
 	 */
-	protected CATExportTool(CarbonAccountingToolSettings carbonSettings, CarbonAssessmentToolSimulationResult summary) throws Exception { 
+	protected CATExportTool(CATSettings carbonSettings, CATSimulationResult summary) throws Exception { 
 		super(true);			// enables multiple selection 
 		this.summary = summary;
 		this.settings = carbonSettings.getSettingMemory();
@@ -447,7 +447,7 @@ public class CATExportTool extends REpiceaExportTool {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List<Enum> getAvailableExportOptions() {
-		if (summary instanceof CarbonAssessmentToolSimulationDifference) {
+		if (summary instanceof CATSimulationDifference) {
 			Vector<Enum> hackedVector = new Vector<Enum>();
 			hackedVector.add(ExportOption.AverageCarbonStock);
 			return hackedVector;

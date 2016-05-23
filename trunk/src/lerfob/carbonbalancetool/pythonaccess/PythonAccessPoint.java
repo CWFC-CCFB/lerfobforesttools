@@ -28,11 +28,11 @@ import java.util.Map;
 import java.util.Vector;
 
 import lerfob.app.LERFOBJARSVNAppVersion;
-import lerfob.carbonbalancetool.BasicWoodDensityProvider.AverageBasicDensity;
-import lerfob.carbonbalancetool.CarbonAssessmentToolSimulationResult;
-import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
+import lerfob.carbonbalancetool.CATSimulationResult;
+import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
-import lerfob.carbonbalancetool.LERFoBCarbonAccountingTool;
+import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import py4j.GatewayServer;
@@ -55,7 +55,7 @@ import repicea.util.REpiceaTranslator.Language;
  * class, the entry point should use the method processStandList(Map myMap).
  * @author Mathieu Fortin - May 2014
  */
-public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
+public class PythonAccessPoint extends CarbonAccountingTool {
 
 	protected AverageBasicDensity speciesForSimulation; 
 	protected double areaHa = 1d;
@@ -183,7 +183,7 @@ public class PythonAccessPoint extends LERFoBCarbonAccountingTool {
 		
 		setStandList(standList);
 		calculateCarbon();
-		CarbonAssessmentToolSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
+		CATSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
 		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
 		
 		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();

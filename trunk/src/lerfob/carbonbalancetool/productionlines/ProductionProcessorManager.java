@@ -31,9 +31,9 @@ import java.util.Vector;
 
 import javax.swing.filechooser.FileFilter;
 
-import lerfob.carbonbalancetool.CarbonCompartmentManager;
-import lerfob.carbonbalancetool.DecayFunction;
-import lerfob.carbonbalancetool.ExponentialFunction;
+import lerfob.carbonbalancetool.CATCompartmentManager;
+import lerfob.carbonbalancetool.CATDecayFunction;
+import lerfob.carbonbalancetool.CATExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
@@ -123,7 +123,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 	private transient CarbonUnitMap<CarbonUnitStatus> carbonUnitMap;
 	
-	private DecayFunction decayFunction;
+	private CATDecayFunction decayFunction;
 	
 	
 	/**
@@ -370,14 +370,14 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param timeScale is an Array of integer that indicates the years of actualization
 	 * @throws Exception
 	 */
-	public void actualizeCarbonUnits(CarbonCompartmentManager compartmentManager) throws Exception {
+	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.HarvestResidues, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.EndUseWoodProduct, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.Recycled, compartmentManager);
 	}
 
-	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CarbonCompartmentManager compartmentManager) throws Exception {
+	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CATCompartmentManager compartmentManager) throws Exception {
 		try {
 			for (CarbonUnit carbonUnit : getCarbonUnits(type)) {
 				carbonUnit.actualizeCarbon(compartmentManager);
@@ -388,9 +388,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		}
 	}
 
-	protected DecayFunction getDecayFunction() {
+	protected CATDecayFunction getDecayFunction() {
 		if (decayFunction == null) {
-			decayFunction = new ExponentialFunction();
+			decayFunction = new CATExponentialFunction();
 		}
 		return decayFunction; 
 	}

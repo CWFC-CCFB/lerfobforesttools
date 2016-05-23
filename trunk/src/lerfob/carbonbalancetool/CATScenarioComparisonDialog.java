@@ -71,10 +71,10 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		
 	}
 	
-	private final CarbonAccountingToolPanelView panelView;
+	private final CATPanelView panelView;
 	
-	private final JComboBox<CarbonAccountingToolSingleViewPanel> scenarioToCompareComboBox;
-	private final JComboBox<CarbonAccountingToolSingleViewPanel> baselineComboBox;
+	private final JComboBox<CATSingleViewPanel> scenarioToCompareComboBox;
+	private final JComboBox<CATSingleViewPanel> baselineComboBox;
 	private final JComboBox<ComparisonMode> comparisonModeComboBox;
 	private final JComboBox<Integer> dateRefComboBox;
 	private final JComboBox<Integer> dateAltComboBox;
@@ -85,21 +85,21 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	
 	private String selectionCompared;
 	
-	private final CarbonAccountingToolSingleViewPanel baselinePanel;
+	private final CATSingleViewPanel baselinePanel;
 	
 	
-	protected CATScenarioComparisonDialog(CATFrame parent, CarbonAccountingToolPanelView panelView) {
+	protected CATScenarioComparisonDialog(CATFrame parent, CATPanelView panelView) {
 		super(parent);
 		this.panelView = panelView;
 		ok = UIControlManager.createCommonButton(CommonControlID.Ok);
 		cancel = UIControlManager.createCommonButton(CommonControlID.Cancel);
 		help = UIControlManager.createCommonButton(CommonControlID.Help);
 		comparisonModeComboBox = new JComboBox<ComparisonMode>();
-		scenarioToCompareComboBox = new JComboBox<CarbonAccountingToolSingleViewPanel>();
+		scenarioToCompareComboBox = new JComboBox<CATSingleViewPanel>();
 		dateRefComboBox = new JComboBox<Integer>();
 		dateAltComboBox = new JComboBox<Integer>();
-		baselinePanel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
-		baselineComboBox = new JComboBox<CarbonAccountingToolSingleViewPanel>();
+		baselinePanel = (CATSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
+		baselineComboBox = new JComboBox<CATSingleViewPanel>();
 		baselineComboBox.addItem(baselinePanel);
 		baselineComboBox.setEnabled(false);
 		
@@ -113,7 +113,7 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	private void setComparisonModeComboBox() {
 		comparisonModeComboBox.removeAllItems();
 		comparisonModeComboBox.addItem(ComparisonMode.PointEstimate);
-		CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
+		CATSingleViewPanel panel = (CATSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
 		if (panel.getSummary().isEvenAged()) {
 			comparisonModeComboBox.addItem(ComparisonMode.InfiniteSequence);
 		}
@@ -130,7 +130,7 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 
 		dateAltComboBox.removeAllItems();
 		if (!isComparisonModeInfiniteSequence()) {
-			CarbonAccountingToolSingleViewPanel altPanel = (CarbonAccountingToolSingleViewPanel) scenarioToCompareComboBox.getSelectedItem();
+			CATSingleViewPanel altPanel = (CATSingleViewPanel) scenarioToCompareComboBox.getSelectedItem();
 			for (Integer date : altPanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
 				dateAltComboBox.addItem(date);
 			}
@@ -141,9 +141,9 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		scenarioToCompareComboBox.removeAllItems();
 		for (int i = 0; i < panelView.tabbedPane.getTabCount(); i++) {
 //			if (i != panelView.tabbedPane.getSelectedIndex()) {
-				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
+				CATSingleViewPanel panel = (CATSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
 				if (panel != null) {
-					if (panel.getSummary() instanceof CarbonAssessmentToolSingleSimulationResult) { // to avoid comparing a difference with a scenario
+					if (panel.getSummary() instanceof CATSingleSimulationResult) { // to avoid comparing a difference with a scenario
 						if (isComparisonModeInfiniteSequence()) {
 							if (panel.getSummary().isEvenAged()) {
 								scenarioToCompareComboBox.addItem(panel);
@@ -202,7 +202,7 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		int selectedIndex = 0;
 		if (formerSelection != null) {
 			for (int i = 0; i < comboBox.getItemCount(); i++) {
-				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) comboBox.getItemAt(i);
+				CATSingleViewPanel panel = (CATSingleViewPanel) comboBox.getItemAt(i);
 				if (panel.toString().equals(formerSelection)) {
 					selectedIndex = i;
 					break;
@@ -271,16 +271,16 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 
 	@Override
 	public void okAction() {
-		CarbonAccountingToolSingleViewPanel scenToCompare = ((CarbonAccountingToolSingleViewPanel) scenarioToCompareComboBox.getSelectedItem());
+		CATSingleViewPanel scenToCompare = ((CATSingleViewPanel) scenarioToCompareComboBox.getSelectedItem());
 		String simulationName = scenToCompare.toString() + " - " + baselinePanel.toString();
 
-		CarbonAssessmentToolSingleSimulationResult base = (CarbonAssessmentToolSingleSimulationResult) baselinePanel.getSummary();
+		CATSingleSimulationResult base = (CATSingleSimulationResult) baselinePanel.getSummary();
 		Integer baseDate = (Integer) dateRefComboBox.getSelectedItem();
 
-		CarbonAssessmentToolSingleSimulationResult altScen = (CarbonAssessmentToolSingleSimulationResult) scenToCompare.getSummary();
+		CATSingleSimulationResult altScen = (CATSingleSimulationResult) scenToCompare.getSummary();
 		Integer altScenDate = (Integer) dateAltComboBox.getSelectedItem();
 				
-		panelView.addSimulationResult(new CarbonAssessmentToolSimulationDifference(simulationName, base, baseDate, altScen, altScenDate));
+		panelView.addSimulationResult(new CATSimulationDifference(simulationName, base, baseDate, altScen, altScenDate));
 		selectionCompared = scenToCompare.toString();
 		super.okAction();
 	}
