@@ -29,14 +29,14 @@ import java.util.HashMap;
 
 import javax.swing.filechooser.FileFilter;
 
-import lerfob.carbonbalancetool.AboveGroundBiomassProvider;
-import lerfob.carbonbalancetool.AboveGroundCarbonProvider;
-import lerfob.carbonbalancetool.AboveGroundVolumeProvider;
-import lerfob.carbonbalancetool.BasicWoodDensityProvider;
-import lerfob.carbonbalancetool.BelowGroundBiomassProvider;
-import lerfob.carbonbalancetool.BelowGroundCarbonProvider;
-import lerfob.carbonbalancetool.BelowGroundVolumeProvider;
-import lerfob.carbonbalancetool.CarbonContentRatioProvider;
+import lerfob.carbonbalancetool.CATAboveGroundBiomassProvider;
+import lerfob.carbonbalancetool.CATAboveGroundCarbonProvider;
+import lerfob.carbonbalancetool.CATAboveGroundVolumeProvider;
+import lerfob.carbonbalancetool.CATBasicWoodDensityProvider;
+import lerfob.carbonbalancetool.CATBelowGroundBiomassProvider;
+import lerfob.carbonbalancetool.CATBelowGroundCarbonProvider;
+import lerfob.carbonbalancetool.CATBelowGroundVolumeProvider;
+import lerfob.carbonbalancetool.CATCarbonContentRatioProvider;
 import lerfob.carbonbalancetool.CATCompatibleTree;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParametersDialog.MessageID;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
@@ -161,8 +161,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 
 		basicWoodDensityFactors.put(SpeciesType.BroadleavedSpecies, 0.500);
 		basicWoodDensityFactors.put(SpeciesType.ConiferousSpecies, 0.350);
-		carbonContentFactors.put(SpeciesType.BroadleavedSpecies, CarbonContentRatioProvider.AverageCarbonContent.Hardwood.getRatio());
-		carbonContentFactors.put(SpeciesType.ConiferousSpecies, CarbonContentRatioProvider.AverageCarbonContent.Softwood.getRatio());
+		carbonContentFactors.put(SpeciesType.BroadleavedSpecies, CATCarbonContentRatioProvider.AverageCarbonContent.Hardwood.getRatio());
+		carbonContentFactors.put(SpeciesType.ConiferousSpecies, CATCarbonContentRatioProvider.AverageCarbonContent.Softwood.getRatio());
 		
 		basicWoodDensityFromModel = false;
 		basicWoodDensityFromModelEnabled = false;
@@ -174,10 +174,10 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	}
 
 	private void testReferent(Object referent) {
-		branchExpansionFactorFromModelEnabled = referent instanceof AboveGroundVolumeProvider || referent instanceof AboveGroundBiomassProvider || referent instanceof AboveGroundCarbonProvider;
-		rootExpansionFactorFromModelEnabled = referent instanceof BelowGroundVolumeProvider || referent instanceof BelowGroundBiomassProvider || referent instanceof BelowGroundCarbonProvider;
-		basicWoodDensityFromModelEnabled = referent instanceof BasicWoodDensityProvider;
-		carbonContentFromModelEnabled = referent instanceof CarbonContentRatioProvider;
+		branchExpansionFactorFromModelEnabled = referent instanceof CATAboveGroundVolumeProvider || referent instanceof CATAboveGroundBiomassProvider || referent instanceof CATAboveGroundCarbonProvider;
+		rootExpansionFactorFromModelEnabled = referent instanceof CATBelowGroundVolumeProvider || referent instanceof CATBelowGroundBiomassProvider || referent instanceof CATBelowGroundCarbonProvider;
+		basicWoodDensityFromModelEnabled = referent instanceof CATBasicWoodDensityProvider;
+		carbonContentFromModelEnabled = referent instanceof CATCarbonContentRatioProvider;
 	}
 
 	public boolean isValid() {
@@ -295,7 +295,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	public double getBasicWoodDensityFromThisTree(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value;
 		if (basicWoodDensityFromModel) {
-			value = ((BasicWoodDensityProvider) tree).getBasicWoodDensity();
+			value = ((CATBasicWoodDensityProvider) tree).getBasicWoodDensity();
 		} else {
 			value = basicWoodDensityFactors.get(tree.getSpeciesType());
 		}
@@ -314,7 +314,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	public double getCarbonContentFromThisTree(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value;
 		if (carbonContentFromModel) {
-			value = ((CarbonContentRatioProvider) tree).getCarbonContentRatio();
+			value = ((CATCarbonContentRatioProvider) tree).getCarbonContentRatio();
 		} else {
 			value = carbonContentFactors.get(tree.getSpeciesType());
 		}
@@ -331,8 +331,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @return the carbon content (Mg)
 	 */
 	private double getBelowGroundCarbonMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		if (carbonContentFromModel && tree instanceof BelowGroundCarbonProvider) {
-			double value = ((BelowGroundCarbonProvider) tree).getBelowGroundCarbonMg() * tree.getNumber();
+		if (carbonContentFromModel && tree instanceof CATBelowGroundCarbonProvider) {
+			double value = ((CATBelowGroundCarbonProvider) tree).getBelowGroundCarbonMg() * tree.getNumber();
 			double biomassModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject);
 			double woodDensityModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject);
 			double carbonModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.CarbonContent, subject);
@@ -347,8 +347,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @return the biomass (Mg)
 	 */
 	private double getBelowGroundBiomassMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		if (basicWoodDensityFromModel && tree instanceof BelowGroundBiomassProvider) {
-			double value = ((BelowGroundBiomassProvider) tree).getBelowGroundBiomassMg() * tree.getNumber();
+		if (basicWoodDensityFromModel && tree instanceof CATBelowGroundBiomassProvider) {
+			double value = ((CATBelowGroundBiomassProvider) tree).getBelowGroundBiomassMg() * tree.getNumber();
 			double biomassModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject);
 			double woodDensityModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject);
 			return value * biomassModifier * woodDensityModifier;
@@ -363,8 +363,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 */
 	private double getBelowGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value;
-		if (rootExpansionFactorFromModel && tree instanceof BelowGroundVolumeProvider) {
-			value = ((BelowGroundVolumeProvider) tree).getBelowGroundVolumeM3() * tree.getNumber();
+		if (rootExpansionFactorFromModel && tree instanceof CATBelowGroundVolumeProvider) {
+			value = ((CATBelowGroundVolumeProvider) tree).getBelowGroundVolumeM3() * tree.getNumber();
 		} else {
 			value = getAboveGroundVolumeM3(tree, subject) * (rootExpansionFactors.get(tree.getSpeciesType()) - 1);		// minus 1 is required because we want to get only the belowground part
 		}
@@ -382,8 +382,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @return a double
 	 */
 	public double getAboveGroundCarbonMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		if (carbonContentFromModel && tree instanceof AboveGroundCarbonProvider) {
-			double value = ((AboveGroundCarbonProvider) tree).getAboveGroundCarbonMg() * tree.getNumber();
+		if (carbonContentFromModel && tree instanceof CATAboveGroundCarbonProvider) {
+			double value = ((CATAboveGroundCarbonProvider) tree).getAboveGroundCarbonMg() * tree.getNumber();
 			double biomassModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject);
 			double woodDensityModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject);
 			double carbonModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.CarbonContent, subject);
@@ -398,8 +398,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	 * @return a double
 	 */
 	private double getAboveGroundBiomassMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		if (basicWoodDensityFromModel && tree instanceof AboveGroundBiomassProvider) {
-			double value = ((AboveGroundBiomassProvider) tree).getAboveGroundBiomassMg() * tree.getNumber();
+		if (basicWoodDensityFromModel && tree instanceof CATAboveGroundBiomassProvider) {
+			double value = ((CATAboveGroundBiomassProvider) tree).getAboveGroundBiomassMg() * tree.getNumber();
 			double biomassModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject);
 			double woodDensityModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject);
 			return value * biomassModifier * woodDensityModifier;
@@ -416,7 +416,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	private double getAboveGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value; 
 		if (branchExpansionFactorFromModel) {
-			value = ((AboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber();
+			value = ((CATAboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber();
 		} else {
 			value = getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getSpeciesType());
 		}

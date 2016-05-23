@@ -47,13 +47,13 @@ public class CarbonAccountingToolTest {
 			}
 		}
 		
-		LERFoBCarbonAccountingTool tool = new LERFoBCarbonAccountingTool();
+		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool(false, null);
 		tool.setStandList(stands);
 		try {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
 			tool.calculateCarbon();
-			CarbonAssessmentToolSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
+			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
 			Assert.assertTrue(result != null);
 		} catch (Exception e) {
 			e.printStackTrace();

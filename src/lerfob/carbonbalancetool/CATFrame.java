@@ -40,10 +40,10 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 
-import lerfob.carbonbalancetool.CarbonAccountingToolSettings.AssessmentReport;
-import lerfob.carbonbalancetool.CarbonAccountingToolTask.Task;
-import lerfob.carbonbalancetool.CarbonAccountingToolUtility.BiomassParametersWrapper;
-import lerfob.carbonbalancetool.CarbonAccountingToolUtility.ProductionProcessorManagerWrapper;
+import lerfob.carbonbalancetool.CATSettings.AssessmentReport;
+import lerfob.carbonbalancetool.CATTask.Task;
+import lerfob.carbonbalancetool.CATUtility.BiomassParametersWrapper;
+import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
@@ -75,7 +75,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 
 
 	static {
-		UIControlManager.setTitle(CATFrame.class, LERFoBCarbonAccountingTool.englishTitle, LERFoBCarbonAccountingTool.frenchTitle);
+		UIControlManager.setTitle(CATFrame.class, CarbonAccountingTool.englishTitle, CarbonAccountingTool.frenchTitle);
 		
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
@@ -174,9 +174,9 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 
 	private static BufferedImage iconImage;
 
-	protected final LERFoBCarbonAccountingTool caller;
+	protected final CarbonAccountingTool caller;
 
-	private CarbonAccountingToolPanelView graphicPanel;
+	private CATPanelView graphicPanel;
 
 	protected final REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper> hwpComboBox;
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
@@ -213,7 +213,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	 * @param caller = a CarbonStorageCalculator object
 	 * @throws Exception
 	 */
-	protected CATFrame(final LERFoBCarbonAccountingTool caller, Window owner) {
+	protected CATFrame(final CarbonAccountingTool caller, Window owner) {
 		super(owner);
 		this.setCancelOnClose(false);		// no possibility for cancelling here
 		this.askUserBeforeExit = true;
@@ -286,7 +286,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		bg2.add(aR4);
 		bg2.add(aR5);
 		
-		switch(CarbonAccountingToolSettings.selectedAR) {
+		switch(CATSettings.selectedAR) {
 		case Second:
 			aR2.setSelected(true);
 			break;
@@ -412,11 +412,11 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		} else if (evt.getSource().equals(sensitivityAnalysisMenuItem)) {
 			CATSensitivityAnalysisSettings.getInstance().showInterface(this);
 		} else if (evt.getSource().equals(aR2)) {
-			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Second);
+			CATSettings.setAssessmentReportForGWP(AssessmentReport.Second);
 		} else if (evt.getSource().equals(aR4)) {
-			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Fourth);
+			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fourth);
 		} else if (evt.getSource().equals(aR5)) {
-			CarbonAccountingToolSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
+			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
 		}
 	}
 	
@@ -433,7 +433,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	 * User interface definition
 	 */
 	private void createUI() {
-		graphicPanel = new CarbonAccountingToolPanelView(new CarbonAccountingToolOptionPanel());
+		graphicPanel = new CATPanelView(new CATOptionPanel());
 		JPanel parameterPanel  = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		parameterPanel.add(Box.createHorizontalStrut(5));
 		parameterPanel.add(calculateCarbonButton);
@@ -482,13 +482,13 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("state")) {
 			if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-				CarbonAccountingToolTask task = (CarbonAccountingToolTask) evt.getSource();
+				CATTask task = (CATTask) evt.getSource();
 				if (task.getFailureReason () == null) {
 					String taskName = task.getName();
-					if (taskName.equals(CarbonAccountingToolTask.Task.COMPILE_CARBON.name())) {
+					if (taskName.equals(CATTask.Task.COMPILE_CARBON.name())) {
 						minorProgressBarMessage.setText(REpiceaTranslator.getString(MessageID.JobDone));
 						minorProgressBar.setValue(100);
-					} else if (taskName.equals(CarbonAccountingToolTask.Task.DISPLAY_RESULT.name())) {
+					} else if (taskName.equals(CATTask.Task.DISPLAY_RESULT.name())) {
 						updateMajorProgressBarValue(majorProgressBar.getMaximum());
 					}
 				}

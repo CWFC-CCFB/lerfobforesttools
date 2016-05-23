@@ -18,9 +18,9 @@
  */
 package lerfob.carbonbalancetool.pythonaccess;
 
-import lerfob.carbonbalancetool.AboveGroundVolumeProvider;
-import lerfob.carbonbalancetool.BasicWoodDensityProvider;
-import lerfob.carbonbalancetool.BelowGroundVolumeProvider;
+import lerfob.carbonbalancetool.CATAboveGroundVolumeProvider;
+import lerfob.carbonbalancetool.CATBasicWoodDensityProvider;
+import lerfob.carbonbalancetool.CATBelowGroundVolumeProvider;
 import lerfob.carbonbalancetool.CATCompatibleTree;
 
 /**
@@ -28,9 +28,9 @@ import lerfob.carbonbalancetool.CATCompatibleTree;
  * @author Mathieu Fortin - May 2014
  */
 abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree, 
-															BasicWoodDensityProvider,
-															AboveGroundVolumeProvider, 
-															BelowGroundVolumeProvider {
+															CATBasicWoodDensityProvider,
+															CATAboveGroundVolumeProvider, 
+															CATBelowGroundVolumeProvider {
 
 	final SpeciesType speciesType; 
 	final AverageBasicDensity species;

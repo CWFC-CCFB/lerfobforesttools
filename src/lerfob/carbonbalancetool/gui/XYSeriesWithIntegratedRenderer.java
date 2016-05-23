@@ -21,7 +21,7 @@ package lerfob.carbonbalancetool.gui;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import lerfob.carbonbalancetool.CarbonCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;

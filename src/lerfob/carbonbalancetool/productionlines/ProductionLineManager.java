@@ -29,7 +29,7 @@ import javax.swing.filechooser.FileFilter;
 
 import lerfob.carbonbalancetool.AbstractDesigner;
 import lerfob.carbonbalancetool.CATFrame;
-import lerfob.carbonbalancetool.CarbonCompartmentManager;
+import lerfob.carbonbalancetool.CATCompartmentManager;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -395,14 +395,14 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 	 * @param timeScale is an Array of integer that indicates the years of actualization
 	 * @throws Exception
 	 */
-	public void actualizeCarbonUnits(CarbonCompartmentManager compartmentManager) throws Exception {
+	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.HarvestResidues, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.EndUseWoodProduct, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.Recycled, compartmentManager);
 	}
 	
-	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CarbonCompartmentManager compartmentManager) throws Exception {
+	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CATCompartmentManager compartmentManager) throws Exception {
 		try {
 			for (CarbonUnit carbonUnit : getCarbonUnits(type)) {
 				carbonUnit.actualizeCarbon(compartmentManager);

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
-class CarbonToolCompatibleStandImpl implements CarbonToolCompatibleEvenAgedStand {
+class CarbonToolCompatibleStandImpl implements CATCompatibleEvenAgedStand {
 
 	
 	private final double areaHa;

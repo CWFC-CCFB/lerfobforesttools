@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import lerfob.carbonbalancetool.CarbonCompartmentManager;
+import lerfob.carbonbalancetool.CATCompartmentManager;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
@@ -98,7 +98,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 */
 	@SuppressWarnings({ "deprecation", "rawtypes", "unchecked" })
 	@Override
-	protected void actualizeCarbon(CarbonCompartmentManager compartmentManager) throws Exception {
+	protected void actualizeCarbon(CATCompartmentManager compartmentManager) throws Exception {
 		super.actualizeCarbon(compartmentManager);
 
 		if (getCarbonUnitFeature().isDisposed()) {
@@ -138,7 +138,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param manager the CarbonCompartmentManager instance
 	 * @return the substitution in tC (double)
 	 */
-	public double getTotalCarbonSubstitution(CarbonCompartmentManager manager) {
+	public double getTotalCarbonSubstitution(CATCompartmentManager manager) {
 		if (isNewImplementation()) {
 			return getSubstitutionForAGivenVolume(getProcessedVolumeAtCreationDate(), manager);
 		} else {
@@ -152,7 +152,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param manager the CarbonCompartmentManager instance
 	 * @return an array of double
 	 */
-	public double[] getCurrentCarbonSubstitution(CarbonCompartmentManager manager) {
+	public double[] getCurrentCarbonSubstitution(CATCompartmentManager manager) {
 		if (isActualized()) {
 			double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
 			double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
@@ -212,7 +212,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param subject the CarbonCompartmentManager instance
 	 * @return the substitution in eq. tC (double)
 	 */
-	private double getSubstitutionForAGivenVolume(double volume, CarbonCompartmentManager subject) {
+	private double getSubstitutionForAGivenVolume(double volume, CATCompartmentManager subject) {
 		return volume * getCarbonUnitFeature().getAverageSubstitution(subject);
 	}
 

@@ -1,22 +1,22 @@
 package lerfob.carbonbalancetool.biomassparameters;
 
-import lerfob.carbonbalancetool.AboveGroundBiomassProvider;
-import lerfob.carbonbalancetool.AboveGroundCarbonProvider;
-import lerfob.carbonbalancetool.AboveGroundVolumeProvider;
-import lerfob.carbonbalancetool.BasicWoodDensityProvider;
-import lerfob.carbonbalancetool.BelowGroundBiomassProvider;
-import lerfob.carbonbalancetool.BelowGroundCarbonProvider;
-import lerfob.carbonbalancetool.CarbonContentRatioProvider;
+import lerfob.carbonbalancetool.CATAboveGroundBiomassProvider;
+import lerfob.carbonbalancetool.CATAboveGroundCarbonProvider;
+import lerfob.carbonbalancetool.CATAboveGroundVolumeProvider;
+import lerfob.carbonbalancetool.CATBasicWoodDensityProvider;
+import lerfob.carbonbalancetool.CATBelowGroundBiomassProvider;
+import lerfob.carbonbalancetool.CATBelowGroundCarbonProvider;
+import lerfob.carbonbalancetool.CATCarbonContentRatioProvider;
 
 public class GUITest {
 
-	public static class FakeReferent implements AboveGroundBiomassProvider, 
-												AboveGroundVolumeProvider, 
-												AboveGroundCarbonProvider,
-												BelowGroundCarbonProvider,
-												BelowGroundBiomassProvider,
-												BasicWoodDensityProvider,
-												CarbonContentRatioProvider {
+	public static class FakeReferent implements CATAboveGroundBiomassProvider, 
+												CATAboveGroundVolumeProvider, 
+												CATAboveGroundCarbonProvider,
+												CATBelowGroundCarbonProvider,
+												CATBelowGroundBiomassProvider,
+												CATBasicWoodDensityProvider,
+												CATCarbonContentRatioProvider {
 
 		@Override
 		public double getAboveGroundBiomassMg() {
