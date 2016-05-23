@@ -234,7 +234,7 @@ public class CarbonProductCompartment extends CarbonCompartment {
 		AmountMap<Element> carrier;
 		for (LoggableTree tree : woodPieceMap.keySet()) {
 			Collection<WoodPiece> coll = woodPieceMap.get(tree);
-			double basicDensity = biomassParameters.getBasicWoodDensityFromThisTree((CarbonToolCompatibleTree) tree, getCompartmentManager());
+			double basicDensity = biomassParameters.getBasicWoodDensityFromThisTree((CATCompatibleTree) tree, getCompartmentManager());
 			for (WoodPiece piece : coll) {
 				logCategoryName = piece.getLogCategory().getName();
 				volume = piece.getWeightedVolumeM3();

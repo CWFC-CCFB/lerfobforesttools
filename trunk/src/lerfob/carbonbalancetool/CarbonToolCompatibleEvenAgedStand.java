@@ -21,13 +21,13 @@ package lerfob.carbonbalancetool;
 import repicea.simulation.covariateproviders.standlevel.AgeYrProvider;
 
 
-public interface CarbonToolCompatibleEvenAgedStand extends CarbonToolCompatibleStand, AgeYrProvider {
+public interface CarbonToolCompatibleEvenAgedStand extends CATCompatibleStand, AgeYrProvider {
 
 	/**
 	 * This method returns a CarbonToolCompatibleStand with all its trees
 	 * set to cut.
 	 * @return a CarbonToolCompatibleStand stand
 	 */
-	public CarbonToolCompatibleStand getHarvestedStand();
+	public CATCompatibleStand getHarvestedStand();
 
 }

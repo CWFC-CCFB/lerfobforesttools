@@ -65,7 +65,7 @@ class CarbonAccountingToolSingleViewPanel extends REpiceaPanel implements ItemLi
 	
 	@Override
 	public void refreshInterface() {
-		CarbonAccountingToolViewer viewer = (CarbonAccountingToolViewer) selector.getSelectedItem();
+		CATResultPanel viewer = (CATResultPanel) selector.getSelectedItem();
 		viewerScrollPane.getViewport().setView(viewer);
 		viewer.refreshInterface();
 		repaint();

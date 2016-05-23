@@ -47,6 +47,8 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerManager;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
+import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
@@ -62,10 +64,10 @@ import repicea.util.REpiceaTranslator;
  */
 public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements ShowableObjectWithParent, ShowableObject {
 	
-	private static class StandComparator implements Comparator<CarbonToolCompatibleStand> {
+	private static class StandComparator implements Comparator<CATCompatibleStand> {
 
 		@Override
-		public int compare(CarbonToolCompatibleStand arg0, CarbonToolCompatibleStand arg1) {
+		public int compare(CATCompatibleStand arg0, CATCompatibleStand arg1) {
 			if (arg0.getDateYr() < arg1.getDateYr()) {
 				return -1;
 			} else if (arg0.getDateYr() == arg1.getDateYr()) {
@@ -89,12 +91,12 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	
 	private CarbonCompartmentManager carbonCompartmentManager;	
 	protected boolean finalCutHadToBeCarriedOut;
-	private final Map<StatusClass, Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>> treeCollections;
-	private final Map<CarbonToolCompatibleTree, CarbonToolCompatibleStand> treeRegister;
+	private final Map<StatusClass, Map<CATCompatibleStand, Collection<CATCompatibleTree>>> treeCollections;
+	private final Map<CATCompatibleTree, CATCompatibleStand> treeRegister;
 	
 	protected Window parentFrame;
-	protected List<CarbonToolCompatibleStand> waitingStandList;
-	protected transient CarbonAccountingToolDialog guiInterface;
+	protected List<CATCompatibleStand> waitingStandList;
+	protected transient CATFrame guiInterface;
 	protected transient Window owner;
 	
 
@@ -105,8 +107,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
-		treeCollections = new HashMap<StatusClass, Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>>();
-		treeRegister = new HashMap<CarbonToolCompatibleTree, CarbonToolCompatibleStand>();
+		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Collection<CATCompatibleTree>>>();
+		treeRegister = new HashMap<CATCompatibleTree, CATCompatibleStand>();
 		
 		Runnable toBeRun = new Runnable () {
 			@Override
@@ -179,36 +181,36 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	 * This method sets the list of stands from which the carbon balance should be calculated.
 	 * @param standList a List of CarbonToolCompatibleStand instance
 	 */
-	public void setStandList(List<CarbonToolCompatibleStand> standList) {
+	public void setStandList(List<CATCompatibleStand> standList) {
 		Collections.sort(standList, StandComparator);
 		waitingStandList = standList;
 		addTask(new CarbonAccountingToolTask(Task.SET_STANDLIST, this));
 	}
 	
-	protected void registerTree(StatusClass statusClass, CarbonToolCompatibleStand stand, CarbonToolCompatibleTree tree) {
+	protected void registerTree(StatusClass statusClass, CATCompatibleStand stand, CATCompatibleTree tree) {
 		if (!treeCollections.containsKey(statusClass)) {
-			treeCollections.put(statusClass, new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>());
+			treeCollections.put(statusClass, new HashMap<CATCompatibleStand, Collection<CATCompatibleTree>>());
 		}
-		Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> innerMap = treeCollections.get(statusClass);
+		Map<CATCompatibleStand, Collection<CATCompatibleTree>> innerMap = treeCollections.get(statusClass);
 		if (!innerMap.containsKey(stand)) {
-			innerMap.put(stand, new ArrayList<CarbonToolCompatibleTree>());
+			innerMap.put(stand, new ArrayList<CATCompatibleTree>());
 		}
-		Collection<CarbonToolCompatibleTree> trees = innerMap.get(stand);
+		Collection<CATCompatibleTree> trees = innerMap.get(stand);
 		trees.add(tree);
 		treeRegister.put(tree, stand);
 	}
 	
-	protected Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> getTrees(StatusClass statusClass) {
+	protected Map<CATCompatibleStand, Collection<CATCompatibleTree>> getTrees(StatusClass statusClass) {
 		if (treeCollections.containsKey(statusClass)) {
 			return treeCollections.get(statusClass);
 		} else {
-			return new HashMap<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>>();
+			return new HashMap<CATCompatibleStand, Collection<CATCompatibleTree>>();
 		}
 	}
 	
-	protected int getDateIndexForThisTree(CarbonToolCompatibleTree tree) {
+	protected int getDateIndexForThisTree(CATCompatibleTree tree) {
 		if (treeRegister.containsKey(tree)) {
-			CarbonToolCompatibleStand stand = treeRegister.get(tree);
+			CATCompatibleStand stand = treeRegister.get(tree);
 			return getCarbonCompartmentManager().getStandList().indexOf(stand);
 		} else {
 			return -1;
@@ -231,7 +233,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 
 	@SuppressWarnings("rawtypes")
 	private Object getAReferentTree() {
-		for (CarbonToolCompatibleStand stand : carbonCompartmentManager.getStandList()) {
+		for (CATCompatibleStand stand : carbonCompartmentManager.getStandList()) {
 			for (StatusClass status : StatusClass.values()) {
 				Collection coll = stand.getTrees(status);
 				if (coll != null && !coll.isEmpty()) {
@@ -263,10 +265,10 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void setReferentForBiomassParameters(List<CarbonToolCompatibleStand> stands) {
+	private void setReferentForBiomassParameters(List<CATCompatibleStand> stands) {
 		Object referent = null;
 		if (stands != null && !stands.isEmpty()) {
-			for (CarbonToolCompatibleStand stand : stands) {
+			for (CATCompatibleStand stand : stands) {
 				referent = stand;
 				Collection<?> coll = null;
 				for (StatusClass statusClass : StatusClass.values()) {
@@ -278,7 +280,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 				}
 				if (coll != null && !coll.isEmpty()) {
 					Object obj = coll.iterator().next();
-					if (obj instanceof CarbonToolCompatibleTree) {
+					if (obj instanceof CATCompatibleTree) {
 						referent = obj;
 						break;
 					}
@@ -365,8 +367,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	 * @return a CarbonAccountingToolExport instance
 	 * @throws Exception 
 	 */
-	public CarbonAccountingToolExport createExportTool() throws Exception {
-		return new CarbonAccountingToolExport(getCarbonCompartmentManager().getCarbonToolSettings(), getCarbonCompartmentManager().getSimulationSummary());
+	public CATExportTool createExportTool() throws Exception {
+		return new CATExportTool(getCarbonCompartmentManager().getCarbonToolSettings(), getCarbonCompartmentManager().getSimulationSummary());
 	}
 	
 	/**
@@ -378,12 +380,12 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	}
 	
 	@Override
-	public CarbonAccountingToolDialog getGuiInterface(Container parent) {
+	public CATFrame getGuiInterface(Container parent) {
 		if (owner == null && parent != null && parent instanceof Window) {
 			owner = (Window) parent;
 		}
 		if (guiInterface == null) {
-			guiInterface = new CarbonAccountingToolDialog(this, null);
+			guiInterface = new CATFrame(this, null);
 		}
 		return guiInterface;
 	}	
@@ -394,7 +396,7 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 	}
 
 	@Override
-	public CarbonAccountingToolDialog getGuiInterface() {return getGuiInterface(null);}
+	public CATFrame getGuiInterface() {return getGuiInterface(null);}
 
 	@Override
 	public void showInterface() {
@@ -427,6 +429,8 @@ public class LERFoBCarbonAccountingTool extends AbstractGenericEngine implements
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
 //		System.exit(0);
 	}

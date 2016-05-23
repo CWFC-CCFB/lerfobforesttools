@@ -31,7 +31,7 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import lerfob.carbonbalancetool.CarbonAccountingToolDialog.MessageID;
+import lerfob.carbonbalancetool.CATFrame.MessageID;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
@@ -70,10 +70,10 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource().equals(exportMenuItem)) {
 				CarbonAccountingToolSingleViewPanel panel = (CarbonAccountingToolSingleViewPanel) getSelectedComponent();
-				CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
-				CarbonAccountingToolExport exportTool;
+				CATFrame dlg = (CATFrame) CommonGuiUtility.getParentComponent(this, CATFrame.class);
+				CATExportTool exportTool;
 				try {
-					exportTool = new CarbonAccountingToolExport(dlg.caller.getCarbonToolSettings(), panel.getSummary());
+					exportTool = new CATExportTool(dlg.caller.getCarbonToolSettings(), panel.getSummary());
 					Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
 					String url = "http://www.inra.fr/capsis/help_"+ 
 							REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
@@ -85,8 +85,8 @@ class CarbonAccountingToolPanelView extends REpiceaPanel implements ChangeListen
 					e.printStackTrace();
 				}
 			} else if (arg0.getSource().equals(compareScenarioMenuItem)) {
-				CarbonAccountingToolDialog dlg = (CarbonAccountingToolDialog) CommonGuiUtility.getParentComponent(this, CarbonAccountingToolDialog.class);
-				new CarbonCompareScenarioDialog(dlg, CarbonAccountingToolPanelView.this);
+				CATFrame dlg = (CATFrame) CommonGuiUtility.getParentComponent(this, CATFrame.class);
+				new CATScenarioComparisonDialog(dlg, CarbonAccountingToolPanelView.this);
 			} else {
 				super.actionPerformed(arg0);
 			} 

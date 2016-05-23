@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lerfob.carbonbalancetool.CarbonToolCompatibleStand;
+import lerfob.carbonbalancetool.CATCompatibleStand;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 /**
@@ -33,7 +33,7 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
  * @author Mathieu Fortin - May 2014
  */
 @SuppressWarnings("rawtypes")
-class PythonCarbonToolCompatibleStand implements CarbonToolCompatibleStand, Comparable {
+class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable {
 
 	
 	final Map<StatusClass, List<PythonCarbonToolCompatibleTree>> trees;

@@ -24,10 +24,10 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 
 
 @SuppressWarnings("serial")
-public class CarbonCompareScenarioDialog extends REpiceaDialog implements ActionListener, ItemListener {
+public class CATScenarioComparisonDialog extends REpiceaDialog implements ActionListener, ItemListener {
 
 	static {
-		UIControlManager.setTitle(CarbonCompareScenarioDialog.class, "Scenario comparison", "Comparaison de sc\u00E9narios");
+		UIControlManager.setTitle(CATScenarioComparisonDialog.class, "Scenario comparison", "Comparaison de sc\u00E9narios");
 	}
 	
 	private static enum MessageID implements TextableEnum {
@@ -88,7 +88,7 @@ public class CarbonCompareScenarioDialog extends REpiceaDialog implements Action
 	private final CarbonAccountingToolSingleViewPanel baselinePanel;
 	
 	
-	protected CarbonCompareScenarioDialog(CarbonAccountingToolDialog parent, CarbonAccountingToolPanelView panelView) {
+	protected CATScenarioComparisonDialog(CATFrame parent, CarbonAccountingToolPanelView panelView) {
 		super(parent);
 		this.panelView = panelView;
 		ok = UIControlManager.createCommonButton(CommonControlID.Ok);

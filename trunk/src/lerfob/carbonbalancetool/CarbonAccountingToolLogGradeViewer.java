@@ -20,7 +20,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-class CarbonAccountingToolLogGradeViewer extends CarbonAccountingToolViewer {
+class CarbonAccountingToolLogGradeViewer extends CATResultPanel {
 
 	protected static enum MessageID implements TextableEnum {
 		Title("Log Category Volumes", "Volumes des cat\u00E9gories de billons"),

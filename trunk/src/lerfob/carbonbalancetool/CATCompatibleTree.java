@@ -26,7 +26,7 @@ import repicea.simulation.treelogger.LoggableTree;
  * the carbon assessment tool.
  * @author Mathieu Fortin - January 2013
  */
-public interface CarbonToolCompatibleTree extends LoggableTree, TreeStatusProvider {
+public interface CATCompatibleTree extends LoggableTree, TreeStatusProvider {
 
 
 	

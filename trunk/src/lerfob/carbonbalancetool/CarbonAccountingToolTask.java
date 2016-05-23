@@ -160,26 +160,26 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		CarbonCompartmentManager manager = caller.getCarbonCompartmentManager();
 		manager.setSimulationValid(false);
 		
-		CarbonToolCompatibleStand lastStand = manager.getLastStand(); 
+		CATCompatibleStand lastStand = manager.getLastStand(); 
 
 		// performing a final cut if has not been done and only if the stand implements the CarbonToolCompatibleEvenAgedStand interface
 		if (lastStand instanceof CarbonToolCompatibleEvenAgedStand && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
-			List<CarbonToolCompatibleStand> stands = manager.getStandList();
-			CarbonToolCompatibleStand stand = ((CarbonToolCompatibleEvenAgedStand) lastStand).getHarvestedStand();
+			List<CATCompatibleStand> stands = manager.getStandList();
+			CATCompatibleStand stand = ((CarbonToolCompatibleEvenAgedStand) lastStand).getHarvestedStand();
 			stands.add(stand);
 			manager.init(stands);				
 			caller.setFinalCutHadToBeCarriedOut(true);
 		} 					
 
 		// retrieve the loggable trees
-		Collection<CarbonToolCompatibleTree> retrievedTreesFromStep;
+		Collection<CATCompatibleTree> retrievedTreesFromStep;
 		caller.clearTreeCollections();
-		for (CarbonToolCompatibleStand stand : manager.getStandList()) {
+		for (CATCompatibleStand stand : manager.getStandList()) {
 			for (StatusClass statusClass : StatusClass.values()) {
 				if (statusClass != StatusClass.alive) {
 					retrievedTreesFromStep = stand.getTrees(statusClass);
 					if (!retrievedTreesFromStep.isEmpty()) {
-						for (CarbonToolCompatibleTree t : retrievedTreesFromStep) {
+						for (CATCompatibleTree t : retrievedTreesFromStep) {
 							caller.registerTree(statusClass, stand, t);
 						}
 					} 
@@ -225,7 +225,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 						MemoryWatchDog.checkAvailableMemory();		// memory check before going further on
 
-						CarbonToolCompatibleTree tree = (CarbonToolCompatibleTree) t;
+						CATCompatibleTree tree = (CATCompatibleTree) t;
 						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
 						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
@@ -299,7 +299,7 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 						MemoryWatchDog.checkAvailableMemory();		// memory check before going further on
 
-						CarbonToolCompatibleTree tree = (CarbonToolCompatibleTree) t;
+						CATCompatibleTree tree = (CATCompatibleTree) t;
 						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
 						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
@@ -365,12 +365,12 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 
 			// The belowground biomass of the logged trees must be considered as left in the forest
 			if (!caller.getTrees(StatusClass.cut).isEmpty()) {
-				for (CarbonToolCompatibleStand stand : caller.getTrees(StatusClass.cut).keySet()) {
+				for (CATCompatibleStand stand : caller.getTrees(StatusClass.cut).keySet()) {
 					if (isCancelled) {
 						break;
 					}
 					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
-					Collection<CarbonToolCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
+					Collection<CATCompatibleTree> trees = caller.getTrees(StatusClass.cut).get(stand);
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
 					double carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
@@ -387,15 +387,15 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 	}
 
 	
-	private void createWoodyDebris(Map<CarbonToolCompatibleStand, Collection<CarbonToolCompatibleTree>> treeMap, WoodyDebrisProcessorID type) {
+	private void createWoodyDebris(Map<CATCompatibleStand, Collection<CATCompatibleTree>> treeMap, WoodyDebrisProcessorID type) {
 		CarbonCompartmentManager manager = caller.getCarbonCompartmentManager();
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
-		for (CarbonToolCompatibleStand stand : treeMap.keySet()) {
+		for (CATCompatibleStand stand : treeMap.keySet()) {
 			if (isCancelled) {
 				break;
 			}
 			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
-			Collection<CarbonToolCompatibleTree> trees = treeMap.get(stand);
+			Collection<CATCompatibleTree> trees = treeMap.get(stand);
 			double volume = 0d;
 			double biomass = 0d;
 			double carbonContent = 0d;
@@ -463,9 +463,9 @@ public class CarbonAccountingToolTask extends AbstractGenericTask {
 		manager.storeResults();
 	}
 
-	private Collection<CarbonToolCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
-		Collection<CarbonToolCompatibleTree> loggableTreesCollection = new ArrayList<CarbonToolCompatibleTree>();
-		for (Collection<CarbonToolCompatibleTree> oColl : caller.getTrees(StatusClass.cut).values()) {
+	private Collection<CATCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
+		Collection<CATCompatibleTree> loggableTreesCollection = new ArrayList<CATCompatibleTree>();
+		for (Collection<CATCompatibleTree> oColl : caller.getTrees(StatusClass.cut).values()) {
 			loggableTreesCollection.addAll(oColl);
 		}
 		return loggableTreesCollection;

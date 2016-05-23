@@ -35,9 +35,9 @@ public class CarbonAccountingToolTest {
 		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;
-		List<CarbonToolCompatibleStand> stands = new ArrayList<CarbonToolCompatibleStand>();
-		CarbonToolCompatibleStand stand;
-		CarbonToolCompatibleTree tree;
+		List<CATCompatibleStand> stands = new ArrayList<CATCompatibleStand>();
+		CATCompatibleStand stand;
+		CATCompatibleTree tree;
 		for (int i = 1; i <= 10; i++) {
 			stand = new CarbonToolCompatibleStandImpl(standID, areaHa, i*10);
 			stands.add(stand);

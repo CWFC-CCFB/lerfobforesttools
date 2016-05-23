@@ -69,13 +69,13 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  * @author M. Fortin - June 2010
  */
 @SuppressWarnings("serial")
-public class CarbonAccountingToolDialog extends REpiceaFrame implements PropertyChangeListener, ItemListener,
+public class CATFrame extends REpiceaFrame implements PropertyChangeListener, ItemListener,
 																		Refreshable, 
-																		AcceptableDropComponent<ArrayList<CarbonToolCompatibleStand>> {
+																		AcceptableDropComponent<ArrayList<CATCompatibleStand>> {
 
 
 	static {
-		UIControlManager.setTitle(CarbonAccountingToolDialog.class, LERFoBCarbonAccountingTool.englishTitle, LERFoBCarbonAccountingTool.frenchTitle);
+		UIControlManager.setTitle(CATFrame.class, LERFoBCarbonAccountingTool.englishTitle, LERFoBCarbonAccountingTool.frenchTitle);
 		
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
@@ -83,7 +83,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
 					"/capsis/extension/modeltool/carbonaccountingtool";
 			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
-			UIControlManager.setHelpMethod(CarbonAccountingToolDialog.class, helper);
+			UIControlManager.setHelpMethod(CATFrame.class, helper);
 		} catch (Exception e) {}
 	}
 
@@ -213,14 +213,14 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	 * @param caller = a CarbonStorageCalculator object
 	 * @throws Exception
 	 */
-	protected CarbonAccountingToolDialog(final LERFoBCarbonAccountingTool caller, Window owner) {
+	protected CATFrame(final LERFoBCarbonAccountingTool caller, Window owner) {
 		super(owner);
 		this.setCancelOnClose(false);		// no possibility for cancelling here
 		this.askUserBeforeExit = true;
 		this.caller = caller;
 		addPropertyChangeListener(this);
 		
-		new DropTargetImpl<ArrayList<CarbonToolCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_REFERENCE);
+		new DropTargetImpl<ArrayList<CATCompatibleStand>>(this, ArrayList.class, DnDConstants.ACTION_REFERENCE);
 		
 		stopButton = UIControlManager.createCommonButton(CommonControlID.Stop);
 		stopButton.setText("");
@@ -344,7 +344,7 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	@Override
 	protected BufferedImage getBufferedImage() {
 		if (iconImage == null) {
-			String path = ObjectUtility.getRelativePackagePath(CarbonAccountingToolDialog.class);
+			String path = ObjectUtility.getRelativePackagePath(CATFrame.class);
 			String iconFilename = path + "LogoLerfob.jpg";
 			InputStream in = ClassLoader.getSystemResourceAsStream(iconFilename);
 			try {
@@ -570,9 +570,9 @@ public class CarbonAccountingToolDialog extends REpiceaFrame implements Property
 	}
 
 	@Override
-	public void acceptThisObject(ArrayList<CarbonToolCompatibleStand> stands, DropTargetDropEvent arg0) {
+	public void acceptThisObject(ArrayList<CATCompatibleStand> stands, DropTargetDropEvent arg0) {
 		if (stands != null && !stands.isEmpty()) {
-			CarbonToolCompatibleStand lastStand = stands.get(stands.size() - 1);
+			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 			String lastStandID = lastStand.getStandIdentification();
 			if (JOptionPane.showConfirmDialog(this, 
 					MessageID.ImportStandList.toString() + " " + lastStandID, 

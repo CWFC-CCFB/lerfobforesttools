@@ -25,7 +25,7 @@ class CarbonToolCompatibleStandImpl implements CarbonToolCompatibleEvenAgedStand
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void addTree(CarbonToolCompatibleTree tree) {
+	protected void addTree(CATCompatibleTree tree) {
 		getTrees(tree.getStatusClass()).add(tree);
 	}
 	
@@ -52,12 +52,12 @@ class CarbonToolCompatibleStandImpl implements CarbonToolCompatibleEvenAgedStand
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public CarbonToolCompatibleStand getHarvestedStand() {
+	public CATCompatibleStand getHarvestedStand() {
 		CarbonToolCompatibleStandImpl newStand = new CarbonToolCompatibleStandImpl(standID, areaHa, dateYr);
 		Collection coll = getTrees(StatusClass.alive);
 		for (Object obj : coll) {
 			CarbonToolCompatibleTreeImpl tree = (CarbonToolCompatibleTreeImpl) obj;
-			CarbonToolCompatibleTree clonedTree = tree.clone();
+			CATCompatibleTree clonedTree = tree.clone();
 			clonedTree.setStatusClass(StatusClass.cut);
 			newStand.addTree(clonedTree);
 		}

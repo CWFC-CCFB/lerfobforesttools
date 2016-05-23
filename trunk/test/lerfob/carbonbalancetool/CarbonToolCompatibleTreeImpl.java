@@ -1,6 +1,6 @@
 package lerfob.carbonbalancetool;
 
-class CarbonToolCompatibleTreeImpl implements CarbonToolCompatibleTree, Cloneable {
+class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 
 	
 	private final double number;
@@ -41,7 +41,7 @@ class CarbonToolCompatibleTreeImpl implements CarbonToolCompatibleTree, Cloneabl
 	public SpeciesType getSpeciesType() {return SpeciesType.BroadleavedSpecies;}
 
 	@Override
-	public CarbonToolCompatibleTree clone() {
+	public CATCompatibleTree clone() {
 		return new CarbonToolCompatibleTreeImpl(number, volM3, speciesName);
 	}
 	

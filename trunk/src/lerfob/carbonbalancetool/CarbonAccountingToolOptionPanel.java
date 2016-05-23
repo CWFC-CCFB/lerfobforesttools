@@ -49,7 +49,7 @@ public class CarbonAccountingToolOptionPanel extends JScrollPane implements Item
 
 		JPanel optionPanel = new JPanel(new BorderLayout());
 
-		JLabel showSomethingLabel = UIControlManager.getLabel(CarbonAccountingToolDialog.MessageID.ShowSomethingOptions);
+		JLabel showSomethingLabel = UIControlManager.getLabel(CATFrame.MessageID.ShowSomethingOptions);
 		JPanel showSomethingLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		showSomethingLabelPanel.add(showSomethingLabel);
 		optionPanel.add(showSomethingLabelPanel, BorderLayout.NORTH);
