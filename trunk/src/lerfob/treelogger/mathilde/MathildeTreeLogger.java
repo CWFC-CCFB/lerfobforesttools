@@ -30,7 +30,7 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 	@Override
 	public void setTreeLoggerParameters() {
 		MathildeTreeLoggerParameters params = createDefaultTreeLoggerParameters();
-		params.showInterface(null);
+		params.showUI(null);
 		setTreeLoggerParameters(params);
 	}
 
@@ -74,7 +74,7 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 	public static void main(String[] args) {
 		MathildeTreeLogger treeLogger = new MathildeTreeLogger();
 		MathildeTreeLoggerParameters params = treeLogger.createDefaultTreeLoggerParameters();
-		params.showInterface(null);
+		params.showUI(null);
 	}
 
 	@Override

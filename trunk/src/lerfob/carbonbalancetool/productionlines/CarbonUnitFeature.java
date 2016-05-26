@@ -22,14 +22,13 @@ import java.io.Serializable;
 
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
-
-import repicea.gui.UserInterfaceableObject;
+import repicea.gui.REpiceaUIObject;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 
 public class CarbonUnitFeature implements Serializable, 
-										UserInterfaceableObject, 
+										REpiceaUIObject, 
 										NumberFieldListener {
 
 	private static final long serialVersionUID = 20101118L;
@@ -66,7 +65,7 @@ public class CarbonUnitFeature implements Serializable,
 	
 
 	@Override
-	public CarbonUnitFeaturePanel getGuiInterface() {
+	public CarbonUnitFeaturePanel getUI() {
 		if (getUserInterfacePanel() == null) {
 			setUserInterfacePanel(new CarbonUnitFeaturePanel(this));
 		}
@@ -89,8 +88,8 @@ public class CarbonUnitFeature implements Serializable,
 
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
-		if (e.getSource().equals(getGuiInterface().averageLifetimeTextField)) {
-			setAverageLifetime(Double.parseDouble(getGuiInterface().averageLifetimeTextField.getText()));
+		if (e.getSource().equals(getUI().averageLifetimeTextField)) {
+			setAverageLifetime(Double.parseDouble(getUI().averageLifetimeTextField.getText()));
 		} 
 	}
 	

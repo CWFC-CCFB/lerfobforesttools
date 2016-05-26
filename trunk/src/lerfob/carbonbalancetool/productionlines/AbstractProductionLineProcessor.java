@@ -37,7 +37,7 @@ public abstract class AbstractProductionLineProcessor extends AbstractProcessor 
 	
 	@Override
 	protected REpiceaPanel getProcessFeaturesPanel() {
-		return getEndProductFeature().getGuiInterface();
+		return getEndProductFeature().getUI();
 	}
 
 }

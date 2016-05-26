@@ -39,8 +39,8 @@ import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
 import repicea.app.SettingMemory;
-import repicea.gui.ShowableObject;
-import repicea.gui.ShowableObjectWithParent;
+import repicea.gui.REpiceaShowableUI;
+import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.gui.genericwindows.GeneralLicenseWindow;
 import repicea.gui.genericwindows.GenericSplashWindow;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -62,7 +62,7 @@ import repicea.util.REpiceaTranslator;
  * 
  * @author Mathieu Fortin (INRA) - January 2010
  */
-public class CarbonAccountingTool extends AbstractGenericEngine implements ShowableObjectWithParent, ShowableObject {
+public class CarbonAccountingTool extends AbstractGenericEngine implements REpiceaShowableUIWithParent, REpiceaShowableUI {
 	
 	private static class StandComparator implements Comparator<CATCompatibleStand> {
 
@@ -254,9 +254,10 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements Showa
 			Runnable doRun = new Runnable() {
 				@Override
 				public void run() {
-					getGuiInterface().majorProgressBar.setMinimum(0);
-					getGuiInterface().majorProgressBar.setMaximum(getCarbonCompartmentManager().nRealizations);
-					getGuiInterface().refreshInterface();
+					getUI().majorProgressBar.setMinimum(0);
+					getUI().majorProgressBar.setMaximum(getCarbonCompartmentManager().nRealizations);
+					getUI().majorProgressBar.setValue(0);
+					getUI().refreshInterface();
 				}
 			};
 			SwingUtilities.invokeLater(doRun);
@@ -309,7 +310,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements Showa
 		super.decideWhatToDoInCaseOfFailure(task);
 		unlockEngine();
 		if (isGuiEnabled()) {
-			getGuiInterface().setSimulationRunning(false);
+			getUI().setSimulationRunning(false);
 		}
 	}
 
@@ -380,7 +381,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements Showa
 	}
 	
 	@Override
-	public CATFrame getGuiInterface(Container parent) {
+	public CATFrame getUI(Container parent) {
 		if (owner == null && parent != null && parent instanceof Window) {
 			owner = (Window) parent;
 		}
@@ -391,19 +392,19 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements Showa
 	}	
 
 	@Override
-	public void showInterface(Window parent) {
-		getGuiInterface(parent).setVisible(true);
+	public void showUI(Window parent) {
+		getUI(parent).setVisible(true);
 	}
 
 	@Override
-	public CATFrame getGuiInterface() {return getGuiInterface(null);}
+	public CATFrame getUI() {return getUI(null);}
 
 	@Override
-	public void showInterface() {
+	public void showUI() {
 		if (owner != null) {
-			showInterface(owner);
+			showUI(owner);
 		} else {
-			getGuiInterface().setVisible(true);
+			getUI().setVisible(true);
 		}
 		
 	}
@@ -413,7 +414,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements Showa
 			Runnable job = new Runnable() {
 				@Override
 				public void run() {
-					getGuiInterface().displayResult();
+					getUI().displayResult();
 				}
 			};
 			SwingUtilities.invokeLater(job);

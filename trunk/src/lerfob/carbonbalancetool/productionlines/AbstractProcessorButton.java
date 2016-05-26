@@ -32,7 +32,7 @@ public class AbstractProcessorButton extends ProcessorButton {
 	}
 
 	@Override
-	public ProcessorInternalDialog getGuiInterface(Container parent) {
+	public ProcessorInternalDialog getUI(Container parent) {
 		if (guiInterface == null) {
 			guiInterface = new EnhancedProcessorInternalDialog((Window) parent, this);
 		}

@@ -60,7 +60,7 @@ public class LandfillProcessor extends AbstractProductionLineProcessor {
 	
 	
 	@Override
-	public ProcessorButton getGuiInterface(Container container) {
+	public ProcessorButton getUI(Container container) {
 		if (guiInterface == null) {
 			guiInterface = new LandfillProcessorButton((SystemPanel) container, this);
 		}

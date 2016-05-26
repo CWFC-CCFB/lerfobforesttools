@@ -60,7 +60,7 @@ public class WoodyDebrisProcessor extends LeftHandSideProcessor {
 	}
 	
 	@Override
-	public ProcessorButton getGuiInterface(Container container) {
+	public ProcessorButton getUI(Container container) {
 		if (guiInterface == null) {
 			guiInterface = new WoodyDebrisProcessorButton((SystemPanel) container, this);
 		}

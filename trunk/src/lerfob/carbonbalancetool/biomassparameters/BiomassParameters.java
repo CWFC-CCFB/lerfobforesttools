@@ -41,8 +41,8 @@ import lerfob.carbonbalancetool.CATCompatibleTree;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParametersDialog.MessageID;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
+import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.gui.Resettable;
-import repicea.gui.ShowableObjectWithParent;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.gui.permissions.REpiceaGUIPermission;
 import repicea.io.IOUserInterfaceableObject;
@@ -57,7 +57,7 @@ import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.Speci
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 
-public class BiomassParameters implements ShowableObjectWithParent, IOUserInterfaceableObject, Resettable, Memorizable {
+public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInterfaceableObject, Resettable, Memorizable {
 
 	static {
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.CarbonToolCompatibleTree$SpeciesType",	
@@ -195,7 +195,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	}
 
 	@Override
-	public Component getGuiInterface(Container parent) {
+	public Component getUI(Container parent) {
 		if (guiInterface == null) {
 			guiInterface = new BiomassParametersDialog((Window) parent, this);
 		}
@@ -203,8 +203,8 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	}
 
 	@Override
-	public void showInterface(Window parent) {
-		getGuiInterface(parent).setVisible(true);
+	public void showUI(Window parent) {
+		getUI(parent).setVisible(true);
 	}
 
 	@Override
@@ -567,7 +567,7 @@ public class BiomassParameters implements ShowableObjectWithParent, IOUserInterf
 	
 	public static void main(String[] args) {
 		BiomassParameters bp = new BiomassParameters();
-		bp.showInterface(null);
+		bp.showUI(null);
 	}
 
 }

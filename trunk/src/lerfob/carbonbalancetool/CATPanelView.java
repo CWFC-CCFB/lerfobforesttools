@@ -80,7 +80,7 @@ class CATPanelView extends REpiceaPanel implements ChangeListener, PropertyChang
 							"/capsis/extension/modeltool/carbonaccountingtool/export";
 					AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 					exportTool.setHelper(helper);
-					exportTool.showInterface(dlg);
+					exportTool.showUI(dlg);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

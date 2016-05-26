@@ -410,7 +410,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		} else if (evt.getSource().equals(stopMenuItem) || evt.getSource().equals(stopButton)) {
 			caller.cancelRunningTask();
 		} else if (evt.getSource().equals(sensitivityAnalysisMenuItem)) {
-			CATSensitivityAnalysisSettings.getInstance().showInterface(this);
+			CATSensitivityAnalysisSettings.getInstance().showUI(this);
 		} else if (evt.getSource().equals(aR2)) {
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Second);
 		} else if (evt.getSource().equals(aR4)) {
