@@ -28,14 +28,14 @@ public class EndOfLifeLinkLine extends ValidProcessorLinkLine {
 
 
 	protected EndOfLifeLinkLine(SystemPanel panel, Processor fatherProcessor, Processor sonProcessor) {
-		super(panel, fatherProcessor.getGuiInterface(panel), sonProcessor.getGuiInterface(panel));
+		super(panel, fatherProcessor.getUI(panel), sonProcessor.getUI(panel));
 
 		((ProductionLineProcessor) fatherProcessor).disposedToProcessor = sonProcessor;
 		
-		ProductionLineProcessorButton fatherButton = (ProductionLineProcessorButton) fatherProcessor.getGuiInterface(panel);
+		ProductionLineProcessorButton fatherButton = (ProductionLineProcessorButton) fatherProcessor.getUI(panel);
 		fatherButton.addComponentListener(this);
 		fatherButton.createEndOfLifeLinkRecognizer.setComponent(null); // disable the drag & drop
-		sonProcessor.getGuiInterface(panel).addComponentListener(this);
+		sonProcessor.getUI(panel).addComponentListener(this);
 	}
 
 	@Override

@@ -69,7 +69,7 @@ public class LogCategoryProcessor extends LeftHandSideProcessor {
 	}
 	
 	@Override
-	public ProcessorButton getGuiInterface(Container container) {
+	public ProcessorButton getUI(Container container) {
 		if (guiInterface == null) {
 			guiInterface = new LogCategoryProcessorButton((SystemPanel) container, this);
 		}

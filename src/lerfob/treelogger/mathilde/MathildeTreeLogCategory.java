@@ -38,7 +38,7 @@ class MathildeTreeLogCategory extends TreeLogCategory {
 	}
 	
 	@Override
-	public MathildeTreeLogCategoryPanel getGuiInterface() {
+	public MathildeTreeLogCategoryPanel getUI() {
 		if (guiInterface == null) {
 			guiInterface = new MathildeTreeLogCategoryPanel(this);
 		}

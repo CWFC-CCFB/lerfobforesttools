@@ -34,14 +34,14 @@ import javax.swing.JLabel;
 
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.REpiceaPanel;
-import repicea.gui.UserInterfaceableObject;
+import repicea.gui.REpiceaUIObject;
 import repicea.gui.components.REpiceaSlider;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.Distribution;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
-public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
+public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 
 	private static enum MessageID implements TextableEnum {
 		ErrorMargin("Error margin", "Marge d'erreur"),
@@ -172,7 +172,7 @@ public class CATSensitivityParameterWrapper implements UserInterfaceableObject {
 	}
 	
 	@Override
-	public REpiceaPanel getGuiInterface() {
+	public REpiceaPanel getUI() {
 		if (guiInterface == null) {
 			guiInterface = new CATSensitivityParameterWrapperPanel();
 		}

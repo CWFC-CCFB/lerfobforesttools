@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
-import repicea.gui.ShowableObjectWithParent;
+import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -38,7 +38,7 @@ public class CATUtility {
 	
 	
 	
-	protected static class ProductionProcessorManagerWrapper implements ShowableObjectWithParent, ParameterWrapper<ProductionProcessorManager> {
+	protected static class ProductionProcessorManagerWrapper implements REpiceaShowableUIWithParent, ParameterWrapper<ProductionProcessorManager> {
 		
 		protected final ProductionProcessorManager manager;
 		protected final ProductionManagerName name;
@@ -52,11 +52,11 @@ public class CATUtility {
 		 * Useless here. 
 		 */
 		@Override
-		public Component getGuiInterface(Container parent) {return null;}
+		public Component getUI(Container parent) {return null;}
 
 		@Override
-		public void showInterface(Window parent) {
-			manager.showInterface(parent);
+		public void showUI(Window parent) {
+			manager.showUI(parent);
 		}
 
 		@Override
@@ -73,7 +73,7 @@ public class CATUtility {
 		public ProductionProcessorManager getWrappedInstance() {return manager;}
 	}
 
-	static class BiomassParametersWrapper implements ShowableObjectWithParent, ParameterWrapper<BiomassParameters> {
+	static class BiomassParametersWrapper implements REpiceaShowableUIWithParent, ParameterWrapper<BiomassParameters> {
 		
 		protected final BiomassParameters manager;
 		protected final BiomassParametersName name;
@@ -87,11 +87,11 @@ public class CATUtility {
 		 * Useless here. 
 		 */
 		@Override
-		public Component getGuiInterface(Container parent) {return null;}
+		public Component getUI(Container parent) {return null;}
 
 		@Override
-		public void showInterface(Window parent) {
-			manager.showInterface(parent);
+		public void showUI(Window parent) {
+			manager.showUI(parent);
 		}
 
 		@Override

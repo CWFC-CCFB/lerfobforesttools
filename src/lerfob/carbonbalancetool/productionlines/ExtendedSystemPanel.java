@@ -18,7 +18,7 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
-import repicea.gui.UserInterfaceableObject;
+import repicea.gui.REpiceaUIObject;
 import repicea.simulation.processsystem.SystemLayout;
 import repicea.simulation.processsystem.SystemManager;
 import repicea.simulation.processsystem.SystemPanel;
@@ -33,7 +33,7 @@ public class ExtendedSystemPanel extends SystemPanel {
 	@Override
 	protected void addManagerComponents() {
 		super.addManagerComponents();
-		for (UserInterfaceableObject obj : getListManager().getList()) {
+		for (REpiceaUIObject obj : getListManager().getList()) {
 			if (obj instanceof ProductionLineProcessor) {
 				ProductionLineProcessor process = (ProductionLineProcessor) obj;
 				if (process.disposedToProcessor != null) {

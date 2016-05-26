@@ -30,7 +30,7 @@ import javax.swing.event.CaretEvent;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
-import repicea.gui.UserInterfaceableObject;
+import repicea.gui.REpiceaUIObject;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.Processor;
@@ -45,7 +45,7 @@ import repicea.util.REpiceaTranslator;
  * whether or not the residual from this processor can be used for energy.
  * @author M. Fortin - September 2010
  */
-public class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, UserInterfaceableObject {
+public class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, REpiceaUIObject {
 	
 	private static final long serialVersionUID = 20101018L;
 
@@ -160,7 +160,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	}
 	
 	@Override
-	public ProcessorButton getGuiInterface(Container container) {
+	public ProcessorButton getUI(Container container) {
 		if (guiInterface == null) {
 			guiInterface = new ProductionLineProcessorButton((SystemPanel) container, this);
 		}

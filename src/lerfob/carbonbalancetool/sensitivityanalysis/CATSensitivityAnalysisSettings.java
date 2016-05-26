@@ -24,12 +24,12 @@ import java.awt.Window;
 import java.util.HashMap;
 import java.util.Map;
 
-import repicea.gui.ShowableObjectWithParent;
+import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
-public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent {
+public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithParent {
 	
 	
 	private static CATSensitivityAnalysisSettings settings; 
@@ -68,7 +68,7 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 	}
 	
 	@Override
-	public Component getGuiInterface(Container parent) {
+	public Component getUI(Container parent) {
 		if (guiInterface == null) {
 			guiInterface = new CATSensitivityAnalysisSettingsDlg(this, (Window) parent);
 		}
@@ -76,8 +76,8 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 	}
 
 	@Override
-	public void showInterface(Window parent) {
-		getGuiInterface(parent).setVisible(true);
+	public void showUI(Window parent) {
+		getUI(parent).setVisible(true);
 	}
 
 	/**
@@ -104,6 +104,6 @@ public class CATSensitivityAnalysisSettings implements ShowableObjectWithParent 
 	
 	public static void main(String[] args) {
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();
-		settings.showInterface(null);
+		settings.showUI(null);
 	}
 }

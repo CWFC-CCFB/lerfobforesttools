@@ -249,7 +249,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 	
 	@Override
-	public SystemManagerDialog getGuiInterface(Container parent) {
+	public SystemManagerDialog getUI(Container parent) {
 		if (guiInterface == null) {
 			guiInterface = new ProductionProcessorManagerDialog((Window) parent, this);
 		}
@@ -462,7 +462,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 				+ File.separator + "hardwood_recycling_fr.prl";
 		try {
 			ppm.load(filename);
-			ppm.showInterface(null);
+			ppm.showUI(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

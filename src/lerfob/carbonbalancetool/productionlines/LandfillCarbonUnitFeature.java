@@ -37,7 +37,7 @@ public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements Chan
 
 		
 	@Override
-	public LandfillCarbonUnitFeaturePanel getGuiInterface() {
+	public LandfillCarbonUnitFeaturePanel getUI() {
 		if (getUserInterfacePanel() == null) {
 			setUserInterfacePanel(new LandfillCarbonUnitFeaturePanel(this));
 		}

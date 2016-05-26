@@ -94,7 +94,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	protected void setUseClass(UseClass useClass) {this.useClass = useClass;}
 
 	@Override
-	public EndUseWoodProductCarbonUnitFeaturePanel getGuiInterface() {
+	public EndUseWoodProductCarbonUnitFeaturePanel getUI() {
 		if (getUserInterfacePanel() == null) {
 			setUserInterfacePanel(new EndUseWoodProductCarbonUnitFeaturePanel(this));
 		}
@@ -138,8 +138,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	 */
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
-		if (e.getSource().equals(getGuiInterface().averageSubstitutionTextField)) {
-			setAverageSubstitution(Double.parseDouble(getGuiInterface().averageSubstitutionTextField.getText()));
+		if (e.getSource().equals(getUI().averageSubstitutionTextField)) {
+			setAverageSubstitution(Double.parseDouble(getUI().averageSubstitutionTextField.getText()));
 		} else {
 			super.numberChanged(e);
 		}

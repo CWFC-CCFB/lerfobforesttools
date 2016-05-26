@@ -85,7 +85,7 @@ public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<Mat
 	public boolean isCorrect() {return true;}
 
 	@Override
-	public MathildeTreeLoggerParametersDialog getGuiInterface(Container parent) {
+	public MathildeTreeLoggerParametersDialog getUI(Container parent) {
 		if (guiInterface == null) {
 			guiInterface = new MathildeTreeLoggerParametersDialog((Window) parent, this);
 		}

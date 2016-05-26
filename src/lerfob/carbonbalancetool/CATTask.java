@@ -117,7 +117,7 @@ public class CATTask extends AbstractGenericTask {
 			caller.showResult();
 			break;
 		case SHOW_INTERFACE:
-			caller.showInterface();
+			caller.showUI();
 			break;
 		case SET_STANDLIST:
 			caller.setStandList();
@@ -190,12 +190,12 @@ public class CATTask extends AbstractGenericTask {
 		TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
 		if (!caller.getTrees(StatusClass.cut).isEmpty()) {
 			if (caller.guiInterface != null) {
-				logger.addTreeLoggerListener(caller.getGuiInterface()); 
+				logger.addTreeLoggerListener(caller.getUI()); 
 			}
 			logger.init(convertMapIntoCollectionOfLoggableTrees());
 			logger.run();
 			if (caller.guiInterface != null) {
-				logger.removeTreeLoggerListener(caller.getGuiInterface()); 
+				logger.removeTreeLoggerListener(caller.getUI()); 
 			}			
 			setProgress((int) (100 * (double) 1 / Task.getNumberOfLongTasks()));
 		} else {

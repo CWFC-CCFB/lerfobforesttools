@@ -53,7 +53,7 @@ public class CATSensitivityAnalysisSettingsDlg extends REpiceaDialog {
 		setTitle(UIControlManager.getTitle(getClass()));
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		for (VariabilitySource source : VariabilitySource.values()) {
-			getContentPane().add(caller.sensitivityParameterMap.get(source).getGuiInterface());
+			getContentPane().add(caller.sensitivityParameterMap.get(source).getUI());
 		}
 	}
 	

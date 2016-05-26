@@ -63,7 +63,7 @@ public class LeftInForestProcessor extends AbstractProductionLineProcessor {
 	
 	
 	@Override
-	public ProcessorButton getGuiInterface(Container container) {
+	public ProcessorButton getUI(Container container) {
 		if (guiInterface == null) {
 			guiInterface = new LeftInForestProcessorButton((SystemPanel) container, this);
 		}
