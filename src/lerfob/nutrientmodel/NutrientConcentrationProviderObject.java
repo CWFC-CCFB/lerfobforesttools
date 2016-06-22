@@ -19,10 +19,28 @@
 package lerfob.nutrientmodel;
 
 
+
 /**
  * This interface ensures the object can return a map with its nutrient concentration.
  */
 public interface NutrientConcentrationProviderObject {
+
+	public static enum Nutrient implements NutrientExtendedList {
+		/** Nitrogen */
+		N,
+		/** Sulfur */
+		S, 
+		/** Phosphorus */
+		P, 
+		/** Potassium */
+		K, 
+		/** Calcium*/
+		Ca, 
+		/** Magnesium*/
+		Mg, 
+		/** Manganese */
+		Mn, 
+	}
 
 	/**
 	 * This method returns an array of double with all the nutrient concentration.
