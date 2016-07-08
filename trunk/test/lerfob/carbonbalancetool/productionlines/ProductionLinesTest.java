@@ -168,8 +168,12 @@ public class ProductionLinesTest {
 				i--;
 			}
 
-			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
-				
+//			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
+			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
+				endProducts.addAll(processorManager.getCarbonUnits(status));
+			}
 			double totalVolume = 0d;
 			for (CarbonUnit unit : endProducts) {
 				totalVolume += unit.getAmountMap().get(Element.Volume);
@@ -218,8 +222,14 @@ public class ProductionLinesTest {
 				}
 				i--;
 			}
-			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+//			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
 				
+			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
+			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
+				endProducts.addAll(processorManager.getCarbonUnits(status));
+			}
+
 			double actualEmissions = 0d;
 			for (CarbonUnit unit : endProducts) {
 				actualEmissions += unit.getAmountMap().get(Element.EmissionsCO2Eq);

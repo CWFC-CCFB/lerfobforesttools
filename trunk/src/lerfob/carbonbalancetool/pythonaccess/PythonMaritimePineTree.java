@@ -1,8 +1,8 @@
 package lerfob.carbonbalancetool.pythonaccess;
 
-import repicea.treelogger.maritimepine.MaritimePineBasicTree;
+import repicea.treelogger.maritimepine.MaritimePineBasicLoggableTree;
 
-class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements MaritimePineBasicTree {
+class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements MaritimePineBasicLoggableTree {
 
 	
 	PythonMaritimePineTree(SpeciesType speciesType,
@@ -15,7 +15,6 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 			double biomassTrunk, 
 			double biomassBranches) {
 		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
-
 	}
 
 	@Override
@@ -24,6 +23,11 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 	@Override
 	public double getDbhCmStandardDeviation() {return dbhCmStandardDeviation;}
 
+	@Override
+	public double getHarvestedStumpVolumeM3() {return rootsVolume;}
+
+	@Override
+	public double getHarvestedCrownVolumeM3() {return branchesVolume;}
 
 	
 }

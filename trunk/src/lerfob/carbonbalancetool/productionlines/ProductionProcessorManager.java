@@ -51,6 +51,8 @@ import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
+import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -136,8 +138,8 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
-//		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
-//		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
 //		try {
 //			Class<?> petroTreeLoggerClass = ClassLoader.getSystemClassLoader().loadClass("quebecmrnfutility.treelogger.petrotreelogger.PetroTreeLogger");
 //			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(petroTreeLoggerClass.getName()));
@@ -326,9 +328,11 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
+//	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
+	public void processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
 		Processor processor = findLeftHandSideProcessor(treeLogCategory);
-		return processAmountMap(processor, dateIndex, amountMap);
+		processAmountMap(processor, dateIndex, amountMap);
+//		return processAmountMap(processor, dateIndex, amountMap);
 	}
 
 	/**

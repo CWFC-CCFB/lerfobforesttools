@@ -361,7 +361,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @param tree a CarbonToolCompatibleTree instance
 	 * @return the volume (M3)
 	 */
-	private double getBelowGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+	public double getBelowGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value;
 		if (rootExpansionFactorFromModel && tree instanceof CATBelowGroundVolumeProvider) {
 			value = ((CATBelowGroundVolumeProvider) tree).getBelowGroundVolumeM3() * tree.getNumber();
@@ -382,6 +382,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @return a double
 	 */
 	public double getAboveGroundCarbonMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+		// TODO this method should be private - it is still needed in the former implementation
 		if (carbonContentFromModel && tree instanceof CATAboveGroundCarbonProvider) {
 			double value = ((CATAboveGroundCarbonProvider) tree).getAboveGroundCarbonMg() * tree.getNumber();
 			double biomassModifier = CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject);
@@ -413,7 +414,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	private double getAboveGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
+	public double getAboveGroundVolumeM3(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value; 
 		if (branchExpansionFactorFromModel) {
 			value = ((CATAboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber();

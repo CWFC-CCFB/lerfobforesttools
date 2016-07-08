@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
@@ -230,10 +229,19 @@ public class CATTask extends AbstractGenericTask {
 						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
 						Collection<WoodPiece> woodPieces = (Collection<WoodPiece>) treeLogger.getWoodPieces().get(t);
-						double totalWoodPieceCarbon = 0d;
+//						double totalAboveGroundWoodPieceCarbon = 0d;
+//						double totalBelowGroundWoodPieceCarbon = 0d;
+						double totalAboveGroundWoodPieceVolume = 0d;
+						double totalBelowGroundWoodPieceVolume = 0d;
 						for (WoodPiece woodPiece : woodPieces) {
 							if (isCancelled) {
 								break outerLoop;
+							}
+
+							if (woodPiece.getLogCategory().isFromStump()) {
+								totalBelowGroundWoodPieceVolume += woodPiece.getWeightedVolumeM3();
+							} else {
+								totalAboveGroundWoodPieceVolume += woodPiece.getWeightedVolumeM3();
 							}
 							
 							double[] nutrientConcentrations = null;
@@ -259,22 +267,37 @@ public class CATTask extends AbstractGenericTask {
 								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), amountMap);		
-							totalWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
+//							Collection<CarbonUnit> carbonUnits = getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), amountMap);		
+							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), amountMap);		
+//							totalAboveGroundWoodPieceCarbon += getCarbonFromCarbonUnitList(carbonUnits);
 						}
 						
-						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
-						double unconsideredAboveGroundCarbon = totalAboveGroundCarbon - totalWoodPieceCarbon; 				// the difference between the carbon in the wood piece and the total aboveground carbon is the part that is left in the forest
-						if (unconsideredAboveGroundCarbon > 0) {		// those branches are sent to the fine woody debris
-							double biomass = unconsideredAboveGroundCarbon / carbonContentRatio;
-							double volume = biomass / basicWoodDensity;
-							AmountMap<Element> amountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
-							amountMap.put(Element.Volume, volume);
-							amountMap.put(Element.Biomass, biomass);
-							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
-							
-							getProcessorManager().processWoodyDebris(caller.getDateIndexForThisTree(tree), amountMap, WoodyDebrisProcessorID.FineWoodyDebris);
-						}
+//						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
+//						double unconsideredAboveGroundCarbon = totalAboveGroundCarbon - totalAboveGroundWoodPieceCarbon; 				// the difference between the carbon in the wood piece and the total aboveground carbon is the part that is left in the forest
+						double totalAboveGroundVolume = biomassParameters.getAboveGroundVolumeM3(tree, manager);
+						double unconsideredAboveGroundVolume = totalAboveGroundVolume - totalAboveGroundWoodPieceVolume;
+						processUnaccountedVolume(unconsideredAboveGroundVolume, 
+								basicWoodDensity, 
+								carbonContentRatio, 
+								caller.getDateIndexForThisTree(tree), 
+								WoodyDebrisProcessorID.FineWoodyDebris);
+						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
+						double unconsideredBelowGroundVolume = totalBelowGroundVolume - totalBelowGroundWoodPieceVolume;
+						processUnaccountedVolume(unconsideredBelowGroundVolume, 
+								basicWoodDensity, 
+								carbonContentRatio, 
+								caller.getDateIndexForThisTree(tree), 
+								WoodyDebrisProcessorID.CoarseWoodyDebris);
+//						if (unconsideredAboveGroundCarbon > 0) {		// those branches are sent to the fine woody debris
+//							double biomass = unconsideredAboveGroundCarbon / carbonContentRatio;
+//							double volume = biomass / basicWoodDensity;
+//							AmountMap<Element> amountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
+//							amountMap.put(Element.Volume, volume);
+//							amountMap.put(Element.Biomass, biomass);
+//							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
+//							
+//							getProcessorManager().processWoodyDebris(caller.getDateIndexForThisTree(tree), amountMap, WoodyDebrisProcessorID.FineWoodyDebris);
+//						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
@@ -386,6 +409,20 @@ public class CATTask extends AbstractGenericTask {
 		}
 	}
 
+	private void processUnaccountedVolume(double volume, double basicWoodDensity, double carbonContentRatio, int dateIndex, WoodyDebrisProcessorID type) {
+		if (volume > 0) {
+			double biomass = volume * basicWoodDensity;
+			double carbon = biomass * carbonContentRatio;
+			AmountMap<Element> amountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
+			amountMap.put(Element.Volume, volume);
+			amountMap.put(Element.Biomass, biomass);
+			amountMap.put(Element.C, carbon);
+			
+			getProcessorManager().processWoodyDebris(dateIndex, amountMap, type);
+		}
+	}
+	
+	
 	
 	private void createWoodyDebris(Map<CATCompatibleStand, Collection<CATCompatibleTree>> treeMap, WoodyDebrisProcessorID type) {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
@@ -472,13 +509,13 @@ public class CATTask extends AbstractGenericTask {
 	}
 	
 
-	private double getCarbonFromCarbonUnitList(Collection<CarbonUnit> carbonUnits) {
-		double sum = 0;
-		for (CarbonUnit unit : carbonUnits) {
-			sum += unit.getInitialCarbon();
-		}
-		return sum;
-	}
+//	private double getCarbonFromCarbonUnitList(Collection<CarbonUnit> carbonUnits) {
+//		double sum = 0;
+//		for (CarbonUnit unit : carbonUnits) {
+//			sum += unit.getInitialCarbon();
+//		}
+//		return sum;
+//	}
 	
 
 	
