@@ -31,7 +31,7 @@ class MathildeTreeLogCategory extends TreeLogCategory {
 	protected double downgradingProportion;
 	
 	protected MathildeTreeLogCategory(MathildeTreeSpecies species, String name, double minimumDiameter, double conversionFactor) {
-		super(name);
+		super(name, false);
 		setSpecies(species.name());
 		this.minimumDbhCm = minimumDiameter;
 		this.conversionFactor = conversionFactor;
