@@ -565,6 +565,11 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		return commercialCarbonMg;
 	}
 
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
+
 	
 	public static void main(String[] args) {
 		BiomassParameters bp = new BiomassParameters();

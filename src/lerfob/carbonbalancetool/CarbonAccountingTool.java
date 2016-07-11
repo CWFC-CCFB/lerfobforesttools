@@ -35,6 +35,8 @@ import javax.swing.SwingUtilities;
 
 import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
+import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
+import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
@@ -421,6 +423,19 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		}
 	}
 
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
+
+	protected void setCurrentBiomassParameters(BiomassParametersName name) {
+		getCarbonToolSettings().currentBiomassParameters = name;
+	}
+	
+	protected void setCurrentProductionManager(ProductionManagerName name) {
+		getCarbonToolSettings().currentProcessorManager = name;
+	}
+	
 	/*
 	 * Entry point for FCBA in GESFOR project
 	 */

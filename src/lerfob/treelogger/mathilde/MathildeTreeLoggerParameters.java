@@ -92,5 +92,9 @@ public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<Mat
 		return guiInterface;
 	}
 
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
 
 }

@@ -66,8 +66,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		
 
 		ParameterSetup(CATSettings carbonToolSettings) {
-			biomassParametersName = carbonToolSettings.biomassParametersVector.get(carbonToolSettings.currentBiomassParametersIndex).toString();
-			productionLinesName = carbonToolSettings.processorManagers.get(carbonToolSettings.currentProcessorManagerIndex).toString();
+			biomassParametersName = carbonToolSettings.biomassParametersVector.get(carbonToolSettings.currentBiomassParameters).toString();
+			productionLinesName = carbonToolSettings.processorManagers.get(carbonToolSettings.currentProcessorManager).toString();
 		}
 	}
 			

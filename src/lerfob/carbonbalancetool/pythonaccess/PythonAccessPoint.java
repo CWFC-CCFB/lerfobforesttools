@@ -29,9 +29,10 @@ import java.util.Vector;
 
 import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
-import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
+import lerfob.carbonbalancetool.CATSimulationResult;
+import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -113,6 +114,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			}
 			System.out.println("Loading settings : " + filename);
 			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
+			setCurrentProductionManager(ProductionManagerName.customized);
 		}
 	}
 
@@ -184,7 +186,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		setStandList(standList);
 		calculateCarbon();
 		CATSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
-		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
+		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = null;
+		try {
+			productEvolutionMap = simulationResult.getProductEvolutionPerHa();
+		} catch (Exception e) {
+			int u = 0;
+		}
 		
 		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 		

@@ -204,7 +204,6 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void actualizeTreeLoggerParameters() {
-		// TODO clean that up
 		List<LeftHandSideProcessor> formerProcessorList = new ArrayList<LeftHandSideProcessor>();
 		formerProcessorList.addAll(logCategoryProcessors);
 		List<LeftHandSideProcessor> newProcessorList = new ArrayList<LeftHandSideProcessor>();
@@ -212,20 +211,16 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		for (Object species : selectedTreeLoggerParameters.getLogCategories().keySet()) {
 			List<TreeLogCategory> innerList = (List) selectedTreeLoggerParameters.getLogCategories().get(species);
  			for (TreeLogCategory logCategory : innerList) {
- 				System.out.println("New processor: " + logCategory.getName());
  				newProcessorList.add(new LogCategoryProcessor(logCategory));
 			}
 		}
 		formerProcessorList.removeAll(newProcessorList);
-//		System.out.println("Removing " + formerProcessorList.toString());
 		for (Processor processor : formerProcessorList) {
 			logCategoryProcessors.remove(processor);
 			removeObject(processor);
 		}
 		newProcessorList.removeAll(logCategoryProcessors);
-//		System.out.println("Adding " + newProcessorList.toString());
 		for (LeftHandSideProcessor  processor : newProcessorList) {
-			System.out.println("Registering new processor: " + processor.getName());
 			logCategoryProcessors.add(processor);
 			registerObject(processor);
 		}
@@ -460,7 +455,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 
 	public static void main(String[] args) {
-		REpiceaTranslator.setCurrentLanguage(Language.French);
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 //		ProductionProcessorManager ppm = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		String filename = ObjectUtility.getPackagePath(ppm.getClass()) 

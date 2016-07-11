@@ -70,6 +70,11 @@ public class CATUtility {
 		}
 
 		@Override
+		public boolean isVisible() {
+			return manager.isVisible();
+		}
+
+		@Override
 		public ProductionProcessorManager getWrappedInstance() {return manager;}
 	}
 
@@ -83,6 +88,11 @@ public class CATUtility {
 			this.manager = manager;
 		}
 
+		@Override
+		public boolean isVisible() {
+			return manager.isVisible();
+		}
+		
 		/*
 		 * Useless here. 
 		 */
@@ -108,7 +118,7 @@ public class CATUtility {
 		public BiomassParameters getWrappedInstance() {return manager;}
 	}
 
-	protected static enum ProductionManagerName implements TextableEnum {
+	public static enum ProductionManagerName implements TextableEnum {
 
 		hardwood_simple("Hardwood - Simple", "Feuillus - Simple"),
 		hardwood_recycling("Hardwood - Recycling", "Feuillus - Recyclage"),
@@ -128,7 +138,7 @@ public class CATUtility {
 	}
 
 	
-	protected static enum BiomassParametersName implements TextableEnum {
+	public static enum BiomassParametersName implements TextableEnum {
 
 		ipcc_2003_oakbeechsprucefir("IPCC - Oak, Beech, Spruce, Fir", "GIEC - Ch\u00E8ne, H\u00E8tre, Epic\u00E9a, Sapin"),
 		citepa_france("CITEPA - France", "CITEPA - France"),
