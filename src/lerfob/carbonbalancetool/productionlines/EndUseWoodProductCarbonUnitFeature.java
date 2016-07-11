@@ -91,7 +91,13 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		useClass = UseClass.NONE;
 	}
 	
-	protected UseClass getUseClass() {return this.useClass;}
+	protected UseClass getUseClass() {
+		if (useClass == null) {
+			useClass = UseClass.NONE;
+		}
+		return this.useClass;
+	}
+	
 	protected void setUseClass(UseClass useClass) {this.useClass = useClass;}
 
 	@Override
