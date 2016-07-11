@@ -53,7 +53,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		BUILDING("Building", "Construction"),
 		FIREWOOD("Fire wood", "Bois de feu"),
 		RESIDUALS_FOR_ENERGY("Residues energy", "R\u00E9sidus pour \u00E9nergie"),
-		BRANCHES_FOR_ENERGY("Branches", "Menus bois");
+		BRANCHES_FOR_ENERGY("Branches", "Menus bois"),
+		STUMPS_FOR_ENERGY("Stumps", "Souches");
 
 		UseClass(String englishText, String frenchText) {
 			setText(englishText, frenchText);

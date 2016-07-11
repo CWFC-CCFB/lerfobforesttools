@@ -212,6 +212,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		for (Object species : selectedTreeLoggerParameters.getLogCategories().keySet()) {
 			List<TreeLogCategory> innerList = (List) selectedTreeLoggerParameters.getLogCategories().get(species);
  			for (TreeLogCategory logCategory : innerList) {
+ 				System.out.println("New processor: " + logCategory.getName());
  				newProcessorList.add(new LogCategoryProcessor(logCategory));
 			}
 		}
@@ -224,6 +225,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		newProcessorList.removeAll(logCategoryProcessors);
 //		System.out.println("Adding " + newProcessorList.toString());
 		for (LeftHandSideProcessor  processor : newProcessorList) {
+			System.out.println("Registering new processor: " + processor.getName());
 			logCategoryProcessors.add(processor);
 			registerObject(processor);
 		}
