@@ -39,6 +39,7 @@ import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeatu
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
+import repicea.serial.xml.XmlSerializer;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -122,6 +123,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
+
+//		String filename = ObjectUtility.getPackagePath(getClass()) + "testMapPythonAccess.ref";
+//		XmlSerializer serializer = new XmlSerializer(filename);
+//		serializer.writeObject(inputMap);
+		
+		
 		final String keyFirstInnerMap = "RECOLTE";
 		List<CATCompatibleStand> standList = new ArrayList<CATCompatibleStand>();
 		PythonCarbonToolCompatibleStand stand;
