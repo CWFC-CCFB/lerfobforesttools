@@ -27,9 +27,7 @@ import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.Numbe
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 
-public class CarbonUnitFeature implements Serializable, 
-										REpiceaUIObject, 
-										NumberFieldListener {
+public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberFieldListener {
 
 	private static final long serialVersionUID = 20101118L;
 
@@ -72,7 +70,11 @@ public class CarbonUnitFeature implements Serializable,
 		return getUserInterfacePanel();
 	}
 
-
+	@Override 
+	public boolean isVisible() {
+		return getUserInterfacePanel() != null && getUserInterfacePanel().isVisible();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof CarbonUnitFeature)) {

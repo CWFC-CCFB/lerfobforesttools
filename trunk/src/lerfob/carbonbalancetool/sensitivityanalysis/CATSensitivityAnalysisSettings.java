@@ -101,6 +101,11 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		return sensitivityParameterMap.get(source).getValue(subject);
 	}
 	
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
+
 	
 	public static void main(String[] args) {
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();

@@ -184,6 +184,11 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(subject).m_afData[0][0];
 	}
 	
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
+
 //	public static void main(String args[]) {
 //		CATSensitivityParameterWrapper wrapper = new CATSensitivityParameterWrapper(VariabilitySource.BiomassExpansionFactor);
 //		JDialog dialog = new JDialog();

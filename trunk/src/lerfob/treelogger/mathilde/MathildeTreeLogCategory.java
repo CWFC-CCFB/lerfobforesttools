@@ -79,4 +79,9 @@ class MathildeTreeLogCategory extends TreeLogCategory {
 		}
 	}
 
+	@Override
+	public boolean isVisible() {
+		return guiInterface != null && guiInterface.isVisible();
+	}
+
 }

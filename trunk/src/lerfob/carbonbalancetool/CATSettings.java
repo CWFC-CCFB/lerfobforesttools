@@ -21,11 +21,11 @@ package lerfob.carbonbalancetool;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersWrapper;
-import lerfob.carbonbalancetool.CATUtility.CarbonToolSettingsVector;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
@@ -123,14 +123,15 @@ public final class CATSettings {
 	@Deprecated
 	private Vector<TreeLoggerDescription> treeLoggerDescriptions;
 
-	protected final CarbonToolSettingsVector<ProductionProcessorManagerWrapper> processorManagers = new CarbonToolSettingsVector<ProductionProcessorManagerWrapper>();
-	protected final CarbonToolSettingsVector<BiomassParametersWrapper> biomassParametersVector = new CarbonToolSettingsVector<BiomassParametersWrapper>();
+	protected final Map<ProductionManagerName, ProductionProcessorManagerWrapper> processorManagers = new TreeMap<ProductionManagerName, ProductionProcessorManagerWrapper>();
+	protected final Map<BiomassParametersName, BiomassParametersWrapper> biomassParametersVector = new TreeMap<BiomassParametersName, BiomassParametersWrapper>();
 
-	protected int currentProcessorManagerIndex = 0;
-	protected int currentBiomassParametersIndex = 0; 
-	
-	protected ProductionProcessorManager customizedManager;
-	
+//	protected int currentProcessorManagerIndex = 0;
+//	protected int currentBiomassParametersIndex = 0; 
+
+	protected ProductionManagerName currentProcessorManager = ProductionManagerName.values()[0];
+	protected BiomassParametersName currentBiomassParameters = BiomassParametersName.values()[0]; 
+
 	/**
 	 * Constructor.
 	 */
@@ -138,7 +139,6 @@ public final class CATSettings {
 		this.settings = settings;
 		readProcessorManagers();
 		readBiomassParametersVector();
-//		biomassParameters = new BiomassParameters();
 		productionLines = new ProductionLineManager();
 		treeLoggerWrapper = new TreeLoggerWrapper();
 		woodSupply = new WoodPieceDispatcher(treeLoggerWrapper, productionLines);
@@ -169,13 +169,13 @@ public final class CATSettings {
 		for (BiomassParametersName biomassParameterNames : BiomassParametersName.values()) {
 			if (biomassParameterNames == BiomassParametersName.customized) {
 				biomassParameters = new BiomassParameters();
-				biomassParametersVector.add(new BiomassParametersWrapper(biomassParameterNames, biomassParameters));
+				biomassParametersVector.put(biomassParameterNames, new BiomassParametersWrapper(biomassParameterNames, biomassParameters));
 			} else {
 				try {
 					biomassParameters = new BiomassParameters(new DefaultREpiceaGUIPermission(false));
 					String filename = relativePathname + biomassParameterNames.name().toLowerCase() + ((ExtendedFileFilter) biomassParameters.getFileFilter()).getExtension(); 
 					biomassParameters.load(filename);
-					biomassParametersVector.add(new BiomassParametersWrapper(biomassParameterNames, biomassParameters));
+					biomassParametersVector.put(biomassParameterNames, new BiomassParametersWrapper(biomassParameterNames, biomassParameters));
 				} catch (Exception e) {}
 			}
 		}
@@ -187,14 +187,14 @@ public final class CATSettings {
 		for (ProductionManagerName processorManagerName : ProductionManagerName.values()) {
 			if (processorManagerName == ProductionManagerName.customized) {
 				productionProcessorManager = new ProductionProcessorManager();
-				processorManagers.add(new ProductionProcessorManagerWrapper(processorManagerName, productionProcessorManager));
-				customizedManager = processorManagers.get(processorManagers.size() - 1).manager;
+				processorManagers.put(processorManagerName, new ProductionProcessorManagerWrapper(processorManagerName, productionProcessorManager));
+//				customizedManager = processorManagers.get(processorManagers.size() - 1).manager;
 			} else {
 				try {
 					productionProcessorManager = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
 					String filename = relativePathname + processorManagerName.name().toLowerCase() + "_" + REpiceaTranslator.getCurrentLanguage().getCode() + ((ExtendedFileFilter) productionProcessorManager.getFileFilter()).getExtension(); 
 					productionProcessorManager.load(filename);
-					processorManagers.add(new ProductionProcessorManagerWrapper(processorManagerName, productionProcessorManager));
+					processorManagers.put(processorManagerName, new ProductionProcessorManagerWrapper(processorManagerName, productionProcessorManager));
 				} catch (Exception e) {
 					System.out.println("Unable to read processor manager : " + processorManagerName.name());
 				}
@@ -206,14 +206,14 @@ public final class CATSettings {
 	 * This method returns the customizable production manager.
 	 * @return a ProductionProcessorManager instance
 	 */
-	public ProductionProcessorManager getCustomizableProductionProcessorManager() {return customizedManager;}
+	public ProductionProcessorManager getCustomizableProductionProcessorManager() {return processorManagers.get(ProductionManagerName.customized).manager;}
 	
 	/**
 	 * This method returns the currently selected ProductionProcessorManager instance.
 	 * @return a ProductionProcessorManager instance
 	 */
 	public ProductionProcessorManager getCurrentProductionProcessorManager() {
-		return processorManagers.get(currentProcessorManagerIndex).manager;
+		return processorManagers.get(currentProcessorManager).manager;
 	}
 
 	
@@ -222,7 +222,7 @@ public final class CATSettings {
 	 * @return a BiomassParameters instance
 	 */
 	public BiomassParameters getCurrentBiomassParameters() {
-		return biomassParametersVector.get(currentBiomassParametersIndex).manager;
+		return biomassParametersVector.get(currentBiomassParameters).manager;
 	}
 
 	/**
@@ -230,19 +230,20 @@ public final class CATSettings {
 	 * @param treeLoggerDescriptions a Vector of TreeLoggerDescription instances
 	 */
 	public void setTreeLoggerDescriptions(Vector<TreeLoggerDescription> treeLoggerDescriptions) {
-		ProductionProcessorManager manager = (ProductionProcessorManager) processorManagers.getFirstInstanceWithThisName(ProductionManagerName.customized);
+//		ProductionProcessorManager manager = (ProductionProcessorManager) processorManagers.getFirstInstanceWithThisName(ProductionManagerName.customized);
+		ProductionProcessorManager manager = processorManagers.get(ProductionManagerName.customized).manager;
 		if (manager != null) {
 			manager.setAvailableTreeLoggers(treeLoggerDescriptions);
 		}
 	}
 
 	protected void setReferentForBiomassParameters(Object referent) {
-		BiomassParameters manager = (BiomassParameters) biomassParametersVector.getFirstInstanceWithThisName(BiomassParametersName.customized);
+//		BiomassParameters manager = (BiomassParameters) biomassParametersVector.getFirstInstanceWithThisName(BiomassParametersName.customized);
+		BiomassParameters manager = biomassParametersVector.get(BiomassParametersName.customized).manager;
 		if (manager != null) {
 			manager.setReferent(referent);
 		}
 	}
-	
 	
 	
 	/**
@@ -380,4 +381,7 @@ public final class CATSettings {
 	@Deprecated
 	protected WoodPieceDispatcher getWoodSupplySetup() {return woodSupply;}
 
+
+	
+	
 }
