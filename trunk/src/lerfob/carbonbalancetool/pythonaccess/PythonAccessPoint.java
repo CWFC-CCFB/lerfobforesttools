@@ -186,12 +186,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		setStandList(standList);
 		calculateCarbon();
 		CATSimulationResult simulationResult = getCarbonCompartmentManager().getSimulationSummary();
-		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = null;
-		try {
-			productEvolutionMap = simulationResult.getProductEvolutionPerHa();
-		} catch (Exception e) {
-			int u = 0;
-		}
+		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
 		
 		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 		
