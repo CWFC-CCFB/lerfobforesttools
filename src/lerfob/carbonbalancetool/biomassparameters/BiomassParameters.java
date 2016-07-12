@@ -138,7 +138,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	
 	public void setReferent(Object referent) {
 		this.referent = referent; 
-		reset();
+		testReferent(referent);
 	}
 	
 

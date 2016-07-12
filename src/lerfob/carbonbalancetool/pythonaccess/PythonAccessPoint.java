@@ -32,6 +32,7 @@ import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATSimulationResult;
+import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
@@ -39,7 +40,6 @@ import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeatu
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
-import repicea.serial.xml.XmlSerializer;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -117,9 +117,14 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
 			setCurrentProductionManager(ProductionManagerName.customized);
 		}
+		setBiomassParameters();
 	}
 
-	
+	private void setBiomassParameters() throws IOException {
+		String biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
+		getCarbonToolSettings().getCustomizableBiomassParameters().load(biomassFilename);
+		setCurrentBiomassParameters(BiomassParametersName.customized);
+	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {

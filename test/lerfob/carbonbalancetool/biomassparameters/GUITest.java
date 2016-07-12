@@ -65,7 +65,7 @@ public class GUITest {
 		BiomassParameters param = new BiomassParameters();
 		param.setReferent(new FakeReferent());
 		param.showUI(null);
-//		System.exit(0);
+		System.exit(0);
 	}
 	
 	
