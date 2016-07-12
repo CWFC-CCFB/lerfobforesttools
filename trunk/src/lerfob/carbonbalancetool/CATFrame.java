@@ -317,13 +317,13 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 
 		
 		hwpComboBox = new REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper>(MessageID.HWP_Parameters.toString()); 
-		hwpComboBox.getComboBox().setModel(new DefaultComboBoxModel<ProductionProcessorManagerWrapper>(caller.getCarbonToolSettings().processorManagers.values().toArray(new ProductionProcessorManagerWrapper[]{})));
-		ProductionProcessorManagerWrapper currentProductionManagerItem = caller.getCarbonToolSettings().processorManagers.get(caller.getCarbonToolSettings().currentProcessorManager);
+		hwpComboBox.getComboBox().setModel(new DefaultComboBoxModel<ProductionProcessorManagerWrapper>(caller.getCarbonToolSettings().productionManagerMap.values().toArray(new ProductionProcessorManagerWrapper[]{})));
+		ProductionProcessorManagerWrapper currentProductionManagerItem = caller.getCarbonToolSettings().productionManagerMap.get(caller.getCarbonToolSettings().currentProcessorManager);
 		hwpComboBox.getComboBox().setSelectedItem(currentProductionManagerItem);
 
 		biomassComboBox  = new REpiceaComboBoxOpenButton<BiomassParametersWrapper>(MessageID.Biomass.toString()); 
-		biomassComboBox.getComboBox().setModel(new DefaultComboBoxModel<BiomassParametersWrapper>(caller.getCarbonToolSettings().biomassParametersVector.values().toArray(new BiomassParametersWrapper[]{})));
-		BiomassParametersWrapper currentBiomassParametersWrapper = caller.getCarbonToolSettings().biomassParametersVector.get(caller.getCarbonToolSettings().currentBiomassParameters);
+		biomassComboBox.getComboBox().setModel(new DefaultComboBoxModel<BiomassParametersWrapper>(caller.getCarbonToolSettings().biomassParametersMap.values().toArray(new BiomassParametersWrapper[]{})));
+		BiomassParametersWrapper currentBiomassParametersWrapper = caller.getCarbonToolSettings().biomassParametersMap.get(caller.getCarbonToolSettings().currentBiomassParameters);
 		biomassComboBox.getComboBox().setSelectedItem(currentBiomassParametersWrapper);
 		
 		refreshInterface();

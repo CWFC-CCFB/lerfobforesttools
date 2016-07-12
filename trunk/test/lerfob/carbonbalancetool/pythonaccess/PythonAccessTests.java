@@ -33,7 +33,7 @@ public class PythonAccessTests {
 	
 	@SuppressWarnings({ "rawtypes" })
 	@Test
-	public void simpleTestWithBeech() throws Exception {
+	public void testCompleteWithBeech() throws Exception {
 		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referenceBeech.ref";
 		
 		PythonAccessPoint pap = new PythonAccessPoint();
@@ -44,6 +44,11 @@ public class PythonAccessTests {
 //		XmlSerializer serializer = new XmlSerializer(refMapFilename);
 //		serializer.writeObject(resultingMap);
 		
+		Collection<Integer> yearsWithBiomass = new ArrayList<Integer>();
+		yearsWithBiomass.add(2010);
+		yearsWithBiomass.add(2011);
+		yearsWithBiomass.add(2012);
+
 		XmlDeserializer deserializer = new XmlDeserializer(refMapFilename);
 		Map<?,?> refMap = (Map) deserializer.readObject();
 		
@@ -72,6 +77,9 @@ public class PythonAccessTests {
 				}
 			}
 			System.out.println("Total biomass in HWP at year " + key + " - " + totalBiomass);
+			if (yearsWithBiomass.contains(key)) {
+				Assert.assertEquals("Comparing biomass for year " + key, 100, totalBiomass, 1E-8);
+			}
 		}
 		System.out.println("Successfully compared this number of values: " + nbValuesCompared);
 	}
@@ -135,7 +143,7 @@ public class PythonAccessTests {
 
 	@SuppressWarnings({ "rawtypes" })
 	@Test
-	public void testWithPine() throws Exception {
+	public void testCompleteWithPine() throws Exception {
 		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referencePine.ref";
 		
 		PythonAccessPoint pap = new PythonAccessPoint();
@@ -148,6 +156,11 @@ public class PythonAccessTests {
 		
 		XmlDeserializer deserializer = new XmlDeserializer(refMapFilename);
 		Map<?,?> refMap = (Map) deserializer.readObject();
+		
+		Collection<Integer> yearsWithBiomass = new ArrayList<Integer>();
+		yearsWithBiomass.add(2010);
+		yearsWithBiomass.add(2011);
+		yearsWithBiomass.add(2012);
 		
 		Assert.assertEquals(refMap.size(), resultingMap.size());
 		int nbValuesCompared = 0;
@@ -174,11 +187,14 @@ public class PythonAccessTests {
 				}
 			}
 			System.out.println("Total biomass in HWP at year " + key + " - " + totalBiomass);
+			if (yearsWithBiomass.contains(key)) {
+				Assert.assertEquals("Comparing biomass for year " + key, 100, totalBiomass, 1E-8);
+			}
 		}
 		System.out.println("Successfully compared this number of values: " + nbValuesCompared);
 	}
 
-	
+
 	@Test
 	public void testWithPineLoggingOnly() throws Exception {
 		PythonAccessPoint pap = new PythonAccessPoint();
@@ -246,11 +262,12 @@ public class PythonAccessTests {
 	@SuppressWarnings("rawtypes")
 	private static Map getInputMap() throws Exception {
 		if (InputMap == null) {
-//			String filename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referenceMapPythonAccess.ref";
 			String filename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "testMapPythonAccess.ref";
 			XmlDeserializer deserializer = new XmlDeserializer(filename);
 			InputMap = (Map) deserializer.readObject();
 		}
 		return InputMap;
 	}
+	
+
 }
