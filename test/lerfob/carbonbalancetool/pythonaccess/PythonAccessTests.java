@@ -1,18 +1,25 @@
 package lerfob.carbonbalancetool.pythonaccess;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
-import junit.framework.Assert;
+import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import repicea.serial.xml.XmlDeserializer;
+import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
+import repicea.simulation.treelogger.TreeLogger;
+import repicea.simulation.treelogger.WoodPiece;
 import repicea.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters;
@@ -24,7 +31,7 @@ public class PythonAccessTests {
 
 	private static Map<?,?> InputMap;
 	
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void simpleTestWithBeech() throws Exception {
 		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referenceBeech.ref";
@@ -70,9 +77,9 @@ public class PythonAccessTests {
 	}
 
 	
-	@SuppressWarnings({"deprecation"})
+	@SuppressWarnings({})
 	@Test
-	public void completeTestWithBeechProductionLines() throws Exception {
+	public void testWithBeechProductionLinesOnly() throws Exception {
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("beech");
 		pap.setAreaHA(0.1);
@@ -98,9 +105,9 @@ public class PythonAccessTests {
 	}		
 
 
-	@SuppressWarnings({"deprecation"})
+	@SuppressWarnings({})
 	@Test
-	public void completeTestWithPineProductionLines() throws Exception {
+	public void testWithPineProductionLinesOnly() throws Exception {
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("pine");
 		pap.setAreaHA(0.1);
@@ -126,7 +133,7 @@ public class PythonAccessTests {
 	}		
 
 
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void testWithPine() throws Exception {
 		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referencePine.ref";
@@ -170,6 +177,71 @@ public class PythonAccessTests {
 		}
 		System.out.println("Successfully compared this number of values: " + nbValuesCompared);
 	}
+
+	
+	@Test
+	public void testWithPineLoggingOnly() throws Exception {
+		PythonAccessPoint pap = new PythonAccessPoint();
+		pap.setSpecies("pine");
+		pap.setAreaHA(0.1);
+	
+		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
+		
+		PythonMaritimePineTree tree = new PythonMaritimePineTree(SpeciesType.ConiferousSpecies, 
+				AverageBasicDensity.MaritimePine,
+				StatusClass.cut,
+				45,
+				7.45,
+				1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1));
+
+		Collection<PythonMaritimePineTree> trees = new ArrayList<PythonMaritimePineTree>();
+		trees.add(tree);
+		manager.init(trees);
+		manager.run();
+		double volume = 0;
+		for (Collection<WoodPiece> woodPieces : manager.getWoodPieces().values()) {
+			for (WoodPiece woodPiece : woodPieces) {
+				volume += woodPiece.getWeightedVolumeM3();
+			}
+		}
+		double biomass = volume * AverageBasicDensity.MaritimePine.getBasicDensity();
+		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+	}		
+
+	@Test
+	public void testWithBeechLoggingOnly() throws Exception {
+		PythonAccessPoint pap = new PythonAccessPoint();
+		pap.setSpecies("beech");
+		pap.setAreaHA(0.1);
+	
+		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
+		
+		PythonEuropeanBeechTree tree = new PythonEuropeanBeechTree(SpeciesType.BroadleavedSpecies, 
+				AverageBasicDensity.EuropeanBeech,
+				StatusClass.cut,
+				45,
+				7.45,
+				1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1));
+
+		Collection<PythonEuropeanBeechTree> trees = new ArrayList<PythonEuropeanBeechTree>();
+		trees.add(tree);
+		manager.init(trees);
+		manager.run();
+		double volume = 0;
+		for (Collection<WoodPiece> woodPieces : manager.getWoodPieces().values()) {
+			for (WoodPiece woodPiece : woodPieces) {
+				volume += woodPiece.getWeightedVolumeM3();
+			}
+		}
+		double biomass = volume * AverageBasicDensity.EuropeanBeech.getBasicDensity();
+		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+	}		
 
 	@SuppressWarnings("rawtypes")
 	private static Map getInputMap() throws Exception {

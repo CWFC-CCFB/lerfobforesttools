@@ -38,9 +38,10 @@ import repicea.util.ObjectUtility;
  * This class implements the general height-diameter relationships for the French National Forest Inventory.
  * @author Mathieu Fortin - June 2012
  */
-@SuppressWarnings("serial")
 public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor implements FertilityClassEmulator {
 
+	private static final long serialVersionUID = -8769528746292724237L;
+	
 	
 	private final Map<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor> predictorMap;
 		
