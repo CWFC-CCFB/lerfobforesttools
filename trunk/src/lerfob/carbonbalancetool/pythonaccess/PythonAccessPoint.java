@@ -228,7 +228,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return outputMap;
 	}
 	
-	private double getAverageDryBiomassByTree(double kgM2, double nbTreesHa) {
+	protected static double getAverageDryBiomassByTree(double kgM2, double nbTreesHa) {
 		return kgM2 * 10d / nbTreesHa;		// 10: 0.001 from kg to Mg times 10000 m2/ha
 	}
 
