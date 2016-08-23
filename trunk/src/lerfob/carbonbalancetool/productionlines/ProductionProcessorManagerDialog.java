@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.Cre
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateLandfillProcessorButton;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateLeftInForestProcessorButton;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorToolPanel.CreateProductionLineProcessorButton;
+import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorButton;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.OwnedWindow;
@@ -63,6 +64,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UISetup.Icons.put(LandfillProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "IconLandfillSite.png"));
 		UISetup.Icons.put(CreateEndOfLifeLinkButton.class.getName(),CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "endOfLifelinkIcon.png"));
 		UISetup.Icons.put(LogCategoryProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "logIcon.png"));
+		UISetup.Icons.put(WoodyDebrisProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "logIcon.png"));
 		UIControlManager.setTitle(ProductionProcessorManagerDialog.class, "Harvested Wood Products", "Bois recolt\u00E9s");
 		
 		try {
