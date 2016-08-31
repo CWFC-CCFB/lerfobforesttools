@@ -46,7 +46,7 @@ import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.Processor;
 import repicea.simulation.processsystem.SystemManager;
 import repicea.simulation.processsystem.SystemManagerDialog;
-import repicea.simulation.treelogger.TreeLogCategory;
+import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
@@ -121,7 +121,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 	protected final ArrayList<LeftHandSideProcessor> logCategoryProcessors;
 	
-	private transient Map<TreeLogCategory, LogCategoryProcessor> logCategoryProcessorIndices = new HashMap<TreeLogCategory, LogCategoryProcessor>();
+	private transient Map<LogCategory, LogCategoryProcessor> logCategoryProcessorIndices = new HashMap<LogCategory, LogCategoryProcessor>();
 	
 	private transient CarbonUnitMap<CarbonUnitStatus> carbonUnitMap;
 	
@@ -209,8 +209,8 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		List<LeftHandSideProcessor> newProcessorList = new ArrayList<LeftHandSideProcessor>();
 		newProcessorList.addAll(getDefaultLeftHandSideProcessors());
 		for (Object species : selectedTreeLoggerParameters.getLogCategories().keySet()) {
-			List<TreeLogCategory> innerList = (List) selectedTreeLoggerParameters.getLogCategories().get(species);
- 			for (TreeLogCategory logCategory : innerList) {
+			List<LogCategory> innerList = (List) selectedTreeLoggerParameters.getLogCategories().get(species);
+ 			for (LogCategory logCategory : innerList) {
  				newProcessorList.add(new LogCategoryProcessor(logCategory));
 			}
 		}
@@ -321,15 +321,13 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	/**
 	 * The main method for this class. The different kinds of produced carbon units are stored in the carbon unit map, which is accessible
 	 * through the getCarbonUnits(CarbonUnitType) method.
-	 * @param treeLogCategory a TreeLogCategory instance
+	 * @param logCategory a TreeLogCategory instance
 	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-//	public Collection<CarbonUnit> processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
-	public void processWoodPiece(TreeLogCategory treeLogCategory,	int dateIndex, AmountMap<Element> amountMap) {
-		Processor processor = findLeftHandSideProcessor(treeLogCategory);
+	public void processWoodPiece(LogCategory logCategory,	int dateIndex, AmountMap<Element> amountMap) {
+		Processor processor = findLeftHandSideProcessor(logCategory);
 		processAmountMap(processor, dateIndex, amountMap);
-//		return processAmountMap(processor, dateIndex, amountMap);
 	}
 
 	/**
@@ -417,7 +415,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		return null;
 	}
 	
-	private LeftHandSideProcessor findLeftHandSideProcessor(TreeLogCategory logCategory) {
+	private LeftHandSideProcessor findLeftHandSideProcessor(LogCategory logCategory) {
 		if (!logCategoryProcessorIndices.containsKey(logCategory)) {
 			for (LeftHandSideProcessor processor : logCategoryProcessors) {
 				if (processor instanceof LogCategoryProcessor) {

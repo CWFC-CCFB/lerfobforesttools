@@ -20,5 +20,6 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014PredictorTest.class,
 				lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014PredictorTest.class,
 				lerfob.treelogger.mathilde.MathildeTreeLoggerTests.class,
+				lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerTests.class,
 				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class})
 public class AllLERFoBTests {}

@@ -16,16 +16,13 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.treelogger.mathilde;
+package lerfob.treelogger.douglasfirfcba;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -35,18 +32,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 import repicea.gui.UIControlManager;
-import repicea.gui.components.REpiceaSlider;
 import repicea.simulation.treelogger.LogCategoryPanel;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-class MathildeTreeLogCategoryPanel extends LogCategoryPanel<MathildeTreeLogCategory> implements PropertyChangeListener {
+class DouglasFCBALogCategoryPanel extends LogCategoryPanel<DouglasFCBALogCategory> {
 
 	private static enum MessageID implements TextableEnum {
-		MinimumTreeDiameter("Minimum tree dbh (cm)", "d130 minimum (cm)"),
-		PotentialUse("Proportion of commercial volume (%)", "Proportion du volume bois fort (%)"),
-		DownGrading("Proportion downgraded (%)", "Proportion de d\u00E9class\u00E9s (%)");
+		MinimumTreeDiameter("Minimum tree dbh (cm)", "d130 minimum (cm)");
 
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -61,17 +55,11 @@ class MathildeTreeLogCategoryPanel extends LogCategoryPanel<MathildeTreeLogCateg
 		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
-	private final REpiceaSlider potentialSlider;
-	private final REpiceaSlider downgradingSlider;
 	
-	protected MathildeTreeLogCategoryPanel(MathildeTreeLogCategory logCategory) {
+	protected DouglasFCBALogCategoryPanel(DouglasFCBALogCategory logCategory) {
 		super(logCategory);
 		nameTextField.setText(logCategory.getName());
 		nameTextField.setEditable(false);
-		potentialSlider = new REpiceaSlider();
-		potentialSlider.setValue((int) (logCategory.conversionFactor * 100));
-		downgradingSlider = new REpiceaSlider();
-		downgradingSlider.setValue((int) (logCategory.downgradingProportion * 100));
 		createUI();
 	}
 
@@ -117,40 +105,7 @@ class MathildeTreeLogCategoryPanel extends LogCategoryPanel<MathildeTreeLogCateg
 		panel.add(featurePanel);
 		panel.add(Box.createHorizontalStrut(5));
 		
-		JPanel potentialLumberWoodPanel = new JPanel();
-		potentialLumberWoodPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), MessageID.PotentialUse.toString()));
-		panel.add(potentialLumberWoodPanel);
-		potentialLumberWoodPanel.add(potentialSlider);
-
-		JPanel downgradingPanel = new JPanel();
-		downgradingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), MessageID.DownGrading.toString()));
-		panel.add(downgradingPanel);
-		downgradingPanel.add(downgradingSlider);
 	}
 	
-	@Override
-	public void listenTo() {
-		super.listenTo();
-		downgradingSlider.addPropertyChangeListener(this);
-		potentialSlider.addPropertyChangeListener(this);
-	}
-	
-	@Override
-	public void doNotListenToAnymore() {
-		super.doNotListenToAnymore();
-		downgradingSlider.removePropertyChangeListener(this);
-		potentialSlider.removePropertyChangeListener(this);
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		if (arg0.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
-			if (arg0.getSource().equals(downgradingSlider)) {
-				logCategory.downgradingProportion = downgradingSlider.getValue() * .01;
-			} else if (arg0.getSource().equals(potentialSlider)) {
-				logCategory.conversionFactor = potentialSlider.getValue() * .01;
-			}
-		}
-	}
 
 }
