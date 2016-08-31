@@ -19,11 +19,11 @@
 package lerfob.treelogger.mathilde;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
-import repicea.simulation.treelogger.TreeLogCategory;
+import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.WoodPiece;
 
 @SuppressWarnings("serial")
-class MathildeTreeLogCategory extends TreeLogCategory {
+class MathildeTreeLogCategory extends LogCategory {
 
 	protected final double minimumDbhCm;
 	private transient MathildeTreeLogCategoryPanel guiInterface;

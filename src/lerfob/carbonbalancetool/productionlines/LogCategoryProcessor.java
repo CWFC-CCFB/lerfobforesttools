@@ -22,7 +22,7 @@ import java.awt.Container;
 
 import repicea.simulation.processsystem.ProcessorButton;
 import repicea.simulation.processsystem.SystemPanel;
-import repicea.simulation.treelogger.TreeLogCategory;
+import repicea.simulation.treelogger.LogCategory;
 
 /**
  * The LogCategoryProcessor is a specific implementation of Processor for a particular log grade category
@@ -51,14 +51,14 @@ public class LogCategoryProcessor extends LeftHandSideProcessor {
 
 	}
 
-	protected final TreeLogCategory logCategory;
+	protected final LogCategory logCategory;
 	
 	/**
 	 * Constructor.
 	 * @param speciesName
 	 * @param logCategory
 	 */
-	protected LogCategoryProcessor(TreeLogCategory logCategory) {
+	protected LogCategoryProcessor(LogCategory logCategory) {
 		super();
 		this.logCategory = logCategory;
 	}

@@ -16,22 +16,22 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.treelogger.mathilde;
+package lerfob.treelogger.douglasfirfcba;
 
 import java.awt.Container;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<MathildeTreeLogCategory> {
+public final class DouglasFCBATreeLoggerParameters extends TreeLoggerParameters<DouglasFCBALogCategory> {
 
 	public static enum Grade implements TextableEnum {
+		Residues("Harvest residues", "Chutes"),
 		EnergyWood("Industry and energy wood", "Bois d'industrie et bois \u00E9nergie (BIBE)"),
 		SmallLumberWood("Small lumber wood", "Petit bois d'oeuvre (BO)"),
 		LargeLumberWood("Lumber wood", "Bois d'oeuvre (BO)"),
@@ -52,36 +52,30 @@ public final class MathildeTreeLoggerParameters extends TreeLoggerParameters<Mat
 		}
 	}
 
-	private transient MathildeTreeLoggerParametersDialog guiInterface;
+	private transient DouglasFCBATreeLoggerParametersDialog guiInterface;
 	
-	protected MathildeTreeLoggerParameters() {
-		super(MathildeTreeLogger.class);
+	protected DouglasFCBATreeLoggerParameters() {
+		super(DouglasFCBATreeLogger.class);
 	}
 
 	@Override
 	protected void initializeDefaultLogCategories() {
-		List<MathildeTreeLogCategory> categories;
 		getLogCategories().clear();
-		for (MathildeTreeSpecies species : MathildeTreeSpecies.values()) {
-			categories = new ArrayList<MathildeTreeLogCategory>();
-			getLogCategories().put(species.name(), categories);
-			double largeLumberWoodLimit = 37.5;
-			if (species == MathildeTreeSpecies.QUERCUS) {
-				largeLumberWoodLimit = 47.5;
-			}
-			categories.add(new MathildeTreeLogCategory(species, Grade.LargeLumberWood.name(), largeLumberWoodLimit, 0.84));
-			categories.add(new MathildeTreeLogCategory(species, Grade.SmallLumberWood.name(), 27.5, 0.50));
-			categories.add(new MathildeTreeLogCategory(species, Grade.EnergyWood.name(), 7d, 1d));
-		}
+		List<DouglasFCBALogCategory> categories = new ArrayList<DouglasFCBALogCategory>();
+		getLogCategories().put(DouglasFCBALoggableTree.Species.DouglasFir.name(), categories);
+		categories.add(new DouglasFCBALogCategory(Grade.LargeLumberWood, 42.5d));
+		categories.add(new DouglasFCBALogCategory(Grade.SmallLumberWood, 17.5d));
+		categories.add(new DouglasFCBALogCategory(Grade.EnergyWood, 7.5d));
+		categories.add(new DouglasFCBALogCategory(Grade.Residues, 0d));
 	}
 
 	@Override
 	public boolean isCorrect() {return true;}
 
 	@Override
-	public MathildeTreeLoggerParametersDialog getUI(Container parent) {
+	public DouglasFCBATreeLoggerParametersDialog getUI(Container parent) {
 		if (guiInterface == null) {
-			guiInterface = new MathildeTreeLoggerParametersDialog((Window) parent, this);
+			guiInterface = new DouglasFCBATreeLoggerParametersDialog((Window) parent, this);
 		}
 		return guiInterface;
 	}
