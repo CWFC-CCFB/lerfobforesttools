@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
@@ -447,6 +448,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
 		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
 //		System.exit(0);
 	}
