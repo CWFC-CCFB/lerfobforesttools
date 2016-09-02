@@ -27,7 +27,7 @@ import repicea.simulation.treelogger.TreeLoggerParametersDialog;
 class DouglasFCBATreeLoggerParametersDialog extends TreeLoggerParametersDialog<DouglasFCBALogCategory> {
 
 	static {
-		UIControlManager.setTitle(DouglasFCBATreeLoggerParametersDialog.class, "Mathilde Tree Logger", "Module de billonnage Mathilde");
+		UIControlManager.setTitle(DouglasFCBATreeLoggerParametersDialog.class, "FCBA Tree Logger for Douglas Fir", "Module de billonnage FCBA pour Douglas");
 	}
 
 	protected DouglasFCBATreeLoggerParametersDialog(Window window,	DouglasFCBATreeLoggerParameters params) {
