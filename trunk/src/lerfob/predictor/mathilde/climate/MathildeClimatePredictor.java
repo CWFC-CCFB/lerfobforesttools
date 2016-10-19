@@ -94,12 +94,13 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	
 	
 	private synchronized static void instantiateReferenceStands() {
+		CSVReader reader = null;
 		try {
 			if (referenceStands == null) {
 				referenceStands = new ArrayList<MathildeClimateStand>();
 				String path = ObjectUtility.getRelativePackagePath(MathildeClimatePredictor.class);
 				String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
-				CSVReader reader = new CSVReader(referenceStandsFilename);
+				reader = new CSVReader(referenceStandsFilename);
 				Object[] record;
 	 			while ((record = reader.nextRecord()) != null) {
 	 				String experimentName = record[0].toString();
@@ -114,6 +115,10 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to instantiate the reference stand list in MathildeClimatePredictor class!");
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 

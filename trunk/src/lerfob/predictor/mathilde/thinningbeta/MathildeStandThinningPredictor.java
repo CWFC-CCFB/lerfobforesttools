@@ -36,7 +36,7 @@ import repicea.util.ObjectUtility;
  * 
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
-@SuppressWarnings({ "serial", "deprecation" })
+@SuppressWarnings({ "serial"})
 @Deprecated
 public final class MathildeStandThinningPredictor extends REpiceaLogisticPredictor<MathildeThinningStand, Object> {
 

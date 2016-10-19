@@ -51,9 +51,10 @@ public final class GeographicalCoordinatesGenerator {
 	private GeographicalCoordinatesGenerator() {
 		coordinateMap = new HashMap<String, List<PlotCoordinates>>();
 		departmentMean = new HashMap<String, PlotCoordinates>();
+		CSVReader reader = null;
 		try {
 			String filename = ObjectUtility.getRelativePackagePath(getClass()) + "plotCoordinates.csv"; 
-			CSVReader reader = new CSVReader(filename);
+			reader = new CSVReader(filename);
 			Object[] record;
 			
 			while ((record = reader.nextRecord()) != null) {
@@ -82,6 +83,10 @@ public final class GeographicalCoordinatesGenerator {
 			
 		} catch (IOException e) {
 			System.out.println("Unable to read plot coordinates in LambertCoordinatesGenerator class");
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 
