@@ -302,7 +302,6 @@ public class CATTask extends AbstractGenericTask {
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
 			}
-			createWoodyDebris(caller.getTrees(StatusClass.cut), WoodyDebrisProcessorID.CoarseWoodyDebris);
 			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CoarseWoodyDebris);
 			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CommercialWoodyDebris);
 			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.FineWoodyDebris);
