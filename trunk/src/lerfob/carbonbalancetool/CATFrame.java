@@ -413,6 +413,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			caller.cancelRunningTask();
 		} else if (evt.getSource().equals(sensitivityAnalysisMenuItem)) {
 			CATSensitivityAnalysisSettings.getInstance().showUI(this);
+			redefineProgressBar();
 		} else if (evt.getSource().equals(aR2)) {
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Second);
 		} else if (evt.getSource().equals(aR4)) {
@@ -422,6 +423,13 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		}
 	}
 	
+
+	protected void redefineProgressBar() {
+		majorProgressBar.setMinimum(0);
+		majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
+		majorProgressBar.setValue(0);
+		refreshInterface();
+	}
 	
 	@Override
 	public void okAction() {

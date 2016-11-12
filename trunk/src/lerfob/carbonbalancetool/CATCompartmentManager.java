@@ -352,15 +352,14 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 
 	@SuppressWarnings("unchecked")
 	protected void setRealization(int realizationID) {
-		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic() && 
-				CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations() > 1) {
+		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic()) {
 			currentStands = new ArrayList<CATCompatibleStand>();
 			for (CATCompatibleStand stand : stands) {
 				currentRealization = realizationID;
 				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(realizationID));
 			}
 		} else {
-			currentRealization = 1;
+			currentRealization = realizationID;
 			currentStands = stands;
 		}
 	}
