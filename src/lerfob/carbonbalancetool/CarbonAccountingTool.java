@@ -258,15 +258,11 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 			Runnable doRun = new Runnable() {
 				@Override
 				public void run() {
-					getUI().majorProgressBar.setMinimum(0);
-					getUI().majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
-					getUI().majorProgressBar.setValue(0);
-					getUI().refreshInterface();
+					getUI().redefineProgressBar();
 				}
 			};
 			SwingUtilities.invokeLater(doRun);
 		}
-
 	}
 	
 	@SuppressWarnings("unchecked")
