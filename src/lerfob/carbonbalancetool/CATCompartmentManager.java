@@ -27,6 +27,7 @@ import java.util.TreeMap;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
@@ -48,12 +49,11 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	private int rotationLength;
 	private boolean isEvenAged;
 	private CATTimeTable timeTable;
-//	private Integer[] timeScale;
 
 	private boolean isSimulationValid;
-	protected boolean isStochastic;
+//	protected boolean isStochastic;
 	private int currentRealization;
-	protected int nRealizations;
+//	protected int nRealizations;
 	private int nbSimulations = 0;
 
 	
@@ -82,8 +82,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		if (stands != null) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 			isEvenAged = lastStand instanceof CATCompatibleEvenAgedStand;
-			isStochastic = false;
-			nRealizations = 1;
+			boolean isStochastic = false;
+			int nRealizations = 1;
 			if (lastStand instanceof StochasticInformationProvider) {
 				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
 				if (stochProv.isStochastic() && stochProv.getRealization(0) instanceof CATCompatibleStand) {
@@ -91,6 +91,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 					nRealizations = stochProv.getNumberRealizations();
 				}
 			}
+			CATSensitivityAnalysisSettings.getInstance().setModelStochastic(isStochastic);
+			CATSensitivityAnalysisSettings.getInstance().setNumberOfMonteCarloRealizations(nRealizations);
 			int nbExtraYears = 0;
 			if (isEvenAged) {
 				rotationLength = ((CATCompatibleEvenAgedStand) lastStand).getAgeYr();
@@ -350,7 +352,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 
 	@SuppressWarnings("unchecked")
 	protected void setRealization(int realizationID) {
-		if (isStochastic && nRealizations > 1) {
+		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic() && 
+				CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations() > 1) {
 			currentStands = new ArrayList<CATCompatibleStand>();
 			for (CATCompatibleStand stand : stands) {
 				currentRealization = realizationID;

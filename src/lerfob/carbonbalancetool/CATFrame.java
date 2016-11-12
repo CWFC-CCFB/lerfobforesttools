@@ -234,8 +234,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		majorProgressBarMessage = UIControlManager.getLabel(MessageID.NumberOfRunsToDo.toString()); // default operation for now
 		minorProgressBar = new JProgressBar();
 		majorProgressBar = new JProgressBar();
-		if (caller.getCarbonCompartmentManager().nRealizations > 0) {
-			majorProgressBar.setMaximum(caller.getCarbonCompartmentManager().nRealizations);
+		if (CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations() > 0) {
+			majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
 		}
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

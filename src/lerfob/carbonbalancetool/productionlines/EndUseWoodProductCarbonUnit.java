@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import lerfob.carbonbalancetool.CATCompartmentManager;
+import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
@@ -71,12 +72,6 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
 	}
 
-//	/**
-//	 * This method makes sure that the derived subproducts won't pile up in the collection. It is called at
-//	 * the beginning of the actualizeProduct method. 
-//	 */
-//	protected void reinitProduct() {firstIndex = -1;}
-	
 	/**
 	 * This method returns the volume of the product as it was created.
 	 * @return a double
@@ -89,6 +84,17 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 */
 	public double getBiomassAtCreationDate() {return getAmountMap().get(Element.Biomass);}
 	
+	/**
+	 * This method returns the number of functional units in this carbon unit.
+	 * @return a double
+	 */
+	public double getNumberOfFunctionalUnits() {
+		if (getCarbonUnitFeature().getBiomassOfFunctionalUnit() != 0d) {
+			return getBiomassAtCreationDate() / getCarbonUnitFeature().getBiomassOfFunctionalUnit();
+		} else {
+			return 0d;
+		}
+	}
 	
 	/**
 	 * This method actualizes the EndProduct instance on a basis that is specified through the time scale parameter. Landfill products are retrieved 
@@ -140,9 +146,9 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 */
 	public double getTotalCarbonSubstitution(CATCompartmentManager manager) {
 		if (isNewImplementation()) {
-			return getSubstitutionForAGivenVolume(getProcessedVolumeAtCreationDate(), manager);
-		} else {
-			return getSubstitutionForAGivenVolume(rawRoundWoodVolume, manager);
+			return getSubstitutionPerFunctionalUnit(getNumberOfFunctionalUnits(), manager);
+		} else {	// former implementation
+			return getSubstitutionPerFunctionalUnit(rawRoundWoodVolume, null);
 		}
 	}
 
@@ -154,19 +160,23 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 */
 	public double[] getCurrentCarbonSubstitution(CATCompartmentManager manager) {
 		if (isActualized()) {
-			double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
-			double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
-			double[] releasedCarbonArray = getReleasedCarbonArray();
-			double[] outputArray = new double[getTimeTable().size()];
-			double volume;
-			for (int i = 0; i < getTimeTable().size(); i++) {
-				volume = releasedCarbonArray[i] * volumeFactor;
-				if (!isNewImplementation()) {
+			if (isNewImplementation()) {
+				double[] outputArray = new double[getTimeTable().size()];
+				outputArray[getIndexInTimeScale()] = getTotalCarbonSubstitution(manager);
+				return outputArray;
+			} else {
+				double ratioToGetRawRoundWoodVolume = rawRoundWoodVolume / getProcessedVolumeAtCreationDate();
+				double volumeFactor = getProcessedVolumeAtCreationDate() / getInitialCarbon();
+				double[] releasedCarbonArray = getReleasedCarbonArray();
+				double[] outputArray = new double[getTimeTable().size()];
+				double volume;
+				for (int i = 0; i < getTimeTable().size(); i++) {
+					volume = releasedCarbonArray[i] * volumeFactor;
 					volume *= ratioToGetRawRoundWoodVolume;
+					outputArray[i] = getSubstitutionPerFunctionalUnit(volume, null);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
 				}
-				outputArray[i] = getSubstitutionForAGivenVolume(volume, manager);	// since the substitution is given as a ratio between tC eq : roundWoodVolume in m3.
+				return outputArray;
 			}
-			return outputArray;
 		} else {
 			return null;
 		}
@@ -186,6 +196,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * this end product.
 	 * @return the carbon emissions in tC Eq. (double) (emissions denoted by negative values)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public double getTotalNonRenewableCarbonEmissionsMgCO2Eq() {
 		if (getAmountMap().containsKey(Element.EmissionsCO2Eq)) {		// new implementation
@@ -207,13 +218,17 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	}
 
 	/**
-	 * This method returns the substitution in eq tC obtained from a volume of this product.
-	 * @param volume = a volume of this product
-	 * @param subject the CarbonCompartmentManager instance
-	 * @return the substitution in eq. tC (double)
+	 * This method returns the substitution in C eq.
+	 * @param manager a CATCompartmentManager instance
+	 * @return the substitution in C eq. (double)
 	 */
-	private double getSubstitutionForAGivenVolume(double volume, CATCompartmentManager subject) {
-		return volume * getCarbonUnitFeature().getAverageSubstitution(subject);
+	@SuppressWarnings("deprecation")
+	private double getSubstitutionPerFunctionalUnit(double nbFunctionalUnits, CATCompartmentManager manager) {
+		if (isNewImplementation()) {
+			return nbFunctionalUnits * getCarbonUnitFeature().getSubstitutionCO2EqFunctionalUnit(manager) * CATSettings.CO2_C_FACTOR; // Conversion to C eq.
+		} else {
+			return nbFunctionalUnits * getCarbonUnitFeature().getAverageSubstitution();
+		}
 	}
 
 	@Override
