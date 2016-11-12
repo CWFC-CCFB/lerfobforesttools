@@ -79,7 +79,14 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	/**
 	 * The average C to m3 of raw material substitution ratio.
 	 */
+	@Deprecated
 	private double averageSubstitution;
+	
+	private double relativeSubstitutionCO2EqFonctionalUnit;
+	
+	private double biomassOfFunctionalUnit;
+
+	@Deprecated
 	private LifeCycleAnalysis lca;
 
 	
@@ -108,14 +115,24 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		return getUserInterfacePanel();
 	}
 
-	protected double getAverageSubstitution(CATCompartmentManager manager) {
+	protected double getSubstitutionCO2EqFunctionalUnit(CATCompartmentManager manager) {
 		if (manager != null) {
-			return averageSubstitution * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.SubstitutionFactors, manager);
+			return relativeSubstitutionCO2EqFonctionalUnit * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.SubstitutionFactors, manager);
 		} else {
-			return averageSubstitution;
+			return relativeSubstitutionCO2EqFonctionalUnit;
 		}
 	}
-		
+	
+	protected double getBiomassOfFunctionalUnit() {
+		return biomassOfFunctionalUnit;
+	}
+	
+	@Deprecated
+	protected double getAverageSubstitution() {
+		return averageSubstitution;
+	}
+	
+	@Deprecated
 	protected void setAverageSubstitution(double d) {averageSubstitution = d;}
 	
 	/**
@@ -145,8 +162,10 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	 */
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
-		if (e.getSource().equals(getUI().averageSubstitutionTextField)) {
-			setAverageSubstitution(Double.parseDouble(getUI().averageSubstitutionTextField.getText()));
+		if (e.getSource().equals(getUI().substitutionTextField)) {
+			relativeSubstitutionCO2EqFonctionalUnit = Double.parseDouble(getUI().substitutionTextField.getText());
+		} else if (e.getSource().equals(getUI().biomassFUTextField)) {
+			biomassOfFunctionalUnit = Double.parseDouble(getUI().biomassFUTextField.getText());
 		} else {
 			super.numberChanged(e);
 		}
@@ -169,8 +188,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 			if (obj instanceof UseClass) {
 				useClass = (UseClass) obj;
 //				System.out.println("Use class changed for " + useClass.name());
-			} else if (obj instanceof LifeCycleAnalysis.ReferenceLCA) {
-				lca = (LifeCycleAnalysis) ((LifeCycleAnalysis.ReferenceLCA) obj).getLCA();
+//			} else if (obj instanceof LifeCycleAnalysis.ReferenceLCA) {
+//				lca = (LifeCycleAnalysis) ((LifeCycleAnalysis.ReferenceLCA) obj).getLCA();
 			}
 		} else if (evt.getSource().equals(getUserInterfacePanel().isDisposableCheckBox)) {
 			if (getUserInterfacePanel().isEnabled()) {
@@ -188,11 +207,15 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		}
 	}
 	
+	@Deprecated
 	protected LifeCycleAnalysis getLCA() {return lca;}
+	
+	@Deprecated
 	protected void setLCA(LifeCycleAnalysis lca) {
 		this.lca = lca;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof EndUseWoodProductCarbonUnitFeature)) {
@@ -209,6 +232,12 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 				return false;
 			}
 			if (cuf.averageSubstitution != averageSubstitution) {
+				return false;
+			}
+			if (cuf.relativeSubstitutionCO2EqFonctionalUnit != this.relativeSubstitutionCO2EqFonctionalUnit) {
+				return false;
+			}
+			if (cuf.biomassOfFunctionalUnit != this.biomassOfFunctionalUnit) {
 				return false;
 			}
 			if (cuf.lca != null) {

@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
@@ -258,7 +259,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				@Override
 				public void run() {
 					getUI().majorProgressBar.setMinimum(0);
-					getUI().majorProgressBar.setMaximum(getCarbonCompartmentManager().nRealizations);
+					getUI().majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
 					getUI().majorProgressBar.setValue(0);
 					getUI().refreshInterface();
 				}
@@ -329,7 +330,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		if (!carbonCompartmentManager.getCarbonToolSettings().isValid()) {
 			throw new InvalidParameterException("The settings of the carbon accounting tool are invalid. Please check!");
 		} else {
-			int nbReals = carbonCompartmentManager.nRealizations;
+			int nbReals = CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations();
 			if (nbReals < 1) {
 				nbReals = 1;
 			}

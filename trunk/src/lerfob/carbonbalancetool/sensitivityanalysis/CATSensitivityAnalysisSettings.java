@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.sensitivityanalysis;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +60,8 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	
 	protected final Map<VariabilitySource, CATSensitivityParameterWrapper> sensitivityParameterMap;
 	
+	protected int nbMonteCarloRealizations;
+	protected boolean isModelStochastic;
 	
 	private CATSensitivityAnalysisSettings() {
 		sensitivityParameterMap = new HashMap<VariabilitySource, CATSensitivityParameterWrapper>();
@@ -106,6 +109,38 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
+	/**
+	 * This method returns the number of Monte Carlo realizations for the sensitivity analysis.
+	 * @return an Integer between 1 and 1000
+	 */
+	public int getNumberOfMonteCarloRealizations() {return nbMonteCarloRealizations;}
+	
+	/**
+	 * This method sets the number of Monte Carlo realizations for the sensitivity analysis.
+	 * @param nbMonteCarloRealizations a positive integer between 1 and 1000
+	 */
+	public void setNumberOfMonteCarloRealizations(int nbMonteCarloRealizations) {
+		if (nbMonteCarloRealizations < 1 || nbMonteCarloRealizations > 1000) {
+			throw new InvalidParameterException("The number of Monte Carlo realizations must be between 1 and 1000");
+		}
+		this.nbMonteCarloRealizations = nbMonteCarloRealizations;
+		if (guiInterface != null) {
+			guiInterface.synchronizeUIWithOwner();
+		}
+	}
+	
+	/**
+	 * This method sets the model to stochastic. 
+	 * @param isModelStochastic a boolean
+	 */
+	public void setModelStochastic(boolean isModelStochastic) {
+		this.isModelStochastic = isModelStochastic;
+		if (guiInterface != null) {
+			guiInterface.synchronizeUIWithOwner();
+		}
+	}
+	
+	public boolean isModelStochastic() {return isModelStochastic;}
 	
 	public static void main(String[] args) {
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();

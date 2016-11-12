@@ -27,6 +27,7 @@ import lerfob.carbonbalancetool.CATSettings;
  * which controls the availability of the lca. 
  * @author Mathieu Fortin - April 2010
  */
+@Deprecated
 public class LifeCycleAnalysis implements Serializable {
 
 	private static final long serialVersionUID = 20100914L;
