@@ -428,6 +428,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		majorProgressBar.setMinimum(0);
 		majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
 		majorProgressBar.setValue(0);
+		majorProgressBar.setString(majorProgressBar.getValue() + " / " + majorProgressBar.getMaximum());
 		refreshInterface();
 	}
 	
