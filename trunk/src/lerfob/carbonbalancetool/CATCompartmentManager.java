@@ -105,19 +105,6 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			if (averageTimeStep == 0) {
 				averageTimeStep = 5;	// default value in case there is a single step
 			}
-//			timeScale = new Integer[stands.size() + nbExtraYears / averageTimeStep];
-//
-//			for (int i = 0; i < timeScale.length; i++) {
-//				if (i < stands.size()) {
-//					if (isEvenAged) {
-//						timeScale[i] = ((CarbonToolCompatibleEvenAgedStand) stands.get(i)).getAgeYr();
-//					} else {
-//						timeScale[i] = stands.get(i).getDateYr();
-//					}
-//				} else  {
-//					timeScale[i] = timeScale[i - 1] + averageTimeStep;
-//				}
-//			}
 			timeTable = new CATTimeTable(lastStand.getDateYr());
 			
 			int size = stands.size() + nbExtraYears / averageTimeStep;

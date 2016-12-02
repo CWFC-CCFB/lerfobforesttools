@@ -81,7 +81,7 @@ public class LeftInForestProcessor extends AbstractProductionLineProcessor {
 		int dateIndex = carbonUnit.getIndexInTimeScale();
 		AmountMap<Element> processedAmountMap = carbonUnit.getAmountMap().multiplyByAScalar(intake * .01);
 
-		CarbonUnit woodProduct =  new CarbonUnit(dateIndex, woodProductFeature, processedAmountMap);
+		CarbonUnit woodProduct =  new CarbonUnit(dateIndex, carbonUnit.samplingUnitID, woodProductFeature, processedAmountMap);
 		woodProduct.addStatus(CarbonUnitStatus.HarvestResidues);
 		outputUnits.add(woodProduct);
 		return outputUnits;

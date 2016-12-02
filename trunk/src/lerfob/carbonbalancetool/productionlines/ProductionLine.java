@@ -90,7 +90,7 @@ public class ProductionLine implements 	Serializable {
 //		return guiInterface;
 //	}
 
-	
+	@Deprecated
 	protected CarbonUnitMap<CarbonUnitStatus> createCarbonUnitFromAWoodPiece(int dateIndex, AmountMap<Element> amountMap) throws Exception {
 		return primaryProcessor.processWoodPiece(dateIndex, amountMap);
 	}

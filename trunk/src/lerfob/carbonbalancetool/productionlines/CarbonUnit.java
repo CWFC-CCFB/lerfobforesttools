@@ -98,6 +98,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	
 	private CATTimeTable timeTable;
 	private final int dateIndex;
+	protected final String samplingUnitID;
 	private final List<CarbonUnitStatus> status; 
 	
 	/**
@@ -114,10 +115,11 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	 * @param carbonUnitFeature a CarbonUnitFeature instance
 	 * @param initialAmounts a map that contains the amount of each element to be processed
 	 */
-	protected CarbonUnit(int dateIndex, CarbonUnitFeature carbonUnitFeature, AmountMap<Element> initialAmounts) {
+	protected CarbonUnit(int dateIndex, String samplingUnitID, CarbonUnitFeature carbonUnitFeature, AmountMap<Element> initialAmounts) {
 		super(initialAmounts);
 		this.dateIndex = dateIndex;
 		this.carbonUnitFeature = carbonUnitFeature;
+		this.samplingUnitID = samplingUnitID;
 		status = new ArrayList<CarbonUnitStatus>();
 		actualized = false;
 	}
@@ -243,7 +245,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 			if (carbonUnitFeature.equals(otherUnit.carbonUnitFeature)) {
 				if (dateIndex == otherUnit.dateIndex) {
 					if (status.equals(otherUnit.status)) {
-						return true;
+						if (samplingUnitID.equals(otherUnit.samplingUnitID)) {
+							return true;
+						}
 					}
 				}
 			}
