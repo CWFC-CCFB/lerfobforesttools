@@ -55,7 +55,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			int dateIndex,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap) {
-		super(dateIndex, carbonUnitFeature, amountMap);
+		super(dateIndex, "", carbonUnitFeature, amountMap);
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	}
 	
@@ -66,9 +66,10 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
 	 */
 	protected EndUseWoodProductCarbonUnit(int dateIndex,
+			String sampleUnitID,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap) {
-		super(dateIndex, carbonUnitFeature, amountMap);
+		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
 	}
 
@@ -118,7 +119,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
 						List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
-						disposedUnits.add(new CarbonUnit(i, null, updatedMap));
+						disposedUnits.add(new CarbonUnit(i, samplingUnitID, null, updatedMap));
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
 						for (CarbonUnit carbonUnit : processedUnits) {
 							if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {

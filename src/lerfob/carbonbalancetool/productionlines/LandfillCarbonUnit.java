@@ -30,10 +30,11 @@ public class LandfillCarbonUnit extends CarbonUnit {
 	 * @param endProduct a EndProduct instance that originates from the landfill market flux.
 	 */
 	protected LandfillCarbonUnit(int dateIndex, 
+							String sampleUnitID,
 							LandfillCarbonUnitFeature landfillCarbonUnitFeature,
 							AmountMap<Element> amountMap,
 							CarbonUnitStatus landfillStatus) {
-		super(dateIndex, landfillCarbonUnitFeature, amountMap);
+		super(dateIndex, sampleUnitID, landfillCarbonUnitFeature, amountMap);
 		addStatus(landfillStatus);
 	}
 	

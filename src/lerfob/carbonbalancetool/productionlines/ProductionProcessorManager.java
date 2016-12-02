@@ -325,9 +325,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public void processWoodPiece(LogCategory logCategory,	int dateIndex, AmountMap<Element> amountMap) {
+	public void processWoodPiece(LogCategory logCategory, int dateIndex, String samplingUnitID, AmountMap<Element> amountMap) {
 		Processor processor = findLeftHandSideProcessor(logCategory);
-		processAmountMap(processor, dateIndex, amountMap);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMap);
 	}
 
 	/**
@@ -336,9 +336,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 * @param type a WoodyDebrisProcessorID enum variable
 	 */
-	public void processWoodyDebris(int dateIndex, AmountMap<Element> amountMap, WoodyDebrisProcessorID type) {
+	public void processWoodyDebris(int dateIndex, String samplingUnitID, AmountMap<Element> amountMap, WoodyDebrisProcessorID type) {
 		Processor processor = findWoodyDebrisProcessor(type);
-		processAmountMap(processor, dateIndex, amountMap);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMap);
 	}
 	
 //	/**
@@ -352,9 +352,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 //	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection<CarbonUnit> processAmountMap(Processor processor, int dateIndex, AmountMap<Element> amountMap) {
+	private Collection<CarbonUnit> processAmountMap(Processor processor, int dateIndex, String samplingUnitID, AmountMap<Element> amountMap) {
 		List<ProcessUnit> inputUnits = new ArrayList<ProcessUnit>();
-		inputUnits.add(new CarbonUnit(dateIndex, null, amountMap));
+		inputUnits.add(new CarbonUnit(dateIndex, samplingUnitID, null, amountMap));
 		Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
 		getCarbonUnitMap().add(processedUnits);
 		return processedUnits;
@@ -454,11 +454,12 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 	public static void main(String[] args) {
 		REpiceaTranslator.setCurrentLanguage(Language.English);
+		REpiceaTranslator.setCurrentLanguage(Language.French);
 //		ProductionProcessorManager ppm = new ProductionProcessorManager(new DefaultREpiceaGUIPermission(false));
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		String filename = ObjectUtility.getPackagePath(ppm.getClass()) 
 				+ File.separator + "library"
-				+ File.separator + "hardwood_recycling_en.prl";
+				+ File.separator + "hardwood_recycling_fr.prl";
 		try {
 			ppm.load(filename);
 			ppm.showUI(null);

@@ -224,11 +224,12 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 		CarbonUnit woodProduct;
 		
 		if (!isFinalProcessor()) {
-			woodProduct = new CarbonUnit(dateIndex, null, processedAmountMap);
+			woodProduct = new CarbonUnit(dateIndex, carbonUnit.samplingUnitID, null, processedAmountMap);
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
 			woodProduct = new EndUseWoodProductCarbonUnit(dateIndex, 
+					carbonUnit.samplingUnitID, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 					processedAmountMap);
 			outputUnits.add(woodProduct);
@@ -248,6 +249,8 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 
 		CarbonUnitMap<CarbonUnitStatus> outputMap = new CarbonUnitMap<CarbonUnitStatus>(CarbonUnitStatus.EndUseWoodProduct);
 
+		String sampleUnitID = "";
+		
 		CarbonUnit woodProduct;
 		
 		boolean somethingIsLoss = (averageYield != 1d);
@@ -269,15 +272,15 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 					double docf = lfcuf.getDegradableOrganicCarbonFraction();
 					
 					AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-					woodProduct = new LandfillCarbonUnit(dateIndex, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillDegradable);
+					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillDegradable);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 					landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-					woodProduct = new LandfillCarbonUnit(dateIndex, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillNonDegradable); 
+					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, CarbonUnitStatus.LandFillNonDegradable); 
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 				} else {				// is left in the forest
-					woodProduct = new CarbonUnit(dateIndex, woodProductFeature, processedAmountMap);
+					woodProduct = new CarbonUnit(dateIndex, sampleUnitID, woodProductFeature, processedAmountMap);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.HarvestResidues).add(woodProduct);
 				}
 

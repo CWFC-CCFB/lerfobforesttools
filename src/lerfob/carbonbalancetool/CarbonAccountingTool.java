@@ -47,6 +47,7 @@ import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.gui.genericwindows.GeneralLicenseWindow;
 import repicea.gui.genericwindows.GenericSplashWindow;
+import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerManager;
@@ -95,7 +96,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	
 	private CATCompartmentManager carbonCompartmentManager;	
 	protected boolean finalCutHadToBeCarriedOut;
-	private final Map<StatusClass, Map<CATCompatibleStand, Collection<CATCompatibleTree>>> treeCollections;
+	private final Map<StatusClass, Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>>> treeCollections;
 	private final Map<CATCompatibleTree, CATCompatibleStand> treeRegister;
 	
 	protected Window parentFrame;
@@ -111,7 +112,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
-		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Collection<CATCompatibleTree>>>();
+		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>>>();
 		treeRegister = new HashMap<CATCompatibleTree, CATCompatibleStand>();
 		
 		Runnable toBeRun = new Runnable () {
@@ -193,22 +194,35 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	
 	protected void registerTree(StatusClass statusClass, CATCompatibleStand stand, CATCompatibleTree tree) {
 		if (!treeCollections.containsKey(statusClass)) {
-			treeCollections.put(statusClass, new HashMap<CATCompatibleStand, Collection<CATCompatibleTree>>());
+			treeCollections.put(statusClass, new HashMap<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>>());
 		}
-		Map<CATCompatibleStand, Collection<CATCompatibleTree>> innerMap = treeCollections.get(statusClass);
+		Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>> innerMap = treeCollections.get(statusClass);
 		if (!innerMap.containsKey(stand)) {
-			innerMap.put(stand, new ArrayList<CATCompatibleTree>());
+//			innerMap.put(stand, new ArrayList<CATCompatibleTree>());
+			innerMap.put(stand, new HashMap<String, Collection<CATCompatibleTree>>());
 		}
-		Collection<CATCompatibleTree> trees = innerMap.get(stand);
+		
+		Map<String, Collection<CATCompatibleTree>> innerInnerMap = innerMap.get(stand);
+		
+		String samplingUnitID;
+		if (tree instanceof SamplingUnitIDProvider) {
+			samplingUnitID = ((SamplingUnitIDProvider) tree).getSamplingUnitID(); 
+		} else {
+			samplingUnitID = "";
+		}
+		if (!innerInnerMap.containsKey(samplingUnitID)) {
+			innerInnerMap.put(samplingUnitID, new ArrayList<CATCompatibleTree>());
+		}
+		Collection<CATCompatibleTree> trees = innerInnerMap.get(samplingUnitID);
 		trees.add(tree);
 		treeRegister.put(tree, stand);
 	}
 	
-	protected Map<CATCompatibleStand, Collection<CATCompatibleTree>> getTrees(StatusClass statusClass) {
+	protected Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>> getTrees(StatusClass statusClass) {
 		if (treeCollections.containsKey(statusClass)) {
 			return treeCollections.get(statusClass);
 		} else {
-			return new HashMap<CATCompatibleStand, Collection<CATCompatibleTree>>();
+			return new HashMap<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>>();
 		}
 	}
 	
