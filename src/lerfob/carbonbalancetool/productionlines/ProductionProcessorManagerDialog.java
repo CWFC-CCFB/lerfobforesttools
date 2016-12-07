@@ -89,7 +89,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		LandfillButtonToolTip("Create a landfill site", "Cr\u00E9er une d\u00E9charge"),
 		LeftInForestButtonToolTip("Leave on forest floor", "Laisser en for\u00EAt"),
 		EndOfLifeLinkButtonToolTip("End of life destination", "Destination en fin de vie"),
-		;
+		IncompatibleTreeLogger("The tree logger is incompatible and will be replaced by the default tree logger!", "Le module de billonnage est incompatible et sera remplac\u00E9 par le module de billonnage par d\u00E9faut!");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);

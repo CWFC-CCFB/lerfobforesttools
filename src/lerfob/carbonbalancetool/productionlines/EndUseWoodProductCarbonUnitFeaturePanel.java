@@ -77,6 +77,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	private JLabel disposableProportionLabel;
 	protected JSlider disposableProportionSlider;
 	protected JFormattedNumericField biomassFUTextField;
+	protected JFormattedNumericField emissionsByFUField;
 
 	/**
 	 * The constructor is linked to its representing class.
@@ -127,6 +128,12 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 			}
 		}
 		
+		emissionsByFUField = NumberFormatFieldFactory.createNumberFormatField(NumberFormatFieldFactory.Type.Double,
+				NumberFormatFieldFactory.Range.Positive,
+				false);
+		emissionsByFUField.setColumns(5);
+		emissionsByFUField.setText(((Double) getCaller().emissionsByFunctionalUnit).toString());
+
 //		lifeCycleAnalysisList = new JComboBox(LifeCycleAnalysis.ReferenceLCA.values());
 //
 //		LifeCycleAnalysis lca = getCaller().getLCA();
@@ -213,6 +220,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 //		lifeCycleAnalysisList.addItemListener(getCaller());
 		substitutionTextField.addNumberFieldListener(getCaller());
 		useClassList.addItemListener(getCaller());
+		emissionsByFUField.addNumberFieldListener(getCaller());
 	}
 
 	@Override
@@ -225,6 +233,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 //		lifeCycleAnalysisList.removeItemListener(getCaller());
 		substitutionTextField.removeNumberFieldListener(getCaller());
 		useClassList.removeItemListener(getCaller());
+		emissionsByFUField.removeNumberFieldListener(getCaller());
 	}
 
 
