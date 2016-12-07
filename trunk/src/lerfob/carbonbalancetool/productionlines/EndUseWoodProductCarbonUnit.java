@@ -71,6 +71,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			AmountMap<Element> amountMap) {
 		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
+		AbstractProcessor.updateProcessEmissions(amountMap, carbonUnitFeature.getBiomassOfFunctionalUnit(), carbonUnitFeature.emissionsByFunctionalUnit);
 	}
 
 	/**

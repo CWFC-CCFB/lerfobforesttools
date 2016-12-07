@@ -85,6 +85,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	private double relativeSubstitutionCO2EqFonctionalUnit;
 	
 	private double biomassOfFunctionalUnit;
+	protected double emissionsByFunctionalUnit;
+	
 
 	@Deprecated
 	private LifeCycleAnalysis lca;
@@ -166,6 +168,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 			relativeSubstitutionCO2EqFonctionalUnit = Double.parseDouble(getUI().substitutionTextField.getText());
 		} else if (e.getSource().equals(getUI().biomassFUTextField)) {
 			biomassOfFunctionalUnit = Double.parseDouble(getUI().biomassFUTextField.getText());
+		} else if (e.getSource().equals(getUI().emissionsByFUField)) {
+			emissionsByFunctionalUnit = Double.parseDouble(getUI().emissionsByFUField.getText());
 		} else {
 			super.numberChanged(e);
 		}

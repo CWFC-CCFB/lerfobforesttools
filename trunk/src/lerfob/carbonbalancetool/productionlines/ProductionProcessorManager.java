@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.productionlines;
 import java.awt.Container;
 import java.awt.Window;
 import java.io.File;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import lerfob.carbonbalancetool.CATCompartmentManager;
@@ -36,7 +38,9 @@ import lerfob.carbonbalancetool.CATDecayFunction;
 import lerfob.carbonbalancetool.CATExponentialFunction;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog.MessageID;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
+import repicea.gui.UIControlManager;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.serial.Memorizable;
 import repicea.serial.MemorizerPackage;
@@ -65,6 +69,11 @@ import repicea.util.REpiceaTranslator.Language;
  */
 public class ProductionProcessorManager extends SystemManager implements Memorizable {
 
+	@SuppressWarnings("serial")
+	protected static class TreeLoggerInstanceCompatibilityException extends InvalidParameterException {
+		protected TreeLoggerInstanceCompatibilityException() {}
+	}
+	
 	static {
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.defaulttreelogger.CATDefaultLogCategory", "repicea.treelogger.basictreelogger.BasicLogCategory");
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.defaulttreelogger.CATDefaultTreeLogger", "repicea.treelogger.basictreelogger.BasicTreeLogger");
@@ -178,7 +187,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 	protected void setSelectedTreeLogger(TreeLoggerParameters<?> treeLoggerParameters) {
 		if (!isCompatibleWithAvailableTreeLoggerParameters(treeLoggerParameters)) {
-			throw new InvalidParameterException("The TreeLoggerDescription instance is not compatible!");
+			throw new TreeLoggerInstanceCompatibilityException();
 		} else {
 			selectedTreeLoggerParameters = treeLoggerParameters;
 			actualizeTreeLoggerParameters();
@@ -275,6 +284,23 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 //		this.actualizeTreeLoggerParameters();
 	}
 
+	@Override
+	public void load(String filename) throws IOException {
+		try {
+			super.load(filename);
+		} catch (TreeLoggerInstanceCompatibilityException e) {
+			if (isGuiVisible()) {
+				JOptionPane.showMessageDialog(getUI(null), 
+						MessageID.IncompatibleTreeLogger.toString(),
+						UIControlManager.InformationMessageTitle.Warning.toString(),
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				System.out.println(MessageID.IncompatibleTreeLogger.toString());
+			}
+			setSelectedTreeLogger(availableTreeLoggerParameters.get(0));
+		}
+	}
+	
 	/**
 	 * This method sets the list of tree logger descriptions.
 	 * @param vector a Vector instance containing TreeLoggerdescription objects

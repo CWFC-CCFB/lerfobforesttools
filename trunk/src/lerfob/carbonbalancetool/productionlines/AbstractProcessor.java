@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
+import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.Processor;
 
@@ -35,14 +36,27 @@ public class AbstractProcessor extends Processor {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<ProcessUnit> doProcess(List<ProcessUnit> inputUnits) {
 		for (ProcessUnit processUnit : inputUnits) {
-			Double biomass = (Double) processUnit.getAmountMap().get(Element.Biomass);
-			if (biomass != null && functionUnitBiomass > 0) {
-				double fonctionalUnits = biomass * 1000 / functionUnitBiomass;		// 1000 to report the biomass in kg since the functional unit is in kg 
-				double emissions = fonctionalUnits * emissionsByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
-				processUnit.getAmountMap().add(Element.EmissionsCO2Eq, emissions);
-			}
+//			Double biomass = (Double) processUnit.getAmountMap().get(Element.Biomass);
+//			if (biomass != null && functionUnitBiomass > 0) {
+//				double fonctionalUnits = biomass * 1000 / functionUnitBiomass;		// 1000 to report the biomass in kg since the functional unit is in kg 
+//				double emissions = fonctionalUnits * emissionsByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
+//				processUnit.getAmountMap().add(Element.EmissionsCO2Eq, emissions);
+//			}
+			AbstractProcessor.updateProcessEmissions(processUnit.getAmountMap(), functionUnitBiomass, emissionsByFunctionalUnit);
 		}
 		return super.doProcess(inputUnits);
 	}
 
+	
+	protected static void updateProcessEmissions(AmountMap<CarbonUnit.Element> amountMap, double functionalUnitBiomass, double emissionsByFunctionalUnit) {
+		Double biomass = (Double) amountMap.get(Element.Biomass);
+		if (biomass != null && functionalUnitBiomass > 0) {
+			double fonctionalUnits = biomass * 1000 / functionalUnitBiomass;		// 1000 to report the biomass in kg since the functional unit is in kg 
+			double emissions = fonctionalUnits * emissionsByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
+			amountMap.add(Element.EmissionsCO2Eq, emissions);
+		}
+
+	}
+	
+	
 }
