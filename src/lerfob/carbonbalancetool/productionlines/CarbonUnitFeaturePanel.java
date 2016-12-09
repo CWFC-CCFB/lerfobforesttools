@@ -56,7 +56,6 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 		public String toString() {
 			return REpiceaTranslator.getString(this);
 		}
-		
 	}
 	
 	
