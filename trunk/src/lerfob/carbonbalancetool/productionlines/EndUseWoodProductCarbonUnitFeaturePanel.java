@@ -134,19 +134,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		emissionsByFUField.setColumns(5);
 		emissionsByFUField.setText(((Double) getCaller().emissionsByFunctionalUnit).toString());
 
-//		lifeCycleAnalysisList = new JComboBox(LifeCycleAnalysis.ReferenceLCA.values());
-//
-//		LifeCycleAnalysis lca = getCaller().getLCA();
-//		if (lca != null) {
-//			for (int i = 0; i < ReferenceLCA.values().length; i++) {
-//				if (lca.compare(ReferenceLCA.values()[i].getLCA())) {
-//					lifeCycleAnalysisList.setSelectedIndex(i);
-//					break;
-//				}
-//			}
-//		} else {
-//			lifeCycleAnalysisList.setSelectedIndex(0);
-//		}
 	}
 	
 	
@@ -159,6 +146,11 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				5,
 				true);
 		
+		JPanel emissionFUPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(EnhancedProcessorInternalDialog.MessageID.EmissionsLabel),
+				emissionsByFUField, 
+				5,
+				true);
+			
 		JPanel averageSubstitutionPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.RelativeSubstitution),
 				substitutionTextField, 
 				5,
@@ -169,19 +161,14 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				5,
 				true);
 		
-//		JPanel lifeCyclePanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.LifeCycleLibrary),
-//				lifeCycleAnalysisList, 
-//				5,
-//				true);
-		
 		mainPanel.add(biomassFUPanel);
+		mainPanel.add(Box.createVerticalStrut(5));
+		mainPanel.add(emissionFUPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(averageSubstitutionPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(useClassPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
-//		mainPanel.add(lifeCyclePanel);
-//		mainPanel.add(Box.createVerticalStrut(5));
 
 	}
 
@@ -220,6 +207,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 //		lifeCycleAnalysisList.addItemListener(getCaller());
 		substitutionTextField.addNumberFieldListener(getCaller());
 		useClassList.addItemListener(getCaller());
+		biomassFUTextField.addNumberFieldListener(getCaller());
 		emissionsByFUField.addNumberFieldListener(getCaller());
 	}
 
@@ -233,6 +221,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 //		lifeCycleAnalysisList.removeItemListener(getCaller());
 		substitutionTextField.removeNumberFieldListener(getCaller());
 		useClassList.removeItemListener(getCaller());
+		biomassFUTextField.removeNumberFieldListener(getCaller());
 		emissionsByFUField.removeNumberFieldListener(getCaller());
 	}
 

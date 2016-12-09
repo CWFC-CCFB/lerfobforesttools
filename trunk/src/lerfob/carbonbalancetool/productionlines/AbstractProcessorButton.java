@@ -38,5 +38,14 @@ public class AbstractProcessorButton extends ProcessorButton {
 		}
 		return guiInterface;
 	}
-
+	
+	/*
+	 * For extended visibility (non-Javadoc)
+	 * @see repicea.simulation.processsystem.ProcessorButton#setChanged(boolean)
+	 */
+	@Override
+	protected void setChanged(boolean hasChanged) {
+		super.setChanged(hasChanged);
+	}
+	
 }

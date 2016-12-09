@@ -63,7 +63,11 @@ public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements Chan
 	public void stateChanged(ChangeEvent evt) {
 		if (evt.getSource().equals(getUserInterfacePanel().degradableOrganicCarbonFractionSlider)) {
 			double factor = (double) 1 / getUserInterfacePanel().degradableOrganicCarbonFractionSlider.getMaximum();
-			degradableOrganicCarbonFraction = getUserInterfacePanel().degradableOrganicCarbonFractionSlider.getValue() * factor;
+			double value = getUserInterfacePanel().degradableOrganicCarbonFractionSlider.getValue() * factor;
+			if (value != degradableOrganicCarbonFraction) {
+				((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+				degradableOrganicCarbonFraction = value;
+			}
 		}
 	}
 	

@@ -77,8 +77,6 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	@Override
 	protected void createUI() {
 		super.createUI();
-
-		
 		JPanel degradableOrganicCarbonFractionSliderLabel = UIControlManager.createSimpleHorizontalPanel(degradableOrganicCarbonFractionLabel, degradableOrganicCarbonFractionSlider, 5, true);
 
 		mainPanel.add(degradableOrganicCarbonFractionSliderLabel);

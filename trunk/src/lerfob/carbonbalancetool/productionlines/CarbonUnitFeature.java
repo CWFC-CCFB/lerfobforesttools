@@ -91,7 +91,11 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
 		if (e.getSource().equals(getUI().averageLifetimeTextField)) {
-			setAverageLifetime(Double.parseDouble(getUI().averageLifetimeTextField.getText()));
+			double value = Double.parseDouble(getUI().averageLifetimeTextField.getText());
+			if (value != averageLifetime) {
+				((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+				setAverageLifetime(value);
+			}
 		} 
 	}
 	

@@ -165,11 +165,23 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
 		if (e.getSource().equals(getUI().substitutionTextField)) {
-			relativeSubstitutionCO2EqFonctionalUnit = Double.parseDouble(getUI().substitutionTextField.getText());
+			double value = Double.parseDouble(getUI().substitutionTextField.getText());
+			if (value != relativeSubstitutionCO2EqFonctionalUnit) {
+				((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+				relativeSubstitutionCO2EqFonctionalUnit = value;
+			}
 		} else if (e.getSource().equals(getUI().biomassFUTextField)) {
-			biomassOfFunctionalUnit = Double.parseDouble(getUI().biomassFUTextField.getText());
+			double value = Double.parseDouble(getUI().biomassFUTextField.getText());
+			if (value != biomassOfFunctionalUnit) {
+				((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+				biomassOfFunctionalUnit = value;
+			}
 		} else if (e.getSource().equals(getUI().emissionsByFUField)) {
-			emissionsByFunctionalUnit = Double.parseDouble(getUI().emissionsByFUField.getText());
+			double value = Double.parseDouble(getUI().emissionsByFUField.getText());
+			if (value != emissionsByFunctionalUnit) {
+				((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+				emissionsByFunctionalUnit = value;
+			}
 		} else {
 			super.numberChanged(e);
 		}
@@ -190,10 +202,11 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		if (evt.getSource() instanceof JComboBox) {
 			Object obj = ((JComboBox) evt.getSource()).getSelectedItem();
 			if (obj instanceof UseClass) {
-				useClass = (UseClass) obj;
-//				System.out.println("Use class changed for " + useClass.name());
-//			} else if (obj instanceof LifeCycleAnalysis.ReferenceLCA) {
-//				lca = (LifeCycleAnalysis) ((LifeCycleAnalysis.ReferenceLCA) obj).getLCA();
+				UseClass newUseClass = (UseClass) obj;
+				if (newUseClass != useClass) {
+					((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+					useClass = (UseClass) obj;
+				}
 			}
 		} else if (evt.getSource().equals(getUserInterfacePanel().isDisposableCheckBox)) {
 			if (getUserInterfacePanel().isEnabled()) {
@@ -242,6 +255,9 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 				return false;
 			}
 			if (cuf.biomassOfFunctionalUnit != this.biomassOfFunctionalUnit) {
+				return false;
+			}
+			if (cuf.emissionsByFunctionalUnit != this.emissionsByFunctionalUnit) {
 				return false;
 			}
 			if (cuf.lca != null) {

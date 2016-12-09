@@ -36,12 +36,6 @@ public class AbstractProcessor extends Processor {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<ProcessUnit> doProcess(List<ProcessUnit> inputUnits) {
 		for (ProcessUnit processUnit : inputUnits) {
-//			Double biomass = (Double) processUnit.getAmountMap().get(Element.Biomass);
-//			if (biomass != null && functionUnitBiomass > 0) {
-//				double fonctionalUnits = biomass * 1000 / functionUnitBiomass;		// 1000 to report the biomass in kg since the functional unit is in kg 
-//				double emissions = fonctionalUnits * emissionsByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
-//				processUnit.getAmountMap().add(Element.EmissionsCO2Eq, emissions);
-//			}
 			AbstractProcessor.updateProcessEmissions(processUnit.getAmountMap(), functionUnitBiomass, emissionsByFunctionalUnit);
 		}
 		return super.doProcess(inputUnits);
@@ -57,6 +51,5 @@ public class AbstractProcessor extends Processor {
 		}
 
 	}
-	
 	
 }

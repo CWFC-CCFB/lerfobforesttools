@@ -114,9 +114,17 @@ public class EnhancedProcessorInternalDialog extends ProcessorInternalDialog imp
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
 		if (e.getSource().equals(functionUnitBiomass)) {
-			getCaller().functionUnitBiomass = (Double) functionUnitBiomass.getValue();
+			double value = (Double) functionUnitBiomass.getValue();
+			if (value != getCaller().functionUnitBiomass) {
+				((AbstractProcessorButton) getCaller().getUI()).setChanged(true);
+				getCaller().functionUnitBiomass = value;
+			}
 		} else if (e.getSource().equals(emissionsByFunctionUnit)) {
-			getCaller().emissionsByFunctionalUnit = (Double) emissionsByFunctionUnit.getValue();
+			double value = (Double) emissionsByFunctionUnit.getValue();
+			if (value != getCaller().emissionsByFunctionalUnit) {
+				((AbstractProcessorButton) getCaller().getUI()).setChanged(true);
+				getCaller().emissionsByFunctionalUnit = value; 
+			}
 		}
 	}
 	
