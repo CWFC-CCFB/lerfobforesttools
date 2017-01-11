@@ -118,13 +118,17 @@ public class CATCompartmentCompileLibrary {
 		case CarbEmis:
 			
 			carbon = new double[timeScale.size()];
+			double scalingFactor = CATSettings.CO2_C_FACTOR;
+			if (manager.getCarbonToolSettings().formerImplementation) {
+				scalingFactor = 1d;
+			};
 			
 			// evolution
 			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq() * CATSettings.CO2_C_FACTOR;
+						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq() * scalingFactor;
 					}
 				}
 				integratedCarbon += carbon[i];
