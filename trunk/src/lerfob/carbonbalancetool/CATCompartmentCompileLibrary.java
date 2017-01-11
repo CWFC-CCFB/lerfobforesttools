@@ -124,7 +124,7 @@ public class CATCompartmentCompileLibrary {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq();
+						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq() * CATSettings.CO2_C_FACTOR;
 					}
 				}
 				integratedCarbon += carbon[i];

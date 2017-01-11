@@ -277,7 +277,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		if (emissions == null) {
 			return 0d;
 		} else {
-			return emissions;
+			return - emissions;
 		}
 	}
 	
