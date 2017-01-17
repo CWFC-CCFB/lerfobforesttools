@@ -48,6 +48,7 @@ public class FrenchCommercialVolume2014PredictorTest {
 			trees.add(tree);
 			id++;
 		}
+		reader.close();
 		return trees;
 	}
 	
