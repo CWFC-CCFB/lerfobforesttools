@@ -40,9 +40,9 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 
 	@Override
 	protected void init() {
-		String betaFilename = ObjectUtility.getPackagePath(getClass()) + "0_DopalepDbhIncBeta.csv";
-		String omegaFilename = ObjectUtility.getPackagePath(getClass()) + "0_DopalepDbhIncOmega.csv";
-		String covParmsFilename = ObjectUtility.getPackagePath(getClass()) + "0_DopalepDbhIncCovParms.csv";
+		String betaFilename = ObjectUtility.getRelativePackagePath(getClass()) + "0_DopalepDbhIncBeta.csv";
+		String omegaFilename = ObjectUtility.getRelativePackagePath(getClass()) + "0_DopalepDbhIncOmega.csv";
+		String covParmsFilename = ObjectUtility.getRelativePackagePath(getClass()) + "0_DopalepDbhIncCovParms.csv";
 		
 		try {
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
