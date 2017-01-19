@@ -229,7 +229,7 @@ public class CATCompartmentCompileLibrary {
 			carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
 			break;
 			
-		case TotalBiomass:
+		case LivingBiomass:
 		case TotalProducts:
 		case NetSubs:
 			carbonCompartment.mergeWithFatherCompartments();

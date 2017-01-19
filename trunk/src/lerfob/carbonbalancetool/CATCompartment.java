@@ -53,7 +53,7 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The dead biomass, i.e. the dead trees and the wood pieces left in the forest
 		 */
-		DeadBiom(false, "Dead organic matter", "Mati\u00E8re organique morte", false, new Color(0,50,0)),
+		DeadBiom(false, "Dead organic matter", "Mati\u00E8re organique morte", true, new Color(0,50,0)),
 		/**
 		 * The wood products.
 		 */
@@ -79,9 +79,9 @@ public class CATCompartment implements Comparable {
 		 */
 		LfillEm(true, "Landfill (Methane emissions)", "D\u00E9charge (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
 		/**
-		 * The living biomass, i.e. the aboveground biomass + the roots.
+		 * The libing biomass, i.e. the aboveground biomass + the belowground biomass.
 		 */
-		TotalBiomass(false, "Forest carbon pool", "Pool de carbone de la for\u00EAt", true, new Color(0,200,0)),
+		LivingBiomass(false, "Living biomass", "Biomass vivante", true, new Color(0,200,0)),
 		/**
 		 * The sum of the living biomass and the wood products.
 		 */
@@ -106,7 +106,7 @@ public class CATCompartment implements Comparable {
 		
 		protected boolean isFlux() {return isFlux;}
 
-		protected boolean isResultFromGrouping() {return resultFromGrouping;}
+		protected boolean isPrimaryCompartment() {return resultFromGrouping;}
 		
 		@Override
 		public void setText(String englishText, String frenchText) {
@@ -123,7 +123,7 @@ public class CATCompartment implements Comparable {
 		public static List<CompartmentInfo> getNaturalOrder() {
 			if (naturalOrder == null) {
 				naturalOrder = new ArrayList<CompartmentInfo>();
-				naturalOrder.add(TotalBiomass);
+				naturalOrder.add(LivingBiomass);
 				naturalOrder.add(AbGround);
 				naturalOrder.add(Roots);
 				naturalOrder.add(DeadBiom);

@@ -236,11 +236,10 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			case EnerSubs:
 				carbonCompartments.put(compartmentInfo, new CATProductCompartment(this, compartmentInfo));
 				break;
-			case TotalBiomass:
+			case LivingBiomass:
 				CATCompartment standing = new CATCompartment(this, compartmentInfo);
 				standing.addFatherCompartment(carbonCompartments.get(CompartmentInfo.AbGround));
 				standing.addFatherCompartment(carbonCompartments.get(CompartmentInfo.Roots));
-				standing.addFatherCompartment(carbonCompartments.get(CompartmentInfo.DeadBiom));
 				this.carbonCompartments.put(compartmentInfo, standing);
 				break;
 			case TotalProducts:
