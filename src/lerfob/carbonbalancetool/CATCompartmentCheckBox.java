@@ -31,7 +31,7 @@ class CATCompartmentCheckBox extends JCheckBox {
 	protected static final Set<CompartmentInfo> DEFAULT_TRUE_OPTIONS_SET = new HashSet<CompartmentInfo>();
 	static {
 		DEFAULT_TRUE_OPTIONS_SET.add(CompartmentInfo.TotalProducts);
-		DEFAULT_TRUE_OPTIONS_SET.add(CompartmentInfo.TotalBiomass);
+		DEFAULT_TRUE_OPTIONS_SET.add(CompartmentInfo.LivingBiomass);
 	}
 
 	private CompartmentInfo compartmentID;

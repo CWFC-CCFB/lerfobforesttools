@@ -64,7 +64,7 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		
 		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
 			if (!compartmentID.isFlux()) {
-				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isResultFromGrouping()));		// no offset since this is a main compartment
+				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
 			}
 		}
 		
@@ -75,7 +75,7 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 
 		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
 			if (compartmentID.isFlux()) {
-				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isResultFromGrouping()));		// no offset since this is a main compartment
+				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
 			}
 		}
 				

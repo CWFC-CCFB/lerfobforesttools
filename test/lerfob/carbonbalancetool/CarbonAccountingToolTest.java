@@ -88,7 +88,8 @@ public class CarbonAccountingToolTest {
 			tool.calculateCarbon();
 			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
 			Assert.assertTrue(result != null);
-			Matrix obsBiomass = result.getEvolutionMap().get(CompartmentInfo.TotalBiomass).getMean();
+			Matrix obsLivingBiomass = result.getEvolutionMap().get(CompartmentInfo.LivingBiomass).getMean();
+			Matrix obsDOM = result.getEvolutionMap().get(CompartmentInfo.DeadBiom).getMean();
 			Matrix obsProducts = result.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 			int indexFirstProducts = -1;
 			for (int i = 0; i < obsProducts.m_iRows; i++) {
@@ -100,8 +101,8 @@ public class CarbonAccountingToolTest {
 			if (indexFirstProducts == -1) {
 				Assert.fail("Cannot find the first occurrence of HWP!");
 			} else {
-				double totalBefore = obsBiomass.m_afData[indexFirstProducts - 1][0];
-				double totalAfter = obsBiomass.m_afData[indexFirstProducts][0] + obsProducts.m_afData[indexFirstProducts][0];
+				double totalBefore = obsLivingBiomass.add(obsDOM).m_afData[indexFirstProducts - 1][0];
+				double totalAfter = obsLivingBiomass.add(obsDOM).m_afData[indexFirstProducts][0] + obsProducts.m_afData[indexFirstProducts][0];
 				Assert.assertEquals("Testing total biomass before and biomass after harvesting", totalBefore, totalAfter, 1E-8);
 			}
 			
