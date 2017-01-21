@@ -39,8 +39,9 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class CATCompartment implements Comparable {
 	
 	static {
-		XmlSerializerChangeMonitor.registerEnumNameChange("lerfob.carbonbalancetool.CATCompartment.CompartmentInfo.TotalBiomass",
-				"lerfob.carbonbalancetool.CATCompartment.CompartmentInfo.LivingBiomass");
+		XmlSerializerChangeMonitor.registerEnumNameChange("lerfob.carbonbalancetool.CATCompartment$CompartmentInfo", 
+				"TotalBiomass",
+				"LivingBiomass");
 	}
 	
 	
