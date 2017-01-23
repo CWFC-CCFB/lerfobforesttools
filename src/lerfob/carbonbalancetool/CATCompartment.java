@@ -89,7 +89,7 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The libing biomass, i.e. the aboveground biomass + the belowground biomass.
 		 */
-		LivingBiomass(false, "Living biomass", "Biomass vivante", true, new Color(0,200,0)),
+		LivingBiomass(false, "Living biomass", "Biomasse vivante", true, new Color(0,200,0)),
 		/**
 		 * The sum of the living biomass and the wood products.
 		 */
