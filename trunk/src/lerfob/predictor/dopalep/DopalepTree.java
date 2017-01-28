@@ -24,5 +24,9 @@ import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 
 public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject, BasalAreaLargerThanSubjectM2Provider {
 	
-	
+	/**
+	 * This method returns the basal area of the other trees.
+	 * @return a double
+	 */
+	public double getBasalAreaM2HaOtherTrees();
 }

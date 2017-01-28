@@ -23,15 +23,17 @@ import repicea.simulation.HierarchicalLevel;
 class DopalepTreeImpl implements DopalepTree {
 
 	private final double BAL;
+	private final double gOthers;
 	private final double dbhCm;
 	private final double pred;
 	final DopalepPlotImpl plot;
 	
-	DopalepTreeImpl(DopalepPlotImpl plot, double dbhCm, double BAL, double pred) {
+	DopalepTreeImpl(DopalepPlotImpl plot, double dbhCm, double BAL, double gOthers, double pred) {
 		this.plot = plot;
 		this.plot.trees.add(this);
 		this.dbhCm = dbhCm;
 		this.BAL = BAL;
+		this.gOthers = gOthers;
 		this.pred = pred;
 	}
 	
@@ -54,6 +56,11 @@ class DopalepTreeImpl implements DopalepTree {
 	@Override
 	public double getBasalAreaLargerThanSubjectM2Ha() {
 		return BAL;
+	}
+
+	@Override
+	public double getBasalAreaM2HaOtherTrees() {
+		return gOthers;
 	}
 
 }
