@@ -19,10 +19,10 @@
 package lerfob.predictor.dopalep;
 
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.treelevel.BasalAreaLargerThanSubjectM2Provider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 
-public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject {
+public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject, BasalAreaLargerThanSubjectM2Provider {
 	
-	public double getBasalAreaM2HaOtherTrees();
 	
 }

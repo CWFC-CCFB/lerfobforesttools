@@ -102,7 +102,7 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 	private double getFixedEffectOnlyPrediction(Matrix currentBeta, DopalepPlot stand, DopalepTree tree) {
 		oXVector.resetMatrix();
 		oXVector.m_afData[0][0] = 1d;
-		oXVector.m_afData[0][1] = tree.getBasalAreaM2HaOtherTrees();
+		oXVector.m_afData[0][1] = tree.getBasalAreaLargerThanSubjectM2Ha();
 		oXVector.m_afData[0][2] = tree.getDbhCm();
 		oXVector.m_afData[0][3] = tree.getDbhCm() * tree.getDbhCm();
 		
