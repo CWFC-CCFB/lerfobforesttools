@@ -103,8 +103,9 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 		oXVector.resetMatrix();
 		oXVector.m_afData[0][0] = 1d;
 		oXVector.m_afData[0][1] = tree.getBasalAreaLargerThanSubjectM2Ha();
-		oXVector.m_afData[0][2] = tree.getDbhCm();
-		oXVector.m_afData[0][3] = tree.getDbhCm() * tree.getDbhCm();
+		oXVector.m_afData[0][2] = tree.getBasalAreaM2HaOtherTrees();
+		oXVector.m_afData[0][3] = tree.getDbhCm();
+		oXVector.m_afData[0][4] = tree.getDbhCm() * tree.getDbhCm();
 		
 		return oXVector.multiply(currentBeta).m_afData[0][0];
 	}

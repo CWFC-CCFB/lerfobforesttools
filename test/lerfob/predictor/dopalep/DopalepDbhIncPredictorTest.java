@@ -49,9 +49,10 @@ public class DopalepDbhIncPredictorTest {
 				}
 				DopalepPlotImpl plot = knownIdp.get(idp);
 				double dbhCm = Double.parseDouble(record[1].toString());
-				double gOthers = Double.parseDouble(record[2].toString());
-				double pred = Double.parseDouble(record[3].toString());
-				trees.add(new DopalepTreeImpl(plot, dbhCm, gOthers, pred));
+				double BAL = Double.parseDouble(record[2].toString());
+				double gOthers = Double.parseDouble(record[3].toString());
+				double pred = Double.parseDouble(record[4].toString());
+				trees.add(new DopalepTreeImpl(plot, dbhCm, BAL, gOthers, pred));
 			}
 			reader.close();
 		}
