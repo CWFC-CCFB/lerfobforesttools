@@ -319,11 +319,23 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 			availableTreeLoggerParameters.add(treeLoggerParameters);
 			
 		}
-		if (selectedTreeLoggerParameters == null || !availableTreeLoggerParameters.contains(selectedTreeLoggerParameters)) {
+//		if (selectedTreeLoggerParameters == null || !availableTreeLoggerParameters.contains(selectedTreeLoggerParameters)) {
+		if (selectedTreeLoggerParameters == null || !isSelectedTreeLoggerAmongAvailableTreeLoggers()) {
 			setSelectedTreeLogger(availableTreeLoggerParameters.get(0));	// default selection here
 		}
 	}
 
+	private boolean isSelectedTreeLoggerAmongAvailableTreeLoggers() {
+		for (TreeLoggerParameters<?> param : availableTreeLoggerParameters) {
+			if (param.getClass().equals(selectedTreeLoggerParameters.getClass())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
 	/**
 	 * This method returns true if the ProductionProcessorManager instance is valid or false otherwise. To be 
 	 * valid, all the LogCategoryProcessor must have at least one sub processor. Moreover, all the processors must be
