@@ -57,6 +57,7 @@ import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 
 /**
  * LERFoBCarbonAccountingTool is the class that implements a tool for the calculation of the carbon balance in a series
@@ -452,6 +453,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Entry point for FCBA in GESFOR project
 	 */
 	public static void main(String[] args) {
+		REpiceaTranslator.setCurrentLanguage(Language.French);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool(true, null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
