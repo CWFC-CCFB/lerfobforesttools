@@ -319,19 +319,24 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 			availableTreeLoggerParameters.add(treeLoggerParameters);
 			
 		}
-//		if (selectedTreeLoggerParameters == null || !availableTreeLoggerParameters.contains(selectedTreeLoggerParameters)) {
-		if (selectedTreeLoggerParameters == null || !isSelectedTreeLoggerAmongAvailableTreeLoggers()) {
+		
+		int index = findSelectedTreeLoggerAmongAvailableTreeLoggers();
+		if (index > -1) {
+			availableTreeLoggerParameters.setElementAt(selectedTreeLoggerParameters, index);
+		} else {
 			setSelectedTreeLogger(availableTreeLoggerParameters.get(0));	// default selection here
 		}
 	}
 
-	private boolean isSelectedTreeLoggerAmongAvailableTreeLoggers() {
-		for (TreeLoggerParameters<?> param : availableTreeLoggerParameters) {
-			if (param.getClass().equals(selectedTreeLoggerParameters.getClass())) {
-				return true;
+	private int findSelectedTreeLoggerAmongAvailableTreeLoggers() {
+		if (selectedTreeLoggerParameters != null) {
+			for (int i = 0; i < availableTreeLoggerParameters.size(); i++) {
+				if (availableTreeLoggerParameters.get(i).getClass().equals(selectedTreeLoggerParameters.getClass())) {
+					return i;
+				}
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	
