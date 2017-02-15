@@ -87,6 +87,8 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	
 	private final CATSingleViewPanel baselinePanel;
 	
+	private boolean referenceDatesHaveBeenSet;
+	
 	
 	protected CATScenarioComparisonDialog(CATFrame parent, CATPanelView panelView) {
 		super(parent);
@@ -121,11 +123,14 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	}
 	
 	private void setDateComboBoxes() {
-		dateRefComboBox.removeAllItems();
-		if (!isComparisonModeInfiniteSequence()) {
-			for (Integer date : baselinePanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
-				dateRefComboBox.addItem(date);
+		if (!referenceDatesHaveBeenSet) {
+			dateRefComboBox.removeAllItems();
+			if (!isComparisonModeInfiniteSequence()) {
+				for (Integer date : baselinePanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
+					dateRefComboBox.addItem(date);
+				}
 			}
+			referenceDatesHaveBeenSet = true;
 		}
 
 		dateAltComboBox.removeAllItems();
