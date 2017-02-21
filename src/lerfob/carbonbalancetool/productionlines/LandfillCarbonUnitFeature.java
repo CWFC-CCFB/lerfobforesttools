@@ -130,7 +130,6 @@ public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements Chan
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource().equals(getUserInterfacePanel().landFillTypeComboBox)) {
 			landfillType = (LandfillType) getUserInterfacePanel().landFillTypeComboBox.getSelectedItem();
-			System.out.println("Changed to " + landfillType.toString());
 		}
 	}
 	
