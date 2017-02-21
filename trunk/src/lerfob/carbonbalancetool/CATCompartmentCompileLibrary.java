@@ -41,10 +41,7 @@ public class CATCompartmentCompileLibrary {
 	@SuppressWarnings("unchecked")
 	public void selectCalculatorFunction(CATCompartment carbonCompartment) throws Exception {
 		CATCompartmentManager manager = carbonCompartment.getCompartmentManager();
-		double scalingCO2toCFactor = CATSettings.CO2_C_FACTOR;
-		if (manager.getCarbonToolSettings().formerImplementation) {
-			scalingCO2toCFactor = 1d;
-		};
+		
 
 		Collection<? extends CarbonUnit> carbonUnits;
 		CATTimeTable timeScale = manager.getTimeTable();
@@ -121,7 +118,11 @@ public class CATCompartmentCompileLibrary {
 
 			
 		case CarbEmis:
-			
+			double scalingCO2toCFactor = CATSettings.CO2_C_FACTOR;
+			if (manager.getCarbonToolSettings().formerImplementation) {
+				scalingCO2toCFactor = 1d;
+			};
+
 			carbon = new double[timeScale.size()];
 			
 			// evolution
@@ -210,9 +211,9 @@ public class CATCompartmentCompileLibrary {
 
 						double[] currentEmission = landfillCarbonProduct.getCO2EquivalentMethaneEmissionsArray();	
 						for (int j = 0; j < timeScale.size(); j++) {
-							carbon[j] += currentEmission[j] * scalingCO2toCFactor;
+							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
 						}
-						integratedCarbon += landfillCarbonProduct.getTotalCO2EqMethaneEmissions() * scalingCO2toCFactor;
+						integratedCarbon += landfillCarbonProduct.getTotalCO2EqMethaneEmissions() * CATSettings.CO2_C_FACTOR;
 					}
 				}
 			}
