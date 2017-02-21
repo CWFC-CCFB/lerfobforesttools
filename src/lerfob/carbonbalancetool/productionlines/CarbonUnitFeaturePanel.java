@@ -39,7 +39,7 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 	private static final long serialVersionUID = 20101020L;
 
 	public static enum MessageID implements TextableEnum {
-		WoodProductFeatureLabel("End product features", "Caract\u00E9ristiques du produit final"),
+		WoodProductFeatureLabel("Specific features", "Caract\u00E9ristiques sp\u00E9cifiques"),
 		AverageLifeTime("Average lifetime (yr)", "Dur\u00E9e de vie moyenne (ann\u00E9es)")
 		;
 		

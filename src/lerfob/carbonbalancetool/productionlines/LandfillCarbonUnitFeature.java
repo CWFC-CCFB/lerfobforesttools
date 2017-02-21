@@ -18,21 +18,63 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements ChangeListener {
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
+
+public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements ChangeListener, ItemListener {
 
 	private static final long serialVersionUID = 20101118L;
 
-	private double degradableOrganicCarbonFraction = 0.4;
+	public static enum LandfillType implements TextableEnum {
+		MANAGED_ANAEROBIC("Managed - anaerobic", "Am\u00E9nag\u00E9 - ana\u00E9robique", 1d),
+		MANAGED_SEMIANAEROBIC("Managed - semi-anaerobic","Am\u00E9nag\u00E9 - semi-ana\u00E9robique", 0.5),
+		UNMANAGED_DEEP("Unmanaged - deep", "Non am\u00E9nag\u00E9 - profond", 0.8),
+		UNMANAGED_SHALLOW("Unmanaged - shallow", "Non am\u00E9nag\u00E9 - superficiel", 0.4),
+		UNCATEGORISED("Uncategorised", "Inconnu", 0.6);
 
+		private double methaneCorrectionFactor;
+		
+		
+		LandfillType(String englishText, String frenchText, double mcf) {
+			setText(englishText, frenchText);
+			methaneCorrectionFactor = mcf;
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+
+		/**
+		 * This method returns the methane correction factor of the landfill site.
+		 * @return a double
+		 */
+		public double getMethaneCorrectionFactor() {
+			return methaneCorrectionFactor;
+		}
+	}
+	
+	
+	private double degradableOrganicCarbonFraction = 0.4;  // Default value from Barlaz 2006 and Ximenes al. 2008
+
+	private LandfillType landfillType = LandfillType.MANAGED_SEMIANAEROBIC;
+	
+	
 	/**
 	 * The empty constructor is handled by the interface.
 	 */
 	protected LandfillCarbonUnitFeature(AbstractProductionLineProcessor processor) {
 		super(processor);
-		setAverageLifetime(25);
+		setAverageLifetime(33);	// Default value in IPCC 2006 Waste p.3.17
 	}
 
 		
@@ -82,6 +124,25 @@ public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements Chan
 			}
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getSource().equals(getUserInterfacePanel().landFillTypeComboBox)) {
+			landfillType = (LandfillType) getUserInterfacePanel().landFillTypeComboBox.getSelectedItem();
+			System.out.println("Changed to " + landfillType.toString());
+		}
+	}
+	
+	/**
+	 * This method returns the type of landfill according to the IPCC (2006, Waste, p.3.14) 
+	 * @return a LandfillType enum
+	 */
+	public LandfillType getLandfillType() {
+		if (landfillType == null) {		// To ensure a proper deserialization
+			landfillType = LandfillType.MANAGED_ANAEROBIC;
+		}
+		return landfillType;
 	}
 
 	

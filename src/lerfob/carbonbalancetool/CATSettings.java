@@ -83,7 +83,7 @@ public final class CATSettings {
 		}
 		
 		/**
-		 * This method returns the CO2 eq of the CH4 gaz
+		 * This method returns the CO2 eq of the CH4 gas
 		 * @return a double
 		 */
 		public double getCH4Factor() {return ch4ToCo2Eq;}
