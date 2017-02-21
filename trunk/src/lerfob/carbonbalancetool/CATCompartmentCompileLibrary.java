@@ -40,8 +40,13 @@ public class CATCompartmentCompileLibrary {
 	 */
 	@SuppressWarnings("unchecked")
 	public void selectCalculatorFunction(CATCompartment carbonCompartment) throws Exception {
-		Collection<? extends CarbonUnit> carbonUnits;
 		CATCompartmentManager manager = carbonCompartment.getCompartmentManager();
+		double scalingCO2toCFactor = CATSettings.CO2_C_FACTOR;
+		if (manager.getCarbonToolSettings().formerImplementation) {
+			scalingCO2toCFactor = 1d;
+		};
+
+		Collection<? extends CarbonUnit> carbonUnits;
 		CATTimeTable timeScale = manager.getTimeTable();
 		double[] carbon = new double[timeScale.size()];
 		double integratedCarbon = 0d;
@@ -118,17 +123,13 @@ public class CATCompartmentCompileLibrary {
 		case CarbEmis:
 			
 			carbon = new double[timeScale.size()];
-			double scalingFactor = CATSettings.CO2_C_FACTOR;
-			if (manager.getCarbonToolSettings().formerImplementation) {
-				scalingFactor = 1d;
-			};
 			
 			// evolution
 			for (int i = 0; i < timeScale.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq() * scalingFactor;
+						carbon[i] += carbonUnit.getTotalNonRenewableCarbonEmissionsMgCO2Eq() * scalingCO2toCFactor;
 					}
 				}
 				integratedCarbon += carbon[i];
@@ -207,11 +208,11 @@ public class CATCompartmentCompileLibrary {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						LandfillCarbonUnit landfillCarbonProduct = (LandfillCarbonUnit) carbonUnit;
 
-						double[] currentEmission = landfillCarbonProduct.getCarbonEquivalentMethaneEmissionsArray();	
+						double[] currentEmission = landfillCarbonProduct.getCO2EquivalentMethaneEmissionsArray();	
 						for (int j = 0; j < timeScale.size(); j++) {
-							carbon[j] += currentEmission[j];
+							carbon[j] += currentEmission[j] * scalingCO2toCFactor;
 						}
-						integratedCarbon += landfillCarbonProduct.getTotalNonRenewableCarbonEmissions();
+						integratedCarbon += landfillCarbonProduct.getTotalCO2EqMethaneEmissions() * scalingCO2toCFactor;
 					}
 				}
 			}

@@ -19,12 +19,14 @@
 package lerfob.carbonbalancetool.productionlines;
 
 import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import lerfob.carbonbalancetool.productionlines.LandfillCarbonUnitFeature.LandfillType;
 import repicea.gui.UIControlManager;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -34,7 +36,8 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	private static final long serialVersionUID = 20101118L;
 	
 	public static enum MessageID implements TextableEnum {
-		DegradableOrganicCarbonLabel ("Proportion of degradable carbone", "Proportion de carbone d\u00E9composable");
+		DegradableOrganicCarbonLabel ("Proportion of degradable carbone", "Proportion de carbone d\u00E9composable"),
+		LandfillTypeLabel("Type of landfill site", "Type de d\u00E9charge");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -51,6 +54,8 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	
 	private JLabel degradableOrganicCarbonFractionLabel;
 	protected JSlider degradableOrganicCarbonFractionSlider;
+	private JLabel landfillTypeLabel;
+	protected JComboBox<LandfillType> landFillTypeComboBox;
 
 	
 	protected LandfillCarbonUnitFeaturePanel(LandfillCarbonUnitFeature caller) {
@@ -63,6 +68,10 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	@Override
 	protected void initializeFields() {
 		super.initializeFields();
+
+		landfillTypeLabel = new JLabel(MessageID.LandfillTypeLabel.toString());
+		landFillTypeComboBox = new JComboBox<LandfillType>(LandfillType.values());
+		landFillTypeComboBox.setSelectedItem(getCaller().getLandfillType());
 		
 		degradableOrganicCarbonFractionLabel = new JLabel();
 
@@ -78,8 +87,11 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	protected void createUI() {
 		super.createUI();
 		JPanel degradableOrganicCarbonFractionSliderLabel = UIControlManager.createSimpleHorizontalPanel(degradableOrganicCarbonFractionLabel, degradableOrganicCarbonFractionSlider, 5, true);
+		JPanel landfillTypePanel = UIControlManager.createSimpleHorizontalPanel(landfillTypeLabel, landFillTypeComboBox, 5, true);
 
 		mainPanel.add(degradableOrganicCarbonFractionSliderLabel);
+		mainPanel.add(Box.createVerticalStrut(5));
+		mainPanel.add(landfillTypePanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 	}
 
@@ -87,6 +99,7 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
 		degradableOrganicCarbonFractionSlider.setEnabled(b);
+		landFillTypeComboBox.setEnabled(b);
 	}
 
 	@Override
@@ -107,6 +120,7 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 		super.listenTo();
 		degradableOrganicCarbonFractionSlider.addChangeListener(this);
 		degradableOrganicCarbonFractionSlider.addChangeListener(getCaller());
+		landFillTypeComboBox.addItemListener(getCaller());
 	}
 
 	@Override
@@ -114,5 +128,6 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 		super.doNotListenToAnymore();
 		degradableOrganicCarbonFractionSlider.removeChangeListener(this);
 		degradableOrganicCarbonFractionSlider.removeChangeListener(getCaller());
+		landFillTypeComboBox.removeItemListener(getCaller());
 	}
 }
