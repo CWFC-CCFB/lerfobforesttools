@@ -100,7 +100,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		Name("Name", "Nom"),
 		CompareScenario("Compare scenarios", "Comparaison de sc\u00E9narios"),
 		Status("Status", "Etat"),
-		HWP_Parameters("Harvested Wood products", "Produits bois"),
+		HWP_Parameters("Flux manager (DOM, HWP)", "Gestionnaire de flux (MOM, Produits bois)"),
 		Biomass("Biomass parameters", "Param\u00E8tres biomasse"),
 		ManageWoodSupply("Manage wood supply", "G\u00E9rer l'approvisionnement"),
 		WaitingTask("Waiting", "En attente d'une t\u00E2che"),

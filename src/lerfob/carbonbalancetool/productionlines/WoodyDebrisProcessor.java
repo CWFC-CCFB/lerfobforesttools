@@ -14,7 +14,7 @@ public class WoodyDebrisProcessor extends LeftHandSideProcessor {
 	
 	public static enum WoodyDebrisProcessorID implements TextableEnum {
 		CoarseWoodyDebris("Coarse Woody Debris", "Gros d\u00E9bris ligneux"),
-		CommercialWoodyDebris("Merchantable Woody Debris", "D\u00E9bris ligneux marchands"),
+		CommercialWoodyDebris("Commercial-sized Woody Debris", "D\u00E9bris ligneux commerciaux"),
 		FineWoodyDebris("Fine Woody Debris", "Petit d\u00E9bris ligneux");
 
 		
@@ -55,9 +55,16 @@ public class WoodyDebrisProcessor extends LeftHandSideProcessor {
 	protected WoodyDebrisProcessorID wdpID;
 	
 	protected WoodyDebrisProcessor(WoodyDebrisProcessorID wdpID) {
-		setName(wdpID.toString());
+//		setName(wdpID.toString());
 		this.wdpID = wdpID;
 	}
+	
+	@Override
+	public String getName() {
+		return wdpID.toString();
+	}
+	
+	
 	
 	@Override
 	public ProcessorButton getUI(Container container) {
