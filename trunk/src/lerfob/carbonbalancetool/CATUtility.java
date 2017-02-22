@@ -140,7 +140,7 @@ public class CATUtility {
 	
 	public static enum BiomassParametersName implements TextableEnum {
 
-		ipcc_2003_oakbeechsprucefir("IPCC - Oak, Beech, Spruce, Fir", "GIEC - Ch\u00E8ne, H\u00EAtre, Epic\u00E9a, Sapin"),
+		ipcc_2003_oakbeechsprucefir("IPCC - Oak, Beech, Spruce, Fir", "GIEC - Ch\u00EAne, H\u00EAtre, Epic\u00E9a, Sapin"),
 		citepa_france("CITEPA - France", "CITEPA - France"),
 		customized("Costumized", "Sur mesure");
 

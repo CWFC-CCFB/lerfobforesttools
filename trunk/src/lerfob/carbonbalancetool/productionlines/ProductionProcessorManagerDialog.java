@@ -21,7 +21,6 @@ package lerfob.carbonbalancetool.productionlines;
 import java.awt.BorderLayout;
 import java.awt.Window;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
@@ -55,7 +54,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class ProductionProcessorManagerDialog extends SystemManagerDialog implements ItemListener, OwnedWindow, PropertyChangeListener {
+public class ProductionProcessorManagerDialog extends SystemManagerDialog implements OwnedWindow, PropertyChangeListener {
 	
 	static {
 		UISetup.Icons.put(CreateLeftInForestProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "IconLeftInForest.png"));
@@ -65,7 +64,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UISetup.Icons.put(CreateEndOfLifeLinkButton.class.getName(),CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "endOfLifelinkIcon.png"));
 		UISetup.Icons.put(LogCategoryProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "logIcon.png"));
 		UISetup.Icons.put(WoodyDebrisProcessorButton.class.getName(), CommonGuiUtility.retrieveIcon(ProductionProcessorManagerDialog.class, "logIcon.png"));
-		UIControlManager.setTitle(ProductionProcessorManagerDialog.class, "Harvested Wood Products", "Bois recolt\u00E9s");
+		UIControlManager.setTitle(ProductionProcessorManagerDialog.class, "Flux manager", "Gestionnaire de flux");
 		
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
@@ -189,6 +188,8 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 			getCaller().setSelectedTreeLogger((TreeLoggerParameters<?>) treeLoggerComboBox.getSelectedItem());
 			firePropertyChange(REpiceaAWTProperty.SynchronizeWithOwner, null, this);
 			firePropertyChange(REpiceaAWTProperty.ActionPerformed, null, this);
+		} else {
+			super.itemStateChanged(arg0);
 		}
 	}
 	
