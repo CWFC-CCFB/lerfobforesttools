@@ -41,7 +41,7 @@ public class ExtendedSystemLayout extends SystemLayout {
 			Component comp = container.getComponent(i);
 			if (comp.isVisible()) {
 				if (comp instanceof LeftHandSideProcessorButton) {
-					Point tmpPoint = new Point(10, j++ * UISetup.YGap);
+					Point tmpPoint = new Point(10, j++ * convertToRelative(UISetup.YGap));
 					setInternalSize(tmpPoint);
 					LeftHandSideProcessorButton lhsButton = (LeftHandSideProcessorButton) comp;
 					lhsButton.setLocation(tmpPoint);
