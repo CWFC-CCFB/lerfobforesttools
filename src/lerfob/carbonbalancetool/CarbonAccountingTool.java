@@ -453,7 +453,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Entry point for FCBA in GESFOR project
 	 */
 	public static void main(String[] args) {
-		REpiceaTranslator.setCurrentLanguage(Language.French);
+//		REpiceaTranslator.setCurrentLanguage(Language.French);
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool(true, null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();

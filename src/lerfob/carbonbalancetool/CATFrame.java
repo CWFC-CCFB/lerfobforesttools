@@ -503,9 +503,9 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 						updateMajorProgressBarValue(majorProgressBar.getMaximum());
 					}
 				}
-				setEnabled(true);
-			} else if (evt.getNewValue() == SwingWorker.StateValue.STARTED) {
-				setEnabled(false);
+//				setEnabled(true);
+//			} else if (evt.getNewValue() == SwingWorker.StateValue.STARTED) {
+//				setEnabled(false);
 			}
 		} else if (evt.getPropertyName().equals("progress")) {
 			minorProgressBar.setValue((Integer) evt.getNewValue());

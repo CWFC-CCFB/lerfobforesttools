@@ -81,7 +81,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 	public static enum MessageID implements TextableEnum {
 		LandFillMarketLabel("Landfill", "D\u00E9charge"),
 		LeftInForestLabel("Dead organic matter", "Mati\u00E8re organique morte"),
-		ProductionLineFileExtension("production lines file (*.prl)", "fichier de lignes de production (*.prl)"),
+		ProductionLineFileExtension("Flux configuration file (*.prl)", "fichier de configuration de flux (*.prl)"),
 		Default("Default","D\u00E9faut"),
 		BuckingModelLabel("Bucking model", "Mod\u00E8le de billonnage"),
 		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un transformateur"),
