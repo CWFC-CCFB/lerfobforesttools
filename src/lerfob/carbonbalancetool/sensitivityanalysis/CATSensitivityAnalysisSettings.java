@@ -55,8 +55,10 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		
 		@Override
 		public String toString() {return REpiceaTranslator.getString(this);}
-		
 	}
+
+	
+	
 	
 	protected final Map<VariabilitySource, CATSensitivityParameterWrapper> sensitivityParameterMap;
 	
@@ -100,8 +102,8 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	 * @param subject a MonteCarloSimulationCompliantObject instance
 	 * @return a double
 	 */
-	public double getModifier(VariabilitySource source, MonteCarloSimulationCompliantObject subject) {
-		return sensitivityParameterMap.get(source).getValue(subject);
+	public double getModifier(VariabilitySource source, MonteCarloSimulationCompliantObject subject, String subjectID) {
+		return sensitivityParameterMap.get(source).getValue(subject, subjectID);
 	}
 	
 	@Override

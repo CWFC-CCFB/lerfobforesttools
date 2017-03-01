@@ -119,7 +119,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 
 	protected double getSubstitutionCO2EqFunctionalUnit(CATCompartmentManager manager) {
 		if (manager != null) {
-			return relativeSubstitutionCO2EqFonctionalUnit * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.SubstitutionFactors, manager);
+			return relativeSubstitutionCO2EqFonctionalUnit * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.SubstitutionFactors, manager, toString());
 		} else {
 			return relativeSubstitutionCO2EqFonctionalUnit;
 		}

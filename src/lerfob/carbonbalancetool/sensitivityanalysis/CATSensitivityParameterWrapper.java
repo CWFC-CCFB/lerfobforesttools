@@ -36,6 +36,7 @@ import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettin
 import repicea.gui.REpiceaPanel;
 import repicea.gui.REpiceaUIObject;
 import repicea.gui.components.REpiceaSlider;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.Distribution;
 import repicea.util.REpiceaTranslator;
@@ -145,20 +146,44 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		}
 	}
  	
+	class MonteCarloSimulationCompliantObjectImpl implements MonteCarloSimulationCompliantObject {
+
+		final MonteCarloSimulationCompliantObject root;
+		final String subjectId;
+		
+		MonteCarloSimulationCompliantObjectImpl(MonteCarloSimulationCompliantObject root, String subjectId) {
+			this.root = root;
+			this.subjectId = subjectId;
+		}
+		
+		@Override
+		public String getSubjectId() {return subjectId;}
+
+		@Override
+		public HierarchicalLevel getHierarchicalLevel() {return null;}
+
+		@Override
+		public int getMonteCarloRealizationId() {return root.getMonteCarloRealizationId();}
+		
+	}
+	
+	
 	
 	private final VariabilitySource source;
 	
 	@SuppressWarnings("rawtypes")
 	private final Map<Distribution.Type, CATSensitivityAnalysisParameter> parameterMap;
-//	private boolean isEnabled;
 	private Distribution.Type selectedDistributionType = Distribution.Type.UNIFORM; // default value
-//	private double modulator = 0d;
 	private transient REpiceaPanel guiInterface;
+	private final Map<String, MonteCarloSimulationCompliantObject> subjectMap;
+	
+	
 		
 	@SuppressWarnings({ "incomplete-switch", "rawtypes" })
 	protected CATSensitivityParameterWrapper(VariabilitySource source) {
 		this.source = source;
 		parameterMap = new HashMap<Distribution.Type, CATSensitivityAnalysisParameter>();
+		subjectMap = new HashMap<String, MonteCarloSimulationCompliantObject>();
 		for (Distribution.Type type : Distribution.Type.values()) {
 			switch(type) {
 			case UNIFORM:
@@ -180,8 +205,17 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 	}
 
 	
-	protected double getValue(MonteCarloSimulationCompliantObject subject) {
-		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(subject).m_afData[0][0];
+	protected double getValue(MonteCarloSimulationCompliantObject subject, String subjectId) {
+		MonteCarloSimulationCompliantObject realSubject;
+		if (subjectId != null) {
+			if (!subjectMap.containsKey(subjectId)) {
+				subjectMap.put(subjectId, new MonteCarloSimulationCompliantObjectImpl(subject, subjectId));
+			}
+			realSubject = subjectMap.get(subjectId);
+		} else {
+			realSubject = subject;
+		}
+		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(realSubject).m_afData[0][0];
 	}
 	
 	@Override
