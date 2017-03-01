@@ -19,7 +19,6 @@
 package lerfob.carbonbalancetool.sensitivityanalysis;
 
 import repicea.math.Matrix;
-import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.estimates.UniformEstimate;
 
 @SuppressWarnings("serial")
@@ -28,24 +27,26 @@ public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalys
 	protected CATUniformSensitivityAnalysisParameter() {
 		super(false);
 		Matrix lowerBoundValue = new Matrix(1,1);
+		lowerBoundValue.m_afData[0][0] = -1d;
 		Matrix upperBoundValue = new Matrix(1,1);
+		upperBoundValue.m_afData[0][0] = 1d;
 		setParameterEstimates(new UniformEstimate(lowerBoundValue, upperBoundValue));
 		setMultiplier(.1);
 	}
 
-	@Override
-	protected void setMultiplier(double multiplier) {
-		super.setMultiplier(multiplier);
-		Matrix lowerBoundValue = new Matrix(1,1);
-		lowerBoundValue.m_afData[0][0] = 1 - multiplier;
-		getParameterEstimates().setLowerBoundValue(lowerBoundValue);
-		Matrix upperBoundValue = new Matrix(1,1);
-		upperBoundValue.m_afData[0][0] = 1 + multiplier;
-		getParameterEstimates().setUpperBoundValue(upperBoundValue);
-	}
+//	@Override
+//	protected void setMultiplier(double multiplier) {
+//		super.setMultiplier(multiplier);
+//		Matrix lowerBoundValue = new Matrix(1,1);
+//		lowerBoundValue.m_afData[0][0] = 1 - multiplier;
+//		getParameterEstimates().setLowerBoundValue(lowerBoundValue);
+//		Matrix upperBoundValue = new Matrix(1,1);
+//		upperBoundValue.m_afData[0][0] = 1 + multiplier;
+//		getParameterEstimates().setUpperBoundValue(upperBoundValue);
+//	}
 	
-	@Override
-	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
-		return this.getParametersForThisRealization(subject);
-	}
+//	@Override
+//	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
+//		return this.getParametersForThisRealization(subject);
+//	}
 }
