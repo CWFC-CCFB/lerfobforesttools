@@ -23,7 +23,7 @@ public abstract class CATSensitivityAnalysisParameter<E extends Estimate> extend
 	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return getParametersForThisRealization(subject).scalarMultiply(getMultiplier()).scalarAdd(1d);
 	}
-	
+
 	protected void setParametersVariabilityEnabled(boolean enabled) {
 		this.isParametersVariabilityEnabled = enabled;
 	}

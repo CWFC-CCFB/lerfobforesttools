@@ -46,7 +46,7 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 	 */
 	protected double getAverageLifetime(MonteCarloSimulationCompliantObject subject) {
 		if (subject != null) {
-			return averageLifetime * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.Lifetime, subject);
+			return averageLifetime * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.Lifetime, subject, toString());
 		} else {
 			return averageLifetime;
 		}
@@ -97,6 +97,11 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 				setAverageLifetime(value);
 			}
 		} 
+	}
+	
+	@Override
+	public String toString() {
+		return getProcessor().getName() + "_" + averageLifetime;
 	}
 	
 }
