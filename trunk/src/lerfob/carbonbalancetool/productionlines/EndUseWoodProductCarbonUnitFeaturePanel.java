@@ -112,7 +112,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		disposableProportionLabel.setText(((Integer) disposableProportionSlider.getValue()).toString() + "%");
 
 		biomassFUTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
-		biomassFUTextField.setText(((Double) getCaller().getBiomassOfFunctionalUnit()).toString());
+		biomassFUTextField.setText(((Double) getCaller().getBiomassOfFunctionalUnitKg()).toString());
 		biomassFUTextField.setPreferredSize(new Dimension(100, biomassFUTextField.getFontMetrics(biomassFUTextField.getFont()).getHeight() + 2));
 		
 		substitutionTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
@@ -132,7 +132,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				NumberFormatFieldFactory.Range.Positive,
 				false);
 		emissionsByFUField.setColumns(5);
-		emissionsByFUField.setText(((Double) getCaller().emissionsByFunctionalUnit).toString());
+		emissionsByFUField.setText(((Double) getCaller().getEmissionsKgCO2ByFunctionalUnit()).toString());
 
 	}
 	
