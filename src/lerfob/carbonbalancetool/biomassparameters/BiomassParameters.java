@@ -290,7 +290,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	/**
 	 * This method returns the basic density factor for this tree.
 	 * @param tree a CarbonToolCompatibleTree
-	 * @return a double
+	 * @return a double (Mg/m3)
 	 */
 	public double getBasicWoodDensityFromThisTree(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
 		double value;

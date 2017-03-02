@@ -84,8 +84,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	
 	private double relativeSubstitutionCO2EqFonctionalUnit;
 	
-	private double biomassOfFunctionalUnit;
-	protected double emissionsByFunctionalUnit;
+	private double biomassOfFunctionalUnit;		// in kg
+	private double emissionsByFunctionalUnit;	// in kg
 	
 
 	@Deprecated
@@ -99,6 +99,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		super(processor);
 		useClass = UseClass.NONE;
 	}
+	
+	protected double getEmissionsKgCO2ByFunctionalUnit() {return emissionsByFunctionalUnit;}
 	
 	protected UseClass getUseClass() {
 		if (useClass == null) {
@@ -125,7 +127,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		}
 	}
 	
-	protected double getBiomassOfFunctionalUnit() {
+	protected double getBiomassOfFunctionalUnitKg() {
 		return biomassOfFunctionalUnit;
 	}
 	

@@ -41,6 +41,7 @@ import repicea.gui.AutomatedHelper;
 import repicea.gui.OwnedWindow;
 import repicea.gui.REpiceaDialog;
 import repicea.gui.UIControlManager;
+import repicea.gui.WindowSettings;
 import repicea.gui.UIControlManager.CommonControlID;
 import repicea.gui.UIControlManager.CommonMenuTitle;
 import repicea.gui.components.NumberFormatFieldFactory;
@@ -53,6 +54,7 @@ import repicea.io.REpiceaIOFileHandlerUI;
 import repicea.net.BrowserCaller;
 import repicea.serial.Memorizable;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -137,6 +139,9 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 	
 	private static final long serialVersionUID = 20130828L;
 	protected BiomassParameters caller;
+	
+	protected final WindowSettings windowSettings;
+	
 	/**
 	 * Constructor.
 	 * @param window
@@ -145,7 +150,8 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 	protected BiomassParametersDialog(Window window, BiomassParameters caller) {
 		super(window);
 		this.caller = caller;
-		
+		windowSettings = new WindowSettings(REpiceaSystem.getJavaIOTmpDir() + getClass().getSimpleName()+ ".ser", this);
+
 		branchExpansionFactorConiferous = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 		branchExpansionFactorBroadleaved = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 		branchFromModelChkBox = new JCheckBox();
@@ -303,10 +309,7 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 
 
 	@Override
-	public SettingMemory getSettingMemory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public SettingMemory getSettingMemory() {return windowSettings;}
 
 	/**
 	 * The method sets the title of the dialog.

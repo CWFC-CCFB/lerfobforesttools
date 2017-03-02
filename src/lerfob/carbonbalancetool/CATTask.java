@@ -233,7 +233,7 @@ public class CATTask extends AbstractGenericTask {
 
 						CATCompatibleTree tree = (CATCompatibleTree) t;
 						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
-						double basicWoodDensity = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
+						double basicWoodDensityMgM3 = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
 						Collection<WoodPiece> woodPieces = (Collection<WoodPiece>) treeLogger.getWoodPieces().get(t);
 						double totalAboveGroundWoodPieceVolume = 0d;
@@ -255,15 +255,15 @@ public class CATTask extends AbstractGenericTask {
 								nutrientConcentrations = ((NutrientConcentrationProviderObject) woodPiece).getAllNutrientConcentrationsFromThisObject();
 							}
 
-							double[] nutrientAmounts = ObjectUtility.multiplyArrayByScalar(nutrientConcentrations, woodPiece.getWeightedVolumeM3() * basicWoodDensity);	// the amounts are expressed here in kg
+							double[] nutrientAmounts = ObjectUtility.multiplyArrayByScalar(nutrientConcentrations, woodPiece.getWeightedVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
 
 							AmountMap<Element> amountMap = new AmountMap<Element>();
-							double volume = woodPiece.getWeightedVolumeM3();
-							double biomass = volume * basicWoodDensity;
-							double carbon = biomass * carbonContentRatio;
-							amountMap.put(Element.Volume, volume);
-							amountMap.put(Element.Biomass, biomass);
-							amountMap.put(Element.C, carbon);
+							double volumeM3 = woodPiece.getWeightedVolumeM3();
+							double biomassMg = volumeM3 * basicWoodDensityMgM3;
+							double carbonMg = biomassMg * carbonContentRatio;
+							amountMap.put(Element.Volume, volumeM3);
+							amountMap.put(Element.Biomass, biomassMg);
+							amountMap.put(Element.C, carbonMg);
 
 							if (nutrientAmounts != null) {
 								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
@@ -275,10 +275,10 @@ public class CATTask extends AbstractGenericTask {
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), samplingUnitID, amountMap);		
 						}
 						
-						double totalAboveGroundVolume = biomassParameters.getAboveGroundVolumeM3(tree, manager);
-						double unconsideredAboveGroundVolume = totalAboveGroundVolume - totalAboveGroundWoodPieceVolume;
-						processUnaccountedVolume(unconsideredAboveGroundVolume, 
-								basicWoodDensity, 
+						double totalAboveGroundVolumeM3 = biomassParameters.getAboveGroundVolumeM3(tree, manager);
+						double unconsideredAboveGroundVolumeM3 = totalAboveGroundVolumeM3 - totalAboveGroundWoodPieceVolume;
+						processUnaccountedVolume(unconsideredAboveGroundVolumeM3, 
+								basicWoodDensityMgM3, 
 								carbonContentRatio, 
 								caller.getDateIndexForThisTree(tree), 
 								samplingUnitID,
@@ -286,7 +286,7 @@ public class CATTask extends AbstractGenericTask {
 						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
 						double unconsideredBelowGroundVolume = totalBelowGroundVolume - totalBelowGroundWoodPieceVolume;
 						processUnaccountedVolume(unconsideredBelowGroundVolume, 
-								basicWoodDensity, 
+								basicWoodDensityMgM3, 
 								carbonContentRatio, 
 								caller.getDateIndexForThisTree(tree), 
 								samplingUnitID,

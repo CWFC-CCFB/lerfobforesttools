@@ -205,7 +205,6 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	private JProgressBar minorProgressBar;
 	private final JLabel minorProgressBarMessage;
 
-//	protected final CarbonCompareScenarioDialog compareDialog;
 	private boolean vetoEnabled;
 	
 	/**

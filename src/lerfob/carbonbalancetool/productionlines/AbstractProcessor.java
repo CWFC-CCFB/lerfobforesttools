@@ -42,11 +42,11 @@ public class AbstractProcessor extends Processor {
 	}
 
 	
-	protected static void updateProcessEmissions(AmountMap<CarbonUnit.Element> amountMap, double functionalUnitBiomass, double emissionsByFunctionalUnit) {
-		Double biomass = (Double) amountMap.get(Element.Biomass);
-		if (biomass != null && functionalUnitBiomass > 0) {
-			double fonctionalUnits = biomass * 1000 / functionalUnitBiomass;		// 1000 to report the biomass in kg since the functional unit is in kg 
-			double emissions = fonctionalUnits * emissionsByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
+	protected static void updateProcessEmissions(AmountMap<CarbonUnit.Element> amountMap, double functionalUnitBiomassKg, double emissionsKgCO2ByFunctionalUnit) {
+		Double biomassMg = (Double) amountMap.get(Element.Biomass);
+		if (biomassMg != null && functionalUnitBiomassKg > 0) {
+			double fonctionalUnits = biomassMg / (functionalUnitBiomassKg * .001);		// .001 to report the mass of the functional unit in Mg 
+			double emissions = fonctionalUnits * emissionsKgCO2ByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
 			amountMap.add(Element.EmissionsCO2Eq, emissions);
 		}
 

@@ -50,12 +50,16 @@ class CATSingleViewPanel extends REpiceaPanel implements ItemListener, PropertyC
 		setLayout(new BorderLayout());
 		add(selector, BorderLayout.NORTH);
 		add(viewerScrollPane, BorderLayout.CENTER);
-		selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
-		if (summary instanceof CATSingleSimulationResult) {
+		if (summary instanceof CATSimulationDifference) {
+			selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
+		} else {
 			selector.addItem(new CATResultEvolutionPanel(summary, optionPanel));
 			selector.addItem(new CATResultLogGradesPanel(summary));
 			selector.addItem(new CATResultHWPPanel(summary));
 			selector.addItem(new CATResultHWPWithRecyclingPanel(summary));
+			if (summary.isEvenAged()) {
+				selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
+			}
 		}
 		selector.setSelectedIndex(0);
 	}

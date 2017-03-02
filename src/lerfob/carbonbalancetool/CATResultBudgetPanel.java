@@ -39,6 +39,7 @@ class CATResultBudgetPanel extends CATResultPanel {
 	
 	protected static enum MessageID implements TextableEnum {
 		Title("Carbon budget", "Bilan carbone"),
+		InfiniteSequence("Carbon budget in infinite sequence", "Bilan carbone en s\u00E9quence infinie"),
 		YAxis("Average Carbon (Mg/ha or Mg/ha/yr of C)", "Carbone moyen (Mg/ha ou Mg/ha/an de C)"),
 		YCO2Axis("Average Carbon (Mg/ha or Mg/ha/yr of CO2 Eq.)", "Carbone moyen (Mg/ha ou Mg/ha/an de CO2 Eq.)"),
 		XAxis("Compartment", "Compartiment");
@@ -104,7 +105,13 @@ class CATResultBudgetPanel extends CATResultPanel {
 	}
 
 	@Override
-	protected String getTitle() {return REpiceaTranslator.getString(MessageID.Title);}
+	protected String getTitle() {
+		if (summary.isEvenAged()) {
+			return REpiceaTranslator.getString(MessageID.InfiniteSequence);
+		} else {
+			return REpiceaTranslator.getString(MessageID.Title);
+		}
+	}
 
 	@Override
 	protected String getXAxisLabel() {return REpiceaTranslator.getString(MessageID.XAxis);}

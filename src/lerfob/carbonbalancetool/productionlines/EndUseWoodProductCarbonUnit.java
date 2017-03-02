@@ -71,7 +71,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			AmountMap<Element> amountMap) {
 		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
-		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnit(), carbonUnitFeature.emissionsByFunctionalUnit);
+		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnitKg(), carbonUnitFeature.getEmissionsKgCO2ByFunctionalUnit());
 	}
 
 	/**
@@ -84,15 +84,15 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * This method returns the dry biomass of the product as it was created.
 	 * @return a double
 	 */
-	public double getBiomassAtCreationDate() {return getAmountMap().get(Element.Biomass);}
+	public double getBiomassMgAtCreationDate() {return getAmountMap().get(Element.Biomass);}
 	
 	/**
 	 * This method returns the number of functional units in this carbon unit.
 	 * @return a double
 	 */
 	public double getNumberOfFunctionalUnits() {
-		if (getCarbonUnitFeature().getBiomassOfFunctionalUnit() != 0d) {
-			return getBiomassAtCreationDate() / getCarbonUnitFeature().getBiomassOfFunctionalUnit();
+		if (getCarbonUnitFeature().getBiomassOfFunctionalUnitKg() != 0d) {
+			return getBiomassMgAtCreationDate() / (getCarbonUnitFeature().getBiomassOfFunctionalUnitKg() * .001);	// .001 to report the mass of the functional unit in tons
 		} else {
 			return 0d;
 		}
