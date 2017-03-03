@@ -22,8 +22,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class EnhancedProcessorInternalDialog extends ProcessorInternalDialog implements NumberFieldListener {
 
 	protected static enum MessageID implements TextableEnum {
-		FunctionalUnitBiomassLabel("Dry biomass per functional unit (kg)", "Biomasse s\u00E8che de l'unit\u00E9 fonctionnelle (kg)"),
-		EmissionsLabel("Emissions per functional unit (kg CO2 Eq.)", "Emission par unit\u00E9 fonctionelle (kg CO2 Eq.)")
+		FunctionalUnitBiomassLabel("Dry biomass per functional unit (Mg)", "Biomasse s\u00E8che de l'unit\u00E9 fonctionnelle (Mg)"),
+		EmissionsLabel("Emissions per functional unit (Mg CO2 Eq.)", "Emission par unit\u00E9 fonctionelle (Mg CO2 Eq.)")
 		;	
 
 		MessageID(String englishText, String frenchText) {

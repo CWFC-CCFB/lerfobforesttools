@@ -29,9 +29,9 @@ import repicea.simulation.processsystem.Processor;
 @SuppressWarnings("serial")
 public class AbstractProcessor extends Processor {
 
-	protected double functionUnitBiomass;
+	protected double functionUnitBiomass; // in Mg
 	
-	protected double emissionsByFunctionalUnit;
+	protected double emissionsByFunctionalUnit; // in Mg
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<ProcessUnit> doProcess(List<ProcessUnit> inputUnits) {
@@ -42,11 +42,11 @@ public class AbstractProcessor extends Processor {
 	}
 
 	
-	protected static void updateProcessEmissions(AmountMap<CarbonUnit.Element> amountMap, double functionalUnitBiomassKg, double emissionsKgCO2ByFunctionalUnit) {
+	protected static void updateProcessEmissions(AmountMap<CarbonUnit.Element> amountMap, double functionalUnitBiomassMg, double emissionsMgCO2ByFunctionalUnit) {
 		Double biomassMg = (Double) amountMap.get(Element.Biomass);
-		if (biomassMg != null && functionalUnitBiomassKg > 0) {
-			double fonctionalUnits = biomassMg / (functionalUnitBiomassKg * .001);		// .001 to report the mass of the functional unit in Mg 
-			double emissions = fonctionalUnits * emissionsKgCO2ByFunctionalUnit * .001;	// .001 to report the CO2 emissions in tons and not in kg
+		if (biomassMg != null && functionalUnitBiomassMg > 0) {
+			double fonctionalUnits = biomassMg / functionalUnitBiomassMg;
+			double emissions = fonctionalUnits * emissionsMgCO2ByFunctionalUnit;
 			amountMap.add(Element.EmissionsCO2Eq, emissions);
 		}
 

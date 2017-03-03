@@ -51,9 +51,8 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	public static enum MessageID implements TextableEnum {
 		LandfillSiteCheckBoxLabel("Send to landfill after useful life", "Envoyer \u00E0 la d\u00E9charge apr\u00E8s vie utile"),
 		PercentageSentToTheLandfill("Percentage sent to landfill", "Pourcentage envoy\u00E9 \u00E0 la d\u00E9charge"),
-		RelativeSubstitution("Relative substitution (Mg CO2 eq / Fonct. Unit)", "Substitution relative (Mg CO2 eq / Unit\u00E9 fonct.)"),
+		RelativeSubstitution("Relative substitution (Mg CO2 eq / Funct. Unit)", "Substitution relative (Mg CO2 eq / Unit\u00E9 fonct.)"),
 		UseClassCategory("Use class", "Cat\u00E9gorie d'usage");
-//		LifeCycleLibrary("Life cycle inventory", "Inventaire de cycle de vie");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -68,8 +67,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	
 	@SuppressWarnings("rawtypes")
 	private JComboBox useClassList;
-//	@SuppressWarnings("rawtypes")
-//	private JComboBox lifeCycleAnalysisList;
 	protected JFormattedNumericField substitutionTextField;
 
 	protected JCheckBox isDisposableCheckBox;
@@ -112,7 +109,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		disposableProportionLabel.setText(((Integer) disposableProportionSlider.getValue()).toString() + "%");
 
 		biomassFUTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
-		biomassFUTextField.setText(((Double) getCaller().getBiomassOfFunctionalUnitKg()).toString());
+		biomassFUTextField.setText(((Double) getCaller().getBiomassOfFunctionalUnitMg()).toString());
 		biomassFUTextField.setPreferredSize(new Dimension(100, biomassFUTextField.getFontMetrics(biomassFUTextField.getFont()).getHeight() + 2));
 		
 		substitutionTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
@@ -132,7 +129,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				NumberFormatFieldFactory.Range.Positive,
 				false);
 		emissionsByFUField.setColumns(5);
-		emissionsByFUField.setText(((Double) getCaller().getEmissionsKgCO2ByFunctionalUnit()).toString());
+		emissionsByFUField.setText(((Double) getCaller().getEmissionsMgCO2ByFunctionalUnit()).toString());
 
 	}
 	
@@ -176,7 +173,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
 		useClassList.setEnabled(b);
-//		lifeCycleAnalysisList.setEnabled(b);
 		substitutionTextField.setEnabled(b);
 		isDisposableCheckBox.setEnabled(b);
 	}
@@ -204,7 +200,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		isDisposableCheckBox.addItemListener(this);
 		disposableProportionSlider.addChangeListener(this);
 		disposableProportionSlider.addChangeListener(getCaller());
-//		lifeCycleAnalysisList.addItemListener(getCaller());
 		substitutionTextField.addNumberFieldListener(getCaller());
 		useClassList.addItemListener(getCaller());
 		biomassFUTextField.addNumberFieldListener(getCaller());
@@ -218,7 +213,6 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		isDisposableCheckBox.removeItemListener(this);
 		disposableProportionSlider.removeChangeListener(this);
 		disposableProportionSlider.removeChangeListener(getCaller());
-//		lifeCycleAnalysisList.removeItemListener(getCaller());
 		substitutionTextField.removeNumberFieldListener(getCaller());
 		useClassList.removeItemListener(getCaller());
 		biomassFUTextField.removeNumberFieldListener(getCaller());
