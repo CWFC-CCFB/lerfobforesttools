@@ -75,7 +75,9 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 
 		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
 			if (compartmentID.isFlux()) {
-				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
+				if (compartmentID != CompartmentInfo.NetSubs) {		// net flux should not be displayed because it implies double counting (substitution already accounts for emissions)
+					checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
+				}
 			}
 		}
 				

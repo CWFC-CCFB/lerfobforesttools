@@ -20,9 +20,6 @@ package lerfob.carbonbalancetool;
 
 import java.awt.Color;
 
-import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.gui.XYSeriesWithIntegratedRenderer;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -31,6 +28,8 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.gui.XYSeriesWithIntegratedRenderer;
 import repicea.math.Matrix;
 import repicea.stats.estimates.ConfidenceInterval;
 import repicea.stats.estimates.MonteCarloEstimate;
@@ -89,7 +88,7 @@ class CATResultEvolutionPanel extends CATResultPanel {
 			
 			Matrix lowerBound = ci.getLowerLimit();
 			Matrix upperBound = ci.getUpperLimit();
-			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Mean.toString(), compartmentID, true, getCarbonFactor());
+			XYSeriesWithIntegratedRenderer meanSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString(), compartmentID, true, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), compartmentID, false, getCarbonFactor());
 			XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, compartmentID.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), compartmentID, false, getCarbonFactor());
 			for (int i = 0; i < summary.getTimeTable().size(); i++) {

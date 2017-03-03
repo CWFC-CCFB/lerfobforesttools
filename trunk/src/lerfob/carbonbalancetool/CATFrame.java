@@ -302,6 +302,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		calculateInCarbon.setSelected(true); // default value;
 		
 		confidenceIntervalSlider = new REpiceaSlider(Position.North);
+		confidenceIntervalSlider.setMinimum(50);
+		confidenceIntervalSlider.setMaximum(100);
 		confidenceIntervalSlider.setValue((int) (.95 * 100));
 		JMenu ciMenu = new JMenu(MessageID.CI.toString());
 		ciMenu.add(confidenceIntervalSlider);

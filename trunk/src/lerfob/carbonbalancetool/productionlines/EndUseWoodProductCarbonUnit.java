@@ -71,7 +71,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			AmountMap<Element> amountMap) {
 		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
-		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnitKg(), carbonUnitFeature.getEmissionsKgCO2ByFunctionalUnit());
+		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnitMg(), carbonUnitFeature.getEmissionsMgCO2ByFunctionalUnit());
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * @return a double
 	 */
 	public double getNumberOfFunctionalUnits() {
-		if (getCarbonUnitFeature().getBiomassOfFunctionalUnitKg() != 0d) {
-			return getBiomassMgAtCreationDate() / (getCarbonUnitFeature().getBiomassOfFunctionalUnitKg() * .001);	// .001 to report the mass of the functional unit in tons
+		if (getCarbonUnitFeature().getBiomassOfFunctionalUnitMg() != 0d) {
+			return getBiomassMgAtCreationDate() / getCarbonUnitFeature().getBiomassOfFunctionalUnitMg();	
 		} else {
 			return 0d;
 		}

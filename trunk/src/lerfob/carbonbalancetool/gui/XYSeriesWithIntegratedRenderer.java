@@ -53,6 +53,7 @@ public class XYSeriesWithIntegratedRenderer extends XYSeries {
 		if (isMean) {
 			renderer.setSeriesStroke(indexOfThisSeries, MajorStroke);
 		} else {
+			renderer.setSeriesVisibleInLegend(indexOfThisSeries, false);
 			renderer.setSeriesStroke(indexOfThisSeries, MinorStroke);
 		}
 	}
