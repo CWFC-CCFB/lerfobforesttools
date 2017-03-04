@@ -73,7 +73,6 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 																		Refreshable, 
 																		AcceptableDropComponent<ArrayList<CATCompatibleStand>> {
 
-
 	static {
 		UIControlManager.setTitle(CATFrame.class, CarbonAccountingTool.englishTitle, CarbonAccountingTool.frenchTitle);
 		
@@ -153,7 +152,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		Units("Units", "Unit\u00E9s"),
 		CI("Confidence intervals", "Intervalles de confiance"),
 		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9"),
-		GlobalWarmingPotential("Global Warming Potential", "Potentiel de r\u00E9chauffement global")
+		GlobalWarmingPotential("Global Warming Potential", "Potentiel de r\u00E9chauffement global"),
+		ImportYieldTable("Yield table", "Table de production")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -188,6 +188,9 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	private final JMenuItem stopMenuItem;
 	private final JMenuItem close; // after confirmation
 	private final JMenuItem help;
+	private final JMenu importMenu;
+	private final JMenuItem yieldTable;
+	
 	private final JRadioButtonMenuItem calculateInCarbon;
 	protected final JRadioButtonMenuItem calculateInCO2;
 	protected final REpiceaSlider confidenceIntervalSlider;
@@ -241,6 +244,13 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		
 		file = UIControlManager.createCommonMenu(CommonMenuTitle.File);
 		menuBar.add(file);
+
+		importMenu = new JMenu(CommonControlID.Import.toString());
+		file.add(importMenu);
+		file.add(new JSeparator());
+		
+		yieldTable = new JMenuItem(MessageID.ImportYieldTable.toString());
+		importMenu.add(yieldTable);
 		
 		close = UIControlManager.createCommonMenuItem(CommonControlID.Quit);
 		file.add(close);
@@ -421,6 +431,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fourth);
 		} else if (evt.getSource().equals(aR5)) {
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
+		} else if (evt.getSource().equals(yieldTable)) {
+			// TODO construct an import for yield tables
 		}
 	}
 	
@@ -550,6 +562,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		aR2.addActionListener(this);
 		aR4.addActionListener(this);
 		aR5.addActionListener(this);
+		yieldTable.addActionListener(this);
 	}
 
 
@@ -570,6 +583,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		aR2.removeActionListener(this);
 		aR4.removeActionListener(this);
 		aR5.removeActionListener(this);
+		yieldTable.removeActionListener(this);
 	}
 
 	@Override

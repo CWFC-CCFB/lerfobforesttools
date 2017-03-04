@@ -73,11 +73,11 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	
 	private final CATPanelView panelView;
 	
-	private final JComboBox<CATSingleViewPanel> scenarioToCompareComboBox;
+	private final JComboBox<CATSingleViewPanel> alternativeScenarioComboBox;
 	private final JComboBox<CATSingleViewPanel> baselineComboBox;
 	private final JComboBox<ComparisonMode> comparisonModeComboBox;
-	private final JComboBox<Integer> dateRefComboBox;
-	private final JComboBox<Integer> dateAltComboBox;
+	private final JComboBox<Integer> dateBaselineScenarioComboBox;
+	private final JComboBox<Integer> dateAlternativeScenarioComboBox;
 	
 	private final JButton ok;
 	private final JButton cancel;
@@ -87,8 +87,6 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	
 	private final CATSingleViewPanel baselinePanel;
 	
-	private boolean referenceDatesHaveBeenSet;
-	
 	
 	protected CATScenarioComparisonDialog(CATFrame parent, CATPanelView panelView) {
 		super(parent);
@@ -97,9 +95,9 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		cancel = UIControlManager.createCommonButton(CommonControlID.Cancel);
 		help = UIControlManager.createCommonButton(CommonControlID.Help);
 		comparisonModeComboBox = new JComboBox<ComparisonMode>();
-		scenarioToCompareComboBox = new JComboBox<CATSingleViewPanel>();
-		dateRefComboBox = new JComboBox<Integer>();
-		dateAltComboBox = new JComboBox<Integer>();
+		alternativeScenarioComboBox = new JComboBox<CATSingleViewPanel>();
+		dateBaselineScenarioComboBox = new JComboBox<Integer>();
+		dateAlternativeScenarioComboBox = new JComboBox<Integer>();
 		baselinePanel = (CATSingleViewPanel) panelView.tabbedPane.getSelectedComponent();
 		baselineComboBox = new JComboBox<CATSingleViewPanel>();
 		baselineComboBox.addItem(baselinePanel);
@@ -122,45 +120,44 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		comparisonModeComboBox.setSelectedIndex(0);
 	}
 	
-	private void setDateComboBoxes() {
-		if (!referenceDatesHaveBeenSet) {
-			dateRefComboBox.removeAllItems();
-			if (!isComparisonModeInfiniteSequence()) {
-				for (Integer date : baselinePanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
-					dateRefComboBox.addItem(date);
-				}
-			}
-			referenceDatesHaveBeenSet = true;
-		}
-
-		dateAltComboBox.removeAllItems();
+	
+	
+	private void setDateComboBoxForBaseline() {
+		dateBaselineScenarioComboBox.removeAllItems();
 		if (!isComparisonModeInfiniteSequence()) {
-			CATSingleViewPanel altPanel = (CATSingleViewPanel) scenarioToCompareComboBox.getSelectedItem();
+			for (Integer date : baselinePanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
+				dateBaselineScenarioComboBox.addItem(date);
+			}
+		}
+	}
+	
+	private void setDateComboBoxForAlternativeScenario() {
+		dateAlternativeScenarioComboBox.removeAllItems();
+		if (!isComparisonModeInfiniteSequence()) {
+			CATSingleViewPanel altPanel = (CATSingleViewPanel) alternativeScenarioComboBox.getSelectedItem();
 			for (Integer date : altPanel.getSummary().getTimeTable().getListOfDatesUntilLastStandDate()) {
-				dateAltComboBox.addItem(date);
+				dateAlternativeScenarioComboBox.addItem(date);
 			}
 		}
 	}
 	
 	private void setComboBoxValues() {
-		scenarioToCompareComboBox.removeAllItems();
+		alternativeScenarioComboBox.removeAllItems();
 		for (int i = 0; i < panelView.tabbedPane.getTabCount(); i++) {
-//			if (i != panelView.tabbedPane.getSelectedIndex()) {
-				CATSingleViewPanel panel = (CATSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
-				if (panel != null) {
-					if (panel.getSummary() instanceof CATSingleSimulationResult) { // to avoid comparing a difference with a scenario
-						if (isComparisonModeInfiniteSequence()) {
-							if (panel.getSummary().isEvenAged()) {
-								scenarioToCompareComboBox.addItem(panel);
-							}
-						} else {
-							scenarioToCompareComboBox.addItem(panel);
+			CATSingleViewPanel panel = (CATSingleViewPanel) panelView.tabbedPane.getComponentAt(i);
+			if (panel != null) {
+				if (panel.getSummary() instanceof CATSingleSimulationResult) { // to avoid comparing a difference with a scenario
+					if (isComparisonModeInfiniteSequence()) {
+						if (panel.getSummary().isEvenAged()) {
+							alternativeScenarioComboBox.addItem(panel);
 						}
+					} else {
+						alternativeScenarioComboBox.addItem(panel);
 					}
 				}
-//			}
+			}
 		}
-		checkCorrespondanceWith(scenarioToCompareComboBox, selectionCompared);
+		checkCorrespondanceWith(alternativeScenarioComboBox, selectionCompared);
 	}
 
 	private boolean isComparisonModeInfiniteSequence() {
@@ -173,7 +170,7 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		cancel.addActionListener(this);
 		help.addActionListener(this);
 		comparisonModeComboBox.addItemListener(this);
-		scenarioToCompareComboBox.addItemListener(this);
+		alternativeScenarioComboBox.addItemListener(this);
 	}
 
 	@Override
@@ -182,7 +179,7 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		cancel.removeActionListener(this);
 		help.removeActionListener(this);
 		comparisonModeComboBox.removeItemListener(this);
-		scenarioToCompareComboBox.removeItemListener(this);
+		alternativeScenarioComboBox.removeItemListener(this);
 	}
 
 	
@@ -190,7 +187,8 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	public void refreshInterface() {
 		setComparisonModeComboBox();
 		setComboBoxValues();
-		setDateComboBoxes();
+		setDateComboBoxForBaseline();
+		setDateComboBoxForAlternativeScenario();
 		super.refreshInterface();
 	}
  	
@@ -246,15 +244,15 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 		baselinePane.setBorder(BorderFactory.createTitledBorder(etched, MessageID.Baseline.toString()));
 		JPanel pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Scenario, baselineComboBox, 5, false);
 		baselinePane.add(pane);
-		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Date,	dateRefComboBox, 5, false);
+		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Date,	dateBaselineScenarioComboBox, 5, false);
 		baselinePane.add(pane);
 		mainPanel.add(baselinePane);
 		
 		JPanel comparisonPane = new JPanel(gridLayout);
 		comparisonPane.setBorder(BorderFactory.createTitledBorder(etched, MessageID.AlternativeScenario.toString()));
-		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Scenario,	scenarioToCompareComboBox, 5, false);
+		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Scenario,	alternativeScenarioComboBox, 5, false);
 		comparisonPane.add(pane);
-		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Date, dateAltComboBox, 5, false);
+		pane = UIControlManager.createSimpleHorizontalPanel(MessageID.Date, dateAlternativeScenarioComboBox, 5, false);
 		comparisonPane.add(pane);
 		
 		mainPanel.add(comparisonPane);
@@ -276,14 +274,14 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 
 	@Override
 	public void okAction() {
-		CATSingleViewPanel scenToCompare = ((CATSingleViewPanel) scenarioToCompareComboBox.getSelectedItem());
+		CATSingleViewPanel scenToCompare = ((CATSingleViewPanel) alternativeScenarioComboBox.getSelectedItem());
 		String simulationName = scenToCompare.toString() + " - " + baselinePanel.toString();
 
 		CATSingleSimulationResult base = (CATSingleSimulationResult) baselinePanel.getSummary();
-		Integer baseDate = (Integer) dateRefComboBox.getSelectedItem();
+		Integer baseDate = (Integer) dateBaselineScenarioComboBox.getSelectedItem();
 
 		CATSingleSimulationResult altScen = (CATSingleSimulationResult) scenToCompare.getSummary();
-		Integer altScenDate = (Integer) dateAltComboBox.getSelectedItem();
+		Integer altScenDate = (Integer) dateAlternativeScenarioComboBox.getSelectedItem();
 				
 		panelView.addSimulationResult(new CATSimulationDifference(simulationName, base, baseDate, altScen, altScenDate));
 		selectionCompared = scenToCompare.toString();
@@ -293,14 +291,15 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
-		if (arg0.getSource().equals(scenarioToCompareComboBox)) {
+		if (arg0.getSource().equals(alternativeScenarioComboBox)) {
 			System.out.println("scenarioToCompareComboBox changed");
-			setDateComboBoxes();
+			setDateComboBoxForAlternativeScenario();
 		} else if (arg0.getSource().equals(comparisonModeComboBox)) {
 			doNotListenToAnymore();
 			System.out.println("comparisonModeComboBox changed");
 			setComboBoxValues();
-			setDateComboBoxes();
+			setDateComboBoxForBaseline();
+			setDateComboBoxForAlternativeScenario();
 			listenTo();
 		}
 	}
