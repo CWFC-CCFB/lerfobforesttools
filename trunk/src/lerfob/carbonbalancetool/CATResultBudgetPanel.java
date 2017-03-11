@@ -38,7 +38,7 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 class CATResultBudgetPanel extends CATResultPanel {
 	
 	protected static enum MessageID implements TextableEnum {
-		Title("Carbon budget", "Bilan carbone"),
+		TitleDifference("Stock difference" , "Diff\u00E9rence de stock"),
 		InfiniteSequence("Carbon budget in infinite sequence", "Bilan carbone en s\u00E9quence infinie"),
 		YAxis("Average Carbon (Mg/ha or Mg/ha/yr of C)", "Carbone moyen (Mg/ha ou Mg/ha/an de C)"),
 		YCO2Axis("Average Carbon (Mg/ha or Mg/ha/yr of CO2 Eq.)", "Carbone moyen (Mg/ha ou Mg/ha/an de CO2 Eq.)"),
@@ -52,6 +52,8 @@ class CATResultBudgetPanel extends CATResultPanel {
 		public void setText(String englishText, String frenchText) {
 			REpiceaTranslator.setString(this, englishText, frenchText);
 		}
+		
+		public String toString() {return REpiceaTranslator.getString(this);}
 		
 	}
 
@@ -106,10 +108,10 @@ class CATResultBudgetPanel extends CATResultPanel {
 
 	@Override
 	protected String getTitle() {
-		if (summary.isEvenAged()) {
-			return REpiceaTranslator.getString(MessageID.InfiniteSequence);
+		if (summary instanceof CATSimulationDifference) {
+			return MessageID.TitleDifference.toString();
 		} else {
-			return REpiceaTranslator.getString(MessageID.Title);
+			return MessageID.InfiniteSequence.toString();
 		}
 	}
 

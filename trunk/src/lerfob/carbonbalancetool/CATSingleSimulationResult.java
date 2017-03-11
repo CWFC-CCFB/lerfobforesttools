@@ -42,7 +42,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		ProductionLinesLabel("Production lines", "Lignes de production"),
 		Workspace("Workspace: ", "R\u00E9pertoire de travail : "),
 		DifferenceBetween("Difference between ", "Difference entre "),
-		And(" and ", " et ");
+		And(" and ", " et "),
+		Years("years", "ans");
 
 		
 		MessageID(String englishText, String frenchText) {

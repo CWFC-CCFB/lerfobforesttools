@@ -146,8 +146,10 @@ class CATSimulationDifference implements CATSimulationResult {
 
 	@Override
 	public String toString() {
-		return "<html>" + CATSingleSimulationResult.MessageID.DifferenceBetween.toString() + ": " + scenToCompare.getStandID() + "<br>" +
-					CATSingleSimulationResult.MessageID.And.toString() + baseline.getStandID() + "</html>";
+		return "<html>" + CATSingleSimulationResult.MessageID.DifferenceBetween.toString() + ": " +
+						scenToCompare.getStandID() + " (" + altDate + ")" + "<br>" +
+						CATSingleSimulationResult.MessageID.And.toString() + 
+						baseline.getStandID() + " (" + refDate + ")" + "</html>";
 	}
 
 
