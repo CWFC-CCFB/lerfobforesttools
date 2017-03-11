@@ -40,6 +40,7 @@ import org.jfree.data.statistics.StatisticalCategoryDataset;
 import repicea.math.Matrix;
 import repicea.stats.estimates.ConfidenceInterval;
 import repicea.stats.estimates.Estimate;
+import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
 /**
@@ -68,6 +69,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	private final List<Comparable> rowKeys; 
 	private final List<Comparable> columnKeys;
 	private final Map<Comparable, Map<Comparable, EstimateWrapper>> estimateMap;
+	private final Map<Comparable, Map<Comparable, Boolean>> ciToBeDisplayedMap;
 	
 	public AsymmetricalCategoryDataset(double carbonFactor, double percentile) {
 		super();
@@ -76,6 +78,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		rowKeys = new ArrayList<Comparable>();
 		columnKeys = new ArrayList<Comparable>();
 		estimateMap = new HashMap<Comparable, Map<Comparable, EstimateWrapper>>();
+		ciToBeDisplayedMap = new HashMap<Comparable, Map<Comparable, Boolean>>(); 
 	}
 
 	public void add(Estimate<?> estimate, Color color, Comparable category, Comparable group) {
@@ -111,12 +114,24 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
 			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
-			if (ci != null) {
+			if (ci != null && !ci.isThereAnyNaN()) {
+				recordBoolean(arg0, arg1, true);
 				return ci.getUpperLimit().m_afData[0][0];
+			} else {
+				recordBoolean(arg0, arg1, false);
+				return estimate.getMean().m_afData[0][0];
 			}
 		}
 		return null;
 	}
+
+	private void recordBoolean(Comparable arg0, Comparable arg1, boolean b) {
+		if (!ciToBeDisplayedMap.containsKey(arg0)) {
+			ciToBeDisplayedMap.put(arg0, new HashMap<Comparable, Boolean>());
+		}
+		Map<Comparable, Boolean> innerMap = ciToBeDisplayedMap.get(arg0);
+		innerMap.put(arg1, b);
+ 	} 
 
 	@Override
 	public Number getStartValue(int arg0, int arg1) {
@@ -130,13 +145,29 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		return null;
 	}
 
+	protected boolean isCIToBeDisplayed(int row, int col) {
+		Comparable rowComparable = rowKeys.get(row);
+		Comparable columnComparable = columnKeys.get(col);
+		if (ciToBeDisplayedMap.containsKey(rowComparable)) {
+			Map<Comparable, Boolean> innerMap = ciToBeDisplayedMap.get(rowComparable);
+			if (innerMap.containsKey(columnComparable)) {
+				return innerMap.get(columnComparable);
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public Number getStartValue(Comparable arg0, Comparable arg1) {
 		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
 			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
-			if (ci != null) {
+			if (ci != null && !ci.isThereAnyNaN()) {
+				recordBoolean(arg0, arg1, true);
 				return ci.getLowerLimit().m_afData[0][0];
+			} else {
+				recordBoolean(arg0, arg1, false);
+				return estimate.getMean().m_afData[0][0];
 			}
 		}
 		return null;
@@ -274,6 +305,11 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		
 		MonteCarloEstimate estimate1 = new MonteCarloEstimate();
 		MonteCarloEstimate estimate2 = new MonteCarloEstimate();
+		Matrix mean = new Matrix(1,1);
+		mean.m_afData[0][0] = 10d;
+		Matrix variance = new Matrix(1,1);
+		variance.m_afData[0][0] = Double.NaN;
+		GaussianEstimate estimate3 = new GaussianEstimate(mean, variance);
 		
 		Matrix mat1;
 		Matrix mat2;
@@ -288,7 +324,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		
 		dataset.add(estimate1, Color.RED, "Estimate1", "group1");		
 		dataset.add(estimate2, Color.GREEN, "Estimate2", "group1");		
-		dataset.add(estimate2, Color.BLUE, "Estimate2", "group2");		
+		dataset.add(estimate3, Color.BLUE, "Estimate2", "group2");		
 		
 		JFreeChart chart = ChartFactory.createBarChart("My title", 
 				"Labels", 

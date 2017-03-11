@@ -66,10 +66,6 @@ public class EnhancedStatisticalBarRenderer extends StatisticalBarRenderer {
 	}
 	
 	
-	
-	
-	
-	
 	@Override
 	protected void drawVerticalItem(Graphics2D g2, 
 			CategoryItemRendererState state, 
@@ -141,9 +137,9 @@ public class EnhancedStatisticalBarRenderer extends StatisticalBarRenderer {
 		}
 		
 		// upper and lower bound
-		Number lowerBound = ((AsymmetricalCategoryDataset) dataset).getStartValue(row, column);
-		Number upperBound = ((AsymmetricalCategoryDataset) dataset).getEndValue(row, column);
-		if (lowerBound != null && upperBound != null) {
+		if (((AsymmetricalCategoryDataset) dataset).isCIToBeDisplayed(row, column)) {
+			Number lowerBound = ((AsymmetricalCategoryDataset) dataset).getStartValue(row, column);
+			Number upperBound = ((AsymmetricalCategoryDataset) dataset).getEndValue(row, column);
 			double highVal = rangeAxis.valueToJava2D(upperBound.doubleValue(), dataArea, yAxisLocation);
 			double lowVal = rangeAxis.valueToJava2D(lowerBound.doubleValue(), dataArea, yAxisLocation);
 			g2.setPaint(getErrorIndicatorPaint());

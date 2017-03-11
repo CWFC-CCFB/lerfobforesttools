@@ -19,6 +19,7 @@
 package lerfob.treelogger.mathilde;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
+import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.WoodPiece;
 
@@ -82,6 +83,12 @@ class MathildeTreeLogCategory extends LogCategory {
 	@Override
 	public boolean isVisible() {
 		return guiInterface != null && guiInterface.isVisible();
+	}
+	
+	@Override
+	public String getName() {
+		Grade grade = Grade.valueOf(super.getName());
+		return grade.toString();
 	}
 
 }
