@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.CancellationException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -28,6 +30,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,14 +42,18 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileFilter;
 
 import lerfob.carbonbalancetool.CATSettings.AssessmentReport;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersWrapper;
 import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
+import lerfob.carbonbalancetool.io.CATRecordReader;
+import lerfob.carbonbalancetool.io.CATSpeciesSelectionDialog;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
+import repicea.gui.CommonGuiUtility.FileChooserOutput;
 import repicea.gui.REpiceaAWTProperty;
 import repicea.gui.REpiceaFrame;
 import repicea.gui.Refreshable;
@@ -58,6 +65,7 @@ import repicea.gui.components.REpiceaSlider;
 import repicea.gui.components.REpiceaSlider.Position;
 import repicea.gui.dnd.AcceptableDropComponent;
 import repicea.gui.dnd.DropTargetImpl;
+import repicea.io.GFileFilter;
 import repicea.net.BrowserCaller;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -432,10 +440,40 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		} else if (evt.getSource().equals(aR5)) {
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
 		} else if (evt.getSource().equals(yieldTable)) {
-			// TODO construct an import for yield tables
+			constructYieldTable();
 		}
 	}
 	
+	private void constructYieldTable() {
+		String yieldTableFilename = caller.getSettingMemory().getProperty("lerfobcat.yieldTableFilename", "");
+		try {
+			Vector<FileFilter> fileFilters = new Vector<FileFilter>();
+			fileFilters.add(GFileFilter.CSV);
+			FileChooserOutput fileChooserOutput = CommonGuiUtility.browseAction(this, 
+					JFileChooser.FILES_ONLY, 
+					yieldTableFilename,
+					fileFilters,
+					JFileChooser.OPEN_DIALOG);
+			if (!fileChooserOutput.isValid()) {
+				return;
+			} 
+			CATSpeciesSelectionDialog dlg = new CATSpeciesSelectionDialog(this);
+			if (!dlg.isValidated()) {
+				return;
+			}
+			yieldTableFilename = fileChooserOutput.getFilename();
+			CATRecordReader catRecordReader = new CATRecordReader(dlg.getCATSpecies());
+			catRecordReader.initGUIMode(this, yieldTableFilename);
+			catRecordReader.readAllRecords();
+			caller.setStandList(catRecordReader.getStandList());
+			caller.getSettingMemory().setProperty("lerfobcat.yieldTableFilename", yieldTableFilename);
+		} catch (Exception e) {
+			if (e instanceof CancellationException) {
+				return;
+			}
+		}
+
+	}
 
 	protected void redefineProgressBar() {
 		majorProgressBar.setMinimum(0);

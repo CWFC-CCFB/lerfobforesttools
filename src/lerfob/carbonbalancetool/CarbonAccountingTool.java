@@ -1,5 +1,5 @@
 /*
- * This file is part of the lerfob-forestools library.
+ * This file is part of the lerfob-foresttools library.
  *
  * Copyright (C) 2010-2014 Mathieu Fortin for LERFOB AgroParisTech/INRA, 
  *

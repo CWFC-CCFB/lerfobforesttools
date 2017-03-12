@@ -35,6 +35,7 @@ import lerfob.carbonbalancetool.woodpiecedispatcher.WoodPieceDispatcher;
 import repicea.app.SettingMemory;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.simulation.Parameterizable;
+import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
@@ -54,6 +55,61 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("deprecation")
 public final class CATSettings {
 
+	public static enum CATSpecies implements TextableEnum, CATBasicWoodDensityProvider {
+		
+		Abies(SpeciesType.ConiferousSpecies, 0.40, "Abies spp."),
+		Acer(SpeciesType.BroadleavedSpecies, 0.52, "Acer spp."),
+		Alnus(SpeciesType.BroadleavedSpecies, 0.45, "Alnus spp."),
+		Betula(SpeciesType.BroadleavedSpecies, 0.51, "Betula spp."),
+		CarpinusBetulus(SpeciesType.BroadleavedSpecies, 0.63, "Carpinus betulus"),
+		CastaneaSativa(SpeciesType.BroadleavedSpecies, 0.48, "Castanea sativa"),
+		FagusSylvatica(SpeciesType.BroadleavedSpecies, 0.58, "Fagus sylvatica"),
+		Fraxinus(SpeciesType.BroadleavedSpecies, 0.57, "Fraxinus spp."),
+		Juglans(SpeciesType.BroadleavedSpecies, 0.53, "Juglans spp."),
+		LarixDecidua(SpeciesType.ConiferousSpecies, 0.46, "Larix decidua"),
+		PiceaAbies(SpeciesType.ConiferousSpecies, 0.40, "Picea abies"),
+		PiceaSitchensis(SpeciesType.ConiferousSpecies, 0.40, "Picea sitchensis"),
+		PinusPinaster(SpeciesType.ConiferousSpecies, 0.44, "Pinus pinaster"),
+		PinusRadiata(SpeciesType.ConiferousSpecies, 0.38, "Pinus radiata"),
+		PinusStrobus(SpeciesType.ConiferousSpecies, 0.32, "Pinus strobus"),
+		PinusSylvestris(SpeciesType.ConiferousSpecies, 0.42, "Pinus sylvestris"),
+		Populus(SpeciesType.BroadleavedSpecies, 0.35, "Populus spp."),
+		Prunus(SpeciesType.ConiferousSpecies, 0.49, "Prunus spp."),
+		PseudotsugaMenziesii(SpeciesType.ConiferousSpecies, 0.45, "Pseudotsuga menziesii"),
+		Quercus(SpeciesType.BroadleavedSpecies, 0.58, "Quercus spp."),
+		Salix(SpeciesType.BroadleavedSpecies, 0.45, "Salix spp."),
+		ThujaPlicata(SpeciesType.ConiferousSpecies, 0.31, "Thuja plicata"),
+		Tilia(SpeciesType.BroadleavedSpecies, 0.43, "Tilia spp."),
+		Tsuga(SpeciesType.ConiferousSpecies, 0.42, "Tsuga spp.")
+		;
+
+		
+		final SpeciesType speciesType;
+		final double basicWoodDensity;
+		
+		CATSpecies(SpeciesType speciesType, double basicWoodDensity, String latinName) {
+			this.speciesType = speciesType;
+			this.basicWoodDensity = basicWoodDensity;
+			setText(latinName, latinName);
+		};
+
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		
+		
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+
+		@Override
+		public double getBasicWoodDensity() {return basicWoodDensity;}
+		
+		public SpeciesType getSpeciesType() {return speciesType;}
+		
+	}
+	
 	public static enum AssessmentReport implements TextableEnum {
 		Second("Second Assessment Report", "Deuxi\u00E8me rapport d'\u00E9valuation"),
 		Fourth("Fourth Assessment Report", "Quatri\u00E8me rapport d'\u00E9valuation"),
@@ -102,7 +158,6 @@ public final class CATSettings {
 		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265));
 	}
 
-	
 	private final CATExponentialFunction decayFunction = new CATExponentialFunction();
 	private final SettingMemory settings;
 	protected boolean formerImplementation;
