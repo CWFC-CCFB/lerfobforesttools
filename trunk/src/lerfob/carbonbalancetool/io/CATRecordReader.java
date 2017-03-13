@@ -128,7 +128,7 @@ public class CATRecordReader extends REpiceaRecordReader {
 		CATYieldTableCompatibleStand stand;
 		if (harvestedVolumeM3 > 0d) {
 			if (standList.size() == 0 || standList.get(standList.size() - 1).getDateYr() != dateYr) { // means that there is no before harvest entry. Need to create one.
-				stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFilename(),
+				stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFileSpecifications()[0],
 						dateYr,
 						false,
 						catSpecies.name(),
@@ -137,7 +137,7 @@ public class CATRecordReader extends REpiceaRecordReader {
 				stand.addTree(new CATYieldTableCompatibleTree(standingVolumeM3 + harvestedVolumeM3, StatusClass.alive)) ;
 			}
 		}
-		stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFilename(),
+		stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFileSpecifications()[0],
 				dateYr,
 				harvestedVolumeM3 > 0,
 				catSpecies.name(),
@@ -149,7 +149,7 @@ public class CATRecordReader extends REpiceaRecordReader {
 			stand.addTree(tree);
 		}
 		if (harvestedVolumeM3 > 0) {
-			tree = new CATYieldTableCompatibleTree(standingVolumeM3, StatusClass.cut);
+			tree = new CATYieldTableCompatibleTree(harvestedVolumeM3, StatusClass.cut);
 			stand.addTree(tree);
 		}
 	}
