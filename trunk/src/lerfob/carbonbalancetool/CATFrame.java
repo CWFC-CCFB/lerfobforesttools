@@ -472,9 +472,15 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 				return;
 			}
 		}
-
 	}
 
+	protected void setCalculateCarbonButtonsEnabled(boolean bool) {
+		boolean isStandListSet = caller.getCarbonCompartmentManager().getLastStand() != null;
+		calculateCarbonMenuItem.setEnabled(bool && !vetoEnabled && isStandListSet );
+		calculateCarbonButton.setEnabled(bool && !vetoEnabled && isStandListSet);
+	}
+	
+	
 	protected void redefineProgressBar() {
 		majorProgressBar.setMinimum(0);
 		majorProgressBar.setMaximum(CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations());
@@ -521,8 +527,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	
 	protected void setSimulationRunning(boolean b) {
 		vetoEnabled = b;
-		calculateCarbonMenuItem.setEnabled(!b);
-		calculateCarbonButton.setEnabled(!b);
+		setCalculateCarbonButtonsEnabled(!b);
 		stopMenuItem.setEnabled(b);
 		stopButton.setEnabled(b);
 		options.setEnabled(!b);
@@ -554,9 +559,6 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 						updateMajorProgressBarValue(majorProgressBar.getMaximum());
 					}
 				}
-//				setEnabled(true);
-//			} else if (evt.getNewValue() == SwingWorker.StateValue.STARTED) {
-//				setEnabled(false);
 			}
 		} else if (evt.getPropertyName().equals("progress")) {
 			minorProgressBar.setValue((Integer) evt.getNewValue());
