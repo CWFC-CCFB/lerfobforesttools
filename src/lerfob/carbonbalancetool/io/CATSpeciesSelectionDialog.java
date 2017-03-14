@@ -41,7 +41,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class CATSpeciesSelectionDialog extends REpiceaDialog implements ActionListener {
 
 	private static enum MessageID implements TextableEnum {
-		SpeciesLabel("Please select the appropriate species", "Veuillez s\u00E9lectionner l'esp\u00E8ce appropri\u00E9e")	;
+		SpeciesLabel("Please select the appropriate species", "Veuillez s\u00E9lectionner l'esp\u00E8ce appropri\u00E9e"),
+		Title("Species selection", "Choix de l'esp\u00E8ce");
 
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -85,6 +86,7 @@ public class CATSpeciesSelectionDialog extends REpiceaDialog implements ActionLi
 
 	@Override
 	protected void initUI() {
+		setTitle(MessageID.Title.toString());
 		setLayout(new BorderLayout());
 		JLabel label = UIControlManager.getLabel(MessageID.SpeciesLabel);
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));

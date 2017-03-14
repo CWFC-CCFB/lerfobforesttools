@@ -273,6 +273,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 			Runnable doRun = new Runnable() {
 				@Override
 				public void run() {
+					getUI().setCalculateCarbonButtonsEnabled(true);
 					getUI().redefineProgressBar();
 				}
 			};
