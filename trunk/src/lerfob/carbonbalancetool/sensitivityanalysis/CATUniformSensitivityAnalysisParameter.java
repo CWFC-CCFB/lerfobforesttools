@@ -1,5 +1,5 @@
 /*
- * This file is part of the lerfob-forestools library.
+ * This file is part of the lerfob-foresttools library.
  *
  * Copyright (C) 2010-2016 Mathieu Fortin AgroParisTech/INRA UMR LERFoB, 
  *
@@ -24,29 +24,14 @@ import repicea.stats.estimates.UniformEstimate;
 @SuppressWarnings("serial")
 public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalysisParameter<UniformEstimate> {
 
-	protected CATUniformSensitivityAnalysisParameter() {
+	protected CATUniformSensitivityAnalysisParameter(double initialValue) {
 		super(false);
 		Matrix lowerBoundValue = new Matrix(1,1);
 		lowerBoundValue.m_afData[0][0] = -1d;
 		Matrix upperBoundValue = new Matrix(1,1);
 		upperBoundValue.m_afData[0][0] = 1d;
 		setParameterEstimates(new UniformEstimate(lowerBoundValue, upperBoundValue));
-		setMultiplier(.1);
+		setMultiplier(initialValue);
 	}
 
-//	@Override
-//	protected void setMultiplier(double multiplier) {
-//		super.setMultiplier(multiplier);
-//		Matrix lowerBoundValue = new Matrix(1,1);
-//		lowerBoundValue.m_afData[0][0] = 1 - multiplier;
-//		getParameterEstimates().setLowerBoundValue(lowerBoundValue);
-//		Matrix upperBoundValue = new Matrix(1,1);
-//		upperBoundValue.m_afData[0][0] = 1 + multiplier;
-//		getParameterEstimates().setUpperBoundValue(upperBoundValue);
-//	}
-	
-//	@Override
-//	protected Matrix getParameterValueForThisSubject(MonteCarloSimulationCompliantObject subject) {
-//		return this.getParametersForThisRealization(subject);
-//	}
 }

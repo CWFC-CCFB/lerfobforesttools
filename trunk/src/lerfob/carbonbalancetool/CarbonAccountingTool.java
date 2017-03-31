@@ -457,7 +457,9 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 //		REpiceaTranslator.setCurrentLanguage(Language.French);
 		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
-		tool.initializeTool(true, null);
+		if (!tool.initializeTool(true, null)) {
+			System.exit(0);
+		}
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
@@ -465,7 +467,6 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
 		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
-//		System.exit(0);
 	}
 
 
