@@ -28,6 +28,7 @@ import java.util.Map;
 import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithParent {
@@ -38,14 +39,21 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	private transient CATSensitivityAnalysisSettingsDlg guiInterface;
 	
 	public static enum VariabilitySource implements TextableEnum {
-		BiomassExpansionFactor("Biomass expansion factors", "Facteur d'expansion de biomasse"),
-		BasicDensity("Wood basic densities", "Infradensit\u00E9s"),
-		CarbonContent("Carbon content", "Teneur en carbone"),
-		Lifetime("HWP lifetimes", "Dur\u00E9es de vie des produits"),
-		SubstitutionFactors("Substitution factors", "Facteurs de substitution");
+		BiomassExpansionFactor("Biomass expansion factors", "Facteur d'expansion de biomasse", 0, 15, 30),
+		BasicDensity("Wood basic densities", "Infradensit\u00E9s", 0, 20, 40),
+		CarbonContent("Carbon content", "Teneur en carbone", 0, 5, 10),
+		Lifetime("HWP lifetimes", "Dur\u00E9es de vie des produits", 0, 50, 70),
+		SubstitutionFactors("Substitution factors", "Facteurs de substitution", 0, 50, 100);
 		
-		VariabilitySource(String englishText, String frenchText) {
+		private final int min;
+		private final int max;
+		private final int suggestedIPCCValue;
+		
+		VariabilitySource(String englishText, String frenchText, int min, int suggestedIPCCValue, int max) {
 			setText(englishText, frenchText);
+			this.min = min;
+			this.max = max;
+			this.suggestedIPCCValue = suggestedIPCCValue;
 		}
 		
 		@Override
@@ -55,20 +63,24 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		
 		@Override
 		public String toString() {return REpiceaTranslator.getString(this);}
+		
+		protected int getMinimumValue() {return min;}
+		protected int getMaximumValue() {return max;}
+		protected int getSuggestedIPCCValue() {return suggestedIPCCValue;}
 	}
 
 	
 	
 	
-	protected final Map<VariabilitySource, CATSensitivityParameterWrapper> sensitivityParameterMap;
+	protected final Map<VariabilitySource, CATSensitivityAnalysisParameterWrapper> sensitivityParameterMap;
 	
 	protected int nbMonteCarloRealizations;
 	protected boolean isModelStochastic;
 	
 	private CATSensitivityAnalysisSettings() {
-		sensitivityParameterMap = new HashMap<VariabilitySource, CATSensitivityParameterWrapper>();
+		sensitivityParameterMap = new HashMap<VariabilitySource, CATSensitivityAnalysisParameterWrapper>();
 		for (VariabilitySource source : VariabilitySource.values()) {
-			sensitivityParameterMap.put(source, new CATSensitivityParameterWrapper(source));
+			sensitivityParameterMap.put(source, new CATSensitivityAnalysisParameterWrapper(source));
 		}
 	}
 	
@@ -145,6 +157,7 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	public boolean isModelStochastic() {return isModelStochastic;}
 	
 	public static void main(String[] args) {
+		REpiceaTranslator.setCurrentLanguage(Language.French);
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();
 		settings.showUI(null);
 	}

@@ -23,9 +23,10 @@ import repicea.stats.estimates.GaussianEstimate;
 @SuppressWarnings("serial")
 public class CATGaussianSensitivityAnalysisParameter extends CATSensitivityAnalysisParameter<GaussianEstimate> {
 
-	protected CATGaussianSensitivityAnalysisParameter() {
+	protected CATGaussianSensitivityAnalysisParameter(double initialValue) {
 		super(false);
 		setParameterEstimates(new GaussianEstimate());
+		setMultiplier(initialValue);
 	}
 	
 	@Override

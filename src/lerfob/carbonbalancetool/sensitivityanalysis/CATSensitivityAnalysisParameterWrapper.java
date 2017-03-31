@@ -18,6 +18,8 @@
  */
 package lerfob.carbonbalancetool.sensitivityanalysis;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -28,6 +30,7 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -35,6 +38,7 @@ import javax.swing.JLabel;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.REpiceaPanel;
 import repicea.gui.REpiceaUIObject;
+import repicea.gui.UIControlManager;
 import repicea.gui.components.REpiceaSlider;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
@@ -42,11 +46,12 @@ import repicea.stats.Distribution;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
-public class CATSensitivityParameterWrapper implements REpiceaUIObject {
+public class CATSensitivityAnalysisParameterWrapper implements REpiceaUIObject {
 
 	private static enum MessageID implements TextableEnum {
 		ErrorMargin("Error margin", "Marge d'erreur"),
-		Enable("Enabled", "Activ\u00E9");
+		Enable("Enabled", "Activ\u00E9"),
+		IPCCDefaultUncertainty("Set to IPCC suggested value", "Fixer \u00E0 la valeur sugg\u00E9r\u00E9e par le GIEC");
 
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -62,13 +67,14 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 	}
 	
 	@SuppressWarnings("serial")
-	class CATSensitivityParameterWrapperPanel extends REpiceaPanel implements ItemListener, PropertyChangeListener{
+	class CATSensitivityAnalysisParameterWrapperPanel extends REpiceaPanel implements ItemListener, PropertyChangeListener, ActionListener{
 		
 		private final JCheckBox enabled;
 		private final JComboBox<Distribution.Type> distributionComboBox;
 		private final REpiceaSlider variabilitySlider;
+		private final JButton setToAppropriateValueButton;
 		
-		CATSensitivityParameterWrapperPanel() {
+		CATSensitivityAnalysisParameterWrapperPanel() {
 			enabled = new JCheckBox(MessageID.Enable.toString());
 			enabled.setSelected(false);	// default value
 			Vector<Distribution.Type> dist = new Vector<Distribution.Type>();
@@ -76,10 +82,12 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 			dist.add(Distribution.Type.GAUSSIAN);
 			distributionComboBox = new JComboBox<Distribution.Type>(dist);
 			variabilitySlider = new REpiceaSlider(REpiceaSlider.Position.West);
-			variabilitySlider.setMinimum(0);
-			variabilitySlider.setMaximum(30);
+			variabilitySlider.setMinimum(CATSensitivityAnalysisParameterWrapper.this.source.getMinimumValue());
+			variabilitySlider.setMaximum(CATSensitivityAnalysisParameterWrapper.this.source.getMaximumValue());
+			setToAppropriateValueButton = UIControlManager.createButtonWithRedCircleIcon();
+			setToAppropriateValueButton.setToolTipText(MessageID.IPCCDefaultUncertainty.toString());
 			
-			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), CATSensitivityParameterWrapper.this.source.toString()));
+			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), CATSensitivityAnalysisParameterWrapper.this.source.toString()));
 			add(Box.createHorizontalStrut(5));
 			add(enabled);
 			add(Box.createHorizontalStrut(10));
@@ -88,15 +96,18 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 			add(Box.createHorizontalStrut(10));
 			add(new JLabel(MessageID.ErrorMargin.toString()));
 			add(variabilitySlider);
+			add(Box.createHorizontalStrut(10));
+			add(setToAppropriateValueButton);
 			add(Box.createHorizontalStrut(5));
+			
 			setEnabled(enabled.isSelected());
 		}
 		
 		
 		@Override
 		public void refreshInterface() {
-			distributionComboBox.setSelectedItem(CATSensitivityParameterWrapper.this.selectedDistributionType);
-			CATSensitivityAnalysisParameter<?> param = CATSensitivityParameterWrapper.this.parameterMap.get(CATSensitivityParameterWrapper.this.selectedDistributionType);
+			distributionComboBox.setSelectedItem(CATSensitivityAnalysisParameterWrapper.this.selectedDistributionType);
+			CATSensitivityAnalysisParameter<?> param = CATSensitivityAnalysisParameterWrapper.this.parameterMap.get(CATSensitivityAnalysisParameterWrapper.this.selectedDistributionType);
 			variabilitySlider.setValue((int) (param.getMultiplier() * 100));
 		}
 
@@ -105,6 +116,7 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 			distributionComboBox.addItemListener(this);
 			variabilitySlider.addPropertyChangeListener(this);
 			enabled.addItemListener(this);
+			setToAppropriateValueButton.addActionListener(this);
 		}
 
 		@Override
@@ -112,16 +124,16 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 			distributionComboBox.removeItemListener(this);
 			variabilitySlider.removePropertyChangeListener(this);
 			enabled.removeItemListener(this);
+			setToAppropriateValueButton.removeActionListener(this);
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
 			if (arg0.getSource().equals(distributionComboBox)) {
-				CATSensitivityParameterWrapper.this.selectedDistributionType = (Distribution.Type) distributionComboBox.getSelectedItem();
+				CATSensitivityAnalysisParameterWrapper.this.selectedDistributionType = (Distribution.Type) distributionComboBox.getSelectedItem();
 //				System.out.println("Selected distribution is " + (Distribution.Type) distributionComboBox.getSelectedItem());
 			} else if (arg0.getSource().equals(enabled)) {
-//				CATSensitivityParameterWrapper.this.isEnabled = enabled.isSelected();
-				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityParameterWrapper.this.parameterMap.values()) {
+				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityAnalysisParameterWrapper.this.parameterMap.values()) {
 					param.setParametersVariabilityEnabled(enabled.isSelected());
 				}
 				setEnabled(enabled.isSelected());
@@ -132,7 +144,7 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		public void propertyChange(PropertyChangeEvent arg0) {
 			if (arg0.getSource().equals(variabilitySlider)) {
 				double multiplier = variabilitySlider.getValue() * .01;
-				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityParameterWrapper.this.parameterMap.values()) {
+				for (CATSensitivityAnalysisParameter<?> param : CATSensitivityAnalysisParameterWrapper.this.parameterMap.values()) {
 					param.setMultiplier(multiplier);
 				}
 //				System.out.println("Slider value set to " + variabilitySlider.getValue());
@@ -143,9 +155,22 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		public void setEnabled(boolean bool) {
 			distributionComboBox.setEnabled(bool);
 			variabilitySlider.setEnabled(bool);
+			setToAppropriateValueButton.setEnabled(bool);
 		}
+
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(setToAppropriateValueButton)) {
+				variabilitySlider.setValue(CATSensitivityAnalysisParameterWrapper.this.source.getSuggestedIPCCValue());
+			}
+		}
+	
 	}
- 	
+
+	
+	
+	
 	class MonteCarloSimulationCompliantObjectImpl implements MonteCarloSimulationCompliantObject {
 
 		final MonteCarloSimulationCompliantObject root;
@@ -167,8 +192,6 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		
 	}
 	
-	
-	
 	private final VariabilitySource source;
 	
 	@SuppressWarnings("rawtypes")
@@ -180,17 +203,18 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 	
 		
 	@SuppressWarnings({ "incomplete-switch", "rawtypes" })
-	protected CATSensitivityParameterWrapper(VariabilitySource source) {
+	protected CATSensitivityAnalysisParameterWrapper(VariabilitySource source) {
 		this.source = source;
 		parameterMap = new HashMap<Distribution.Type, CATSensitivityAnalysisParameter>();
 		subjectMap = new HashMap<String, MonteCarloSimulationCompliantObject>();
+		double initialValue = source.getSuggestedIPCCValue() * .01;
 		for (Distribution.Type type : Distribution.Type.values()) {
 			switch(type) {
 			case UNIFORM:
-				parameterMap.put(type, new CATUniformSensitivityAnalysisParameter());
+				parameterMap.put(type, new CATUniformSensitivityAnalysisParameter(initialValue));
 				break;
 			case GAUSSIAN:
-				parameterMap.put(type, new CATGaussianSensitivityAnalysisParameter());
+				parameterMap.put(type, new CATGaussianSensitivityAnalysisParameter(initialValue));
 				break;
 			}
 		}
@@ -199,7 +223,7 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 	@Override
 	public REpiceaPanel getUI() {
 		if (guiInterface == null) {
-			guiInterface = new CATSensitivityParameterWrapperPanel();
+			guiInterface = new CATSensitivityAnalysisParameterWrapperPanel();
 		}
 		return guiInterface;
 	}
@@ -223,12 +247,4 @@ public class CATSensitivityParameterWrapper implements REpiceaUIObject {
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
-//	public static void main(String args[]) {
-//		CATSensitivityParameterWrapper wrapper = new CATSensitivityParameterWrapper(VariabilitySource.BiomassExpansionFactor);
-//		JDialog dialog = new JDialog();
-//		dialog.setModal(true);
-//		dialog.add(wrapper.getGuiInterface());
-//		dialog.pack();
-//		dialog.setVisible(true);
-//	}
 }

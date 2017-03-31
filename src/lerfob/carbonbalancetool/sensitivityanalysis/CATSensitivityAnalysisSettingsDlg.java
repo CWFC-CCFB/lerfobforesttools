@@ -18,9 +18,9 @@
  */
 package lerfob.carbonbalancetool.sensitivityanalysis;
 
-import java.awt.Dimension;
 import java.awt.Window;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -86,13 +86,17 @@ public class CATSensitivityAnalysisSettingsDlg extends REpiceaDialog implements 
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
 		mcRealField = NumberFormatFieldFactory.createNumberFormatField(NumberFormatFieldFactory.Type.Integer, Range.Positive, false);
-		mcRealField.setPreferredSize(new Dimension(100, mcRealField.getFontMetrics(mcRealField.getFont()).getHeight() + 2));
 	
 		JPanel monteCarloRealPanel = UIControlManager.createSimpleHorizontalPanel(MessageID.NumberMonteCarloRealizations, 
 				mcRealField, 
 				5, 
 				false);
-		getContentPane().add(monteCarloRealPanel);
+		JPanel wrapperPanel = new JPanel();
+		wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
+		wrapperPanel.add(Box.createVerticalStrut(5));
+		wrapperPanel.add(monteCarloRealPanel);
+		wrapperPanel.add(Box.createVerticalStrut(5));
+		getContentPane().add(wrapperPanel);
 		
 		for (VariabilitySource source : VariabilitySource.values()) {
 			getContentPane().add(caller.sensitivityParameterMap.get(source).getUI());
