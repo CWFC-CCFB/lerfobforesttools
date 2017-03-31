@@ -213,16 +213,15 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 	@SuppressWarnings({ "rawtypes"})
 	@Override
 	protected List<ProcessUnit> createProcessUnitsFromThisProcessor(ProcessUnit unit, int intake) {
-		
 		List<ProcessUnit> outputUnits = new ArrayList<ProcessUnit>();
-		
+
 		CarbonUnit carbonUnit = (CarbonUnit) unit;
 		int dateIndex = carbonUnit.getIndexInTimeScale();
-			
+
 		AmountMap<Element> processedAmountMap = carbonUnit.getAmountMap().multiplyByAScalar(intake * .01);
 
 		CarbonUnit woodProduct;
-		
+
 		if (!isFinalProcessor()) {
 			woodProduct = new CarbonUnit(dateIndex, carbonUnit.samplingUnitID, null, processedAmountMap);
 			outputUnits.add(woodProduct);
