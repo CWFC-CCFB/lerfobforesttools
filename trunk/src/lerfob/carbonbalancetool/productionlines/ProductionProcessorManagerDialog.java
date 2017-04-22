@@ -83,7 +83,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		LeftInForestLabel("Dead organic matter", "Mati\u00E8re organique morte"),
 		ProductionLineFileExtension("Flux configuration file (*.prl)", "fichier de configuration de flux (*.prl)"),
 		Default("Default","D\u00E9faut"),
-		BuckingModelLabel("Bucking model", "Mod\u00E8le de billonnage"),
+		BuckingModelLabel("Bucking module", "Mod\u00E8le de billonnage"),
 		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un transformateur"),
 		LandfillButtonToolTip("Create a landfill site", "Cr\u00E9er une d\u00E9charge"),
 		LeftInForestButtonToolTip("Leave on forest floor", "Laisser en for\u00EAt"),

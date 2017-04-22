@@ -154,16 +154,14 @@ public final class CATSettings {
 	private static Map<AssessmentReport, GWP> GlobalWarmingPotentialMap = new HashMap<AssessmentReport, GWP>();
 	static {
 		GlobalWarmingPotentialMap.put(AssessmentReport.Second, new GWP(21, 310));
-		GlobalWarmingPotentialMap.put(AssessmentReport.Fourth, new GWP(25, 298));
-		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265));
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fourth, new GWP(25, 298));	// from IPCC(2007, Table 2.14)
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265));	// from IPCC(2013, Ch.8 p.714)
 	}
 
 	private final CATExponentialFunction decayFunction = new CATExponentialFunction();
 	private final SettingMemory settings;
 	protected boolean formerImplementation;
-
-//	public static final double CH4_CO2_EQUIVALENT = 25;	// taken from IPCC(2007, Table 2.14)
-//	public static final double N2O_CO2_EQUIVALENT = 298;	// taken from IPCC(2007, Table 2.14)
+	
 	public static final double CO2_C_FACTOR = 12d / 44;
 	public static final double C_C02_FACTOR = 44d / 12;
 

@@ -28,8 +28,8 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor {
 
-	public FrenchCommercialVolume2014Predictor(boolean isParametersVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, false, isResidualVariabilityEnabled);	 // no random effect
+	public FrenchCommercialVolume2014Predictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled, false, isVariabilityEnabled);	 // no random effect
 		init();
 		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}

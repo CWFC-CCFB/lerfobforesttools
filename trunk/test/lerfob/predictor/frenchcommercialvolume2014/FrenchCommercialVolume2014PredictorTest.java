@@ -14,7 +14,7 @@ public class FrenchCommercialVolume2014PredictorTest {
 
 	@Test
 	public void testAgainstSASPredictions() throws IOException {
-		FrenchCommercialVolume2014Predictor predictor = new FrenchCommercialVolume2014Predictor(false, false);
+		FrenchCommercialVolume2014Predictor predictor = new FrenchCommercialVolume2014Predictor(false);
 		List<FrenchCommercialVolume2014TreeImpl> trees = readTrees();
 		int nbTrees = 0;
 		for (FrenchCommercialVolume2014TreeImpl tree : trees) {

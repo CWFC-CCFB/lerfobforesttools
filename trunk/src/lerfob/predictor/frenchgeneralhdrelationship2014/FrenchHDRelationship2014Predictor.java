@@ -52,8 +52,8 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * @param isRandomEffectsVariabilityEnabled a boolean that enables the variability at the random effect level
 	 * @param isResidualVariabilityEnabled a boolean that enables the variability at the tree level
 	 */
-	public FrenchHDRelationship2014Predictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+	public FrenchHDRelationship2014Predictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
 		predictorMap = new HashMap<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor>();
 		init();
 	}
@@ -62,7 +62,7 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * Default constructor with all sources of uncertainty disabled.
 	 */
 	public FrenchHDRelationship2014Predictor() {
-		this(false, false, false);
+		this(false);
 	}
 
 	@Override

@@ -65,6 +65,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 	private static double CorrelationRandomEffectsHeightDiameterGrowth = 0.4;
 
 	protected final Map<Integer, MathildeDiameterIncrementSubModule> subModules;
+
 	
 	/**
 	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
@@ -73,8 +74,19 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 	 * @param isRandomEffectsVariabilityEnabled a boolean
 	 * @param isResidualVariabilityEnabled a boolean
 	 */
-	public MathildeDiameterIncrementPredictor(boolean isParametersVariabilityEnabled,boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+	public MathildeDiameterIncrementPredictor(boolean isVariabilityEnabled) {
+		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
+	}
+
+	/**
+	 * The MathildeDiameterIncrementPredictor class implements the diameter increment model fitted with the
+	 * LERFoB database.
+	 * @param isParametersVariabilityEnabled a boolean
+	 * @param isRandomEffectsVariabilityEnabled a boolean
+	 * @param isResidualVariabilityEnabled a boolean
+	 */
+	MathildeDiameterIncrementPredictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 		subModules = new HashMap<Integer, MathildeDiameterIncrementSubModule>();
 		init();
 	}

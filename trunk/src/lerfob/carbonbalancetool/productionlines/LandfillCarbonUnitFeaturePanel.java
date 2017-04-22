@@ -36,7 +36,7 @@ public class LandfillCarbonUnitFeaturePanel extends CarbonUnitFeaturePanel imple
 	private static final long serialVersionUID = 20101118L;
 	
 	public static enum MessageID implements TextableEnum {
-		DegradableOrganicCarbonLabel ("Proportion of degradable carbone", "Proportion de carbone d\u00E9composable"),
+		DegradableOrganicCarbonLabel ("Proportion of degradable carbon", "Proportion de carbone d\u00E9composable"),
 		LandfillTypeLabel("Type of landfill site", "Type de d\u00E9charge");
 		
 		MessageID(String englishText, String frenchText) {

@@ -20,7 +20,6 @@ package lerfob.carbonbalancetool;
 
 import java.awt.Container;
 import java.awt.Window;
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,6 @@ import repicea.app.GenericTask;
 import repicea.app.SettingMemory;
 import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
-import repicea.gui.genericwindows.GeneralLicenseWindow;
 import repicea.gui.genericwindows.GenericSplashWindow;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -158,24 +156,24 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				String iconPath =  packagePath + "SplashImage.jpg";
 				new GenericSplashWindow(iconPath, 4, parentFrame);
 
-				String licensePath = packagePath + "LGPLLicense_en.html";
-				if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
-					licensePath = packagePath + "LGPLLicense_fr.html";
-				}
+//				String licensePath = packagePath + "LGPLLicense_en.html";
+//				if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
+//					licensePath = packagePath + "LGPLLicense_fr.html";
+//				}
 				
-				GeneralLicenseWindow licenseDlg;
-				try {
-					licenseDlg = new GeneralLicenseWindow(parentFrame, licensePath);
-					licenseDlg.setVisible(true);
-					if (!licenseDlg.isLicenseAccepted()) {
-						return false;
-					} else {
-						hasAlreadyBeenInstanciated = true;
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
+//				GeneralLicenseWindow licenseDlg;
+//				try {
+//					licenseDlg = new GeneralLicenseWindow(parentFrame, licensePath);
+//					licenseDlg.setVisible(true);
+//					if (!licenseDlg.isLicenseAccepted()) {
+//						return false;
+//					} else {
+				hasAlreadyBeenInstanciated = true;
+//					}
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//					return false;
+//				}
 			}
 			addTask(new CATTask(Task.SHOW_INTERFACE, this));
 		}

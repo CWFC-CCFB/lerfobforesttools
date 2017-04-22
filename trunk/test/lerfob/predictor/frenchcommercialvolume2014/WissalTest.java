@@ -56,7 +56,7 @@ public class WissalTest {
 
 		try {
 			recordIndex = 0;
-			FrenchCommercialVolume2014Predictor predictor = new FrenchCommercialVolume2014Predictor(false, false);
+			FrenchCommercialVolume2014Predictor predictor = new FrenchCommercialVolume2014Predictor(false);
 			for (Tree t : trees) {
 				t.pred = predictor.predictTreeCommercialVolumeDm3(t) * .001;
 			}

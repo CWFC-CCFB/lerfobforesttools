@@ -357,6 +357,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 			if (!processor.isValid()) {
 				return false;
 			}
+			if (processor.isPartOfEndlessLoop()) {
+				return false;
+			}
 		}
 		return true;
 	}

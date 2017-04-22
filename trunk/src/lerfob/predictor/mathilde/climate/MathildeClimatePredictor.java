@@ -44,8 +44,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 
 	private double rho;
 	
-	public MathildeClimatePredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectsVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+	public MathildeClimatePredictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
 		init();
 	}
 
@@ -263,6 +263,6 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	}
 	
 	public static void main(String[] args) {
-		new MathildeClimatePredictor(false, false, false);
+		new MathildeClimatePredictor(false);
 	}
 }
