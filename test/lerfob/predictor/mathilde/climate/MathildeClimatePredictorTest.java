@@ -52,7 +52,7 @@ public class MathildeClimatePredictorTest {
 	
 	@Test
 	public void testDeterministicPredictionsWithReferenceStands() {
-		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false, false, false);
+		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false);
 		int nbStands = 0;
 		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
@@ -72,7 +72,7 @@ public class MathildeClimatePredictorTest {
 	@Test
 	public void testBlups() throws Exception {
 		readBlups();
-		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false, false, false);
+		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false);
 		int nbStands = 0;
 		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;

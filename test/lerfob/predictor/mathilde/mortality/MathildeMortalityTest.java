@@ -67,6 +67,8 @@ public class MathildeMortalityTest {
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Unable to read record " + (treesOriginalModel.size() + 1));
+			} finally {
+				reader.close();
 			}
 		}
 	}
@@ -115,6 +117,8 @@ public class MathildeMortalityTest {
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Unable to read record " + (treesImprovedModel.size() + 1));
+			} finally {
+				reader.close();
 			}
 		}
 	}
@@ -123,7 +127,7 @@ public class MathildeMortalityTest {
 	public void testInDeterministicModeOriginalModel() throws IOException {
 		readTreesOriginalModel();
 		
-		MathildeMortalityPredictor predictor = new MathildeMortalityPredictor(false, false, false);
+		MathildeMortalityPredictor predictor = new MathildeMortalityPredictor(false);
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
@@ -161,7 +165,7 @@ public class MathildeMortalityTest {
 		
 		
 		MathildeMortalityPredictor stochasticPredictor = new MathildeMortalityPredictor(false, true, false);
-		MathildeMortalityPredictor deterministicPredictor = new MathildeMortalityPredictor(false, false, false);
+		MathildeMortalityPredictor deterministicPredictor = new MathildeMortalityPredictor(false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
 			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
@@ -186,7 +190,7 @@ public class MathildeMortalityTest {
 	public void testInDeterministicModeImprovedModel() throws IOException {
 		readTreesImprovedModel();
 		
-		MathildeImprovedMortalityPredictor predictor = new MathildeImprovedMortalityPredictor(false, false, false);
+		MathildeImprovedMortalityPredictor predictor = new MathildeImprovedMortalityPredictor(false);
 		predictor.ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
 		
 		int nbTrees = 0;
@@ -226,7 +230,7 @@ public class MathildeMortalityTest {
 		
 		
 		MathildeImprovedMortalityPredictor stochasticPredictor = new MathildeImprovedMortalityPredictor(false, true, false);
-		MathildeImprovedMortalityPredictor deterministicPredictor = new MathildeImprovedMortalityPredictor(false, false, false);
+		MathildeImprovedMortalityPredictor deterministicPredictor = new MathildeImprovedMortalityPredictor(false);
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
 			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();

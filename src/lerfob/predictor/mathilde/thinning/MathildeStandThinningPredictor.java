@@ -49,10 +49,9 @@ public final class MathildeStandThinningPredictor extends REpiceaLogisticPredict
 	 * Constructor.
 	 * 
 	 * @param isParametersVariabilityEnabled
-	 * @param isResidualVariabilityEnabled
 	 */
-	public MathildeStandThinningPredictor(boolean isParametersVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, false, isResidualVariabilityEnabled);
+	public MathildeStandThinningPredictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled, false, isVariabilityEnabled);
 		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
 		oXVector = new Matrix(1, NumberOfParameters);

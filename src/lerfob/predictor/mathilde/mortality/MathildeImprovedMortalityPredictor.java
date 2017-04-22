@@ -33,10 +33,14 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredictor {
 
-	public MathildeImprovedMortalityPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled,	boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled,	isResidualVariabilityEnabled);
+	public MathildeImprovedMortalityPredictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled);
 	}
 
+	MathildeImprovedMortalityPredictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
+	}
+	
 	@Override
 	protected void init() {
 		try {

@@ -6,10 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.mathilde.MathildeTree;
-
 import org.junit.Test;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.stats.distributions.NonparametricDistribution;
@@ -60,6 +59,7 @@ public class MathildeDiameterIncrementTest {
 						tIntervalVeg6);
 				trees.add(tree);
 			}
+			reader.close();
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class MathildeDiameterIncrementTest {
 	public void testInDeterministicMode() throws IOException {
 		readTrees();
 		
-		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
+		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false);
 		
 		MathildeDiameterIncrementStand stand;
 		int nbTrees = 0;
@@ -85,7 +85,7 @@ public class MathildeDiameterIncrementTest {
 	public void testInDeterministicModeWithBackTransformationCorrection() throws IOException {
 		readTrees();
 		
-		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false, false, false);
+		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(false);
 		
 		MathildeDiameterIncrementStand stand;
 		int nbTrees = 0;
@@ -132,7 +132,7 @@ public class MathildeDiameterIncrementTest {
 		int nbReal = 50000;
 		readTrees();
 		
-		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(true, true, true);
+		MathildeDiameterIncrementPredictor predictor = new MathildeDiameterIncrementPredictor(true);
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();

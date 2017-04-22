@@ -61,7 +61,7 @@ public class MathildeThinningPredictorTest {
 	@Test
 	public void PlotPredictionsTest() {
 		ReadTrees();
-		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false, false);
+		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
 		int nbTested = 0;
 		for (MathildeThinningTreeImpl tree : Trees) {
 			MathildeThinningStandImpl stand = tree.getStand();
@@ -79,7 +79,7 @@ public class MathildeThinningPredictorTest {
 	@Test
 	public void TreePredictionsFixedEffectsOnlyTest() {
 		ReadTrees();
-		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false, false, false);
+		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false);
 		int nbTested = 0;
 		for (MathildeThinningTreeImpl tree : Trees) {
 			if (tree.isCutPlot()) {
@@ -100,8 +100,8 @@ public class MathildeThinningPredictorTest {
 	@Test
 	public void completeMarginalPredictionsTest() {
 		ReadTrees();
-		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false, false);
-		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false, false, false);
+		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
+		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false);
 		int nbTested = 0;
 		for (MathildeThinningTreeImpl tree : Trees) {
 //			if (nbTested == 176423) {

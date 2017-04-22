@@ -106,19 +106,26 @@ public class MathildeMortalityPredictor extends REpiceaLogisticPredictor<Mathild
 
 	/**
 	 * Constructor.
-	 * @param isParametersVariabilityEnabled
-	 * @param isResidualVariabilityEnabled
+	 * @param isVariabilityEnabled
 	 */
-	public MathildeMortalityPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);	
+	public MathildeMortalityPredictor(boolean isVariabilityEnabled) {
+		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);	
+	}
+
+	/**
+	 * Constructor.
+	 * @param isVariabilityEnabled
+	 */
+	MathildeMortalityPredictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);	
 		subModules = new HashMap<Integer, MathildeMortalitySubModule>();
 		init();
 		oXVector = new Matrix(1,numberOfParameters);
 		linkFunction = new LinkFunction(Type.CLogLog, new InternalMathematicalFunction());
 		linkFunction.setVariableValue(0, 1d);
-		
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);		
 	}
+
 	
 	@Override
 	protected void init() {
@@ -305,7 +312,7 @@ public class MathildeMortalityPredictor extends REpiceaLogisticPredictor<Mathild
 
 	
 	public static void main (String[] args) {
-		new MathildeMortalityPredictor(false, false, false); 
+		new MathildeMortalityPredictor(false); 
 	}
 }
 

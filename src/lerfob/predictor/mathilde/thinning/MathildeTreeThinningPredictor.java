@@ -59,8 +59,8 @@ public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredicto
 	/**
 	 * Constructor.
 	 */
-	public MathildeTreeThinningPredictor(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
+	public MathildeTreeThinningPredictor(boolean isVariabilityEnabled) {
+		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
 		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
