@@ -48,9 +48,7 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	
 	/**
 	 * General constructor for all combinations of uncertainty sources.
-	 * @param isParametersVariabilityEnabled a boolean that enables the variability at the parameter level
-	 * @param isRandomEffectsVariabilityEnabled a boolean that enables the variability at the random effect level
-	 * @param isResidualVariabilityEnabled a boolean that enables the variability at the tree level
+	 * @param isVariabilityEnabled a boolean that enables the variability at the parameter level
 	 */
 	public FrenchHDRelationship2014Predictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
@@ -87,9 +85,7 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 			ParameterMap effectList = ParameterLoader.loadVectorFromFile(1, effectListFilename);
 
 			for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
-				FrenchHDRelationship2014InternalPredictor internalPredictor = new FrenchHDRelationship2014InternalPredictor(isParametersVariabilityEnabled, 
-						isRandomEffectsVariabilityEnabled, 
-						isResidualVariabilityEnabled,
+				FrenchHDRelationship2014InternalPredictor internalPredictor = new FrenchHDRelationship2014InternalPredictor(isParametersVariabilityEnabled,
 						species);
 				int index = species.ordinal() + 1;
 				

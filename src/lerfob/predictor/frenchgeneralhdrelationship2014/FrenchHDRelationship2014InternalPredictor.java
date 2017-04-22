@@ -53,11 +53,8 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	private final FrenchHdSpecies species;
 	private FertilityClass currentFertilityClass;
 	
-	protected FrenchHDRelationship2014InternalPredictor(boolean isParametersVariabilityEnabled,	
-			boolean isRandomEffectsVariabilityEnabled, 
-			boolean isResidualVariabilityEnabled,
-			FrenchHdSpecies species) {
-		super(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
+	protected FrenchHDRelationship2014InternalPredictor(boolean isVariabilityEnabled, FrenchHdSpecies species) {
+		super(isVariabilityEnabled);
 		this.species = species;
 		currentFertilityClass = FertilityClass.Unknown;	// default value
 	}
