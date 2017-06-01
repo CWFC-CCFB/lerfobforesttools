@@ -36,14 +36,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import repicea.app.SettingMemory;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.OwnedWindow;
 import repicea.gui.REpiceaDialog;
 import repicea.gui.UIControlManager;
-import repicea.gui.WindowSettings;
 import repicea.gui.UIControlManager.CommonControlID;
 import repicea.gui.UIControlManager.CommonMenuTitle;
+import repicea.gui.WindowSettings;
 import repicea.gui.components.NumberFormatFieldFactory;
 import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
@@ -309,7 +308,7 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 
 
 	@Override
-	public SettingMemory getSettingMemory() {return windowSettings;}
+	public WindowSettings getWindowSettings() {return windowSettings;}
 
 	/**
 	 * The method sets the title of the dialog.
