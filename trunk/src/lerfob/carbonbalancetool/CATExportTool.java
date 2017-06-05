@@ -20,7 +20,6 @@ package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -45,16 +44,10 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("serial")
 public class CATExportTool extends REpiceaExportTool {
 
-	protected static enum MessageID implements TextableEnum {
+	private static enum MessageID implements TextableEnum {
 		Year("Year", "Annee"),
 		Compartment("Compart", "Compart"),
 		CarbonHaMean("tCHaMean", "tCHaMoy"),
-		StockEvolutionOption("Carbon stock and flux evolution", "Evolution des stocks et des flux de carbone"),
-		AverageStockOption("Average carbon stocks and fluxes", "Stocks et flux moyens"),
-		ProductProportionOption("Proportions of the different wood product classes", "Proportions des diff\u00E9rentes classes de produits"),
-		AnnualFluxOption("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
-		LogCategoryVolume("Log category volumes", "Volumes des cat\u00E9gories de billons"),
-		WoodProductEvolution("Wood product evolution", "Evolution des produits bois"),
 		Variance("Variance", "Variance");
 			
 		MessageID(String englishText, String frenchText) {
@@ -86,23 +79,23 @@ public class CATExportTool extends REpiceaExportTool {
 		@Override
 		protected void doThisJob() throws Exception {
 			switch ((ExportOption) getExportOption()) {
-			case CarbonStockEvolution:
-				createCarbonStockEvolutionRecordSet();
+			case CarbonStockAndFluxEvolution:
+				createCarbonStockAndFluxEvolutionRecordSet();
 				break;
-			case AverageCarbonStock:
-				createAverageCarbonStockRecordSet();
+			case AverageCarbonStocksAndFluxes:
+				createAverageCarbonStocksAndFluxesRecordSet();
 				break;
-			case ProductProportion:
-				createWoodProductProportionRecordSet();
+			case TotalHWPbyCategories:
+				createTotalHWPbyCategoriesRecordSet();
 				break;
 			case AnnualVolumeNutrientFluxes:
-				createNutrientFluxRecordSet();
+				createAnnualVolumeNutrientFluxesRecordSet();
 				break;
-			case LogCategoryVolume:
-				createLogCategoryVolumeRecordSet();
+			case TotalLogVolumeByCategories:
+				createTotalLogVolumeByCategoriesRecordSet();
 				break;
-			case WoodProductEvolution:
-				createWoodProductEvolutionRecordSet();
+			case HWPEvolution:
+				createHWPEvolutionRecordSet();
 				break;
 			default:
 				throw new Exception("Unrecognized Export Format");
@@ -112,7 +105,7 @@ public class CATExportTool extends REpiceaExportTool {
 		
 		
 		
-		private void createWoodProductEvolutionRecordSet() throws Exception {
+		private void createHWPEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 						
 			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionPerHa();
@@ -154,7 +147,7 @@ public class CATExportTool extends REpiceaExportTool {
 			}
 		}
 
-		private void createCarbonStockEvolutionRecordSet() throws Exception {
+		private void createCarbonStockAndFluxEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 			
 			CATTimeTable timeScale = caller.summary.getTimeTable();
@@ -198,7 +191,7 @@ public class CATExportTool extends REpiceaExportTool {
 		}
 		
 		
-		private void createAverageCarbonStockRecordSet() throws Exception {
+		private void createAverageCarbonStocksAndFluxesRecordSet() throws Exception {
 			GExportRecord r;
 
 			String standID = caller.summary.getStandID();
@@ -232,10 +225,14 @@ public class CATExportTool extends REpiceaExportTool {
 			}
 		}
 		
-
-		private void createWoodProductProportionRecordSet() throws Exception {
+		/**
+		 * Sum the different wood products by category over the simulation period. THe output is in terms of volume (m3/ha),
+		 * biomass (kg/ha) and C (kg/ha). 
+		 * @throws Exception
+		 */
+		private void createTotalHWPbyCategoriesRecordSet() throws Exception {
 			GExportRecord r;
-			
+			// TODO change the units
 			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
 			
 			double nutrientKg;
@@ -284,7 +281,7 @@ public class CATExportTool extends REpiceaExportTool {
 		}
 
 		
-		private void createNutrientFluxRecordSet() throws Exception {
+		private void createAnnualVolumeNutrientFluxesRecordSet() throws Exception {
 			GExportRecord r;
 			double annualFactor = 1d / caller.summary.getRotationLength();
 			
@@ -335,7 +332,7 @@ public class CATExportTool extends REpiceaExportTool {
 			}
 		}
 
-		private void createLogCategoryVolumeRecordSet() throws Exception {
+		private void createTotalLogVolumeByCategoriesRecordSet() throws Exception {
 			GExportRecord r;
 			
 			String standID = caller.summary.getStandID();
@@ -374,33 +371,25 @@ public class CATExportTool extends REpiceaExportTool {
 	private final CATSimulationResult summary;
 	private final SettingMemory settings;
 	
-	public enum ExportOption {
-		CarbonStockEvolution, 
-		AverageCarbonStock, 
-		ProductProportion,
-		AnnualVolumeNutrientFluxes,
-		LogCategoryVolume,
-		WoodProductEvolution;
-		
-	
-		private static Map<ExportOption, String> optionNames;
+	public enum ExportOption implements TextableEnum {
+		CarbonStockAndFluxEvolution("Carbon stock and cumulative flux evolution", "Evolution des stocks et des flux cumulatifs de carbone"), 
+		AverageCarbonStocksAndFluxes("Average carbon stocks and fluxes", "Stocks et flux moyens"), 
+		TotalHWPbyCategories("Total production of HWP by categories", "Production totale des produits bois par cat\u00E9gories"),
+		AnnualVolumeNutrientFluxes("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
+		TotalLogVolumeByCategories("Total production of logs by categories", "Production totale de billons par cat\u00E9gories"),
+		HWPEvolution("HWP production by date and categories", "Production des produits bois par dates et cat\u00E9gories");
+
+		ExportOption(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
 		
 		@Override
-		public String toString() {return getOptionNames().get(this);}
-		
-		private static Map<ExportOption, String> getOptionNames() {
-			if (optionNames == null) {
-				optionNames = new HashMap<ExportOption, String>();
-				optionNames.put(ExportOption.CarbonStockEvolution, MessageID.StockEvolutionOption.toString());
-				optionNames.put(ExportOption.AverageCarbonStock, MessageID.AverageStockOption.toString());
-				optionNames.put(ExportOption.ProductProportion, MessageID.ProductProportionOption.toString());
-				optionNames.put(ExportOption.AnnualVolumeNutrientFluxes, MessageID.AnnualFluxOption.toString());
-				optionNames.put(ExportOption.LogCategoryVolume, MessageID.LogCategoryVolume.toString());
-				optionNames.put(ExportOption.WoodProductEvolution, MessageID.WoodProductEvolution.toString());
-						}
-			return optionNames;
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
 		}
-	
+
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
 	/**
@@ -449,7 +438,7 @@ public class CATExportTool extends REpiceaExportTool {
 	protected List<Enum> getAvailableExportOptions() {
 		if (summary instanceof CATSimulationDifference) {
 			Vector<Enum> hackedVector = new Vector<Enum>();
-			hackedVector.add(ExportOption.AverageCarbonStock);
+			hackedVector.add(ExportOption.AverageCarbonStocksAndFluxes);
 			return hackedVector;
 		} else {
 			return super.getAvailableExportOptions();
