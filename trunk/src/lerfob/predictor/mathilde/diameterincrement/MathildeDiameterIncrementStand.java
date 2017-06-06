@@ -21,6 +21,7 @@ package lerfob.predictor.mathilde.diameterincrement;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
+import repicea.simulation.covariateproviders.standlevel.InterventionPlannedProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
@@ -28,13 +29,9 @@ import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvid
  */
 public interface MathildeDiameterIncrementStand extends MonteCarloSimulationCompliantObject, 
 										GrowthStepLengthYrProvider, 
-										BasalAreaM2HaProvider {
+										BasalAreaM2HaProvider,
+										InterventionPlannedProvider {
 
-	/**
-	 * This method returns true if a cut was planned in the upcoming growth interval.
-	 * @return a boolean
-	 */
-	public boolean isGoingToBeHarvested();
 
 	/**
 	 * This method returns the monthly mean temperature above 6 degrees Celsius.
