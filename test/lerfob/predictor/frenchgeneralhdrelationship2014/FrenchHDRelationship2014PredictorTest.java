@@ -18,12 +18,13 @@ import repicea.util.ObjectUtility;
 public class FrenchHDRelationship2014PredictorTest {
 
 	static List<String> speciesList = new ArrayList<String>();
-	static List<FrenchHDRelationship2014StandImpl> Stands = readTrees();
+	static List<FrenchHDRelationship2014StandImpl> Stands;
 	static ParameterMap Blups = readBlups();
 	
 
 	@Test
 	public void validation1FixedEffectPredictions() throws IOException {
+		Stands = readTrees();
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = false;
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbTrees = 0;
@@ -41,6 +42,7 @@ public class FrenchHDRelationship2014PredictorTest {
 	
 	@Test
 	public void validation2BlupsPredictions() throws IOException {
+		Stands = readTrees();
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbBlups = 0;
@@ -72,11 +74,40 @@ public class FrenchHDRelationship2014PredictorTest {
 		System.out.println("Successfully compared " + nbBlups + " blups.");
 	}
 
+	
+	@Test
+	public void validationErrorTermForKnownHeightWithStochasticSimulation() throws IOException {
+		Stands = readTrees();
+		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false, true);	// variability of residual error terms only
+		int nbTrees = 0;
+		
+		FrenchHDRelationship2014StandImpl s = Stands.get(0);
+		List<FrenchHDRelationship2014StandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		for (int i = 0; i < 400; i++) {
+			retainedPlots.add(s.standList.get(i));
+		}
+		s.standList.retainAll(retainedPlots);
+
+		for (FrenchHDRelationship2014Stand stand : s.standList) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
+				double actual = predictor.predictHeightM(stand, tree);
+				double expected = tree.getHeightM();
+				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
+				nbTrees++;
+			}
+		}
+		System.out.println("Successfully compared " + nbTrees + " trees.");
+	}
+
+	
 	private static List<FrenchHDRelationship2014StandImpl> readTrees() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2014PredictorTest.class) + "testData.csv";
 		List<FrenchHDRelationship2014StandImpl> standList = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		CSVReader reader = null;
 		try {
-			CSVReader reader = new CSVReader(filename);
+			reader = new CSVReader(filename);
 			Object[] record;
 			int idp;
 			String species;
@@ -116,6 +147,10 @@ public class FrenchHDRelationship2014PredictorTest {
 			e.printStackTrace();
 			Assert.fail("Unable to read the stands");
 			return null;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 	
