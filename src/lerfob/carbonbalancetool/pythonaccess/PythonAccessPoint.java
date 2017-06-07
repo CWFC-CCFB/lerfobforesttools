@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
@@ -79,6 +80,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			speciesCode = AverageBasicDensity.EuropeanBeech;
 		} else if (species.toLowerCase().trim().equals("pine")) {
 			speciesCode = AverageBasicDensity.MaritimePine;
+		} else if (species.toLowerCase().trim().equals("douglas")) {
+			speciesCode = AverageBasicDensity.DouglasFir;
 		} else {
 			throw new InvalidParameterException("Only beech and pine are accepted as species!");
 		}
@@ -101,6 +104,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
 		return defaultTreeLoggerDescriptions;
 	}
 
@@ -110,6 +114,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			String filename;
 			if (speciesForSimulation.equals(AverageBasicDensity.MaritimePine)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
+			} else if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170516_Tot.prl";
 			} else {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
@@ -121,7 +127,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	}
 
 	private void setBiomassParameters() throws IOException {
-		String biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
+		String biomassFilename;
+		if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
+			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersDouglasFir.bpf";
+		} else {
+			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
+		}
 		getCarbonToolSettings().getCustomizableBiomassParameters().load(biomassFilename);
 		setCurrentBiomassParameters(BiomassParametersName.customized);
 	}
@@ -142,6 +153,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		if (speciesForSimulation == AverageBasicDensity.EuropeanBeech) {
 			type = SpeciesType.BroadleavedSpecies;
 		} else  if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
+			type = SpeciesType.ConiferousSpecies;
+		} else  if (speciesForSimulation == AverageBasicDensity.DouglasFir) {
 			type = SpeciesType.ConiferousSpecies;
 		} else {
 			throw new InvalidParameterException("The species has not been properly set!");
@@ -179,8 +192,19 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
 						stand.addTree(StatusClass.cut, tree);
-					} else {
+					} else if (speciesForSimulation == AverageBasicDensity.EuropeanBeech) {
 						tree = new PythonEuropeanBeechTree(type, 
+								speciesForSimulation,
+								StatusClass.cut,
+								mqd,
+								dbhStandardDeviation,
+								nbTrees,
+								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+						stand.addTree(StatusClass.cut, tree);
+					} else {
+						tree = new PythonDouglasFirTree(type, 
 								speciesForSimulation,
 								StatusClass.cut,
 								mqd,
