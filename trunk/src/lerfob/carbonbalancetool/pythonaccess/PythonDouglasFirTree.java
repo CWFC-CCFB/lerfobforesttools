@@ -1,7 +1,7 @@
 /*
  * This file is part of the lerfob-forestools library.
  *
- * Copyright (C) 2010-2014 Mathieu Fortin for LERFOB AgroParisTech/INRA, 
+ * Copyright (C) 2010-2017 Mathieu Fortin for LERFOB AgroParisTech/INRA, 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,30 +18,23 @@
  */
 package lerfob.carbonbalancetool.pythonaccess;
 
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTree;
+import lerfob.treelogger.douglasfirfcba.DouglasFCBALoggableTree;
 
-class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements EuropeanBeechBasicTree {
+class PythonDouglasFirTree extends PythonCarbonToolCompatibleTree implements DouglasFCBALoggableTree {
 
-	
-	PythonEuropeanBeechTree(SpeciesType speciesType,
-			AverageBasicDensity species,
+	PythonDouglasFirTree(SpeciesType speciesType, 
+			AverageBasicDensity species, 
 			StatusClass statusClass, 
-			double dbhCm,
-			double dbhCmStandardDeviation,
-			double number, 
-			double biomassRoots,
+			double number,
+			double biomassRoots, 
 			double biomassTrunk, 
-			double biomassBranches) {
+			double biomassBranches, 
+			double dbhCm,
+			double dbhCmStandardDeviation) {
 		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
-
 	}
 
 	@Override
 	public double getDbhCm() {return dbhCm;}
 
-	@Override
-	public double getDbhCmStandardDeviation() {return dbhCmStandardDeviation;}
-
-
-	
 }
