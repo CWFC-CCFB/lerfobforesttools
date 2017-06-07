@@ -56,6 +56,12 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 		init();
 	}
 
+	FrenchHDRelationship2014Predictor(boolean isVariabilityEnabled, boolean isResidualErrorVariabilityEnabled) {
+		super(isVariabilityEnabled, isVariabilityEnabled, isResidualErrorVariabilityEnabled);
+		predictorMap = new HashMap<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor>();
+		init();
+	}
+	
 	/**
 	 * Default constructor with all sources of uncertainty disabled.
 	 */
@@ -86,6 +92,8 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 
 			for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
 				FrenchHDRelationship2014InternalPredictor internalPredictor = new FrenchHDRelationship2014InternalPredictor(isParametersVariabilityEnabled,
+						isRandomEffectsVariabilityEnabled,
+						isResidualVariabilityEnabled,
 						species);
 				int index = species.ordinal() + 1;
 				
