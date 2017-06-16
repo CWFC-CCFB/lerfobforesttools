@@ -1,15 +1,22 @@
 package lerfob.carbonbalancetool;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
+import lerfob.carbonbalancetool.io.CATRecordReader;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
+import repicea.serial.xml.XmlDeserializer;
+import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
 
 
@@ -111,5 +118,40 @@ public class CarbonAccountingToolTest {
 			Assert.fail("Unable to calculate carbon!");
 		}
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testWithYieldTable() throws Exception {
+		String filename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.csv";
+		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.ife";
+		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableReference.xml";
+		CarbonAccountingTool cat = new CarbonAccountingTool();
+		cat.initializeTool(false, null);
+		CATRecordReader recordReader = new CATRecordReader(CATSpecies.Abies);
+		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
+		recordReader.initInScriptMode(ifm);
+		recordReader.readAllRecords();
+		cat.setStandList(recordReader.getStandList());
+		cat.calculateCarbon();
+		CATSingleSimulationResult result = cat.getCarbonCompartmentManager().getSimulationSummary();
+		Map<CompartmentInfo, Estimate<?>> obsMap = result.getBudgetMap();
+		
+//		XmlSerializer serializer = new XmlSerializer(refFilename);
+//		serializer.writeObject(obsMap);
+
+		XmlDeserializer deserializer = new XmlDeserializer(refFilename);
+		Map<CompartmentInfo, Estimate<?>> refMap = (Map) deserializer.readObject();
+		int nbCompartmentChecked = 0;
+		Assert.assertTrue("Testing the size of the map", refMap.size() == obsMap.size());
+		for (CompartmentInfo key : refMap.keySet()) {
+			double expected = refMap.get(key).getMean().m_afData[0][0];
+			double observed = obsMap.get(key).getMean().m_afData[0][0];
+			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
+			nbCompartmentChecked++;
+		}
+		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
+	}
+	
+	
 	
 }

@@ -373,7 +373,8 @@ public class CATExportTool extends REpiceaExportTool {
 	
 	public enum ExportOption implements TextableEnum {
 		CarbonStockAndFluxEvolution("Carbon stock and cumulative flux evolution", "Evolution des stocks et des flux cumulatifs de carbone"), 
-		AverageCarbonStocksAndFluxes("Average carbon stocks and fluxes", "Stocks et flux moyens"), 
+		AverageCarbonStocksAndFluxes("Average carbon stocks and fluxes over the rotation", "Stocks et flux moyens sur l'ensemble de la r\u00E9volution"), 
+		DifferenceCarbonStocksAndFluxes("Difference in carbon stocks and cumulative fluxes", "Diff\u00E9rence de stocks et flux cumulatifs"), 
 		TotalHWPbyCategories("Total production of HWP by categories", "Production totale des produits bois par cat\u00E9gories"),
 		AnnualVolumeNutrientFluxes("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
 		TotalLogVolumeByCategories("Total production of logs by categories", "Production totale de billons par cat\u00E9gories"),
@@ -436,13 +437,23 @@ public class CATExportTool extends REpiceaExportTool {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List<Enum> getAvailableExportOptions() {
+		List<Enum> hackedVector = new ArrayList<Enum>();
 		if (summary instanceof CATSimulationDifference) {
-			Vector<Enum> hackedVector = new Vector<Enum>();
-			hackedVector.add(ExportOption.AverageCarbonStocksAndFluxes);
+			hackedVector.add(ExportOption.DifferenceCarbonStocksAndFluxes);
 			return hackedVector;
+		} else if (!summary.isEvenAged()) {
+			for (Enum option : super.getAvailableExportOptions()) {
+				hackedVector.add(option);
+			}
+			hackedVector.remove(ExportOption.DifferenceCarbonStocksAndFluxes);
+			hackedVector.remove(ExportOption.AverageCarbonStocksAndFluxes);
 		} else {
-			return super.getAvailableExportOptions();
+			for (Enum option : super.getAvailableExportOptions()) {
+				hackedVector.add(option);
+			}
+			hackedVector.remove(ExportOption.DifferenceCarbonStocksAndFluxes);
 		}
+		return hackedVector;
 	}
 
 	@SuppressWarnings("rawtypes")
