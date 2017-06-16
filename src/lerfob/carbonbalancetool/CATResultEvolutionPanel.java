@@ -29,6 +29,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATExportTool.ExportOption;
 import lerfob.carbonbalancetool.gui.XYSeriesWithIntegratedRenderer;
 import repicea.math.Matrix;
 import repicea.stats.estimates.ConfidenceInterval;
@@ -40,7 +41,6 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 class CATResultEvolutionPanel extends CATResultPanel {
 
 	protected static enum MessageID implements TextableEnum {
-		Title("Carbon stock evolution", "Evolution des stocks de carbone"),
 		YAxis("Carbon (Mg/ha of C)", "Carbone (Mg/ha de C)"),
 		YCO2Axis("Carbon (Mg/ha of CO2 Eq.)", "Carbone (Mg/ha de CO2 Eq.)"),
 		XAxis("Year", "Ann\u00E9e");
@@ -116,7 +116,7 @@ class CATResultEvolutionPanel extends CATResultPanel {
 
 
 	@Override
-	protected String getTitle() {return REpiceaTranslator.getString(MessageID.Title);}
+	protected String getTitle() {return ExportOption.CarbonStockAndFluxEvolution.toString();}
 
 	@Override
 	protected String getXAxisLabel() {return REpiceaTranslator.getString(MessageID.XAxis);}

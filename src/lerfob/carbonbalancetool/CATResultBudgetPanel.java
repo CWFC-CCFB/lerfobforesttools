@@ -20,16 +20,16 @@ package lerfob.carbonbalancetool;
 
 import java.awt.Color;
 
-import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
-import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
+import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATExportTool.ExportOption;
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
 import repicea.stats.estimates.Estimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -38,8 +38,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 class CATResultBudgetPanel extends CATResultPanel {
 	
 	protected static enum MessageID implements TextableEnum {
-		TitleDifference("Stock difference" , "Diff\u00E9rence de stock"),
-		InfiniteSequence("Carbon budget in infinite sequence", "Bilan carbone en s\u00E9quence infinie"),
+//		TitleDifference("Stock difference" , "Diff\u00E9rence de stock"),
+//		InfiniteSequence("Carbon budget in infinite sequence", "Bilan carbone en s\u00E9quence infinie"),
 		YAxis("Average Carbon (Mg/ha or Mg/ha/yr of C)", "Carbone moyen (Mg/ha ou Mg/ha/an de C)"),
 		YCO2Axis("Average Carbon (Mg/ha or Mg/ha/yr of CO2 Eq.)", "Carbone moyen (Mg/ha ou Mg/ha/an de CO2 Eq.)"),
 		XAxis("Compartment", "Compartiment");
@@ -109,9 +109,9 @@ class CATResultBudgetPanel extends CATResultPanel {
 	@Override
 	protected String getTitle() {
 		if (summary instanceof CATSimulationDifference) {
-			return MessageID.TitleDifference.toString();
+			return ExportOption.DifferenceCarbonStocksAndFluxes.toString();
 		} else {
-			return MessageID.InfiniteSequence.toString();
+			return ExportOption.AverageCarbonStocksAndFluxes.toString();
 		}
 	}
 
