@@ -152,6 +152,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	@Deprecated
 	protected void setDisposable(boolean disposable) {this.disposable = disposable;}
 	
+	@Deprecated
 	protected double getDisposableProportion() {
 		if (((ProductionLineProcessor) getProcessor()).disposedToProcessor != null) {		// new implementation
 			return 1;

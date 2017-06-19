@@ -245,11 +245,6 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		return DefaultLeftHandSideProcessors;
 	}
 
-	protected boolean isGuiVisible() {
-		return guiInterface != null && guiInterface.isVisible();
-	}
-	
-
 	protected Vector<TreeLoggerParameters<?>> getAvailableTreeLoggerParameters() {return availableTreeLoggerParameters;}
 
 	@Override
@@ -289,15 +284,23 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		try {
 			super.load(filename);
 		} catch (TreeLoggerInstanceCompatibilityException e) {
-			if (isGuiVisible()) {
-				JOptionPane.showMessageDialog(getUI(null), 
-						MessageID.IncompatibleTreeLogger.toString(),
-						UIControlManager.InformationMessageTitle.Warning.toString(),
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				System.out.println(MessageID.IncompatibleTreeLogger.toString());
-			}
-			setSelectedTreeLogger(availableTreeLoggerParameters.get(0));
+			handleTreeLoggerChange();
+		}
+	}
+
+	
+	private void handleTreeLoggerChange() {
+		if (guiInterface != null) {
+			JOptionPane.showMessageDialog(getUI(null), 
+					MessageID.IncompatibleTreeLogger.toString(),
+					UIControlManager.InformationMessageTitle.Warning.toString(),
+					JOptionPane.WARNING_MESSAGE);
+		} else {
+			System.out.println(MessageID.IncompatibleTreeLogger.toString());
+		}
+		setSelectedTreeLogger(availableTreeLoggerParameters.get(0));
+		if (guiInterface != null) {
+			guiInterface.synchronizeUIWithOwner();
 		}
 	}
 	
@@ -317,14 +320,22 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 			TreeLoggerParameters<?> treeLoggerParameters = description.instantiateTreeLogger(true).createDefaultTreeLoggerParameters();
 			treeLoggerParameters.setReadWritePermissionGranted(getGUIPermission());
 			availableTreeLoggerParameters.add(treeLoggerParameters);
-			
 		}
 		
 		int index = findSelectedTreeLoggerAmongAvailableTreeLoggers();
 		if (index > -1) {
 			availableTreeLoggerParameters.setElementAt(selectedTreeLoggerParameters, index);
 		} else {
-			setSelectedTreeLogger(availableTreeLoggerParameters.get(0));	// default selection here
+//			if (guiInterface != null) {
+//				guiInterface.setVisible(true);
+//			}
+//			Runnable doRun2 = new Runnable() {
+//				@Override
+//				public void run() {
+					handleTreeLoggerChange();
+//				}
+//			};
+//			SwingUtilities.invokeLater(doRun2);
 		}
 	}
 
