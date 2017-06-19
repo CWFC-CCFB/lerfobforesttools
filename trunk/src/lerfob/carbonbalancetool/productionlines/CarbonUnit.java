@@ -44,21 +44,22 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		LandFillDegradable,
 		LandFillNonDegradable,
 		Recycled, 
-		HarvestResidues, 
-		DeadWood,
+		/** Can be either harvest residues or dead wood. */
+		DeadWood, 
+//		DeadWood,
 		IndustrialLosses,
 		RecycledLosses;
 		
-		private static List<CarbonUnitStatus> PotentialInterventionResultStatus;
-		
-		protected static List<CarbonUnitStatus> getPotentialInterventionResultStatus() {
-			if (PotentialInterventionResultStatus == null) {
-				PotentialInterventionResultStatus = new ArrayList<CarbonUnitStatus>();
-				PotentialInterventionResultStatus.add(CarbonUnitStatus.EndUseWoodProduct);
-				PotentialInterventionResultStatus.add(CarbonUnitStatus.HarvestResidues);
-			}
-			return PotentialInterventionResultStatus;
-		}
+//		private static List<CarbonUnitStatus> PotentialInterventionResultStatus;
+//		
+//		protected static List<CarbonUnitStatus> getPotentialInterventionResultStatus() {
+//			if (PotentialInterventionResultStatus == null) {
+//				PotentialInterventionResultStatus = new ArrayList<CarbonUnitStatus>();
+//				PotentialInterventionResultStatus.add(CarbonUnitStatus.EndUseWoodProduct);
+//				PotentialInterventionResultStatus.add(CarbonUnitStatus.HarvestResidues);
+//			}
+//			return PotentialInterventionResultStatus;
+//		}
 	
 	
 	};
@@ -211,9 +212,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		actualized = true;
 	}
 	
-	protected boolean isFromIntervention() {
-		return status.size() == 1 && CarbonUnitStatus.getPotentialInterventionResultStatus().contains(status.get(0));
-	}
+//	protected boolean isFromIntervention() {
+//		return status.size() == 1 && CarbonUnitStatus.getPotentialInterventionResultStatus().contains(status.get(0));
+//	}
 
 	/**
 	 * This method returns the released carbon along in time given the product has been actualized. Otherwise it returns null.

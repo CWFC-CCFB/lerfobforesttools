@@ -206,12 +206,12 @@ public class PythonAccessTests {
 		PythonMaritimePineTree tree = new PythonMaritimePineTree(SpeciesType.ConiferousSpecies, 
 				AverageBasicDensity.MaritimePine,
 				StatusClass.cut,
-				45,
-				7.45,
 				1,
 				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
 				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1));
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				45,
+				7.45);
 
 		Collection<PythonMaritimePineTree> trees = new ArrayList<PythonMaritimePineTree>();
 		trees.add(tree);
@@ -238,12 +238,12 @@ public class PythonAccessTests {
 		PythonEuropeanBeechTree tree = new PythonEuropeanBeechTree(SpeciesType.BroadleavedSpecies, 
 				AverageBasicDensity.EuropeanBeech,
 				StatusClass.cut,
-				45,
-				7.45,
 				1,
 				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
 				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1));
+				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				45,
+				7.45);
 
 		Collection<PythonEuropeanBeechTree> trees = new ArrayList<PythonEuropeanBeechTree>();
 		trees.add(tree);

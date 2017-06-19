@@ -296,7 +296,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 					UIControlManager.InformationMessageTitle.Warning.toString(),
 					JOptionPane.WARNING_MESSAGE);
 		} else {
-			System.out.println(MessageID.IncompatibleTreeLogger.toString());
+//			System.out.println(MessageID.IncompatibleTreeLogger.toString());
 		}
 		setSelectedTreeLogger(availableTreeLoggerParameters.get(0));
 		if (guiInterface != null) {
@@ -427,15 +427,17 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @throws Exception
 	 */
 	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {
-		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.HarvestResidues, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.EndUseWoodProduct, compartmentManager);
-		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.Recycled, compartmentManager);
+		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.DeadWood, compartmentManager);
+		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 	}
 
 	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CATCompartmentManager compartmentManager) throws Exception {
 		try {
-			for (CarbonUnit carbonUnit : getCarbonUnits(type)) {
+			CarbonUnitList list = getCarbonUnits(type);
+			for (int i = 0; i < list.size(); i++) {		// FIXME risk of endless loop here
+				CarbonUnit carbonUnit = list.get(i);
 				carbonUnit.actualizeCarbon(compartmentManager);
 			}
 		} catch (Exception e) {

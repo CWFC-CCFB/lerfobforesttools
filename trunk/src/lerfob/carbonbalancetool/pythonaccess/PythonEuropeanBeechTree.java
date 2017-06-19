@@ -26,12 +26,12 @@ class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements 
 	PythonEuropeanBeechTree(SpeciesType speciesType,
 			AverageBasicDensity species,
 			StatusClass statusClass, 
-			double dbhCm,
-			double dbhCmStandardDeviation,
 			double number, 
 			double biomassRoots,
 			double biomassTrunk, 
-			double biomassBranches) {
+			double biomassBranches,
+			double dbhCm,
+			double dbhCmStandardDeviation) {
 		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
 
 	}

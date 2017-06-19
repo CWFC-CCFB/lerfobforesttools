@@ -172,14 +172,14 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			ProductionProcessorManager productionLineManager = getCarbonToolSettings().getCurrentProductionProcessorManager();
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct));
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.Recycled));
-			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.HarvestResidues);
+			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.DeadWood);
 			degradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillDegradable);
 			nonDegradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable);
 		} else {
 			ProductionLineManager productionLineManager = getCarbonToolSettings().getProductionLines();
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct));
 			joinEndUseProductRecyclageList.addAll(productionLineManager.getCarbonUnits(CarbonUnitStatus.Recycled));
-			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.HarvestResidues);
+			leftInForestList = productionLineManager.getCarbonUnits(CarbonUnitStatus.DeadWood);
 			degradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillDegradable);
 			nonDegradableLandfillList = productionLineManager.getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable);
 			
