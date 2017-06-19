@@ -85,6 +85,9 @@ public class CATExportTool extends REpiceaExportTool {
 			case AverageCarbonStocksAndFluxes:
 				createAverageCarbonStocksAndFluxesRecordSet();
 				break;
+			case DifferenceCarbonStocksAndFluxes:
+				createAverageCarbonStocksAndFluxesRecordSet();
+				break;
 			case TotalHWPbyCategories:
 				createTotalHWPbyCategoriesRecordSet();
 				break;
