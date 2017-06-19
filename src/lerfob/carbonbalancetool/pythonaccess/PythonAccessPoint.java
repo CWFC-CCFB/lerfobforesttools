@@ -185,34 +185,34 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 						tree = new PythonMaritimePineTree(type, 
 								speciesForSimulation,
 								StatusClass.cut,
-								mqd,
-								dbhStandardDeviation,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
+								mqd,
+								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 					} else if (speciesForSimulation == AverageBasicDensity.EuropeanBeech) {
 						tree = new PythonEuropeanBeechTree(type, 
 								speciesForSimulation,
 								StatusClass.cut,
-								mqd,
-								dbhStandardDeviation,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
+								mqd,
+								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 					} else {
 						tree = new PythonDouglasFirTree(type, 
 								speciesForSimulation,
 								StatusClass.cut,
-								mqd,
-								dbhStandardDeviation,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
-								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa));
+								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
+								mqd,
+								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 					}
 				}

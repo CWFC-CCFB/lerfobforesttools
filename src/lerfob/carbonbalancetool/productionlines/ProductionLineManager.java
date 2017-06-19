@@ -396,7 +396,7 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 	 * @throws Exception
 	 */
 	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {
-		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.HarvestResidues, compartmentManager);
+		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.DeadWood, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.EndUseWoodProduct, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.LandFillDegradable, compartmentManager);
 		actualizeCarbonUnitsOfThisType(CarbonUnitStatus.Recycled, compartmentManager);

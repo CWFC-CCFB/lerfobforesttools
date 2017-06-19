@@ -280,7 +280,7 @@ public class ProductionLineProcessor extends AbstractProductionLineProcessor imp
 					
 				} else {				// is left in the forest
 					woodProduct = new CarbonUnit(dateIndex, sampleUnitID, woodProductFeature, processedAmountMap);
-					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.HarvestResidues).add(woodProduct);
+					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.DeadWood).add(woodProduct);
 				}
 
 			} else if (hasSubProcessors()) {
