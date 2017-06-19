@@ -87,7 +87,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	@Override
 	protected EndUseWoodProductCarbonUnitFeature getCaller() {return (EndUseWoodProductCarbonUnitFeature) super.getCaller();}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 	@Override
 	protected void initializeFields() {
 		super.initializeFields();

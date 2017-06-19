@@ -18,7 +18,10 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.util.List;
+
 import repicea.gui.REpiceaPanel;
+import repicea.simulation.processsystem.ProcessUnit;
 
 /**
  * An abstract for all Processor-derived classes (except the LogCategoryProcessor), which ensures
@@ -40,4 +43,12 @@ public abstract class AbstractProductionLineProcessor extends AbstractProcessor 
 		return getEndProductFeature().getUI();
 	}
 
+	/*
+	 * For extended visibility (non-Javadoc)
+	 * @see repicea.simulation.processsystem.Processor#createProcessUnitsFromThisProcessor(repicea.simulation.processsystem.ProcessUnit, int)
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected abstract List<ProcessUnit> createProcessUnitsFromThisProcessor(ProcessUnit unit, int intake);
+	
 }

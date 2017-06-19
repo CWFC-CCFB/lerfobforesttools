@@ -19,7 +19,6 @@
 package lerfob.carbonbalancetool.productionlines;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
-import repicea.simulation.processsystem.Processor;
 
 
 /**
@@ -115,12 +113,12 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			for (int i = getIndexInTimeScale(); i < getTimeTable().size(); i++) {
 				proportion = releasedCarbonArray[i] / getInitialCarbon();
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
-//				int creationDate = compartmentManager.getTimeScale()[i];
-				Processor disposedToProcessor = ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
+				AbstractProductionLineProcessor disposedToProcessor = (AbstractProductionLineProcessor) ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
-						List<ProcessUnit> disposedUnits = new ArrayList<ProcessUnit>();
-						disposedUnits.add(new CarbonUnit(i, samplingUnitID, null, updatedMap));
+						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap);
+						List<ProcessUnit> disposedUnits = disposedToProcessor.createProcessUnitsFromThisProcessor(newUnit, 100);
+//						disposedUnits.add(new CarbonUnit(i, samplingUnitID, null, updatedMap));
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
 						for (CarbonUnit carbonUnit : processedUnits) {
 							if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
