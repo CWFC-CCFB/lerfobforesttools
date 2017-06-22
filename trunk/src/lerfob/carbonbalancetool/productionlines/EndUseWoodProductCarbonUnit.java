@@ -117,6 +117,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
 						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap);
+						newUnit.getAmountMap().add(Element.EmissionsCO2Eq, 0d);		// reset the emissions to 0 after useful lifetime - otherwise there is a double count
 						List<ProcessUnit> disposedUnits = disposedToProcessor.createProcessUnitsFromThisProcessor(newUnit, 100);
 //						disposedUnits.add(new CarbonUnit(i, samplingUnitID, null, updatedMap));
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
