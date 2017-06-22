@@ -49,9 +49,9 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	private static final long serialVersionUID = 20101020L;
 	
 	public static enum MessageID implements TextableEnum {
-		LandfillSiteCheckBoxLabel("Send to landfill after useful life", "Envoyer \u00E0 la d\u00E9charge apr\u00E8s vie utile"),
-		PercentageSentToTheLandfill("Percentage sent to landfill", "Pourcentage envoy\u00E9 \u00E0 la d\u00E9charge"),
-		RelativeSubstitution("Relative substitution (Mg CO2 eq / Funct. Unit)", "Substitution relative (Mg CO2 eq / Unit\u00E9 fonct.)"),
+//		LandfillSiteCheckBoxLabel("Send to landfill after useful life", "Envoyer \u00E0 la d\u00E9charge apr\u00E8s vie utile"),
+//		PercentageSentToTheLandfill("Percentage sent to landfill", "Pourcentage envoy\u00E9 \u00E0 la d\u00E9charge"),
+		RelativeSubstitution("Relative substitution (Mg CO2 eq. / Funct. Unit)", "Substitution relative (Mg CO2 eq. / Unit\u00E9 fonct.)"),
 		UseClassCategory("Use class", "Cat\u00E9gorie d'usage");
 		
 		MessageID(String englishText, String frenchText) {
@@ -112,7 +112,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		biomassFUTextField.setText(((Double) getCaller().getBiomassOfFunctionalUnitMg()).toString());
 		biomassFUTextField.setPreferredSize(new Dimension(100, biomassFUTextField.getFontMetrics(biomassFUTextField.getFont()).getHeight() + 2));
 		
-		substitutionTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
+		substitutionTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.All, false);
 		substitutionTextField.setText(((Double) getCaller().getSubstitutionCO2EqFunctionalUnit(null)).toString());
 		substitutionTextField.setPreferredSize(new Dimension(100, substitutionTextField.getFontMetrics(substitutionTextField.getFont()).getHeight() + 2));
 		
