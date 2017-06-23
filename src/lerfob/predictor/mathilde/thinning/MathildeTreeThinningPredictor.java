@@ -156,13 +156,8 @@ public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredicto
 	@Override
 	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
 		MathildeThinningSubModule subModule;
-//		if (parms == null || parms.length < 1) {
-//			throw new InvalidParameterException("The probability at stand level is missing!");
-//		} 
-//		
-//		Object thinningStandEvent = parms[0];
 			
-		if (parms.length >= 1 && parms[0] instanceof Integer) {
+		if (parms != null && parms.length >= 1 && parms[0] instanceof Integer) {
 			subModule = getSubModule((Integer) parms[0]);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + parms[1]);
