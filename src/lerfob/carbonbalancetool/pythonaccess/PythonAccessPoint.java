@@ -115,7 +115,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			if (speciesForSimulation.equals(AverageBasicDensity.MaritimePine)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
 			} else if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
-				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170516_Tot.prl";
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170622_P_EOL.prl";
 			} else {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
