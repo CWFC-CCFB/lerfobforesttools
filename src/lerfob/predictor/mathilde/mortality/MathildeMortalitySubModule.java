@@ -9,10 +9,6 @@ final class MathildeMortalitySubModule extends MathildeSubModule {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
-	@Override
-	public void clear() {
-		clearDeviates();
-	}
 
 }
 

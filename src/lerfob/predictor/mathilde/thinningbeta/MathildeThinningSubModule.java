@@ -28,10 +28,6 @@ final class MathildeThinningSubModule extends MathildeSubModule {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
 	
-	@Override
-	public void clear() {
-		clearDeviates();
-	}
 
 }
 

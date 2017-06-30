@@ -311,9 +311,9 @@ public class MathildeMortalityPredictor extends REpiceaLogisticPredictor<Mathild
 	}
 
 	@Override
-	public void clear() {
+	public void clearDeviates() {
 		for (MathildeMortalitySubModule p : subModules.values()) {
-			p.clear();
+			p.clearDeviates();
 		}
 	}
 

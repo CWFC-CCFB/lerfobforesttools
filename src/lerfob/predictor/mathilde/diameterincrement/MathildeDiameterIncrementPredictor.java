@@ -375,9 +375,9 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 	}
 	
 	@Override
-	public void clear() {
+	public void clearDeviates() {
 		for (MathildeDiameterIncrementSubModule p : subModules.values()) {
-			p.clear();
+			p.clearDeviates();
 		}
 	}
 
