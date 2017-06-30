@@ -262,7 +262,12 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		return super.getBlupsForThisSubject(subject);
 	}
 	
-	public static void main(String[] args) {
-		new MathildeClimatePredictor(false);
+	@Override
+	public void clear() {
+		clearDeviates();
 	}
+
+//	public static void main(String[] args) {
+//		new MathildeClimatePredictor(false);
+//	}
 }

@@ -148,6 +148,13 @@ public final class MathildeStandThinningPredictor extends REpiceaLogisticPredict
 		return prob;
 	}
 
+	@Override
+	public void clear() {
+		for (MathildeThinningSubModule p : subModules.values()) {
+			p.clear();
+		}
+	}
+
 //	public static void main(String[] args) {
 //		new MathildeStandThinningPredictor(false, false, false);
 //	}

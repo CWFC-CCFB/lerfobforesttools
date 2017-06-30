@@ -8,5 +8,11 @@ final class MathildeThinningSubModule extends MathildeSubModule {
 	protected MathildeThinningSubModule(boolean isParametersVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParametersVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 	}
+	
+	@Override
+	public void clear() {
+		clearDeviates();
+	}
+
 }
 

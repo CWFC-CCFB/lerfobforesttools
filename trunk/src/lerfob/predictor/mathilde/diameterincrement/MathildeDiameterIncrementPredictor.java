@@ -374,6 +374,12 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		return new GaussianEstimate(mean, variance);
 	}
 	
+	@Override
+	public void clear() {
+		for (MathildeDiameterIncrementSubModule p : subModules.values()) {
+			p.clear();
+		}
+	}
 
 
 //	public static void main(String[] args) {

@@ -310,9 +310,16 @@ public class MathildeMortalityPredictor extends REpiceaLogisticPredictor<Mathild
 		}
 	}
 
-	
-	public static void main (String[] args) {
-		new MathildeMortalityPredictor(false); 
+	@Override
+	public void clear() {
+		for (MathildeMortalitySubModule p : subModules.values()) {
+			p.clear();
+		}
 	}
+
+	
+//	public static void main (String[] args) {
+//		new MathildeMortalityPredictor(false); 
+//	}
 }
 
