@@ -192,7 +192,13 @@ public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredicto
 		return subModules.get(subModuleId);
 	}
 	
-	
+	@Override
+	public void clear() {
+		for (MathildeThinningSubModule p : subModules.values()) {
+			p.clear();
+		}
+	}
+
 //	public static void main(String[] args) {
 //		new MathildeTreeThinningPredictor(false, false, false);
 //	}

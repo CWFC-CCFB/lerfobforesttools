@@ -159,4 +159,11 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 		}
 	}
 	
+	@Override
+	public void clear() {
+		for (FrenchHDRelationship2014InternalPredictor p : predictorMap.values()) {
+			p.clear();
+		}
+	}
+
 }

@@ -31,6 +31,11 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 	}
 	
 	protected void setBlupsEstimated(boolean bool) {super.setBlupsEstimated(bool);}
-	
+
+	@Override
+	public void clear() {
+		clearDeviates();
+	}
+
 }
 

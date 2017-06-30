@@ -114,4 +114,9 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 		return getFixedEffectOnlyPrediction(getParametersForThisRealization(stand), stand, tree);
 	}
 
+	@Override
+	public void clear() {
+		clearDeviates();
+	}
+
 }

@@ -252,5 +252,10 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	 */
 	public FrenchHdSpecies getSpecies() {return species;}
 	
+	@Override
+	public void clear() {
+		clearDeviates();
+	}
+
 	
 }
