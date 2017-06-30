@@ -119,6 +119,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		} else {	// we have tweaked the plot random effect to account for the site index class
 			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
 			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
+			setBlupsEstimated(true);		// to make sure we won't come here after the blup prediction
 		}
 	}
 	
