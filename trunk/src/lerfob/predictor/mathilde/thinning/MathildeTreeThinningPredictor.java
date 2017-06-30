@@ -193,9 +193,9 @@ public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredicto
 	}
 	
 	@Override
-	public void clear() {
+	public void clearDeviates() {
 		for (MathildeThinningSubModule p : subModules.values()) {
-			p.clear();
+			p.clearDeviates();
 		}
 	}
 

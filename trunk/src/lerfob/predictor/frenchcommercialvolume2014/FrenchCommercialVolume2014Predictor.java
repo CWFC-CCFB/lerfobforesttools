@@ -105,9 +105,5 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		return oXVector.multiply(beta).m_afData[0][0];
 	}
  
-	@Override
-	public void clear() {
-		clearDeviates();
-	}
 
 }
