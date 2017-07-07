@@ -150,6 +150,9 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		Matrix modelParameters = beta;
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
+		if (basalAreaMinusSubj < 0d) {
+			throw new InvalidParameterException("The basal area of the plot has not been calculated yet!");
+		}
 		double slope = stand.getSlopePercent();
 		
 		oXVector.resetMatrix();
