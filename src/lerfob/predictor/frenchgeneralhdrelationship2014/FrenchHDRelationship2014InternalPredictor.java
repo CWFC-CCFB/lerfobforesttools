@@ -151,6 +151,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
 		if (basalAreaMinusSubj < 0d) {
+			System.out.println("Error in HD relationship: The basal area of the plot has not been calculated yet!");
 			throw new InvalidParameterException("The basal area of the plot has not been calculated yet!");
 		}
 		double slope = stand.getSlopePercent();
