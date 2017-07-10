@@ -11,15 +11,24 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
-import repicea.simulation.ParameterLoader;
-import repicea.simulation.ParameterMap;
+import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2014PredictorTest {
 
 	static List<String> speciesList = new ArrayList<String>();
 	static List<FrenchHDRelationship2014StandImpl> Stands;
-	static ParameterMap Blups = readBlups();
+	static Map<Integer, Map<Integer, Blup>> Blups = readBlups();
+	
+	static class Blup {
+		final double estimate;
+		final double variance;
+		Blup(double estimate, double std) {
+			this.estimate = estimate;
+			this.variance = std * std;
+		}
+	}
+	
 	
 
 	@Test
@@ -33,7 +42,7 @@ public class FrenchHDRelationship2014PredictorTest {
 				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getPred();
-				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
+				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-4);
 				nbTrees++;
 			}
 		}
@@ -41,10 +50,10 @@ public class FrenchHDRelationship2014PredictorTest {
 	}
 	
 	@Test
-	public void validation2BlupsPredictions() throws IOException {
+	public void validation2BlupsPredictionsAndVariance() throws IOException {
 		Stands = readTrees();
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
-		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(true);
 		int nbBlups = 0;
 
 		FrenchHDRelationship2014StandImpl s = Stands.get(0);
@@ -60,12 +69,19 @@ public class FrenchHDRelationship2014PredictorTest {
 				if (tree.getFrenchHDTreeSpecies().ordinal() <= 3) {
 					int index = tree.getFrenchHDTreeSpecies().ordinal() + 1;
 					predictor.predictHeightM(stand, tree);
-					double actualBlup = predictor.getBlups(stand, tree).m_afData[0][0];
+					GaussianEstimate currentBlups = predictor.getBlups(stand, tree);
+					double actualBlup = currentBlups.getMean().m_afData[0][0];
+					double actualVariance = currentBlups.getVariance().m_afData[0][0];
 					int convertedIndex = Integer.parseInt(stand.getSubjectId());
-					double expectedBlup = Blups.get(index, convertedIndex).m_afData[0][0];
+					double expectedBlup = Blups.get(index).get(convertedIndex).estimate;
+					double expectedVariance = Blups.get(index).get(convertedIndex).variance;
 					Assert.assertEquals("Comparing blups for species = " + tree.getFrenchHDTreeSpecies().name() + " in plot " + stand.getSubjectId(), 
 							expectedBlup, 
 							actualBlup,
+							1E-5);
+					Assert.assertEquals("Comparing blups variance for species = " + tree.getFrenchHDTreeSpecies().name() + " in plot " + stand.getSubjectId(), 
+							expectedVariance, 
+							actualVariance,
 							1E-5);
 					nbBlups++;
 				}
@@ -76,10 +92,88 @@ public class FrenchHDRelationship2014PredictorTest {
 
 	
 	@Test
-	public void validationErrorTermForKnownHeightWithStochasticSimulation() throws IOException {
+	public void validationErrorTermForKnownHeightWithStochasticSimulationRandomEffectPlusResiduals() throws IOException {
 		Stands = readTrees();
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
-		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false, true);	// variability of residual error terms only
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false, true, true);	// variability of residual error terms only
+		int nbTrees = 0;
+		
+		FrenchHDRelationship2014StandImpl s = Stands.get(0);
+		List<FrenchHDRelationship2014StandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		for (int i = 0; i < 400; i++) {
+			retainedPlots.add(s.standList.get(i));
+		}
+		s.standList.retainAll(retainedPlots);
+
+		for (FrenchHDRelationship2014Stand stand : s.standList) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
+				double actual = predictor.predictHeightM(stand, tree);
+				double expected = tree.getHeightM();
+				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
+				nbTrees++;
+			}
+		}
+		System.out.println("Successfully compared " + nbTrees + " trees.");
+	}
+
+	@Test
+	public void validationErrorTermForKnownHeightWithStochasticSimulationRandomEffectWithoutResiduals() throws IOException {
+		Stands = readTrees();
+		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false, true, false);	// variability of residual error terms only
+		int nbTrees = 0;
+		
+		FrenchHDRelationship2014StandImpl s = Stands.get(0);
+		List<FrenchHDRelationship2014StandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		for (int i = 0; i < 400; i++) {
+			retainedPlots.add(s.standList.get(i));
+		}
+		s.standList.retainAll(retainedPlots);
+
+		for (FrenchHDRelationship2014Stand stand : s.standList) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
+				double actual = predictor.predictHeightM(stand, tree);
+				double expected = tree.getHeightM();
+				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
+				nbTrees++;
+			}
+		}
+		System.out.println("Successfully compared " + nbTrees + " trees.");
+	}
+
+	@Test
+	public void validationErrorTermForKnownHeightWithStochasticSimulationWithoutRandomEffectButWithResiduals() throws IOException {
+		Stands = readTrees();
+		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false, false, true);	// variability of residual error terms only
+		int nbTrees = 0;
+		
+		FrenchHDRelationship2014StandImpl s = Stands.get(0);
+		List<FrenchHDRelationship2014StandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2014StandImpl>();
+		for (int i = 0; i < 400; i++) {
+			retainedPlots.add(s.standList.get(i));
+		}
+		s.standList.retainAll(retainedPlots);
+
+		for (FrenchHDRelationship2014Stand stand : s.standList) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
+				double actual = predictor.predictHeightM(stand, tree);
+				double expected = tree.getHeightM();
+				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
+				nbTrees++;
+			}
+		}
+		System.out.println("Successfully compared " + nbTrees + " trees.");
+	}
+	
+	@Test
+	public void validationErrorTermForKnownHeightWithStochasticSimulationWithoutRandomEffectNorResiduals() throws IOException {
+		Stands = readTrees();
+		FrenchHDRelationship2014TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor(false);	// variability of residual error terms only
 		int nbTrees = 0;
 		
 		FrenchHDRelationship2014StandImpl s = Stands.get(0);
@@ -155,14 +249,34 @@ public class FrenchHDRelationship2014PredictorTest {
 	}
 	
 
-	private static ParameterMap readBlups() {
+	private static Map<Integer, Map<Integer, Blup>> readBlups() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2014PredictorTest.class) + "testBlups.csv";
+		CSVReader reader = null; 
+		Map<Integer, Map<Integer, Blup>> blupMap = new HashMap<Integer, Map<Integer,Blup>>();
 		try {
-			return ParameterLoader.loadVectorFromFile(2, filename);
+			reader = new CSVReader(filename);
+			Object[] record;
+			while ((record = reader.nextRecord()) != null) {
+				int index = Integer.parseInt(record[0].toString());
+				int plotId = Integer.parseInt(record[1].toString());
+				double estimate = Double.parseDouble(record[2].toString());
+				double std = Double.parseDouble(record[3].toString());
+				if (!blupMap.containsKey(index)) {
+					blupMap.put(index, new HashMap<Integer, Blup>());
+				}
+				Map<Integer, Blup> innerMap = blupMap.get(index);
+				innerMap.put(plotId, new Blup(estimate,std));
+			}
+			
+			return blupMap;
 		} catch (IOException e) {
 			e.printStackTrace();
 			Assert.fail("Unable to read the blups");
 			return null;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 

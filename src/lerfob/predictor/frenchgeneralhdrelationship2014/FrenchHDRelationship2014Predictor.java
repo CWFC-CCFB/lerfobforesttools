@@ -51,13 +51,11 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * @param isVariabilityEnabled a boolean that enables the variability at the parameter level
 	 */
 	public FrenchHDRelationship2014Predictor(boolean isVariabilityEnabled) {
-		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
-		predictorMap = new HashMap<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor>();
-		init();
+		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
 	}
 
-	FrenchHDRelationship2014Predictor(boolean isVariabilityEnabled, boolean isResidualErrorVariabilityEnabled) {
-		super(isVariabilityEnabled, isVariabilityEnabled, isResidualErrorVariabilityEnabled);
+	FrenchHDRelationship2014Predictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariablityEnabled, boolean isResidualErrorVariabilityEnabled) {
+		super(isParameterVariabilityEnabled, isRandomEffectVariablityEnabled, isResidualErrorVariabilityEnabled);
 		predictorMap = new HashMap<FrenchHdSpecies, FrenchHDRelationship2014InternalPredictor>();
 		init();
 	}
@@ -140,9 +138,9 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * For testing purpose only
 	 * @param stand
 	 */
-	protected Matrix getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
+	protected GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
-		return internalPred.getBlups(stand).getMean();
+		return internalPred.getBlups(stand);
 	}
 	
 	@Override
