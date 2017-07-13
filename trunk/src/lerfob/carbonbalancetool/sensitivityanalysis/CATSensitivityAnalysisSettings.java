@@ -27,6 +27,7 @@ import java.util.Map;
 
 import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.stats.Distribution;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.Language;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -66,7 +67,7 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		
 		protected int getMinimumValue() {return min;}
 		protected int getMaximumValue() {return max;}
-		protected int getSuggestedIPCCValue() {return suggestedIPCCValue;}
+		public int getSuggestedIPCCValue() {return suggestedIPCCValue;}
 	}
 
 	
@@ -156,6 +157,24 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	
 	public boolean isModelStochastic() {return isModelStochastic;}
 	
+	/**
+	 * This method sets the different parameters of the sensitivity analysis
+	 * @param source the source of variability
+	 * @param type the distribution (either uniform (default) or Gaussian
+	 * @param enabled true to enable or false to disable
+	 * @param multiplier a value between 0.0 and 0.5 (50%)
+	 */
+	public void setVariabilitySource(VariabilitySource source, Distribution.Type type, boolean enabled, double multiplier) {
+		if (multiplier > 0.5 || multiplier < 0d) {
+			throw new InvalidParameterException("The multiplier must be a value between 0.0 and 0.5");
+		}
+		CATSensitivityAnalysisParameterWrapper wrapper = sensitivityParameterMap.get(source);
+		CATSensitivityAnalysisParameter<?> parm = wrapper.getParameter(type);
+		parm.setParametersVariabilityEnabled(enabled);
+		wrapper.selectedDistributionType = type;	// at the point we are sure that type is either Gaussian or uniform
+		parm.setMultiplier(multiplier);
+	}
+
 	public static void main(String[] args) {
 		REpiceaTranslator.setCurrentLanguage(Language.French);
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();
