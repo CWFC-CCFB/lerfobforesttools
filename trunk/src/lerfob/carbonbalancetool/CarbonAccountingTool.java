@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.carbonbalancetool.io.CATExportTool;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
@@ -393,7 +394,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * @throws Exception 
 	 */
 	public CATExportTool createExportTool() throws Exception {
-		return new CATExportTool(getCarbonCompartmentManager().getCarbonToolSettings(), getCarbonCompartmentManager().getSimulationSummary());
+		return new CATExportTool(getCarbonCompartmentManager().getCarbonToolSettings().getSettingMemory(), 
+				getCarbonCompartmentManager().getSimulationSummary());
 	}
 	
 	/**
@@ -453,11 +455,16 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	/**
 	 * This method sets the biomass parameters for the next simulation in script mode.
 	 * @param filename a String that defines the filename (.bpf) of the biomass parameters
+	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	public void setBiomassParameters(String filename) {
+	public void setBiomassParameters(String filename) throws InterruptedException {
 		this.biomassParametersFilename = filename;
 		addTask(new CATTask(Task.SET_BIOMASS_PARMS, this));
+		addTask(new CATTask(Task.UNLOCK_ENGINE, this));
+		if (!isGuiEnabled()) {
+			lockEngine();
+		}
 	}
 
 	protected void setBiomassParameters() throws IOException {
@@ -468,11 +475,16 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	/**
 	 * This method sets the production lines for the next simulation in script mode. 
 	 * @param filename a String that defines the filename (.prl) of the processor manager
+	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	public void setProductionManager(String filename) {
+	public void setProductionManager(String filename) throws InterruptedException {
 		this.productionManagerFilename = filename;
 		addTask(new CATTask(Task.SET_PRODUCTION_MANAGER, this));
+		addTask(new CATTask(Task.UNLOCK_ENGINE, this));
+		if (!isGuiEnabled()) {
+			lockEngine();
+		}
 	}
 	
 	protected void setProductionManager() throws IOException {

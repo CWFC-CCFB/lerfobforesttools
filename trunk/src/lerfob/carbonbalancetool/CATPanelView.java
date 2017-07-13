@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 
 import javax.swing.ImageIcon;
@@ -32,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.CATFrame.MessageID;
-import repicea.gui.AutomatedHelper;
+import lerfob.carbonbalancetool.io.CATExportTool;
 import repicea.gui.CommonGuiUtility;
 import repicea.gui.REpiceaPanel;
 import repicea.gui.UIControlManager;
@@ -40,8 +39,6 @@ import repicea.gui.UIControlManager.CommonControlID;
 import repicea.gui.components.REpiceaSlider;
 import repicea.gui.components.REpiceaTabbedPane;
 import repicea.gui.popup.REpiceaPopupMenu;
-import repicea.net.BrowserCaller;
-import repicea.util.REpiceaTranslator;
 
 @SuppressWarnings("serial")
 class CATPanelView extends REpiceaPanel implements ChangeListener, PropertyChangeListener {
@@ -73,14 +70,8 @@ class CATPanelView extends REpiceaPanel implements ChangeListener, PropertyChang
 				CATFrame dlg = (CATFrame) CommonGuiUtility.getParentComponent(this, CATFrame.class);
 				CATExportTool exportTool;
 				try {
-					exportTool = new CATExportTool(dlg.caller.getCarbonToolSettings(), panel.getSummary());
-					Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-					String url = "http://www.inra.fr/capsis/help_"+ 
-							REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-							"/capsis/extension/modeltool/carbonaccountingtool/export";
-					AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
-					exportTool.setHelper(helper);
-					exportTool.showUI(dlg);
+					exportTool = new CATExportTool(dlg.caller.getCarbonToolSettings().getSettingMemory(), panel.getSummary());
+						exportTool.showUI(dlg);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

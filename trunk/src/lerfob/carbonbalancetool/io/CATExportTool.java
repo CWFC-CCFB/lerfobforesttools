@@ -16,8 +16,9 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.carbonbalancetool;
+package lerfob.carbonbalancetool.io;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,9 @@ import java.util.Map;
 import java.util.Vector;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATSimulationDifference;
+import lerfob.carbonbalancetool.CATSimulationResult;
+import lerfob.carbonbalancetool.CATTimeTable;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -36,6 +40,7 @@ import repicea.io.GExportRecord;
 import repicea.io.REpiceaRecordSet;
 import repicea.io.tools.REpiceaExportTool;
 import repicea.io.tools.REpiceaExportToolDialog;
+import repicea.net.BrowserCaller;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
@@ -401,19 +406,21 @@ public class CATExportTool extends REpiceaExportTool {
 	 * @param summary a CarbonAccountingToolExportSummary instance
 	 * @throws Exception 
 	 */
-	protected CATExportTool(CATSettings carbonSettings, CATSimulationResult summary) throws Exception { 
+	public CATExportTool(SettingMemory memorySettings, CATSimulationResult summary) throws Exception { 
 		super(true);			// enables multiple selection 
 		this.summary = summary;
-		this.settings = carbonSettings.getSettingMemory();
+		this.settings = memorySettings;
 		String defaultPath = settings.getProperty("CarbonBudgetExportDialog.defaultPath", "export.dbf");
 		setFilename(defaultPath);
+		setHelper();
 	}
 
-	/**
-	 * This method sets the helper of this dialog.
-	 * @param helper an AutomatedHelper instance
-	 */
-	protected void setHelper(AutomatedHelper helper) {
+	private void setHelper() throws NoSuchMethodException, SecurityException {
+		Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
+		String url = "http://www.inra.fr/capsis/help_"+ 
+				REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
+				"/capsis/extension/modeltool/carbonaccountingtool/export";
+		AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 		UIControlManager.setHelpMethod(REpiceaExportToolDialog.class, helper);
 	}
 	

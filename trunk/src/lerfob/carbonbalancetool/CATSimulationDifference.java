@@ -34,7 +34,7 @@ import repicea.stats.estimates.MonteCarloEstimate;
  * The CarbonAssessmentToolSimulationDifference class handles differences between two scenarios and provides the results.
  * @author Mathieu Fortin - February 2014
  */
-class CATSimulationDifference implements CATSimulationResult {
+public class CATSimulationDifference implements CATSimulationResult {
 
 	private final CATSingleSimulationResult scenToCompare;
 	private final CATSingleSimulationResult baseline;
