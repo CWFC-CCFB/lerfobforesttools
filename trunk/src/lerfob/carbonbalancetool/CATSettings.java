@@ -259,14 +259,14 @@ public final class CATSettings {
 	 * This method returns the customizable production manager.
 	 * @return a ProductionProcessorManager instance
 	 */
-	public ProductionProcessorManager getCustomizableProductionProcessorManager() {return productionManagerMap.get(ProductionManagerName.customized).manager;}
+	protected ProductionProcessorManager getCustomizableProductionProcessorManager() {return productionManagerMap.get(ProductionManagerName.customized).manager;}
 	
 	
 	/**
 	 * This method returns the customizable biomass parameters manager.
 	 * @return a BiomassParameters instance
 	 */
-	public BiomassParameters getCustomizableBiomassParameters() {return biomassParametersMap.get(BiomassParametersName.customized).manager;}
+	protected BiomassParameters getCustomizableBiomassParameters() {return biomassParametersMap.get(BiomassParametersName.customized).manager;}
 
 	/**
 	 * This method returns the currently selected ProductionProcessorManager instance.
