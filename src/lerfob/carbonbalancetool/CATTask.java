@@ -57,7 +57,9 @@ public class CATTask extends AbstractGenericTask {
 		UNLOCK_ENGINE(false),
 		SHOW_INTERFACE(false),
 		RESET_MANAGER(false), 
-		DISPLAY_RESULT(false);
+		DISPLAY_RESULT(false),
+		SET_BIOMASS_PARMS(false),
+		SET_PRODUCTION_MANAGER(false);
 	
 		private boolean longTask;
 		private static int NumberOfLongTasks = -1;	
@@ -145,6 +147,14 @@ public class CATTask extends AbstractGenericTask {
 		case UNLOCK_ENGINE:
 			firePropertyChange("Unlocking Engine", null, currentTask);
 			caller.unlockEngine();
+			break;
+		case SET_BIOMASS_PARMS:
+			firePropertyChange("Setting biomass parameters", null, currentTask);
+			caller.setBiomassParameters();
+			break;
+		case SET_PRODUCTION_MANAGER:
+			firePropertyChange("Setting production manager", null, currentTask);
+			caller.setProductionManager();
 			break;
 		}
 	}

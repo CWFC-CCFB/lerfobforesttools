@@ -20,6 +20,7 @@ package lerfob.carbonbalancetool;
 
 import java.awt.Container;
 import java.awt.Window;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -103,6 +104,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	protected transient CATFrame guiInterface;
 	protected transient Window owner;
 	
+	private String biomassParametersFilename;
+	private String productionManagerFilename;
 
 	/**
 	 * General constructor.
@@ -133,7 +136,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * This method returns the settings of the carbon accounting tool.
 	 * @return a CarbonAccountingToolSettings instance
 	 */
-	public CATSettings getCarbonToolSettings() {
+	protected CATSettings getCarbonToolSettings() {
 		return carbonCompartmentManager.getCarbonToolSettings();
 	}
 	
@@ -448,19 +451,33 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	}
 
 	/**
-	 * This method sets the biomass parameters for the next simulation.
-	 * @param name a BiomassParametersName enum
+	 * This method sets the biomass parameters for the next simulation in script mode.
+	 * @param filename a String that defines the filename (.bpf) of the biomass parameters
+	 * @throws IOException 
 	 */
-	public void setCurrentBiomassParameters(BiomassParametersName name) {
-		getCarbonToolSettings().currentBiomassParameters = name;
+	public void setBiomassParameters(String filename) {
+		this.biomassParametersFilename = filename;
+		addTask(new CATTask(Task.SET_BIOMASS_PARMS, this));
 	}
 
+	protected void setBiomassParameters() throws IOException {
+		getCarbonToolSettings().getCustomizableBiomassParameters().load(biomassParametersFilename);
+		getCarbonToolSettings().currentBiomassParameters = BiomassParametersName.customized;
+	}
+	
 	/**
-	 * This method sets the production lines for the next simulation. 
-	 * @param name a ProductionManagerName enum
+	 * This method sets the production lines for the next simulation in script mode. 
+	 * @param filename a String that defines the filename (.prl) of the processor manager
+	 * @throws IOException 
 	 */
-	public void setCurrentProductionManager(ProductionManagerName name) {
-		getCarbonToolSettings().currentProcessorManager = name;
+	public void setProductionManager(String filename) {
+		this.productionManagerFilename = filename;
+		addTask(new CATTask(Task.SET_PRODUCTION_MANAGER, this));
+	}
+	
+	protected void setProductionManager() throws IOException {
+		getCarbonToolSettings().getCustomizableProductionProcessorManager().load(productionManagerFilename);
+		getCarbonToolSettings().currentProcessorManager = ProductionManagerName.customized;
 	}
 	
 	/*
@@ -480,6 +497,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
 		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
+		
 	}
 
 

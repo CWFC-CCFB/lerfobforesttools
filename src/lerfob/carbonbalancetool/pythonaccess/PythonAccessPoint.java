@@ -31,9 +31,8 @@ import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
+import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.CATSimulationResult;
-import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
-import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -120,22 +119,28 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
 			System.out.println("Loading settings : " + filename);
-			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
-			setCurrentProductionManager(ProductionManagerName.customized);
+			setProductionManager(filename);
+//			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
+//			setCurrentProductionManager(ProductionManagerName.customized);
 		}
-		setBiomassParameters();
-	}
-
-	private void setBiomassParameters() throws IOException {
 		String biomassFilename;
 		if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
 			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersDouglasFir.bpf";
 		} else {
 			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
 		}
-		getCarbonToolSettings().getCustomizableBiomassParameters().load(biomassFilename);
-		setCurrentBiomassParameters(BiomassParametersName.customized);
+		setBiomassParameters(biomassFilename);
 	}
+
+	/*
+	 * For extended visibility only (non-Javadoc)
+	 * @see lerfob.carbonbalancetool.CarbonAccountingTool#getCarbonToolSettings()
+	 */
+	@Override
+	protected CATSettings getCarbonToolSettings() {
+		return super.getCarbonToolSettings();
+	}
+	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
