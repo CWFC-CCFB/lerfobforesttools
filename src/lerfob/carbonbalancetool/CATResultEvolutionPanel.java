@@ -29,7 +29,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.CATExportTool.ExportOption;
+import lerfob.carbonbalancetool.io.CATExportTool.ExportOption;
 import lerfob.carbonbalancetool.gui.XYSeriesWithIntegratedRenderer;
 import repicea.math.Matrix;
 import repicea.stats.estimates.ConfidenceInterval;

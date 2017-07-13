@@ -73,7 +73,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @param species a String either "beech" or "pine"
 	 * @throws IOException 
 	 */
-	public void setSpecies(String species) throws IOException {
+	public void setSpecies(String species) throws Exception {
 		AverageBasicDensity speciesCode;
 		if (species.toLowerCase().trim().equals("beech")) {
 			speciesCode = AverageBasicDensity.EuropeanBeech;
@@ -107,7 +107,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return defaultTreeLoggerDescriptions;
 	}
 
-	private void setSpeciesAndSettings(AverageBasicDensity speciesCode) throws IOException {
+	private void setSpeciesAndSettings(AverageBasicDensity speciesCode) throws Exception {
 		if (!speciesCode.equals(speciesForSimulation)) {
 			speciesForSimulation = speciesCode;
 			String filename;

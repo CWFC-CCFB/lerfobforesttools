@@ -27,9 +27,9 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.CATExportTool.ExportOption;
 import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
 import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
+import lerfob.carbonbalancetool.io.CATExportTool;
 import repicea.stats.estimates.Estimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -109,9 +109,9 @@ class CATResultBudgetPanel extends CATResultPanel {
 	@Override
 	protected String getTitle() {
 		if (summary instanceof CATSimulationDifference) {
-			return ExportOption.DifferenceCarbonStocksAndFluxes.toString();
+			return CATExportTool.ExportOption.DifferenceCarbonStocksAndFluxes.toString();
 		} else {
-			return ExportOption.AverageCarbonStocksAndFluxes.toString();
+			return CATExportTool.ExportOption.AverageCarbonStocksAndFluxes.toString();
 		}
 	}
 

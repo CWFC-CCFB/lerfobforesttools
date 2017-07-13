@@ -122,7 +122,7 @@ public class CATUtility {
 
 		hardwood_simple("Hardwood - Simple", "Feuillus - Simple"),
 		hardwood_recycling("Hardwood - Recycling", "Feuillus - Recyclage"),
-		customized("Costumized", "Sur mesure");
+		customized("Customized", "Sur mesure");
 
 		ProductionManagerName(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -142,7 +142,7 @@ public class CATUtility {
 
 		ipcc_2003_oakbeechsprucefir("IPCC - Oak, Beech, Spruce, Fir", "GIEC - Ch\u00EAne, H\u00EAtre, Epic\u00E9a, Sapin"),
 		citepa_france("CITEPA - France", "CITEPA - France"),
-		customized("Costumized", "Sur mesure");
+		customized("Customized", "Sur mesure");
 
 		BiomassParametersName(String englishText, String frenchText) {
 			setText(englishText, frenchText);
