@@ -24,6 +24,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -196,7 +197,7 @@ public class CATSensitivityAnalysisParameterWrapper implements REpiceaUIObject {
 	
 	@SuppressWarnings("rawtypes")
 	private final Map<Distribution.Type, CATSensitivityAnalysisParameter> parameterMap;
-	private Distribution.Type selectedDistributionType = Distribution.Type.UNIFORM; // default value
+	protected Distribution.Type selectedDistributionType = Distribution.Type.UNIFORM; // default value
 	private transient REpiceaPanel guiInterface;
 	private final Map<String, MonteCarloSimulationCompliantObject> subjectMap;
 	
@@ -247,4 +248,13 @@ public class CATSensitivityAnalysisParameterWrapper implements REpiceaUIObject {
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
+	protected CATSensitivityAnalysisParameter<?> getParameter(Distribution.Type type) {
+		CATSensitivityAnalysisParameter<?> parm = parameterMap.get(type);
+		if (parm == null) {
+			throw new InvalidParameterException("The supported distribution are Gaussian and uniform!");
+		} else {
+			return parm;
+		}
+	}
+	
 }

@@ -39,6 +39,7 @@ import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.io.CATExportTool;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
@@ -51,6 +52,7 @@ import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerManager;
+import repicea.stats.Distribution;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
@@ -492,6 +494,27 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		getCarbonToolSettings().currentProcessorManager = ProductionManagerName.customized;
 	}
 	
+	/**
+	 * This method sets the different parameters of the sensitivity analysis at the level suggested by the IPCC.
+	 * @param source the source of variability
+	 * @param type the distribution (either uniform (default) or Gaussian
+	 * @param enabled true to enable or false to disable
+	 */
+	public void setVariabilitySource(VariabilitySource source, Distribution.Type type, boolean enabled) {
+		CATSensitivityAnalysisSettings.getInstance().setVariabilitySource(source, type, enabled, source.getSuggestedIPCCValue() * .01);
+	}	
+
+	/**
+	 * This method sets the different parameters of the sensitivity analysis
+	 * @param source the source of variability
+	 * @param type the distribution (either uniform (default) or Gaussian
+	 * @param enabled true to enable or false to disable
+	 * @param multiplier a value between 0.0 and 0.5 (50%)
+	 */
+	public void setVariabilitySource(VariabilitySource source, Distribution.Type type, boolean enabled, double multiplier) {
+		CATSensitivityAnalysisSettings.getInstance().setVariabilitySource(source, type, enabled, multiplier);
+	}
+
 	/*
 	 * Entry point for FCBA in GESFOR project
 	 */
