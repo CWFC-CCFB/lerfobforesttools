@@ -319,7 +319,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	 * This method returns a summary of simulation.
 	 * @return a CarbonAccountingToolExportSummary instance if the simulation has been carried out or null otherwise
 	 */
-	public CATSingleSimulationResult getSimulationSummary() {
+	protected CATSingleSimulationResult getSimulationSummary() {
 		if (isSimulationValid) {
 			if (summary == null) {
 				summary = new CATSingleSimulationResult("Sim " + ++nbSimulations, this);

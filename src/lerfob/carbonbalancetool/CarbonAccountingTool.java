@@ -328,8 +328,15 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		}
 	}
 
+	/**
+	 * This method retrieves the simulation results after calling the calculateCarbon method.
+	 * @return a CATSingleSimulationResult instance
+	 */
+	public CATSingleSimulationResult retrieveSimulationSummary() {
+		return getCarbonCompartmentManager().getSimulationSummary();
+	}
 	
-	public CATCompartmentManager getCarbonCompartmentManager() {return carbonCompartmentManager;}
+	protected CATCompartmentManager getCarbonCompartmentManager() {return carbonCompartmentManager;}
 
 	/**
 	 * This method launches the calculation of the different carbon compartments.
@@ -440,11 +447,19 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
-	protected void setCurrentBiomassParameters(BiomassParametersName name) {
+	/**
+	 * This method sets the biomass parameters for the next simulation.
+	 * @param name a BiomassParametersName enum
+	 */
+	public void setCurrentBiomassParameters(BiomassParametersName name) {
 		getCarbonToolSettings().currentBiomassParameters = name;
 	}
-	
-	protected void setCurrentProductionManager(ProductionManagerName name) {
+
+	/**
+	 * This method sets the production lines for the next simulation. 
+	 * @param name a ProductionManagerName enum
+	 */
+	public void setCurrentProductionManager(ProductionManagerName name) {
 		getCarbonToolSettings().currentProcessorManager = name;
 	}
 	
