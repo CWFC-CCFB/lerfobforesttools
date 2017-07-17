@@ -45,7 +45,7 @@ import repicea.util.REpiceaTranslator;
  * whether or not the residual from this processor can be used for energy.
  * @author M. Fortin - September 2010
  */
-public class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, REpiceaUIObject {
+public final class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, REpiceaUIObject {
 	
 	private static final long serialVersionUID = 20101018L;
 
