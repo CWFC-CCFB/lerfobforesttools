@@ -18,6 +18,8 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureRecognizer;
 import java.awt.dnd.DragSource;
@@ -41,6 +43,8 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton {
 		protected PreProcessorLinkLine instantiatePreLink(SystemPanel panel) {
 			return new PreEndOfLifeLinkLine(panel, button);
 		}
+		
+		
 	}
 	
 	
@@ -79,5 +83,19 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton {
 			}
 		}
 	}
+	
+	@Override
+	public void paint(Graphics g) {
+		if (!getOwner().hasSubProcessors() && getOwner() instanceof ProductionLineProcessor) {
+			setBorderColor(Color.BLUE);
+			if (!isSelected()) {
+				setBorderWidth(2);
+			}
+		} else {
+			setBorderColor(Color.BLACK);
+		}
+		super.paint(g);
+	}
+
 
 }

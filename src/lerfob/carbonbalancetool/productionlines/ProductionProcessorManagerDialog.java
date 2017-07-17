@@ -68,9 +68,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-			String url = "http://www.inra.fr/capsis/help_"+ 
-					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-					"/capsis/extension/modeltool/productionprocessormanager";
+			String url = "https://sourceforge.net/p/lerfobforesttools/wiki/CAT%20-%20Flux%20Manager/";
 			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 			UIControlManager.setHelpMethod(ProductionProcessorManagerDialog.class, helper);
 		} catch (Exception e) {}

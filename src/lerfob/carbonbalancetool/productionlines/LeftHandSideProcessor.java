@@ -21,12 +21,9 @@ package lerfob.carbonbalancetool.productionlines;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.BorderFactory;
-
 import repicea.gui.permissions.REpiceaGUIPermission;
 import repicea.simulation.processsystem.Processor;
 import repicea.simulation.processsystem.SystemPanel;
-import repicea.simulation.processsystem.UISetup;
 
 @SuppressWarnings("serial")
 public abstract class LeftHandSideProcessor extends AbstractProcessor {
@@ -76,9 +73,11 @@ public abstract class LeftHandSideProcessor extends AbstractProcessor {
 		@Override
 		public void paint(Graphics g) {
 			if (!getOwner().hasSubProcessors()) {
-				setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+				setBorderColor(Color.RED);
+				setBorderWidth(2);
 			} else {
-				setBorder(UISetup.ButtonDefaultBorder);
+				setBorderColor(Color.BLACK);
+				setBorderWidth(1);
 			}
 			super.paint(g);
 		}
