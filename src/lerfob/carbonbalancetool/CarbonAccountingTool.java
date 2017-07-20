@@ -92,8 +92,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		}
 	}
 	
-	protected static final String englishTitle = "LERFoB Carbon Accounting Tool (LERFoB-CAT)";
-	protected static final String frenchTitle = "Outil de comptabilit\u00E9 du carbone LERFoB (LERFoB-CAT)";
+	protected static final String englishTitle = "Carbon Accounting Tool (CAT)";
+	protected static final String frenchTitle = "Outil de comptabilit\u00E9 carbone (CAT)";
 	private static final StandComparator StandComparator = new StandComparator();
 	protected static boolean hasAlreadyBeenInstanciated = false;
 	

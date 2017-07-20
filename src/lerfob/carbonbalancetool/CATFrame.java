@@ -86,9 +86,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-			String url = "http://www.inra.fr/capsis/help_"+ 
-					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-					"/capsis/extension/modeltool/carbonaccountingtool";
+			String url = "https://sourceforge.net/p/lerfobforesttools/wiki/CAT/";
 			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 			UIControlManager.setHelpMethod(CATFrame.class, helper);
 		} catch (Exception e) {}
