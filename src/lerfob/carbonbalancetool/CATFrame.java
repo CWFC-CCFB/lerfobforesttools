@@ -48,8 +48,9 @@ import lerfob.carbonbalancetool.CATSettings.AssessmentReport;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersWrapper;
 import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
-import lerfob.carbonbalancetool.io.CATRecordReader;
+import lerfob.carbonbalancetool.io.CATGrowthSimulationRecordReader;
 import lerfob.carbonbalancetool.io.CATSpeciesSelectionDialog;
+import lerfob.carbonbalancetool.io.CATYieldTableRecordReader;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
@@ -159,7 +160,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		CI("Confidence intervals", "Intervalles de confiance"),
 		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9"),
 		GlobalWarmingPotential("Global Warming Potential", "Potentiel de r\u00E9chauffement global"),
-		ImportYieldTable("Yield table", "Table de production")
+		ImportYieldTable("Yield table", "Table de production"),
+		ImportGrowthSimulation("Growth simulation", "Simulation de croissance")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -196,6 +198,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	private final JMenuItem help;
 	private final JMenu importMenu;
 	private final JMenuItem yieldTable;
+	private final JMenuItem growthSimulation;
 	
 	private final JRadioButtonMenuItem calculateInCarbon;
 	protected final JRadioButtonMenuItem calculateInCO2;
@@ -257,6 +260,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		
 		yieldTable = new JMenuItem(MessageID.ImportYieldTable.toString());
 		importMenu.add(yieldTable);
+		growthSimulation = new JMenuItem(MessageID.ImportGrowthSimulation.toString());
+		importMenu.add(growthSimulation);
 		
 		close = UIControlManager.createCommonMenuItem(CommonControlID.Quit);
 		file.add(close);
@@ -439,6 +444,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			CATSettings.setAssessmentReportForGWP(AssessmentReport.Fifth);
 		} else if (evt.getSource().equals(yieldTable)) {
 			constructYieldTable();
+		} else if (evt.getSource().equals(growthSimulation)) {
+			constructStandListFromGrowthSimulation();
 		}
 	}
 	
@@ -460,7 +467,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 				return;
 			}
 			yieldTableFilename = fileChooserOutput.getFilename();
-			CATRecordReader catRecordReader = new CATRecordReader(dlg.getCATSpecies());
+			CATYieldTableRecordReader catRecordReader = new CATYieldTableRecordReader(dlg.getCATSpecies());
 			catRecordReader.initGUIMode(this, yieldTableFilename);
 			catRecordReader.readAllRecords();
 			caller.setStandList(catRecordReader.getStandList());
@@ -472,6 +479,38 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		}
 	}
 
+	private void constructStandListFromGrowthSimulation() {
+		String growthSimulationFilename = caller.getSettingMemory().getProperty("lerfobcat.growthSimulationFilename", "");
+		try {
+			Vector<FileFilter> fileFilters = new Vector<FileFilter>();
+			fileFilters.add(GFileFilter.CSV);
+			FileChooserOutput fileChooserOutput = CommonGuiUtility.browseAction(this, 
+					JFileChooser.FILES_ONLY, 
+					growthSimulationFilename,
+					fileFilters,
+					JFileChooser.OPEN_DIALOG);
+			if (!fileChooserOutput.isValid()) {
+				return;
+			} 
+			growthSimulationFilename = fileChooserOutput.getFilename();
+			CATGrowthSimulationRecordReader catRecordReader = new CATGrowthSimulationRecordReader();
+			catRecordReader.initGUIMode(this, growthSimulationFilename);
+			
+			catRecordReader.readAllRecords();
+			catRecordReader.getSelector().showUI(this);
+			if (catRecordReader.getSelector().getUI(null).hasBeenCancelled()) {
+				return;
+			}
+			caller.setStandList(catRecordReader.getStandList());
+			caller.getSettingMemory().setProperty("lerfobcat.growthSimulationFilename", growthSimulationFilename);
+		} catch (Exception e) {
+			if (e instanceof CancellationException) {
+				return;
+			}
+		}
+	}
+
+	
 	protected void setCalculateCarbonButtonsEnabled(boolean bool) {
 		boolean isStandListSet = caller.getCarbonCompartmentManager().getLastStand() != null;
 		calculateCarbonMenuItem.setEnabled(bool && !vetoEnabled && isStandListSet );
@@ -601,6 +640,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		aR4.addActionListener(this);
 		aR5.addActionListener(this);
 		yieldTable.addActionListener(this);
+		growthSimulation.addActionListener(this);
 	}
 
 
@@ -622,6 +662,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		aR4.removeActionListener(this);
 		aR5.removeActionListener(this);
 		yieldTable.removeActionListener(this);
+		growthSimulation.removeActionListener(this);
 	}
 
 	@Override

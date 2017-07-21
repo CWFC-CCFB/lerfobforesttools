@@ -30,6 +30,10 @@ import lerfob.carbonbalancetool.CATCompatibleTree;
 import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
+/**
+ * This class represents the stand in a yield table import in CAT.
+ * @author Mathieu Fortin - June 2016
+ */
 class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 
 	private final String standId;

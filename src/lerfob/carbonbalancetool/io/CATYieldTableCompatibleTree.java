@@ -20,6 +20,11 @@ package lerfob.carbonbalancetool.io;
 
 import lerfob.carbonbalancetool.CATCompatibleTree;
 
+/**
+ * This class represents the trees in a yield table import in CAT. It is actually a fake class that ensures the 
+ * compatibility with CAT. It is set to a single tree having the volume per ha of the stand.
+ * @author Mathieu Fortin - June 2017
+ */
 class CATYieldTableCompatibleTree implements CATCompatibleTree {
 
 	private final double volumeM3;

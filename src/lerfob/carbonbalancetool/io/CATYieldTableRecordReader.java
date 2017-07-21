@@ -32,7 +32,7 @@ import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class CATRecordReader extends REpiceaRecordReader {
+public class CATYieldTableRecordReader extends REpiceaRecordReader {
 
 	protected static enum MessageID implements TextableEnum {
 		DateDescription("Stand age (years)","Age du peuplement (ann\u00E9es"),
@@ -57,18 +57,18 @@ public class CATRecordReader extends REpiceaRecordReader {
 		}
 	}
 
-	protected static enum CATFieldLevel {Stand;}
+	protected static enum CATYieldTableFieldLevel {Stand;}
 
-	protected static enum CATFieldID implements LevelProviderEnum {
+	protected static enum CATYieldTableFieldID implements LevelProviderEnum {
 		Date,
 		StandingVolume,
 		HarvestedVolume;
 		
-		CATFieldID() {}
+		CATYieldTableFieldID() {}
 
 		@Override
-		public CATFieldLevel getFieldLevel() {
-			return CATFieldLevel.Stand;
+		public CATYieldTableFieldLevel getFieldLevel() {
+			return CATYieldTableFieldLevel.Stand;
 		}
 	}
 
@@ -81,7 +81,7 @@ public class CATRecordReader extends REpiceaRecordReader {
 	/**
 	 * General constructor.
 	 */
-	public CATRecordReader(CATSpecies catSpecies) {
+	public CATYieldTableRecordReader(CATSpecies catSpecies) {
 		super();
 		setPopUpWindowEnabled(true);
 		this.catSpecies = catSpecies;
@@ -93,21 +93,21 @@ public class CATRecordReader extends REpiceaRecordReader {
 	protected List<ImportFieldElement> defineFieldsToImport() throws Exception {
 		List<ImportFieldElement> ifeList = new ArrayList<ImportFieldElement>();
 		ImportFieldElement ife;
-		ife = new ImportFieldElement(CATFieldID.Date,
+		ife = new ImportFieldElement(CATYieldTableFieldID.Date,
 				MessageID.DateDescription.toString(), 
 				getClass().getSimpleName() + ".dateDescription", 
 				false, 
 				MessageID.DateHelp.toString(),
 				FieldType.Integer);
 		ifeList.add(ife);
-		ife = new ImportFieldElement(CATFieldID.StandingVolume,
+		ife = new ImportFieldElement(CATYieldTableFieldID.StandingVolume,
 				MessageID.StandingVolumeDescription.toString(), 
 				getClass().getSimpleName() + ".standingVolumeDescription", 
 				false, 
 				MessageID.StandingVolumeHelp.toString(),
 				FieldType.Double);
 		ifeList.add(ife);
-		ife = new ImportFieldElement(CATFieldID.HarvestedVolume,
+		ife = new ImportFieldElement(CATYieldTableFieldID.HarvestedVolume,
 				MessageID.HarvestedVolumeDescription.toString(), 
 				getClass().getSimpleName() + ".harvestVolumeDescription", 
 				false, 
@@ -156,7 +156,7 @@ public class CATRecordReader extends REpiceaRecordReader {
 
 	@Override
 	protected void checkInputFieldsFormat(Object[] oArray) throws Exception {
-		int index = this.getImportFieldManager().getIndexOfThisField(CATFieldID.HarvestedVolume);
+		int index = this.getImportFieldManager().getIndexOfThisField(CATYieldTableFieldID.HarvestedVolume);
 		if (oArray[index].toString().isEmpty()) {
 			oArray[index] = "0";
 		}
