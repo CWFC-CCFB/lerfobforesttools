@@ -11,17 +11,22 @@ import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
-import lerfob.carbonbalancetool.io.CATRecordReader;
+import lerfob.carbonbalancetool.io.CATYieldTableRecordReader;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
 import repicea.serial.xml.XmlDeserializer;
+import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
 
 
 public class CarbonAccountingToolTest {
 
+	static {
+		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldLevel", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldLevel");
+		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldID", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldID");
+	}
 
 	
 	@Test
@@ -127,7 +132,7 @@ public class CarbonAccountingToolTest {
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableReference.xml";
 		CarbonAccountingTool cat = new CarbonAccountingTool();
 		cat.initializeTool(false, null);
-		CATRecordReader recordReader = new CATRecordReader(CATSpecies.Abies);
+		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.Abies);
 		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
 		recordReader.initInScriptMode(ifm);
 		recordReader.readAllRecords();
