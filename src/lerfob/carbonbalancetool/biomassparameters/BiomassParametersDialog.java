@@ -64,9 +64,7 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 
 		try {
 			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
-			String url = "http://www.inra.fr/capsis/help_"+ 
-					REpiceaTranslator.getCurrentLanguage().getLocale().getLanguage() +
-					"/capsis/extension/modeltool/biomassparameter";
+			String url = "https://sourceforge.net/p/lerfobforesttools/wiki/CAT%20-%20User%20interface/#setting-biomass-parameters";
 			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
 			UIControlManager.setHelpMethod(BiomassParametersDialog.class, helper);
 		} catch (Exception e) {}
