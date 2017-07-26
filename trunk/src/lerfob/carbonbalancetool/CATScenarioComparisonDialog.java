@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.lang.reflect.Method;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,9 +17,11 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import repicea.gui.AutomatedHelper;
 import repicea.gui.REpiceaDialog;
 import repicea.gui.UIControlManager;
 import repicea.gui.UIControlManager.CommonControlID;
+import repicea.net.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
@@ -28,6 +31,13 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 
 	static {
 		UIControlManager.setTitle(CATScenarioComparisonDialog.class, "Scenario comparison", "Comparaison de sc\u00E9narios");
+		try {
+			Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
+			String url = "https://sourceforge.net/p/lerfobforesttools/wiki/CAT%20-%20User%20interface/#comparing-scenarios";
+			AutomatedHelper helper = new AutomatedHelper(callHelp, new Object[]{url});
+			UIControlManager.setHelpMethod(CATScenarioComparisonDialog.class, helper);
+		} catch (Exception e) {}
+
 	}
 	
 	private static enum MessageID implements TextableEnum {
