@@ -25,6 +25,7 @@ import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import repicea.io.tools.ImportFieldElement;
 import repicea.io.tools.ImportFieldElement.FieldType;
+import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.io.tools.LevelProviderEnum;
 import repicea.io.tools.REpiceaRecordReader;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -34,6 +35,11 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("serial")
 public class CATYieldTableRecordReader extends REpiceaRecordReader {
 
+	static {
+		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldLevel", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldLevel");
+		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldID", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldID");
+	}
+	
 	protected static enum MessageID implements TextableEnum {
 		DateDescription("Stand age (years)","Age du peuplement (ann\u00E9es"),
 		DateHelp("This field must contains the age of the stand. It is an integer.", "Ce champ doit contenir l'\u00E2ge du peuplement. Il s'agit d'un entier."),
