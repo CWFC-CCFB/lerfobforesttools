@@ -16,17 +16,11 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
 import repicea.serial.xml.XmlDeserializer;
-import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
 
 
 public class CarbonAccountingToolTest {
-
-	static {
-		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldLevel", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldLevel");
-		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.io.CATRecordReader$CATFieldID", "lerfob.carbonbalancetool.io.CATYieldTableRecordReader$CATYieldTableFieldID");
-	}
 
 	
 	@Test
