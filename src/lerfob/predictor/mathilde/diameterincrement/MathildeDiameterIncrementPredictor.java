@@ -48,6 +48,9 @@ import repicea.util.ObjectUtility;
 
 /**
  * This class contains the diameter increment module of Mathilde growth simulator.
+ * @see <a href=https://academic.oup.com/forestry/article/88/5/540/521744/Effect-of-climate-and-intra-and-inter-specific> 
+	 Manso, R., Morneau, F., Ningre, F., and Fortin, M. 2015. Effect of climate and intra- and inter-specific competition on diameter 
+	 increment in beech and oak stands. Forestry 88: 540-551</a>
  * @authors Mathieu Fortin and Ruben Manso - August 2013
  */
 public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, REpiceaPredictorListener {
