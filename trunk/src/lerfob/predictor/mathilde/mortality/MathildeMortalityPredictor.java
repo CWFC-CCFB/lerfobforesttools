@@ -43,6 +43,9 @@ import repicea.util.ObjectUtility;
 /**
  * This class implements the mortality submodel in Mathilde model. All the details of this module are available in 
  * Manso et al. 2015. Forest Ecology and Management 354: 243-253. 
+ * @see <a href=http://www.sciencedirect.com/science/article/pii/S0378112715003345> 
+	 Manso, R., Morneau, F., Ningre, F., and Fortin, M. 2015. Incorporating stochasticity from extreme climatic events
+	 and multi-species competition relationships into single-tree mortality models. Forest Ecology and Management 354: 243-253</a>
  * @author Ruben Manso and Mathieu Fortin - October 2013
  */
 @SuppressWarnings("serial")

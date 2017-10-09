@@ -23,7 +23,7 @@ import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 
 /**
- * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
+ * This interface ensures that the Stand instance is compatible with the MathildeMortalityPredictor.
  * @author Mathieu Fortin - June 2013
  */
 public interface MathildeMortalityStand extends MonteCarloSimulationCompliantObject, 
