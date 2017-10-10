@@ -32,6 +32,10 @@ import repicea.stats.distributions.utility.NegativeBinomialUtility;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
+/**
+ * This class predicts the number of recruits for each species of the MATHILDE model.
+ * @author Mathieu Fortin - Octobre 2017
+ */
 @SuppressWarnings("serial")
 public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 
@@ -70,25 +74,25 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	@Override
 	protected void init() {
 		try {
-		String path = ObjectUtility.getRelativePackagePath(getClass());
-		String betaFilename = path + "0_zinb_beta.csv";
-		String omegaFilename = path + "0_zinb_omega.csv";
-		String copulaFilename = path + "0_zinb_copula.csv";
-		
-		ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
-		Matrix theta = new Matrix(1,1);
-		theta.m_afData[0][0] = LogTheta;
-		Matrix thetaVar = new Matrix(1,1);
-		thetaVar.m_afData[0][0] = ThetaSE * ThetaSE;
-		Matrix beta = betaMap.get().matrixStack(theta, true);
-		Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
-		omega = omega.matrixDiagBlock(thetaVar);
-		setParameterEstimates(new GaussianEstimate(beta, omega));
-		
-		Matrix copula = ParameterLoader.loadMatrixFromFile(copulaFilename);
-		Matrix meanCopula = new Matrix(copula.m_iRows, 1);
-		this.copula = new GaussianEstimate(meanCopula, copula);
-		
+			String path = ObjectUtility.getRelativePackagePath(getClass());
+			String betaFilename = path + "0_zinb_beta.csv";
+			String omegaFilename = path + "0_zinb_omega.csv";
+			String copulaFilename = path + "0_zinb_copula.csv";
+
+			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
+			Matrix theta = new Matrix(1,1);
+			theta.m_afData[0][0] = LogTheta;
+			Matrix thetaVar = new Matrix(1,1);
+			thetaVar.m_afData[0][0] = ThetaSE * ThetaSE;
+			Matrix beta = betaMap.get().matrixStack(theta, true);
+			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
+			omega = omega.matrixDiagBlock(thetaVar);
+			setParameterEstimates(new GaussianEstimate(beta, omega));
+
+			Matrix copula = ParameterLoader.loadMatrixFromFile(copulaFilename);
+			Matrix meanCopula = new Matrix(copula.m_iRows, 1);
+			this.copula = new GaussianEstimate(meanCopula, copula);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("An error ocurred while reading the parameters!");
