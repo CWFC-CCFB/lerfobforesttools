@@ -57,11 +57,14 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		m.m_afData[0][3] = 1d;
 		DummyMap.put(MathildeTreeSpecies.OTHERS, m);
 	}
+
+	public static final double REFERENCE_AREA_HA = Math.PI * 6d * 6d / 10000;
 	
-	private static double LogTheta = -0.7066183;
-	private static double ThetaSE = 0.0482423;
+	private static final double LogTheta = -0.7066183;
+	private static final double ThetaSE = 0.0482423;
 	
 	private final Matrix oXVectorZero;
+	
 	private GaussianEstimate copula;
 	
 	/**
