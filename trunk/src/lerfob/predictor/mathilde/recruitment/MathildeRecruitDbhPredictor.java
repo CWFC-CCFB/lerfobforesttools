@@ -61,7 +61,10 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 	protected static double Dispersion = 1.178388;
 	private final static double Offset = 24d / Math.PI;
 	
-	
+	/**
+	 * Constructor
+	 * @param isVariabilityEnabled true to enable the stochastic variability.
+	 */
 	public MathildeRecruitDbhPredictor(boolean isVariabilityEnabled) {
 		this(isVariabilityEnabled, isVariabilityEnabled); 
 	}

@@ -64,7 +64,11 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	private final Matrix oXVectorZero;
 	private GaussianEstimate copula;
 	
-	protected MathildeRecruitmentNumberPredictor(boolean isVariabilityEnabled) {
+	/**
+	 * Constructor
+	 * @param isVariabilityEnabled true to enable the stochastic variability.
+	 */
+	public MathildeRecruitmentNumberPredictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, false, isVariabilityEnabled); // there is no random effect in this model
 		init();
 		oXVector = new Matrix(1,12);
