@@ -60,8 +60,8 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 
 	public static final double REFERENCE_AREA_HA = Math.PI * 6d * 6d / 10000;
 	
-	private static final double LogTheta = -0.7066183;
-	private static final double ThetaSE = 0.0482423;
+	private static final double LogTheta = -0.419641;
+	private static final double ThetaSE = 0.173895;
 	
 	private final Matrix oXVectorZero;
 	
@@ -160,25 +160,27 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		double theta = Math.exp(betaForThisStand.m_afData[betaForThisStand.m_iRows - 1][0]);
 		Matrix betaZero = betaForThisStand.getSubMatrix(12, betaForThisStand.m_iRows - 2, 0, 0);
 		double negBinMean = getNegativeBinomialMean(betaCount, stand, species);
-		double zeroProb = getFalseZeroProbability(betaZero, stand, species);
-
+		double nonZeroProb = getFalseZeroProbability(betaZero, stand, species);
+		double dispersion = 1d/theta;
+		double truncationFactor = 1 - NegativeBinomialUtility.getMassProbability(0, negBinMean, dispersion);
+				
 		Matrix output;
 		if (isResidualVariabilityEnabled) {
 			output = new Matrix(1,15);
 			double p;
-			double dispersion = 1d/theta;
 			
 			for (int j = 0; j < output.m_iCols; j++) {
 				if (j==0) {
-					p = zeroProb + (1 - zeroProb) * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion);
+//					p = zeroProb + (1 - zeroProb) * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion);
+					p = (1 - nonZeroProb);
 				} else {
-					p = (1 - zeroProb) * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion);
+					p =  nonZeroProb * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion) / truncationFactor;
 				}
 				output.m_afData[0][j] = p;
 			}
 		} else {
 			output = new Matrix(1,1);
-			double overallMean = (1 - zeroProb) * negBinMean;
+			double overallMean = (1 - nonZeroProb) * negBinMean;
 			output.m_afData[0][0] = overallMean;
 		}
 		return output;
