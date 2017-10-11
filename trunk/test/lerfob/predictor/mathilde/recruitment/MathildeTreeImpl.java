@@ -12,6 +12,7 @@ class MathildeTreeImpl implements MathildeTree {
 	MathildeTreeImpl(MathildeRecruitmentStand stand, MathildeTreeSpecies species, double[] predictions) throws Exception {
 		thisSpecies = species;
 		this.stand = stand;
+		((MathildeRecruitmentStandImpl) this.stand).treeList.add(this);
 		this.predictions = predictions;
 	}
 	
