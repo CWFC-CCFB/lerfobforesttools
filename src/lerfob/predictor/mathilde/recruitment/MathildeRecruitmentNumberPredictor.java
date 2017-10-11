@@ -66,13 +66,17 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	private final Matrix oXVectorZero;
 	
 	private GaussianEstimate copula;
-	
+
 	/**
 	 * Constructor
 	 * @param isVariabilityEnabled true to enable the stochastic variability.
 	 */
 	public MathildeRecruitmentNumberPredictor(boolean isVariabilityEnabled) {
-		super(isVariabilityEnabled, false, isVariabilityEnabled); // there is no random effect in this model
+		this(isVariabilityEnabled, isVariabilityEnabled); // there is no random effect in this model
+	}
+
+	protected MathildeRecruitmentNumberPredictor(boolean isParameterVariabilityEnabled, boolean isResidualVariabilityEnabled) {
+		super(isParameterVariabilityEnabled, false, isResidualVariabilityEnabled); // there is no random effect in this model
 		init();
 		oXVector = new Matrix(1,12);
 		oXVectorZero = new Matrix(1,20);
@@ -97,6 +101,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 			setParameterEstimates(new GaussianEstimate(beta, omega));
 
 			Matrix copula = ParameterLoader.loadMatrixFromFile(copulaFilename);
+//			Matrix copula = new Matrix(4,1,1,0).matrixDiagonal();
 			Matrix meanCopula = new Matrix(copula.m_iRows, 1);
 			this.copula = new GaussianEstimate(meanCopula, copula);
 

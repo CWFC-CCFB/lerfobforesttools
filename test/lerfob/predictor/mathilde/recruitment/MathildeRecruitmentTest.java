@@ -17,6 +17,8 @@ import repicea.util.ObjectUtility;
 public class MathildeRecruitmentTest {
 
 	private static List<MathildeTreeImpl> TREES;
+	private static Map<String, MathildeRecruitmentStandImpl> STAND_MAP;
+
 
 	private static List<MathildeTreeImpl> SetTreeListForDbhTests() throws Exception {
 		Map<String, MathildeRecruitmentStand> standMap = new HashMap<String, MathildeRecruitmentStand>();
@@ -61,11 +63,9 @@ public class MathildeRecruitmentTest {
 		}
 	}
 	
-	@Test
-	public void numbersOfRecruitsTest() throws Exception {
-		List<MathildeTreeImpl> trees = new ArrayList<MathildeTreeImpl>();
-		Map<String, MathildeRecruitmentStand> standMap = new HashMap<String, MathildeRecruitmentStand>();
-		String filename = ObjectUtility.getPackagePath(getClass()) + "zinb_pred.csv";
+	private static Map<String, MathildeRecruitmentStandImpl> getStandMap() throws Exception {
+		Map<String, MathildeRecruitmentStandImpl> standMap = new HashMap<String, MathildeRecruitmentStandImpl>();
+		String filename = ObjectUtility.getPackagePath(MathildeRecruitmentTest.class) + "zinb_pred.csv";
 		Object[] record;
 		CSVReader reader = null;
 		try {
@@ -91,7 +91,7 @@ public class MathildeRecruitmentTest {
 				}
 				MathildeRecruitmentStand stand = standMap.get(idp);
 				double gThisSpecies = Double.parseDouble(record[4].toString());
-				((MathildeRecruitmentStandImpl) stand).setSpecies(thisSpecies, gThisSpecies);
+				((MathildeRecruitmentStandImpl) stand).setBasalAreaM2HaOfThisSpecies(thisSpecies, gThisSpecies);
 				double[] predictions = new double[15];
 				predictions[0] = Double.parseDouble(record[5].toString());
 				predictions[1] = Double.parseDouble(record[6].toString());
@@ -108,14 +108,29 @@ public class MathildeRecruitmentTest {
 				predictions[12] = Double.parseDouble(record[17].toString());
 				predictions[13] = Double.parseDouble(record[18].toString());
 				predictions[14] = Double.parseDouble(record[19].toString());
-				MathildeTreeImpl tree = new MathildeTreeImpl(stand, thisSpecies, predictions);
-				trees.add(tree);
+				new MathildeTreeImpl(stand, thisSpecies, predictions);
 			}
+			return standMap;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
+	}
+	
+	@Test
+	public void numbersOfRecruitsTest() throws Exception {
+		if (STAND_MAP == null) {
+			STAND_MAP = getStandMap();
+		}
 
-			MathildeRecruitmentNumberPredictor pred = new MathildeRecruitmentNumberPredictor(false);
+		MathildeRecruitmentNumberPredictor pred = new MathildeRecruitmentNumberPredictor(false);
 
-			int nbTreesTested = 0;
-			for (MathildeTreeImpl tree : trees) {
+		int nbTreesTested = 0;
+		for (MathildeRecruitmentStandImpl s : STAND_MAP.values()) {
+			for (MathildeTreeImpl tree : s.treeList) {
 				Matrix predictions = pred.getMarginalPredictionsForThisStandAndSpecies(tree.getStand(), tree.getMathildeTreeSpecies(), true);
 				double[] expectedValues = tree.getPredictions();
 				Assert.assertEquals("Testing the number of predicted values", predictions.m_iCols, expectedValues.length);
@@ -126,14 +141,8 @@ public class MathildeRecruitmentTest {
 				}
 				nbTreesTested++;
 			}
-			System.out.println("Prediction of number of recruits successfully tested on " + nbTreesTested + " trees.");
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 		}
+		System.out.println("Prediction of number of recruits successfully tested on " + nbTreesTested + " trees.");
 	}
 
 
@@ -188,6 +197,40 @@ public class MathildeRecruitmentTest {
 		System.out.println("Prediction of stochastic recruit diameter successfully tested.");
 	}
 
+	/*
+	 * This test makes sure that the copula predictions are on average equivalent to those of the margins.
+	 */
+	@Test
+	public void recruitDiameterCopulaTest() throws Exception {
+		if (STAND_MAP == null) {
+			STAND_MAP = getStandMap();
+		}
+
+		MathildeRecruitmentStandImpl stand = STAND_MAP.get("19");
+		MathildeRecruitmentNumberPredictor pred = new MathildeRecruitmentNumberPredictor(false, true);	// only residual variability enabled
+
+		int nbRealizations = 100000;
+		double realizationFactor = 1d/nbRealizations;
+		Matrix averageFrequencies = new Matrix(4,15);
+		for (int k = 0; k < nbRealizations; k++) {
+			Matrix predictedFrequencies = pred.predictNumberOfRecruits(stand);
+			for (int i = 0; i < predictedFrequencies.m_iRows; i++) {
+				averageFrequencies.m_afData[i][(int) predictedFrequencies.m_afData[i][0]] += realizationFactor;  
+			}
+		}
+		for (MathildeTreeImpl tree : stand.treeList) {
+			int rowIndex = tree.getMathildeTreeSpecies().ordinal();
+			Matrix averageFrequenciesForThisSpecies = averageFrequencies.getSubMatrix(rowIndex, rowIndex, 0, averageFrequencies.m_iCols - 1);
+			double[] predictions = tree.getPredictions();
+			Assert.assertEquals("Testing the number of predicted values", averageFrequenciesForThisSpecies.m_iCols, predictions.length);
+			for (int j = 0; j < averageFrequenciesForThisSpecies.m_iCols; j++) {
+				double expected = predictions[j];
+				double actual = averageFrequenciesForThisSpecies.m_afData[0][j];
+				Assert.assertEquals(expected, actual, 5E-3);
+			}
+		}
+		System.out.println("Prediction of copula successfully tested on 4 trees.");
+	}
 
 
 }

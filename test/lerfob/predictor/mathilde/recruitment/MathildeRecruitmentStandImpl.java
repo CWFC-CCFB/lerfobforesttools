@@ -1,6 +1,8 @@
 package lerfob.predictor.mathilde.recruitment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
@@ -12,10 +14,12 @@ class MathildeRecruitmentStandImpl implements MathildeRecruitmentStand {
 	private final String idp;
 	private final double basalAreaM2Ha;
 	private Map<MathildeTreeSpecies, Double> basalAreaSpeciesMap = new HashMap<MathildeTreeSpecies, Double>();
+	protected List<MathildeTreeImpl> treeList;
 	
 	MathildeRecruitmentStandImpl(String idp, double basalAreaM2Ha) {
 		this.idp = idp;
 		this.basalAreaM2Ha = basalAreaM2Ha;
+		treeList = new ArrayList<MathildeTreeImpl>();
 	}
 	
 	@Override
@@ -41,9 +45,11 @@ class MathildeRecruitmentStandImpl implements MathildeRecruitmentStand {
 		return basalAreaSpeciesMap.get(species);
 	}
 	
-	protected void setSpecies(MathildeTreeSpecies species, double basalAreaForThisSpecies) {
+	protected void setBasalAreaM2HaOfThisSpecies(MathildeTreeSpecies species, double basalAreaForThisSpecies) {
 		basalAreaSpeciesMap.put(species, basalAreaForThisSpecies);
 	}
 
-	
+	protected List<MathildeTreeImpl> getTrees() {
+		return treeList;
+	}
 }
