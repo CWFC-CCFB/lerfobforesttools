@@ -131,7 +131,7 @@ public class MathildeRecruitmentTest {
 		int nbTreesTested = 0;
 		for (MathildeRecruitmentStandImpl s : STAND_MAP.values()) {
 			for (MathildeTreeImpl tree : s.treeList) {
-				Matrix predictions = pred.getMarginalPredictionsForThisStandAndSpecies(tree.getStand(), tree.getMathildeTreeSpecies(), true);
+				Matrix predictions = pred.getMarginalPredictionsForThisStandAndSpecies(tree.getStand(), tree.getMathildeTreeSpecies(), 15, true);
 				double[] expectedValues = tree.getPredictions();
 				Assert.assertEquals("Testing the number of predicted values", predictions.m_iCols, expectedValues.length);
 				for (int j = 0; j < predictions.m_iCols; j++) {
@@ -145,6 +145,30 @@ public class MathildeRecruitmentTest {
 		System.out.println("Prediction of number of recruits successfully tested on " + nbTreesTested + " trees.");
 	}
 
+
+	@Test
+	public void meanNumbersOfRecruitsTest() throws Exception {
+		if (STAND_MAP == null) {
+			STAND_MAP = getStandMap();
+		}
+
+		MathildeRecruitmentNumberPredictor pred = new MathildeRecruitmentNumberPredictor(false);
+
+		int nbTreesTested = 0;
+		for (MathildeRecruitmentStandImpl s : STAND_MAP.values()) {
+			for (MathildeTreeImpl tree : s.treeList) {
+				Matrix predictions = pred.getMarginalPredictionsForThisStandAndSpecies(tree.getStand(), tree.getMathildeTreeSpecies(), 50, true);
+				double actualMean = 0;
+				for (int j = 0; j < predictions.m_iCols; j++) {
+					actualMean += j * predictions.m_afData[0][j];
+				}
+				double expectedMean = pred.predictNumberOfRecruits(tree.getStand()).m_afData[tree.getMathildeTreeSpecies().ordinal()][0];
+				Assert.assertEquals(expectedMean, actualMean, 1E-5);
+				nbTreesTested++;
+			}
+		}
+		System.out.println("Prediction of number of recruits successfully tested on " + nbTreesTested + " trees.");
+	}
 
 	@Test
 	public void recruitDiameterTest() throws Exception {

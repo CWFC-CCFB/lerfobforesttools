@@ -60,8 +60,6 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 
 	public static final double REFERENCE_AREA_HA = Math.PI * 6d * 6d / 10000;
 	
-	private static final double LogTheta = -0.419641;
-	private static final double ThetaSE = 0.173895;
 	
 	private final Matrix oXVectorZero;
 	
@@ -87,21 +85,24 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
 			String betaFilename = path + "0_zinb_beta.csv";
+			String thetaFilename = path + "0_zinb_theta.csv";
 			String omegaFilename = path + "0_zinb_omega.csv";
 			String copulaFilename = path + "0_zinb_copula.csv";
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
+			
+			Matrix thetaMat = ParameterLoader.loadVectorFromFile(thetaFilename).get();
 			Matrix theta = new Matrix(1,1);
-			theta.m_afData[0][0] = LogTheta;
+			theta.m_afData[0][0] = thetaMat.m_afData[0][0];
+			
 			Matrix thetaVar = new Matrix(1,1);
-			thetaVar.m_afData[0][0] = ThetaSE * ThetaSE;
+			thetaVar.m_afData[0][0] = thetaMat.m_afData[1][0] * thetaMat.m_afData[1][0];
 			Matrix beta = betaMap.get().matrixStack(theta, true);
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
 			omega = omega.matrixDiagBlock(thetaVar);
 			setParameterEstimates(new GaussianEstimate(beta, omega));
 
 			Matrix copula = ParameterLoader.loadMatrixFromFile(copulaFilename);
-//			Matrix copula = new Matrix(4,1,1,0).matrixDiagonal();
 			Matrix meanCopula = new Matrix(copula.m_iRows, 1);
 			this.copula = new GaussianEstimate(meanCopula, copula);
 
@@ -119,7 +120,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	public synchronized Matrix predictNumberOfRecruits(MathildeRecruitmentStand stand) {
 		Matrix deterministicPred = null;
 		for (MathildeTreeSpecies species : MathildeTreeSpecies.values()) {
-			Matrix mat = getMarginalPredictionsForThisStandAndSpecies(stand, species, isResidualVariabilityEnabled);
+			Matrix mat = getMarginalPredictionsForThisStandAndSpecies(stand, species, 15, isResidualVariabilityEnabled);
 			if (deterministicPred == null) {
 				deterministicPred = mat;
 			} else {
@@ -158,8 +159,16 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		}
 		return i;
 	}
-
-	protected Matrix getMarginalPredictionsForThisStandAndSpecies(MathildeRecruitmentStand stand, MathildeTreeSpecies species, boolean isResidualVariabilityEnabled) {
+	/**
+	 * This method returns the marginal prediction for a single species. If the isResidualVariabilityEnabled
+	 * option is set to false then the resolution parameter is useless.
+	 * @param stand a MathildeRecruitmentStand instance
+	 * @param species a MathildeTreeSpecies instance
+	 * @param resolution the maximum number of recruits
+	 * @param isResidualVariabilityEnabled true to enabled the stochastic variability.  
+	 * @return a row vector (the column index is the number of recruits 
+	 */
+	protected Matrix getMarginalPredictionsForThisStandAndSpecies(MathildeRecruitmentStand stand, MathildeTreeSpecies species, int resolution, boolean isResidualVariabilityEnabled) {
 		Matrix betaForThisStand = getParametersForThisRealization(stand);
 		Matrix betaCount = betaForThisStand.getSubMatrix(0, 11, 0, 0);
 		double theta = Math.exp(betaForThisStand.m_afData[betaForThisStand.m_iRows - 1][0]);
@@ -171,12 +180,11 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 				
 		Matrix output;
 		if (isResidualVariabilityEnabled) {
-			output = new Matrix(1,15);
+			output = new Matrix(1,resolution);
 			double p;
 			
 			for (int j = 0; j < output.m_iCols; j++) {
 				if (j==0) {
-//					p = zeroProb + (1 - zeroProb) * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion);
 					p = (1 - nonZeroProb);
 				} else {
 					p =  nonZeroProb * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion) / truncationFactor;
@@ -185,7 +193,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 			}
 		} else {
 			output = new Matrix(1,1);
-			double overallMean = (1 - nonZeroProb) * negBinMean;
+			double overallMean = nonZeroProb * negBinMean / truncationFactor;
 			output.m_afData[0][0] = overallMean;
 		}
 		return output;
