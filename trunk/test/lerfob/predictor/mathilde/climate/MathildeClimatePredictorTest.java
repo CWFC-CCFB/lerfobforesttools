@@ -21,32 +21,50 @@ public class MathildeClimatePredictorTest {
 	static Map<String, Double> meanLatitude;
 	
 	protected static void readBlups() throws Exception {
-		blupMean = new HashMap<String, Double>();
-		blupStdErr = new HashMap<String, Double>();
-		String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "dataBaseClimateBlups.csv";
-		CSVReader reader = new CSVReader(filename);
-		Object[] record;
-		while ((record = reader.nextRecord()) != null) {
-			String experiment = record[0].toString();
-			double mean = Double.parseDouble(record[1].toString());
-			double variance = Double.parseDouble(record[2].toString());
-			blupMean.put(experiment, mean);
-			blupStdErr.put(experiment, variance);
+		CSVReader reader = null;
+		try {
+			blupMean = new HashMap<String, Double>();
+			blupStdErr = new HashMap<String, Double>();
+			String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "dataBaseClimateBlups.csv";
+			reader = new CSVReader(filename);
+			Object[] record;
+			while ((record = reader.nextRecord()) != null) {
+				String experiment = record[0].toString();
+				double mean = Double.parseDouble(record[1].toString());
+				double variance = Double.parseDouble(record[2].toString());
+				blupMean.put(experiment, mean);
+				blupStdErr.put(experiment, variance);
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 	
 	protected static void readMeanPlotCoordinates() throws IOException {
-		meanLongitude = new HashMap<String, Double>();
-		meanLatitude = new HashMap<String, Double>();
-		String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "meanPlotCoordinates.csv";
-		CSVReader reader = new CSVReader(filename);
-		Object[] record;
-		while ((record = reader.nextRecord()) != null) {
-			String department = record[0].toString();
-			double longitude = Double.parseDouble(record[1].toString());
-			double latitude = Double.parseDouble(record[2].toString());
-			meanLongitude.put(department, longitude);
-			meanLatitude.put(department, latitude);
+		CSVReader reader = null;
+		try {
+			meanLongitude = new HashMap<String, Double>();
+			meanLatitude = new HashMap<String, Double>();
+			String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "meanPlotCoordinates.csv";
+			reader = new CSVReader(filename);
+			Object[] record;
+			while ((record = reader.nextRecord()) != null) {
+				String department = record[0].toString();
+				double longitude = Double.parseDouble(record[1].toString());
+				double latitude = Double.parseDouble(record[2].toString());
+				meanLongitude.put(department, longitude);
+				meanLatitude.put(department, latitude);
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 	}
 	

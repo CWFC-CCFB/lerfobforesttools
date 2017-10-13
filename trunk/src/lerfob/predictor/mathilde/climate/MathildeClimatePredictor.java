@@ -1,7 +1,7 @@
 /*
  * This file is part of the lerfob-forestools library.
  *
- * Copyright (C) 2010-2016 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ * Copyright (C) 2010-2017 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,12 @@ import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
+/**
+ * The MathildeClimatePredictor class is a model based on the safran grid values in the LERFoB network of permanent plots. 
+ * The model has plot random effects that are spatially correlated. If the plot coordinates are not available, then the
+ * GeographicalCoordinatesGenerator class provides the mean coordinates for the department.
+ * @author Mathieu Fortin - October 2017
+ */
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends REpiceaPredictor {
 	
