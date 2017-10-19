@@ -21,7 +21,8 @@ package lerfob.carbonbalancetool.biomassparameters;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import java.awt.event.ItemListener;
 import java.lang.reflect.Method;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -90,7 +92,8 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		AboveGround("Aboveground biomass", "Biomasse a\u00E9rienne"),
 		BelowGround("Belowgound biomass", "Biomasse souterraine"),
 		BiomassConversion("HWP biomass", "Biomasses des HWPs"),
-		BiomassParametersFileExtension("biomass parameters file (*.bpf)", "fichier de param\u00E8tres de biomasse (*.bpf)");
+		BiomassParametersFileExtension("biomass parameters file (*.bpf)", "fichier de param\u00E8tres de biomasse (*.bpf)"),
+		AverageBasicWoodDensityForTheSpecies("Average wood density for each species (Tier 1)", "Densit\u00E9 moyenne pour chaque esp\u00E8ce (Tier 1)");
 
 		
 		MessageID(String englishText, String frenchText) {
@@ -115,15 +118,15 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 	private final JMenuItem close;
 	private final JMenuItem help;
 	
-	
+	private final JLabel woodDensityLabel;
 	protected final JFormattedNumericField branchExpansionFactorConiferous;
 	protected final JFormattedNumericField branchExpansionFactorBroadleaved;
 	
 	protected final JFormattedNumericField rootExpansionFactorConiferous;
 	protected final JFormattedNumericField rootExpansionFactorBroadleaved;
 
-	protected final JFormattedNumericField basicDensityFactorConiferous;
-	protected final JFormattedNumericField basicDensityFactorBroadleaved;
+//	protected final JFormattedNumericField basicDensityFactorConiferous;
+//	protected final JFormattedNumericField basicDensityFactorBroadleaved;
 	protected final JFormattedNumericField carbonContentConiferous;
 	protected final JFormattedNumericField carbonContentBroadleaved;
 
@@ -157,12 +160,13 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		rootExpansionFactorBroadleaved = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 		rootFromModelChkBox = new JCheckBox();
 		
-		basicDensityFactorConiferous = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
-		basicDensityFactorBroadleaved = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
+//		basicDensityFactorConiferous = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
+//		basicDensityFactorBroadleaved = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 		carbonContentConiferous = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 		carbonContentBroadleaved = NumberFormatFieldFactory.createNumberFormatField(10, NumberFormatFieldFactory.Type.Double, Range.Positive, false);
 
 		basicDensityFromModelChkBox = new JCheckBox();
+		woodDensityLabel = new JLabel(MessageID.AverageBasicWoodDensityForTheSpecies.toString());
 		carbonContentFromModelChkBox = new JCheckBox();
 		
 	
@@ -210,32 +214,51 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		about.add(help);
 
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(5,4,5,5));
+//		mainPanel.setLayout(new GridLayout(5,4,5,5));
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		mainPanel.setLayout(gridBag);
 		
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.Blank), FlowLayout.LEFT));
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.ProvidedByTheModel), FlowLayout.CENTER));
-		mainPanel.add(makePanel(UIControlManager.getLabel(SpeciesType.ConiferousSpecies), FlowLayout.CENTER));
-		mainPanel.add(makePanel(UIControlManager.getLabel(SpeciesType.BroadleavedSpecies), FlowLayout.CENTER));
+        c.fill = GridBagConstraints.BOTH;
 
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.BranchExpansionFactor), FlowLayout.LEFT));
-		mainPanel.add(makePanel(branchFromModelChkBox, FlowLayout.CENTER));
-		mainPanel.add(makePanel(branchExpansionFactorConiferous, FlowLayout.CENTER));
-		mainPanel.add(makePanel(branchExpansionFactorBroadleaved, FlowLayout.CENTER));
-		
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.RootExpansionFactor), FlowLayout.LEFT));
-		mainPanel.add(makePanel(rootFromModelChkBox, FlowLayout.CENTER));
-		mainPanel.add(makePanel(rootExpansionFactorConiferous, FlowLayout.CENTER));
-		mainPanel.add(makePanel(rootExpansionFactorBroadleaved, FlowLayout.CENTER));
+        c.weightx = 1.0;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.Blank), FlowLayout.LEFT), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.ProvidedByTheModel), FlowLayout.CENTER), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(SpeciesType.ConiferousSpecies), FlowLayout.CENTER), gridBag, c));
+        c.gridwidth = GridBagConstraints.REMAINDER;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(SpeciesType.BroadleavedSpecies), FlowLayout.CENTER), gridBag, c));
 
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.BasicDensityFactor), FlowLayout.LEFT));
-		mainPanel.add(makePanel(basicDensityFromModelChkBox, FlowLayout.CENTER));
-		mainPanel.add(makePanel(basicDensityFactorConiferous, FlowLayout.CENTER));
-		mainPanel.add(makePanel(basicDensityFactorBroadleaved, FlowLayout.CENTER));
+        c.weightx = 1.0;
+        c.gridwidth = GridBagConstraints.BOTH;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.BranchExpansionFactor), FlowLayout.LEFT), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(branchFromModelChkBox, FlowLayout.CENTER), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(branchExpansionFactorConiferous, FlowLayout.CENTER), gridBag, c));
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		mainPanel.add(setComponentInGridBag(makePanel(branchExpansionFactorBroadleaved, FlowLayout.CENTER), gridBag, c));
 
-		mainPanel.add(makePanel(UIControlManager.getLabel(MessageID.CarbonContent), FlowLayout.LEFT));
-		mainPanel.add(makePanel(carbonContentFromModelChkBox, FlowLayout.CENTER));
-		mainPanel.add(makePanel(carbonContentConiferous, FlowLayout.CENTER));
-		mainPanel.add(makePanel(carbonContentBroadleaved, FlowLayout.CENTER));
+        c.weightx = 1.0;
+        c.gridwidth = GridBagConstraints.BOTH;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.RootExpansionFactor), FlowLayout.LEFT), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(rootFromModelChkBox, FlowLayout.CENTER), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(rootExpansionFactorConiferous, FlowLayout.CENTER), gridBag, c));
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		mainPanel.add(setComponentInGridBag(makePanel(rootExpansionFactorBroadleaved, FlowLayout.CENTER), gridBag, c));
+
+        c.weightx = 1.0;
+        c.gridwidth = GridBagConstraints.BOTH;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.BasicDensityFactor), FlowLayout.LEFT), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(basicDensityFromModelChkBox, FlowLayout.CENTER), gridBag, c));
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		mainPanel.add(setComponentInGridBag(woodDensityLabel, gridBag, c));
+////		mainPanel.add(makePanel(basicDensityFactorBroadleaved, FlowLayout.CENTER));
+
+        c.weightx = 1.0;
+        c.gridwidth = GridBagConstraints.BOTH;
+		mainPanel.add(setComponentInGridBag(makePanel(UIControlManager.getLabel(MessageID.CarbonContent), FlowLayout.LEFT), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(carbonContentFromModelChkBox, FlowLayout.CENTER), gridBag, c));
+		mainPanel.add(setComponentInGridBag(makePanel(carbonContentConiferous, FlowLayout.CENTER), gridBag, c));
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		mainPanel.add(setComponentInGridBag(makePanel(carbonContentBroadleaved, FlowLayout.CENTER), gridBag, c));
 		
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		
@@ -243,6 +266,14 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		pack();
 		setMinimumSize(getSize());
 	}
+
+	private Component setComponentInGridBag(Component panel, GridBagLayout gridBag, GridBagConstraints c) {
+        gridBag.setConstraints(panel, c);
+		return panel;
+	}
+
+
+
 
 	protected JPanel makePanel(Component comp, int orientation) {
 		JPanel panel = new JPanel(new FlowLayout(orientation));
@@ -257,8 +288,8 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		branchExpansionFactorBroadleaved.addNumberFieldListener(this);
 		rootExpansionFactorConiferous.addNumberFieldListener(this);
 		rootExpansionFactorBroadleaved.addNumberFieldListener(this);
-		basicDensityFactorConiferous.addNumberFieldListener(this);
-		basicDensityFactorBroadleaved.addNumberFieldListener(this);
+//		basicDensityFactorConiferous.addNumberFieldListener(this);
+//		basicDensityFactorBroadleaved.addNumberFieldListener(this);
 		carbonContentConiferous.addNumberFieldListener(this);
 		carbonContentBroadleaved.addNumberFieldListener(this);
 		reset.addActionListener(this);
@@ -278,8 +309,8 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		branchExpansionFactorBroadleaved.removeNumberFieldListener(this);
 		rootExpansionFactorConiferous.removeNumberFieldListener(this);
 		rootExpansionFactorBroadleaved.removeNumberFieldListener(this);
-		basicDensityFactorConiferous.removeNumberFieldListener(this);
-		basicDensityFactorBroadleaved.removeNumberFieldListener(this);
+//		basicDensityFactorConiferous.removeNumberFieldListener(this);
+//		basicDensityFactorBroadleaved.removeNumberFieldListener(this);
 		carbonContentConiferous.removeNumberFieldListener(this);
 		carbonContentBroadleaved.removeNumberFieldListener(this);
 		reset.removeActionListener(this);
@@ -342,12 +373,13 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 		rootExpansionFactorConiferous.setEnabled(!getCaller().rootExpansionFactorFromModel && getCaller().permissions.isEnablingGranted());
 		rootExpansionFactorBroadleaved.setEnabled(!getCaller().rootExpansionFactorFromModel && getCaller().permissions.isEnablingGranted());
 
-		basicDensityFactorConiferous.setText(getCaller().basicWoodDensityFactors.get(SpeciesType.ConiferousSpecies).toString());
-		basicDensityFactorBroadleaved.setText(getCaller().basicWoodDensityFactors.get(SpeciesType.BroadleavedSpecies).toString());
+//		basicDensityFactorConiferous.setText(getCaller().basicWoodDensityFactors.get(SpeciesType.ConiferousSpecies).toString());
+//		basicDensityFactorBroadleaved.setText(getCaller().basicWoodDensityFactors.get(SpeciesType.BroadleavedSpecies).toString());
 		basicDensityFromModelChkBox.setSelected(getCaller().basicWoodDensityFromModel);
 		basicDensityFromModelChkBox.setEnabled(getCaller().basicWoodDensityFromModelEnabled && getCaller().permissions.isEnablingGranted());
-		basicDensityFactorConiferous.setEnabled(!getCaller().basicWoodDensityFromModel && getCaller().permissions.isEnablingGranted());
-		basicDensityFactorBroadleaved.setEnabled(!getCaller().basicWoodDensityFromModel && getCaller().permissions.isEnablingGranted());
+		woodDensityLabel.setEnabled(!getCaller().basicWoodDensityFromModel && getCaller().permissions.isEnablingGranted());
+//		basicDensityFactorConiferous.setEnabled(!getCaller().basicWoodDensityFromModel && getCaller().permissions.isEnablingGranted());
+//		basicDensityFactorBroadleaved.setEnabled(!getCaller().basicWoodDensityFromModel && getCaller().permissions.isEnablingGranted());
 		
 		carbonContentConiferous.setText(getCaller().carbonContentFactors.get(SpeciesType.ConiferousSpecies).toString());
 		carbonContentBroadleaved.setText(getCaller().carbonContentFactors.get(SpeciesType.BroadleavedSpecies).toString());
@@ -369,11 +401,12 @@ public class BiomassParametersDialog extends REpiceaDialog implements IOUserInte
 	public void numberChanged(NumberFieldEvent e) {
 		if (e.getSource() instanceof JFormattedNumericField) {
 			JFormattedNumericField source = (JFormattedNumericField) e.getSource();
-			if (e.getSource().equals(basicDensityFactorConiferous)) {
-				getCaller().basicWoodDensityFactors.put(SpeciesType.ConiferousSpecies, Double.parseDouble(source.getText()));
-			} else if (e.getSource().equals(basicDensityFactorBroadleaved)) {
-				getCaller().basicWoodDensityFactors.put(SpeciesType.BroadleavedSpecies, Double.parseDouble(source.getText()));
-			} else if (e.getSource().equals(carbonContentConiferous)) {
+//			if (e.getSource().equals(basicDensityFactorConiferous)) {
+//				getCaller().basicWoodDensityFactors.put(SpeciesType.ConiferousSpecies, Double.parseDouble(source.getText()));
+//			} else if (e.getSource().equals(basicDensityFactorBroadleaved)) {
+//				getCaller().basicWoodDensityFactors.put(SpeciesType.BroadleavedSpecies, Double.parseDouble(source.getText()));
+//			} else 
+			if (e.getSource().equals(carbonContentConiferous)) {
 				getCaller().carbonContentFactors.put(SpeciesType.ConiferousSpecies, Double.parseDouble(source.getText()));
 			} else if (e.getSource().equals(carbonContentBroadleaved)) {
 				getCaller().carbonContentFactors.put(SpeciesType.BroadleavedSpecies, Double.parseDouble(source.getText()));
