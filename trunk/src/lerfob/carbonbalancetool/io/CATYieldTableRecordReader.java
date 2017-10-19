@@ -137,8 +137,7 @@ public class CATYieldTableRecordReader extends REpiceaRecordReader {
 				stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFileSpecifications()[0],
 						dateYr,
 						false,
-						catSpecies.name(),
-						catSpecies.getSpeciesType());
+						catSpecies.name());
 				standList.add(stand);
 				stand.addTree(new CATYieldTableCompatibleTree(standingVolumeM3 + harvestedVolumeM3, StatusClass.alive)) ;
 			}
@@ -146,8 +145,7 @@ public class CATYieldTableRecordReader extends REpiceaRecordReader {
 		stand = new CATYieldTableCompatibleStand(getImportFieldManager().getFileSpecifications()[0],
 				dateYr,
 				harvestedVolumeM3 > 0,
-				catSpecies.name(),
-				catSpecies.getSpeciesType());
+				catSpecies.name());
 		standList.add(stand);
 		CATYieldTableCompatibleTree tree;
 		if (standingVolumeM3 > 0) {

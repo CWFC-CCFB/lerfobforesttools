@@ -297,7 +297,8 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (basicWoodDensityFromModel) {
 			value = ((CATBasicWoodDensityProvider) tree).getBasicWoodDensity();
 		} else {
-			value = basicWoodDensityFactors.get(tree.getSpeciesType());
+//			value = basicWoodDensityFactors.get(tree.getSpeciesType());
+			value  = tree.getCATSpecies().getBasicWoodDensity();
 		}
 		if (subject != null) {
 			return value * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BasicDensity, subject, getSubjectId(VariabilitySource.BasicDensity, tree));
@@ -316,7 +317,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (carbonContentFromModel) {
 			value = ((CATCarbonContentRatioProvider) tree).getCarbonContentRatio();
 		} else {
-			value = carbonContentFactors.get(tree.getSpeciesType());
+			value = carbonContentFactors.get(tree.getCATSpecies().getSpeciesType());
 		}
 		if (subject != null) {
 			return value * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.CarbonContent, subject, getSubjectId(VariabilitySource.CarbonContent, tree));
@@ -366,7 +367,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (rootExpansionFactorFromModel && tree instanceof CATBelowGroundVolumeProvider) {
 			value = ((CATBelowGroundVolumeProvider) tree).getBelowGroundVolumeM3() * tree.getNumber();
 		} else {
-			value = getAboveGroundVolumeM3(tree, subject) * (rootExpansionFactors.get(tree.getSpeciesType()) - 1);		// minus 1 is required because we want to get only the belowground part
+			value = getAboveGroundVolumeM3(tree, subject) * (rootExpansionFactors.get(tree.getCATSpecies().getSpeciesType()) - 1);		// minus 1 is required because we want to get only the belowground part
 		}
 		if (subject != null) {
 			return value * CATSensitivityAnalysisSettings.getInstance().getModifier(VariabilitySource.BiomassExpansionFactor, subject, getSubjectId(VariabilitySource.BiomassExpansionFactor, tree));
@@ -419,7 +420,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (branchExpansionFactorFromModel) {
 			value = ((CATAboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber();
 		} else {
-			value = getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getSpeciesType());
+			value = getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getCATSpecies().getSpeciesType());
 		}
 		if (subject != null) {
 			String subjectId = getSubjectId(VariabilitySource.BiomassExpansionFactor, tree);
@@ -435,19 +436,19 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 			if (branchExpansionFactorFromModel || rootExpansionFactorFromModel) {
 				return tree.getSpeciesName();
 			} else {
-				return tree.getSpeciesType().name();
+				return tree.getCATSpecies().getSpeciesType().name();
 			}
 		case BasicDensity:
 			if (basicWoodDensityFromModel) {
 				return tree.getSpeciesName();
 			} else {
-				return tree.getSpeciesType().name();
+				return tree.getCATSpecies().getSpeciesType().name();
 			}
 		case CarbonContent:
 			if (carbonContentFromModel) {
 				return tree.getSpeciesName();
 			} else {
-				return tree.getSpeciesType().name();
+				return tree.getCATSpecies().getSpeciesType().name();
 			}
 		default:
 			return null;

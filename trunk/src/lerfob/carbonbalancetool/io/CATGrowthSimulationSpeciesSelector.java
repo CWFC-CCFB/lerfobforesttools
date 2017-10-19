@@ -87,7 +87,7 @@ public class CATGrowthSimulationSpeciesSelector extends REpiceaMatchSelector<CAT
 	}
 
 	protected CATGrowthSimulationSpeciesSelector(Object[] toBeMatched) {
-		super(toBeMatched, CATSpecies.values(), CATSpecies.Abies, ColumnName.values());
+		super(toBeMatched, CATSpecies.values(), CATSpecies.ABIES, ColumnName.values());
 	}
 
 	@Override
