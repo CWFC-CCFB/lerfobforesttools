@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import lerfob.app.LERFOBJARSVNAppVersion;
-import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATSettings;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
@@ -40,7 +40,6 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.stats.estimates.MonteCarloEstimate;
@@ -59,7 +58,7 @@ import repicea.util.REpiceaTranslator.Language;
  */
 public class PythonAccessPoint extends CarbonAccountingTool {
 
-	protected AverageBasicDensity speciesForSimulation; 
+	protected CATSpecies speciesForSimulation; 
 	protected double areaHa = 1d;
 	
 	public PythonAccessPoint() {
@@ -74,13 +73,13 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @throws IOException 
 	 */
 	public void setSpecies(String species) throws Exception {
-		AverageBasicDensity speciesCode;
+		CATSpecies speciesCode;
 		if (species.toLowerCase().trim().equals("beech")) {
-			speciesCode = AverageBasicDensity.EuropeanBeech;
+			speciesCode = CATSpecies.FAGUS_SYLVATICA;
 		} else if (species.toLowerCase().trim().equals("pine")) {
-			speciesCode = AverageBasicDensity.MaritimePine;
+			speciesCode = CATSpecies.PINUS_PINASTER;
 		} else if (species.toLowerCase().trim().equals("douglas")) {
-			speciesCode = AverageBasicDensity.DouglasFir;
+			speciesCode = CATSpecies.PSEUDOTSUGA_MENZIESII;
 		} else {
 			throw new InvalidParameterException("Only beech and pine are accepted as species!");
 		}
@@ -107,24 +106,22 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return defaultTreeLoggerDescriptions;
 	}
 
-	private void setSpeciesAndSettings(AverageBasicDensity speciesCode) throws Exception {
+	private void setSpeciesAndSettings(CATSpecies speciesCode) throws Exception {
 		if (!speciesCode.equals(speciesForSimulation)) {
 			speciesForSimulation = speciesCode;
 			String filename;
-			if (speciesForSimulation.equals(AverageBasicDensity.MaritimePine)) {
+			if (speciesForSimulation.equals(CATSpecies.PINUS_PINASTER)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
-			} else if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
-				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170622_P_EOL.prl";
+			} else if (speciesForSimulation.equals(CATSpecies.PSEUDOTSUGA_MENZIESII)) {
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170703_P_EOL.prl";
 			} else {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
 			System.out.println("Loading settings : " + filename);
 			setProductionManager(filename);
-//			getCarbonToolSettings().getCustomizableProductionProcessorManager().load(filename);
-//			setCurrentProductionManager(ProductionManagerName.customized);
 		}
 		String biomassFilename;
-		if (speciesForSimulation.equals(AverageBasicDensity.DouglasFir)) {
+		if (speciesForSimulation.equals(CATSpecies.PSEUDOTSUGA_MENZIESII)) {
 			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersDouglasFir.bpf";
 		} else {
 			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
@@ -154,16 +151,15 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		List<CATCompatibleStand> standList = new ArrayList<CATCompatibleStand>();
 		PythonCarbonToolCompatibleStand stand;
 		PythonCarbonToolCompatibleTree tree;
-		SpeciesType type;
-		if (speciesForSimulation == AverageBasicDensity.EuropeanBeech) {
-			type = SpeciesType.BroadleavedSpecies;
-		} else  if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
-			type = SpeciesType.ConiferousSpecies;
-		} else  if (speciesForSimulation == AverageBasicDensity.DouglasFir) {
-			type = SpeciesType.ConiferousSpecies;
-		} else {
-			throw new InvalidParameterException("The species has not been properly set!");
-		}
+//		if (speciesForSimulation == CATSpecies.FAGUS_SYLVATICA) {
+//			type = SpeciesType.BroadleavedSpecies;
+//		} else  if (speciesForSimulation == CATSpecies.PINUS_PINASTER) {
+//			type = SpeciesType.ConiferousSpecies;
+//		} else  if (speciesForSimulation == CATSpecies.PSEUDOTSUGA_MENZIESII) {
+//			type = SpeciesType.ConiferousSpecies;
+//		} else {
+//			throw new InvalidParameterException("The species has not been properly set!");
+//		}
 		
 		List<Integer> years = new ArrayList<Integer>();
 		years.addAll(inputMap.keySet());
@@ -186,10 +182,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				if (isProcessable) {
 					double nbTrees = nbTreesHa * stand.getAreaHa();
 					
-					if (speciesForSimulation == AverageBasicDensity.MaritimePine) {
-						tree = new PythonMaritimePineTree(type, 
-								speciesForSimulation,
-								StatusClass.cut,
+					if (speciesForSimulation == CATSpecies.PINUS_PINASTER) {
+						tree = new PythonMaritimePineTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
@@ -197,10 +191,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								mqd,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
-					} else if (speciesForSimulation == AverageBasicDensity.EuropeanBeech) {
-						tree = new PythonEuropeanBeechTree(type, 
-								speciesForSimulation,
-								StatusClass.cut,
+					} else if (speciesForSimulation == CATSpecies.FAGUS_SYLVATICA) {
+						tree = new PythonEuropeanBeechTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
@@ -209,9 +201,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 					} else {
-						tree = new PythonDouglasFirTree(type, 
-								speciesForSimulation,
-								StatusClass.cut,
+						tree = new PythonDouglasFirTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),

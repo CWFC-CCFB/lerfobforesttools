@@ -27,7 +27,7 @@ import java.util.Map;
 import lerfob.carbonbalancetool.CATCompatibleEvenAgedStand;
 import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATCompatibleTree;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 /**
@@ -39,15 +39,21 @@ class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 	private final String standId;
 	private final int dateYr;
 	private final boolean isInterventionResult;
-	protected final String speciesName;
-	protected final SpeciesType speciesType;
+//	protected final String speciesName;
+	protected final CATSpecies species;
 	protected final Map<StatusClass, Collection<CATCompatibleTree>> statusClassMap;
 
 	CATYieldTableCompatibleStand(String standId, 
 			int dateYr, 
 			boolean isInterventionResult, 
-			String speciesName,
-			SpeciesType speciesType) {
+			String speciesName) {
+		this(standId, dateYr, isInterventionResult, CATSpecies.getCATSpeciesFromThisString(speciesName));
+	}
+
+	CATYieldTableCompatibleStand(String standId, 
+			int dateYr, 
+			boolean isInterventionResult, 
+			CATSpecies species) {
 		this.standId = standId;
 		this.dateYr = dateYr;
 		this.isInterventionResult = isInterventionResult;
@@ -55,9 +61,10 @@ class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 		for (StatusClass statusClass : StatusClass.values()) {
 			statusClassMap.put(statusClass, new ArrayList<CATCompatibleTree>());
 		}
-		this.speciesName = speciesName;
-		this.speciesType = speciesType;
+		this.species = species;
 	}
+
+	
 	
 	@Override
 	public String getStandIdentification() {return standId;}
@@ -80,7 +87,7 @@ class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public CATCompatibleStand getHarvestedStand() {
-		CATYieldTableCompatibleStand harvestedStand = new CATYieldTableCompatibleStand(standId, dateYr, true, speciesName, speciesType);
+		CATYieldTableCompatibleStand harvestedStand = new CATYieldTableCompatibleStand(standId, dateYr, true, species);
 		for (StatusClass statusClass : StatusClass.values()){
 			StatusClass newStatusClass = statusClass;
 			if (newStatusClass == StatusClass.alive) {

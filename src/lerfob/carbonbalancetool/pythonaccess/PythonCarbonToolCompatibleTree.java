@@ -22,6 +22,7 @@ import lerfob.carbonbalancetool.CATAboveGroundVolumeProvider;
 import lerfob.carbonbalancetool.CATBasicWoodDensityProvider;
 import lerfob.carbonbalancetool.CATBelowGroundVolumeProvider;
 import lerfob.carbonbalancetool.CATCompatibleTree;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 
 /**
  * This internal class is actually a wrapper for the trees that are sent to the PythonAccessPoint class.
@@ -32,8 +33,9 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 															CATAboveGroundVolumeProvider, 
 															CATBelowGroundVolumeProvider {
 
-	final SpeciesType speciesType; 
-	final AverageBasicDensity species;
+//	final SpeciesType speciesType; 
+//	final AverageBasicDensity species;
+	final CATSpecies species;
 	StatusClass statusClass; 
 	final double number; 
 	final double rootsVolume;
@@ -42,8 +44,7 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 	final double dbhCm;
 	final double dbhCmStandardDeviation;
 
-	PythonCarbonToolCompatibleTree(SpeciesType speciesType, 
-			AverageBasicDensity species, 
+	PythonCarbonToolCompatibleTree(CATSpecies species,
 			StatusClass statusClass, 
 			double number, 
 			double biomassRoots,
@@ -51,13 +52,16 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 			double biomassBranches,
 			double dbhCm,
 			double dbhCmStandardDeviation) {
-		this.speciesType = speciesType;
+//		this.speciesType = speciesType;
 		this.species = species;
 		setStatusClass(statusClass);
 		this.number = number;
-		this.branchesVolume = biomassBranches / species.getBasicDensity();
-		this.rootsVolume = biomassRoots / species.getBasicDensity();
-		this.trunkVolume = biomassTrunk / species.getBasicDensity();
+		this.branchesVolume = biomassBranches / species.getBasicWoodDensity();
+		this.rootsVolume = biomassRoots / species.getBasicWoodDensity();
+		this.trunkVolume = biomassTrunk / species.getBasicWoodDensity();
+//		this.branchesVolume = biomassBranches / getBasicWoodDensity();
+//		this.rootsVolume = biomassRoots / getBasicWoodDensity();
+//		this.trunkVolume = biomassTrunk / getBasicWoodDensity();
 		this.dbhCm = dbhCm;
 		this.dbhCmStandardDeviation = dbhCmStandardDeviation;
 	}
@@ -78,12 +82,12 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
 
-	@Override
-	public SpeciesType getSpeciesType() {return speciesType;}
+//	@Override
+//	public double getBasicWoodDensity() {return species.getBasicDensity();}
 
 	@Override
-	public double getBasicWoodDensity() {return species.getBasicDensity();}
-
+	public CATSpecies getCATSpecies() {return species;}
+	
 	@Override
 	public double getAboveGroundVolumeM3() {return branchesVolume + trunkVolume;}
 

@@ -47,10 +47,11 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 	@Override
 	public String getSpeciesName() {return getCATSpecies().toString();}
 
-	@Override
-	public SpeciesType getSpeciesType() {return getCATSpecies().getSpeciesType();}
+//	@Override
+//	public SpeciesType getSpeciesType() {return getCATSpecies().getSpeciesType();}
 
-	private CATSpecies getCATSpecies() {return (CATSpecies) plot.plotSample.compositeStand.reader.getSelector().getMatch(originalSpeciesName);}
+	@Override
+	public CATSpecies getCATSpecies() {return (CATSpecies) plot.plotSample.compositeStand.reader.getSelector().getMatch(originalSpeciesName);}
 	
 	@Override
 	public double getNumber() {return numberOfTrees;}

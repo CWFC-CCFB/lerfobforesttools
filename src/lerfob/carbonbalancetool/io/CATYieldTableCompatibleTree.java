@@ -19,6 +19,7 @@
 package lerfob.carbonbalancetool.io;
 
 import lerfob.carbonbalancetool.CATCompatibleTree;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 
 /**
  * This class represents the trees in a yield table import in CAT. It is actually a fake class that ensures the 
@@ -41,7 +42,7 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	public double getCommercialVolumeM3() {return volumeM3;}
 
 	@Override
-	public String getSpeciesName() {return stand.speciesName;}
+	public String getSpeciesName() {return stand.species.toString();}
 
 	@Override
 	public double getNumber() {return 1d;}
@@ -54,13 +55,16 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
 
-	@Override
-	public SpeciesType getSpeciesType() {
-		return stand.speciesType;
-	}
+//	@Override
+//	public SpeciesType getSpeciesType() {
+//		return stand.speciesType;
+//	}
 
 	public CATYieldTableCompatibleTree getClone() {
 		return new CATYieldTableCompatibleTree(volumeM3, statusClass);
 	}
+
+	@Override
+	public CATSpecies getCATSpecies() {return stand.species;}
 	
 }

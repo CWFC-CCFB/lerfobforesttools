@@ -18,6 +18,7 @@
  */
 package lerfob.carbonbalancetool;
 
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
@@ -30,11 +31,17 @@ public interface CATCompatibleTree extends LoggableTree, TreeStatusProvider {
 
 
 	
+//	/**
+//	 * This method returns the species type, either coniferous or broadleaved.
+//	 * @return a SpeciesType Enum
+//	 */
+//	public SpeciesType getSpeciesType();
+	
 	/**
-	 * This method returns the species type, either coniferous or broadleaved.
-	 * @return a SpeciesType Enum
+	 * This method returns the species of the tree.
+	 * @return a CATSpecies instance
 	 */
-	public SpeciesType getSpeciesType();
+	public CATSpecies getCATSpecies();
 	
 	
 }

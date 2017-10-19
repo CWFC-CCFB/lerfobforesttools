@@ -18,23 +18,27 @@
  */
 package lerfob.carbonbalancetool.pythonaccess;
 
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBALoggableTree;
 
 class PythonDouglasFirTree extends PythonCarbonToolCompatibleTree implements DouglasFCBALoggableTree {
 
-	PythonDouglasFirTree(SpeciesType speciesType, 
-			AverageBasicDensity species, 
-			StatusClass statusClass, 
+	PythonDouglasFirTree(StatusClass statusClass, 
 			double number,
 			double biomassRoots, 
 			double biomassTrunk, 
 			double biomassBranches, 
 			double dbhCm,
 			double dbhCmStandardDeviation) {
-		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
+		super(CATSpecies.PSEUDOTSUGA_MENZIESII, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
 	}
 
 	@Override
 	public double getDbhCm() {return dbhCm;}
+
+	@Override
+	public double getBasicWoodDensity() {
+		return AverageBasicDensity.DouglasFir.getBasicDensity();
+	}
 
 }

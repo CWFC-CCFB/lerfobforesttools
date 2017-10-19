@@ -22,7 +22,6 @@ import repicea.util.ObjectUtility;
 
 public class CarbonAccountingToolTest {
 
-	
 	@Test
 	public void deserializationTest() {
 		String filename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
@@ -49,7 +48,7 @@ public class CarbonAccountingToolTest {
 			stand = new CarbonToolCompatibleStandImpl(standID, areaHa, i*10);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
-				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus");
+				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
 				((CarbonToolCompatibleStandImpl) stand).addTree(tree);
 			}
 		}
@@ -81,7 +80,7 @@ public class CarbonAccountingToolTest {
 			stand = new CarbonToolCompatibleStandImpl(standID, areaHa, i*10);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
-				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus");
+				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
 				((CarbonToolCompatibleStandImpl) stand).addTree(tree);
 			}
 		}
@@ -126,7 +125,7 @@ public class CarbonAccountingToolTest {
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableReference.xml";
 		CarbonAccountingTool cat = new CarbonAccountingTool();
 		cat.initializeTool(false, null);
-		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.Abies);
+		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.ABIES);
 		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
 		recordReader.initInScriptMode(ifm);
 		recordReader.readAllRecords();

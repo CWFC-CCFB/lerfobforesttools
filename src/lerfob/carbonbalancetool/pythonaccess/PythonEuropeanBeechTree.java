@@ -18,21 +18,20 @@
  */
 package lerfob.carbonbalancetool.pythonaccess;
 
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTree;
 
 class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements EuropeanBeechBasicTree {
 
 	
-	PythonEuropeanBeechTree(SpeciesType speciesType,
-			AverageBasicDensity species,
-			StatusClass statusClass, 
+	PythonEuropeanBeechTree(StatusClass statusClass, 
 			double number, 
 			double biomassRoots,
 			double biomassTrunk, 
 			double biomassBranches,
 			double dbhCm,
 			double dbhCmStandardDeviation) {
-		super(speciesType, species, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
+		super(CATSpecies.FAGUS_SYLVATICA, statusClass, number, biomassRoots, biomassTrunk, biomassBranches, dbhCm, dbhCmStandardDeviation);
 
 	}
 
@@ -41,6 +40,11 @@ class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements 
 
 	@Override
 	public double getDbhCmStandardDeviation() {return dbhCmStandardDeviation;}
+
+	@Override
+	public double getBasicWoodDensity() {
+		return AverageBasicDensity.EuropeanBeech.getBasicDensity();
+	}
 
 
 	

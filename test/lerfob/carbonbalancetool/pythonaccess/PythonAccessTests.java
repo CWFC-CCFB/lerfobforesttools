@@ -203,9 +203,7 @@ public class PythonAccessTests {
 	
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		
-		PythonMaritimePineTree tree = new PythonMaritimePineTree(SpeciesType.ConiferousSpecies, 
-				AverageBasicDensity.MaritimePine,
-				StatusClass.cut,
+		PythonMaritimePineTree tree = new PythonMaritimePineTree(StatusClass.cut,
 				1,
 				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
 				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
@@ -235,9 +233,7 @@ public class PythonAccessTests {
 	
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		
-		PythonEuropeanBeechTree tree = new PythonEuropeanBeechTree(SpeciesType.BroadleavedSpecies, 
-				AverageBasicDensity.EuropeanBeech,
-				StatusClass.cut,
+		PythonEuropeanBeechTree tree = new PythonEuropeanBeechTree(StatusClass.cut,
 				1,
 				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
 				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
