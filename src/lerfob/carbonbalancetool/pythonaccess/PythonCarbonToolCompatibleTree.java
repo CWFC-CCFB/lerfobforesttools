@@ -52,16 +52,12 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 			double biomassBranches,
 			double dbhCm,
 			double dbhCmStandardDeviation) {
-//		this.speciesType = speciesType;
 		this.species = species;
 		setStatusClass(statusClass);
 		this.number = number;
-		this.branchesVolume = biomassBranches / species.getBasicWoodDensity();
-		this.rootsVolume = biomassRoots / species.getBasicWoodDensity();
-		this.trunkVolume = biomassTrunk / species.getBasicWoodDensity();
-//		this.branchesVolume = biomassBranches / getBasicWoodDensity();
-//		this.rootsVolume = biomassRoots / getBasicWoodDensity();
-//		this.trunkVolume = biomassTrunk / getBasicWoodDensity();
+		this.branchesVolume = biomassBranches / getBasicWoodDensity();
+		this.rootsVolume = biomassRoots / getBasicWoodDensity();
+		this.trunkVolume = biomassTrunk / getBasicWoodDensity();
 		this.dbhCm = dbhCm;
 		this.dbhCmStandardDeviation = dbhCmStandardDeviation;
 	}
