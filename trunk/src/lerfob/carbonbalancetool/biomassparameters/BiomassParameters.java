@@ -90,6 +90,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	
 	protected final HashMap<SpeciesType, Double> branchExpansionFactors;
 	protected final HashMap<SpeciesType, Double> rootExpansionFactors;
+	@Deprecated
 	protected final HashMap<SpeciesType, Double> basicWoodDensityFactors;
 	protected final HashMap<SpeciesType, Double> carbonContentFactors;
 
