@@ -61,11 +61,11 @@ public final class CATSettings {
 		ACER(SpeciesType.BroadleavedSpecies, 0.52, "Acer spp."),
 		ALNUS(SpeciesType.BroadleavedSpecies, 0.45, "Alnus spp."),
 		BETULA(SpeciesType.BroadleavedSpecies, 0.51, "Betula spp."),
-		CARPINUS_BETULUS(SpeciesType.BroadleavedSpecies, 0.63, "Carpinus betulus"),
-		CASTANEA_SATIVA(SpeciesType.BroadleavedSpecies, 0.48, "Castanea sativa"),
+		CARPINUS_BETULUS(SpeciesType.BroadleavedSpecies, 0.63, "Carpinus betulus"), // this one is from IPCC guidelines 2003
+		CASTANEA_SATIVA(SpeciesType.BroadleavedSpecies, 0.48, "Castanea sativa"),	// this one is from IPCC guidelines 2003
 		FAGUS_SYLVATICA(SpeciesType.BroadleavedSpecies, 0.58, "Fagus sylvatica"),
 		FRAXINUS(SpeciesType.BroadleavedSpecies, 0.57, "Fraxinus spp."),
-		JUGLANS(SpeciesType.BroadleavedSpecies, 0.53, "Juglans spp."),
+		JUGLANS(SpeciesType.BroadleavedSpecies, 0.53, "Juglans spp."),	// this one is from IPCC guidelines 2003
 		LARIX_DECIDUA(SpeciesType.ConiferousSpecies, 0.46, "Larix decidua"),
 		PICEA_ABIES(SpeciesType.ConiferousSpecies, 0.40, "Picea abies"),
 		PICEA_SITCHENSIS(SpeciesType.ConiferousSpecies, 0.40, "Picea sitchensis"),
@@ -78,9 +78,9 @@ public final class CATSettings {
 		PSEUDOTSUGA_MENZIESII(SpeciesType.ConiferousSpecies, 0.45, "Pseudotsuga menziesii"),
 		QUERCUS(SpeciesType.BroadleavedSpecies, 0.58, "Quercus spp."),
 		SALIX(SpeciesType.BroadleavedSpecies, 0.45, "Salix spp."),
-		THUJA_PLICATA(SpeciesType.ConiferousSpecies, 0.31, "Thuja plicata"),
+		THUJA_PLICATA(SpeciesType.ConiferousSpecies, 0.31, "Thuja plicata"), // this one is from IPCC guidelines 2003
 		TILIA(SpeciesType.BroadleavedSpecies, 0.43, "Tilia spp."),
-		TSUGA(SpeciesType.ConiferousSpecies, 0.42, "Tsuga spp.")
+		TSUGA(SpeciesType.ConiferousSpecies, 0.42, "Tsuga spp.") // this one is from IPCC guidelines 2003
 		;
 
 		final SpeciesType speciesType;
