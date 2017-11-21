@@ -167,6 +167,13 @@ public class CATYieldTableRecordReader extends REpiceaRecordReader {
 		super.checkInputFieldsFormat(oArray);
 	}	
 	
+	
+	@Override
+	public void readRecordsForThisGroupId(int groupId) throws Exception {
+		standList.clear();
+		super.readRecordsForThisGroupId(groupId);
+	}
+
 	/**
 	 * This method returns the stand list that was last read.
 	 * @return a list of CATCompatibleStand instances

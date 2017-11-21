@@ -243,7 +243,12 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 //			oArray[index] = "0";
 //		}
 //		super.checkInputFieldsFormat(oArray);
-//	}	
+//	}
+	@Override
+	public void readRecordsForThisGroupId(int groupId) throws Exception {
+		standMap.clear();
+		super.readRecordsForThisGroupId(groupId);
+	}
 	
 	/**
 	 * This method returns the stand list that was last read.

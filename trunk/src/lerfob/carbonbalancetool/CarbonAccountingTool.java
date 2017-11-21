@@ -110,10 +110,21 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	private String biomassParametersFilename;
 	private String productionManagerFilename;
 
+	private final boolean shutdownInducesSystemExit; 
+	
 	/**
-	 * General constructor.
+	 * Constructor for stand alone application
 	 */
 	public CarbonAccountingTool() {
+		this(true);
+	}
+	
+	/**
+	 * Generic constructor
+	 * @param isStandAloneApplication if yes, then the method request shutdown will call System.exit()
+	 */
+	protected CarbonAccountingTool(boolean isStandAloneApplication) {
+		this.shutdownInducesSystemExit = isStandAloneApplication;	
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
@@ -133,7 +144,14 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		
 		new Thread(toBeRun, "CarbonAccountingTool").start();
 	}
-	
+
+	@Override
+	protected void shutdown(int shutdownCode) {
+		System.out.println("Shutting down CAT...");
+		if (shutdownInducesSystemExit) {
+			System.exit(shutdownCode);
+		}
+	}
 	
 	/**
 	 * This method returns the settings of the carbon accounting tool.
@@ -383,6 +401,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	@Override
 	protected void unlockEngine() {super.unlockEngine();}
 	
+	@Override
+	protected void lockEngine() throws InterruptedException {super.lockEngine();}
 
 	
 	protected void setFinalCutHadToBeCarriedOut(boolean finalCutHadToBeCarriedOut) {
