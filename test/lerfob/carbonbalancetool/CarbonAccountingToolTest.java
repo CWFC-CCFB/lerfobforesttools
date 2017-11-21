@@ -156,6 +156,10 @@ public class CarbonAccountingToolTest {
 		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
 	}
 	
+	
+	/*
+	 * TODO FP this test often fails for unknown reason. Check if this is due to the lock of the engine in the shutdownrequest method
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testWithSimulationResults() throws Exception {
