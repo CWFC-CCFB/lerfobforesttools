@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
@@ -211,7 +210,6 @@ public class CarbonAccountingToolTest {
 			cat.setStandList(recordReader.getStandList());
 			cat.calculateCarbon();
 			cat.requestShutdown();
-			cat.lockEngine();
 			System.gc();
 			double currentUsedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) * 1E-6;
 			if (i > 0) { // the first simulation is out of the scope since the field stand is empty
