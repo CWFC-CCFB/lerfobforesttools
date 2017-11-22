@@ -18,6 +18,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
 import repicea.serial.xml.XmlDeserializer;
+import repicea.serial.xml.XmlSerializer;
 import repicea.stats.distributions.utility.GaussianUtility;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
