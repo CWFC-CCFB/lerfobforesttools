@@ -213,6 +213,14 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		Collections.sort(standList, StandComparator);
 		waitingStandList = standList;
 		addTask(new CATTask(Task.SET_STANDLIST, this));
+		addTask(new CATTask(Task.UNLOCK_ENGINE, this));
+		if (!isGuiEnabled()) {
+			try {
+				lockEngine();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	protected void registerTree(StatusClass statusClass, CATCompatibleStand stand, CATCompatibleTree tree) {
