@@ -97,6 +97,23 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	private static final StandComparator StandComparator = new StandComparator();
 	protected static boolean hasAlreadyBeenInstanciated = false;
 	
+	public static enum CATMode {
+		/**
+		 * Running CAT as a stand alone application with user interface enabled.
+		 */
+		STANDALONE, 
+		/**
+		 * Running CAT from another application with user interface enabled.
+		 */
+		FROM_OTHER_APP, 
+		/**
+		 * Running CAT in script mode with used interface disabled and clearing of random deviates of the 
+		 * sensitivity analysis.
+		 */
+		SCRIPT;
+	}
+	
+	
 	private CATCompartmentManager carbonCompartmentManager;	
 	protected boolean finalCutHadToBeCarriedOut;
 	private final Map<StatusClass, Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>>> treeCollections;
@@ -110,38 +127,22 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	private String biomassParametersFilename;
 	private String productionManagerFilename;
 
-	private final boolean shutdownInducesSystemExit; 
-	private final boolean isSensitivityAnalysisMemoryEnabled;
+	private final CATMode mode;
 	
 	/**
 	 * Constructor for stand alone application.
 	 */
 	public CarbonAccountingTool() {
-		this(true);
+		this(CATMode.STANDALONE);
 	}
 	
+
 	/**
-	 * Generic constructor 1. 
-	 * @param isStandAloneApplication If yes, then the method request shutdown will call System.exit().
-	 * If no, then CAT is assumed to be called from another software and the sensitivity analysis deviates 
-	 * are automatically kept in memory for consistent error propagation.
+	 * Generic constructor.
+	 * @param mode defines how CAT is to be used. See the CATMode enum variable.
 	 */
-	protected CarbonAccountingTool(boolean isStandAloneApplication) {
-		this(isStandAloneApplication, !isStandAloneApplication);
-	}
-	
-	/**
-	 * Generic constructor 2. In rare occasions, in script mode in particular, it might be desirable to 
-	 * disable the stand-alone mode to avoid shutting down the JVM but to make sure that the deviates of 
-	 * the sensitivity analysis are cleared.
-	 * @param isStandAloneApplication if yes, then the method request shutdown will call System.exit()
-	 * @param isSensitivityAnalysisMemoryEnabled if yes the static instance of CATSensitivityAnalysisSettings will not
-	 * clear when shutting down. This parameter has no effect is CAT is run as a stand-alone application since the
-	 * virtual machine will be shutdown.
-	 */
-	protected CarbonAccountingTool(boolean isStandAloneApplication, boolean isSensitivityAnalysisMemoryEnabled) {
-		this.shutdownInducesSystemExit = isStandAloneApplication;	
-		this.isSensitivityAnalysisMemoryEnabled = isSensitivityAnalysisMemoryEnabled;
+	protected CarbonAccountingTool(CATMode mode) {
+		this.mode = mode;
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
@@ -165,10 +166,10 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	@Override
 	protected void shutdown(int shutdownCode) {
 		System.out.println("Shutting down CAT...");
-		if (!isSensitivityAnalysisMemoryEnabled) {
+		if (mode == CATMode.SCRIPT) {
 			CATSensitivityAnalysisSettings.getInstance().clear();
 		}
-		if (shutdownInducesSystemExit) {
+		if (mode == CATMode.STANDALONE) {		// only the stand alone mode will shutdown the JVM
 			System.exit(shutdownCode);
 		}
 	}
@@ -423,7 +424,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 
 	
 	protected boolean isGuiEnabled() {
-		return guiInterface != null  && guiInterface.isVisible();
+		return mode == CATMode.STANDALONE || mode == CATMode.FROM_OTHER_APP;
 	}
 
 	@Override
