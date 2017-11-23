@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
+import lerfob.carbonbalancetool.CarbonAccountingTool.CATMode;
 import lerfob.carbonbalancetool.io.CATGrowthSimulationRecordReader;
 import lerfob.carbonbalancetool.io.CATYieldTableRecordReader;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
@@ -59,7 +60,7 @@ public class CarbonAccountingToolTest {
 			}
 		}
 		
-		CarbonAccountingTool tool = new CarbonAccountingTool();
+		CarbonAccountingTool tool = new CarbonAccountingTool(CATMode.SCRIPT);
 		tool.initializeTool(false, null);
 		tool.setStandList(stands);
 		try {
@@ -71,6 +72,7 @@ public class CarbonAccountingToolTest {
 			e.printStackTrace();
 			Assert.fail("Unable to calculate carbon!");
 		}
+		tool.requestShutdown();
 	}
 	
 
@@ -91,7 +93,7 @@ public class CarbonAccountingToolTest {
 			}
 		}
 		
-		CarbonAccountingTool tool = new CarbonAccountingTool();
+		CarbonAccountingTool tool = new CarbonAccountingTool(CATMode.SCRIPT);
 		tool.initializeTool(false, null);
 		tool.setStandList(stands);
 		try {
@@ -116,6 +118,7 @@ public class CarbonAccountingToolTest {
 				double totalAfter = obsLivingBiomass.add(obsDOM).m_afData[indexFirstProducts][0] + obsProducts.m_afData[indexFirstProducts][0];
 				Assert.assertEquals("Testing total biomass before and biomass after harvesting", totalBefore, totalAfter, 1E-8);
 			}
+			tool.requestShutdown();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,7 +132,7 @@ public class CarbonAccountingToolTest {
 		String filename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.csv";
 		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.ife";
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableReference.xml";
-		CarbonAccountingTool cat = new CarbonAccountingTool();
+		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
 		cat.initializeTool(false, null);
 		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.ABIES);
 		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
@@ -154,6 +157,7 @@ public class CarbonAccountingToolTest {
 			nbCompartmentChecked++;
 		}
 		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
+		cat.requestShutdown();
 	}
 	
 	
@@ -167,7 +171,7 @@ public class CarbonAccountingToolTest {
 		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "MathildeTreeExport.ife";
 		String speciesMatchFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "speciesCorrespondanceForSimulationData.xml";
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "MathildeTreeExportReference.xml";
-		CarbonAccountingTool cat = new CarbonAccountingTool();
+		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
 		cat.initializeTool(false, null);
 		CATGrowthSimulationRecordReader recordReader = new CATGrowthSimulationRecordReader();
 		recordReader.getSelector().load(speciesMatchFilename);
@@ -204,7 +208,7 @@ public class CarbonAccountingToolTest {
 		Matrix matX = new Matrix(nbSimulations-1, 2);
 		Matrix matY = new Matrix(nbSimulations-1, 1);
 		for (int i = 0; i < nbSimulations; i++) {
-			CarbonAccountingTool cat = new CarbonAccountingTool(false, false);	// false to bypass the System exit
+			CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
 			cat.initializeTool(false, null);
 			CATGrowthSimulationRecordReader recordReader = new CATGrowthSimulationRecordReader();
 			recordReader.getSelector().load(speciesMatchFilename);
