@@ -80,6 +80,10 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 	
 	private CATSensitivityAnalysisSettings() {
 		sensitivityParameterMap = new HashMap<VariabilitySource, CATSensitivityAnalysisParameterWrapper>();
+		initialize();
+	}
+	
+	private void initialize() {
 		for (VariabilitySource source : VariabilitySource.values()) {
 			sensitivityParameterMap.put(source, new CATSensitivityAnalysisParameterWrapper(source));
 		}
@@ -179,5 +183,9 @@ public class CATSensitivityAnalysisSettings implements REpiceaShowableUIWithPare
 		REpiceaTranslator.setCurrentLanguage(Language.French);
 		CATSensitivityAnalysisSettings settings = new CATSensitivityAnalysisSettings();
 		settings.showUI(null);
+	}
+
+	public void clear() {
+		initialize();
 	}
 }

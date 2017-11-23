@@ -18,7 +18,6 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
 import repicea.serial.xml.XmlDeserializer;
-import repicea.serial.xml.XmlSerializer;
 import repicea.stats.distributions.utility.GaussianUtility;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
@@ -205,7 +204,7 @@ public class CarbonAccountingToolTest {
 		Matrix matX = new Matrix(nbSimulations-1, 2);
 		Matrix matY = new Matrix(nbSimulations-1, 1);
 		for (int i = 0; i < nbSimulations; i++) {
-			CarbonAccountingTool cat = new CarbonAccountingTool(false);	// false to bypass the System exit
+			CarbonAccountingTool cat = new CarbonAccountingTool(false, false);	// false to bypass the System exit
 			cat.initializeTool(false, null);
 			CATGrowthSimulationRecordReader recordReader = new CATGrowthSimulationRecordReader();
 			recordReader.getSelector().load(speciesMatchFilename);
