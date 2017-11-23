@@ -166,9 +166,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	@Override
 	protected void shutdown(int shutdownCode) {
 		System.out.println("Shutting down CAT...");
-		if (mode == CATMode.SCRIPT) {
-			CATSensitivityAnalysisSettings.getInstance().clear();
-		}
+		CATSensitivityAnalysisSettings.getInstance().clear();
 		if (mode == CATMode.STANDALONE) {		// only the stand alone mode will shutdown the JVM
 			System.exit(shutdownCode);
 		}
