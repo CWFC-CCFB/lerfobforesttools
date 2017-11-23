@@ -185,17 +185,16 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	
 	/**
  	 * This method initialises the carbon accounting tool either in script or in GUI mode.
-	 * @param isGuiEnabled a boolean (true to enable the GUI or false otherwise)
 	 * @param parentFrame the parent frame which can be null
 	 * @return true if the tool was properly initialised or false otherwise
 	 */
-	public boolean initializeTool(boolean isGuiEnabled, Window parentFrame) {
+	public boolean initializeTool(Window parentFrame) {
 		
 		this.parentFrame = parentFrame;
 		CATSettings carbonToolSettings = new CATSettings(getSettingMemory());
 		carbonCompartmentManager = new CATCompartmentManager(carbonToolSettings);
 		
-		if (isGuiEnabled) {
+		if (isGuiEnabled()) {
 			if (!hasAlreadyBeenInstanciated) {
 				String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
 				String iconPath =  packagePath + "SplashImage.jpg";
@@ -571,7 +570,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 //		REpiceaTranslator.setCurrentLanguage(Language.French);
 		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
-		if (!tool.initializeTool(true, null)) {
+		if (!tool.initializeTool(null)) {
 			System.exit(0);
 		}
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
