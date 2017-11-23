@@ -111,20 +111,37 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	private String productionManagerFilename;
 
 	private final boolean shutdownInducesSystemExit; 
+	private final boolean isSensitivityAnalysisMemoryEnabled;
 	
 	/**
-	 * Constructor for stand alone application
+	 * Constructor for stand alone application.
 	 */
 	public CarbonAccountingTool() {
 		this(true);
 	}
 	
 	/**
-	 * Generic constructor
-	 * @param isStandAloneApplication if yes, then the method request shutdown will call System.exit()
+	 * Generic constructor 1. 
+	 * @param isStandAloneApplication If yes, then the method request shutdown will call System.exit().
+	 * If no, then CAT is assumed to be called from another software and the sensitivity analysis deviates 
+	 * are automatically kept in memory for consistent error propagation.
 	 */
 	protected CarbonAccountingTool(boolean isStandAloneApplication) {
+		this(isStandAloneApplication, !isStandAloneApplication);
+	}
+	
+	/**
+	 * Generic constructor 2. In rare occasions, in script mode in particular, it might be desirable to 
+	 * disable the stand-alone mode to avoid shutting down the JVM but to make sure that the deviates of 
+	 * the sensitivity analysis are cleared.
+	 * @param isStandAloneApplication if yes, then the method request shutdown will call System.exit()
+	 * @param isSensitivityAnalysisMemoryEnabled if yes the static instance of CATSensitivityAnalysisSettings will not
+	 * clear when shutting down. This parameter has no effect is CAT is run as a stand-alone application since the
+	 * virtual machine will be shutdown.
+	 */
+	protected CarbonAccountingTool(boolean isStandAloneApplication, boolean isSensitivityAnalysisMemoryEnabled) {
 		this.shutdownInducesSystemExit = isStandAloneApplication;	
+		this.isSensitivityAnalysisMemoryEnabled = isSensitivityAnalysisMemoryEnabled;
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
@@ -148,6 +165,9 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	@Override
 	protected void shutdown(int shutdownCode) {
 		System.out.println("Shutting down CAT...");
+		if (!isSensitivityAnalysisMemoryEnabled) {
+			CATSensitivityAnalysisSettings.getInstance().clear();
+		}
 		if (shutdownInducesSystemExit) {
 			System.exit(shutdownCode);
 		}
