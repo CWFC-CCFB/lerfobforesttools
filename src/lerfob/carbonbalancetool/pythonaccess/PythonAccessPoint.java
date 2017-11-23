@@ -62,8 +62,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	protected double areaHa = 1d;
 	
 	public PythonAccessPoint() {
-		super();
-		initializeTool(false, null);
+		super(CATMode.SCRIPT);
+		initializeTool(null);
 		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(null));
 	}
 	

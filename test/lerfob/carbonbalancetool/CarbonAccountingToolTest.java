@@ -61,7 +61,7 @@ public class CarbonAccountingToolTest {
 		}
 		
 		CarbonAccountingTool tool = new CarbonAccountingTool(CATMode.SCRIPT);
-		tool.initializeTool(false, null);
+		tool.initializeTool(null);
 		tool.setStandList(stands);
 		try {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
@@ -94,7 +94,7 @@ public class CarbonAccountingToolTest {
 		}
 		
 		CarbonAccountingTool tool = new CarbonAccountingTool(CATMode.SCRIPT);
-		tool.initializeTool(false, null);
+		tool.initializeTool(null);
 		tool.setStandList(stands);
 		try {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
@@ -133,7 +133,7 @@ public class CarbonAccountingToolTest {
 		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.ife";
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableReference.xml";
 		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
-		cat.initializeTool(false, null);
+		cat.initializeTool(null);
 		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.ABIES);
 		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
 		recordReader.initInScriptMode(ifm);
@@ -172,7 +172,7 @@ public class CarbonAccountingToolTest {
 		String speciesMatchFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "speciesCorrespondanceForSimulationData.xml";
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "MathildeTreeExportReference.xml";
 		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
-		cat.initializeTool(false, null);
+		cat.initializeTool(null);
 		CATGrowthSimulationRecordReader recordReader = new CATGrowthSimulationRecordReader();
 		recordReader.getSelector().load(speciesMatchFilename);
 		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
@@ -209,7 +209,7 @@ public class CarbonAccountingToolTest {
 		Matrix matY = new Matrix(nbSimulations-1, 1);
 		for (int i = 0; i < nbSimulations; i++) {
 			CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
-			cat.initializeTool(false, null);
+			cat.initializeTool(null);
 			CATGrowthSimulationRecordReader recordReader = new CATGrowthSimulationRecordReader();
 			recordReader.getSelector().load(speciesMatchFilename);
 			ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);

@@ -17,7 +17,6 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.javacsv.CSVReader;
 import repicea.serial.xml.XmlDeserializer;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.TreeLogger;
