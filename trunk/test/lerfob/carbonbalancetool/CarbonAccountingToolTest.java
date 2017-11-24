@@ -44,7 +44,7 @@ public class CarbonAccountingToolTest {
 
 
 	@Test
-	public void simpleCarbonAccountingTest() {
+	public void simpleCarbonAccountingTest() throws Exception {
 		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;
@@ -77,7 +77,7 @@ public class CarbonAccountingToolTest {
 	
 
 	@Test
-	public void matterBalanceAfterHarvest() {
+	public void matterBalanceAfterHarvest() throws Exception {
 		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;

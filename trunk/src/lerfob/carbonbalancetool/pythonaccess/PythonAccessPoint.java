@@ -61,7 +61,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	protected CATSpecies speciesForSimulation; 
 	protected double areaHa = 1d;
 	
-	public PythonAccessPoint() {
+	public PythonAccessPoint() throws Exception {
 		super(CATMode.SCRIPT);
 		initializeTool(null);
 		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(null));
@@ -273,8 +273,9 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	/**
 	 * Start method for connection to Python.
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String repiceaRevision = REpiceaJARSVNAppVersion.getInstance().getName() + "; " + REpiceaJARSVNAppVersion.getInstance().getRevision();
 		System.out.println(repiceaRevision);
 		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
