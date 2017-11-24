@@ -63,7 +63,6 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	/**
 	 * Constructor for this class
 	 * @param tool a CarbonAccountingTool instance
-	 * @throws Exception
 	 */
 	public CATCompartmentManager(CATSettings settings) {
 		this.carbonAccountingToolSettings = settings;

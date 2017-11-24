@@ -128,6 +128,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	private String productionManagerFilename;
 
 	private final CATMode mode;
+	private boolean initialized;
 	
 	/**
 	 * Constructor for stand alone application.
@@ -182,45 +183,46 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	
 	
 	/**
- 	 * This method initialises the carbon accounting tool either in script or in GUI mode.
+	 * This method initializes the carbon accounting tool either in script or in GUI mode. This method can
+	 * be called only once per instance. 
 	 * @param parentFrame the parent frame which can be null
-	 * @return true if the tool was properly initialised or false otherwise
 	 */
-	public boolean initializeTool(Window parentFrame) {
-		
-		this.parentFrame = parentFrame;
-		CATSettings carbonToolSettings = new CATSettings(getSettingMemory());
-		carbonCompartmentManager = new CATCompartmentManager(carbonToolSettings);
-		
-		if (isGuiEnabled()) {
-			if (!hasAlreadyBeenInstanciated) {
-				String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
-				String iconPath =  packagePath + "SplashImage.jpg";
-				new GenericSplashWindow(iconPath, 4, parentFrame);
+	public void initializeTool(Window parentFrame) throws Exception {
+		if (initialized) {
+			throw new Exception("The Carbon Accounting Tool is already initialized!");
+		} else {
+			this.parentFrame = parentFrame;
+			CATSettings carbonToolSettings = new CATSettings(getSettingMemory());
+			carbonCompartmentManager = new CATCompartmentManager(carbonToolSettings);
+			if (isGuiEnabled()) {
+				if (!hasAlreadyBeenInstanciated) {
+					String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
+					String iconPath =  packagePath + "SplashImage.jpg";
+					new GenericSplashWindow(iconPath, 4, parentFrame);
 
-//				String licensePath = packagePath + "LGPLLicense_en.html";
-//				if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
-//					licensePath = packagePath + "LGPLLicense_fr.html";
-//				}
-				
-//				GeneralLicenseWindow licenseDlg;
-//				try {
-//					licenseDlg = new GeneralLicenseWindow(parentFrame, licensePath);
-//					licenseDlg.setVisible(true);
-//					if (!licenseDlg.isLicenseAccepted()) {
-//						return false;
-//					} else {
-				hasAlreadyBeenInstanciated = true;
-//					}
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					return false;
-//				}
+					//				String licensePath = packagePath + "LGPLLicense_en.html";
+					//				if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
+					//					licensePath = packagePath + "LGPLLicense_fr.html";
+					//				}
+
+					//				GeneralLicenseWindow licenseDlg;
+					//				try {
+					//					licenseDlg = new GeneralLicenseWindow(parentFrame, licensePath);
+					//					licenseDlg.setVisible(true);
+					//					if (!licenseDlg.isLicenseAccepted()) {
+					//						return false;
+					//					} else {
+					hasAlreadyBeenInstanciated = true;
+					//					}
+					//				} catch (IOException e) {
+					//					e.printStackTrace();
+					//					return false;
+					//				}
+				}
+				addTask(new CATTask(Task.SHOW_INTERFACE, this));
 			}
-			addTask(new CATTask(Task.SHOW_INTERFACE, this));
+			initialized = true;
 		}
-		
-		return true;
 	}
 
 	/**
@@ -564,13 +566,11 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	/*
 	 * Entry point for FCBA in GESFOR project
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 //		REpiceaTranslator.setCurrentLanguage(Language.French);
 		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
-		if (!tool.initializeTool(null)) {
-			System.exit(0);
-		}
+		tool.initializeTool(null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
@@ -578,7 +578,6 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
 		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
-		
 	}
 
 
