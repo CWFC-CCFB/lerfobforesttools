@@ -563,6 +563,12 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		CATSensitivityAnalysisSettings.getInstance().setVariabilitySource(source, type, enabled, multiplier);
 	}
 
+	/**
+	 * This method returns true if this CAT instance has been initialized or false otherwise
+	 * @return a boolean
+	 */
+	public boolean isInitialized() {return initialized;}
+	
 	/*
 	 * Entry point for FCBA in GESFOR project
 	 */
