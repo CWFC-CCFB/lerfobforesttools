@@ -55,7 +55,7 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 
 	@Override
 	public FrenchHd2018Species getFrenchHDTreeSpecies() {
-		int index = FrenchHDRelationship2018PredictorTest.speciesList.indexOf(species);
+		int index = FrenchHDRelationship2018PredictorTest.SpeciesList.indexOf(species);
 		return FrenchHd2018Species.values()[index];
 	}
 
