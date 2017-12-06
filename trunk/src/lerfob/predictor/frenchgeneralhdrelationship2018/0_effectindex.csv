@@ -1,0 +1,13 @@
+n,Effect
+1,GotherThanSu*logdhp2
+2,logdhp
+3,logdhp*GotherThanSub
+4,logdhp*coupe
+5,logdhp*meanPrec
+6,logdhp*meanTM*meanTM
+7,logdhp*meanTMoy
+8,logdhp*pent2
+9,logdhp*socialIndex
+10,logdhp*socialIndex2
+11,logdhp2
+12,socialIndex*logdhp2

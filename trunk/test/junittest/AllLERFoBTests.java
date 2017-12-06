@@ -18,6 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.mathilde.climate.MathildeClimatePredictorTest.class,
 				lerfob.predictor.mathilde.thinning.MathildeThinningPredictorTest.class,
 				lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014PredictorTest.class,
+				lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018PredictorTest.class,
 				lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014PredictorTest.class,
 				lerfob.treelogger.mathilde.MathildeTreeLoggerTests.class,
 				lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerTests.class,
