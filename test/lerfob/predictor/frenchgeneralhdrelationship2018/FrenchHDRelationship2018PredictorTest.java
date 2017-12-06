@@ -16,7 +16,7 @@ import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2018PredictorTest {
 
-	static List<String> speciesList = new ArrayList<String>();
+	static List<String> SpeciesList = new ArrayList<String>();
 	static List<FrenchHDRelationship2018StandImpl> Stands;
 	static Map<Integer, Map<Integer, Blup>> Blups = readBlups();
 	
@@ -249,11 +249,11 @@ public class FrenchHDRelationship2018PredictorTest {
 					standMap.put(idp, stand);
 				}
 				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, pred, standMap.get(idp));
-				if (!speciesList.contains(species)) {
-					speciesList.add(species);
+				if (!SpeciesList.contains(species)) {
+					SpeciesList.add(species);
 				}
 			}
-			Collections.sort(speciesList);
+			Collections.sort(SpeciesList);
 			standList.addAll(standMap.values());
 			Collections.sort(standList);
 			return standList;
