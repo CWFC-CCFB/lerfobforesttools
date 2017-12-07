@@ -199,6 +199,7 @@ public class FrenchHDRelationship2018PredictorTest {
 
 	
 	private static List<FrenchHDRelationship2018StandImpl> readTrees() {
+		FrenchHDRelationship2018PredictorTest.SpeciesList.clear();
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
 		List<FrenchHDRelationship2018StandImpl> standList = new ArrayList<FrenchHDRelationship2018StandImpl>();
 		CSVReader reader = null;
