@@ -6,19 +6,20 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 
 	protected static boolean BlupPrediction = false;
 	
-	private double heightM;
+	double heightM;
 	private double dbhCm;
-	private String species;
+	String species;
 	private FrenchHDRelationship2018Stand stand;
-	private double pred;
+	double reference;
 	private double gOther;
+	boolean knownHeight;
 	
 	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String species, double pred, FrenchHDRelationship2018Stand stand) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
 		this.species = species;
-		this.pred = pred;
+		this.reference = pred;
 		this.stand = stand;
 		((FrenchHDRelationship2018StandImpl) this.stand).addTree(this); 
 	}
@@ -59,7 +60,7 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 		return FrenchHd2018Species.values()[index];
 	}
 
-	protected double getPred() {return pred;}
+	protected double getPred() {return reference;}
 	protected double getGOther() {return gOther;}
 	
 	@Override
