@@ -128,6 +128,7 @@ public class ValidationOn2013Data {
 		List<FormatField> fields = new ArrayList<FormatField>();
 		fields.add(new CSVField("idp"));
 		fields.add(new CSVField("species"));
+		fields.add(new CSVField("speciesType"));
 		fields.add(new CSVField("d130Cm"));
 		fields.add(new CSVField("heightM"));
 		fields.add(new CSVField("trueHeightM"));
@@ -138,16 +139,17 @@ public class ValidationOn2013Data {
 		Object[] record;
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				record = new Object[8];
+				record = new Object[9];
 				record[0] = stand.getSubjectId();
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
 				record[1] = tree.species;
-				record[2] = tree.getDbhCm();
-				record[3] = tree.heightM;
-				record[4] = tree.reference;
-				record[5] = tree.knownHeight;
-				record[6] = tree.obsVolDm3;
-				record[7] = tree.predictedVolDm3;
+				record[2] = tree.species.type;
+				record[3] = tree.getDbhCm();
+				record[4] = tree.heightM;
+				record[5] = tree.reference;
+				record[6] = tree.knownHeight;
+				record[7] = tree.obsVolDm3;
+				record[8] = tree.predictedVolDm3;
 				writer.addRecord(record);
 			}
 		}
