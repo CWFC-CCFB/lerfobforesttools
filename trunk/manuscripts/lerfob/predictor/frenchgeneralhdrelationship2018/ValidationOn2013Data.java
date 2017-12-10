@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 
+import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Predictor;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
@@ -104,6 +105,8 @@ public class ValidationOn2013Data {
 	public void validateWithTheNumberOfKnownHeightsPerPlot(int i) throws IOException {
 		readTrees();
 		FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
+		FrenchCommercialVolume2014Predictor volPred = new FrenchCommercialVolume2014Predictor(false);
+		
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			stand.clear();
 			stand.setHeightForThisNumberOfTrees(i);
@@ -112,6 +115,10 @@ public class ValidationOn2013Data {
 				if (!tree.knownHeight) {
 					tree.heightM = pred.predictHeightM(stand, tree);
 				}
+				FrenchHDRelationship2018TreeImpl.TrueHeight = true;
+				tree.obsVolDm3 = volPred.predictTreeCommercialVolumeDm3(tree);
+				FrenchHDRelationship2018TreeImpl.TrueHeight = false;
+				tree.predictedVolDm3 = volPred.predictTreeCommercialVolumeDm3(tree);
 			}
 		}
 		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + ".csv";
@@ -125,11 +132,13 @@ public class ValidationOn2013Data {
 		fields.add(new CSVField("heightM"));
 		fields.add(new CSVField("trueHeightM"));
 		fields.add(new CSVField("knownHeight"));
+		fields.add(new CSVField("obsVolDm3"));
+		fields.add(new CSVField("predictedVolDm3"));
 		writer.setFields(fields);
 		Object[] record;
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				record = new Object[6];
+				record = new Object[8];
 				record[0] = stand.getSubjectId();
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
 				record[1] = tree.species;
@@ -137,6 +146,8 @@ public class ValidationOn2013Data {
 				record[3] = tree.heightM;
 				record[4] = tree.reference;
 				record[5] = tree.knownHeight;
+				record[6] = tree.obsVolDm3;
+				record[7] = tree.predictedVolDm3;
 				writer.addRecord(record);
 			}
 		}
@@ -147,9 +158,9 @@ public class ValidationOn2013Data {
 	
 	public static void main(String[] args) throws IOException {
 		ValidationOn2013Data validator = new ValidationOn2013Data();
+		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation without known heights...");
 		validator.validateWithTheNumberOfKnownHeightsPerPlot(0);
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation with 1 known height per plot...");
 		validator.validateWithTheNumberOfKnownHeightsPerPlot(1);
 		System.out.println("Running height simulation with 2 known height per plot...");
@@ -160,6 +171,12 @@ public class ValidationOn2013Data {
 		validator.validateWithTheNumberOfKnownHeightsPerPlot(4);
 		System.out.println("Running height simulation with 5 known height per plot...");
 		validator.validateWithTheNumberOfKnownHeightsPerPlot(5);
+		System.out.println("Running height simulation with 6 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(6);
+		System.out.println("Running height simulation with 7 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(7);
+		System.out.println("Running height simulation with 8 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(8);
 		System.out.println("Simulations done");
 	}
 }
