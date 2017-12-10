@@ -35,6 +35,15 @@ public interface FrenchHDRelationship2018Tree extends HDRelationshipTree,
 										LnDbhCmPlus1Provider,
 										SquaredLnDbhCmPlus1Provider {
 
+	public static FrenchHd2018Species getFrenchHd2018SpeciesFromThisString(String speciesName) {
+		speciesName = speciesName.trim().toUpperCase().replace(" ", "_");
+		speciesName = speciesName.replace("'", "_");
+		speciesName = speciesName.replace("-", "_");
+		FrenchHd2018Species species = FrenchHd2018Species.valueOf(speciesName);
+		return species;
+	}
+	
+	
 	public enum FrenchHd2018Species {
 		ALISIER_BLANC(SpeciesType.BroadleavedSpecies),
 		ALISIER_TORMINAL(SpeciesType.BroadleavedSpecies),
@@ -54,31 +63,31 @@ public interface FrenchHDRelationship2018Tree extends HDRelationshipTree,
 		DOUGLAS(SpeciesType.ConiferousSpecies),
 		EPICEA_COMMUN(SpeciesType.ConiferousSpecies),
 		EPICEA_DE_SITKA(SpeciesType.ConiferousSpecies),
-		ERABLE_OBIER(SpeciesType.BroadleavedSpecies),
+		ERABLE_A_FEUILLES_D_OBIER(SpeciesType.BroadleavedSpecies),
 		ERABLE_CHAMPETRE(SpeciesType.BroadleavedSpecies),
 		ERABLE_DE_MONTPELLIER(SpeciesType.BroadleavedSpecies),
 		ERABLE_SYCOMORE(SpeciesType.BroadleavedSpecies),
 		FRENE_COMMUN(SpeciesType.BroadleavedSpecies),
 		HETRE(SpeciesType.BroadleavedSpecies),
 		HOUX(SpeciesType.BroadleavedSpecies),
-		MELEZE_EUROPE(SpeciesType.ConiferousSpecies),
+		MELEZE_D_EUROPE(SpeciesType.ConiferousSpecies),
 		MERISIER(SpeciesType.BroadleavedSpecies),
 		NOISETIER_COUDRIER(SpeciesType.BroadleavedSpecies),
 		ORME_CHAMPETRE(SpeciesType.BroadleavedSpecies),
 		PEUPLIER_CULTIVE(SpeciesType.BroadleavedSpecies),
-		PIN_CROCHETS(SpeciesType.ConiferousSpecies),
-		PIN_ALEP(SpeciesType.ConiferousSpecies),
-		PIN_LARICIO(SpeciesType.ConiferousSpecies),
+		PIN_A_CROCHETS(SpeciesType.ConiferousSpecies),
+		PIN_D_ALEP(SpeciesType.ConiferousSpecies),
+		PIN_LARICIO_DE_CORSE(SpeciesType.ConiferousSpecies),
 		PIN_MARITIME(SpeciesType.ConiferousSpecies),
-		PIN_NOIR(SpeciesType.ConiferousSpecies),
+		PIN_NOIR_D_AUTRICHE(SpeciesType.ConiferousSpecies),
 		PIN_SYLVESTRE(SpeciesType.ConiferousSpecies),
-		ROBINIER(SpeciesType.BroadleavedSpecies),
+		ROBINIER_FAUX_ACACIA(SpeciesType.BroadleavedSpecies),
 		SAPIN_PECTINE(SpeciesType.ConiferousSpecies),
 		SAULE_CENDRE(SpeciesType.BroadleavedSpecies),
 		SAULE_MARSAULT(SpeciesType.BroadleavedSpecies),
-		SORBIER_OISELEURS(SpeciesType.BroadleavedSpecies),
-		TILLEUL_GRANDES_FEUILLES(SpeciesType.BroadleavedSpecies),
-		TILLEUL_PETITES_FEUILLES(SpeciesType.BroadleavedSpecies),
+		SORBIER_DES_OISELEURS(SpeciesType.BroadleavedSpecies),
+		TILLEUL_A_GRANDES_FEUILLES(SpeciesType.BroadleavedSpecies),
+		TILLEUL_A_PETITES_FEUILLES(SpeciesType.BroadleavedSpecies),
 		TREMBLE(SpeciesType.BroadleavedSpecies);
 		
 		SpeciesType type;

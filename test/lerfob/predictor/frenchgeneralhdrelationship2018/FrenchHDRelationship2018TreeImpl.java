@@ -30,29 +30,29 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree, 
 		MatchTable.put(FrenchHd2018Species.EPICEA_DE_SITKA, FrenchCommercialVolume2014TreeSpecies.PICEA_ABIES);
 		MatchTable.put(FrenchHd2018Species.ERABLE_CHAMPETRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.ERABLE_DE_MONTPELLIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.ERABLE_OBIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		MatchTable.put(FrenchHd2018Species.ERABLE_A_FEUILLES_D_OBIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.ERABLE_SYCOMORE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.FRENE_COMMUN, FrenchCommercialVolume2014TreeSpecies.FRAXINUS_EXCELSIOR);
 		MatchTable.put(FrenchHd2018Species.HETRE, FrenchCommercialVolume2014TreeSpecies.FAGUS_SYLVATICA);
 		MatchTable.put(FrenchHd2018Species.HOUX, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.MELEZE_EUROPE, FrenchCommercialVolume2014TreeSpecies.LARIX_DECIDUA);
+		MatchTable.put(FrenchHd2018Species.MELEZE_D_EUROPE, FrenchCommercialVolume2014TreeSpecies.LARIX_DECIDUA);
 		MatchTable.put(FrenchHd2018Species.MERISIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.NOISETIER_COUDRIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.ORME_CHAMPETRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.PEUPLIER_CULTIVE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.PIN_ALEP, FrenchCommercialVolume2014TreeSpecies.PINUS_HALEPENSIS);
-		MatchTable.put(FrenchHd2018Species.PIN_CROCHETS, FrenchCommercialVolume2014TreeSpecies.PINUS_UNCINATA);
-		MatchTable.put(FrenchHd2018Species.PIN_LARICIO, FrenchCommercialVolume2014TreeSpecies.PINUS_LARICIO);
+		MatchTable.put(FrenchHd2018Species.PIN_D_ALEP, FrenchCommercialVolume2014TreeSpecies.PINUS_HALEPENSIS);
+		MatchTable.put(FrenchHd2018Species.PIN_A_CROCHETS, FrenchCommercialVolume2014TreeSpecies.PINUS_UNCINATA);
+		MatchTable.put(FrenchHd2018Species.PIN_LARICIO_DE_CORSE, FrenchCommercialVolume2014TreeSpecies.PINUS_LARICIO);
 		MatchTable.put(FrenchHd2018Species.PIN_MARITIME, FrenchCommercialVolume2014TreeSpecies.PINUS_PINASTER);
-		MatchTable.put(FrenchHd2018Species.PIN_NOIR, FrenchCommercialVolume2014TreeSpecies.PINUS_NIGRA);
+		MatchTable.put(FrenchHd2018Species.PIN_NOIR_D_AUTRICHE, FrenchCommercialVolume2014TreeSpecies.PINUS_NIGRA);
 		MatchTable.put(FrenchHd2018Species.PIN_SYLVESTRE, FrenchCommercialVolume2014TreeSpecies.PINUS_SYLVESTRIS);
-		MatchTable.put(FrenchHd2018Species.ROBINIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		MatchTable.put(FrenchHd2018Species.ROBINIER_FAUX_ACACIA, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.SAPIN_PECTINE, FrenchCommercialVolume2014TreeSpecies.ABIES_ALBA);
 		MatchTable.put(FrenchHd2018Species.SAULE_CENDRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.SAULE_MARSAULT, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.SORBIER_OISELEURS, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.TILLEUL_GRANDES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
-		MatchTable.put(FrenchHd2018Species.TILLEUL_PETITES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		MatchTable.put(FrenchHd2018Species.SORBIER_DES_OISELEURS, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		MatchTable.put(FrenchHd2018Species.TILLEUL_A_GRANDES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		MatchTable.put(FrenchHd2018Species.TILLEUL_A_PETITES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 		MatchTable.put(FrenchHd2018Species.TREMBLE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 	}
 	
@@ -63,7 +63,7 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree, 
 	
 	double heightM;
 	private double dbhCm;
-	String species;
+	final FrenchHd2018Species species;
 	private FrenchHDRelationship2018Stand stand;
 	double reference;
 	private double gOther;
@@ -71,11 +71,11 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree, 
 	double predictedVolDm3;
 	double obsVolDm3;
 	
-	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String species, double pred, FrenchHDRelationship2018Stand stand) {
+	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String speciesName, double pred, FrenchHDRelationship2018Stand stand) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
-		this.species = species;
+		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
 		this.reference = pred;
 		this.stand = stand;
 		((FrenchHDRelationship2018StandImpl) this.stand).addTree(this); 
@@ -115,8 +115,7 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree, 
 
 	@Override
 	public FrenchHd2018Species getFrenchHDTreeSpecies() {
-		int index = FrenchHDRelationship2018PredictorTest.SpeciesList.indexOf(species);
-		return FrenchHd2018Species.values()[index];
+		return species;
 	}
 
 	protected double getPred() {return reference;}
