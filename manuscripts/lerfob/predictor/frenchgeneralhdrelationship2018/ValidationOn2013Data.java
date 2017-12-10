@@ -102,7 +102,7 @@ public class ValidationOn2013Data {
 		return StandMap;
 	}
 
-	public void validateWithTheNumberOfKnownHeightsPerPlot(int i) throws IOException {
+	public void validateWithTheNumberOfKnownHeightsPerPlot(int i, int realization) throws IOException {
 		readTrees();
 		FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
 		FrenchCommercialVolume2014Predictor volPred = new FrenchCommercialVolume2014Predictor(false);
@@ -121,11 +121,12 @@ public class ValidationOn2013Data {
 				tree.predictedVolDm3 = volPred.predictTreeCommercialVolumeDm3(tree);
 			}
 		}
-		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + ".csv";
+		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + "_" + realization + ".csv";
 		filename = filename.replace("bin", "manuscripts");
 		File file = new File(filename);
 		CSVWriter writer = new CSVWriter(file, false);
 		List<FormatField> fields = new ArrayList<FormatField>();
+		fields.add(new CSVField("realization"));
 		fields.add(new CSVField("idp"));
 		fields.add(new CSVField("species"));
 		fields.add(new CSVField("speciesType"));
@@ -139,17 +140,18 @@ public class ValidationOn2013Data {
 		Object[] record;
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				record = new Object[9];
-				record[0] = stand.getSubjectId();
+				record = new Object[10];
+				record[0] = realization;
+				record[1] = stand.getSubjectId();
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
-				record[1] = tree.species;
-				record[2] = tree.species.type;
-				record[3] = tree.getDbhCm();
-				record[4] = tree.heightM;
-				record[5] = tree.reference;
-				record[6] = tree.knownHeight;
-				record[7] = tree.obsVolDm3;
-				record[8] = tree.predictedVolDm3;
+				record[2] = tree.species;
+				record[3] = tree.species.type;
+				record[4] = tree.getDbhCm();
+				record[5] = tree.heightM;
+				record[6] = tree.reference;
+				record[7] = tree.knownHeight;
+				record[8] = tree.obsVolDm3;
+				record[9] = tree.predictedVolDm3;
 				writer.addRecord(record);
 			}
 		}
@@ -159,26 +161,30 @@ public class ValidationOn2013Data {
 	
 	
 	public static void main(String[] args) throws IOException {
+		int nbMaxReal = 100;
 		ValidationOn2013Data validator = new ValidationOn2013Data();
 		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation without known heights...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(0);
-		System.out.println("Running height simulation with 1 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(1);
-		System.out.println("Running height simulation with 2 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(2);
-		System.out.println("Running height simulation with 3 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(3);
-		System.out.println("Running height simulation with 4 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(4);
-		System.out.println("Running height simulation with 5 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(5);
-		System.out.println("Running height simulation with 6 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(6);
-		System.out.println("Running height simulation with 7 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(7);
-		System.out.println("Running height simulation with 8 known height per plot...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(8);
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(0,0);
+		for (int realization = 0; realization < nbMaxReal; realization++) {
+			System.out.println("Running realization " + realization);
+//			System.out.println("Running height simulation with 1 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(1,realization);
+//			System.out.println("Running height simulation with 2 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(2,realization);
+//			System.out.println("Running height simulation with 3 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(3,realization);
+//			System.out.println("Running height simulation with 4 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(4,realization);
+//			System.out.println("Running height simulation with 5 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(5,realization);
+//			System.out.println("Running height simulation with 6 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(6,realization);
+//			System.out.println("Running height simulation with 7 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(7,realization);
+//			System.out.println("Running height simulation with 8 known height per plot...");
+			validator.validateWithTheNumberOfKnownHeightsPerPlot(8,realization);
+		}
 		System.out.println("Simulations done");
 	}
 }
