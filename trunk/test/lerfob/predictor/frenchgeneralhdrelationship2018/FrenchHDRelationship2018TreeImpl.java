@@ -12,7 +12,6 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 	private FrenchHDRelationship2018Stand stand;
 	double reference;
 	private double gOther;
-	boolean knownHeight;
 	
 	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String speciesName, double pred, FrenchHDRelationship2018Stand stand) {
 		this.heightM = heightM;

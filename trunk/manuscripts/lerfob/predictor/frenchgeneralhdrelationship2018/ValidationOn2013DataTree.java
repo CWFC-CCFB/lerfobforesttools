@@ -56,7 +56,8 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 	}
 
 	private final double weight;
-	
+	boolean knownHeight;
+
 	
 	ValidationOn2013DataTree(double heightM, 
 			double dbhCm, 
@@ -77,4 +78,8 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 	@Override
 	public double getSquaredDbhCm() {return getDbhCm() * getDbhCm();}
 
+	
+	double getDiff() {
+		return reference - getHeightM();		// reference is the true height here and the prediction has been stored into heightM.
+	}
 }
