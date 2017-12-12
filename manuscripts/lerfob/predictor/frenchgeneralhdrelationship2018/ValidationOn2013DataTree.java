@@ -80,6 +80,7 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 
 	
 	double getDiff() {
-		return reference - getHeightM();		// reference is the true height here and the prediction has been stored into heightM.
+		double diff = reference - getHeightM();
+		return diff;		// reference is the true height here and the prediction has been stored into heightM.
 	}
 }
