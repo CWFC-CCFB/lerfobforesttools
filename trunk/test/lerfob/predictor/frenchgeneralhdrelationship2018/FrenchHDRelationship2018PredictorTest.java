@@ -16,7 +16,6 @@ import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2018PredictorTest {
 
-	static List<String> SpeciesList = new ArrayList<String>();
 	static List<FrenchHDRelationship2018StandImpl> Stands;
 	static Map<Integer, Map<Integer, Blup>> Blups = readBlups();
 	
@@ -199,7 +198,6 @@ public class FrenchHDRelationship2018PredictorTest {
 
 	
 	private static List<FrenchHDRelationship2018StandImpl> readTrees() {
-		FrenchHDRelationship2018PredictorTest.SpeciesList.clear();
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
 		List<FrenchHDRelationship2018StandImpl> standList = new ArrayList<FrenchHDRelationship2018StandImpl>();
 		CSVReader reader = null;
@@ -250,11 +248,7 @@ public class FrenchHDRelationship2018PredictorTest {
 					standMap.put(idp, stand);
 				}
 				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, pred, standMap.get(idp));
-				if (!SpeciesList.contains(species)) {
-					SpeciesList.add(species);
-				}
 			}
-			Collections.sort(SpeciesList);
 			standList.addAll(standMap.values());
 			Collections.sort(standList);
 			return standList;
