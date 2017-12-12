@@ -74,5 +74,19 @@ public class ValidationOn2013DataStand extends FrenchHDRelationship2018StandImpl
 		}
 		return diffMap;
 	}
-	
+
+	protected Map<FrenchHd2018Species, List<Double>> getObservations() {
+		Map<FrenchHd2018Species, List<Double>> obsMap = new HashMap<FrenchHd2018Species, List<Double>>();
+		for (FrenchHd2018Species sp : FrenchHd2018Species.values()) {
+			obsMap.put(sp, new ArrayList<Double>());
+		}
+		for (FrenchHDRelationship2018Tree tree : treeList) {
+			ValidationOn2013DataTree t = (ValidationOn2013DataTree) tree;
+			if (!t.knownHeight) {
+				obsMap.get(tree.getFrenchHDTreeSpecies()).add(t.reference);
+			}
+		}
+		return obsMap;
+	}
+
 }

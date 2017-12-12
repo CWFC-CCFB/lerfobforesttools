@@ -2,6 +2,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,33 @@ import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
 import repicea.io.javacsv.CSVWriter;
+import repicea.math.Matrix;
 import repicea.util.ObjectUtility;
 
 public class ValidationOn2013Data {
-	
+
+	static class FutureRecord {
+		final int realization;
+		final FrenchHd2018Species species;
+		final int nbObs;
+		final double bias;
+		final double rmse;
+		final double meanObs;
+
+		FutureRecord(int realization, FrenchHd2018Species species, int nbObs, double bias, double rmse, double meanObs) {
+			this.realization = realization;
+			this.species = species;
+			this.nbObs = nbObs;
+			this.bias = bias;
+			this.rmse = rmse;
+			this.meanObs = meanObs;
+		}
+	}
+
+
+
 	static Map<Integer, ValidationOn2013DataStand> StandMap;
-	
+
 	private static Map<Integer, ValidationOn2013DataStand> readTrees() {
 		if (StandMap == null) {
 			String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "dataHDComplete.csv";
@@ -106,7 +128,7 @@ public class ValidationOn2013Data {
 								new ValidationOn2013DataTree(-1, d130, gOther, species, htot, w, standMap.get(idp));
 							}
 						}
-						
+
 					} catch (Exception e) {
 						System.out.println("Error while reading file at line " + line);
 					}
@@ -126,96 +148,110 @@ public class ValidationOn2013Data {
 		return StandMap;
 	}
 
-	public void validateWithTheNumberOfKnownHeightsPerPlot(int i, int realization) throws IOException {
+	public void validateWithTheNumberOfKnownHeightsPerPlot(int i, int nbRealizations) throws IOException {
 		readTrees();
-		FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
-		
-		for (ValidationOn2013DataStand stand : StandMap.values()) {
-			stand.clear();
-			stand.setHeightForThisNumberOfTrees(i);
-			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
-				if (!tree.knownHeight) {
-					tree.heightM = pred.predictHeightM(stand, tree);
+
+		List<FutureRecord> mainOutput = new ArrayList<FutureRecord>();
+		for (int real = 0; real < nbRealizations; real++) {
+			FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
+
+			for (ValidationOn2013DataStand stand : StandMap.values()) {
+				stand.clear();
+				stand.setHeightForThisNumberOfTrees(i);
+				for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
+					ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
+					if (!tree.knownHeight) {
+						tree.heightM = pred.predictHeightM(stand, tree);
+					}
 				}
 			}
+
+
+			Map<FrenchHd2018Species, List<Double>> biasMap = null;
+			Map<FrenchHd2018Species, List<Double>> obsMap = null;
+			for (ValidationOn2013DataStand stand : StandMap.values()) {
+				Map<FrenchHd2018Species, List<Double>> incomingMap = stand.getDifferences();
+				Map<FrenchHd2018Species, List<Double>> incomingObsMap = stand.getObservations();
+				if (biasMap == null) {
+					biasMap = incomingMap;
+					obsMap = incomingObsMap;
+				} else {
+					for (FrenchHd2018Species species : incomingMap.keySet()) {
+						biasMap.get(species).addAll(incomingMap.get(species));
+						obsMap.get(species).addAll(incomingObsMap.get(species));
+					}
+				}
+			}		
+
+			List<FutureRecord> output = new ArrayList<FutureRecord>();
+			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+				Matrix diff = new Matrix(biasMap.get(species));
+				Matrix obs = new Matrix(obsMap.get(species));
+				if (diff.m_iRows != obs.m_iRows) {
+					throw new InvalidParameterException("The number of observations is different from the number of differences!");
+				}
+				int nbObs = diff.m_iRows;
+				double bias = diff.scalarMultiply(1d/nbObs).getSumOfElements();
+				double rmse = Math.sqrt(diff.transpose().multiply(diff).m_afData[0][0] / nbObs);
+				double meanObs = obs.scalarMultiply(1d/nbObs).getSumOfElements();
+				output.add(new FutureRecord(real, species, nbObs, bias, rmse, meanObs));
+			}
+
+			mainOutput.addAll(output);
 		}
-		
-		
-		Map<FrenchHd2018Species, List<Double>> biasMap = null;
-		for (ValidationOn2013DataStand stand : StandMap.values()) {
-			Map<FrenchHd2018Species, List<Double>> incomingMap = stand.getDifferences();
-			if (biasMap == null) {
-				biasMap = incomingMap;
-			} else {
-				for (FrenchHd2018Species species : incomingMap.keySet()) {
-					biasMap.get(species).addAll(incomingMap.get(species));
-				}
-			}
-		}		
-		
-		
-		
-		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + "_" + realization + ".csv";
+
+
+
+		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + ".csv";
 		filename = filename.replace("bin", "manuscripts");
 		File file = new File(filename);
 		CSVWriter writer = new CSVWriter(file, false);
 		List<FormatField> fields = new ArrayList<FormatField>();
 		fields.add(new CSVField("realization"));
-		fields.add(new CSVField("idp"));
 		fields.add(new CSVField("species"));
-		fields.add(new CSVField("speciesType"));
-		fields.add(new CSVField("d130Cm"));
-		fields.add(new CSVField("heightM"));
-		fields.add(new CSVField("trueHeightM"));
-		fields.add(new CSVField("knownHeight"));
+		fields.add(new CSVField("nbObs"));
+		fields.add(new CSVField("bias"));
+		fields.add(new CSVField("rmse"));
+		fields.add(new CSVField("meanObs"));
 		writer.setFields(fields);
 		Object[] record;
-		for (ValidationOn2013DataStand stand : StandMap.values()) {
-			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				record = new Object[8];
-				record[0] = realization;
-				record[1] = stand.getSubjectId();
-				ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
-				record[2] = tree.species;
-				record[3] = tree.species.type;
-				record[4] = tree.getDbhCm();
-				record[5] = tree.heightM;
-				record[6] = tree.reference;
-				record[7] = tree.knownHeight;
-				writer.addRecord(record);
-			}
+		for (FutureRecord rec : mainOutput) {
+			record = new Object[6];
+			record[0] = rec.realization;
+			record[1] = rec.species.name();
+			record[2] = rec.nbObs;
+			record[3] = rec.bias;
+			record[4] = rec.rmse;
+			record[5] = rec.meanObs;
+			writer.addRecord(record);
 		}
 		writer.close();
 	}
-	
-	
-	
+
+
+
 	public static void main(String[] args) throws IOException {
 		int nbMaxReal = 100;
 		ValidationOn2013Data validator = new ValidationOn2013Data();
 		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation without known heights...");
-		validator.validateWithTheNumberOfKnownHeightsPerPlot(0,0);
-		for (int realization = 0; realization < nbMaxReal; realization++) {
-			System.out.println("Running realization " + realization);
-//			System.out.println("Running height simulation with 1 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(1,realization);
-//			System.out.println("Running height simulation with 2 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(2,realization);
-//			System.out.println("Running height simulation with 3 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(3,realization);
-//			System.out.println("Running height simulation with 4 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(4,realization);
-//			System.out.println("Running height simulation with 5 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(5,realization);
-//			System.out.println("Running height simulation with 6 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(6,realization);
-//			System.out.println("Running height simulation with 7 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(7,realization);
-//			System.out.println("Running height simulation with 8 known height per plot...");
-			validator.validateWithTheNumberOfKnownHeightsPerPlot(8,realization);
-		}
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(0,1);
+		System.out.println("Running height simulation with 1 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(1,nbMaxReal);
+		System.out.println("Running height simulation with 2 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(2,nbMaxReal);
+		System.out.println("Running height simulation with 3 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(3,nbMaxReal);
+		System.out.println("Running height simulation with 4 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(4,nbMaxReal);
+		System.out.println("Running height simulation with 5 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(5,nbMaxReal);
+		System.out.println("Running height simulation with 6 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(6,nbMaxReal);
+		System.out.println("Running height simulation with 7 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(7,nbMaxReal);
+		System.out.println("Running height simulation with 8 known height per plot...");
+		validator.validateWithTheNumberOfKnownHeightsPerPlot(8,nbMaxReal);
 		System.out.println("Simulations done");
 	}
 }
