@@ -3,7 +3,6 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,11 @@ public class ValidationOn2013Data {
 						
 						species = record[6].toString();
 						pent2 = Double.parseDouble(record[7].toString());
-						htot = Double.parseDouble(record[8].toString()) + 1.3;
+						double htot_mod = Double.parseDouble(record[8].toString());
+						if (Double.isNaN(htot_mod)) {
+							int u = 0;
+						}
+						htot = htot_mod + 1.3;
 						gOther = Double.parseDouble(record[9].toString());
 						w = Double.parseDouble(record[10].toString());
 						d130 = Double.parseDouble(record[11].toString());
@@ -110,10 +113,18 @@ public class ValidationOn2013Data {
 						double meanPrec = meanPrec_3 + meanPrec_4 + meanPrec_5 + meanPrec_6 + meanPrec_7 + meanPrec_8 + meanPrec_9; 
 						double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
 						if (!standMap.containsKey(idp)) {
-							FrenchHDRelationship2018StandImpl stand = new FrenchHDRelationship2018StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, standList);
+							ValidationOn2013DataStand stand = new ValidationOn2013DataStand(counter++, 
+									idp, 
+									dep,
+									mqd, 
+									pent2, 
+									harvestInLastFiveYears, 
+									meanTemp, 
+									meanPrec, 
+									standList);
 							standMap.put(idp, stand);
 						}
-						new FrenchHDRelationship2018TreeImpl(-1, d130, gOther, species, htot, standMap.get(idp));
+						new ValidationOn2013DataTree(-1, d130, gOther, species, htot, w, standMap.get(idp));
 					}
 				}
 				standList.addAll(standMap.values());
@@ -134,7 +145,6 @@ public class ValidationOn2013Data {
 	public void validateWithTheNumberOfKnownHeightsPerPlot(int i, int realization) throws IOException {
 		readTrees();
 		FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
-		FrenchCommercialVolume2014Predictor volPred = new FrenchCommercialVolume2014Predictor(false);
 		
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			stand.clear();
@@ -144,10 +154,6 @@ public class ValidationOn2013Data {
 				if (!tree.knownHeight) {
 					tree.heightM = pred.predictHeightM(stand, tree);
 				}
-				FrenchHDRelationship2018TreeImpl.TrueHeight = true;
-				tree.obsVolDm3 = volPred.predictTreeCommercialVolumeDm3(tree);
-				FrenchHDRelationship2018TreeImpl.TrueHeight = false;
-				tree.predictedVolDm3 = volPred.predictTreeCommercialVolumeDm3(tree);
 			}
 		}
 		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + "_" + realization + ".csv";
@@ -163,13 +169,11 @@ public class ValidationOn2013Data {
 		fields.add(new CSVField("heightM"));
 		fields.add(new CSVField("trueHeightM"));
 		fields.add(new CSVField("knownHeight"));
-		fields.add(new CSVField("obsVolDm3"));
-		fields.add(new CSVField("predictedVolDm3"));
 		writer.setFields(fields);
 		Object[] record;
 		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				record = new Object[10];
+				record = new Object[8];
 				record[0] = realization;
 				record[1] = stand.getSubjectId();
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
@@ -179,8 +183,6 @@ public class ValidationOn2013Data {
 				record[5] = tree.heightM;
 				record[6] = tree.reference;
 				record[7] = tree.knownHeight;
-				record[8] = tree.obsVolDm3;
-				record[9] = tree.predictedVolDm3;
 				writer.addRecord(record);
 			}
 		}
