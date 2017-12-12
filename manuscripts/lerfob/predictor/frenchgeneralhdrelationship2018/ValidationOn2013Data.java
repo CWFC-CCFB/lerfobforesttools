@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 
-import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Predictor;
+import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
@@ -17,42 +17,15 @@ import repicea.io.javacsv.CSVWriter;
 import repicea.util.ObjectUtility;
 
 public class ValidationOn2013Data {
-
-	static enum Department {
-		
-		d54("Lorraine"),
-		d55("Lorraine"),
-		d57("Lorraine"),
-		d88("Lorraine"),
-		d18("Centre"),
-		d28("Centre"),
-		d36("Centre"),
-		d37("Centre"),
-		d41("Centre"),
-		d45("Centre"),
-		d03("Auvergne"),
-		d15("Auvergne"),
-		d43("Auvergne"),
-		d63("Auvergne"),
-;
-		final String region;
-		
-		Department(String region) {
-			this.region = region;
-		}
-		
-	}
 	
+	static Map<Integer, ValidationOn2013DataStand> StandMap;
 	
-	static Map<Integer, FrenchHDRelationship2018StandImpl> StandMap;
-	
-	private static Map<Integer, FrenchHDRelationship2018StandImpl> readTrees() {
+	private static Map<Integer, ValidationOn2013DataStand> readTrees() {
 		if (StandMap == null) {
 			String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "dataHDComplete.csv";
-			List<FrenchHDRelationship2018StandImpl> standList = new ArrayList<FrenchHDRelationship2018StandImpl>();
+			List<ValidationOn2013DataStand> standList = new ArrayList<ValidationOn2013DataStand>();
 			CSVReader reader = null;
 			try {
-				// TODO FP update the reader with the new fields and update the vectors of parameters
 				reader = new CSVReader(filename);
 				Object[] record;
 				int idp;
@@ -64,67 +37,78 @@ public class ValidationOn2013Data {
 				double d130;
 				String dep;
 				double w;
-//				double pred;
+				//				double pred;
 				double mqd;
 				double htot;
 				double meanTemp_3, meanTemp_4, meanTemp_5, meanTemp_6, meanTemp_7, meanTemp_8, meanTemp_9;
 				double meanPrec_3, meanPrec_4, meanPrec_5, meanPrec_6, meanPrec_7, meanPrec_8, meanPrec_9;
-				Map<Integer, FrenchHDRelationship2018StandImpl> standMap = new HashMap<Integer, FrenchHDRelationship2018StandImpl>();
+				Map<Integer, ValidationOn2013DataStand> standMap = new HashMap<Integer, ValidationOn2013DataStand>();
 				int counter = 0;
+				int line = 0;
 				while ((record = reader.nextRecord()) != null) {
-					idp = Integer.parseInt(record[0].toString());
-					dep = record[1].toString().trim();
+					line++;
+					try {
+						idp = Integer.parseInt(record[0].toString());
+						dep = record[1].toString().trim();
+						if (dep.length() == 1) {
+							dep = "0" + dep;
+						}
 
-					if (record[2].toString().trim().equals("NA") || record[1].toString().trim().equals("0")) {
-						harvestInLastFiveYears = 0;
-					} else {
-						harvestInLastFiveYears = 1;
-					}
-					
-					year = Integer.parseInt(record[5].toString());
+						if (record[2].toString().trim().equals("NA") || record[1].toString().trim().equals("0")) {
+							harvestInLastFiveYears = 0;
+						} else {
+							harvestInLastFiveYears = 1;
+						}
 
-					if (year == 2013) {
+						year = Integer.parseInt(record[5].toString());
+
+						if (year == 2013) {
+							species = record[6].toString();
+							if (record[7].toString().equals("NA")) {
+								pent2 = 0d;		// assumption of flat land when the slope is missing
+							} else {
+								pent2 = Double.parseDouble(record[7].toString());
+							}
+							if (!record[8].toString().equals("NA")) {
+								htot = Double.parseDouble(record[8].toString()) + 1.3;
+								gOther = Double.parseDouble(record[9].toString());
+								w = Double.parseDouble(record[10].toString());
+								d130 = Double.parseDouble(record[11].toString());
+								mqd = d130 - Double.parseDouble(record[13].toString());
+								meanTemp_3 = Double.parseDouble(record[28].toString()); 
+								meanTemp_4 = Double.parseDouble(record[29].toString()); 
+								meanTemp_5 = Double.parseDouble(record[30].toString()); 
+								meanTemp_6 = Double.parseDouble(record[31].toString()); 
+								meanTemp_7 = Double.parseDouble(record[32].toString()); 
+								meanTemp_8 = Double.parseDouble(record[33].toString()); 
+								meanTemp_9 = Double.parseDouble(record[34].toString()); 
+								meanPrec_3 = Double.parseDouble(record[40].toString()); 
+								meanPrec_4 = Double.parseDouble(record[41].toString()); 
+								meanPrec_5 = Double.parseDouble(record[42].toString()); 
+								meanPrec_6 = Double.parseDouble(record[43].toString()); 
+								meanPrec_7 = Double.parseDouble(record[44].toString()); 
+								meanPrec_8 = Double.parseDouble(record[45].toString()); 
+								meanPrec_9 = Double.parseDouble(record[46].toString()); 
+								double meanPrec = meanPrec_3 + meanPrec_4 + meanPrec_5 + meanPrec_6 + meanPrec_7 + meanPrec_8 + meanPrec_9; 
+								double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
+								if (!standMap.containsKey(idp)) {
+									ValidationOn2013DataStand stand = new ValidationOn2013DataStand(counter++, 
+											idp, 
+											dep,
+											mqd, 
+											pent2, 
+											harvestInLastFiveYears, 
+											meanTemp, 
+											meanPrec, 
+											standList);
+									standMap.put(idp, stand);
+								}
+								new ValidationOn2013DataTree(-1, d130, gOther, species, htot, w, standMap.get(idp));
+							}
+						}
 						
-						species = record[6].toString();
-						pent2 = Double.parseDouble(record[7].toString());
-						double htot_mod = Double.parseDouble(record[8].toString());
-						if (Double.isNaN(htot_mod)) {
-							int u = 0;
-						}
-						htot = htot_mod + 1.3;
-						gOther = Double.parseDouble(record[9].toString());
-						w = Double.parseDouble(record[10].toString());
-						d130 = Double.parseDouble(record[11].toString());
-						mqd = d130 - Double.parseDouble(record[13].toString());
-						meanTemp_3 = Double.parseDouble(record[28].toString()); 
-						meanTemp_4 = Double.parseDouble(record[29].toString()); 
-						meanTemp_5 = Double.parseDouble(record[30].toString()); 
-						meanTemp_6 = Double.parseDouble(record[31].toString()); 
-						meanTemp_7 = Double.parseDouble(record[32].toString()); 
-						meanTemp_8 = Double.parseDouble(record[33].toString()); 
-						meanTemp_9 = Double.parseDouble(record[34].toString()); 
-						meanPrec_3 = Double.parseDouble(record[40].toString()); 
-						meanPrec_4 = Double.parseDouble(record[41].toString()); 
-						meanPrec_5 = Double.parseDouble(record[42].toString()); 
-						meanPrec_6 = Double.parseDouble(record[43].toString()); 
-						meanPrec_7 = Double.parseDouble(record[44].toString()); 
-						meanPrec_8 = Double.parseDouble(record[45].toString()); 
-						meanPrec_9 = Double.parseDouble(record[46].toString()); 
-						double meanPrec = meanPrec_3 + meanPrec_4 + meanPrec_5 + meanPrec_6 + meanPrec_7 + meanPrec_8 + meanPrec_9; 
-						double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
-						if (!standMap.containsKey(idp)) {
-							ValidationOn2013DataStand stand = new ValidationOn2013DataStand(counter++, 
-									idp, 
-									dep,
-									mqd, 
-									pent2, 
-									harvestInLastFiveYears, 
-									meanTemp, 
-									meanPrec, 
-									standList);
-							standMap.put(idp, stand);
-						}
-						new ValidationOn2013DataTree(-1, d130, gOther, species, htot, w, standMap.get(idp));
+					} catch (Exception e) {
+						System.out.println("Error while reading file at line " + line);
 					}
 				}
 				standList.addAll(standMap.values());
@@ -146,16 +130,32 @@ public class ValidationOn2013Data {
 		readTrees();
 		FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
 		
-		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
+		for (ValidationOn2013DataStand stand : StandMap.values()) {
 			stand.clear();
 			stand.setHeightForThisNumberOfTrees(i);
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
+				ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
 				if (!tree.knownHeight) {
 					tree.heightM = pred.predictHeightM(stand, tree);
 				}
 			}
 		}
+		
+		
+		Map<FrenchHd2018Species, List<Double>> biasMap = null;
+		for (ValidationOn2013DataStand stand : StandMap.values()) {
+			Map<FrenchHd2018Species, List<Double>> incomingMap = stand.getDifferences();
+			if (biasMap == null) {
+				biasMap = incomingMap;
+			} else {
+				for (FrenchHd2018Species species : incomingMap.keySet()) {
+					biasMap.get(species).addAll(incomingMap.get(species));
+				}
+			}
+		}		
+		
+		
+		
 		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + "_" + realization + ".csv";
 		filename = filename.replace("bin", "manuscripts");
 		File file = new File(filename);
@@ -171,12 +171,12 @@ public class ValidationOn2013Data {
 		fields.add(new CSVField("knownHeight"));
 		writer.setFields(fields);
 		Object[] record;
-		for (FrenchHDRelationship2018StandImpl stand : StandMap.values()) {
+		for (ValidationOn2013DataStand stand : StandMap.values()) {
 			for (FrenchHDRelationship2018Tree t : stand.getTreesForFrenchHDRelationship()) {
 				record = new Object[8];
 				record[0] = realization;
 				record[1] = stand.getSubjectId();
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) t;
+				ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
 				record[2] = tree.species;
 				record[3] = tree.species.type;
 				record[4] = tree.getDbhCm();

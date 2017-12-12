@@ -6,7 +6,6 @@ import java.util.List;
 
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
-import repicea.stats.StatisticalUtility;
 
 class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand, Comparable<FrenchHDRelationship2018StandImpl> {
 
@@ -20,7 +19,7 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 	private final double meanPrec;
 	final List<FrenchHDRelationship2018StandImpl> standList;
 	
-	private List<FrenchHDRelationship2018Tree> treeList;
+	List<FrenchHDRelationship2018Tree> treeList;
 	
 	
 	FrenchHDRelationship2018StandImpl(int index, 
@@ -105,31 +104,5 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 		return meanPrec;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void setHeightForThisNumberOfTrees(int i) {
-		if (i > treeList.size()) {
-			i = treeList.size();
-		}
-		if (i > 0) {
-			try {
-				List<FrenchHDRelationship2018Tree> sample = (List) StatisticalUtility.getSampleFromPopulation(treeList, i, false);
-				for (FrenchHDRelationship2018Tree tree : sample) {
-					((FrenchHDRelationship2018TreeImpl) tree).heightM = ((FrenchHDRelationship2018TreeImpl) tree).reference;
-					((FrenchHDRelationship2018TreeImpl) tree).knownHeight = true;
-				}
-			} catch (Exception e) {
-				int u = 0;
-			}
-		}
-	}
-	
-
-	protected void clear() {
-		for (FrenchHDRelationship2018Tree tree : treeList) {
-			((FrenchHDRelationship2018TreeImpl) tree).heightM = -1d;
-			((FrenchHDRelationship2018TreeImpl) tree).knownHeight = false;
-		}
-	}
-	
 	
 }
