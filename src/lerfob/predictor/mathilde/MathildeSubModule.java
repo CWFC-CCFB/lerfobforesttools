@@ -100,7 +100,7 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	public GaussianEstimate getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 

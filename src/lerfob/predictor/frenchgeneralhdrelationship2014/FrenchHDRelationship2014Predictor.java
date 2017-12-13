@@ -30,6 +30,8 @@ import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
+import repicea.stats.distributions.StandardGaussianDistribution;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -138,9 +140,9 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * For testing purpose only
 	 * @param stand
 	 */
-	protected GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
+	protected Estimate<? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
-		return internalPred.getBlups(stand);
+		return internalPred.getBlupsForThisSubject(stand);
 	}
 	
 	@Override
