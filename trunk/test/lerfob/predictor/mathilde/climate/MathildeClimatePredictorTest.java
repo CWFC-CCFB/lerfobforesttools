@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
 import repicea.io.javacsv.CSVReader;
-import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.distributions.StandardGaussianDistribution;
+import repicea.stats.estimates.Estimate;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
 public class MathildeClimatePredictorTest {
@@ -95,7 +96,7 @@ public class MathildeClimatePredictorTest {
 		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
 			climatePredictor.getMeanTemperatureForGrowthInterval(stand);
-			GaussianEstimate blup = climatePredictor.getBlupsForThisSubject(stand);
+			Estimate<? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
 			String experiment = stand.getSubjectId();
 			
 			double actualMean = blup.getMean().m_afData[0][0]; 
@@ -116,7 +117,34 @@ public class MathildeClimatePredictorTest {
 		}
 		System.out.println("MathildeClimatePredictorTest, Number of stands successfully tested : " + nbStands);
 	}
+
 	
+	@Test
+	public void testBlupsInStochasticMode() throws Exception {
+		readBlups();
+		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(true);
+		int nbRealizations = 50000;
+		MonteCarloEstimate estimate = new MonteCarloEstimate();
+		MathildeClimateStand s = MathildeClimatePredictor.getReferenceStands().get(10);
+		
+		for (int i = 0; i < nbRealizations; i++) {
+			for (MathildeClimateStand stand : MathildeClimatePredictor.getReferenceStands()) {
+				((MathildeClimateStandImpl) stand).realization = i;
+			}
+			climatePredictor.getMeanTemperatureForGrowthInterval(s);
+			estimate.addRealization(climatePredictor.getRandomEffects(s));
+		}
+		
+		double expectedMean = climatePredictor.getBlupsForThisSubject(s).getMean().m_afData[0][0];
+		double actualMean = estimate.getMean().m_afData[0][0];
+		double expectedVariance = climatePredictor.getBlupsForThisSubject(s).getVariance().m_afData[0][0];
+		double actualVariance = estimate.getVariance().m_afData[0][0];
+		Assert.assertEquals("Comparing blup means",	expectedMean, actualMean, 5E-3);
+		Assert.assertEquals("Comparing blup variances",	expectedVariance, actualVariance, 1E-3);
+		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of blups successfully tested!");
+
+	}
+
 	@Test
 	public void testMeanPlotCoordinates() throws IOException {
 		readMeanPlotCoordinates();

@@ -102,12 +102,17 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}
 	
-	
+
+	/**
+	 * This method sets the fertility class. However, it must be set before estimating the random effects. 
+	 * Otherwise, it has no effect.
+	 */
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
-		if (areBlupsEstimated()) {
-			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
-		} else if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
+//		if (areBlupsEstimated()) {
+//			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
+//		} else 
+		if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
 			currentFertilityClass = fertilityClass;
 		}
 	}
@@ -118,8 +123,9 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 			super.predictHeightRandomEffects(stand);
 		} else {	// we have tweaked the plot random effect to account for the site index class
 			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
-			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
-			setBlupsEstimated(true);		// to make sure we won't come here after the blup prediction
+			setBlupsForThisSubject(stand, estimate);
+//			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
+//			setBlupsEstimated(true);		// to make sure we won't come here after the blup prediction
 		}
 	}
 	
@@ -221,8 +227,11 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	}
 
 
-	public GaussianEstimate getBlups(FrenchHDRelationship2014Stand stand) {
-		return getBlupsForThisSubject(stand);
+	/*
+	 * Extended visibility for MathildeDiameterIncrementPredictor
+	 */
+	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2014Stand stand) {
+		return super.getBlupsForThisSubject(stand);
 	}
 
 

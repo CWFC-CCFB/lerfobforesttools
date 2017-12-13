@@ -19,9 +19,7 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014InternalPredictor;
@@ -295,12 +293,11 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 					species == FrenchHdSpecies.CHENE_PEDONCULE || 
 					species == FrenchHdSpecies.HETRE) {
 				if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.BLUPS_JUST_SET.getPropertyName())) {
-					if (!getSubModule().areBlupsEstimated()) {
-						Object[] newValue = (Object[]) event.getNewValue();
-						Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects = (Map) newValue[0];
-						List<MonteCarloSimulationCompliantObject> subjectList = (List) newValue[1]; 
-						setDiameterBlupsFromHeightBlups(subjectList, defaultHeightRandomEffects, hdPredictor);
-						getSubModule().setBlupsEstimated(true);
+					Object[] newValue = (Object[]) event.getNewValue();
+					Estimate<? extends StandardGaussianDistribution> defaultHeightRandomEffects = (Estimate) newValue[0];
+					MonteCarloSimulationCompliantObject subject = (MonteCarloSimulationCompliantObject) newValue[1]; 
+					if (!getSubModule().doBlupsExistForThisSubject(subject)) {
+						setDiameterBlupFromHeightBlup(subject, defaultHeightRandomEffects, hdPredictor);
 					}
 				} else if (event.getPropertyName().equals(ModelBasedSimulatorEventProperty.DEFAULT_RANDOM_EFFECT_AT_THIS_LEVEL_JUST_SET.getPropertyName())) {
 					Object[] newValue = (Object[]) event.getNewValue();
@@ -331,36 +328,18 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		}
 	}
 	
-	private void setDiameterBlupsFromHeightBlups(List<MonteCarloSimulationCompliantObject> subjectList,
-			Map<String, Estimate<? extends StandardGaussianDistribution>> defaultHeightRandomEffects,
+	private void setDiameterBlupFromHeightBlup(MonteCarloSimulationCompliantObject subject,
+			Estimate<? extends StandardGaussianDistribution> defaultHeightRandomEffects,
 			FrenchHDRelationship2014InternalPredictor hdPredictor) {
-		List<MonteCarloSimulationCompliantObject> newSubjectList = new ArrayList<MonteCarloSimulationCompliantObject>();
-		Matrix mean = null;
-		Matrix variance = null;
-		for (MonteCarloSimulationCompliantObject subject : subjectList) {
-			if (subject instanceof FrenchHDRelationship2014Stand) {
-				if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT) && getSubModule().getBlupsForThisSubject(subject) == null) {
-					GaussianEstimate heightBlups = hdPredictor.getBlups((FrenchHDRelationship2014Stand) subject);
-					GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(defaultHeightRandomEffects.get(subject.getHierarchicalLevel().toString()),
-							getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
-							heightBlups.getMean()); 
-					if (mean == null) {
-						mean = blupsForThisSubject.getMean();
-					} else {
-						mean = mean.matrixStack(blupsForThisSubject.getMean(), true);
-					}
-					if (variance == null) {
-						variance = blupsForThisSubject.getVariance();
-					} else {
-						variance = variance.matrixDiagBlock(blupsForThisSubject.getVariance());
-					}
-					newSubjectList.add(subject);
-				}
+		if (subject instanceof FrenchHDRelationship2014Stand) {
+			if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT)) {
+				Estimate<? extends StandardGaussianDistribution> heightBlups = hdPredictor.getBlupsForThisSubject((FrenchHDRelationship2014Stand) subject);
+				GaussianEstimate blupsForThisSubject = setRandomEffectsAccordingToHeightDeviate(defaultHeightRandomEffects,
+						getSubModule().getDefaultRandomEffects(subject.getHierarchicalLevel()), 
+						heightBlups.getMean()); 
+				getSubModule().registerBlupsForThisSubject(subject, blupsForThisSubject);
 			}
 		}
-		int numberFixedEffectParameters = getSubModule().getParameterEstimates().getNumberOfFixedEffectParameters();
-		Matrix covariance = new Matrix(variance.m_iRows, numberFixedEffectParameters);
-		getSubModule().registerBlups(mean, variance, covariance, newSubjectList);
 	}
 	
 	protected final GaussianEstimate setRandomEffectsAccordingToHeightDeviate(Estimate<? extends StandardGaussianDistribution> heightRandomEffect,

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.hdrelationships.HDRelationshipStand;
 
 class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand, Comparable<FrenchHDRelationship2014StandImpl> {
 
@@ -75,10 +74,10 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	public boolean isInterventionResult() {return this.hasBeenHarvestedInLast5Years == 1d;}
 
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public List<HDRelationshipStand> getAllHDStands() {
-		return (List) standList;
-	}
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	@Override
+//	public List<HDRelationshipStand> getAllHDStands() {
+//		return (List) standList;
+//	}
 
 }

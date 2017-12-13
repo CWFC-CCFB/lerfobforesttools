@@ -48,7 +48,7 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
 			setParameterEstimates(new GaussianEstimate(beta, omega));
-			oXVector = new Matrix(1, getParameterEstimates().getNumberOfFixedEffectParameters());
+			oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 			
 			Matrix covParms = ParameterLoader.loadVectorFromFile(covParmsFilename).get();
 			Matrix randomEffectVariance = covParms.getSubMatrix(0, 0, 0, 0);

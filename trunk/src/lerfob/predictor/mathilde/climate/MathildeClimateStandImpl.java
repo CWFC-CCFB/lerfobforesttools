@@ -33,6 +33,7 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	final double xCoord;
 	final double yCoord;
 	final double pred;
+	int realization;
 	
 	MathildeClimateStandImpl(String name, double xCoord, double yCoord, int dateYr, double meanAnnualTempAbove6C, double pred) {
 		this.name = name;
@@ -60,7 +61,7 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	protected double getPrediction() {return pred;}
 
 	@Override
-	public int getMonteCarloRealizationId() {return 0;}
+	public int getMonteCarloRealizationId() {return realization;}
 
 	
 	@Override

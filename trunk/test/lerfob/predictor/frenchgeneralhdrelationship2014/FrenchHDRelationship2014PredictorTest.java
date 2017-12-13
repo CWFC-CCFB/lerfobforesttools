@@ -11,7 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
-import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.distributions.StandardGaussianDistribution;
+import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2014PredictorTest {
@@ -69,7 +70,7 @@ public class FrenchHDRelationship2014PredictorTest {
 				if (tree.getFrenchHDTreeSpecies().ordinal() <= 3) {
 					int index = tree.getFrenchHDTreeSpecies().ordinal() + 1;
 					predictor.predictHeightM(stand, tree);
-					GaussianEstimate currentBlups = predictor.getBlups(stand, tree);
+					Estimate<? extends StandardGaussianDistribution> currentBlups = predictor.getBlups(stand, tree);
 					double actualBlup = currentBlups.getMean().m_afData[0][0];
 					double actualVariance = currentBlups.getVariance().m_afData[0][0];
 					int convertedIndex = Integer.parseInt(stand.getSubjectId());

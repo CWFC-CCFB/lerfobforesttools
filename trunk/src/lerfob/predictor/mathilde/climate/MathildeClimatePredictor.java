@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde.climate;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -32,6 +33,8 @@ import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
+import repicea.stats.distributions.StandardGaussianDistribution;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -48,7 +51,12 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimateStand> referenceStands;
 
+	private List<String> listStandID;
+	private List<MathildeClimateStand> standsForWhichBlupsWillBePredicted;
+	
 	private double rho;
+	
+	private GaussianEstimate blups;
 	
 	public MathildeClimatePredictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
@@ -152,7 +160,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * @return
 	 */
 	public double getMeanTemperatureForGrowthInterval(MathildeClimateStand stand) {
-		if (!areBlupsEstimated()) {
+		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}
 		Matrix currentBeta = getParametersForThisRealization(stand);
@@ -173,15 +181,14 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private synchronized void predictBlups(MathildeClimateStand stand) {
-		if (!areBlupsEstimated()) {
+		if (!doBlupsExistForThisSubject(stand)) {
 			List<MathildeClimateStand> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
-			List<MathildeClimateStand> standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimateStands();
+			standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimateStands();
 			stands.addAll(standsForWhichBlupsWillBePredicted);
 			
-			List<String> listStandID = new ArrayList<String>();
+			listStandID = new ArrayList<String>();
 			Map<String, MathildeClimateStand> uniqueStandMap = new HashMap<String, MathildeClimateStand>();
 			for (MathildeClimateStand s : stands) {
 				if (!listStandID.contains(s.getSubjectId())) {
@@ -254,20 +261,45 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix varBlupsSecondTerm = covariance.multiply(matXk.transpose()).multiply(invVk).multiply(covV.transpose());
 			Matrix varBlups = varBlupsFirstTerm.subtract(varBlupsSecondTerm);
 			
-			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
+			this.blups = new GaussianEstimate(blups, varBlups);
+			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
+				int index = listStandID.indexOf(s.getSubjectId());
+				setBlupsForThisSubject(s, new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
+						varBlups.getSubMatrix(index, index, index, index)));
+			}
+//			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
 		}
-		setBlupsEstimated(true);
+//		setBlupsEstimated(true);
 	}
 
+	@Override
+	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+		if (listStandID.contains(subject.getSubjectId())) {
+			Matrix simulatedBlups = blups.getRandomDeviate();
+			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
+				int index = listStandID.indexOf(s.getSubjectId());
+				setDeviatesForRandomEffectsOfThisSubject(s, simulatedBlups.getSubMatrix(index, index, 0, 0));
+			}
+			return simulatedBlups.getDeepClone();
+		} else {
+			throw new InvalidParameterException("The stand has no blups which is abnormal!");
+		}
+	}
 	/*
 	 * For extended visibility (non-Javadoc)
 	 * @see repicea.simulation.ModelBasedSimulator#getBlupsForThisSubject(repicea.simulation.MonteCarloSimulationCompliantObject)
 	 */
 	@Override
-	protected GaussianEstimate getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 	
+	/*
+	 * For extended visibility
+	 */
+	protected final Matrix getRandomEffects(MonteCarloSimulationCompliantObject subject) {
+		return super.getRandomEffectsForThisSubject(subject);
+	}
 //	public static void main(String[] args) {
 //		new MathildeClimatePredictor(false);
 //	}
