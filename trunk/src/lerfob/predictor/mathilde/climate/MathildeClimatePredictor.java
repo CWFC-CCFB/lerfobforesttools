@@ -262,11 +262,16 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix varBlups = varBlupsFirstTerm.subtract(varBlupsSecondTerm);
 			
 			this.blups = new GaussianEstimate(blups, varBlups);
-			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
-				int index = listStandID.indexOf(s.getSubjectId());
-				setBlupsForThisSubject(s, new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
+			for (int index = 0; index < standsForWhichBlupsWillBePredicted.size(); index++) {
+				setBlupsForThisSubject(standsForWhichBlupsWillBePredicted.get(index),
+						new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
 						varBlups.getSubMatrix(index, index, index, index)));
 			}
+//			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
+//				int index = listStandID.indexOf(s.getSubjectId());
+//				setBlupsForThisSubject(s, new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
+//						varBlups.getSubMatrix(index, index, index, index)));
+//			}
 //			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
 		}
 //		setBlupsEstimated(true);
