@@ -16,28 +16,72 @@ import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
 import repicea.io.javacsv.CSVWriter;
 import repicea.math.Matrix;
+import repicea.stats.estimates.ConfidenceInterval;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
 public class ValidationOn2013Data {
 
-	static class FutureRecord {
+	static class Realization {
 		final int realization;
 		final FrenchHd2018Species species;
 		final int nbObs;
 		final double bias;
-		final double rmse;
+		final double mse;
 		final double meanObs;
 
-		FutureRecord(int realization, FrenchHd2018Species species, int nbObs, double bias, double rmse, double meanObs) {
+		Realization(int realization, FrenchHd2018Species species, int nbObs, double bias, double mse, double meanObs) {
 			this.realization = realization;
 			this.species = species;
 			this.nbObs = nbObs;
 			this.bias = bias;
-			this.rmse = rmse;
+			this.mse = mse;
 			this.meanObs = meanObs;
 		}
 	}
 
+	static class Record {
+		final FrenchHd2018Species species;
+		final double meanNbObs;
+		final double lowNbObs;
+		final double uppNbObs;
+
+		final double meanBias;
+		final double lowBias;
+		final double uppBias;
+
+		final double meanMse;
+		final double lowMse;
+		final double uppMse;
+		
+		final double meanMeanObs;
+		final double lowMeanObs;
+		final double uppMeanObs;
+
+		Record(FrenchHd2018Species species, double meanNbObs, double lowNbObs, double uppNbObs,
+				double meanBias, double lowBias, double uppBias, 
+				double meanMse, double lowMse, double uppMse,
+				double meanMeanObs, double lowMeanObs, double uppMeanObs) {
+			this.species = species;
+			
+			this.meanNbObs = meanNbObs;
+			this.lowNbObs = lowNbObs;
+			this.uppNbObs = uppNbObs;
+
+			this.meanBias = meanBias;
+			this.lowBias = lowBias;
+			this.uppBias = uppBias;
+
+			this.meanMse = meanMse;
+			this.lowMse = lowMse;
+			this.uppMse = uppMse;
+			
+			this.meanMeanObs = meanMeanObs;
+			this.lowMeanObs = lowMeanObs;
+			this.uppMeanObs= uppMeanObs;
+			
+		}
+	}
 
 
 	static Map<Integer, ValidationOn2013DataStand> StandMap;
@@ -152,7 +196,7 @@ public class ValidationOn2013Data {
 	public void validateWithTheNumberOfKnownHeightsPerPlot(int i, int nbRealizations) throws IOException {
 		readTrees();
 
-		List<FutureRecord> mainOutput = new ArrayList<FutureRecord>();
+		List<Realization> mainOutput = new ArrayList<Realization>();
 		for (int real = 0; real < nbRealizations; real++) {
 			FrenchHDRelationship2018Predictor pred = new FrenchHDRelationship2018Predictor();		// deterministic 
 
@@ -166,14 +210,10 @@ public class ValidationOn2013Data {
 					ValidationOn2013DataTree tree = (ValidationOn2013DataTree) t;
 					if (!tree.knownHeight) {
 						double predicted = pred.predictHeightM(stand, tree);
-						if (predicted > 100) {
-							int u = 0;
-						}
 						tree.heightM = predicted;
 					}
 				}
 			}
-
 
 			Map<FrenchHd2018Species, List<Double>> biasMap = null;
 			Map<FrenchHd2018Species, List<Double>> obsMap = null;
@@ -191,7 +231,7 @@ public class ValidationOn2013Data {
 				}
 			}		
 
-			List<FutureRecord> output = new ArrayList<FutureRecord>();
+			List<Realization> output = new ArrayList<Realization>();
 			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
 				Matrix diff = new Matrix(biasMap.get(species));
 				Matrix obs = new Matrix(obsMap.get(species));
@@ -200,46 +240,118 @@ public class ValidationOn2013Data {
 				}
 				int nbObs = diff.m_iRows;
 				double bias = diff.scalarMultiply(1d/nbObs).getSumOfElements();
-				double rmse = Math.sqrt(diff.transpose().multiply(diff).m_afData[0][0] / nbObs);
+				double mse = diff.transpose().multiply(diff).m_afData[0][0] / nbObs;
 				double meanObs = obs.scalarMultiply(1d/nbObs).getSumOfElements();
-				output.add(new FutureRecord(real, species, nbObs, bias, rmse, meanObs));
+				output.add(new Realization(real, species, nbObs, bias, mse, meanObs));
 			}
-
 			mainOutput.addAll(output);
 		}
 
-
+		Map<FrenchHd2018Species, MonteCarloEstimate> nbObs = new HashMap<FrenchHd2018Species, MonteCarloEstimate>();  
+		Map<FrenchHd2018Species, MonteCarloEstimate> bias = new HashMap<FrenchHd2018Species, MonteCarloEstimate>();  
+		Map<FrenchHd2018Species, MonteCarloEstimate> mse = new HashMap<FrenchHd2018Species, MonteCarloEstimate>();  
+		Map<FrenchHd2018Species, MonteCarloEstimate> meanObs = new HashMap<FrenchHd2018Species, MonteCarloEstimate>();  
+		for (Realization rec : mainOutput) {
+			recordValueInThisMap(nbObs, rec.species, (double) rec.nbObs);
+			recordValueInThisMap(bias, rec.species, rec.bias);
+			recordValueInThisMap(mse, rec.species, rec.mse);
+			recordValueInThisMap(meanObs, rec.species, rec.meanObs);
+		}
 
 		String filename = ObjectUtility.getPackagePath(getClass()) + "knownHeight_" + i + ".csv";
 		filename = filename.replace("bin", "manuscripts");
 		File file = new File(filename);
-		CSVWriter writer = new CSVWriter(file, false);
-		List<FormatField> fields = new ArrayList<FormatField>();
-		fields.add(new CSVField("realization"));
-		fields.add(new CSVField("species"));
-		fields.add(new CSVField("nbObs"));
-		fields.add(new CSVField("bias"));
-		fields.add(new CSVField("rmse"));
-		fields.add(new CSVField("meanObs"));
-		writer.setFields(fields);
-		Object[] record;
-		for (FutureRecord rec : mainOutput) {
-			record = new Object[6];
-			record[0] = rec.realization;
-			record[1] = rec.species.name();
-			record[2] = rec.nbObs;
-			record[3] = rec.bias;
-			record[4] = rec.rmse;
-			record[5] = rec.meanObs;
-			writer.addRecord(record);
+		CSVWriter writer = null;
+		
+		try {
+	        writer = new CSVWriter(file, false);
+			List<FormatField> fields = new ArrayList<FormatField>();
+			fields.add(new CSVField("species"));
+			
+			fields.add(new CSVField("meanNbObs"));
+			fields.add(new CSVField("lowNbObs"));
+			fields.add(new CSVField("uppNbObs"));
+			
+			fields.add(new CSVField("meanBias"));
+			fields.add(new CSVField("lowBias"));
+			fields.add(new CSVField("uppBias"));
+			
+			fields.add(new CSVField("meanMse"));
+			fields.add(new CSVField("lowMse"));
+			fields.add(new CSVField("uppMse"));
+
+			fields.add(new CSVField("meanMeanObs"));
+			fields.add(new CSVField("lowMeanObs"));
+			fields.add(new CSVField("uppMeanObs"));
+			
+			writer.setFields(fields);
+			
+			Object[] record;
+			ConfidenceInterval ci;
+			MonteCarloEstimate estimate;
+			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+				record = new Object[13];
+				record[0] = species;
+
+				estimate = nbObs.get(species);
+				if (estimate.getNumberOfRealizations() != nbRealizations) {
+					throw new InvalidParameterException("The resulting number of realizations is inconsistent!");
+				}
+				record[1] = estimate.getMean().m_afData[0][0];
+				ci = estimate.getConfidenceIntervalBounds(0.95);
+				record[2] = ci.getLowerLimit().m_afData[0][0];
+				record[3] = ci.getUpperLimit().m_afData[0][0];
+				
+				estimate = bias.get(species);
+				if (estimate.getNumberOfRealizations() != nbRealizations) {
+					throw new InvalidParameterException("The resulting number of realizations is inconsistent!");
+				}
+				record[4] = estimate.getMean().m_afData[0][0];
+				ci = estimate.getConfidenceIntervalBounds(0.95);
+				record[5] = ci.getLowerLimit().m_afData[0][0];
+				record[6] = ci.getUpperLimit().m_afData[0][0];
+
+				estimate = mse.get(species);
+				if (estimate.getNumberOfRealizations() != nbRealizations) {
+					throw new InvalidParameterException("The resulting number of realizations is inconsistent!");
+				}
+				record[7] = estimate.getMean().m_afData[0][0];
+				ci = estimate.getConfidenceIntervalBounds(0.95);
+				record[8] = ci.getLowerLimit().m_afData[0][0];
+				record[9] = ci.getUpperLimit().m_afData[0][0];
+
+				estimate = meanObs.get(species);
+				if (estimate.getNumberOfRealizations() != nbRealizations) {
+					throw new InvalidParameterException("The resulting number of realizations is inconsistent!");
+				}
+				record[10] = estimate.getMean().m_afData[0][0];
+				ci = estimate.getConfidenceIntervalBounds(0.95);
+				record[11] = ci.getLowerLimit().m_afData[0][0];
+				record[12] = ci.getUpperLimit().m_afData[0][0];
+				
+				writer.addRecord(record);
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
 		}
-		writer.close();
 	}
 
 
-
+	private void recordValueInThisMap(Map<FrenchHd2018Species, MonteCarloEstimate> map, FrenchHd2018Species species, double value) {
+		if (!map.containsKey(species)) {
+			map.put(species, new MonteCarloEstimate());
+		}
+		Matrix newFormat = new Matrix(1,1);
+		newFormat.m_afData[0][0] = value;
+		map.get(species).addRealization(newFormat);
+	}
+	
 	public static void main(String[] args) throws IOException {
-		int nbMaxReal = 1000;
+		int nbMaxReal = 100;
 		ValidationOn2013Data validator = new ValidationOn2013Data();
 		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation without known heights...");
