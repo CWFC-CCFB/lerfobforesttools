@@ -351,7 +351,7 @@ public class ValidationOn2013Data {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		int nbMaxReal = 100;
+		int nbMaxReal = 1000;
 		ValidationOn2013Data validator = new ValidationOn2013Data();
 		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
 		System.out.println("Running height simulation without known heights...");
