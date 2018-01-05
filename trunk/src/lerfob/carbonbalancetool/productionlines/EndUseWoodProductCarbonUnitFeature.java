@@ -70,6 +70,9 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 			return REpiceaTranslator.getString(this);
 		}
 	}
+	
+	
+	
 	@Deprecated
 	private boolean disposable;
 	@Deprecated
@@ -92,6 +95,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	private LifeCycleAnalysis lca;
 
 	
+	
 	/**
 	 * The empty constructor is handled by the interface.
 	 */
@@ -99,6 +103,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		super(processor);
 		useClass = UseClass.NONE;
 	}
+	
 	
 	protected double getEmissionsMgCO2ByFunctionalUnit() {return emissionsByFunctionalUnit;}
 	
@@ -208,8 +213,10 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 				UseClass newUseClass = (UseClass) obj;
 				if (newUseClass != useClass) {
 					((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
-					useClass = (UseClass) obj;
+					useClass = newUseClass;
 				}
+			} else if (obj instanceof LifetimeMode) {
+				super.itemStateChanged(evt);
 			}
 		} else if (evt.getSource().equals(getUserInterfacePanel().isDisposableCheckBox)) {
 			if (getUserInterfacePanel().isEnabled()) {
