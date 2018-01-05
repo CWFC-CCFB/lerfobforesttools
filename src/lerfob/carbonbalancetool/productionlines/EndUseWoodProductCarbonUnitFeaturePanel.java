@@ -125,6 +125,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 			}
 		}
 		
+		
 		emissionsByFUField = NumberFormatFieldFactory.createNumberFormatField(NumberFormatFieldFactory.Type.Double,
 				NumberFormatFieldFactory.Range.Positive,
 				false);

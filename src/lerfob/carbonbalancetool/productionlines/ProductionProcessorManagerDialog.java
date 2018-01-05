@@ -77,13 +77,13 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 
 
 	public static enum MessageID implements TextableEnum {
-		LandFillMarketLabel("Landfill", "D\u00E9charge"),
+		LandFillMarketLabel("Solid waste disposal site", "Site d'\u00E9mination des d\u00E9chets solides"),
 		LeftInForestLabel("Dead organic matter", "Mati\u00E8re organique morte"),
 		ProductionLineFileExtension("Flux configuration file (*.prl)", "fichier de configuration de flux (*.prl)"),
 		Default("Default","D\u00E9faut"),
 		BuckingModelLabel("Bucking module", "Mod\u00E8le de billonnage"),
-		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un transformateur"),
-		LandfillButtonToolTip("Create a landfill site", "Cr\u00E9er une d\u00E9charge"),
+		ProcessorButtonToolTip("Create a processor", "Cr\u00E9er un processeur"),
+		LandfillButtonToolTip("Create a solid waste disposal site", "Cr\u00E9er un site d'\u00E9mination des d\u00E9chets solides"),
 		LeftInForestButtonToolTip("Leave on forest floor", "Laisser en for\u00EAt"),
 		EndOfLifeLinkButtonToolTip("End of life destination", "Destination en fin de vie"),
 		IncompatibleTreeLogger("The tree logger is incompatible and will be replaced by the default tree logger!", "Le module de billonnage est incompatible et sera remplac\u00E9 par le module de billonnage par d\u00E9faut!");
