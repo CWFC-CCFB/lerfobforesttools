@@ -40,8 +40,8 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 	private static final double HALFLIFE_TO_MEANLIFETIME_CONSTANT = 1d / Math.log(2d);
 
 	protected static enum LifetimeMode implements TextableEnum {
-		HALFLIFE("Half-life", "Demi-vie"),
-		AVERAGE("Average", "Moyenne"); 
+		HALFLIFE("Half-life (yr)", "Demi-vie (ann\u00E9es)"),
+		AVERAGE("Average lifetime (yr)", "Dur\u00E9e de vie moyenne (ann\u00E9es)"); 
 
 		LifetimeMode(String englishText, String frenchText) {
 			setText(englishText, frenchText);

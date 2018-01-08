@@ -20,7 +20,6 @@ package lerfob.carbonbalancetool.productionlines;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -43,7 +42,7 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 
 	public static enum MessageID implements TextableEnum {
 		WoodProductFeatureLabel("Specific features", "Caract\u00E9ristiques sp\u00E9cifiques"),
-		AverageLifeTime("Lifetime (yr)", "Dur\u00E9e de vie (ann\u00E9es)")
+//		AverageLifeTime("Lifetime (yr)", "Dur\u00E9e de vie (ann\u00E9es)")
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -97,22 +96,7 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 		setupPanel.add(mainPanel, BorderLayout.NORTH);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-//		JPanel lifetimePanel = UIControlManager.createSimpleHorizontalPanel(MessageID.AverageLifeTime, averageLifetimeTextField, 5, true);
-	
-		
-		JPanel lifetimePanel = new JPanel(new BorderLayout());
-		JPanel subPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		subPanel.add(Box.createHorizontalStrut(5));
-		subPanel.add(UIControlManager.getLabel(MessageID.AverageLifeTime));
-		subPanel.add(Box.createHorizontalStrut(5));
-		subPanel.add(lifetimeModeList);
-		subPanel.add(Box.createHorizontalStrut(5));
-		
-		lifetimePanel.add(subPanel, BorderLayout.WEST);
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		lifetimePanel.add(centerPanel, BorderLayout.CENTER);
-		centerPanel.add(averageLifetimeTextField, BorderLayout.CENTER);
-		lifetimePanel.add(Box.createHorizontalStrut(5), BorderLayout.EAST);
+		JPanel lifetimePanel = UIControlManager.createSimpleHorizontalPanel(lifetimeModeList, averageLifetimeTextField, 5, true);
 		
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(lifetimePanel);
