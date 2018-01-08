@@ -23,6 +23,9 @@ import java.awt.Container;
 import repicea.simulation.processsystem.ProcessorButton;
 import repicea.simulation.processsystem.SystemPanel;
 import repicea.simulation.treelogger.LogCategory;
+import repicea.simulation.treelogger.TreeLoggerParameters;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * The LogCategoryProcessor is a specific implementation of Processor for a particular log grade category
@@ -32,6 +35,25 @@ import repicea.simulation.treelogger.LogCategory;
 @SuppressWarnings("serial")
 public class LogCategoryProcessor extends LeftHandSideProcessor {
 
+	private enum MessageID implements TextableEnum {
+		ALL_SPECIES("Any species", "Toute esp\u00E8ce");
+
+		MessageID(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		@Override
+		public String toString() {
+			return REpiceaTranslator.getString(this);
+		}
+	}
+	
+	
 	/**
 	 * The LogCategoryProcessorButton class is the GUI implementation for 
 	 * LogCategoryProcessor. It has a specific icon for better identification in the GUI.
@@ -65,7 +87,11 @@ public class LogCategoryProcessor extends LeftHandSideProcessor {
 	
 	@Override
 	public String getName() {
-		return logCategory.getSpecies() + " - " + logCategory.getName();
+		String speciesName = logCategory.getSpecies();
+		if (speciesName.equals(TreeLoggerParameters.ANY_SPECIES)) {
+			speciesName = MessageID.ALL_SPECIES.toString();
+		}
+		return speciesName + " - " + logCategory.getName();
 	}
 	
 	@Override
