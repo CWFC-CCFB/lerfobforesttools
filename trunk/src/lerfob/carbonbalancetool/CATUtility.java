@@ -122,6 +122,7 @@ public class CATUtility {
 
 		hardwood_simple("Hardwood - Simple", "Feuillus - Simple"),
 		hardwood_recycling("Hardwood - Recycling", "Feuillus - Recyclage"),
+		ipcc2014("IPCC 2014 basic configuration", "GIEC 2014 configuration de base"),
 		customized("Customized", "Sur mesure");
 
 		ProductionManagerName(String englishText, String frenchText) {
