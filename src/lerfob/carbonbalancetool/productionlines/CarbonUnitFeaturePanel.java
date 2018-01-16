@@ -80,7 +80,7 @@ public class CarbonUnitFeaturePanel extends REpiceaPanel {
 	
 	protected void initializeFields() {
 		averageLifetimeTextField = NumberFormatFieldFactory.createNumberFormatField(Type.Double, Range.Positive, false);
-		averageLifetimeTextField.setText(((Double) getCaller().getAverageLifetime(null)).toString());
+		averageLifetimeTextField.setText(((Double) getCaller().averageLifetime).toString());
 		averageLifetimeTextField.setPreferredSize(new Dimension(100, averageLifetimeTextField.getFontMetrics(averageLifetimeTextField.getFont()).getHeight() + 2));
 		
 		lifetimeModeList = new JComboBox<LifetimeMode>(LifetimeMode.values());

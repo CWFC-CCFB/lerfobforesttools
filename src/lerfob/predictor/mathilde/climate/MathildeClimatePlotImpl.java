@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 import repicea.simulation.HierarchicalLevel;
 
-class MathildeClimateStandImpl implements MathildeClimateStand {
+class MathildeClimatePlotImpl implements MathildeClimatePlot {
 
 	final String name;
 	final double meanAnnualTempAbove6C;
@@ -35,7 +35,7 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	final double pred;
 	int realization;
 	
-	MathildeClimateStandImpl(String name, double xCoord, double yCoord, int dateYr, double meanAnnualTempAbove6C, double pred) {
+	MathildeClimatePlotImpl(String name, double xCoord, double yCoord, int dateYr, double meanAnnualTempAbove6C, double pred) {
 		this.name = name;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -76,15 +76,15 @@ class MathildeClimateStandImpl implements MathildeClimateStand {
 	}
 
 	@Override
-	public List<MathildeClimateStand> getAllMathildeClimateStands() {
-		Map<String, MathildeClimateStand> standMap = new TreeMap<String, MathildeClimateStand>(); 
-		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
-			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
+	public List<MathildeClimatePlot> getAllMathildeClimatePlots() {
+		Map<String, MathildeClimatePlot> standMap = new TreeMap<String, MathildeClimatePlot>(); 
+		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
+			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
 			if (!standMap.containsKey(stand.name)) {
 				standMap.put(stand.name, stand);
 			}
 		}
-		List<MathildeClimateStand> stands = new ArrayList<MathildeClimateStand>();
+		List<MathildeClimatePlot> stands = new ArrayList<MathildeClimatePlot>();
 		stands.addAll(standMap.values());
 		return stands;
 	}

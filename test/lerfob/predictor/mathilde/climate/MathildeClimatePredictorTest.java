@@ -73,8 +73,8 @@ public class MathildeClimatePredictorTest {
 	public void testDeterministicPredictionsWithReferenceStands() {
 		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false);
 		int nbStands = 0;
-		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
-			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
+		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
+			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
 			double actualPrediction = climatePredictor.getFixedEffectPrediction(stand);
 			double expectedPrediction = stand.getPrediction();
 			Assert.assertEquals("Comparing predictions for stand : " + stand.name + stand.dateYr,
@@ -93,8 +93,8 @@ public class MathildeClimatePredictorTest {
 		readBlups();
 		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false);
 		int nbStands = 0;
-		for (MathildeClimateStand s : MathildeClimatePredictor.getReferenceStands()) {
-			MathildeClimateStandImpl stand = (MathildeClimateStandImpl) s;
+		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
+			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
 			climatePredictor.getMeanTemperatureForGrowthInterval(stand);
 			Estimate<? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
 			String experiment = stand.getSubjectId();
@@ -125,11 +125,11 @@ public class MathildeClimatePredictorTest {
 		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(true);
 		int nbRealizations = 50000;
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
-		MathildeClimateStand s = MathildeClimatePredictor.getReferenceStands().get(10);
+		MathildeClimatePlot s = MathildeClimatePredictor.getReferenceStands().get(10);
 		
 		for (int i = 0; i < nbRealizations; i++) {
-			for (MathildeClimateStand stand : MathildeClimatePredictor.getReferenceStands()) {
-				((MathildeClimateStandImpl) stand).realization = i;
+			for (MathildeClimatePlot stand : MathildeClimatePredictor.getReferenceStands()) {
+				((MathildeClimatePlotImpl) stand).realization = i;
 			}
 			climatePredictor.getMeanTemperatureForGrowthInterval(s);
 			estimate.addRealization(climatePredictor.getRandomEffects(s));

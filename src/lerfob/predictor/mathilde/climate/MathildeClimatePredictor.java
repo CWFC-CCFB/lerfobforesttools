@@ -49,10 +49,10 @@ import repicea.util.ObjectUtility;
 public class MathildeClimatePredictor extends REpiceaPredictor {
 	
 	private final static GregorianCalendar SystemDate = new GregorianCalendar();
-	private static List<MathildeClimateStand> referenceStands;
+	private static List<MathildeClimatePlot> referenceStands;
 
 	private List<String> listStandID;
-	private List<MathildeClimateStand> standsForWhichBlupsWillBePredicted;
+	private List<MathildeClimatePlot> standsForWhichBlupsWillBePredicted;
 	
 	private double rho;
 	
@@ -97,11 +97,11 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * This method returns a copy of static member referenceStands.
 	 * @return a List of MathildeClimateStandImpl instances
 	 */
-	protected static List<MathildeClimateStand> getReferenceStands() {
+	protected static List<MathildeClimatePlot> getReferenceStands() {
 		if (referenceStands == null) {
 			instantiateReferenceStands();
 		} 
-		List<MathildeClimateStand> copyList = new ArrayList<MathildeClimateStand>();
+		List<MathildeClimatePlot> copyList = new ArrayList<MathildeClimatePlot>();
 		copyList.addAll(referenceStands);
 		return copyList;
 	}
@@ -111,7 +111,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		CSVReader reader = null;
 		try {
 			if (referenceStands == null) {
-				referenceStands = new ArrayList<MathildeClimateStand>();
+				referenceStands = new ArrayList<MathildeClimatePlot>();
 				String path = ObjectUtility.getRelativePackagePath(MathildeClimatePredictor.class);
 				String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
 				reader = new CSVReader(referenceStandsFilename);
@@ -123,7 +123,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 				int dateYr = Integer.parseInt(record[3].toString());
 	 				double meanTempGrowthSeason = Double.parseDouble(record[5].toString());
 	 				double predicted = Double.parseDouble(record[6].toString());
-	 				MathildeClimateStandImpl stand = new MathildeClimateStandImpl(experimentName, xCoord, yCoord, dateYr, meanTempGrowthSeason, predicted);
+	 				MathildeClimatePlotImpl stand = new MathildeClimatePlotImpl(experimentName, xCoord, yCoord, dateYr, meanTempGrowthSeason, predicted);
 	 				referenceStands.add(stand);
 	 			}
 			}
@@ -136,7 +136,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		}
 	}
 
-	protected final synchronized double getFixedEffectPrediction(MathildeClimateStand stand, Matrix currentBeta) {
+	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
 		double dateMinus1950 = stand.getDateYr() - 1950;
 		if (dateMinus1950 < 0) {
@@ -159,7 +159,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * @param stand a MathildeMortalityStand stand
 	 * @return
 	 */
-	public double getMeanTemperatureForGrowthInterval(MathildeClimateStand stand) {
+	public double getMeanTemperatureForGrowthInterval(MathildeClimatePlot stand) {
 		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}
@@ -177,20 +177,20 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * @param stand
 	 * @return
 	 */
-	protected final double getFixedEffectPrediction(MathildeClimateStand stand) {
+	protected final double getFixedEffectPrediction(MathildeClimatePlot stand) {
 		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
 	}
 	
-	private synchronized void predictBlups(MathildeClimateStand stand) {
+	private synchronized void predictBlups(MathildeClimatePlot stand) {
 		if (!doBlupsExistForThisSubject(stand)) {
-			List<MathildeClimateStand> stands = getReferenceStands();
+			List<MathildeClimatePlot> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
-			standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimateStands();
+			standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimatePlots();
 			stands.addAll(standsForWhichBlupsWillBePredicted);
 			
 			listStandID = new ArrayList<String>();
-			Map<String, MathildeClimateStand> uniqueStandMap = new HashMap<String, MathildeClimateStand>();
-			for (MathildeClimateStand s : stands) {
+			Map<String, MathildeClimatePlot> uniqueStandMap = new HashMap<String, MathildeClimatePlot>();
+			for (MathildeClimatePlot s : stands) {
 				if (!listStandID.contains(s.getSubjectId())) {
 					listStandID.add(s.getSubjectId());
 					uniqueStandMap.put(s.getSubjectId(), s);
@@ -203,7 +203,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix matX = new Matrix(stands.size(),2);
 			
 			for (int i = 0; i < knownStandIndex; i++) {
-				MathildeClimateStandImpl standImpl = (MathildeClimateStandImpl) stands.get(i);
+				MathildeClimatePlotImpl standImpl = (MathildeClimatePlotImpl) stands.get(i);
 				residuals.m_afData[i][0] = standImpl.meanAnnualTempAbove6C - getFixedEffectPrediction(standImpl, defaultBeta);
 			}
 
@@ -211,7 +211,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix matZ = new Matrix(stands.size(), listStandID.size());
 			for (int i = 0; i < stands.size(); i++) {
 				Matrix z_i = new Matrix(1, listStandID.size());
-				MathildeClimateStand s = stands.get(i);
+				MathildeClimatePlot s = stands.get(i);
 				z_i.m_afData[0][listStandID.indexOf(s.getSubjectId())] = 1d;
 				matZ.setSubMatrix(z_i, i, 0);
 				getFixedEffectPrediction(s, defaultBeta);
@@ -226,8 +226,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 					if (i == j) {
 						matG.m_afData[i][j] = variance;
 					} else {
-						MathildeClimateStand stand1 = uniqueStandMap.get(listStandID.get(i));
-						MathildeClimateStand stand2 = uniqueStandMap.get(listStandID.get(j));
+						MathildeClimatePlot stand1 = uniqueStandMap.get(listStandID.get(i));
+						MathildeClimatePlot stand2 = uniqueStandMap.get(listStandID.get(j));
 						double y_resc1 = stand1.getLatitudeDeg();
 						double x_resc1 = stand1.getLongitudeDeg();
 						double y_resc2 = stand2.getLatitudeDeg();
@@ -281,7 +281,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
 		if (listStandID.contains(subject.getSubjectId())) {
 			Matrix simulatedBlups = blups.getRandomDeviate();
-			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
+			for (MathildeClimatePlot s : standsForWhichBlupsWillBePredicted) {
 				int index = listStandID.indexOf(s.getSubjectId());
 				setDeviatesForRandomEffectsOfThisSubject(s, simulatedBlups.getSubMatrix(index, index, 0, 0));
 			}
