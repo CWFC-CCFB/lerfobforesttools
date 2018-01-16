@@ -52,7 +52,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	private static List<MathildeClimatePlot> referenceStands;
 
 	private List<String> listStandID;
-	private List<MathildeClimatePlot> standsForWhichBlupsWillBePredicted;
+//	private List<MathildeClimatePlot> standsForWhichBlupsWillBePredicted;
 	
 	private double rho;
 	
@@ -185,7 +185,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		if (!doBlupsExistForThisSubject(stand)) {
 			List<MathildeClimatePlot> stands = getReferenceStands();
 			int knownStandIndex = stands.size();
-			standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimatePlots();
+			List<MathildeClimatePlot> standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimatePlots();
 			stands.addAll(standsForWhichBlupsWillBePredicted);
 			
 			List<String> tempListStandID = new ArrayList<String>();
@@ -277,7 +277,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
 		if (listStandID.contains(subject.getSubjectId())) {
 			Matrix simulatedBlups = blups.getRandomDeviate();
-			for (MathildeClimatePlot s : standsForWhichBlupsWillBePredicted) {
+			List<MathildeClimatePlot> standList = ((MathildeClimatePlot) subject).getAllMathildeClimatePlots();
+			for (MathildeClimatePlot s : standList) {
 				int index = listStandID.indexOf(s.getSubjectId());
 				setDeviatesForRandomEffectsOfThisSubject(s, simulatedBlups.getSubMatrix(index, index, 0, 0));
 			}
