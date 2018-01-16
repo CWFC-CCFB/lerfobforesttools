@@ -62,7 +62,7 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 	 * IMPORTANT: This field can be either the average lifetime or the half-life. The conversion is handled 
 	 * by the getAverageLifetime() method.
 	 */
-	private double averageLifetime;
+	protected double averageLifetime;
 
 	private AbstractProductionLineProcessor processor;
 	
@@ -72,7 +72,7 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 
 	protected CarbonUnitFeature(AbstractProductionLineProcessor processor) {
 		setProcessor(processor);
-		lifetimeMode = LifetimeMode.HALFLIFE; // default value
+//		lifetimeMode = LifetimeMode.HALFLIFE; // default value
 	}
 	
 	protected LifetimeMode getLifetimeMode() {

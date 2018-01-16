@@ -28,16 +28,16 @@ import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesP
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
  * @author Mathieu Fortin - June 2013
  */
-public interface MathildeClimateStand extends MonteCarloSimulationCompliantObject, 
+public interface MathildeClimatePlot extends MonteCarloSimulationCompliantObject, 
 										DateYrProvider,
 										GeographicalCoordinatesProvider {
 
 	/**
-	 * This method returns all the stand of the sample so that it is possible
+	 * This method returns all the plots of the sample so that it is possible
 	 * to generate the blups with respect to the reference stands in the 
 	 * MathildeClimatePredictor class.
 	 * @return a List of MathildeClimateStand which will be concatenated with the reference stands.
 	 */
-	public List<MathildeClimateStand> getAllMathildeClimateStands();
+	public List<MathildeClimatePlot> getAllMathildeClimatePlots();
 	
 }
