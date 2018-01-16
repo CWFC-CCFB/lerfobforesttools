@@ -188,11 +188,11 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			standsForWhichBlupsWillBePredicted = stand.getAllMathildeClimatePlots();
 			stands.addAll(standsForWhichBlupsWillBePredicted);
 			
-			listStandID = new ArrayList<String>();
+			List<String> tempListStandID = new ArrayList<String>();
 			Map<String, MathildeClimatePlot> uniqueStandMap = new HashMap<String, MathildeClimatePlot>();
 			for (MathildeClimatePlot s : stands) {
-				if (!listStandID.contains(s.getSubjectId())) {
-					listStandID.add(s.getSubjectId());
+				if (!tempListStandID.contains(s.getSubjectId())) {
+					tempListStandID.add(s.getSubjectId());
 					uniqueStandMap.put(s.getSubjectId(), s);
 				}
 			}
@@ -208,17 +208,17 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			}
 
 			
-			Matrix matZ = new Matrix(stands.size(), listStandID.size());
+			Matrix matZ = new Matrix(stands.size(), tempListStandID.size());
 			for (int i = 0; i < stands.size(); i++) {
-				Matrix z_i = new Matrix(1, listStandID.size());
+				Matrix z_i = new Matrix(1, tempListStandID.size());
 				MathildeClimatePlot s = stands.get(i);
-				z_i.m_afData[0][listStandID.indexOf(s.getSubjectId())] = 1d;
+				z_i.m_afData[0][tempListStandID.indexOf(s.getSubjectId())] = 1d;
 				matZ.setSubMatrix(z_i, i, 0);
 				getFixedEffectPrediction(s, defaultBeta);
 				matX.setSubMatrix(oXVector.getSubMatrix(0, 0, 0, 1), i, 0);
 			}
 			
-			Matrix matG = new Matrix(listStandID.size(), listStandID.size());
+			Matrix matG = new Matrix(tempListStandID.size(), tempListStandID.size());
 			
 			double variance = getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().m_afData[0][0];
 			for (int i = 0; i < matG.m_iRows; i++) {
@@ -226,8 +226,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 					if (i == j) {
 						matG.m_afData[i][j] = variance;
 					} else {
-						MathildeClimatePlot stand1 = uniqueStandMap.get(listStandID.get(i));
-						MathildeClimatePlot stand2 = uniqueStandMap.get(listStandID.get(j));
+						MathildeClimatePlot stand1 = uniqueStandMap.get(tempListStandID.get(i));
+						MathildeClimatePlot stand2 = uniqueStandMap.get(tempListStandID.get(j));
 						double y_resc1 = stand1.getLatitudeDeg();
 						double x_resc1 = stand1.getLongitudeDeg();
 						double y_resc2 = stand2.getLatitudeDeg();
@@ -262,10 +262,13 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix varBlups = varBlupsFirstTerm.subtract(varBlupsSecondTerm);
 			
 			this.blups = new GaussianEstimate(blups, varBlups);
+			listStandID = new ArrayList<String>();
 			for (int index = 0; index < standsForWhichBlupsWillBePredicted.size(); index++) {
-				setBlupsForThisSubject(standsForWhichBlupsWillBePredicted.get(index),
+				MathildeClimatePlot plot = standsForWhichBlupsWillBePredicted.get(index); 
+				setBlupsForThisSubject(plot,
 						new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
 						varBlups.getSubMatrix(index, index, index, index)));
+				listStandID.add(plot.getSubjectId());
 			}
 		}
 	}
@@ -275,8 +278,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		if (listStandID.contains(subject.getSubjectId())) {
 			Matrix simulatedBlups = blups.getRandomDeviate();
 			for (MathildeClimatePlot s : standsForWhichBlupsWillBePredicted) {
-//				int index = listStandID.indexOf(s.getSubjectId());
-				int index = standsForWhichBlupsWillBePredicted.indexOf(s.getSubjectId());
+				int index = listStandID.indexOf(s.getSubjectId());
 				setDeviatesForRandomEffectsOfThisSubject(s, simulatedBlups.getSubMatrix(index, index, 0, 0));
 			}
 			return simulatedBlups.getDeepClone();
