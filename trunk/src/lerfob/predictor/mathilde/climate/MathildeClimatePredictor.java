@@ -267,14 +267,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 						new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
 						varBlups.getSubMatrix(index, index, index, index)));
 			}
-//			for (MathildeClimateStand s : standsForWhichBlupsWillBePredicted) {
-//				int index = listStandID.indexOf(s.getSubjectId());
-//				setBlupsForThisSubject(s, new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
-//						varBlups.getSubMatrix(index, index, index, index)));
-//			}
-//			registerBlups(blups, varBlups, covariance, (List) standsForWhichBlupsWillBePredicted);
 		}
-//		setBlupsEstimated(true);
 	}
 
 	@Override
@@ -282,7 +275,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 		if (listStandID.contains(subject.getSubjectId())) {
 			Matrix simulatedBlups = blups.getRandomDeviate();
 			for (MathildeClimatePlot s : standsForWhichBlupsWillBePredicted) {
-				int index = listStandID.indexOf(s.getSubjectId());
+//				int index = listStandID.indexOf(s.getSubjectId());
+				int index = standsForWhichBlupsWillBePredicted.indexOf(s.getSubjectId());
 				setDeviatesForRandomEffectsOfThisSubject(s, simulatedBlups.getSubMatrix(index, index, 0, 0));
 			}
 			return simulatedBlups.getDeepClone();
