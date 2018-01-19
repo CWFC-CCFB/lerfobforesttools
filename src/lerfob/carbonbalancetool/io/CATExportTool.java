@@ -266,7 +266,7 @@ public class CATExportTool extends REpiceaExportTool {
 								r.addField(new GExportFieldDetails("Type", type.name()));
 								r.addField(new GExportFieldDetails("Class", useClass.toString()));
 								r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
-								r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+								r.addField(new GExportFieldDetails("Biomass_Mgha", biomassEstimate.getRealizations().get(j).m_afData[0][0]));
 								for (Element nutrient : Element.getNutrients()) {
 									nutrientKg = 0d;
 									if (carrier != null && carrier.containsKey(nutrient)) {

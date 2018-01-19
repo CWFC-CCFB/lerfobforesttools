@@ -24,7 +24,8 @@ package lerfob.carbonbalancetool;
  */
 public interface CATBasicWoodDensityProvider {
 
-	
+	// TODO use the basic wood density from the CATSettings class
+	@Deprecated
 	public enum AverageBasicDensity {
 		SessileOak(.685, 12d),		// Nepveu Table IV.3 12% moisture content
 		EuropeanBeech(.720, 12d),	// Nepveu Table IV.3 12% moisture content
