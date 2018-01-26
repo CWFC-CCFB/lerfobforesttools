@@ -153,7 +153,6 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 				chkBox.setEnabled(!isComparison);
 			} 
 			if (chkBox.getCompartmentID() == CompartmentInfo.EnerSubs) {
-				System.out.println("Checking substitution! : " + isComparison);
 				chkBox.setEnabled(isComparison);
 			}
 		}

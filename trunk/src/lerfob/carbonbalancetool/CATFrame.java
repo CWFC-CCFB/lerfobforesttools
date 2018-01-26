@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CancellationException;
 
@@ -501,7 +502,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			if (catRecordReader.getSelector().getUI(null).hasBeenCancelled()) {
 				return;
 			}
-			caller.setStandList(catRecordReader.getStandList());
+			List<CATCompatibleStand> stands = catRecordReader.getStandList();
+			caller.setStandList(stands);
 			caller.getSettingMemory().setProperty("lerfobcat.growthSimulationFilename", growthSimulationFilename);
 		} catch (Exception e) {
 			if (e instanceof CancellationException) {

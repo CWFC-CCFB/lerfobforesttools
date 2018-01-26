@@ -19,6 +19,7 @@
 package lerfob.carbonbalancetool.io;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -236,20 +237,51 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		}
 	}
 
-//	@Override
-//	protected void checkInputFieldsFormat(Object[] oArray) throws Exception {
-//		int index = this.getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.HarvestedVolume);
-//		if (oArray[index].toString().isEmpty()) {
-//			oArray[index] = "0";
-//		}
-//		super.checkInputFieldsFormat(oArray);
-//	}
 	@Override
 	public void readRecordsForThisGroupId(int groupId) throws Exception {
 		standMap.clear();
 		super.readRecordsForThisGroupId(groupId);
 	}
+
+	@Override 
+	public void readAllRecords() throws Exception {
+		super.readAllRecords();
+		ensureValidityInCasesOfEmptyPlots();
+	}
 	
+	
+	private void ensureValidityInCasesOfEmptyPlots() throws Exception {
+		Map<String, Double> plotIDAndAreaHa = new HashMap<String, Double>();
+		int numberOfRealizations = -1;
+		for (CATGrowthSimulationCompositeStand stand : standMap.values()) {
+			for (int i = 0; i < stand.getNumberRealizations(); i++) {
+				if (numberOfRealizations == -1) {
+					numberOfRealizations = stand.getNumberRealizations();
+				}
+				if (numberOfRealizations != stand.getNumberRealizations()) {
+					throw new Exception("The number of realizations is inconsistent along the projections!");
+				}
+				CATGrowthSimulationPlotSample sample = stand.getRealization(i);
+				for (String pId : sample.getPlotMap().keySet()) {
+					if (!plotIDAndAreaHa.containsKey(pId)) {
+						plotIDAndAreaHa.put(pId, sample.getPlot(pId).getAreaHa());
+					}
+				}
+			}
+		}
+		
+		for (CATGrowthSimulationCompositeStand stand : standMap.values()) {
+			for (int i = 0; i < stand.getNumberRealizations(); i++) {
+				CATGrowthSimulationPlotSample sample = stand.getRealization(i);
+				for (String pId : plotIDAndAreaHa.keySet()) {
+					if (!sample.getPlotMap().containsKey(pId)) {
+						sample.createPlot(pId, plotIDAndAreaHa.get(pId));
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * This method returns the stand list that was last read.
 	 * @return a list of CATCompatibleStand instances
