@@ -32,7 +32,7 @@ class CATGrowthSimulationPlotSample implements CATCompatibleStand {
 	@Override
 	public Collection<CATGrowthSimulationTree> getTrees(StatusClass statusClass) {
 		Collection<CATGrowthSimulationTree> coll = new ArrayList<CATGrowthSimulationTree>();
-		for (CATGrowthSimulationPlot plot : plotMap.values()) {
+		for (CATGrowthSimulationPlot plot : getPlotMap().values()) {
 			coll.addAll(plot.getTrees(statusClass));
 		}
 		return coll;
@@ -48,11 +48,13 @@ class CATGrowthSimulationPlotSample implements CATCompatibleStand {
 	public int getDateYr() {return compositeStand.getDateYr();}
 
 	void createPlot(String plotID, double plotAreaHa) {
-		if (!plotMap.containsKey(plotID)) {
-			plotMap.put(plotID, new CATGrowthSimulationPlot(plotID, plotAreaHa, this));
+		if (!getPlotMap().containsKey(plotID)) {
+			getPlotMap().put(plotID, new CATGrowthSimulationPlot(plotID, plotAreaHa, this));
 		}
 	}
 	
-	CATGrowthSimulationPlot getPlot(String plotID) {return plotMap.get(plotID);}
+	Map<String, CATGrowthSimulationPlot> getPlotMap() {return plotMap;}
+	
+	CATGrowthSimulationPlot getPlot(String plotID) {return getPlotMap().get(plotID);}
 
 }

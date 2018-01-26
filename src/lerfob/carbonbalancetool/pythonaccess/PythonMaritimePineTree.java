@@ -48,7 +48,7 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 
 	@Override
 	public double getBasicWoodDensity() {
-		return AverageBasicDensity.MaritimePine.getBasicDensity();
+		return AverageBasicDensity.MaritimePine.getBasicDensity();			// to ensure that the JUnit test will be validated
 	}
 
 	

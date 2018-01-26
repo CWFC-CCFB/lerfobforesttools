@@ -43,7 +43,7 @@ class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements 
 
 	@Override
 	public double getBasicWoodDensity() {
-		return AverageBasicDensity.EuropeanBeech.getBasicDensity();
+		return AverageBasicDensity.EuropeanBeech.getBasicDensity();		// to ensure that the JUnit test will be validated
 	}
 
 
