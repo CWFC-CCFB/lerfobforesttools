@@ -70,7 +70,6 @@ class CATResultBudgetPanel extends CATResultPanel {
 
 	@Override
 	protected ChartPanel createChart() {
-
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(getCarbonFactor(), getCICoverage());
 
 		for (CompartmentInfo compartmentID : optionPanel.getCompartmentToBeShown()) {
