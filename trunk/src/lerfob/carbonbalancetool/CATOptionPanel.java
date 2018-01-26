@@ -34,12 +34,34 @@ import javax.swing.JScrollPane;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import repicea.gui.UIControlManager;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * This inner class is just a JPanel with check boxes to display the compartment options. 
  * @author Mathieu Fortin - November 2012
  */
 public class CATOptionPanel extends JScrollPane implements ItemListener {
+	
+	private static enum MessageID implements TextableEnum {
+		Stocks("Stocks", "Stocks"),
+		Fluxes("Fluxes", "Flux"),
+		TooltipSubstitution("Substitution is only available when comparing scenarios", "La substitution n'est affich\u00E9e que dans les comparaisons de sc\u00E9arios"),
+		TooltipFossilFuelEmission("Fossil-fuel emissions are only available when visualizing a single carbon balance", "Les \u00E9missions d'origine fossile ne sont pas affich\u00E9es lors des comparaisons de sc\u00E9arios");
+		MessageID(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+	}
+
+	
 	
 	private static final long serialVersionUID = 1L;
 	private List<CATCompartmentCheckBox> booleanSettings;
@@ -58,7 +80,7 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
 
 		JPanel stockLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JLabel stockLabel = UIControlManager.getLabel ("Stock");
+		JLabel stockLabel = UIControlManager.getLabel(MessageID.Stocks);
 		stockLabelPanel.add(stockLabel);
 		checkBoxPanel.add(stockLabelPanel);
 		
@@ -69,7 +91,7 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		}
 		
 		JPanel fluxLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JLabel fluxLabel = UIControlManager.getLabel("Flux");
+		JLabel fluxLabel = UIControlManager.getLabel(MessageID.Fluxes);
 		fluxLabelPanel.add(fluxLabel);
 		checkBoxPanel.add(fluxLabelPanel);
 
@@ -97,6 +119,12 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		CATCompartmentCheckBox checkBox = new CATCompartmentCheckBox(compartmentID);
 		booleanSettings.add(checkBox);
 		checkBox.addItemListener(this);
+		if (compartmentID == CompartmentInfo.EnerSubs) {
+			checkBox.setToolTipText(MessageID.TooltipSubstitution.toString());
+		}
+		if (compartmentID == CompartmentInfo.CarbEmis) {
+			checkBox.setToolTipText(MessageID.TooltipFossilFuelEmission.toString());
+		}
 		if (offset) {
 			panel.add(Box.createHorizontalStrut(10));
 		}
@@ -112,13 +140,27 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 	protected List<CompartmentInfo> getCompartmentToBeShown() {
 		List<CompartmentInfo> oVec = new ArrayList<CompartmentInfo>();
 		for (CATCompartmentCheckBox chkBox : booleanSettings) {
-			if (chkBox.isSelected()) {
+			if (chkBox.isEnabled() && chkBox.isSelected()) {
 				oVec.add(chkBox.getCompartmentID());
 			}
 		}
 		return oVec;
 	}
-
+	
+	protected void enableOnlyIfComparison(boolean isComparison) {
+		for (CATCompartmentCheckBox chkBox : booleanSettings) {
+			if (chkBox.getCompartmentID() == CompartmentInfo.CarbEmis) {
+				chkBox.setEnabled(!isComparison);
+			} 
+			if (chkBox.getCompartmentID() == CompartmentInfo.EnerSubs) {
+				System.out.println("Checking substitution! : " + isComparison);
+				chkBox.setEnabled(isComparison);
+			}
+		}
+	}
+	
+	
+	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {

@@ -69,11 +69,11 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The landfill degradable carbon pool.
 		 */
-		LfillDeg(false, "Landfill (DOCf)", "D\u00E9charge (DOCf)", false, new Color(0,0,100)),
+		LfillDeg(false, "SWDS (DOCf)", "Site d'enfouissement (DOCf)", false, new Color(0,0,100)),
 		/**
 		 * The carbon emissions due to fossil fuel consumption.
 		 */
-		CarbEmis(true, "Carbon emissions", "Emissions", false, new Color(150,100,100)),
+		CarbEmis(true, "Fossil-fuel emissions", "Emissions d'origine fossile", false, new Color(150,100,100)),
 		/**
 		 * The energy substitution.
 		 */
@@ -81,11 +81,11 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The landfill non degradable carbon pool.
 		 */
-		LfillND(true, "Landfill (Non degradable)", "D\u00E9charge (Non d\u00E9gradable)", false, new Color(0,150,150)),
+		LfillND(true, "SWDS (Non degradable)", "Site d'enfouissement (Non d\u00E9gradable)", false, new Color(0,150,150)),
 		/**
 		 * The Landfill GHG emissions (CH4)
 		 */
-		LfillEm(true, "Landfill (Methane emissions)", "D\u00E9charge (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
+		LfillEm(true, "SWDS (Methane emissions)", "Site d'enfouissement (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
 		/**
 		 * The libing biomass, i.e. the aboveground biomass + the belowground biomass.
 		 */

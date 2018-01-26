@@ -67,9 +67,13 @@ class CATSingleViewPanel extends REpiceaPanel implements ItemListener, PropertyC
 	
 	protected CATSimulationResult getSummary() {return summary;}
 	
+	private boolean isComparison() {return getSummary() instanceof CATSimulationDifference;}
+
+	
 	@Override
 	public void refreshInterface() {
 		CATResultPanel viewer = (CATResultPanel) selector.getSelectedItem();
+		optionPanel.enableOnlyIfComparison(isComparison());
 		viewerScrollPane.getViewport().setView(viewer);
 		viewer.refreshInterface();
 		repaint();
