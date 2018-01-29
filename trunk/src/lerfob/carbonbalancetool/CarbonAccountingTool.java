@@ -33,6 +33,7 @@ import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 
+import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
@@ -44,10 +45,12 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
+import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.app.SettingMemory;
 import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
-import repicea.gui.genericwindows.GenericSplashWindow;
+import repicea.gui.genericwindows.REpiceaLicenseWindow;
+import repicea.gui.genericwindows.REpiceaSplashWindow;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -198,26 +201,27 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				if (!hasAlreadyBeenInstanciated) {
 					String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
 					String iconPath =  packagePath + "SplashImage.jpg";
-					new GenericSplashWindow(iconPath, 4, parentFrame);
+					String bottomSplashWindowString = "Build " +  LERFOBJARSVNAppVersion.getInstance().getBuild() + "-" + REpiceaJARSVNAppVersion.getInstance().getBuild();
+					new REpiceaSplashWindow(iconPath, 4, parentFrame, bottomSplashWindowString);
 
-					//				String licensePath = packagePath + "LGPLLicense_en.html";
-					//				if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
-					//					licensePath = packagePath + "LGPLLicense_fr.html";
-					//				}
+					String licensePath = packagePath + "CATLicense_en.txt";
+					if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
+						licensePath = packagePath + "CATLicense_fr.txt";
+					}
 
-					//				GeneralLicenseWindow licenseDlg;
-					//				try {
-					//					licenseDlg = new GeneralLicenseWindow(parentFrame, licensePath);
-					//					licenseDlg.setVisible(true);
-					//					if (!licenseDlg.isLicenseAccepted()) {
-					//						return false;
-					//					} else {
-					hasAlreadyBeenInstanciated = true;
-					//					}
-					//				} catch (IOException e) {
-					//					e.printStackTrace();
-					//					return false;
-					//				}
+					REpiceaLicenseWindow licenseDlg;
+					try {
+						licenseDlg = new REpiceaLicenseWindow(parentFrame, licensePath);
+						licenseDlg.setVisible(true);
+						if (!licenseDlg.isLicenseAccepted()) {
+							addTask(new CATTask(Task.SHUT_DOWN, this));
+						} else {
+							hasAlreadyBeenInstanciated = true;
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+						addTask(new CATTask(Task.SHUT_DOWN, this));
+					}
 				}
 				addTask(new CATTask(Task.SHOW_INTERFACE, this));
 			}
