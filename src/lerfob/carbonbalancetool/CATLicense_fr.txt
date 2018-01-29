@@ -1,0 +1,13 @@
+﻿Carbon Accounting Tool (CAT) 1.0, © Mathieu FORTIN
+CAT est un logiciel libre : vous pouvez le redistribuer 
+et/ou le modifier suivant les termes de la licence "Lesser
+GNU General Public License" telle que publiée par la Free 
+Software Foundation, soit la version 3 de la licence ou une
+version plus récente.
+
+Ce programme est distribué dans le but qu'il soit utilisé, mais 
+SANS AUCUNE GARANTIE, même sans la garantie implicite de vente ou
+d'adéquation pour un usage particulier. Voir la licence "Lesser
+GNU General Public License" pour plus de détails à 
+http://www.gnu.org/licenses/.
+ 
