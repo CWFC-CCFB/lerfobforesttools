@@ -72,7 +72,7 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 
 	protected CarbonUnitFeature(AbstractProductionLineProcessor processor) {
 		setProcessor(processor);
-//		lifetimeMode = LifetimeMode.HALFLIFE; // default value
+		lifetimeMode = LifetimeMode.HALFLIFE; // default value
 	}
 	
 	protected LifetimeMode getLifetimeMode() {

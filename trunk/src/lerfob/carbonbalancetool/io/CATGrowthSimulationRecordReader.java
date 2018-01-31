@@ -57,7 +57,8 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		TreeFreqHelp("This field must contain the number of trees represented by the record in the plot. It is a double. This field is optional. If it is not specified, CAT assumes that the frequency is one.",
 				"Ce champ doit contenir le nombre d'arbres repr\u00E9sent\u00E9s par cet enregistrement dans la placette. Il s'agit d'un double. Ce champ est facultatif. S'il n'est pas sp\u00E9cifi\u00E9, CAT utilise une fr\u00E9quence unitaire."),
 		TreeVolumeDescription("Tree volume (dm3)", "Volume d'arbre (dm3)"),
-		TreeVolumeHelp("This field contains the commercial volume (dm3). It is a double.", "Ce champ contient le volume commercial (dm3). Il s'agit d'un double.");
+		TreeVolumeHelp("This field contains the commercial volume (dm3). It is a double.", "Ce champ contient le volume commercial (dm3). Il s'agit d'un double."),
+		InconsistentGrowthSimulation("The number of realizations is inconsistent along the projection!", "Le nombre de r\u00E9alisations n'est pas constant tout au long de la simulation!");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -259,7 +260,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 					numberOfRealizations = stand.getNumberRealizations();
 				}
 				if (numberOfRealizations != stand.getNumberRealizations()) {
-					throw new Exception("The number of realizations is inconsistent along the projections!");
+					throw new Exception(MessageID.InconsistentGrowthSimulation.toString());
 				}
 				CATGrowthSimulationPlotSample sample = stand.getRealization(i);
 				for (String pId : sample.getPlotMap().keySet()) {

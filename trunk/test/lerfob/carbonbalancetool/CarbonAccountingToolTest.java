@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
+import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.CarbonAccountingTool.CATMode;
 import lerfob.carbonbalancetool.io.CATGrowthSimulationRecordReader;
 import lerfob.carbonbalancetool.io.CATYieldTableRecordReader;
@@ -161,9 +162,6 @@ public class CarbonAccountingToolTest {
 	}
 	
 	
-	/*
-	 * TODO FP this test often fails for unknown reason. Check if this is due to the lock of the engine in the shutdownrequest method
-	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testWithSimulationResults() throws Exception {
@@ -241,5 +239,42 @@ public class CarbonAccountingToolTest {
 		Assert.assertTrue(slopeParameterEstimate < 1E-2 || prob > 0.025);		// 1E-2 implies 1Kb memory occupation
 	}
 	
-	
+	@Test
+	public void testComparisonHalflifeVsAverageLifetime() throws Exception {
+		String filename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.csv";
+		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.ife";
+		String averageLifetimeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "SingleProcessorWithAverageLifetime.prl";
+		String halflifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "SingleProcessorWithHalflife.prl";
+		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
+		cat.initializeTool(null);
+		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.ABIES);
+		ImportFieldManager ifm = ImportFieldManager.createImportFieldManager(ifeFilename, filename);
+		recordReader.initInScriptMode(ifm);
+		recordReader.readAllRecords();
+		cat.setStandList(recordReader.getStandList());
+		
+		cat.getCarbonToolSettings().getCustomizableProductionProcessorManager().load(averageLifetimeFilename);
+		cat.getCarbonToolSettings().currentProcessorManager = ProductionManagerName.customized;
+		cat.calculateCarbon();
+		CATSingleSimulationResult resultAverageLifetime = cat.getCarbonCompartmentManager().getSimulationSummary();
+		Map<CompartmentInfo, Estimate<?>> obsMapAverageLifetime = resultAverageLifetime.getBudgetMap();
+		
+		cat.getCarbonToolSettings().getCustomizableProductionProcessorManager().load(halflifeFilename);
+		cat.calculateCarbon();
+		CATSingleSimulationResult resultHalflife = cat.getCarbonCompartmentManager().getSimulationSummary();
+		Map<CompartmentInfo, Estimate<?>> obsMapHalflife = resultHalflife.getBudgetMap();
+		
+		
+		Assert.assertTrue("Testing the size of the map", obsMapAverageLifetime.size() == obsMapHalflife.size());
+		int nbCompartmentChecked = 0;
+		for (CompartmentInfo key : obsMapAverageLifetime.keySet()) {
+			double expected = obsMapAverageLifetime.get(key).getMean().m_afData[0][0];
+			double observed = obsMapHalflife.get(key).getMean().m_afData[0][0];
+			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
+			nbCompartmentChecked++;
+		}
+		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
+		cat.requestShutdown();
+	}
+
 }
