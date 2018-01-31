@@ -20,6 +20,7 @@ package lerfob.carbonbalancetool.productionlines;
 
 import java.awt.BorderLayout;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,6 +29,8 @@ import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import lerfob.carbonbalancetool.productionlines.LandfillProcessor.LandfillProcessorButton;
 import lerfob.carbonbalancetool.productionlines.LeftInForestProcessor.LeftInForestProcessorButton;
@@ -86,7 +89,8 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		LandfillButtonToolTip("Create a solid waste disposal site", "Cr\u00E9er un site d'\u00E9mination des d\u00E9chets solides"),
 		LeftInForestButtonToolTip("Leave on forest floor", "Laisser en for\u00EAt"),
 		EndOfLifeLinkButtonToolTip("End of life destination", "Destination en fin de vie"),
-		IncompatibleTreeLogger("The tree logger is incompatible and will be replaced by the default tree logger!", "Le module de billonnage est incompatible et sera remplac\u00E9 par le module de billonnage par d\u00E9faut!");
+		IncompatibleTreeLogger("The tree logger is incompatible and will be replaced by the default tree logger!", "Le module de billonnage est incompatible et sera remplac\u00E9 par le module de billonnage par d\u00E9faut!"),
+		ExamplesOfFluxConfigurations("Examples of flux configurations", "Exemples de configurations de flux");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -108,12 +112,13 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		UISetup.ToolTips.put(CreateEndOfLifeLinkButton.class.getName(), MessageID.EndOfLifeLinkButtonToolTip.toString());
 		UISetup.ToolTips.put(CreateLeftInForestProcessorButton.class.getName(), MessageID.LeftInForestButtonToolTip.toString());
 		UISetup.ToolTips.put(CreateLandfillProcessorButton.class.getName(), MessageID.LandfillButtonToolTip.toString());
-		
 	}
 
 	
 	protected REpiceaComboBoxOpenButton<TreeLoggerParameters<?>> comboBoxPanel;
 	private JComboBox<TreeLoggerParameters<?>> treeLoggerComboBox;
+	
+	protected JMenuItem downloadExamplesMenuItem;
 	
 	
 	/**
@@ -136,6 +141,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		super.init();
 		comboBoxPanel = new REpiceaComboBoxOpenButton<TreeLoggerParameters<?>>(MessageID.BuckingModelLabel.toString(), getCaller().getGUIPermission());
 		treeLoggerComboBox = comboBoxPanel.getComboBox();
+		downloadExamplesMenuItem = new JMenuItem(MessageID.ExamplesOfFluxConfigurations.toString());
 	}
 
 	@Override
@@ -144,7 +150,14 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		getContentPane().add(comboBoxPanel, BorderLayout.NORTH);
 		initTreeLoggerComboBox();
 	}
-	
+
+	@Override
+	protected JMenu createAboutMenu() {
+		JMenu about = super.createAboutMenu();
+		about.add(downloadExamplesMenuItem);
+		return about;
+	}
+		
 	@Override
 	protected ProductionProcessorManager getCaller() {
 		return (ProductionProcessorManager) super.getCaller();
@@ -171,6 +184,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		super.listenTo();
 		treeLoggerComboBox.addItemListener(this);
 		comboBoxPanel.addComboBoxEntryPropertyListener(this);
+		downloadExamplesMenuItem.addActionListener(this);
 	}
 	
 	@Override
@@ -178,6 +192,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		super.doNotListenToAnymore();
 		treeLoggerComboBox.removeItemListener(this);
 		comboBoxPanel.removeComboBoxEntryPropertyListener(this);
+		downloadExamplesMenuItem.removeActionListener(this);
 	}
 
 	@Override
@@ -189,6 +204,20 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 		} else {
 			super.itemStateChanged(arg0);
 		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		if (evt.getSource().equals(downloadExamplesMenuItem)) {
+			downloadExamplesAction();
+		} else {
+			super.actionPerformed(evt);
+		} 
+	}
+	
+	private void downloadExamplesAction() {
+		String url = "https://sourceforge.net/p/lerfobforesttools/wiki/CAT%20-%20Flux%20Manager//#examples-of-complex-flux-configurations";
+		BrowserCaller.openUrl(url);
 	}
 	
 	@Override

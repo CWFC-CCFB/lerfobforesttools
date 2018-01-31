@@ -162,7 +162,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		SensitivityAnalysis("Sensitivity Analysis", "Analyse de sensibilit\u00E9"),
 		GlobalWarmingPotential("Global Warming Potential", "Potentiel de r\u00E9chauffement global"),
 		ImportYieldTable("Yield table", "Table de production"),
-		ImportGrowthSimulation("Growth simulation", "Simulation de croissance")
+		ImportGrowthSimulation("Growth simulation", "Simulation de croissance"),
+		ErrorWhileLoadingData("An error occured while loading the data:", "Une erreur est survenue lors de lecture des donn\u00E9es :"),
 		;
 		
 		MessageID(String englishText, String frenchText) {
@@ -353,7 +354,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		setSimulationRunning(false);
 		createUI();
 		pack();
-		setMinimumSize(getSize());
+//		setMinimumSize(getSize());
 	}
 
 	/*
@@ -508,6 +509,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		} catch (Exception e) {
 			if (e instanceof CancellationException) {
 				return;
+			} else {
+				CommonGuiUtility.showErrorMessage(MessageID.ErrorWhileLoadingData.toString() + " " + e.getMessage(), this);
 			}
 		}
 	}
