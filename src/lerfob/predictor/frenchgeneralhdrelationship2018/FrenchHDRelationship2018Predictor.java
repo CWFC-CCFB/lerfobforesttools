@@ -73,7 +73,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
-		for (FrenchHDRelationship2018InternalPredictor internalPredictor : predictorMap.values()) {
+		for (FrenchHDRelationship2018InternalPredictor internalPredictor : getInternalPredictorMap().values()) {
 			internalPredictor.emulateFertilityClass(fertilityClass);
 		}
 	}
@@ -114,7 +114,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 				internalPredictor.setResidualVariance(residualVariance);
 				
 				internalPredictor.setEffectList(effectList.get(index));
-				predictorMap.put(species, internalPredictor);
+				getInternalPredictorMap().put(species, internalPredictor);
 			}
 		} catch (Exception e) {
 			System.out.println("GeneralHDRelation Class : Unable to initialize the general height-diameter relationship");
@@ -131,7 +131,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	 * @return the predicted height (m)
 	 */
 	public double predictHeightM(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
-		FrenchHDRelationship2018InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
+		FrenchHDRelationship2018InternalPredictor internalPred = getInternalPredictorMap().get(tree.getFrenchHDTreeSpecies());
 		double prediction = internalPred.predictHeight(stand, tree);
 		return prediction;
 	}	
@@ -143,29 +143,26 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	 * @param stand
 	 */
 	protected Estimate<? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
-		FrenchHDRelationship2018InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
+		FrenchHDRelationship2018InternalPredictor internalPred = getInternalPredictorMap().get(tree.getFrenchHDTreeSpecies());
 		return internalPred.getBlupsForThisSubject(stand);
 	}
 	
 	@Override
 	public void addModelBasedSimulatorListener(REpiceaPredictorListener listener) {
-		for (FrenchHDRelationship2018InternalPredictor internalPredictor : predictorMap.values()) {
+		for (FrenchHDRelationship2018InternalPredictor internalPredictor : getInternalPredictorMap().values()) {
 			internalPredictor.addModelBasedSimulatorListener(listener);
 		}
 	}
 	
 	@Override
 	public void removeModelBasedSimulatorListener(REpiceaPredictorListener listener) {
-		for (FrenchHDRelationship2018InternalPredictor internalPredictor : predictorMap.values()) {
+		for (FrenchHDRelationship2018InternalPredictor internalPredictor : getInternalPredictorMap().values()) {
 			internalPredictor.removeModelBasedSimulatorListener(listener);
 		}
 	}
 	
-//	@Override
-//	public void clearDeviates() {
-//		for (FrenchHDRelationship2014InternalPredictor p : predictorMap.values()) {
-//			p.clearDeviates();
-//		}
-//	}
-
+	Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> getInternalPredictorMap() {
+		return predictorMap;
+	}
+	
 }
