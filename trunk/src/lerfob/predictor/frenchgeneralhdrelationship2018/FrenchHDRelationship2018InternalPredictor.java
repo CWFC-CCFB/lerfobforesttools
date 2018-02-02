@@ -108,9 +108,6 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	 */
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
-//		if (areBlupsEstimated()) {
-//			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
-//		} else 
 		if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
 			currentFertilityClass = fertilityClass;
 		}
@@ -123,8 +120,6 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 		} else {	// we have tweaked the plot random effect to account for the site index class
 			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
 			setBlupsForThisSubject(stand, estimate);
-//			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
-//			setBlupsEstimated(true);		// to make sure we won't come here after the blup prediction
 		}
 	}
 	
@@ -278,6 +273,24 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	 * @return a FrenchHdSpecies instance
 	 */
 	public FrenchHd2018Species getSpecies() {return species;}
+
 	
+	GaussianEstimate getGaussianEstimateFromTemperatureEffect() {
+		List<Integer> indices = new ArrayList<Integer>();
+		if (effectList.contains(7)) {
+			indices.add(effectList.indexOf(7));
+		}
+		if (effectList.contains(6)) {
+			indices.add(effectList.indexOf(6));
+		}
+		
+		if (indices.isEmpty()) {
+			return null;
+		} else {
+			Matrix mean = getParameterEstimates().getMean().getSubMatrix(indices, new ArrayList<Integer>(0));
+			Matrix variance = getParameterEstimates().getVariance().getSubMatrix(indices, indices); 
+			return new GaussianEstimate(mean, variance);
+		}
 	
+	}
 }
