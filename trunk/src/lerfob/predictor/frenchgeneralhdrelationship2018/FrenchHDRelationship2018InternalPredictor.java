@@ -146,7 +146,6 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	 */
 	@Override
 	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree, Matrix beta) {
-//		Matrix modelParameters = getParametersForThisRealization(stand);
 		Matrix modelParameters = beta;
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
@@ -274,23 +273,40 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	 */
 	public FrenchHd2018Species getSpecies() {return species;}
 
-	
-	GaussianEstimate getGaussianEstimateFromTemperatureEffect() {
-		List<Integer> indices = new ArrayList<Integer>();
-		if (effectList.contains(7)) {
-			indices.add(effectList.indexOf(7));
-		}
-		if (effectList.contains(6)) {
-			indices.add(effectList.indexOf(6));
-		}
-		
-		if (indices.isEmpty()) {
-			return null;
-		} else {
-			Matrix mean = getParameterEstimates().getMean().getSubMatrix(indices, new ArrayList<Integer>(0));
-			Matrix variance = getParameterEstimates().getVariance().getSubMatrix(indices, indices); 
-			return new GaussianEstimate(mean, variance);
-		}
-	
+
+	boolean hasTemperatureEffect() {
+		return effectList.contains(7) || effectList.contains(6);
 	}
+	
+	boolean hasPrecipitationEffect() {
+		return effectList.contains(5);
+	}
+
+	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
+		Matrix pred = new Matrix(1,1);
+		pred.m_afData[0][0] = predictHeight(stand, tree);
+		Matrix variance = oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose());
+		return new GaussianEstimate(pred, variance);
+	}
+	
+	
+	
+//	GaussianEstimate getGaussianEstimateFromTemperatureEffect() {
+//		List<Integer> indices = new ArrayList<Integer>();
+//		if (effectList.contains(7)) {
+//			indices.add(effectList.indexOf(7));
+//		}
+//		if (effectList.contains(6)) {
+//			indices.add(effectList.indexOf(6));
+//		}
+//		
+//		if (indices.isEmpty()) {
+//			return null;
+//		} else {
+//			Matrix mean = getParameterEstimates().getMean().getSubMatrix(indices, new ArrayList<Integer>(0));
+//			Matrix variance = getParameterEstimates().getVariance().getSubMatrix(indices, indices); 
+//			return new GaussianEstimate(mean, variance);
+//		}
+//	
+//	}
 }
