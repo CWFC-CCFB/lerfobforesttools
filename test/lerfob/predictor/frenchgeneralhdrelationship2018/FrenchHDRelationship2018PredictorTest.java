@@ -48,7 +48,7 @@ public class FrenchHDRelationship2018PredictorTest {
 				}
 			}
 		}
-		System.out.println("Successfully compared " + nbTrees + " trees.");
+		System.out.println("Successfully compared " + nbTrees + " trees (should be 460 130 - 8 trees with negative predictions.");
 	}
 	
 	@Test
