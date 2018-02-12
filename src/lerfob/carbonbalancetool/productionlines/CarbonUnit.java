@@ -46,22 +46,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		Recycled, 
 		/** Can be either harvest residues or dead wood. */
 		DeadWood, 
-//		DeadWood,
 		IndustrialLosses,
 		RecycledLosses;
-		
-//		private static List<CarbonUnitStatus> PotentialInterventionResultStatus;
-//		
-//		protected static List<CarbonUnitStatus> getPotentialInterventionResultStatus() {
-//			if (PotentialInterventionResultStatus == null) {
-//				PotentialInterventionResultStatus = new ArrayList<CarbonUnitStatus>();
-//				PotentialInterventionResultStatus.add(CarbonUnitStatus.EndUseWoodProduct);
-//				PotentialInterventionResultStatus.add(CarbonUnitStatus.HarvestResidues);
-//			}
-//			return PotentialInterventionResultStatus;
-//		}
-	
-	
 	};
 
 	
