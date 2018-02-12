@@ -28,8 +28,6 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
-import lerfob.nutrientmodel.NutrientConcentrationProviderObject;
-import lerfob.nutrientmodel.NutrientConcentrationProviderObject.Nutrient;
 import repicea.app.AbstractGenericTask;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -38,7 +36,6 @@ import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.MemoryWatchDog;
-import repicea.util.ObjectUtility;
 
 @SuppressWarnings({ "serial", "deprecation" })
 public class CATTask extends AbstractGenericTask {
@@ -259,13 +256,11 @@ public class CATTask extends AbstractGenericTask {
 								totalAboveGroundWoodPieceVolume += woodPiece.getWeightedVolumeM3();
 							}
 							
-							double[] nutrientConcentrations = null;
+							AmountMap<Element> nutrientConcentrations = null;
 
-							if (woodPiece instanceof NutrientConcentrationProviderObject) {
-								nutrientConcentrations = ((NutrientConcentrationProviderObject) woodPiece).getAllNutrientConcentrationsFromThisObject();
+							if (woodPiece instanceof CATAdditionalElementsProvider) {
+								nutrientConcentrations = ((CATAdditionalElementsProvider) woodPiece).getAdditionalElementConcentrations();
 							}
-
-							double[] nutrientAmounts = ObjectUtility.multiplyArrayByScalar(nutrientConcentrations, woodPiece.getWeightedVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
 
 							AmountMap<Element> amountMap = new AmountMap<Element>();
 							double volumeM3 = woodPiece.getWeightedVolumeM3();
@@ -275,11 +270,14 @@ public class CATTask extends AbstractGenericTask {
 							amountMap.put(Element.Biomass, biomassMg);
 							amountMap.put(Element.C, carbonMg);
 
-							if (nutrientAmounts != null) {
-								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
-								amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
-								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
-								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
+							if (nutrientConcentrations != null) {
+								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+								cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
+								amountMap.putAll(nutrientAmounts);
+//								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
+//								amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
+//								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
+//								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), samplingUnitID, amountMap);		
@@ -337,10 +335,10 @@ public class CATTask extends AbstractGenericTask {
 							dispatchMap = caller.getCarbonToolSettings().getWoodSupplySetup().dispatchThisWoodPiece(woodPiece.getLogCategory().getName());
 							double proportion;
 
-							double[] nutrientConcentrations = null;
+							AmountMap<Element> nutrientConcentrations = null;
 
-							if (woodPiece instanceof NutrientConcentrationProviderObject) {
-								nutrientConcentrations = ((NutrientConcentrationProviderObject) woodPiece).getAllNutrientConcentrationsFromThisObject();
+							if (woodPiece instanceof CATAdditionalElementsProvider) {
+								nutrientConcentrations = ((CATAdditionalElementsProvider) woodPiece).getAdditionalElementConcentrations();
 							}
 
 							for (String productionLineName : dispatchMap.keySet()) {
@@ -350,7 +348,6 @@ public class CATTask extends AbstractGenericTask {
 									totalWoodPieceCarbon += carbonOfTheFutureWoodProduct;
 								}
 
-								double[] nutrientAmounts = ObjectUtility.multiplyArrayByScalar(nutrientConcentrations, proportion * woodPiece.getWeightedVolumeM3() * basicWoodDensity);	// the amounts are expressed here in kg
 
 								AmountMap<Element> amountMap = new AmountMap<Element>();
 								double volume = proportion * woodPiece.getWeightedVolumeM3();
@@ -360,11 +357,14 @@ public class CATTask extends AbstractGenericTask {
 								amountMap.put(Element.Biomass, biomass);
 								amountMap.put(Element.C, carbon);
 
-								if (nutrientAmounts != null) {
-									amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
-									amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
-									amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
-									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
+								if (nutrientConcentrations != null) {
+									AmountMap<Element> nutrientAmounts = nutrientConcentrations.multiplyByAScalar(proportion * woodPiece.getWeightedVolumeM3() * basicWoodDensity);	// the amounts are expressed here in kg
+									cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
+									amountMap.putAll(nutrientAmounts);
+//									amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
+//									amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
+//									amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
+//									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 								}
 
 								productionLineManager.processWoodPiece(productionLineName, caller.getDateIndexForThisTree(tree), amountMap);		
@@ -414,6 +414,13 @@ public class CATTask extends AbstractGenericTask {
 		}
 	}
 
+	
+	private void cleanAmountMapOfAdditionalElementsBeforeMerging(AmountMap<Element> additionalElement) {
+		additionalElement.remove(Element.Volume);
+		additionalElement.remove(Element.Biomass);
+		additionalElement.remove(Element.C);
+	}
+	
 	private void processUnaccountedVolume(double volume, double basicWoodDensity, double carbonContentRatio, int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
 		if (volume > 0) {
 			double biomass = volume * basicWoodDensity;
