@@ -19,6 +19,23 @@ import repicea.util.ObjectUtility;
 
 public class PredictedEffects {
 
+	private enum Variable {
+		DBH("rangeDBH.csv", "EffectPredDBH.csv"),
+		BasalArea("rangeBasalArea.csv", "EffectPredBasalArea.csv"),
+		Slope("rangeSlope.csv", "EffectPredSlope.csv"),
+		Temperature("rangeTemp.csv", "EffectPredTemp.csv"),
+		Precipitation("rangePrec.csv", "EffectPredPrec.csv"),
+		Dg("rangeDg.csv", "EffectPredDg.csv");
+		
+		final String inputFilename;
+		final String outputFilename;
+		
+		Variable(String inputFilename, String outputFilename) {
+			this.inputFilename = inputFilename;
+			this.outputFilename = outputFilename;
+		}
+	}
+	
 	static class Tree implements FrenchHDRelationship2018Tree {
 		final FrenchHd2018Species species;
 		double dbhCm;
@@ -129,12 +146,23 @@ public class PredictedEffects {
 	}
 	
 	
+	final Map<Variable, Map<FrenchHd2018Species, Range>> rangeMap;
+	
+	PredictedEffects() throws IOException {
+		rangeMap = new HashMap<Variable, Map<FrenchHd2018Species, Range>>();
+		rangeMap.put(Variable.DBH, readVariableRange(Variable.DBH));
+		rangeMap.put(Variable.BasalArea, readVariableRange(Variable.BasalArea));
+		rangeMap.put(Variable.Dg, readVariableRange(Variable.Dg));
+		rangeMap.put(Variable.Slope, readVariableRange(Variable.Slope));
+		rangeMap.put(Variable.Temperature, readVariableRange(Variable.Temperature));
+		rangeMap.put(Variable.Precipitation, readVariableRange(Variable.Precipitation));
+	}
 	
 
-	private void testTemperatureRange() throws IOException {
+	private Map<FrenchHd2018Species, Range> readVariableRange(Variable var) throws IOException {
 		Map<FrenchHd2018Species, Range> rangeMap = new HashMap<FrenchHd2018Species, Range>();
 		Object[] record;
-		String filenameTempRange = ObjectUtility.getPackagePath(PredictedEffects.class) + "tempRange.csv";
+		String filenameTempRange = ObjectUtility.getPackagePath(PredictedEffects.class) + var.inputFilename;
 		CSVReader reader = new CSVReader(filenameTempRange);
 		while ((record = reader.nextRecord()) != null) {
 			String speciesName = record[0].toString();
@@ -148,51 +176,77 @@ public class PredictedEffects {
 			rangeMap.put(species, r);
 		}
 		reader.close();
-		
-		
+		return rangeMap;
+	}
+	
+	private void setStandAndTreeMeanVariables(Stand s, Tree t) {
+		FrenchHd2018Species species = t.getFrenchHDTreeSpecies();
+		t.dbhCm = rangeMap.get(Variable.DBH).get(species).mean;
+		s.basalAreaM2Ha = rangeMap.get(Variable.BasalArea).get(species).mean;
+		s.slopeInclination = rangeMap.get(Variable.Slope).get(species).mean;
+		s.meanTemperatureGrowingSeason = rangeMap.get(Variable.Temperature).get(species).mean;
+		s.meanPrecipitationGrowingSeason = rangeMap.get(Variable.Precipitation).get(species).mean;
+	}
+	
+	private void setParticularVariable(Variable var, double value, Stand s, Tree t) {
+		switch(var) {
+		case DBH:
+			t.dbhCm = value;
+			s.meanQuadraticDiameterCm = value;
+			break;
+		case BasalArea:
+			s.basalAreaM2Ha = value;
+			break;
+		case Slope:
+			s.slopeInclination = value;
+			break;
+		case Temperature:
+			s.meanTemperatureGrowingSeason = value;
+			break;
+		case Precipitation:
+			s.meanPrecipitationGrowingSeason = value;
+			break;
+		case Dg:
+			s.meanQuadraticDiameterCm = value;
+			break;
+		}
+	}
+	
+	private void testVariable(Variable var) {
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		double dbhCm = 20;
 		
 		Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
-		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + "EffectPredTemp.csv";
+		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + var.outputFilename;
 		filename = filename.replace("bin", "manuscripts");
 		CSVWriter writer = null;
 		try {
-			writer = new CSVWriter(new File(filename), false);
-			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("species"));
-			fields.add(new CSVField("dbhCm"));
-			fields.add(new CSVField("basalAreaM2Ha"));
-			fields.add(new CSVField("inclination"));
-			fields.add(new CSVField("meanTemp"));
-			fields.add(new CSVField("meanPrec"));
-			fields.add(new CSVField("reference"));
-			fields.add(new CSVField("pred"));
-			fields.add(new CSVField("var"));
-			writer.setFields(fields);
+			writer = instantiateWriter(filename);
 
 			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
-				if (internalPredictorMap.get(species).hasTemperatureEffect()) {
-					Tree t = new Tree(species, dbhCm);
-					Stand s = new Stand();
-					Range r = rangeMap.get(species);
-					double range = r.max - r.min;
-					double meanTemperature = r.mean;
-					
-					s.meanTemperatureGrowingSeason = meanTemperature;
-					GaussianEstimate prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
+				Tree t = new Tree(species, 0d);
+				Stand s = new Stand();
+				setStandAndTreeMeanVariables(s, t);  // default value for each species
+				Range r = rangeMap.get(var).get(species);
+				double range = r.max - r.min;
+				double meanVariable = r.mean;
+
+				setParticularVariable(var, meanVariable, s, t);
+				GaussianEstimate prediction;
+				if (s.getBasalAreaM2HaMinusThisSubject(t) >= 0d) {
+					prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
 					t.reference = 1;
 					writeRecord(s, t, prediction, writer);
-					
-					double step = range * .01;
-					for (double temp = r.min; temp <= r.max; temp += step) {
-						s.meanTemperatureGrowingSeason = temp;
-						t.reference = 0;
+				}
+
+				double step = range * .01;
+				for (double tmpVar = r.min; tmpVar <= r.max; tmpVar += step) {
+					setParticularVariable(var, tmpVar, s, t);
+					if (s.getBasalAreaM2HaMinusThisSubject(t) >= 0d) {
 						prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
+						t.reference = 0;
 						writeRecord(s, t, prediction, writer);
 					}
 				}
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -201,190 +255,49 @@ public class PredictedEffects {
 				writer.close();
 			}
 		}
+		
 	}
-
 	
-	
-	private void testPrecipitationRange() throws IOException {
-		Map<FrenchHd2018Species, Range> rangeMap = new HashMap<FrenchHd2018Species, Range>();
-		Object[] record;
-		String filenameTempRange = ObjectUtility.getPackagePath(PredictedEffects.class) + "precRange.csv";
-		CSVReader reader = new CSVReader(filenameTempRange);
-		while ((record = reader.nextRecord()) != null) {
-			String speciesName = record[0].toString();
-			speciesName = speciesName.replaceAll("-", " ");
-			speciesName = speciesName.replaceAll("'", " ");
-			FrenchHd2018Species species = FrenchHd2018Species.valueOf(speciesName.toUpperCase().replace(" ", "_"));
-			double mean = Double.parseDouble(record[1].toString());
-			double min = Double.parseDouble(record[2].toString());
-			double max = Double.parseDouble(record[3].toString());
-			Range r = new Range(mean, min, max);
-			rangeMap.put(species, r);
-		}
-		reader.close();
-		
-		
-		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		double dbhCm = 20;
-		
-		Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
-		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + "EffectPredPrec.csv";
-		filename = filename.replace("bin", "manuscripts");
-		CSVWriter writer = null;
-		try {
-			writer = new CSVWriter(new File(filename), false);
-			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("species"));
-			fields.add(new CSVField("dbhCm"));
-			fields.add(new CSVField("basalAreaM2Ha"));
-			fields.add(new CSVField("inclination"));
-			fields.add(new CSVField("meanTemp"));
-			fields.add(new CSVField("meanPrec"));
-			fields.add(new CSVField("reference"));
-			fields.add(new CSVField("pred"));
-			fields.add(new CSVField("var"));
-			writer.setFields(fields);
-
-			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
-				if (internalPredictorMap.get(species).hasPrecipitationEffect()) {
-					Tree t = new Tree(species, dbhCm);
-					Stand s = new Stand();
-					Range r = rangeMap.get(species);
-					double range = r.max - r.min;
-					double meanPrecipitation = r.mean;
-					
-					s.meanPrecipitationGrowingSeason = meanPrecipitation;
-					GaussianEstimate prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
-					t.reference = 1;
-					writeRecord(s, t, prediction, writer);
-					
-					double step = range * .01;
-					for (double prec = r.min; prec <= r.max; prec += step) {
-						s.meanPrecipitationGrowingSeason = prec;
-						t.reference = 0;
-						prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
-						writeRecord(s, t, prediction, writer);
-					}
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	
-	private void testBasalAreaRange() throws IOException {
-		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		double dbhCm = 20;
-		
-		Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
-		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + "EffectPredBasalArea.csv";
-		filename = filename.replace("bin", "manuscripts");
-		CSVWriter writer = null;
-		try {
-			writer = new CSVWriter(new File(filename), false);
-			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("species"));
-			fields.add(new CSVField("dbhCm"));
-			fields.add(new CSVField("basalAreaM2Ha"));
-			fields.add(new CSVField("inclination"));
-			fields.add(new CSVField("meanTemp"));
-			fields.add(new CSVField("meanPrec"));
-			fields.add(new CSVField("reference"));
-			fields.add(new CSVField("pred"));
-			fields.add(new CSVField("var"));
-			writer.setFields(fields);
-
-			GaussianEstimate prediction;
-			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
-				Tree t = new Tree(species, dbhCm);
-				Stand s = new Stand();
-				for (double basalArea = 10; basalArea <= 40; basalArea += .5) {
-					s.basalAreaM2Ha = basalArea;
-					prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
-					writeRecord(s, t, prediction, writer);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	private void testSlopeInclinationRange() throws IOException {
-		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		double dbhCm = 20;
-		
-		Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
-		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + "EffectPredSlope.csv";
-		filename = filename.replace("bin", "manuscripts");
-		CSVWriter writer = null;
-		try {
-			writer = new CSVWriter(new File(filename), false);
-			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("species"));
-			fields.add(new CSVField("dbhCm"));
-			fields.add(new CSVField("basalAreaM2Ha"));
-			fields.add(new CSVField("inclination"));
-			fields.add(new CSVField("meanTemp"));
-			fields.add(new CSVField("meanPrec"));
-			fields.add(new CSVField("reference"));
-			fields.add(new CSVField("pred"));
-			fields.add(new CSVField("var"));
-			writer.setFields(fields);
-
-			GaussianEstimate prediction;
-			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
-				Tree t = new Tree(species, dbhCm);
-				Stand s = new Stand();
-				for (double slope = 0; slope <= 70; slope += 1) {
-					s.slopeInclination = slope;
-					prediction = internalPredictorMap.get(species).predictHeightAndVariance(s, t);
-					writeRecord(s, t, prediction, writer);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	
-
-	private static void writeRecord(Stand stand, Tree tree, GaussianEstimate prediction, CSVWriter writer) throws IOException {
-		Object[] record = new Object[9];
+	private void writeRecord(Stand stand, Tree tree, GaussianEstimate prediction, CSVWriter writer) throws IOException {
+		Object[] record = new Object[10];
 		record[0] = tree.getFrenchHDTreeSpecies().toString();
 		record[1] = tree.getDbhCm();
 		record[2] = stand.basalAreaM2Ha;
-		record[3] = stand.getSlopePercent();
-		record[4] = stand.getMeanTemperatureOfGrowingSeason();
-		record[5] = stand.getMeanPrecipitationOfGrowingSeason();
-		record[6] = tree.reference;
-		record[7] = prediction.getMean().m_afData[0][0];
-		record[8] = prediction.getVariance().m_afData[0][0];
-		// TODO add mean quadratic diameter here
+		record[3] = stand.getMeanQuadraticDiameterCm();
+		record[4] = stand.getSlopePercent();
+		record[5] = stand.getMeanTemperatureOfGrowingSeason();
+		record[6] = stand.getMeanPrecipitationOfGrowingSeason();
+		record[7] = tree.reference;
+		record[8] = prediction.getMean().m_afData[0][0];
+		record[9] = prediction.getVariance().m_afData[0][0];
 		writer.addRecord(record);
-
 	}
 
+	private CSVWriter instantiateWriter(String filename) throws IOException {
+		CSVWriter writer = new CSVWriter(new File(filename), false);
+		List<FormatField> fields = new ArrayList<FormatField>();
+		fields.add(new CSVField("species"));
+		fields.add(new CSVField("dbhCm"));
+		fields.add(new CSVField("basalAreaM2Ha"));
+		fields.add(new CSVField("mqdCm"));
+		fields.add(new CSVField("inclination"));
+		fields.add(new CSVField("meanTemp"));
+		fields.add(new CSVField("meanPrec"));
+		fields.add(new CSVField("reference"));
+		fields.add(new CSVField("pred"));
+		fields.add(new CSVField("var"));
+		writer.setFields(fields);
+		return writer;
+	}
 
 	public static void main(String[] args) throws IOException {
 		PredictedEffects p = new PredictedEffects();
-		p.testTemperatureRange();
-		p.testPrecipitationRange();
-		p.testBasalAreaRange();
-		p.testSlopeInclinationRange();
+		p.testVariable(Variable.DBH);
+		p.testVariable(Variable.BasalArea);
+		p.testVariable(Variable.Slope);
+		p.testVariable(Variable.Temperature);
+		p.testVariable(Variable.Precipitation);
+		p.testVariable(Variable.Dg);
 	}
 
 
