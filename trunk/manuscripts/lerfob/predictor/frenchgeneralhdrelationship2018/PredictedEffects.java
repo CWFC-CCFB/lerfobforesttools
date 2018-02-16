@@ -41,9 +41,8 @@ public class PredictedEffects {
 		double dbhCm;
 		int reference;
 		
-		Tree(FrenchHd2018Species species, double dbhCm) {
+		Tree(FrenchHd2018Species species) {
 			this.species = species;
-			this.dbhCm = dbhCm;
 		}
 		
 		@Override
@@ -84,14 +83,15 @@ public class PredictedEffects {
 	static class Stand implements FrenchHDRelationship2018Stand {
 
 		private final double plotAreaHa = 15d * 15d * Math.PI * .0001;
-		private double basalAreaM2Ha = 25d;
-		
-		private double meanTemperatureGrowingSeason = 13;
-		private double meanPrecipitationGrowingSeason = 600;
+
+		private double basalAreaM2Ha;;
+		private double meanTemperatureGrowingSeason;
+		private double meanPrecipitationGrowingSeason;
+		private double meanQuadraticDiameterCm;
+		private double slopeInclination;;
+
 		private final List<FrenchHDRelationship2018Tree> trees;
-		private double meanQuadraticDiameterCm = 20d;
-		private double slopeInclination = 0;
-		
+
 		Stand() {
 			trees = new ArrayList<FrenchHDRelationship2018Tree>();
 		}
@@ -186,6 +186,7 @@ public class PredictedEffects {
 		} else {
 			t.dbhCm = rangeMap.get(Variable.DBH).get(species).mean;
 		}
+		
 		s.basalAreaM2Ha = rangeMap.get(Variable.BasalArea).get(species).mean;
 		s.meanQuadraticDiameterCm = rangeMap.get(Variable.Dg).get(species).mean;
 		s.slopeInclination = rangeMap.get(Variable.Slope).get(species).mean;
@@ -228,7 +229,7 @@ public class PredictedEffects {
 			writer = instantiateWriter(filename);
 
 			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
-				Tree t = new Tree(species, 0d);
+				Tree t = new Tree(species);
 				Stand s = new Stand();
 				setStandAndTreeMeanVariables(s, t, var);  // default value for each species
 				Range r = rangeMap.get(var).get(species);
