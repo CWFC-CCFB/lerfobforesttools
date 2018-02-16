@@ -179,10 +179,15 @@ public class PredictedEffects {
 		return rangeMap;
 	}
 	
-	private void setStandAndTreeMeanVariables(Stand s, Tree t) {
+	private void setStandAndTreeMeanVariables(Stand s, Tree t, Variable var) {
 		FrenchHd2018Species species = t.getFrenchHDTreeSpecies();
-		t.dbhCm = rangeMap.get(Variable.DBH).get(species).mean;
+		if (var == Variable.Dg) {
+			t.dbhCm = rangeMap.get(Variable.Dg).get(species).mean;
+		} else {
+			t.dbhCm = rangeMap.get(Variable.DBH).get(species).mean;
+		}
 		s.basalAreaM2Ha = rangeMap.get(Variable.BasalArea).get(species).mean;
+		s.meanQuadraticDiameterCm = rangeMap.get(Variable.Dg).get(species).mean;
 		s.slopeInclination = rangeMap.get(Variable.Slope).get(species).mean;
 		s.meanTemperatureGrowingSeason = rangeMap.get(Variable.Temperature).get(species).mean;
 		s.meanPrecipitationGrowingSeason = rangeMap.get(Variable.Precipitation).get(species).mean;
@@ -225,7 +230,7 @@ public class PredictedEffects {
 			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
 				Tree t = new Tree(species, 0d);
 				Stand s = new Stand();
-				setStandAndTreeMeanVariables(s, t);  // default value for each species
+				setStandAndTreeMeanVariables(s, t, var);  // default value for each species
 				Range r = rangeMap.get(var).get(species);
 				double range = r.max - r.min;
 				double meanVariable = r.mean;
