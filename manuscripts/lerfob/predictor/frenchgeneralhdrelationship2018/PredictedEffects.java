@@ -186,7 +186,6 @@ public class PredictedEffects {
 		} else {
 			t.dbhCm = rangeMap.get(Variable.DBH).get(species).mean;
 		}
-		
 		s.basalAreaM2Ha = rangeMap.get(Variable.BasalArea).get(species).mean;
 		s.meanQuadraticDiameterCm = rangeMap.get(Variable.Dg).get(species).mean;
 		s.slopeInclination = rangeMap.get(Variable.Slope).get(species).mean;
