@@ -53,10 +53,10 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 	}
 
 	/**
-	 * This method return the volume estimate for an individual trees. 
-	 * NOTE: Stochastic implementation is handled through the general constructor.
+	 * This method return the over-bark volume estimate for an individual tree. 
+	 * NOTE: The stochastic implementation is handled through the general constructor.
 	 * The method returns 0 if the tree is smaller than 7 cm in dbh. It returns -1
-	 * if the tree height has not been calculated.
+	 * if tree height is not available.
 	 * @param tree a TreeVolumable object
 	 * @return the commercial volume (dm3)
 	 */
