@@ -97,7 +97,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 						isRandomEffectsVariabilityEnabled,
 						isResidualVariabilityEnabled,
 						species);
-				int index = species.ordinal() + 1;
+				int index = species.getIndex();
 				
 				Matrix mean = betaMap.get(index);
 				Matrix variance = omegaMap.get(index).squareSym();

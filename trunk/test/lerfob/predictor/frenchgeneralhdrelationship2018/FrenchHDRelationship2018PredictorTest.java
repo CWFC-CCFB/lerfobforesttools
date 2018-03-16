@@ -68,8 +68,8 @@ public class FrenchHDRelationship2018PredictorTest {
 		for (FrenchHDRelationship2018Stand stand : s.standList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
-				if (tree.getFrenchHDTreeSpecies().ordinal() <= 3) {
-					int index = tree.getFrenchHDTreeSpecies().ordinal() + 1;
+				if (tree.getFrenchHDTreeSpecies().getIndex() <= 4) {
+					int index = tree.getFrenchHDTreeSpecies().getIndex();
 					predictor.predictHeightM(stand, tree);
 					Estimate<? extends StandardGaussianDistribution> currentBlups = predictor.getBlups(stand, tree);
 					double actualBlup = currentBlups.getMean().m_afData[0][0];
