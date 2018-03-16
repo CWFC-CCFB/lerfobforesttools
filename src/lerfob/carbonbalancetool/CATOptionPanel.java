@@ -31,8 +31,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATCompartment.PoolCategory;
 import repicea.gui.UIControlManager;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -44,8 +46,9 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class CATOptionPanel extends JScrollPane implements ItemListener {
 	
 	private static enum MessageID implements TextableEnum {
-		Stocks("Stocks", "Stocks"),
-		Fluxes("Fluxes", "Flux"),
+		ForestPools("Forest", "For\u00EAt"),
+		HWPPools("Harvested wood products (HWP)", "Produits du bois"),
+		OtherPools("Other pools", "Autres pools"),
 		TooltipSubstitution("Substitution is only available when comparing scenarios", "La substitution n'est affich\u00E9e que dans les comparaisons de sc\u00E9arios"),
 		TooltipFossilFuelEmission("Fossil-fuel emissions are only available when visualizing a single carbon balance", "Les \u00E9missions d'origine fossile ne sont pas affich\u00E9es lors des comparaisons de sc\u00E9arios");
 		MessageID(String englishText, String frenchText) {
@@ -78,31 +81,52 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+		checkBoxPanel.add(new JSeparator());
 
-		JPanel stockLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JLabel stockLabel = UIControlManager.getLabel(MessageID.Stocks);
-		stockLabelPanel.add(stockLabel);
-		checkBoxPanel.add(stockLabelPanel);
+		JPanel forestPoolLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		JLabel forestPoolLabel = UIControlManager.getLabel(MessageID.ForestPools);
+		forestPoolLabelPanel.add(forestPoolLabel);
+		checkBoxPanel.add(forestPoolLabelPanel);
 		
 		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
-			if (!compartmentID.isFlux()) {
+			if (compartmentID.getPoolCategory() == PoolCategory.Forest) {
 				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
 			}
 		}
+
+		checkBoxPanel.add(Box.createVerticalStrut(10));
+		checkBoxPanel.add(new JSeparator());
 		
+		JPanel hwpPoolLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		JLabel hwpPoolLabel = UIControlManager.getLabel(MessageID.HWPPools);
+		hwpPoolLabelPanel.add(hwpPoolLabel);
+		checkBoxPanel.add(hwpPoolLabelPanel);
+		
+		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
+			if (compartmentID.getPoolCategory() == PoolCategory.HarvestedWoodProducts) {
+				checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
+			}
+		}
+
+		checkBoxPanel.add(Box.createVerticalStrut(10));
+		checkBoxPanel.add(new JSeparator());
+
 		JPanel fluxLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JLabel fluxLabel = UIControlManager.getLabel(MessageID.Fluxes);
+		JLabel fluxLabel = UIControlManager.getLabel(MessageID.OtherPools);
 		fluxLabelPanel.add(fluxLabel);
 		checkBoxPanel.add(fluxLabelPanel);
 
 		for (CompartmentInfo compartmentID : CompartmentInfo.getNaturalOrder()) {
-			if (compartmentID.isFlux()) {
+			if (compartmentID.getPoolCategory() == PoolCategory.Others) {
 				if (compartmentID != CompartmentInfo.NetSubs) {		// net flux should not be displayed because it implies double counting (substitution already accounts for emissions)
 					checkBoxPanel.add(getCheckBoxPanel(compartmentID, !compartmentID.isPrimaryCompartment()));		// no offset since this is a main compartment
 				}
 			}
 		}
-				
+
+		checkBoxPanel.add(Box.createVerticalStrut(10));
+		checkBoxPanel.add(new JSeparator());
+
 		JPanel intermediatePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		intermediatePanel.add(Box.createHorizontalStrut(20));
 		intermediatePanel.add(checkBoxPanel);

@@ -380,9 +380,9 @@ public class CATExportTool extends REpiceaExportTool {
 	private final SettingMemory settings;
 	
 	public enum ExportOption implements TextableEnum {
-		CarbonStockAndFluxEvolution("Carbon stock and cumulative flux evolution", "Evolution des stocks et des flux cumulatifs de carbone"), 
-		AverageCarbonStocksAndFluxes("Average carbon stocks and fluxes over the rotation", "Stocks et flux moyens sur l'ensemble de la r\u00E9volution"), 
-		DifferenceCarbonStocksAndFluxes("Difference in carbon stocks and cumulative fluxes", "Diff\u00E9rence de stocks et flux cumulatifs"), 
+		CarbonStockAndFluxEvolution("Carbon stock evolution", "Evolution des stocks de carbone"), 
+		AverageCarbonStocksAndFluxes("Average carbon stocks over the rotation", "Stocks moyens sur l'ensemble de la r\u00E9volution"), 
+		DifferenceCarbonStocksAndFluxes("Difference in carbon stocks", "Diff\u00E9rence de stocks"), 
 		TotalHWPbyCategories("Total production of HWP by categories", "Production totale des produits bois par cat\u00E9gories"),
 		AnnualVolumeNutrientFluxes("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
 		TotalLogVolumeByCategories("Total production of logs by categories", "Production totale de billons par cat\u00E9gories"),

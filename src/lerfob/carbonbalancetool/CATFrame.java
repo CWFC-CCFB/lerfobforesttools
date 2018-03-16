@@ -101,7 +101,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		WoodDispatcherLabel("Production line supply", "Approvisionnement des lignes de production"),
 		Default("<Default>","<D\u00E9faut>"),
 		CalculateCarbonBalance("Calculate carbon balance", "Calculer bilan carbone"),
-		ShowSomethingOptions("Show compartment(s)", "Afficher le(s) compartiment(s)"),
+		ShowSomethingOptions("Show pool(s)", "Afficher le(s) pool(s)"),
 		Component("Component", "Composante"),
 		DefaultParameters("Default parameters", "Param\u00E8tres par d\u00e9faut"),
 		Name("Name", "Nom"),
