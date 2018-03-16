@@ -21,8 +21,9 @@ package lerfob.carbonbalancetool;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import repicea.math.Matrix;
@@ -45,6 +46,12 @@ public class CATCompartment implements Comparable {
 	}
 	
 	
+	protected static enum PoolCategory {
+		Forest,
+		HarvestedWoodProducts,
+		Others
+	}
+	
 	/**
 	 * This enum contains basic information on the carbon compartments.
 	 * @author Mathieu Fortin - June 2010
@@ -53,66 +60,91 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The compartment that contains the root biomass.
 		 */
-		Roots(false, "Belowground biomass", "Biomasse souterraine", false, new Color(0,100,0)),
+		Roots("Belowground biomass", "Biomasse souterraine", false, new Color(0,100,0)),
 		/**
 		 * The aboveground biomass (bole, branches and twigs).
 		 */
-		AbGround(false, "Aboveground biomass", "Biomasse a\u00E9rienne", false, new Color(0,150,0)),
+		AbGround("Aboveground biomass", "Biomasse a\u00E9rienne", false, new Color(0,150,0)),
 		/**
 		 * The dead biomass, i.e. the dead trees and the wood pieces left in the forest
 		 */
-		DeadBiom(false, "Dead organic matter", "Mati\u00E8re organique morte", true, new Color(0,50,0)),
+		DeadBiom("Dead organic matter", "Mati\u00E8re organique morte", true, new Color(0,50,0)),
 		/**
 		 * The wood products.
 		 */
-		Products(false, "Harvested wood products", "Produits bois", false, new Color(0,0,150)),
+		Products("In use", "En usage", false, new Color(0,0,150)),
 		/**
 		 * The landfill degradable carbon pool.
 		 */
-		LfillDeg(false, "SWDS (DOCf)", "Site d'enfouissement (DOCf)", false, new Color(0,0,100)),
+		LfillDeg("At the SWDS (DOCf)", "Au site d'enfouissement (DOCf)", false, new Color(0,0,100)),
 		/**
 		 * The carbon emissions due to fossil fuel consumption.
 		 */
-		CarbEmis(true, "Fossil-fuel emissions", "Emissions d'origine fossile", false, new Color(150,100,100)),
+		CarbEmis("Fossil-fuel emissions", "Emissions d'origine fossile", false, new Color(150,100,100)),
 		/**
 		 * The energy substitution.
 		 */
-		EnerSubs(true, "Energy and material substitution", "Substitution mat\u00E9rielle et \u00E9nerg\u00E9tique", false, new Color(0,100,100)),
+		EnerSubs("Energy and material substitution", "Substitution mat\u00E9rielle et \u00E9nerg\u00E9tique", false, new Color(0,100,100)),
 		/**
 		 * The landfill non degradable carbon pool.
 		 */
-		LfillND(true, "SWDS (Non degradable)", "Site d'enfouissement (Non d\u00E9gradable)", false, new Color(0,150,150)),
+		LfillND("SWDS (Non degradable)", "Site d'enfouissement (Non d\u00E9gradable)", false, new Color(0,150,150)),
 		/**
 		 * The Landfill GHG emissions (CH4)
 		 */
-		LfillEm(true, "SWDS (Methane emissions)", "Site d'enfouissement (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
+		LfillEm("SWDS (Methane emissions)", "Site d'enfouissement (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
 		/**
 		 * The libing biomass, i.e. the aboveground biomass + the belowground biomass.
 		 */
-		LivingBiomass(false, "Living biomass", "Biomasse vivante", true, new Color(0,200,0)),
+		LivingBiomass("Living biomass", "Biomasse vivante", true, new Color(0,200,0)),
 		/**
 		 * The sum of the living biomass and the wood products.
 		 */
-		TotalProducts(false, "HWP carbon pool", "Pool de carbone des produits du bois", true, new Color(0,0,200)),
+		TotalProducts("All HWP", "Tous les produits du bois", true, new Color(0,0,200)),
 		/**
 		 * The net substitution, i.e. the energy substitution less the carbon emissions.
 		 */
-		NetSubs(true, "Cumulative net flux", "Flux net cumulatif", true, new Color(200,0,0));
+		NetSubs("Cumulative net flux", "Flux net cumulatif", true, new Color(200,0,0));
 
 		private static List<CompartmentInfo> naturalOrder;
+		private static Map<CompartmentInfo, PoolCategory> poolCategoryMap;
 		
-		private boolean isFlux;
+//		private boolean isFlux;
 		private boolean resultFromGrouping;
 		private Color color;
 
-		CompartmentInfo(boolean isFlux, String englishText, String frenchText, boolean resultFromGrouping, Color color) {
-			this.isFlux = isFlux;
+		CompartmentInfo(String englishText, String frenchText, boolean resultFromGrouping, Color color) {
+//			this.isFlux = isFlux;
 			this.resultFromGrouping = resultFromGrouping;
 			this.color = color;
 			setText(englishText, frenchText);
 		}
 		
-		protected boolean isFlux() {return isFlux;}
+//		boolean isFlux() {return isFlux;}
+		
+		
+		PoolCategory getPoolCategory() {
+			if (poolCategoryMap == null) {
+				poolCategoryMap = new HashMap<CompartmentInfo, PoolCategory>();
+				
+				poolCategoryMap.put(LivingBiomass, PoolCategory.Forest);
+				poolCategoryMap.put(AbGround, PoolCategory.Forest);
+				poolCategoryMap.put(Roots, PoolCategory.Forest);
+				poolCategoryMap.put(DeadBiom, PoolCategory.Forest);
+				
+				poolCategoryMap.put(TotalProducts, PoolCategory.HarvestedWoodProducts);
+				poolCategoryMap.put(Products, PoolCategory.HarvestedWoodProducts);
+				poolCategoryMap.put(LfillDeg, PoolCategory.HarvestedWoodProducts);
+				
+				poolCategoryMap.put(NetSubs, PoolCategory.Others);
+				poolCategoryMap.put(EnerSubs, PoolCategory.Others);
+				poolCategoryMap.put(CarbEmis, PoolCategory.Others);
+				poolCategoryMap.put(LfillEm, PoolCategory.Others);
+				poolCategoryMap.put(LfillND, PoolCategory.Others);
+			}
+			return poolCategoryMap.get(this);
+		}
+		
 
 		protected boolean isPrimaryCompartment() {return resultFromGrouping;}
 		
@@ -266,15 +298,15 @@ public class CATCompartment implements Comparable {
 	
 	protected CATTimeTable getTimeTable() {return getCompartmentManager().getTimeTable();}
 	
-	protected static Vector<CompartmentInfo> getCompartmentInfoMap(boolean isFlux) {
-		Vector<CompartmentInfo> outputSet = new Vector<CompartmentInfo>();
-		for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
-			if (compartmentInfo.isFlux() == isFlux) {
-				outputSet.add(compartmentInfo);
-			}
-		}
-		return outputSet;
-	}
+//	protected static Vector<CompartmentInfo> getCompartmentInfoMap(boolean isFlux) {
+//		Vector<CompartmentInfo> outputSet = new Vector<CompartmentInfo>();
+//		for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
+//			if (compartmentInfo.isFlux() == isFlux) {
+//				outputSet.add(compartmentInfo);
+//			}
+//		}
+//		return outputSet;
+//	}
 
 	@Override
 	public int compareTo (Object o) {
