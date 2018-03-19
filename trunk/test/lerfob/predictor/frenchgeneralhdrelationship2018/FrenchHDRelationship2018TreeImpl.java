@@ -12,14 +12,16 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 	private FrenchHDRelationship2018Stand stand;
 	double reference;
 	private double gOther;
+	final double weight;
 	
-	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String speciesName, double pred, FrenchHDRelationship2018Stand stand) {
+	FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String speciesName, double weight, double pred, FrenchHDRelationship2018Stand stand) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
 		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
 		this.reference = pred;
 		this.stand = stand;
+		this.weight = weight;
 		((FrenchHDRelationship2018StandImpl) this.stand).addTree(this); 
 	}
 	

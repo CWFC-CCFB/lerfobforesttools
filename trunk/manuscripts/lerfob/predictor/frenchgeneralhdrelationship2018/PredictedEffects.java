@@ -13,6 +13,7 @@ import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
 import repicea.io.javacsv.CSVWriter;
+import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -295,6 +296,74 @@ public class PredictedEffects {
 		return writer;
 	}
 
+	public void predictVolumeChangeForTemperatureIncrease() {
+		System.out.println("Running climate warming simulation...");
+		List<FrenchHDRelationship2018StandImpl> Stands = FrenchHDRelationship2018PredictorTest.readTrees();
+		Map<FrenchHd2018Species, List<Double>> obsMap = new HashMap<FrenchHd2018Species, List<Double>>();
+		Map<FrenchHd2018Species, List<Double>> predMap = new HashMap<FrenchHd2018Species, List<Double>>();
+		for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+			obsMap.put(species, new ArrayList<Double>());
+			predMap.put(species, new ArrayList<Double>());
+		}
+		FrenchHDRelationship2018TreeImpl.BlupPrediction = false;
+		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
+		for (FrenchHDRelationship2018Stand stand : Stands) {
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
+				obsMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
+			}
+			((FrenchHDRelationship2018StandImpl) stand).meanTemp = stand.getMeanTemperatureOfGrowingSeason() + 2d;
+			((FrenchHDRelationship2018StandImpl) stand).meanPrec = stand.getMeanPrecipitationOfGrowingSeason() * .9;
+			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
+				predMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
+			}
+		}
+		String filename = ObjectUtility.getPackagePath(PredictedEffects.class).replace("bin", "manuscripts") + "simClimateWarming.csv";
+		
+		CSVWriter writer = null;
+		
+		try {
+			writer = new CSVWriter(new File(filename), false);
+			List<FormatField> fields = new ArrayList<FormatField>();
+			fields.add(new CSVField("species"));
+			fields.add(new CSVField("nbObs"));
+			fields.add(new CSVField("before"));
+			fields.add(new CSVField("after"));
+			writer.setFields(fields);
+			for (FrenchHd2018Species species : obsMap.keySet()) {
+				List<Double> obs = obsMap.get(species);
+				List<Double> pred = predMap.get(species);
+				if (obs.size() != pred.size()) {
+					throw new Exception(" The obsMap size does not match the predMap size for species " + species.name());
+				}
+				Object[] record = new Object[4];
+				record[0] = species.latinName;
+				record[1] = obs.size();
+				Matrix mat = new Matrix(obs);
+				record[2] = mat.getSumOfElements();
+				mat = new Matrix(pred);
+				record[3] = mat.getSumOfElements();
+				writer.addRecord(record);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+		
+		System.out.println("Climate warming simulation successfully run!");
+		
+	}
+
+	
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		PredictedEffects p = new PredictedEffects();
 		p.testVariable(Variable.DBH);
@@ -303,6 +372,7 @@ public class PredictedEffects {
 		p.testVariable(Variable.Temperature);
 		p.testVariable(Variable.Precipitation);
 		p.testVariable(Variable.Dg);
+		p.predictVolumeChangeForTemperatureIncrease();
 	}
 
 
