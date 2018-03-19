@@ -198,7 +198,7 @@ public class FrenchHDRelationship2018PredictorTest {
 	}
 
 	
-	private static List<FrenchHDRelationship2018StandImpl> readTrees() {
+	static List<FrenchHDRelationship2018StandImpl> readTrees() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
 		List<FrenchHDRelationship2018StandImpl> standList = new ArrayList<FrenchHDRelationship2018StandImpl>();
 		CSVReader reader = null;
@@ -216,6 +216,7 @@ public class FrenchHDRelationship2018PredictorTest {
 			double harvestInLastFiveYears;
 			double meanTemp_3, meanTemp_4, meanTemp_5, meanTemp_6, meanTemp_7, meanTemp_8, meanTemp_9;
 			double meanPrec_3, meanPrec_4, meanPrec_5, meanPrec_6, meanPrec_7, meanPrec_8, meanPrec_9;
+			double weight;
 			Map<Integer, FrenchHDRelationship2018StandImpl> standMap = new HashMap<Integer, FrenchHDRelationship2018StandImpl>();
 			int counter = 0;
 			while ((record = reader.nextRecord()) != null) {
@@ -242,13 +243,14 @@ public class FrenchHDRelationship2018PredictorTest {
 				meanPrec_7 = Double.parseDouble(record[20].toString()); 
 				meanPrec_8 = Double.parseDouble(record[21].toString()); 
 				meanPrec_9 = Double.parseDouble(record[22].toString()); 
+				weight = Double.parseDouble(record[23].toString());
 				double meanPrec = meanPrec_3 + meanPrec_4 + meanPrec_5 + meanPrec_6 + meanPrec_7 + meanPrec_8 + meanPrec_9; 
 				double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
 				if (!standMap.containsKey(idp)) {
 					FrenchHDRelationship2018StandImpl stand = new FrenchHDRelationship2018StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, standList);
 					standMap.put(idp, stand);
 				}
-				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, pred, standMap.get(idp));
+				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, weight, pred, standMap.get(idp));
 			}
 			standList.addAll(standMap.values());
 			Collections.sort(standList);

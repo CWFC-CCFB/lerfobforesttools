@@ -55,7 +55,6 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 		MatchTable.put(FrenchHd2018Species.TREMBLE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
 	}
 
-	private final double weight;
 	boolean knownHeight;
 
 	
@@ -66,8 +65,7 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 			double pred,
 			double w,
 			FrenchHDRelationship2018Stand stand) {
-		super(heightM, dbhCm, gOther, speciesName, pred, stand);
-		this.weight = w;
+		super(heightM, dbhCm, gOther, speciesName, w, pred, stand);
 	}
 	
 	@Override

@@ -14,8 +14,8 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 	private double pent2;
 	private double hasBeenHarvestedInLast5Years;
 	private final int index;
-	private final double meanTemp;
-	private final double meanPrec;
+	double meanTemp;
+	double meanPrec;
 	final List<FrenchHDRelationship2018StandImpl> standList;
 	
 	List<FrenchHDRelationship2018Tree> treeList;
