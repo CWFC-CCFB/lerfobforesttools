@@ -80,7 +80,7 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The carbon emissions due to fossil fuel consumption.
 		 */
-		CarbEmis("Fossil-fuel emissions", "Emissions d'origine fossile", false, new Color(150,100,100)),
+		CarbEmis("Fossil fuel emissions", "Emissions d'origine fossile", false, new Color(150,100,100)),
 		/**
 		 * The energy substitution.
 		 */
@@ -88,7 +88,7 @@ public class CATCompartment implements Comparable {
 		/**
 		 * The landfill non degradable carbon pool.
 		 */
-		LfillND("SWDS (Non degradable)", "Site d'enfouissement (Non d\u00E9gradable)", false, new Color(0,150,150)),
+		LfillND("SWDS (Non-degradable)", "Site d'enfouissement (Non d\u00E9gradable)", false, new Color(0,150,150)),
 		/**
 		 * The Landfill GHG emissions (CH4)
 		 */
