@@ -2,6 +2,7 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.StemDensityHaProvider;
+import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
 
 public interface FrenchNFIThinnerPlot extends BasalAreaM2HaProvider,
 												StemDensityHaProvider,
