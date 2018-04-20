@@ -30,5 +30,15 @@ public interface FrenchNFIThinnerPlot extends BasalAreaM2HaProvider,
 	 * @return a boolean
 	 */
 	public boolean wasThereAnySiliviculturalTreatmentInTheLast5Years();
+	
+
+	/**
+	 * This method returns the target species of the management. This is most likely
+	 * the species with the current highest value.
+	 * @return a Species enum
+	 */
+	public FrenchNFIThinnerStandingPriceProvider.Species getTargetSpecies();
+	
+	
 
 }
