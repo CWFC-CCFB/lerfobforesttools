@@ -313,8 +313,7 @@ public class PredictedEffects {
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				obsMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}
-			((FrenchHDRelationship2018StandImpl) stand).meanTemp = stand.getMeanTemperatureOfGrowingSeason() + 2d;
-			((FrenchHDRelationship2018StandImpl) stand).meanPrec = stand.getMeanPrecipitationOfGrowingSeason() * .9;
+			((FrenchHDRelationship2018StandImpl) stand).meanTemp = stand.getMeanTemperatureOfGrowingSeason() + 1.5;
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
