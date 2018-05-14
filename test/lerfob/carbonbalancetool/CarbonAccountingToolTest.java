@@ -20,6 +20,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import repicea.io.tools.ImportFieldManager;
 import repicea.math.Matrix;
 import repicea.serial.xml.XmlDeserializer;
+import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.stats.distributions.utility.GaussianUtility;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
@@ -28,6 +29,12 @@ import repicea.util.ObjectUtility;
 
 public class CarbonAccountingToolTest {
 
+	static {
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.stats.distributions.NonparametricDistribution", "repicea.stats.distributions.EmpiricalDistribution");
+	}
+	
+	
+	
 	private final static NumberFormat FORMATTER = NumberFormat.getInstance();
 
 	@Test
