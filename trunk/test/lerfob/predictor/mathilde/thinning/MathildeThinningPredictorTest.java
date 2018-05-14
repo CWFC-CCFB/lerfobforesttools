@@ -22,8 +22,9 @@ public class MathildeThinningPredictorTest {
 			
 			String filenamePath = ObjectUtility.getRelativePackagePath(MathildeThinningPredictorTest.class) + "dataBaseThinningGlobalPredictions.csv";
 			int recordId = 1;
+			CSVReader reader = null;
 			try {
-				CSVReader reader = new CSVReader(filenamePath);
+				reader = new CSVReader(filenamePath);
 				Object[] record;
 				
 				while((record = reader.nextRecord()) != null) {
@@ -54,6 +55,10 @@ public class MathildeThinningPredictorTest {
 				}
 			} catch (Exception e) {
 				System.out.println("Unable to read tree in MathildeThinningPredictorTest class at line : " + recordId);
+			} finally {
+				if (reader != null) {
+					reader.close();
+				}
 			}
 		}
 	}

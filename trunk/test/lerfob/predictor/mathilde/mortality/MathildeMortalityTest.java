@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
-import repicea.stats.distributions.NonparametricDistribution;
+import repicea.stats.distributions.EmpiricalDistribution;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
 import repicea.util.ObjectUtility;
@@ -169,7 +169,7 @@ public class MathildeMortalityTest {
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
 			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
-			NonparametricDistribution dist = new NonparametricDistribution();
+			EmpiricalDistribution dist = new EmpiricalDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
 				((MathildeMortalityStandImpl) stand).setMonteCarloRealizationId(i);
@@ -234,7 +234,7 @@ public class MathildeMortalityTest {
 		
 		for (MathildeTree tree : firstTenTreesWithWindstorm) {
 			MathildeMortalityStand stand = ((MathildeMortalityTreeImpl) tree).getStand();
-			NonparametricDistribution dist = new NonparametricDistribution();
+			EmpiricalDistribution dist = new EmpiricalDistribution();
 			Matrix result;
 			for (int i = 0; i < nbReal; i++) {
 				((MathildeMortalityStandImpl) stand).setMonteCarloRealizationId(i);

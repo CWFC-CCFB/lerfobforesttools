@@ -11,7 +11,7 @@ import org.junit.Test;
 import lerfob.predictor.mathilde.MathildeTree;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
-import repicea.stats.distributions.NonparametricDistribution;
+import repicea.stats.distributions.EmpiricalDistribution;
 import repicea.util.ObjectUtility;
 
 public class MathildeDiameterIncrementTest {
@@ -111,7 +111,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution dist = new NonparametricDistribution();
+		EmpiricalDistribution dist = new EmpiricalDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
 //			tree.setMonteCarloRealizationId(i);
@@ -136,7 +136,7 @@ public class MathildeDiameterIncrementTest {
 		
 		MathildeTree tree = trees.get(0);
 		MathildeDiameterIncrementStand stand = ((MathildeDiameterIncrementTreeImpl) tree).getStand();
-		NonparametricDistribution dist = new NonparametricDistribution();
+		EmpiricalDistribution dist = new EmpiricalDistribution();
 		Matrix result;
 		for (int i = 0; i < nbReal; i++) {
 			((MathildeDiameterIncrementStandImpl) stand).setMonteCarloRealizationId(i);

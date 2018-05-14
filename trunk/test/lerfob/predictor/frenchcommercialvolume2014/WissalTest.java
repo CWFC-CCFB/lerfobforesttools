@@ -28,8 +28,9 @@ public class WissalTest {
 		List<Tree> trees = new ArrayList<Tree>();
 		String path = ObjectUtility.getRelativePackagePath(getClass());
 		Object[] record;
+		CSVReader reader = null;
 		try {
-			CSVReader reader = new CSVReader(path + "dataSet.csv");
+			reader = new CSVReader(path + "dataSet.csv");
 
 			int plotID;
 			int treeID;
@@ -52,6 +53,10 @@ public class WissalTest {
 		} catch (Exception e) {
 			System.out.println("Error while reading record " + recordIndex);
 			return;
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 
 		try {
