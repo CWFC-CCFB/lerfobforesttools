@@ -37,7 +37,7 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - May 2018
  */
 @SuppressWarnings("serial")
-public class FrenchNFIThinner extends REpiceaLogisticPredictor<FrenchNFIThinnerPlot, Object> {
+public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNFIThinnerPlot, Object> {
 
 	private final static Map<FrenchRegion2016, Matrix> DummyRegion = new HashMap<FrenchRegion2016, Matrix>();
 	static {
@@ -59,7 +59,7 @@ public class FrenchNFIThinner extends REpiceaLogisticPredictor<FrenchNFIThinnerP
 	 * Constructor.
 	 * @param isVariabilityEnabled true to enable the stochastic mode or false for deterministic predictions.
 	 */
-	public FrenchNFIThinner(boolean isVariabilityEnabled) {
+	public FrenchNFIThinnerPredictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, false, isVariabilityEnabled);		// no random effect in this model
 		init();
 	}
@@ -159,10 +159,6 @@ public class FrenchNFIThinner extends REpiceaLogisticPredictor<FrenchNFIThinnerP
 		return 1 - survival;
 	}
 
-	
-	public static void main(String[] args) {
-		new FrenchNFIThinner(false);
-	}
 	
 	
 }

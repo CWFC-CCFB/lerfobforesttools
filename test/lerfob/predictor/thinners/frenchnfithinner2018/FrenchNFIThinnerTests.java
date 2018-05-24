@@ -69,7 +69,7 @@ public class FrenchNFIThinnerTests {
 	@Test
 	public void testSASPredictions() {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
-		FrenchNFIThinner thinner = new FrenchNFIThinner(false);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false);
 
 		int nbPlots = 0;
 		for (FrenchNFIThinnerPlot plot : plots) {
