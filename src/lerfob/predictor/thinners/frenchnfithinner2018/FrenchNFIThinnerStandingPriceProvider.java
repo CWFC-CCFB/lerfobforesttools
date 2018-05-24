@@ -1,6 +1,23 @@
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2018 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,14 +27,17 @@ import repicea.util.ObjectUtility;
 
 public class FrenchNFIThinnerStandingPriceProvider {
 
-	public enum Species{
+	public enum Species {
 		Oak("Chene"),
 		Beech("Hetre"),
 		Fir("Sapin"),
 		Spruce("Epicea"),
+		DouglasFir("Douglas"),
 		ScotsPine("Pin sylvestre"),
 		MaritimePine("Pin maritime"),
-		Coppice("Taillis feuillus");
+		Poplar("Peuplier"),
+		Coppice("Taillis feuillus"),
+		;
 		
 		private static Map<String, Species> MatchMap;
 		
@@ -43,20 +63,18 @@ public class FrenchNFIThinnerStandingPriceProvider {
 		}
 	}
 	
+	private static final FrenchNFIThinnerStandingPriceProvider Singleton = new FrenchNFIThinnerStandingPriceProvider();
 	
 	private final Map<FrenchNFIThinnerStandingPriceProvider.Species, Map<Integer, Double>> priceMap;
 	
 	private final int minimumYearDate = 2006;
 	private final int maximumYearDate = 2016;
 	
-	FrenchNFIThinnerStandingPriceProvider() {
+	private FrenchNFIThinnerStandingPriceProvider() {
 		priceMap = new HashMap<FrenchNFIThinnerStandingPriceProvider.Species, Map<Integer, Double>>();
 		init();
 	}
-	
-	
-	
-	
+			
 	private void init() {
 		priceMap.clear();
 		String filename = ObjectUtility.getRelativePackagePath(getClass()) + "prixBoisOnf.csv";
@@ -76,7 +94,7 @@ public class FrenchNFIThinnerStandingPriceProvider {
 					innerMap.put(year, value);
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Unable to read the price of standing volume in the FrenchNFIThinnerStandingPriceProvider class!");
 		} finally {
 			if (reader != null) {
@@ -111,6 +129,14 @@ public class FrenchNFIThinnerStandingPriceProvider {
 			priceArray[yearIndex] = priceMap.get(species).get(yearDate);
 		}
 		return priceArray;
+	}
+	
+	/**
+	 * This method returns the singleton instance of the FrenchNFIThinnerStandingPriceProvider class.
+	 * @return a FrenchNFIThinnerStandingPriceProvider object
+	 */
+	public static FrenchNFIThinnerStandingPriceProvider getInstance() {
+		return Singleton;
 	}
 	
 }

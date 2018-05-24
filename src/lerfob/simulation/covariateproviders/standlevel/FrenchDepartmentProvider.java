@@ -38,9 +38,10 @@ public abstract interface FrenchDepartmentProvider {
 		ILE_DE_FRANCE,
 		NORMANDIE,
 		NOUVELLE_AQUITAINE,
+		OCCITANIE,
 		PAYS_DE_LA_LOIRE,
-		PROVENCE_ALPES_COTE_D_AZUR,
-		OCCITANIE;
+		PROVENCE_ALPES_COTE_D_AZUR
+		;
 	}
 	
 	public static enum FrenchRegionPriorTo2016 {

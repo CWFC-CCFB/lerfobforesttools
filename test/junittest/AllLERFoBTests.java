@@ -25,5 +25,6 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
 				lerfob.predictor.dopalep.DopalepDbhIncPredictorTest.class,
 				lerfob.predictor.mathilde.recruitment.MathildeRecruitmentTest.class,
-				lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentTests.class})
+				lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentTests.class,
+				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerTests.class})
 public class AllLERFoBTests {}
