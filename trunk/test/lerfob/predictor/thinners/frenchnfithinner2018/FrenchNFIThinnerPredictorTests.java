@@ -12,7 +12,7 @@ import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.
 import repicea.io.javacsv.CSVReader;
 import repicea.util.ObjectUtility;
 
-public class FrenchNFIThinnerTests {
+public class FrenchNFIThinnerPredictorTests {
 
 	private List<FrenchNFIThinnerPlot> readPlots() {
 		List<FrenchNFIThinnerPlot> plots = new ArrayList<FrenchNFIThinnerPlot>();
