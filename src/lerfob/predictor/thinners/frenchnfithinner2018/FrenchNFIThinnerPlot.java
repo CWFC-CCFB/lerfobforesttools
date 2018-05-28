@@ -18,13 +18,13 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider;
+import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
 import repicea.simulation.covariateproviders.standlevel.StemDensityHaProvider;
 
-public interface FrenchNFIThinnerPlot extends FrenchDepartmentProvider,
+public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 												BasalAreaM2HaProvider,
 												StemDensityHaProvider,
 												SlopeInclinationPercentProvider,

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchRegion2016;
+import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaLogisticPredictor;
@@ -119,7 +119,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent();
 		index++;
 		
-		Matrix dummy = DummyRegion.get(stand.getFrenchDepartment().getNewRegion());
+		Matrix dummy = DummyRegion.get(stand.getFrenchRegion2016());
 		oXVector.setSubMatrix(dummy, 0, index);
 		index += dummy.m_iCols;
 		

@@ -6,7 +6,7 @@ import repicea.simulation.HierarchicalLevel;
 class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	final String plotID;
-	final FrenchDepartment department;
+	final FrenchRegion2016 region2016;
 	final double basalAreaM2Ha;
 	final double stemDensityHa;
 	final double slopeInclination;
@@ -26,11 +26,11 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	 * @param targetSpecies
 	 * @param interventionInPrevious5Years
 	 */
-	FrenchNFIThinnerPlotImpl(String plotID, FrenchDepartment department, double basalAreaM2Ha, double stemDensityHa,	
+	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
 							double predictedProb, int year0, int year1) {
 		this.plotID = plotID;
-		this.department = department;
+		this.region2016 = region2016;
 		this.basalAreaM2Ha = basalAreaM2Ha;
 		this.stemDensityHa = stemDensityHa;
 		this.slopeInclination = slopeInclination;
@@ -47,7 +47,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	int getYear1() {return year1;}
  	
 	@Override
-	public FrenchDepartment getFrenchDepartment() {return department;}
+	public FrenchRegion2016 getFrenchRegion2016() {return region2016;}
 
 	@Override
 	public double getBasalAreaM2Ha() {return basalAreaM2Ha;}
