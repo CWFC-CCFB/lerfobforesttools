@@ -40,7 +40,7 @@ public class FrenchNFIThinnerPredictorTests {
 				int year1 = Integer.parseInt(record[9].toString());
 				
 				FrenchNFIThinnerPlot plot = new FrenchNFIThinnerPlotImpl(idp, 
-						department, 
+						department.getFrenchRegion2016(), 
 						basalAreaM2Ha, 
 						stemDensityHa,	
 						slopeInclination, 
