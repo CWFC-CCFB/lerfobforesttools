@@ -15,6 +15,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	final double predictedProb;
 	final int year0;
 	final int year1;
+	int monteCarloRealization;
 	
 	/**
 	 * Constructor.
@@ -64,7 +65,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
-	public int getMonteCarloRealizationId() {return 0;}
+	public int getMonteCarloRealizationId() {return monteCarloRealization;}
 
 	@Override
 	public boolean wasThereAnySiliviculturalTreatmentInTheLast5Years() {return interventionInPrevious5Years;}
