@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
@@ -79,16 +78,16 @@ class FrenchNFIThinnerPredictions {
 	
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 24, 691, 14, true); // TODO covariates to be set
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 24, 691, 14, true);// TODO covariates to be set
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true); 
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true);
 		
 		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
 		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 24, 691, 14, true);// TODO covariates to be set
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 24, 691, 14, true);// TODO covariates to be set
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 24, 691, 14, true);// TODO covariates to be set
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 24, 691, 14, true);// TODO covariates to be set
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
 
 		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
 		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
