@@ -27,6 +27,7 @@ import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.simulation.SASParameterEstimates;
+import repicea.simulation.covariateproviders.standlevel.SpeciesCompositionProvider.SpeciesComposition;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -53,7 +54,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	
 	
 	
-	private final int NumberParmsForHazard = 10;
+	private final int NumberParmsForHazard = 12;
 	
 	/**
 	 * Constructor.
@@ -84,13 +85,18 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 	}
 
-	private double getBaseline(Matrix beta, double[] prices, Species targetSpecies) {
-		int parameterIndex = targetSpecies.ordinal() - 1;
+	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand) {
+		int parameterIndex = stand.getTargetSpecies().ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
-		double slope = beta.m_afData[1][0];
+		if (stand.getSpeciesComposition() == SpeciesComposition.Mixed) {
+			intercept += beta.m_afData[1][0];
+		} else  if (stand.getSpeciesComposition() == SpeciesComposition.ConiferDominated) {
+			intercept += beta.m_afData[2][0];
+		}
+		double slope = beta.m_afData[3][0];
 		if (parameterIndex >= 0) { // if oak then it is smaller than 0
-			slope += beta.m_afData[parameterIndex + 2][0];
+			slope += beta.m_afData[parameterIndex + 4][0];
 		}
 		
 		double baselineResult = 0;
@@ -152,7 +158,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 			prices = FrenchNFIThinnerStandingPriceProvider.getInstance().getStandingPrices(targetSpecies, year0, year1);
 		}
 		
-		double baseline = getBaseline(beta, prices, targetSpecies);
+		double baseline = getBaseline(beta, prices, stand);
 
 		double survival = Math.exp(-proportionalPart * baseline);
 
