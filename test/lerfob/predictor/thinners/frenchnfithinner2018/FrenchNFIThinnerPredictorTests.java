@@ -1,6 +1,7 @@
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.junit.Test;
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
+import repicea.simulation.covariateproviders.standlevel.SpeciesCompositionProvider.SpeciesComposition;
 import repicea.util.ObjectUtility;
 
 public class FrenchNFIThinnerPredictorTests {
@@ -28,16 +30,29 @@ public class FrenchNFIThinnerPredictorTests {
 				String idp = record[0].toString();
 				String targetSpeciesStr = record[1].toString();
 				Species targetSpecies = Species.getSpeciesFromFrenchName(targetSpeciesStr);
-				double slopeInclination = Double.parseDouble(record[2].toString());
-				double basalAreaM2Ha = Double.parseDouble(record[3].toString());
-				double stemDensityHa = Double.parseDouble(record[4].toString());
-				String departmentCode = record[5].toString();
+				String forestType = record[2].toString().trim().toUpperCase();
+				SpeciesComposition spComp = null;
+				if (forestType.equals("RES")) {
+					spComp = SpeciesComposition.ConiferDominated;
+				} else if (forestType.equals("MIX")) {
+					spComp = SpeciesComposition.Mixed;
+				} else if (forestType.equals("FEU")) {
+					spComp = SpeciesComposition.BroadleavedDominated;
+				}
+				if (spComp == null) {
+					throw new InvalidParameterException("Impossible to determine the species composition!");
+				}
+				
+				double slopeInclination = Double.parseDouble(record[3].toString());
+				double basalAreaM2Ha = Double.parseDouble(record[4].toString());
+				double stemDensityHa = Double.parseDouble(record[5].toString());
+				String departmentCode = record[6].toString();
 				FrenchDepartment department = FrenchDepartment.getDepartment(departmentCode);
-				int underManagementInt = Integer.parseInt(record[6].toString());
+				int underManagementInt = Integer.parseInt(record[7].toString());
 				boolean underManagement = underManagementInt == 1;
-				double pred = Double.parseDouble(record[7].toString());
-				int year0 = Integer.parseInt(record[8].toString());
-				int year1 = Integer.parseInt(record[9].toString());
+				double pred = Double.parseDouble(record[8].toString());
+				int year0 = Integer.parseInt(record[9].toString());
+				int year1 = Integer.parseInt(record[10].toString());
 				
 				FrenchNFIThinnerPlot plot = new FrenchNFIThinnerPlotImpl(idp, 
 						department.getFrenchRegion2016(), 
@@ -46,6 +61,7 @@ public class FrenchNFIThinnerPredictorTests {
 						slopeInclination, 
 						targetSpecies, 
 						underManagement,
+						spComp,
 						pred,
 						year0,
 						year1);

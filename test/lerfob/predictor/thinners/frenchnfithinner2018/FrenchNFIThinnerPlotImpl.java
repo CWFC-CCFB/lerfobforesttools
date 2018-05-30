@@ -15,19 +15,15 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	final double predictedProb;
 	final int year0;
 	final int year1;
+	final SpeciesComposition speciesComposition;
 	int monteCarloRealization;
 	
 	/**
 	 * Constructor.
-	 * @param department
-	 * @param basalAreaM2Ha
-	 * @param stemDensityHa
-	 * @param slopeInclination
-	 * @param targetSpecies
-	 * @param interventionInPrevious5Years
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
+							SpeciesComposition speciesComposition,
 							double predictedProb, int year0, int year1) {
 		this.plotID = plotID;
 		this.region2016 = region2016;
@@ -36,6 +32,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 		this.slopeInclination = slopeInclination;
 		this.targetSpecies = targetSpecies;
 		this.interventionInPrevious5Years = interventionInPrevious5Years;
+		this.speciesComposition = speciesComposition;
 		this.predictedProb = predictedProb;
 		this.year0 = year0;
 		this.year1 = year1;
@@ -72,5 +69,9 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	@Override
 	public Species getTargetSpecies() {return targetSpecies;}
+
+
+	@Override
+	public SpeciesComposition getSpeciesComposition() {return speciesComposition;}
 
 }

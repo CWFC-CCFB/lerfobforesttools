@@ -10,6 +10,7 @@ import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVWriter;
 import repicea.math.Matrix;
+import repicea.simulation.covariateproviders.standlevel.SpeciesCompositionProvider.SpeciesComposition;
 import repicea.stats.estimates.ConfidenceInterval;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
@@ -18,6 +19,7 @@ class FrenchNFIThinnerPredictions {
 
 	void predictHarvestProbabilityAgainstStandingPrice(int startingYear, 
 			Species targetSpecies, 
+			SpeciesComposition spComp,
 			FrenchRegion2016 region,
 			double basalAreaM2Ha,
 			double stemDensityHa,
@@ -31,6 +33,7 @@ class FrenchNFIThinnerPredictions {
 				slopeInclination, 
 				targetSpecies,
 				underManagement,
+				spComp,
 				0, 
 				2010,
 				2015);
@@ -78,19 +81,19 @@ class FrenchNFIThinnerPredictions {
 	
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true); 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true); 
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
 		
 		
 	}
