@@ -6,10 +6,10 @@ import repicea.simulation.HierarchicalLevel;
 class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	final String plotID;
-	final FrenchRegion2016 region2016;
+	FrenchRegion2016 region2016;
 	final double basalAreaM2Ha;
 	final double stemDensityHa;
-	final double slopeInclination;
+	double slopeInclination;
 	final Species targetSpecies;
 	final boolean interventionInPrevious5Years;
 	final double predictedProb;
