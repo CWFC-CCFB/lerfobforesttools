@@ -51,6 +51,7 @@ import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.gui.genericwindows.REpiceaLicenseWindow;
 import repicea.gui.genericwindows.REpiceaSplashWindow;
+import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -74,7 +75,11 @@ import repicea.util.REpiceaTranslator.Language;
  * @author Mathieu Fortin (INRA) - January 2010
  */
 public class CarbonAccountingTool extends AbstractGenericEngine implements REpiceaShowableUIWithParent, REpiceaShowableUI {
-	
+
+	static {
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider$SpeciesType", "repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider$SpeciesType");
+	}
+
 	private static class StandComparator implements Comparator<CATCompatibleStand> {
 
 		@Override

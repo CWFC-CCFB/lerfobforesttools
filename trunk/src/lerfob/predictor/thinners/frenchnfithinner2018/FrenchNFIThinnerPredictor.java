@@ -27,7 +27,7 @@ import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.simulation.SASParameterEstimates;
-import repicea.simulation.covariateproviders.standlevel.SpeciesCompositionProvider.SpeciesComposition;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -54,7 +54,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	
 	
 	
-	private final int NumberParmsForHazard = 12;
+	private final int NumberParmsForHazard = 11;
 	
 	/**
 	 * Constructor.
@@ -89,14 +89,13 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		int parameterIndex = stand.getTargetSpecies().ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
-		if (stand.getSpeciesComposition() == SpeciesComposition.Mixed) {
+		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			intercept += beta.m_afData[1][0];
-		} else  if (stand.getSpeciesComposition() == SpeciesComposition.ConiferDominated) {
-			intercept += beta.m_afData[2][0];
 		}
-		double slope = beta.m_afData[3][0];
+		
+		double slope = beta.m_afData[2][0];
 		if (parameterIndex >= 0) { // if oak then it is smaller than 0
-			slope += beta.m_afData[parameterIndex + 4][0];
+			slope += beta.m_afData[parameterIndex + 3][0];
 		}
 		
 		double baselineResult = 0;
@@ -109,12 +108,8 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
-		int dummy_mix = 0;
-		if (stand.getSpeciesComposition() == SpeciesComposition.Mixed) {
-			dummy_mix = 1;
-		}
 		int dummy_res = 0;
-		if (stand.getSpeciesComposition() == SpeciesComposition.ConiferDominated) {
+		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			dummy_res = 1;
 		}
 		
@@ -131,9 +126,6 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		index++;
 
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent();
-		index++;
-
-		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_mix;
 		index++;
 
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_res;

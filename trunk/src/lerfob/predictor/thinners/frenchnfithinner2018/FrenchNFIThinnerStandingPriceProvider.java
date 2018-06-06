@@ -23,28 +23,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.util.ObjectUtility;
 
 public class FrenchNFIThinnerStandingPriceProvider {
 
-	public enum Species {
-		Oak("Chene"),
-		Beech("Hetre"),
-		Fir("Sapin"),
-		Spruce("Epicea"),
-		DouglasFir("Douglas"),
-		ScotsPine("Pin sylvestre"),
-		MaritimePine("Pin maritime"),
-		Poplar("Peuplier"),
-		Coppice("Taillis feuillus"),
+	public enum Species implements SpeciesTypeProvider {
+		Oak("Chene", SpeciesType.BroadleavedSpecies),
+		Beech("Hetre", SpeciesType.BroadleavedSpecies),
+		Fir("Sapin", SpeciesType.ConiferousSpecies),
+		Spruce("Epicea", SpeciesType.ConiferousSpecies),
+		DouglasFir("Douglas", SpeciesType.ConiferousSpecies),
+		ScotsPine("Pin sylvestre", SpeciesType.ConiferousSpecies),
+		MaritimePine("Pin maritime", SpeciesType.ConiferousSpecies),
+		Poplar("Peuplier", SpeciesType.BroadleavedSpecies),
+		Coppice("Taillis feuillus", SpeciesType.BroadleavedSpecies),
 		;
 		
 		private static Map<String, Species> MatchMap;
 		
 		private final String frenchName;
+		private final SpeciesType type;
 		
-		Species(String frenchName) {
+		Species(String frenchName, SpeciesType type) {
 			this.frenchName = frenchName;
+			this.type = type;
 		}
 		
 		
@@ -61,6 +64,9 @@ public class FrenchNFIThinnerStandingPriceProvider {
 		static Species getSpeciesFromFrenchName(String frenchName) {
 			return getMatchMap().get(frenchName);
 		}
+
+		@Override
+		public SpeciesType getSpeciesType() {return type;}
 	}
 	
 	private static final FrenchNFIThinnerStandingPriceProvider Singleton = new FrenchNFIThinnerStandingPriceProvider();

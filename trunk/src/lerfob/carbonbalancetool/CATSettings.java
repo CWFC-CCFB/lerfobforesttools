@@ -35,7 +35,7 @@ import lerfob.carbonbalancetool.woodpiecedispatcher.WoodPieceDispatcher;
 import repicea.app.SettingMemory;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.simulation.Parameterizable;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
@@ -55,7 +55,7 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("deprecation")
 public final class CATSettings {
 
-	public static enum CATSpecies implements TextableEnum, CATBasicWoodDensityProvider {
+	public static enum CATSpecies implements TextableEnum, CATBasicWoodDensityProvider, SpeciesTypeProvider {
 		
 		ABIES(SpeciesType.ConiferousSpecies, 0.40, "Abies spp."),
 		ACER(SpeciesType.BroadleavedSpecies, 0.52, "Acer spp."),
@@ -105,6 +105,7 @@ public final class CATSettings {
 		@Override
 		public double getBasicWoodDensity() {return basicWoodDensity;}
 		
+		@Override
 		public SpeciesType getSpeciesType() {return speciesType;}
 		
 		/**

@@ -53,7 +53,7 @@ import repicea.serial.xml.XmlMarshallException;
 import repicea.serial.xml.XmlSerializer;
 import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 
