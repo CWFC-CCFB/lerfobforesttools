@@ -103,7 +103,6 @@ class FrenchNFIThinnerPredictions {
 		try {
 			writer = new CSVWriter(new File(filename), false);
 			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("Composition"));
 			fields.add(new CSVField("Slope"));
 			fields.add(new CSVField("Pred"));
 			fields.add(new CSVField("Lower95"));
