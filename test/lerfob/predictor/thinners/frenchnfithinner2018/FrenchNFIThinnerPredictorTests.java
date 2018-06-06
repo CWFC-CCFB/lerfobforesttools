@@ -61,7 +61,7 @@ public class FrenchNFIThinnerPredictorTests {
 						slopeInclination, 
 						targetSpecies, 
 						underManagement,
-						spComp,
+//						spComp,
 						pred,
 						year0,
 						year1);

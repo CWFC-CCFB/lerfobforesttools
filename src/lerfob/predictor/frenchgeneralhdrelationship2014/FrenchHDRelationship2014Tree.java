@@ -21,7 +21,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2014;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
 import repicea.simulation.covariateproviders.treelevel.LnDbhCmPlus1Provider;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SquaredLnDbhCmPlus1Provider;
 import repicea.simulation.hdrelationships.HDRelationshipTree;
 
@@ -35,7 +35,7 @@ public interface FrenchHDRelationship2014Tree extends HDRelationshipTree,
 										LnDbhCmPlus1Provider,
 										SquaredLnDbhCmPlus1Provider {
 
-	public enum FrenchHdSpecies {
+	public enum FrenchHdSpecies implements SpeciesTypeProvider {
 		ALISIER_BLANC(SpeciesType.BroadleavedSpecies),
 		ALISIER_TORMINAL(SpeciesType.BroadleavedSpecies),
 		AUBEPINE_MONOGYNE(SpeciesType.BroadleavedSpecies),
@@ -84,6 +84,7 @@ public interface FrenchHDRelationship2014Tree extends HDRelationshipTree,
 			this.type = type;
 		}
 		
+		@Override
 		public SpeciesType getSpeciesType() {return type;}
 		
 	}	

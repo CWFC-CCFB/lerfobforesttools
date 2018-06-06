@@ -54,7 +54,7 @@ import repicea.io.IOUserInterface;
 import repicea.io.REpiceaIOFileHandlerUI;
 import repicea.net.BrowserCaller;
 import repicea.serial.Memorizable;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;

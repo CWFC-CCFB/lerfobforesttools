@@ -29,7 +29,7 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.hdrelationships.HDRelationshipModel;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
 import repicea.stats.distributions.StandardGaussianDistribution;

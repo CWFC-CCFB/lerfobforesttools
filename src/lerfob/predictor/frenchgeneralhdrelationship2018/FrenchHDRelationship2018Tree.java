@@ -21,7 +21,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
 import repicea.simulation.covariateproviders.treelevel.LnDbhCmPlus1Provider;
-import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider.SpeciesType;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SquaredLnDbhCmPlus1Provider;
 import repicea.simulation.hdrelationships.HDRelationshipTree;
 
@@ -44,7 +44,7 @@ public interface FrenchHDRelationship2018Tree extends HDRelationshipTree,
 	}
 	
 	
-	public enum FrenchHd2018Species {
+	public enum FrenchHd2018Species implements SpeciesTypeProvider {
 		ALISIER_BLANC(SpeciesType.BroadleavedSpecies, "Sorbus aria", 39),
 		ALISIER_TORMINAL(SpeciesType.BroadleavedSpecies, "Sorbus torminalis", 41),
 		ARBOUSIER(SpeciesType.BroadleavedSpecies, "Arbutus unedo", 7),
@@ -102,7 +102,8 @@ public interface FrenchHDRelationship2018Tree extends HDRelationshipTree,
 		
 		protected int getIndex() {return index;}
 
-		protected SpeciesType getSpeciesType() {return speciesType;}
+		@Override
+		public SpeciesType getSpeciesType() {return speciesType;}
 	}	
 	
 	
