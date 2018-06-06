@@ -109,6 +109,14 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
+		int dummy_mix = 0;
+		if (stand.getSpeciesComposition() == SpeciesComposition.Mixed) {
+			dummy_mix = 1;
+		}
+		int dummy_res = 0;
+		if (stand.getSpeciesComposition() == SpeciesComposition.ConiferDominated) {
+			dummy_res = 1;
+		}
 		
 		int index = 0;
 		if (stand.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
@@ -124,7 +132,13 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent();
 		index++;
-		
+
+		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_mix;
+		index++;
+
+		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_res;
+		index++;
+
 		Matrix dummy = DummyRegion.get(stand.getFrenchRegion2016());
 		oXVector.setSubMatrix(dummy, 0, index);
 		index += dummy.m_iCols;
