@@ -15,7 +15,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	final double predictedProb;
 	final int year0;
 	final int year1;
-	final SpeciesComposition speciesComposition;
+	SpeciesComposition speciesComposition;
 	int monteCarloRealization;
 	
 	/**

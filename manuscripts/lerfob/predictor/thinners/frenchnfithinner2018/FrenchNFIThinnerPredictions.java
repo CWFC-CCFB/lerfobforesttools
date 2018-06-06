@@ -80,7 +80,6 @@ class FrenchNFIThinnerPredictions {
 
 	void predictHarvestProbabilityAgainstSlope(int startingYear, 
 			Species targetSpecies, 
-			SpeciesComposition spComp,
 			FrenchRegion2016 region,
 			double basalAreaM2Ha,
 			double stemDensityHa,
@@ -93,7 +92,7 @@ class FrenchNFIThinnerPredictions {
 				0, 
 				targetSpecies,
 				underManagement,
-				spComp,
+				SpeciesComposition.BroadleavedDominated,
 				0, 
 				2010,
 				2015);
@@ -106,29 +105,37 @@ class FrenchNFIThinnerPredictions {
 		try {
 			writer = new CSVWriter(new File(filename), false);
 			List<FormatField> fields = new ArrayList<FormatField>();
+			fields.add(new CSVField("Composition"));
 			fields.add(new CSVField("Slope"));
 			fields.add(new CSVField("Pred"));
 			fields.add(new CSVField("Lower95"));
 			fields.add(new CSVField("Upper95"));
 			writer.setFields(fields);
 
-			
-			for (double slope = 0; slope <= 70; slope++) {
-				plot.slopeInclination = slope;
-				MonteCarloEstimate estimate = new MonteCarloEstimate();
-				for (int real = 0; real < 10000; real++) {
-					plot.monteCarloRealization = real;
-					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
-					estimate.addRealization(realization);
+			List<SpeciesComposition> compositions = new ArrayList<SpeciesComposition>();
+			compositions.add(SpeciesComposition.BroadleavedDominated);
+			compositions.add(SpeciesComposition.Mixed);
+		
+			for (SpeciesComposition comp : compositions) {
+				plot.speciesComposition = comp;
+				for (double slope = 0; slope <= 70; slope++) {
+					plot.slopeInclination = slope;
+					MonteCarloEstimate estimate = new MonteCarloEstimate();
+					for (int real = 0; real < 10000; real++) {
+						plot.monteCarloRealization = real;
+						Matrix realization = new Matrix(1,1);
+						realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
+						estimate.addRealization(realization);
+					}
+					Object[] record = new Object[5];
+					record[0] = comp;
+					record[1] = slope;
+					record[2] = estimate.getMean().m_afData[0][0];
+					ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
+					record[3] = ci.getLowerLimit().m_afData[0][0];
+					record[4] = ci.getUpperLimit().m_afData[0][0];
+					writer.addRecord(record);
 				}
-				Object[] record = new Object[4];
-				record[0] = slope;
-				record[1] = estimate.getMean().m_afData[0][0];
-				ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
-				record[2] = ci.getLowerLimit().m_afData[0][0];
-				record[3] = ci.getUpperLimit().m_afData[0][0];
-				writer.addRecord(record);
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstSlope!");
@@ -192,7 +199,7 @@ class FrenchNFIThinnerPredictions {
 				writer.addRecord(record);
 			}
 		} catch (Exception e) {
-			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstSlope!");
+			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstRegion!");
 		} finally {
 			if (writer != null) {
 				writer.close();
@@ -202,21 +209,21 @@ class FrenchNFIThinnerPredictions {
 
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true); 
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true);
-//		
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
-//		
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
-//
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
-//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true); 
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.7, 778, 4, true);
 		
-//		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, SpeciesComposition.BroadleavedDominated, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
+		
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, SpeciesComposition.ConiferDominated, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 872, 33, true);
+
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, SpeciesComposition.ConiferDominated, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
+		
+		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, true);
 		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, SpeciesComposition.BroadleavedDominated, 15, 24, 691, true);
 	}
 }
