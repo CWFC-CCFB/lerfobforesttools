@@ -11,20 +11,29 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	final double stemDensityHa;
 	double slopeInclination;
 	final Species targetSpecies;
-	final boolean interventionInPrevious5Years;
-	final double predictedProb;
-	final int year0;
-	final int year1;
-//	SpeciesComposition speciesComposition;
+	boolean interventionInPrevious5Years;
+	double predictedProb;
+	int year0;
+	int year1;
 	int monteCarloRealization;
 	
 	/**
-	 * Constructor.
+	 * Constructor for prediction purpose.
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
-//							SpeciesComposition speciesComposition,
 							double predictedProb, int year0, int year1) {
+		this(plotID, region2016, basalAreaM2Ha, stemDensityHa, slopeInclination, targetSpecies, interventionInPrevious5Years);
+		this.predictedProb = predictedProb;
+		this.year0 = year0;
+		this.year1 = year1;
+	}
+	
+	/**
+	 * Constructor for prediction.
+	 */
+	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
+							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years) {
 		this.plotID = plotID;
 		this.region2016 = region2016;
 		this.basalAreaM2Ha = basalAreaM2Ha;
@@ -32,13 +41,8 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 		this.slopeInclination = slopeInclination;
 		this.targetSpecies = targetSpecies;
 		this.interventionInPrevious5Years = interventionInPrevious5Years;
-//		this.speciesComposition = speciesComposition;
-		this.predictedProb = predictedProb;
-		this.year0 = year0;
-		this.year1 = year1;
 	}
-	
-	
+
 	double getPredictedProbability() {return predictedProb;}
 	int getYear0() {return year0;}
 	int getYear1() {return year1;}
