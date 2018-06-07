@@ -131,6 +131,62 @@ class FrenchNFIThinnerPredictions {
 		}
 	}
 
+	void predictHarvestProbabilityAgainstRegion(int startingYear, 
+			Species targetSpecies, 
+			double basalAreaM2Ha,
+			double stemDensityHa,
+			boolean underManagement,
+			double slope) {
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("region" + targetSpecies.name() + startingYear + ".csv");
+		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+				FrenchRegion2016.AUVERGNE_RHONE_ALPES,
+				basalAreaM2Ha,
+				stemDensityHa,	
+				slope, 
+				targetSpecies,
+				underManagement);
+		
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		
+		
+		CSVWriter writer = null;
+
+		try {
+			writer = new CSVWriter(new File(filename), false);
+			List<FormatField> fields = new ArrayList<FormatField>();
+			fields.add(new CSVField("Region"));
+			fields.add(new CSVField("Pred"));
+			fields.add(new CSVField("Lower95"));
+			fields.add(new CSVField("Upper95"));
+			writer.setFields(fields);
+
+			
+			for (FrenchRegion2016 region : FrenchRegion2016.values()) {
+				plot.region2016 = region;;
+				MonteCarloEstimate estimate = new MonteCarloEstimate();
+				for (int real = 0; real < 10000; real++) {
+					plot.monteCarloRealization = real;
+					Matrix realization = new Matrix(1,1);
+					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
+					estimate.addRealization(realization);
+				}
+				Object[] record = new Object[4];
+				record[0] = region.name();
+				record[1] = estimate.getMean().m_afData[0][0];
+				ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
+				record[2] = ci.getLowerLimit().m_afData[0][0];
+				record[3] = ci.getUpperLimit().m_afData[0][0];
+				writer.addRecord(record);
+			}
+		} catch (Exception e) {
+			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstRegion!");
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
+
 	void predictHarvestProbabilityAgainstPreviousManagement(int startingYear, 
 			Species targetSpecies, 
 			FrenchRegion2016 region,
@@ -189,17 +245,17 @@ class FrenchNFIThinnerPredictions {
 		}
 	}
 
-	void predictHarvestProbabilityAgainstRegion(int startingYear, 
+	
+	
+	void predictHarvestProbabilityAgainstBasalAreaAndStemDensity(int startingYear, 
 			Species targetSpecies, 
-			double basalAreaM2Ha,
-			double stemDensityHa,
 			boolean underManagement,
 			double slope) {
-		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("region" + targetSpecies.name() + startingYear + ".csv");
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("BAStemDensity" + targetSpecies.name() + startingYear + ".csv");
 		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
-				FrenchRegion2016.AUVERGNE_RHONE_ALPES,
-				basalAreaM2Ha,
-				stemDensityHa,	
+				FrenchRegion2016.GRAND_EST,
+				24,
+				700,	
 				slope, 
 				targetSpecies,
 				underManagement);
@@ -212,38 +268,47 @@ class FrenchNFIThinnerPredictions {
 		try {
 			writer = new CSVWriter(new File(filename), false);
 			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("Region"));
+			fields.add(new CSVField("BasalAreaM2Ha"));
+			fields.add(new CSVField("StemDensityHa"));
 			fields.add(new CSVField("Pred"));
 			fields.add(new CSVField("Lower95"));
 			fields.add(new CSVField("Upper95"));
 			writer.setFields(fields);
 
-			
-			for (FrenchRegion2016 region : FrenchRegion2016.values()) {
-				plot.region2016 = region;;
-				MonteCarloEstimate estimate = new MonteCarloEstimate();
-				for (int real = 0; real < 10000; real++) {
-					plot.monteCarloRealization = real;
-					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
-					estimate.addRealization(realization);
+			List<Double> densities = new ArrayList<Double>();
+			densities.add(200d);
+			densities.add(1200d);
+			for (Double densityHa : densities) {
+				plot.stemDensityHa = densityHa;
+				for (double basalAreaM2Ha = 10d; basalAreaM2Ha < 40; basalAreaM2Ha++) {
+					plot.basalAreaM2Ha = basalAreaM2Ha;
+					MonteCarloEstimate estimate = new MonteCarloEstimate();
+					for (int real = 0; real < 10000; real++) {
+						plot.monteCarloRealization = real;
+						Matrix realization = new Matrix(1,1);
+						realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
+						estimate.addRealization(realization);
+					}
+					Object[] record = new Object[5];
+					record[0] = plot.stemDensityHa;
+					record[1] = plot.basalAreaM2Ha;
+					record[2] = estimate.getMean().m_afData[0][0];
+					ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
+					record[3] = ci.getLowerLimit().m_afData[0][0];
+					record[4] = ci.getUpperLimit().m_afData[0][0];
+					writer.addRecord(record);
+					
 				}
-				Object[] record = new Object[4];
-				record[0] = region.name();
-				record[1] = estimate.getMean().m_afData[0][0];
-				ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
-				record[2] = ci.getLowerLimit().m_afData[0][0];
-				record[3] = ci.getUpperLimit().m_afData[0][0];
-				writer.addRecord(record);
 			}
 		} catch (Exception e) {
-			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstRegion!");
+			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstBasalAreaAndStemDensity!");
 		} finally {
 			if (writer != null) {
 				writer.close();
 			}
 		}
 	}
+
 
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
@@ -264,8 +329,9 @@ class FrenchNFIThinnerPredictions {
 //		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, true);
 //		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 24, 691, 15, true);
 
-		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 15);
+		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 
+		predictions.predictHarvestProbabilityAgainstBasalAreaAndStemDensity(2011, Species.Beech, true, 14);
 	
 	
 	}
