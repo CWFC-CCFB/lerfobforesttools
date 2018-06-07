@@ -134,12 +134,12 @@ class FrenchNFIThinnerPredictions {
 	void predictHarvestProbabilityAgainstPreviousManagement(int startingYear, 
 			Species targetSpecies, 
 			FrenchRegion2016 region,
-			double slope,
 			double basalAreaM2Ha,
-			double stemDensityHa) {
+			double stemDensityHa,
+			double slope) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("previousManagement" + targetSpecies.name() + startingYear + ".csv");
 		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
-				FrenchRegion2016.AUVERGNE_RHONE_ALPES,
+				region,
 				basalAreaM2Ha,
 				stemDensityHa,	
 				slope, 
@@ -191,10 +191,10 @@ class FrenchNFIThinnerPredictions {
 
 	void predictHarvestProbabilityAgainstRegion(int startingYear, 
 			Species targetSpecies, 
-			double slope,
 			double basalAreaM2Ha,
 			double stemDensityHa,
-			boolean underManagement) {
+			boolean underManagement,
+			double slope) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("region" + targetSpecies.name() + startingYear + ".csv");
 		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
 				FrenchRegion2016.AUVERGNE_RHONE_ALPES,
@@ -262,9 +262,9 @@ class FrenchNFIThinnerPredictions {
 //		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 749, 14, true);
 //		
 //		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, true);
-//		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 15, 24, 691, true);
+//		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 24, 691, 15, true);
 
-		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 15, 24, 691);
+		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 15);
 
 	
 	
