@@ -7,8 +7,8 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	final String plotID;
 	FrenchRegion2016 region2016;
-	final double basalAreaM2Ha;
-	final double stemDensityHa;
+	double basalAreaM2Ha;
+	double stemDensityHa;
 	double slopeInclination;
 	final Species targetSpecies;
 	boolean interventionInPrevious5Years;
