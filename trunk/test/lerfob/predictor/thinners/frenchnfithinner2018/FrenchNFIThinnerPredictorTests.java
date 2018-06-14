@@ -50,9 +50,10 @@ public class FrenchNFIThinnerPredictorTests {
 				FrenchDepartment department = FrenchDepartment.getDepartment(departmentCode);
 				int underManagementInt = Integer.parseInt(record[7].toString());
 				boolean underManagement = underManagementInt == 1;
-				double pred = Double.parseDouble(record[8].toString());
-				int year0 = Integer.parseInt(record[9].toString());
-				int year1 = Integer.parseInt(record[10].toString());
+				double probabilityPublicLand = Double.parseDouble(record[8].toString());
+				double pred = Double.parseDouble(record[9].toString());
+				int year0 = Integer.parseInt(record[10].toString());
+				int year1 = Integer.parseInt(record[11].toString());
 				
 				FrenchNFIThinnerPlot plot = new FrenchNFIThinnerPlotImpl(idp, 
 						department.getFrenchRegion2016(), 
@@ -61,7 +62,7 @@ public class FrenchNFIThinnerPredictorTests {
 						slopeInclination, 
 						targetSpecies, 
 						underManagement,
-//						spComp,
+						probabilityPublicLand,
 						pred,
 						year0,
 						year1);
@@ -102,7 +103,7 @@ public class FrenchNFIThinnerPredictorTests {
 			nbPlots++;
 		}
 		
-		Assert.assertEquals(39404, nbPlots);
+		Assert.assertEquals(40077, nbPlots);
 		
 		System.out.println("Number of plots successfully tested for FrenchNFIThinnertests: " + nbPlots);
 		

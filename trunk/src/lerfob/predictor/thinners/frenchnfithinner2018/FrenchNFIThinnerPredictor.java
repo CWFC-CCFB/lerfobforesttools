@@ -27,6 +27,8 @@ import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.simulation.SASParameterEstimates;
+import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider;
+import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider.LandOwnership;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -108,10 +110,25 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
+		double probabilityPublicLand;
+		if (stand instanceof LandOwnershipProvider) {		// priority is given to the interface
+			boolean isPublic = ((LandOwnershipProvider) stand).getLandOwnership() == LandOwnership.Public;
+			if (isPublic) {
+				probabilityPublicLand = 1d;
+			} else {
+				probabilityPublicLand = 0d;
+			}
+		} else {
+			probabilityPublicLand = stand.getProbabilityOfBeingOnPublicLand();
+		}
 		int dummy_res = 0;
 		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			dummy_res = 1;
 		}
+
+		
+		
+		
 		
 		int index = 0;
 		if (stand.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
@@ -130,7 +147,10 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_res;
 		index++;
-
+		
+		oXVector.m_afData[0][index] = probabilityPublicLand;
+		index++;
+		
 		Matrix dummy = DummyRegion.get(stand.getFrenchRegion2016());
 		oXVector.setSubMatrix(dummy, 0, index);
 		index += dummy.m_iCols;

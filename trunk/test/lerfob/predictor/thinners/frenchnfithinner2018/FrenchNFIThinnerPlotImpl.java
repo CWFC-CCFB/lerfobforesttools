@@ -16,14 +16,18 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	int year0;
 	int year1;
 	int monteCarloRealization;
+	double probabilityPublicLand;
 	
 	/**
 	 * Constructor for prediction purpose.
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
+							double probabilityPublicLand,
 							double predictedProb, int year0, int year1) {
-		this(plotID, region2016, basalAreaM2Ha, stemDensityHa, slopeInclination, targetSpecies, interventionInPrevious5Years);
+		this(plotID, region2016, basalAreaM2Ha, 
+				stemDensityHa, slopeInclination, targetSpecies, 
+				interventionInPrevious5Years, probabilityPublicLand);
 		this.predictedProb = predictedProb;
 		this.year0 = year0;
 		this.year1 = year1;
@@ -33,7 +37,8 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	 * Constructor for prediction.
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
-							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years) {
+							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
+							double probabilityPublicLand) {
 		this.plotID = plotID;
 		this.region2016 = region2016;
 		this.basalAreaM2Ha = basalAreaM2Ha;
@@ -41,6 +46,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 		this.slopeInclination = slopeInclination;
 		this.targetSpecies = targetSpecies;
 		this.interventionInPrevious5Years = interventionInPrevious5Years;
+		this.probabilityPublicLand = probabilityPublicLand;
 	}
 
 	double getPredictedProbability() {return predictedProb;}
@@ -73,6 +79,9 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	@Override
 	public Species getTargetSpecies() {return targetSpecies;}
+
+	@Override
+	public double getProbabilityOfBeingOnPublicLand() {return probabilityPublicLand;}
 
 
 //	@Override
