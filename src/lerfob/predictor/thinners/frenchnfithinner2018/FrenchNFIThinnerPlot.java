@@ -56,6 +56,16 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	
 
 	/**
+	 * This method returns the probability that the plot is located on public land. This method 
+	 * reflects the uncertainty around the location of the plot in the French NFI. In case the 
+	 * model is used with other data, the value of 1 should be returned when the plot is located on 
+	 * public land or 0 if it is on private land. If the plot instance implements the LandOwnershipProvider
+	 * interface available in repicea.jar, the interface is used in priority over the current method.
+	 * @return a double (a probability)
+	 */
+	public double getProbabilityOfBeingOnPublicLand();
+	
+	/**
 	 * This method returns the target species of the management. This is most likely
 	 * the species with the current highest value.
 	 * @return a Species enum
