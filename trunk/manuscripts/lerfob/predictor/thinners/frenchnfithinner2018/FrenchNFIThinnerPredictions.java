@@ -31,7 +31,7 @@ class FrenchNFIThinnerPredictions {
 				slopeInclination, 
 				targetSpecies,
 				underManagement,
-				1d);	// 100% of being on public land
+				0d); // 100% of being on private land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
@@ -87,7 +87,7 @@ class FrenchNFIThinnerPredictions {
 				0, 
 				targetSpecies,
 				underManagement,
-				1d); // 100% of being on public land
+				0d); // 100% of being on private land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
@@ -147,7 +147,7 @@ class FrenchNFIThinnerPredictions {
 				slope, 
 				targetSpecies,
 				underManagement,
-				1d); // 100% of being on public land
+				0d); // 100% of being on private land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
@@ -204,7 +204,7 @@ class FrenchNFIThinnerPredictions {
 				slope, 
 				targetSpecies,
 				true,
-				1d); // 100% of being on public land
+				0d); // 100% of being on private land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
@@ -328,7 +328,7 @@ class FrenchNFIThinnerPredictions {
 				slope, 
 				targetSpecies,
 				underManagement,
-				1d); // 100% of being on public land
+				0d); // 100% of being on private land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
