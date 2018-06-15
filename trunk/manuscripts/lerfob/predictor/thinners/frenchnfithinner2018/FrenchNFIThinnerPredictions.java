@@ -262,7 +262,7 @@ class FrenchNFIThinnerPredictions {
 				stemDensityHa,	
 				slope, 
 				targetSpecies,
-				true,
+				false,
 				1d); // 100% of being on public land
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
