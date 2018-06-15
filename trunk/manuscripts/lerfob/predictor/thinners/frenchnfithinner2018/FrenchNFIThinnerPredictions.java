@@ -383,26 +383,26 @@ class FrenchNFIThinnerPredictions {
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, true); 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false); 
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, true);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, true);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
+		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, Species.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
 		
-		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, true);
-		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 24, 691, true, 14);
+		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, false);
+		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 24, 691, false, 14);
 
 		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 
-		predictions.predictHarvestProbabilityAgainstBasalAreaAndStemDensity(2011, Species.Beech, true, 14);
+		predictions.predictHarvestProbabilityAgainstBasalAreaAndStemDensity(2011, Species.Beech, false, 14);
 	
 		predictions.predictHarvestProbabilityAgainstLandownership(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 	}
