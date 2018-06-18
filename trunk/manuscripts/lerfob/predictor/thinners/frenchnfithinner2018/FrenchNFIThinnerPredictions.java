@@ -79,7 +79,7 @@ class FrenchNFIThinnerPredictions {
 			double basalAreaM2Ha,
 			double stemDensityHa,
 			boolean underManagement) {
-		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("slope" + targetSpecies.name() + startingYear + ".csv");
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("slope" + startingYear + ".csv");
 		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
 				region,
 				basalAreaM2Ha,
@@ -91,22 +91,23 @@ class FrenchNFIThinnerPredictions {
 		
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
 		
-		
 		CSVWriter writer = null;
 
 		try {
 			writer = new CSVWriter(new File(filename), false);
 			List<FormatField> fields = new ArrayList<FormatField>();
 			fields.add(new CSVField("Slope"));
+			fields.add(new CSVField("Species"));
 			fields.add(new CSVField("Pred"));
 			fields.add(new CSVField("Lower95"));
 			fields.add(new CSVField("Upper95"));
 			writer.setFields(fields);
 
-//			List<SpeciesComposition> compositions = new ArrayList<SpeciesComposition>();
-//			compositions.add(SpeciesComposition.BroadleavedDominated);
-//			compositions.add(SpeciesComposition.Mixed);
-		
+			List<Species> tSp = new ArrayList<Species>();
+			tSp.add(Species.Beech);
+			tSp.add(Species.Fir);
+			for (Species sp : tSp) {
+				plot.targetSpecies = sp;
 				for (double slope = 0; slope <= 70; slope++) {
 					plot.slopeInclination = slope;
 					MonteCarloEstimate estimate = new MonteCarloEstimate();
@@ -116,14 +117,16 @@ class FrenchNFIThinnerPredictions {
 						realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
 						estimate.addRealization(realization);
 					}
-					Object[] record = new Object[4];
+					Object[] record = new Object[5];
 					record[0] = slope;
-					record[1] = estimate.getMean().m_afData[0][0];
+					record[1] = plot.targetSpecies;
+					record[2] = estimate.getMean().m_afData[0][0];
 					ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
-					record[2] = ci.getLowerLimit().m_afData[0][0];
-					record[3] = ci.getUpperLimit().m_afData[0][0];
+					record[3] = ci.getLowerLimit().m_afData[0][0];
+					record[4] = ci.getUpperLimit().m_afData[0][0];
 					writer.addRecord(record);
 				}
+			}
 		} catch (Exception e) {
 			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstSlope!");
 		} finally {
@@ -190,66 +193,7 @@ class FrenchNFIThinnerPredictions {
 		}
 	}
 
-	void predictHarvestProbabilityAgainstPreviousManagement(int startingYear, 
-			Species targetSpecies, 
-			FrenchRegion2016 region,
-			double basalAreaM2Ha,
-			double stemDensityHa,
-			double slope) {
-		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("previousManagement" + targetSpecies.name() + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
-				region,
-				basalAreaM2Ha,
-				stemDensityHa,	
-				slope, 
-				targetSpecies,
-				true,
-				1d); // 100% of being on private land
-		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
-		
-		
-		CSVWriter writer = null;
-
-		try {
-			writer = new CSVWriter(new File(filename), false);
-			List<FormatField> fields = new ArrayList<FormatField>();
-			fields.add(new CSVField("Intervention"));
-			fields.add(new CSVField("Pred"));
-			fields.add(new CSVField("Lower95"));
-			fields.add(new CSVField("Upper95"));
-			writer.setFields(fields);
-
-			List<Boolean> bools = new ArrayList<Boolean>();
-			bools.add(true);
-			bools.add(false);
-			for (Boolean bool : bools) {
-				plot.interventionInPrevious5Years = bool;;
-				MonteCarloEstimate estimate = new MonteCarloEstimate();
-				for (int real = 0; real < 10000; real++) {
-					plot.monteCarloRealization = real;
-					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, startingYear, startingYear + 5);
-					estimate.addRealization(realization);
-				}
-				Object[] record = new Object[4];
-				record[0] = bool.toString();
-				record[1] = estimate.getMean().m_afData[0][0];
-				ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
-				record[2] = ci.getLowerLimit().m_afData[0][0];
-				record[3] = ci.getUpperLimit().m_afData[0][0];
-				writer.addRecord(record);
-			}
-		} catch (Exception e) {
-			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstPreviousManagement!");
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	void predictHarvestProbabilityAgainstLandownership(int startingYear, 
+	void predictHarvestProbabilityAgainstLandownershipAndPreviousManagement(int startingYear, 
 			Species targetSpecies, 
 			FrenchRegion2016 region,
 			double basalAreaM2Ha,
@@ -279,17 +223,24 @@ class FrenchNFIThinnerPredictions {
 			fields.add(new CSVField("Upper95"));
 			writer.setFields(fields);
 
-			List<Boolean> bools = new ArrayList<Boolean>();
-			bools.add(true);
-			bools.add(false);
-			for (Boolean bool : bools) {
+			List<Integer> bools = new ArrayList<Integer>();
+			bools.add(1);
+			bools.add(2);
+			bools.add(3);
+			for (Integer bool : bools) {
 				String label;
-				if (bool) {
-					plot.probabilityPrivateLand = 1d;
-					label = "Private";
-				} else {
+				if (bool == 1) {
 					plot.probabilityPrivateLand = 0d;
+					plot.interventionInPrevious5Years = true;
 					label = "Public";
+				} else if (bool == 2) {
+					plot.probabilityPrivateLand = 1d;
+					plot.interventionInPrevious5Years = false;
+					label = "Private - No intervention";
+				} else {
+					plot.probabilityPrivateLand = 1d;
+					plot.interventionInPrevious5Years = true;
+					label = "Private - With intervention";
 				}
 				MonteCarloEstimate estimate = new MonteCarloEstimate();
 				for (int real = 0; real < 10000; real++) {
@@ -307,7 +258,7 @@ class FrenchNFIThinnerPredictions {
 				writer.addRecord(record);
 			}
 		} catch (Exception e) {
-			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstLandownership!");
+			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstLandownershipAndPreviousManagement!");
 		} finally {
 			if (writer != null) {
 				writer.close();
@@ -401,9 +352,7 @@ class FrenchNFIThinnerPredictions {
 
 		predictions.predictHarvestProbabilityAgainstSlope(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, false);
 		
-		predictions.predictHarvestProbabilityAgainstLandownership(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
-
-		predictions.predictHarvestProbabilityAgainstPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
+		predictions.predictHarvestProbabilityAgainstLandownershipAndPreviousManagement(2011, Species.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 
 		predictions.predictHarvestProbabilityAgainstRegion(2011, Species.Beech, 24, 691, false, 14);
 	
