@@ -110,16 +110,16 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
-		double probabilityPublicLand;
+		double probabilityPrivateLand;
 		if (stand instanceof LandOwnershipProvider) {		// priority is given to the interface
-			boolean isPublic = ((LandOwnershipProvider) stand).getLandOwnership() == LandOwnership.Public;
-			if (isPublic) {
-				probabilityPublicLand = 1d;
+			boolean isPrivate = ((LandOwnershipProvider) stand).getLandOwnership() == LandOwnership.Private;
+			if (isPrivate) {
+				probabilityPrivateLand = 1d;
 			} else {
-				probabilityPublicLand = 0d;
+				probabilityPrivateLand = 0d;
 			}
 		} else {
-			probabilityPublicLand = stand.getProbabilityOfBeingOnPublicLand();
+			probabilityPrivateLand = stand.getProbabilityOfBeingOnPrivateLand();
 		}
 		int dummy_res = 0;
 		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
@@ -131,11 +131,6 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 		
 		int index = 0;
-		if (stand.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
-			oXVector.m_afData[0][index] = 1d;
-		}
-		index++;
-
 		oXVector.m_afData[0][index] = basalAreaM2Ha;
 		index++;
 
@@ -148,7 +143,12 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_res;
 		index++;
 		
-		oXVector.m_afData[0][index] = probabilityPublicLand;
+		oXVector.m_afData[0][index] = probabilityPrivateLand;
+		index++;
+		
+		if (stand.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
+			oXVector.m_afData[0][index] = 1d * probabilityPrivateLand;
+		}
 		index++;
 		
 		Matrix dummy = DummyRegion.get(stand.getFrenchRegion2016());

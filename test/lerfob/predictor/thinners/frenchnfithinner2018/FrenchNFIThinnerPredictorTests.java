@@ -50,7 +50,7 @@ public class FrenchNFIThinnerPredictorTests {
 				FrenchDepartment department = FrenchDepartment.getDepartment(departmentCode);
 				int underManagementInt = Integer.parseInt(record[7].toString());
 				boolean underManagement = underManagementInt == 1;
-				double probabilityPublicLand = Double.parseDouble(record[8].toString());
+				double probabilityPrivateLand = Double.parseDouble(record[8].toString());
 				double pred = Double.parseDouble(record[9].toString());
 				int year0 = Integer.parseInt(record[10].toString());
 				int year1 = Integer.parseInt(record[11].toString());
@@ -62,7 +62,7 @@ public class FrenchNFIThinnerPredictorTests {
 						slopeInclination, 
 						targetSpecies, 
 						underManagement,
-						probabilityPublicLand,
+						probabilityPrivateLand,
 						pred,
 						year0,
 						year1);
