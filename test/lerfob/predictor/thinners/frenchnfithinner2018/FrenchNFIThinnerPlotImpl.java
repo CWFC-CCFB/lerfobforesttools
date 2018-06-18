@@ -10,7 +10,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	double basalAreaM2Ha;
 	double stemDensityHa;
 	double slopeInclination;
-	final Species targetSpecies;
+	Species targetSpecies;
 	boolean interventionInPrevious5Years;
 	double predictedProb;
 	int year0;
