@@ -18,71 +18,41 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import repicea.io.javacsv.CSVReader;
-import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
+import repicea.simulation.REpiceaPredictor;
 import repicea.util.ObjectUtility;
 
-public class FrenchNFIThinnerStandingPriceProvider {
+/**
+ * The FrenchNFIThinnerStandingPriceProvider class provides the prices of the 
+ * target species which are used by the FrenchNFIThinnerPredictor class to estimate 
+ * the probability of harvesting.
+ * @author Mathieu Fortin - June 2018
+ *
+ */
+@SuppressWarnings("serial")
+class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 
-	public enum Species implements SpeciesTypeProvider {
-		Oak("Chene", SpeciesType.BroadleavedSpecies),
-		Beech("Hetre", SpeciesType.BroadleavedSpecies),
-		Fir("Sapin", SpeciesType.ConiferousSpecies),
-		Spruce("Epicea", SpeciesType.ConiferousSpecies),
-		DouglasFir("Douglas", SpeciesType.ConiferousSpecies),
-		ScotsPine("Pin sylvestre", SpeciesType.ConiferousSpecies),
-		MaritimePine("Pin maritime", SpeciesType.ConiferousSpecies),
-		Poplar("Peuplier", SpeciesType.BroadleavedSpecies),
-		Coppice("Taillis feuillus", SpeciesType.BroadleavedSpecies),
-		;
-		
-		private static Map<String, Species> MatchMap;
-		
-		private final String frenchName;
-		private final SpeciesType type;
-		
-		Species(String frenchName, SpeciesType type) {
-			this.frenchName = frenchName;
-			this.type = type;
-		}
-		
-		
-		private static Map<String, Species> getMatchMap() {
-			if (MatchMap == null) {
-				MatchMap = new HashMap<String, Species>();
-				for (Species sp : Species.values()) {
-					MatchMap.put(sp.frenchName, sp);
-				}
-			}
-			return MatchMap;
-		}
-		
-		static Species getSpeciesFromFrenchName(String frenchName) {
-			return getMatchMap().get(frenchName);
-		}
+	final Map<Species, FrenchNFIThinnerStandingPriceProviderSubModel> subModels;
+	
+	final int minimumYearDate = 2006;
+	final int maximumYearDate = 2016;
 
-		@Override
-		public SpeciesType getSpeciesType() {return type;}
-	}
 	
-	private static final FrenchNFIThinnerStandingPriceProvider Singleton = new FrenchNFIThinnerStandingPriceProvider();
-	
-	private final Map<FrenchNFIThinnerStandingPriceProvider.Species, Map<Integer, Double>> priceMap;
-	
-	private final int minimumYearDate = 2006;
-	private final int maximumYearDate = 2016;
-	
-	private FrenchNFIThinnerStandingPriceProvider() {
-		priceMap = new HashMap<FrenchNFIThinnerStandingPriceProvider.Species, Map<Integer, Double>>();
+	FrenchNFIThinnerStandingPriceProvider(boolean isVariabilityEnabled) {
+		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
+		subModels = new HashMap<Species, FrenchNFIThinnerStandingPriceProviderSubModel>();
+		for (Species sp : Species.values()) {
+			subModels.put(sp, new FrenchNFIThinnerStandingPriceProviderSubModel(isVariabilityEnabled, this));
+		}
 		init();
 	}
 			
-	private void init() {
-		priceMap.clear();
+	@Override
+	protected void init() {
 		String filename = ObjectUtility.getRelativePackagePath(getClass()) + "prixBoisOnf.csv";
 		CSVReader reader = null;
 		try {
@@ -91,17 +61,20 @@ public class FrenchNFIThinnerStandingPriceProvider {
 			while ((record = reader.nextRecord()) != null) {
 				if (record[1].toString().equals("total")) {
 					Species sp = Species.getSpeciesFromFrenchName(record[0].toString());
-					if (!priceMap.containsKey(sp)) {
-						priceMap.put(sp, new HashMap<Integer, Double>());
+					if (sp != null) {
+						FrenchNFIThinnerStandingPriceProviderSubModel subModel = subModels.get(sp);
+						int year = Integer.parseInt(record[2].toString());
+						double value = Double.parseDouble(record[3].toString());
+						subModel.observedPriceMap.put(year, value);
 					}
-					Map<Integer, Double> innerMap = priceMap.get(sp);
-					int year = Integer.parseInt(record[2].toString());
-					double value = Double.parseDouble(record[3].toString());
-					innerMap.put(year, value);
 				}
+			}
+			for (Species sp : Species.values()) {
+				subModels.get(sp).init();	// initialize the mean and the residual variance
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to read the price of standing volume in the FrenchNFIThinnerStandingPriceProvider class!");
+			e.printStackTrace();
 		} finally {
 			if (reader != null) {
 				reader.close();
@@ -116,33 +89,12 @@ public class FrenchNFIThinnerStandingPriceProvider {
 	 * @param species a Species enum
 	 * @param startingYear not included in the array
 	 * @param endingYear included in the array
+	 * @param monteCarloId the id of the Monte Carlo realization
 	 * @return an array of double
 	 */
-	double[] getStandingPrices(Species species, int startingYear, int endingYear) {
-		if (endingYear <= startingYear) {
-			throw new InvalidParameterException("The ending year must be greater than the starting year!");
-		}
-		int length = endingYear - startingYear;
-		double[] priceArray = new double[length];
-		for (int yearIndex = 0; yearIndex < priceArray.length; yearIndex++) {
-			int yearDate = startingYear + yearIndex + 1;
-			if (yearDate < minimumYearDate) {
-				yearDate = minimumYearDate;
-			}
-			if (yearDate > maximumYearDate) {
-				yearDate = maximumYearDate;
-			}
-			priceArray[yearIndex] = priceMap.get(species).get(yearDate);
-		}
-		return priceArray;
+	double[] getStandingPrices(Species species, int startingYear, int endingYear, int monteCarloId) {
+		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId);
 	}
-	
-	/**
-	 * This method returns the singleton instance of the FrenchNFIThinnerStandingPriceProvider class.
-	 * @return a FrenchNFIThinnerStandingPriceProvider object
-	 */
-	public static FrenchNFIThinnerStandingPriceProvider getInstance() {
-		return Singleton;
-	}
+
 	
 }

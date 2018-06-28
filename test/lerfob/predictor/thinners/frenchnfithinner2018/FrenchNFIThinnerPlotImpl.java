@@ -1,6 +1,6 @@
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import repicea.simulation.HierarchicalLevel;
 
 class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {

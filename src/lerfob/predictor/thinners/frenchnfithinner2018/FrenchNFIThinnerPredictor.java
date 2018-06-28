@@ -21,7 +21,6 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
@@ -29,6 +28,7 @@ import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider;
 import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider.LandOwnership;
+import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
@@ -54,16 +54,57 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		}
 	}
 	
-	
-	
+	public enum Species implements SpeciesTypeProvider {
+		Oak("Chene", SpeciesType.BroadleavedSpecies),
+		Beech("Hetre", SpeciesType.BroadleavedSpecies),
+		Fir("Sapin", SpeciesType.ConiferousSpecies),
+		Spruce("Epicea", SpeciesType.ConiferousSpecies),
+		DouglasFir("Douglas", SpeciesType.ConiferousSpecies),
+		ScotsPine("Pin sylvestre", SpeciesType.ConiferousSpecies),
+		MaritimePine("Pin maritime", SpeciesType.ConiferousSpecies),
+		Poplar("Peuplier", SpeciesType.BroadleavedSpecies),
+		Coppice("Taillis feuillus", SpeciesType.BroadleavedSpecies),
+		;
+		
+		private static Map<String, Species> MatchMap;
+		
+		private final String frenchName;
+		private final SpeciesType type;
+		
+		Species(String frenchName, SpeciesType type) {
+			this.frenchName = frenchName;
+			this.type = type;
+		}
+		
+		
+		private static Map<String, Species> getMatchMap() {
+			if (MatchMap == null) {
+				MatchMap = new HashMap<String, Species>();
+				for (Species sp : Species.values()) {
+					MatchMap.put(sp.frenchName, sp);
+				}
+			}
+			return MatchMap;
+		}
+		
+		static Species getSpeciesFromFrenchName(String frenchName) {
+			return getMatchMap().get(frenchName);
+		}
+
+		@Override
+		public SpeciesType getSpeciesType() {return type;}
+	}
+
 	private final int NumberParmsForHazard = 11;
+	protected final FrenchNFIThinnerStandingPriceProvider priceProvider;
 	
 	/**
 	 * Constructor.
 	 * @param isVariabilityEnabled true to enable the stochastic mode or false for deterministic predictions.
 	 */
-	public FrenchNFIThinnerPredictor(boolean isVariabilityEnabled) {
-		super(isVariabilityEnabled, false, isVariabilityEnabled);		// no random effect in this model
+	public FrenchNFIThinnerPredictor(boolean isPredictionVariabilityEnabled, boolean isPriceVariabilityEnabled) {
+		super(isPredictionVariabilityEnabled, false, isPredictionVariabilityEnabled);		// no random effect in this model
+		priceProvider = new FrenchNFIThinnerStandingPriceProvider(isPriceVariabilityEnabled);
 		init();
 	}
 
@@ -165,7 +206,10 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	 * This method returns the probability of harvest occurrence at the plot level.
 	 * @param stand a FrenchNFIThinnerPlot instance
 	 * @param tree USELESS can be set to NULL
-	 * @param parms should contain two integers being the initial and the final dates
+	 * @param parms should contain two integers being the initial and the final dates. Note that the price of the 
+	 * initial year does not contribute to the probability of harvesting. For example, if one provides 2012 and 
+	 * 2017 as initial and final dates, then the prices of 2013, 2014, 2015, 2016 and 2017 will contribute to the 
+	 * probability of harvesting. 
 	 */
 	@Override
 	public synchronized double predictEventProbability(FrenchNFIThinnerPlot stand, Object tree, Object... parms) {
@@ -181,7 +225,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		} else {
 			int year0 = (Integer) parms[0];
 			int year1 = (Integer) parms[1];
-			prices = FrenchNFIThinnerStandingPriceProvider.getInstance().getStandingPrices(targetSpecies, year0, year1);
+			prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, stand.getMonteCarloRealizationId());
 		}
 		
 		double baseline = getBaseline(beta, prices, stand);
