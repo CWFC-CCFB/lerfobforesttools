@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
+import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
 
 
@@ -31,9 +32,9 @@ import repicea.simulation.hdrelationships.HDRelationshipStand;
  * @author Mathieu Fortin - May 2014
  */
 public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
-//														TreeStatusCollectionsProvider,
 														MeanQuadraticDiameterCmProvider, 
-														InterventionResultProvider {
+														InterventionResultProvider,
+														SlopeInclinationPercentProvider {
 	
 	
 	/**
@@ -42,12 +43,6 @@ public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
 	 * @return the basal area (m2/ha)
 	 */
 	public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2014Tree tree);
-	
-	/**
-	 * This method returns the slope of the plot in percentage.
-	 * @return a double
-	 */
-	public double getSlopePercent();
 	
 	
 	/**
