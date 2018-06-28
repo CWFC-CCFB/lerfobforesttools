@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProvider.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
@@ -33,7 +33,7 @@ class FrenchNFIThinnerPredictions {
 				underManagement,
 				1d); // 100% of being on private land
 		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false);	// no price variability
 		
 		
 		CSVWriter writer = null;
@@ -89,7 +89,7 @@ class FrenchNFIThinnerPredictions {
 				underManagement,
 				1d); // 100% of being on private land
 		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false); // no price variability
 		
 		CSVWriter writer = null;
 
@@ -152,7 +152,7 @@ class FrenchNFIThinnerPredictions {
 				underManagement,
 				1d); // 100% of being on private land
 		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false); // no price variability
 		
 		
 		CSVWriter writer = null;
@@ -209,7 +209,7 @@ class FrenchNFIThinnerPredictions {
 				false,
 				1d); // 100% of being on private land
 		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false); // no price variability
 		
 		
 		CSVWriter writer = null;
@@ -281,7 +281,7 @@ class FrenchNFIThinnerPredictions {
 				underManagement,
 				1d); // 100% of being on private land
 		
-		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true);
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false); // no price variability
 		
 		
 		CSVWriter writer = null;

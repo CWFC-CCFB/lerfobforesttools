@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
@@ -70,7 +71,7 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	 * the species with the current highest value.
 	 * @return a Species enum
 	 */
-	public FrenchNFIThinnerStandingPriceProvider.Species getTargetSpecies();
+	public Species getTargetSpecies();
 	
 	
 
