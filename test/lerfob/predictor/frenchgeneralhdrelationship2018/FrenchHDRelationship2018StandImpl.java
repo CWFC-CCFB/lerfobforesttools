@@ -63,7 +63,7 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 	}
 
 	@Override
-	public double getSlopePercent() {return pent2;}
+	public double getSlopeInclinationPercent() {return pent2;}
 	
 	protected void addTree(FrenchHDRelationship2018TreeImpl tree) {
 		treeList.add(tree);

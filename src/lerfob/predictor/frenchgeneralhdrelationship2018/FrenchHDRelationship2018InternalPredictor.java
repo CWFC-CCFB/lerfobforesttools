@@ -153,7 +153,7 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 			System.out.println("Error in HD relationship: The basal area of the plot has not been calculated yet!");
 			throw new InvalidParameterException("The basal area of the plot has not been calculated yet!");
 		}
-		double slope = stand.getSlopePercent();
+		double slope = stand.getSlopeInclinationPercent();
 		
 		oXVector.resetMatrix();
 		int pointer = 0;

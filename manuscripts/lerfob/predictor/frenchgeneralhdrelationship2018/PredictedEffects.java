@@ -121,7 +121,7 @@ public class PredictedEffects {
 		private double getPlotAreaHa() {return plotAreaHa;}
 
 		@Override
-		public double getSlopePercent() {return slopeInclination;}
+		public double getSlopeInclinationPercent() {return slopeInclination;}
 
 		@Override
 		public Collection<FrenchHDRelationship2018Tree> getTreesForFrenchHDRelationship() {return trees;}
@@ -270,7 +270,7 @@ public class PredictedEffects {
 		record[1] = tree.getDbhCm();
 		record[2] = stand.basalAreaM2Ha;
 		record[3] = stand.getMeanQuadraticDiameterCm();
-		record[4] = stand.getSlopePercent();
+		record[4] = stand.getSlopeInclinationPercent();
 		record[5] = stand.getMeanTemperatureOfGrowingSeason();
 		record[6] = stand.getMeanPrecipitationOfGrowingSeason();
 		record[7] = tree.reference;
