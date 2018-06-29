@@ -211,6 +211,9 @@ public abstract interface FrenchDepartmentProvider {
 				InnerMapCode = new HashMap<String, FrenchDepartment>();
 				for (FrenchDepartment dep : FrenchDepartment.values()) {
 					InnerMapCode.put(dep.getCode(), dep);
+					if (dep.getCode().startsWith("0")) {
+						InnerMapCode.put(dep.getCode().substring(1), dep);
+					}
 				}
 			}
 			String formattedCode = departmentCode.trim();

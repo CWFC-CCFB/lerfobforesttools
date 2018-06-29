@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.util.ObjectUtility;
 
@@ -63,12 +64,12 @@ public final class GeographicalCoordinatesGenerator {
 		}
 	}
 	
-	private final Map<String, List<PlotCoordinates>> coordinateMap;
-	private final Map<String, PlotCoordinates> departmentMean;
+	private final Map<FrenchDepartment, List<PlotCoordinates>> coordinateMap;
+	private final Map<FrenchDepartment, PlotCoordinates> departmentMean;
 		
 	private GeographicalCoordinatesGenerator() {
-		coordinateMap = new HashMap<String, List<PlotCoordinates>>();
-		departmentMean = new HashMap<String, PlotCoordinates>();
+		coordinateMap = new HashMap<FrenchDepartment, List<PlotCoordinates>>();
+		departmentMean = new HashMap<FrenchDepartment, PlotCoordinates>();
 		CSVReader reader = null;
 		try {
 			String filename = ObjectUtility.getRelativePackagePath(getClass()) + "plotCoordinates.csv"; 
@@ -76,7 +77,8 @@ public final class GeographicalCoordinatesGenerator {
 			Object[] record;
 			
 			while ((record = reader.nextRecord()) != null) {
-				String department = record[6].toString();
+				String departmentCode = record[6].toString();
+				FrenchDepartment department = FrenchDepartment.getDepartment(departmentCode); 
 				double latitude = Double.parseDouble(record[2].toString());
 				double longitude = Double.parseDouble(record[1].toString());
 				if (!coordinateMap.containsKey(department)) {
@@ -85,7 +87,7 @@ public final class GeographicalCoordinatesGenerator {
 				coordinateMap.get(department).add(new PlotCoordinates(latitude, longitude));
 			}
 			
-			for (String department : coordinateMap.keySet()) {
+			for (FrenchDepartment department : coordinateMap.keySet()) {
 				List<PlotCoordinates> plotCoordinateColl = coordinateMap.get(department);
 				Collections.sort(plotCoordinateColl);
 				double latitude = 0;
@@ -112,10 +114,10 @@ public final class GeographicalCoordinatesGenerator {
 	/**
 	 * This method returns a number of plot coordinates for imputation.
 	 * @param n the number of coordinates needed
-	 * @param department a String representing the department e.g. "88"
+	 * @param department a FrenchDepartment representing the department
 	 * @return a List of PlotCoordinates instances
 	 */
-	public List<PlotCoordinates> getRandomCoordinates(int n, String department) {
+	public List<PlotCoordinates> getRandomCoordinates(int n, FrenchDepartment department) {
 		if (!coordinateMap.containsKey(department)) {
 			throw new InvalidParameterException("This department is not recognized in Mathilde!");
 		} else {
@@ -134,10 +136,10 @@ public final class GeographicalCoordinatesGenerator {
 	
 	/**
 	 * This method returns the mean coordinates for a given department.
-	 * @param department a String that represents the department e.g. "88"
+	 * @param department a FrenchDepartment enum  that represents the department
 	 * @return a PlotCoordinates instance
 	 */
-	public PlotCoordinates getMeanCoordinatesForThisDepartment(String department) {
+	public PlotCoordinates getMeanCoordinatesForThisDepartment(FrenchDepartment department) {
 		if (!departmentMean.containsKey(department)) {
 			throw new InvalidParameterException("This department is not recognized in Mathilde!");
 		} else {

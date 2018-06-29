@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
+import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
@@ -18,8 +19,8 @@ public class MathildeClimatePredictorTest {
 
 	static Map<String, Double> blupMean;
 	static Map<String, Double> blupStdErr;
-	static Map<String, Double> meanLongitude;
-	static Map<String, Double> meanLatitude;
+	static Map<FrenchDepartment, Double> meanLongitude;
+	static Map<FrenchDepartment, Double> meanLatitude;
 	
 	protected static void readBlups() throws Exception {
 		CSVReader reader = null;
@@ -48,13 +49,14 @@ public class MathildeClimatePredictorTest {
 	protected static void readMeanPlotCoordinates() throws IOException {
 		CSVReader reader = null;
 		try {
-			meanLongitude = new HashMap<String, Double>();
-			meanLatitude = new HashMap<String, Double>();
+			meanLongitude = new HashMap<FrenchDepartment, Double>();
+			meanLatitude = new HashMap<FrenchDepartment, Double>();
 			String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "meanPlotCoordinates.csv";
 			reader = new CSVReader(filename);
 			Object[] record;
 			while ((record = reader.nextRecord()) != null) {
-				String department = record[0].toString();
+				String departmentCode = record[0].toString();
+				FrenchDepartment department = FrenchDepartment.getDepartment(departmentCode);
 				double longitude = Double.parseDouble(record[1].toString());
 				double latitude = Double.parseDouble(record[2].toString());
 				meanLongitude.put(department, longitude);
@@ -149,7 +151,7 @@ public class MathildeClimatePredictorTest {
 	public void testMeanPlotCoordinates() throws IOException {
 		readMeanPlotCoordinates();
 		int i = 0;
-		for (String department : meanLongitude.keySet()) {
+		for (FrenchDepartment department : meanLongitude.keySet()) {
 			double expectedLongitude = meanLongitude.get(department);
 			double expectedLatitude = meanLatitude.get(department);
 			PlotCoordinates coord = GeographicalCoordinatesGenerator.getInstance().getMeanCoordinatesForThisDepartment(department);
