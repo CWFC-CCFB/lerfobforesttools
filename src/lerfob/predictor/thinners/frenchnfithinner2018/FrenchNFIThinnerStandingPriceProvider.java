@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.util.ObjectUtility;
@@ -41,10 +41,10 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 
 	class TargetSpeciesSelection implements Serializable {
 		
-		final Species targetSpecies;
+		final FrenchNFIThinnerSpecies targetSpecies;
 		final int yearDate;
 		
-		TargetSpeciesSelection(Species targetSpecies, int yearDate) {
+		TargetSpeciesSelection(FrenchNFIThinnerSpecies targetSpecies, int yearDate) {
 			this.targetSpecies = targetSpecies;
 			this.yearDate = yearDate;
 		}
@@ -52,7 +52,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	
 	
 	
-	final Map<Species, FrenchNFIThinnerStandingPriceProviderSubModel> subModels;
+	final Map<FrenchNFIThinnerSpecies, FrenchNFIThinnerStandingPriceProviderSubModel> subModels;
 	
 	final int minimumYearDate = 2006;
 	final int maximumYearDate = 2016;
@@ -64,8 +64,8 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	
 	FrenchNFIThinnerStandingPriceProvider(boolean isVariabilityEnabled) {
 		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
-		subModels = new HashMap<Species, FrenchNFIThinnerStandingPriceProviderSubModel>();
-		for (Species sp : Species.values()) {
+		subModels = new HashMap<FrenchNFIThinnerSpecies, FrenchNFIThinnerStandingPriceProviderSubModel>();
+		for (FrenchNFIThinnerSpecies sp : FrenchNFIThinnerSpecies.values()) {
 			subModels.put(sp, new FrenchNFIThinnerStandingPriceProviderSubModel(isVariabilityEnabled, this));
 		}
 		targetSpeciesSelectionMap = new HashMap<String, Map<Integer, List<TargetSpeciesSelection>>>();
@@ -81,7 +81,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 			Object[] record;
 			while ((record = reader.nextRecord()) != null) {
 				if (record[1].toString().equals("total")) {
-					Species sp = Species.getSpeciesFromFrenchName(record[0].toString());
+					FrenchNFIThinnerSpecies sp = FrenchNFIThinnerSpecies.getSpeciesFromFrenchName(record[0].toString());
 					if (sp != null) {
 						FrenchNFIThinnerStandingPriceProviderSubModel subModel = subModels.get(sp);
 						int year = Integer.parseInt(record[2].toString());
@@ -90,7 +90,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 					}
 				}
 			}
-			for (Species sp : Species.values()) {
+			for (FrenchNFIThinnerSpecies sp : FrenchNFIThinnerSpecies.values()) {
 				subModels.get(sp).init();	// initialize the mean and the residual variance
 			}
 		} catch (Exception e) {
@@ -103,20 +103,20 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		}
 	}
 	
-	synchronized Species getTargetSpecies(FrenchNFIThinnerPlot plot, int yearDate) {
+	synchronized FrenchNFIThinnerSpecies getTargetSpecies(FrenchNFIThinnerPlot plot, int yearDate) {
 		TargetSpeciesSelection tSp = getLastTargetSpeciesSelection(plot);
 		if (tSp != null & (yearDate - tSp.yearDate) <= 20) {
 			return tSp.targetSpecies;
 		} else {
-			Map<Species, Double> volumeBySpecies = plot.getVolumeBySpecies();
-			Map<Species, Double> valueBySpecies = new HashMap<Species, Double>();
-			for (Species sp : volumeBySpecies.keySet()) {
+			Map<FrenchNFIThinnerSpecies, Double> volumeBySpecies = plot.getVolumeBySpecies();
+			Map<FrenchNFIThinnerSpecies, Double> valueBySpecies = new HashMap<FrenchNFIThinnerSpecies, Double>();
+			for (FrenchNFIThinnerSpecies sp : volumeBySpecies.keySet()) {
 				double priceByM3 = getStandingPriceForThisYear(sp, yearDate, plot.getMonteCarloRealizationId());
 				valueBySpecies.put(sp, volumeBySpecies.get(sp) * priceByM3);
 			}
 			double priceMax = 0;
-			Species speciesWithMaxValue = null; 
-			for (Species sp : valueBySpecies.keySet()) {
+			FrenchNFIThinnerSpecies speciesWithMaxValue = null; 
+			for (FrenchNFIThinnerSpecies sp : valueBySpecies.keySet()) {
 				if (valueBySpecies.get(sp) > priceMax) {
 					priceMax = valueBySpecies.get(sp);
 					speciesWithMaxValue = sp;
@@ -128,7 +128,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	}
 	
 	
-	private void recordTargetSpeciesSelection(FrenchNFIThinnerPlot plot, Species speciesWithMaxValue, int yearDate) {
+	private void recordTargetSpeciesSelection(FrenchNFIThinnerPlot plot, FrenchNFIThinnerSpecies speciesWithMaxValue, int yearDate) {
 		if (!targetSpeciesSelectionMap.containsKey(plot.getSubjectId())) {
 			targetSpeciesSelectionMap.put(plot.getSubjectId(), new HashMap<Integer, List<TargetSpeciesSelection>>());
 		}
@@ -141,7 +141,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	}
 	
 	
-	double getStandingPriceForThisYear(Species species, int yearDate, int monteCarloID) {
+	double getStandingPriceForThisYear(FrenchNFIThinnerSpecies species, int yearDate, int monteCarloID) {
 		return subModels.get(species).getStandingPriceForThisYear(yearDate, monteCarloID);
 	}
 	
@@ -165,7 +165,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	 * @param monteCarloId the id of the Monte Carlo realization
 	 * @return an array of double
 	 */
-	double[] getStandingPrices(Species species, int startingYear, int endingYear, int monteCarloId) {
+	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId) {
 		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId);
 	}
 

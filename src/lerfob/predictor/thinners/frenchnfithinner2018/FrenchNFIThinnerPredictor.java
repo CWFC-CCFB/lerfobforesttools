@@ -54,7 +54,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		}
 	}
 	
-	public enum Species implements SpeciesTypeProvider {
+	public enum FrenchNFIThinnerSpecies implements SpeciesTypeProvider {
 		Oak("Chene", SpeciesType.BroadleavedSpecies),
 		Beech("Hetre", SpeciesType.BroadleavedSpecies),
 		Fir("Sapin", SpeciesType.ConiferousSpecies),
@@ -66,28 +66,28 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		Coppice("Taillis feuillus", SpeciesType.BroadleavedSpecies),
 		;
 		
-		private static Map<String, Species> MatchMap;
+		private static Map<String, FrenchNFIThinnerSpecies> MatchMap;
 		
 		private final String frenchName;
 		private final SpeciesType type;
 		
-		Species(String frenchName, SpeciesType type) {
+		FrenchNFIThinnerSpecies(String frenchName, SpeciesType type) {
 			this.frenchName = frenchName;
 			this.type = type;
 		}
 		
 		
-		private static Map<String, Species> getMatchMap() {
+		private static Map<String, FrenchNFIThinnerSpecies> getMatchMap() {
 			if (MatchMap == null) {
-				MatchMap = new HashMap<String, Species>();
-				for (Species sp : Species.values()) {
+				MatchMap = new HashMap<String, FrenchNFIThinnerSpecies>();
+				for (FrenchNFIThinnerSpecies sp : FrenchNFIThinnerSpecies.values()) {
 					MatchMap.put(sp.frenchName, sp);
 				}
 			}
 			return MatchMap;
 		}
 		
-		static Species getSpeciesFromFrenchName(String frenchName) {
+		static FrenchNFIThinnerSpecies getSpeciesFromFrenchName(String frenchName) {
 			return getMatchMap().get(frenchName);
 		}
 
@@ -128,7 +128,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 	}
 
-	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand, Species targetSpecies) {
+	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand, FrenchNFIThinnerSpecies targetSpecies) {
 		int parameterIndex = targetSpecies.ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
@@ -149,7 +149,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		return baselineResult;
 	}
 
-	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta, Species targetSpecies) {
+	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta, FrenchNFIThinnerSpecies targetSpecies) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
 		double probabilityPrivateLand;
 		if (stand instanceof LandOwnershipProvider) {		// priority is given to the interface
@@ -218,7 +218,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		int year0 = (Integer) parms[0];
 		int year1 = (Integer) parms[1];
 		
-		Species targetSpecies;
+		FrenchNFIThinnerSpecies targetSpecies;
 		if (stand instanceof InnerValidationPlot) {
 			targetSpecies = ((InnerValidationPlot) stand).getTargetSpecies(); 
 		} else {

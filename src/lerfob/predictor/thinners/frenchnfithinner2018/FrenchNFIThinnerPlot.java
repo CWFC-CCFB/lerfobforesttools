@@ -20,7 +20,7 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import java.util.Map;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
@@ -57,7 +57,7 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	 * to identify the target species.
 	 * @return a Map instance
 	 */
-	public Map<Species, Double> getVolumeBySpecies();
+	public Map<FrenchNFIThinnerSpecies, Double> getVolumeBySpecies();
 	
 	
 	
