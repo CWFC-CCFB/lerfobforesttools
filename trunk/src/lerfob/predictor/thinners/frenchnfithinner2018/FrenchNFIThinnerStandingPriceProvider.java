@@ -105,7 +105,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	
 	synchronized FrenchNFIThinnerSpecies getTargetSpecies(FrenchNFIThinnerPlot plot, int yearDate) {
 		TargetSpeciesSelection tSp = getLastTargetSpeciesSelection(plot);
-		if (tSp != null && (yearDate - tSp.yearDate) <= 20) {
+		if (tSp != null && (yearDate - tSp.yearDate) <= managementPlanDuration) {
 			return tSp.targetSpecies;
 		} else {
 			Map<FrenchNFIThinnerSpecies, Double> volumeBySpecies = plot.getVolumeM3BySpecies();
