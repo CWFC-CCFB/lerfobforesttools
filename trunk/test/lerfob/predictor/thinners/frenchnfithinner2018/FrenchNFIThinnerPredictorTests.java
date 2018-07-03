@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
@@ -31,7 +31,7 @@ public class FrenchNFIThinnerPredictorTests {
 			while ((record = reader.nextRecord()) != null) {
 				String idp = record[0].toString();
 				String targetSpeciesStr = record[1].toString();
-				Species targetSpecies = Species.getSpeciesFromFrenchName(targetSpeciesStr);
+				FrenchNFIThinnerSpecies targetSpecies = FrenchNFIThinnerSpecies.getSpeciesFromFrenchName(targetSpeciesStr);
 				String forestType = record[2].toString().trim().toUpperCase();
 				SpeciesComposition spComp = null;
 				if (forestType.equals("RES")) {

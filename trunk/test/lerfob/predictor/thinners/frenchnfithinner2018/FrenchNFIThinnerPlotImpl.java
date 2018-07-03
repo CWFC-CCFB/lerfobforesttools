@@ -2,7 +2,7 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import java.util.Map;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 import repicea.simulation.HierarchicalLevel;
 
 class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationPlot {
@@ -12,7 +12,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	double basalAreaM2Ha;
 	double stemDensityHa;
 	double slopeInclination;
-	Species targetSpecies;
+	FrenchNFIThinnerSpecies targetSpecies;
 	boolean interventionInPrevious5Years;
 	double predictedProb;
 	int year0;
@@ -24,7 +24,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	 * Constructor for prediction purpose.
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
-							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
+							double slopeInclination, FrenchNFIThinnerSpecies targetSpecies, boolean interventionInPrevious5Years,
 							double probabilityPrivateLand,
 							double predictedProb, int year0, int year1) {
 		this(plotID, region2016, basalAreaM2Ha, 
@@ -39,7 +39,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	 * Constructor for prediction.
 	 */
 	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
-							double slopeInclination, Species targetSpecies, boolean interventionInPrevious5Years,
+							double slopeInclination, FrenchNFIThinnerSpecies targetSpecies, boolean interventionInPrevious5Years,
 							double probabilityPrivateLand) {
 		this.plotID = plotID;
 		this.region2016 = region2016;
@@ -80,7 +80,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	public boolean wasThereAnySiliviculturalTreatmentInTheLast5Years() {return interventionInPrevious5Years;}
 
 	@Override
-	public Species getTargetSpecies() {return targetSpecies;}
+	public FrenchNFIThinnerSpecies getTargetSpecies() {return targetSpecies;}
 
 	@Override
 	public double getProbabilityOfBeingOnPrivateLand() {return probabilityPrivateLand;}
@@ -90,7 +90,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	 * @see lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPlot#getVolumeBySpecies()
 	 */
 	@Override
-	public Map<Species, Double> getVolumeBySpecies() {
+	public Map<FrenchNFIThinnerSpecies, Double> getVolumeBySpecies() {
 		return null;
 	}
 

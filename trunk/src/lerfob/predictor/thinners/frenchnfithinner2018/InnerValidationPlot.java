@@ -18,7 +18,7 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 
 /**
  * This package interface is used only for the validation of the thinner in the JUnit tests.
@@ -26,6 +26,6 @@ import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.
  */
 interface InnerValidationPlot {
 
-	Species getTargetSpecies();
+	FrenchNFIThinnerSpecies getTargetSpecies();
 	
 }
