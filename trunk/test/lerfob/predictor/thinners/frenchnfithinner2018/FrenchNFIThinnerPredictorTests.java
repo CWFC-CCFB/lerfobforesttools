@@ -110,7 +110,7 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
-		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
+		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
 		double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, plot.getMonteCarloRealizationId());
 		
 		Assert.assertEquals("Prices 2017 oak", 109.71538461538464, prices[0], 1E-8);
@@ -135,7 +135,7 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, true);
 
-		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
+		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
 			double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, mc);

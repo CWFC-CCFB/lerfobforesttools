@@ -128,11 +128,11 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 	}
 
-	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand) {
-		int parameterIndex = stand.getTargetSpecies().ordinal() - 1;
+	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand, Species targetSpecies) {
+		int parameterIndex = targetSpecies.ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
-		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
+		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			intercept += beta.m_afData[1][0];
 		}
 		
@@ -149,7 +149,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		return baselineResult;
 	}
 
-	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta) {
+	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta, Species targetSpecies) {
 		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
 		double probabilityPrivateLand;
 		if (stand instanceof LandOwnershipProvider) {		// priority is given to the interface
@@ -163,7 +163,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 			probabilityPrivateLand = stand.getProbabilityOfBeingOnPrivateLand();
 		}
 		int dummy_res = 0;
-		if (stand.getTargetSpecies().getSpeciesType() == SpeciesType.ConiferousSpecies) {
+		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			dummy_res = 1;
 		}
 
@@ -214,22 +214,21 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	@Override
 	public synchronized double predictEventProbability(FrenchNFIThinnerPlot stand, Object tree, Object... parms) {
 		oXVector.resetMatrix();
-		Matrix beta = getParametersForThisRealization(stand);
-		double proportionalPart = getProportionalPart(stand, beta);
-
-		Species targetSpecies = stand.getTargetSpecies();
 		
-		double[] prices;
-		if (parms[0] instanceof double[]) {
-			prices = (double[]) parms[0];
+		int year0 = (Integer) parms[0];
+		int year1 = (Integer) parms[1];
+		
+		Species targetSpecies;
+		if (stand instanceof InnerValidationPlot) {
+			targetSpecies = ((InnerValidationPlot) stand).getTargetSpecies(); 
 		} else {
-			int year0 = (Integer) parms[0];
-			int year1 = (Integer) parms[1];
-			prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, stand.getMonteCarloRealizationId());
+			targetSpecies = priceProvider.getTargetSpecies(stand, year0);
 		}
-		
-		double baseline = getBaseline(beta, prices, stand);
 
+		Matrix beta = getParametersForThisRealization(stand);
+		double proportionalPart = getProportionalPart(stand, beta, targetSpecies);
+		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, stand.getMonteCarloRealizationId());
+		double baseline = getBaseline(beta, prices, stand, targetSpecies);
 		double survival = Math.exp(-proportionalPart * baseline);
 
 		return 1 - survival;
