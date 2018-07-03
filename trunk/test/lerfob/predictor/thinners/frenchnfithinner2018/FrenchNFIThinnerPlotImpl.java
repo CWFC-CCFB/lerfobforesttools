@@ -90,7 +90,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	 * @see lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPlot#getVolumeBySpecies()
 	 */
 	@Override
-	public Map<FrenchNFIThinnerSpecies, Double> getVolumeBySpecies() {
+	public Map<FrenchNFIThinnerSpecies, Double> getVolumeM3BySpecies() {
 		return null;
 	}
 
