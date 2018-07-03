@@ -53,11 +53,11 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	
 	
 	/**
-	 * This method returns a Map with the species as keys and the volumes as values. It is required
+	 * This method returns a Map with the species as keys and the volumes (m3) as values. It is required
 	 * to identify the target species.
 	 * @return a Map instance
 	 */
-	public Map<FrenchNFIThinnerSpecies, Double> getVolumeBySpecies();
+	public Map<FrenchNFIThinnerSpecies, Double> getVolumeM3BySpecies();
 	
 	
 	

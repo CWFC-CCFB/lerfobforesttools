@@ -108,7 +108,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		if (tSp != null & (yearDate - tSp.yearDate) <= 20) {
 			return tSp.targetSpecies;
 		} else {
-			Map<FrenchNFIThinnerSpecies, Double> volumeBySpecies = plot.getVolumeBySpecies();
+			Map<FrenchNFIThinnerSpecies, Double> volumeBySpecies = plot.getVolumeM3BySpecies();
 			Map<FrenchNFIThinnerSpecies, Double> valueBySpecies = new HashMap<FrenchNFIThinnerSpecies, Double>();
 			for (FrenchNFIThinnerSpecies sp : volumeBySpecies.keySet()) {
 				double priceByM3 = getStandingPriceForThisYear(sp, yearDate, plot.getMonteCarloRealizationId());
