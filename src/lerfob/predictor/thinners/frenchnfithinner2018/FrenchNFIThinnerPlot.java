@@ -18,6 +18,8 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import java.util.Map;
+
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
@@ -29,24 +31,7 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 												BasalAreaM2HaProvider,
 												StemDensityHaProvider,
 												SlopeInclinationPercentProvider,
-//												SpeciesCompositionProvider,
 												MonteCarloSimulationCompliantObject {
-//	public enum Composition {
-//		BroadleavedDominated,
-//		ConiferousDominated,
-//		Mixed;
-//	}
-	
-	
-//	/**
-//	 * This method returns the composition of the plots based on basal area. Plots
-//	 * with 75% or more of their basal area in broadleaved species are considered 
-//	 * broadleaved dominated. Plots with 75% or more of their basal area in coniferous
-//	 * species are considered coniferous dominated. Plots that do fall into these
-//	 * two categories are considered as mixed stands. 
-//	 * @return a Composition enum variable
-//	 */
-//	public Composition getComposition();
 	
 	/**
 	 * This method returns true if any silvicultural treatment was carried out in the
@@ -66,12 +51,14 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	 */
 	public double getProbabilityOfBeingOnPrivateLand();
 	
+	
 	/**
-	 * This method returns the target species of the management. This is most likely
-	 * the species with the current highest value.
-	 * @return a Species enum
+	 * This method returns a Map with the species as keys and the volumes as values. It is required
+	 * to identify the target species.
+	 * @return a Map instance
 	 */
-	public Species getTargetSpecies();
+	public Map<Species, Double> getVolumeBySpecies();
+	
 	
 	
 

@@ -18,7 +18,10 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
@@ -36,10 +39,25 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 
+	class TargetSpeciesSelection implements Serializable {
+		
+		final Species targetSpecies;
+		final int yearDate;
+		
+		TargetSpeciesSelection(Species targetSpecies, int yearDate) {
+			this.targetSpecies = targetSpecies;
+			this.yearDate = yearDate;
+		}
+	}
+	
+	
+	
 	final Map<Species, FrenchNFIThinnerStandingPriceProviderSubModel> subModels;
 	
 	final int minimumYearDate = 2006;
 	final int maximumYearDate = 2016;
+	
+	final Map<String, Map<Integer, List<TargetSpeciesSelection>>> targetSpeciesSelectionMap;
 
 	
 	FrenchNFIThinnerStandingPriceProvider(boolean isVariabilityEnabled) {
@@ -48,6 +66,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		for (Species sp : Species.values()) {
 			subModels.put(sp, new FrenchNFIThinnerStandingPriceProviderSubModel(isVariabilityEnabled, this));
 		}
+		targetSpeciesSelectionMap = new HashMap<String, Map<Integer, List<TargetSpeciesSelection>>>();
 		init();
 	}
 			
@@ -82,6 +101,58 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		}
 	}
 	
+	synchronized Species getTargetSpecies(FrenchNFIThinnerPlot plot, int yearDate) {
+		TargetSpeciesSelection tSp = getLastTargetSpeciesSelection(plot);
+		if (tSp != null & (yearDate - tSp.yearDate) <= 20) {
+			return tSp.targetSpecies;
+		} else {
+			Map<Species, Double> volumeBySpecies = plot.getVolumeBySpecies();
+			Map<Species, Double> valueBySpecies = new HashMap<Species, Double>();
+			for (Species sp : volumeBySpecies.keySet()) {
+				double priceByM3 = getStandingPriceForThisYear(sp, yearDate, plot.getMonteCarloRealizationId());
+				valueBySpecies.put(sp, volumeBySpecies.get(sp) * priceByM3);
+			}
+			double priceMax = 0;
+			Species speciesWithMaxValue = null; 
+			for (Species sp : valueBySpecies.keySet()) {
+				if (valueBySpecies.get(sp) > priceMax) {
+					priceMax = valueBySpecies.get(sp);
+					speciesWithMaxValue = sp;
+				}
+			}
+			recordTargetSpeciesSelection(plot, speciesWithMaxValue, yearDate);
+			return speciesWithMaxValue;
+		}
+	}
+	
+	
+	private void recordTargetSpeciesSelection(FrenchNFIThinnerPlot plot, Species speciesWithMaxValue, int yearDate) {
+		if (!targetSpeciesSelectionMap.containsKey(plot.getSubjectId())) {
+			targetSpeciesSelectionMap.put(plot.getSubjectId(), new HashMap<Integer, List<TargetSpeciesSelection>>());
+		}
+		Map<Integer, List<TargetSpeciesSelection>> innerMap = targetSpeciesSelectionMap.get(plot.getSubjectId());
+		if (!innerMap.containsKey(plot.getMonteCarloRealizationId())) {
+			innerMap.put(plot.getMonteCarloRealizationId(), new ArrayList<TargetSpeciesSelection>());
+		}
+		List<TargetSpeciesSelection> tSpList = innerMap.get(plot.getMonteCarloRealizationId());
+		tSpList.add(new TargetSpeciesSelection(speciesWithMaxValue, yearDate));
+	}
+	
+	
+	double getStandingPriceForThisYear(Species species, int yearDate, int monteCarloID) {
+		return subModels.get(species).getStandingPriceForThisYear(yearDate, monteCarloID);
+	}
+	
+	private TargetSpeciesSelection getLastTargetSpeciesSelection(FrenchNFIThinnerPlot plot) {
+		if (targetSpeciesSelectionMap.containsKey(plot.getSubjectId())) {
+			Map<Integer, List<TargetSpeciesSelection>> innerMap = targetSpeciesSelectionMap.get(plot.getSubjectId());
+			if (innerMap.containsKey(plot.getMonteCarloRealizationId())) {
+				List<TargetSpeciesSelection> targetSpeciesSelections = innerMap.get(plot.getMonteCarloRealizationId());
+				return targetSpeciesSelections.get(targetSpeciesSelections.size() - 1);
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * This method returns the array of the prices for standing volume. If the year is smaller than 2006, it is assumed that the

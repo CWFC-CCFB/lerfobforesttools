@@ -1,9 +1,11 @@
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import java.util.Map;
+
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.Species;
 import repicea.simulation.HierarchicalLevel;
 
-class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
+class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationPlot {
 
 	final String plotID;
 	FrenchRegion2016 region2016;
@@ -82,6 +84,15 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	@Override
 	public double getProbabilityOfBeingOnPrivateLand() {return probabilityPrivateLand;}
+
+	/*
+	 * Useless (non-Javadoc)
+	 * @see lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPlot#getVolumeBySpecies()
+	 */
+	@Override
+	public Map<Species, Double> getVolumeBySpecies() {
+		return null;
+	}
 
 
 }
