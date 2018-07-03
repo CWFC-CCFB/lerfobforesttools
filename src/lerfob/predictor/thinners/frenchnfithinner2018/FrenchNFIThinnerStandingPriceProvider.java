@@ -57,6 +57,8 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	final int minimumYearDate = 2006;
 	final int maximumYearDate = 2016;
 	
+	final int managementPlanDuration = 15; // the duration of management plan on private lands goes from 10 to 20 years
+	
 	final Map<String, Map<Integer, List<TargetSpeciesSelection>>> targetSpeciesSelectionMap;
 
 	
