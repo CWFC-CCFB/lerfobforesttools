@@ -104,8 +104,8 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	}
 	
 	synchronized FrenchNFIThinnerSpecies getTargetSpecies(FrenchNFIThinnerPlot plot, int yearDate) {
-		TargetSpeciesSelection tSp = getLastTargetSpeciesSelection(plot);
-		if (tSp != null && (yearDate - tSp.yearDate) <= managementPlanDuration) {
+		TargetSpeciesSelection tSp = getTargetSpeciesSelection(plot, yearDate);
+		if (tSp != null) {
 			return tSp.targetSpecies;
 		} else {
 			Map<FrenchNFIThinnerSpecies, Double> volumeBySpecies = plot.getVolumeM3BySpecies();
@@ -144,16 +144,29 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	double getStandingPriceForThisYear(FrenchNFIThinnerSpecies species, int yearDate, int monteCarloID) {
 		return subModels.get(species).getStandingPriceForThisYear(yearDate, monteCarloID);
 	}
-	
-	private TargetSpeciesSelection getLastTargetSpeciesSelection(FrenchNFIThinnerPlot plot) {
+
+	/**
+	 * This method returns the target species selection that was performed in the previous 15-year period, which
+	 * is the average duration for a management plan. If this selection does not exist, then it returns null.
+	 * @param plot a FrenchNFIThinnerPlot plot
+	 * @param yearDate the current date (year)
+	 * @return a TargetSpeciesSelection instance or null
+	 */
+	private TargetSpeciesSelection getTargetSpeciesSelection(FrenchNFIThinnerPlot plot, int yearDate) {
+		TargetSpeciesSelection tss = null;
 		if (targetSpeciesSelectionMap.containsKey(plot.getSubjectId())) {
 			Map<Integer, List<TargetSpeciesSelection>> innerMap = targetSpeciesSelectionMap.get(plot.getSubjectId());
 			if (innerMap.containsKey(plot.getMonteCarloRealizationId())) {
 				List<TargetSpeciesSelection> targetSpeciesSelections = innerMap.get(plot.getMonteCarloRealizationId());
-				return targetSpeciesSelections.get(targetSpeciesSelections.size() - 1);
+				for (TargetSpeciesSelection sel : targetSpeciesSelections) {
+					if ((yearDate - sel.yearDate) <= managementPlanDuration) {
+						tss = sel;
+						break;
+					}
+				}
 			}
 		}
-		return null;
+		return tss;
 	}
 	
 	/**
