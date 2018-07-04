@@ -204,7 +204,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	
 	/**
 	 * This method returns the probability of harvest occurrence at the plot level.
-	 * @param stand a FrenchNFIThinnerPlot instance
+	 * @param plot a FrenchNFIThinnerPlot instance
 	 * @param tree USELESS can be set to NULL
 	 * @param parms should contain two integers being the initial and the final dates. Note that the price of the 
 	 * initial year does not contribute to the probability of harvesting. For example, if one provides 2012 and 
@@ -212,23 +212,26 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	 * probability of harvesting. 
 	 */
 	@Override
-	public synchronized double predictEventProbability(FrenchNFIThinnerPlot stand, Object tree, Object... parms) {
+	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Object... parms) {
+		if (plot.getBasalAreaM2Ha() == 0d) {	// if the plot is empty then no need for calculating whatsoever
+			return 0d;
+		}
 		oXVector.resetMatrix();
 		
 		int year0 = (Integer) parms[0];
 		int year1 = (Integer) parms[1];
 		
 		FrenchNFIThinnerSpecies targetSpecies;
-		if (stand instanceof InnerValidationPlot) {
-			targetSpecies = ((InnerValidationPlot) stand).getTargetSpecies(); 
+		if (plot instanceof InnerValidationPlot) {
+			targetSpecies = ((InnerValidationPlot) plot).getTargetSpecies(); 
 		} else {
-			targetSpecies = priceProvider.getTargetSpecies(stand, year0);
+			targetSpecies = priceProvider.getTargetSpecies(plot, year0);
 		}
 
-		Matrix beta = getParametersForThisRealization(stand);
-		double proportionalPart = getProportionalPart(stand, beta, targetSpecies);
-		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, stand.getMonteCarloRealizationId());
-		double baseline = getBaseline(beta, prices, stand, targetSpecies);
+		Matrix beta = getParametersForThisRealization(plot);
+		double proportionalPart = getProportionalPart(plot, beta, targetSpecies);
+		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, plot.getMonteCarloRealizationId());
+		double baseline = getBaseline(beta, prices, plot, targetSpecies);
 		double survival = Math.exp(-proportionalPart * baseline);
 
 		return 1 - survival;
