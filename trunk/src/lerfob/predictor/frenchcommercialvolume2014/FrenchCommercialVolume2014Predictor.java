@@ -71,13 +71,14 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		}
 
 		double volume = fixedEffectPrediction(tree);
-
+		double residualError = 0d;
+		
 		if (isResidualVariabilityEnabled) {
-			double residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).m_afData[0][0];
+			residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).m_afData[0][0];
 			volume += residualError;
 		}
-		if (volume < 0) {		// protected to avoid negative volumes
-			volume = 0;
+		if (volume < 0) {		
+			volume = 0.1; 		// default value if the residual error is inconsistently large and yields a negative volume
 		}
 		return volume;
 	}
