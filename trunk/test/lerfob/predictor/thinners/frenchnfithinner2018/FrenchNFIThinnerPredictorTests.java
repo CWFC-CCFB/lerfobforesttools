@@ -111,9 +111,13 @@ public class FrenchNFIThinnerPredictorTests {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
+		FrenchNFIThinnerSpecies species = plot.targetSpecies;
+
 		double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, plot.getMonteCarloRealizationId());
+
+		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().m_afData[0][0];
 		
-		Assert.assertEquals("Prices 2017 oak", 109.71538461538464, prices[0], 1E-8);
+		Assert.assertEquals("Prices 2017 oak", expectedPrice, prices[0], 1E-8);
 		
 		System.out.println("Successful deterministic test on oak price in 2017");
 	}
@@ -125,7 +129,7 @@ public class FrenchNFIThinnerPredictorTests {
 
 		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
 		double predictedProbability = thinner.predictEventProbability(plot, null, 2016, 2017);
-		Assert.assertEquals("Probability of harvesting", 0.025875040212217648, predictedProbability, 1E-8);
+		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, predictedProbability, 1E-8);
 		
 		System.out.println("Successful deterministic test on an oak plot from 2016 to 2017");
 	}
@@ -136,13 +140,18 @@ public class FrenchNFIThinnerPredictorTests {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, true);
 
 		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
+		FrenchNFIThinnerSpecies species = plot.targetSpecies;
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
 			double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, mc);
 			estimate.addRealization(new Matrix(prices));
 		}
+		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().m_afData[0][0];
 		double estimatedMean = estimate.getMean().m_afData[0][0];
-		Assert.assertEquals("Prices 2017 oak", 109.71538461538464, estimatedMean, 3E-1);
+		Assert.assertEquals("Prices 2017 oak", expectedPrice, estimatedMean, 3E-1);
+
+		double estimatedVariance = estimate.getVariance().m_afData[0][0];
+		Assert.assertTrue("Testing if variance greater than 0", estimatedVariance > 0);
 		
 		System.out.println("Successful stochastic test on oak price in 2017");
 	}
@@ -154,7 +163,7 @@ public class FrenchNFIThinnerPredictorTests {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false);
 
 		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
-		
+
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
 			((FrenchNFIThinnerPlotImpl) plot).monteCarloRealization = mc;
@@ -162,7 +171,7 @@ public class FrenchNFIThinnerPredictorTests {
 			estimate.addRealization(new Matrix(new double[]{predictedProbability}));
 		}
 		double estimatedProbability = estimate.getMean().m_afData[0][0];
-		Assert.assertEquals("Probability of harvesting", 0.025875040212217648, estimatedProbability, 5E-5);
+		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, estimatedProbability, 5E-5);
 		
 		System.out.println("Successful stochastic test on an oak plot from 2016 to 2017");
 	}

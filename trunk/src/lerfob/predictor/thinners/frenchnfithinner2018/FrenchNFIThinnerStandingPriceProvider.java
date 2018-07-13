@@ -122,6 +122,9 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 					speciesWithMaxValue = sp;
 				}
 			}
+			if (speciesWithMaxValue == null) {
+				int u = 0;
+			}
 			recordTargetSpeciesSelection(plot, speciesWithMaxValue, yearDate);
 			return speciesWithMaxValue;
 		}

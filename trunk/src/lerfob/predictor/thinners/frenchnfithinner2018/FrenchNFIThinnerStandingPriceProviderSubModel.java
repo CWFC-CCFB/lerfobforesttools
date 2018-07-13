@@ -19,7 +19,9 @@
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import repicea.math.Matrix;
@@ -27,6 +29,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.REpiceaPredictor;
 import repicea.stats.distributions.EmpiricalDistribution;
+import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
@@ -60,46 +63,80 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	
 	
 	final Map<Integer, Year> yearDateMap;
-	final Map<Integer, Map<Integer, Double>> realizedPriceMap;		// realization : year : error value 
 	final FrenchNFIThinnerStandingPriceProvider caller;
 	final Map<Integer, Double> observedPriceMap;
+	private List<Integer> knownYears;
 
 	FrenchNFIThinnerStandingPriceProviderSubModel(boolean isVariabilityEnabled, FrenchNFIThinnerStandingPriceProvider caller) {
 		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
 		this.caller = caller;
 		yearDateMap = new HashMap<Integer, Year>();
 		observedPriceMap = new HashMap<Integer, Double>();
-		realizedPriceMap = new HashMap<Integer, Map<Integer, Double>>(); 
 	}
 
 	@Override
 	protected void init() {
 		EmpiricalDistribution empDist = new EmpiricalDistribution();
 		Matrix obs;
-		for (Double price : observedPriceMap.values()) {
-			obs = new Matrix(1,1);
-			obs.m_afData[0][0] = price;
-			empDist.addRealization(obs);
-			setParameterEstimates(new GaussianEstimate(empDist.getMean(), new Matrix(1,1)));
-			setDefaultRandomEffects(HierarchicalLevel.YEAR, new GaussianEstimate(new Matrix(1,1), empDist.getVariance()));
+		for (Integer year : observedPriceMap.keySet()) {
+			if (year >= caller.minimumYearDate && year <= caller.maximumYearDate) {
+				double price = observedPriceMap.get(year);
+				obs = new Matrix(1,1);
+				obs.m_afData[0][0] = price;
+				empDist.addRealization(obs);
+			}
 		}
+		setParameterEstimates(new GaussianEstimate(empDist.getMean(), new Matrix(1,1)));
+		setDefaultRandomEffects(HierarchicalLevel.YEAR, new GaussianEstimate(new Matrix(1,1), empDist.getVariance()));
 	}
 	
 	double getStandingPriceForThisYear(int yearDate, int monteCarloID) {
 		if (observedPriceMap.containsKey(yearDate)) {
 			return observedPriceMap.get(yearDate);
 		} else {
-			double price = this.getParameterEstimates().getMean().m_afData[0][0];
-			if (!yearDateMap.containsKey(yearDate)) {
-				yearDateMap.put(yearDate, new Year(yearDate));
+			double price;
+			if (isRandomEffectsVariabilityEnabled) {
+				if (!yearDateMap.containsKey(yearDate)) {
+					yearDateMap.put(yearDate, new Year(yearDate));
+				}
+				Year year = yearDateMap.get(yearDate);
+				year.monteCarloId = monteCarloID;
+				price = getRandomEffectsForThisSubject(year).m_afData[0][0];
+			} else {
+				price = getParameterEstimates().getMean().m_afData[0][0];
 			}
-			Year year = yearDateMap.get(yearDate);
-			year.monteCarloId = monteCarloID;
-			price += getRandomEffectsForThisSubject(year).m_afData[0][0];
 			return price;
 		}
-		
 	}
+
+	
+	private List<Integer> getKnownYears() {
+		if (knownYears == null) {
+			knownYears = new ArrayList<Integer>();
+			for (Integer year : observedPriceMap.keySet()) {
+				if (year >= caller.minimumYearDate && year <= caller.maximumYearDate) {
+					knownYears.add(year);
+				}
+			}
+		}
+		return knownYears;
+	}
+
+	/*
+	 * Instead of simulating a Gaussian random effect, the method now draws a random price within the observed prices (non-Javadoc)
+	 * @see repicea.simulation.REpiceaPredictor#simulateDeviatesForRandomEffectsOfThisSubject(repicea.simulation.MonteCarloSimulationCompliantObject, repicea.stats.estimates.Estimate)
+	 */
+	@Override
+	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+		int index = (int) Math.floor(random.nextDouble() * getKnownYears().size());
+		int randomYear = getKnownYears().get(index);
+		Matrix randomDeviates = new Matrix(1,1);
+		randomDeviates.m_afData[0][0] = observedPriceMap.get(randomYear);
+		setDeviatesForRandomEffectsOfThisSubject(subject, randomDeviates);
+		return randomDeviates.getDeepClone();
+	}
+
+	
 	
 	double[] getStandingPrices(int startingYear, int endingYear, int monteCarloID) {
 		if (endingYear <= startingYear) {
@@ -114,5 +151,13 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		return priceArray;
 	}
 
+	/*
+	 * For extended visibility (non-Javadoc)
+	 * @see repicea.simulation.SensitivityAnalysisParameter#getParameterEstimates()
+	 */
+	@Override
+	protected GaussianEstimate getParameterEstimates() {
+		return super.getParameterEstimates();
+	}
 
 }
