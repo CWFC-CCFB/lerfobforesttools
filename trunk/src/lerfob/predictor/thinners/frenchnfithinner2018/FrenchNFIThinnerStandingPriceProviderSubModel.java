@@ -131,9 +131,9 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 				}
 				Year year = yearDateMap.get(yearDate);
 				year.monteCarloId = monteCarloID;
-				price = getRandomEffectsForThisSubject(year).m_afData[0][0] * getModifier(yearDate);
+				price = getRandomEffectsForThisSubject(year).m_afData[0][0] + getModifier(yearDate);
 			} else {
-				price = getParameterEstimates().getMean().m_afData[0][0] * getModifier(yearDate);
+				price = getParameterEstimates().getMean().m_afData[0][0] + getModifier(yearDate);
 			}
 			return price;
 		}
