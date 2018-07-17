@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProviderSubModel.PriceModifier;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.util.ObjectUtility;
@@ -50,8 +51,6 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		}
 	}
 	
-	
-	
 	final Map<FrenchNFIThinnerSpecies, FrenchNFIThinnerStandingPriceProviderSubModel> subModels;
 	
 	final int minimumYearDate = 2006;
@@ -71,7 +70,13 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		targetSpeciesSelectionMap = new HashMap<String, Map<Integer, List<TargetSpeciesSelection>>>();
 		init();
 	}
-			
+		
+	void setPriceModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		PriceModifier modifier = new PriceModifier(fromYear, toYear, relativeChange);
+		subModels.get(species).setPriceModifier(modifier);
+	}
+	
+	
 	@Override
 	protected void init() {
 		String filename = ObjectUtility.getRelativePackagePath(getClass()) + "prixBoisOnf.csv";
@@ -121,9 +126,6 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 					priceMax = valueBySpecies.get(sp);
 					speciesWithMaxValue = sp;
 				}
-			}
-			if (speciesWithMaxValue == null) {
-				int u = 0;
 			}
 			recordTargetSpeciesSelection(plot, speciesWithMaxValue, yearDate);
 			return speciesWithMaxValue;
