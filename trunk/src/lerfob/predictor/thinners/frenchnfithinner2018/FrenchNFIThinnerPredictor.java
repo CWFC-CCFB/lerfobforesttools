@@ -237,6 +237,27 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		return 1 - survival;
 	}
 
-	
-	
+	/**
+	 * This method makes it possible to induce price changes over time for a particular species.
+	 * @param species a FrenchNFIThinnerSpecies instance
+	 * @param fromYear the starting year 
+	 * @param toYear the final year
+	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
+	 */
+	public void setPriceModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		priceProvider.setPriceModifier(species, fromYear, toYear, relativeChange);
+	}
+
+	/**
+	 * This method makes it possible to induce price changes over time for all species.
+	 * @param fromYear the starting year 
+	 * @param toYear the final year
+	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
+	 */
+	public void setPriceModifier(int fromYear, int toYear, double relativeChange) {
+		for (FrenchNFIThinnerSpecies species : FrenchNFIThinnerSpecies.values()) {
+			setPriceModifier(species, fromYear, toYear, relativeChange);
+		}
+	}
+
 }

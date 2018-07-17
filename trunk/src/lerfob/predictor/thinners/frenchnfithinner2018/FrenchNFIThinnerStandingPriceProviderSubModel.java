@@ -58,14 +58,40 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		public int getMonteCarloRealizationId() {
 			return monteCarloId;
 		}
-		
 	}
-	
+
+	static class PriceModifier {
+		final int fromYear;
+		final int toYear;
+		final double relativeChange;
+		final double slope;
+		
+		PriceModifier(int fromYear, int toYear, double relativeChange) {
+			if (toYear <= fromYear) {
+				throw new InvalidParameterException("The toYear parameter must be greater than the fromYear parameter!");
+			}
+			this.fromYear = fromYear;
+			this.toYear = toYear;
+			this.relativeChange = relativeChange;
+			slope = relativeChange / (toYear - fromYear);
+		}
+		
+		double getRelativeChangePercentPlusOne(int toThisYear) {
+			if (toThisYear >= toYear) {
+				return 1d + relativeChange;
+			} else if (toThisYear <= fromYear) {
+				return 1d;
+			} else {
+				return 1d + (toThisYear - fromYear) * slope;
+			}
+		}
+	}
 	
 	final Map<Integer, Year> yearDateMap;
 	final FrenchNFIThinnerStandingPriceProvider caller;
 	final Map<Integer, Double> observedPriceMap;
 	private List<Integer> knownYears;
+	private PriceModifier modifier;
 
 	FrenchNFIThinnerStandingPriceProviderSubModel(boolean isVariabilityEnabled, FrenchNFIThinnerStandingPriceProvider caller) {
 		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
@@ -74,6 +100,10 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		observedPriceMap = new HashMap<Integer, Double>();
 	}
 
+	void setPriceModifier(PriceModifier modifier) {
+		this.modifier = modifier;
+	}
+	
 	@Override
 	protected void init() {
 		EmpiricalDistribution empDist = new EmpiricalDistribution();
@@ -101,14 +131,23 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 				}
 				Year year = yearDateMap.get(yearDate);
 				year.monteCarloId = monteCarloID;
-				price = getRandomEffectsForThisSubject(year).m_afData[0][0];
+				price = getRandomEffectsForThisSubject(year).m_afData[0][0] * getModifier(yearDate);
 			} else {
-				price = getParameterEstimates().getMean().m_afData[0][0];
+				price = getParameterEstimates().getMean().m_afData[0][0] * getModifier(yearDate);
 			}
 			return price;
 		}
 	}
 
+	private double getModifier(int yearDate) {
+		double innerModifier;
+		if (modifier == null) {
+			innerModifier = 1d;
+		} else {
+			innerModifier = modifier.getRelativeChangePercentPlusOne(yearDate);
+		}
+		return getParameterEstimates().getMean().m_afData[0][0] * (innerModifier - 1d);
+	}
 	
 	private List<Integer> getKnownYears() {
 		if (knownYears == null) {
