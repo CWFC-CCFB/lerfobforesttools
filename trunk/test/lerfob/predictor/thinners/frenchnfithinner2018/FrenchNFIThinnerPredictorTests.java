@@ -127,7 +127,12 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
-		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
 		double predictedProbability = thinner.predictEventProbability(plot, null, 2016, 2017);
 		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, predictedProbability, 1E-8);
 		
@@ -162,7 +167,12 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false);
 
-		FrenchNFIThinnerPlot plot = plots.get(0); // we pick the first plot
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
 
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
