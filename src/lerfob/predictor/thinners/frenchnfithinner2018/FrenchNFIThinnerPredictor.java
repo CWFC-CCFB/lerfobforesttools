@@ -95,7 +95,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		public SpeciesType getSpeciesType() {return type;}
 	}
 
-	private final int NumberParmsForHazard = 11;
+	private final int NumberParmsForHazard = 10;
 	protected final FrenchNFIThinnerStandingPriceProvider priceProvider;
 	
 	/**
@@ -132,13 +132,13 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		int parameterIndex = targetSpecies.ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
-		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
-			intercept += beta.m_afData[1][0];
-		}
+//		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
+//			intercept += beta.m_afData[1][0];
+//		}
 		
-		double slope = beta.m_afData[2][0];
+		double slope = beta.m_afData[1][0];
 		if (parameterIndex >= 0) { // if oak then it is smaller than 0
-			slope += beta.m_afData[parameterIndex + 3][0];
+			slope += beta.m_afData[parameterIndex + 2][0];
 		}
 		
 		double baselineResult = 0;
@@ -172,6 +172,9 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 		
 		int index = 0;
+		oXVector.m_afData[0][index] = dummy_res;
+		index++;
+		
 		oXVector.m_afData[0][index] = basalAreaM2Ha;
 		index++;
 
