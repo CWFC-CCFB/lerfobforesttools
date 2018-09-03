@@ -355,7 +355,7 @@ class FrenchNFIThinnerPredictions {
 		predictions.predictHarvestProbabilityAgainstLandownershipAndPreviousManagement(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 
 		predictions.predictHarvestProbabilityAgainstRegion(2011, FrenchNFIThinnerSpecies.Beech, 24, 691, false, 14);
-	
 	}
+	
 }
 
