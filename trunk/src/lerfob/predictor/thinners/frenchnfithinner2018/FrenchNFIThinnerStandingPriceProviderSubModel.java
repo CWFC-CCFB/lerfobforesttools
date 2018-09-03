@@ -175,9 +175,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		return randomDeviates.getDeepClone();
 	}
 
-	
-	
-	double[] getStandingPrices(int startingYear, int endingYear, int monteCarloID) {
+	double[] getStandingPrices(int startingYear, int endingYear, int monteCarloID, double eurosToAdd) {
 		if (endingYear <= startingYear) {
 			throw new InvalidParameterException("The ending year must be greater than the starting year!");
 		}
@@ -185,7 +183,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		double[] priceArray = new double[length];
 		for (int yearIndex = 0; yearIndex < priceArray.length; yearIndex++) {
 			int yearDate = startingYear + yearIndex + 1;
-			priceArray[yearIndex] = getStandingPriceForThisYear(yearDate, monteCarloID);
+			priceArray[yearIndex] = getStandingPriceForThisYear(yearDate, monteCarloID) + eurosToAdd;
 		}
 		return priceArray;
 	}

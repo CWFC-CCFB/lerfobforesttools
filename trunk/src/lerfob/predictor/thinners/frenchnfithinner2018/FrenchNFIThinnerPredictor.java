@@ -223,6 +223,10 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 		int year0 = (Integer) parms[0];
 		int year1 = (Integer) parms[1];
+		double eurosToAdd = 0d;
+		if (parms.length > 2) {
+			eurosToAdd = (Double) parms[2];
+		}
 		
 		FrenchNFIThinnerSpecies targetSpecies;
 		if (plot instanceof InnerValidationPlot) {
@@ -233,7 +237,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 		Matrix beta = getParametersForThisRealization(plot);
 		double proportionalPart = getProportionalPart(plot, beta, targetSpecies);
-		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, plot.getMonteCarloRealizationId());
+		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, plot.getMonteCarloRealizationId(), eurosToAdd);
 		double baseline = getBaseline(beta, prices, plot, targetSpecies);
 		double survival = Math.exp(-proportionalPart * baseline);
 

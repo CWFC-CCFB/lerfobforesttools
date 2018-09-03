@@ -181,11 +181,25 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	 * @param startingYear not included in the array
 	 * @param endingYear included in the array
 	 * @param monteCarloId the id of the Monte Carlo realization
+	 * @param eurosToAdd a double to be added to annual prices
+	 * @return an array of double
+	 */
+	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId, double eurosToAdd) {
+		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId, eurosToAdd);
+	}
+
+	/**
+	 * This method returns the array of the prices for standing volume. If the year is smaller than 2006, it is assumed that the
+	 * price is that of 2006. If the year is larger than 2016, it is assumed that the price is that of 2016.
+	 * @param species a Species enum
+	 * @param startingYear not included in the array
+	 * @param endingYear included in the array
+	 * @param monteCarloId the id of the Monte Carlo realization
+	 * @param eurosToAdd a double to be added to annual prices
 	 * @return an array of double
 	 */
 	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId) {
-		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId);
+		return getStandingPrices(species, startingYear, endingYear, monteCarloId, 0d);
 	}
 
-	
 }
