@@ -73,6 +73,81 @@ class FrenchNFIThinnerPredictions {
 		}
 	}
 
+	void predictHarvestProbabilityAgainstIncreasingStandingPriceForAllSpecies(int startingYear, 
+			double basalAreaM2Ha,
+			double stemDensityHa,
+			double slopeInclination,
+			boolean underManagement) {
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("standingPriceAllSpecies.csv");
+		List<FrenchNFIThinnerPlotImpl> plots = new ArrayList<FrenchNFIThinnerPlotImpl>();
+		for (FrenchNFIThinnerSpecies sp : FrenchNFIThinnerSpecies.values()) {
+			FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+					FrenchRegion2016.NOUVELLE_AQUITAINE,
+					basalAreaM2Ha,
+					stemDensityHa,	
+					slopeInclination, 
+					sp,
+					underManagement,
+					1d); // 100% of being on private land
+			plots.add(plot);
+		}
+		
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(true, false);	// no price variability
+		
+		
+		CSVWriter writer = null;
+
+		try {
+			writer = new CSVWriter(new File(filename), false);
+			List<FormatField> fields = new ArrayList<FormatField>();
+			fields.add(new CSVField("Species"));
+			fields.add(new CSVField("Price"));
+			fields.add(new CSVField("Pred"));
+			fields.add(new CSVField("Lower95"));
+			fields.add(new CSVField("Upper95"));
+			writer.setFields(fields);
+
+			int year0 = startingYear;
+			int year1 = startingYear + 5;
+			for (FrenchNFIThinnerPlotImpl plot : plots) {
+				MonteCarloEstimate estimate = new MonteCarloEstimate();
+				for (int real = 0; real < 10000; real++) {
+					plot.monteCarloRealization = real;
+					Matrix realization = new Matrix(1,1);
+					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1);
+					estimate.addRealization(realization);
+				}
+				writer.addRecord(getRecord(plot.targetSpecies, estimate, "regular"));
+				
+				estimate = new MonteCarloEstimate();
+				for (int real = 0; real < 10000; real++) {
+					plot.monteCarloRealization = real;
+					Matrix realization = new Matrix(1,1);
+					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1, 10d);	// 10 euros added to the price
+					estimate.addRealization(realization);
+				}
+				writer.addRecord(getRecord(plot.targetSpecies, estimate, "increased"));
+			}
+		} catch (Exception e) {
+			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstIncreasingStandingPriceForAllSpecies!");
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
+	
+	private Object[] getRecord(FrenchNFIThinnerSpecies species, MonteCarloEstimate estimate, String price) {
+		Object[] record = new Object[5];
+		record[0] = species.name();
+		record[1] = price;
+		record[2] = estimate.getMean().m_afData[0][0];
+		ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
+		record[3] = ci.getLowerLimit().m_afData[0][0];
+		record[4] = ci.getUpperLimit().m_afData[0][0];
+		return record;
+	}
+ 
 	void predictHarvestProbabilityAgainstSlope(int startingYear, 
 			FrenchNFIThinnerSpecies targetSpecies, 
 			FrenchRegion2016 region,
@@ -334,27 +409,30 @@ class FrenchNFIThinnerPredictions {
 	public static void main(String[] args) {
 		FrenchNFIThinnerPredictions predictions = new FrenchNFIThinnerPredictions();
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false); 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false); 
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Oak, FrenchRegion2016.PAYS_DE_LA_LOIRE, 23.6, 783, 4, false);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14, false);
 		
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Fir, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.Spruce, FrenchRegion2016.AUVERGNE_RHONE_ALPES, 28.5, 870, 33, false);
 
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
-		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
-		
-		predictions.predictHarvestProbabilityAgainstBasalAreaAndStemDensity(2011, FrenchNFIThinnerSpecies.Beech, false, 14);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2005, FrenchNFIThinnerSpecies.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
+//		predictions.predictHarvestProbabilityAgainstStandingPrice(2011, FrenchNFIThinnerSpecies.MaritimePine, FrenchRegion2016.NOUVELLE_AQUITAINE, 23, 751, 14, false);
 
-		predictions.predictHarvestProbabilityAgainstSlope(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, false);
+		predictions.predictHarvestProbabilityAgainstIncreasingStandingPriceForAllSpecies(2011, 23, 751, 14, false);
 		
-		predictions.predictHarvestProbabilityAgainstLandownershipAndPreviousManagement(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
+//		predictions.predictHarvestProbabilityAgainstLandownershipAndPreviousManagement(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, 14);
 
-		predictions.predictHarvestProbabilityAgainstRegion(2011, FrenchNFIThinnerSpecies.Beech, 24, 691, false, 14);
+//		predictions.predictHarvestProbabilityAgainstRegion(2011, FrenchNFIThinnerSpecies.Beech, 24, 691, false, 14);
+		
+//		predictions.predictHarvestProbabilityAgainstBasalAreaAndStemDensity(2011, FrenchNFIThinnerSpecies.Beech, false, 14);
+
+//		predictions.predictHarvestProbabilityAgainstSlope(2011, FrenchNFIThinnerSpecies.Beech, FrenchRegion2016.GRAND_EST, 24, 691, false);
+		
 	}
 	
 }
