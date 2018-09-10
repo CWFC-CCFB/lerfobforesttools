@@ -161,7 +161,9 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 		double meanPrec = stand.getMeanPrecipitationOfGrowingSeason();
 		double meanTemp = stand.getMeanTemperatureOfGrowingSeason();
 		double lnDbh = tree.getLnDbhCmPlus1();
-		double socialIndex = tree.getDbhCm() - stand.getMeanQuadraticDiameterCm();
+//		double socialIndex = tree.getDbhCm() - stand.getMeanQuadraticDiameterCm(); // former version changed for next line MF2018-09-10
+		double socialIndex = tree.getDbhCm() / stand.getMeanQuadraticDiameterCm(); // former version changed for next line MF2018-09-10
+		
 		double lnDbh2 = tree.getSquaredLnDbhCmPlus1();
 
 		double harvested = 0d;
