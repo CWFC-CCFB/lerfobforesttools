@@ -1,10 +1,10 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
 import lerfob.predictor.mathilde.MathildeSubModule;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
-import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
 final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
@@ -25,7 +25,7 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 	 * @see repicea.simulation.SensitivityAnalysisParameter#getParameterEstimates()
 	 */
 	@Override
-	protected GaussianEstimate getParameterEstimates() {
+	protected ModelParameterEstimates getParameterEstimates() {
 		return super.getParameterEstimates();
 	}
 	

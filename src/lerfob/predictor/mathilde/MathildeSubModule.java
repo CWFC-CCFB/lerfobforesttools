@@ -2,12 +2,12 @@ package lerfob.predictor.mathilde;
 
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.REpiceaPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
-import repicea.stats.estimates.GaussianEstimate;
 
 @SuppressWarnings("serial")
 public abstract class MathildeSubModule extends REpiceaPredictor {
@@ -23,7 +23,7 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public void setParameterEstimates(GaussianEstimate betaEstimate) {
+	public void setParameterEstimates(ModelParameterEstimates betaEstimate) {
 		super.setParameterEstimates(betaEstimate);
 	}
 	

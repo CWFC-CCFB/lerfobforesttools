@@ -23,6 +23,7 @@ import java.io.IOException;
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -47,7 +48,7 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 		try {
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
-			setParameterEstimates(new GaussianEstimate(beta, omega));
+			setParameterEstimates(new ModelParameterEstimates(beta, omega));
 			oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 			
 			Matrix covParms = ParameterLoader.loadVectorFromFile(covParmsFilename).get();

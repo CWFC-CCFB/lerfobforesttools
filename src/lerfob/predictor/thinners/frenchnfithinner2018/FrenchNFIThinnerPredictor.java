@@ -23,6 +23,7 @@ import java.util.Map;
 
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaLogisticPredictor;
 import repicea.simulation.SASParameterEstimates;
@@ -30,7 +31,6 @@ import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider;
 import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider.LandOwnership;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
 /**
@@ -118,7 +118,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
 			Matrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
 			
-			GaussianEstimate estimate = new SASParameterEstimates(beta, omega);
+			ModelParameterEstimates estimate = new SASParameterEstimates(beta, omega);
 			setParameterEstimates(estimate); 
 			oXVector = new Matrix(1, estimate.getMean().m_iRows - NumberParmsForHazard);
 			

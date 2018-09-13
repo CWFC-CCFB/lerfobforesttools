@@ -24,6 +24,7 @@ import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
@@ -100,7 +101,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 			Matrix beta = betaMap.get().matrixStack(theta, true);
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
 			omega = omega.matrixDiagBlock(thetaVar);
-			setParameterEstimates(new GaussianEstimate(beta, omega));
+			setParameterEstimates(new ModelParameterEstimates(beta, omega));
 
 			Matrix copula = ParameterLoader.loadMatrixFromFile(copulaFilename);
 			Matrix meanCopula = new Matrix(copula.m_iRows, 1);

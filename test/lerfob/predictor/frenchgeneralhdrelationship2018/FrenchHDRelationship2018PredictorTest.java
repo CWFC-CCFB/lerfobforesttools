@@ -51,6 +51,10 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees (should be 566 170 - 10 trees with negative predictions.");
 	}
 	
+	/*
+	 * Make sure that blup estimation is correct. The predictor is checked as
+	 * well as its variance.
+	 */
 	@Test
 	public void validation2BlupsPredictionsAndVariance() throws IOException {
 		Stands = readTrees();

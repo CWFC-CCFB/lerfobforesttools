@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaLogisticPredictor;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -85,7 +85,7 @@ public final class MathildeStandThinningPredictor extends REpiceaLogisticPredict
 				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, NumberOfParameters - 1, 0, NumberOfParameters - 1);
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				
 				subModules.put(excludedGroup, subModule);
 			}
