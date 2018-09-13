@@ -30,6 +30,7 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies
 import repicea.math.Matrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -118,7 +119,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 				MathildeDiameterIncrementSubModule subModule = new MathildeDiameterIncrementSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
 
-				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 	
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				

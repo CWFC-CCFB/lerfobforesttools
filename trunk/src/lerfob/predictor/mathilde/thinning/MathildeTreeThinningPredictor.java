@@ -28,6 +28,7 @@ import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaLogisticPredictor;
@@ -109,7 +110,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaLogisticPredicto
 				
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
-				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				
 				Matrix meanIntervalRandomEffect = new Matrix(1,1);
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, randomEffectVariance));

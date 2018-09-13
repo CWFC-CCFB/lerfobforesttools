@@ -29,6 +29,7 @@ import java.util.Map;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -80,7 +81,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 			Matrix covparms = covparmsMap.get();
 
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms.getSubMatrix(2, 2, 0, 0)));
-			setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+			setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
 	
 			rho = covparms.m_afData[1][0];

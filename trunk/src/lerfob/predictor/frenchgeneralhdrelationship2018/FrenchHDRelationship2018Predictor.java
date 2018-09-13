@@ -25,6 +25,7 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
@@ -101,7 +102,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 				
 				Matrix mean = betaMap.get(index);
 				Matrix variance = omegaMap.get(index).squareSym();
-				GaussianEstimate defaultBeta = new SASParameterEstimates(mean, variance);
+				ModelParameterEstimates defaultBeta = new SASParameterEstimates(mean, variance);
 				internalPredictor.setParameterEstimates(defaultBeta);
 				
 				Matrix covparms = covparmMap.get(index);

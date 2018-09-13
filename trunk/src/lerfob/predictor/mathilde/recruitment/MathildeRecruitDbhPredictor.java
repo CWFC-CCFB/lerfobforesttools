@@ -25,10 +25,10 @@ import java.util.Map;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
 /**
@@ -85,7 +85,7 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
 			Matrix beta = betaMap.get();
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
-			setParameterEstimates(new GaussianEstimate(beta, omega));
+			setParameterEstimates(new ModelParameterEstimates(beta, omega));
 
 		} catch (IOException e) {
 			e.printStackTrace();

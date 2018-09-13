@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import repicea.math.Matrix;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaLogisticPredictor;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -93,7 +93,7 @@ public final class MathildeStandThinningPredictor extends REpiceaLogisticPredict
 
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				// rm+fc-10.6.2015 No random effect for the thinning stand level
 				// model
 				// subModule.getDefaultRandomEffects().put(HierarchicalLevel.IntervalNestedInPlot,

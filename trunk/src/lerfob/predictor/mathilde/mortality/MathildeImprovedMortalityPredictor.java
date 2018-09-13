@@ -25,6 +25,7 @@ import java.util.List;
 import lerfob.predictor.mathilde.MathildeTree;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianEstimate;
@@ -63,7 +64,7 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
 				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
 				MathildeMortalitySubModule subModule = new MathildeMortalitySubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
-				subModule.setParameterEstimates(new GaussianEstimate(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));
 				subModules.put(excludedGroup, subModule);
 			}

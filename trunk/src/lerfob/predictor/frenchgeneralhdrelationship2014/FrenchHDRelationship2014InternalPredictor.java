@@ -29,13 +29,13 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.hdrelationships.HDRelationshipModel;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
@@ -97,7 +97,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipMod
 	
 	
 	@Override
-	protected void setParameterEstimates(GaussianEstimate defaultBeta) {
+	protected void setParameterEstimates(ModelParameterEstimates defaultBeta) {
 		super.setParameterEstimates(defaultBeta);
 		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}
