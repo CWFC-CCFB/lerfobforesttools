@@ -110,6 +110,7 @@ class FrenchNFIThinnerPredictions {
 			int year0 = startingYear;
 			int year1 = startingYear + 5;
 			for (FrenchNFIThinnerPlotImpl plot : plots) {
+				thinner.setPriceModifier(year0-1, year0, 0d);		// no change
 				MonteCarloEstimate estimate = new MonteCarloEstimate();
 				for (int real = 0; real < 10000; real++) {
 					plot.monteCarloRealization = real;
@@ -118,12 +119,12 @@ class FrenchNFIThinnerPredictions {
 					estimate.addRealization(realization);
 				}
 				writer.addRecord(getRecord(plot.targetSpecies, estimate, "regular"));
-				
+				thinner.setPriceModifier(year0-1, year0, 0.15); 	// 15% increase
 				estimate = new MonteCarloEstimate();
 				for (int real = 0; real < 10000; real++) {
 					plot.monteCarloRealization = real;
 					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1, 10d);	// 10 euros added to the price
+					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1);
 					estimate.addRealization(realization);
 				}
 				writer.addRecord(getRecord(plot.targetSpecies, estimate, "increased"));
