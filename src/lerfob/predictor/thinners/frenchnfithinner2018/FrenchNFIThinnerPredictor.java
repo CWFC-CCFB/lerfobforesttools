@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -223,10 +224,6 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 		int year0 = (Integer) parms[0];
 		int year1 = (Integer) parms[1];
-		double multiplier = 0d;
-		if (parms.length > 2) {
-			multiplier = (Double) parms[2];
-		}
 		
 		FrenchNFIThinnerSpecies targetSpecies;
 		if (plot instanceof InnerValidationPlot) {
@@ -234,6 +231,24 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		} else {
 			targetSpecies = priceProvider.getTargetSpecies(plot, year0);
 		}
+
+		double multiplier = 0d;
+		if (parms.length > 2) {
+			Object additionalParameter = parms[2];
+			if (additionalParameter instanceof Double) {
+				multiplier = (Double) parms[2];
+			} else if (additionalParameter instanceof Matrix) {
+				Matrix addParms = (Matrix) additionalParameter;
+				if (addParms.m_iRows != FrenchNFIThinnerSpecies.values().length) {
+					throw new InvalidParameterException("The matrix set as additional parameters in FrenchNFIThinnerPredictor.predictEventProbability() does not have the proper number of rows!");
+				} else {
+					multiplier = addParms.m_afData[targetSpecies.ordinal()][0];
+				}
+			} else {
+				throw new InvalidParameterException("The additional parameters in FrenchNFIThinnerPredictor.predictEventProbability() must be either a Double or a Matrix!");
+			}
+		}
+		
 
 		Matrix beta = getParametersForThisRealization(plot);
 		double proportionalPart = getProportionalPart(plot, beta, targetSpecies);
@@ -246,24 +261,26 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 
 	/**
 	 * This method makes it possible to induce price changes over time for a particular species.
+	 * Note that this change DOES not affect observed prices
 	 * @param species a FrenchNFIThinnerSpecies instance
 	 * @param fromYear the starting year 
 	 * @param toYear the final year
 	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
 	 */
-	public void setPriceModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
-		priceProvider.setPriceModifier(species, fromYear, toYear, relativeChange);
+	public void setBasicTrendModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		priceProvider.setBasicTrendModifier(species, fromYear, toYear, relativeChange);
 	}
 
 	/**
-	 * This method makes it possible to induce price changes over time for all species.
+	 * This method makes it possible to induce price changes over time for all species. Note that this
+	 * change DOES not affect observed prices.
 	 * @param fromYear the starting year 
 	 * @param toYear the final year
 	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
 	 */
-	public void setPriceModifier(int fromYear, int toYear, double relativeChange) {
+	public void setBasicTrendModifier(int fromYear, int toYear, double relativeChange) {
 		for (FrenchNFIThinnerSpecies species : FrenchNFIThinnerSpecies.values()) {
-			setPriceModifier(species, fromYear, toYear, relativeChange);
+			setBasicTrendModifier(species, fromYear, toYear, relativeChange);
 		}
 	}
 

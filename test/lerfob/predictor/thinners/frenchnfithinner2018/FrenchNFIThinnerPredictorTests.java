@@ -185,5 +185,101 @@ public class FrenchNFIThinnerPredictorTests {
 		
 		System.out.println("Successful stochastic test on an oak plot from 2016 to 2017");
 	}
+
+	@Test
+	public void testNoChange2016PricePredictionsWithBasicTrend() {
+		List<FrenchNFIThinnerPlot> plots = readPlots();
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
+
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
+
+		double priceIn2016 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
+		
+		thinner.setBasicTrendModifier(2016, 2017, .5);
+
+		double priceIn2016WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
+
+		Assert.assertEquals("Price in 2016", priceIn2016, priceIn2016WithModifier, 1E-8);
+		
+		System.out.println("Successful test on basic trend modifier for year 2016");
+	}
+
+	@Test
+	public void testChange2017PricePredictionsWithBasicTrend() {
+		List<FrenchNFIThinnerPlot> plots = readPlots();
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
+
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
+
+		double priceIn2017 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
+		
+		thinner.setBasicTrendModifier(2016, 2017, .5);
+
+		double priceIn2017WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
+
+		Assert.assertEquals("Price in 2017", priceIn2017 * 1.5, priceIn2017WithModifier, 1E-8);
+		
+		System.out.println("Successful test on basic trend modifier for year 2017");
+	}
+	
+	@Test
+	public void testChange2018PricePredictionsWithBasicTrend() {
+		List<FrenchNFIThinnerPlot> plots = readPlots();
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
+
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
+
+		double priceIn2018 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
+		
+		thinner.setBasicTrendModifier(2016, 2020, .5);
+
+		double priceIn2018WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
+
+		Assert.assertEquals("Price in 2018", priceIn2018 * 1.25, priceIn2018WithModifier, 1E-8);
+		
+		System.out.println("Successful test on basic trend modifier for year 2018");
+	}
+
+	@Test
+	public void testChangeInPredictionsWithConstantTrendDouble() {
+		List<FrenchNFIThinnerPlot> plots = readPlots();
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
+
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
+
+		double unModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		double modifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020, .5);
+		double actualDifference = modifiedPrediction - unModifiedPrediction;
+		Assert.assertEquals("Probability difference with 50% increase in stumpage price",
+				0.17374675683611285, 
+				actualDifference,
+				1E-8);
+		
+		System.out.println("Successful test on constant trend modifier for 2015-2020 predictions!");
+	}
+
+	
+	
+	
 	
 }
