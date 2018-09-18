@@ -279,7 +279,30 @@ public class FrenchNFIThinnerPredictorTests {
 	}
 
 	
-	
+	@Test
+	public void testChangeInPredictionsWithConstantTrendMatrix() {
+		List<FrenchNFIThinnerPlot> plots = readPlots();
+		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
+
+		int i = 0;
+		FrenchNFIThinnerPlot plot = plots.get(i);
+		while (!plot.getSubjectId().equals("310480")) {
+			i++;
+			plot = plots.get(i);
+		}
+
+		double predictionWithDouble = thinner.predictEventProbability(plot, null, 2015, 2020, .5);
+		Matrix constantModifier = new Matrix(FrenchNFIThinnerSpecies.values().length, 1);
+		constantModifier.m_afData[((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies().ordinal()][0] = .5;
+		double predictionWithMatrix = thinner.predictEventProbability(plot, null, 2015, 2020, constantModifier);
+		Assert.assertEquals("Comparison modified predictions with double and matrix",
+				predictionWithDouble, 
+				predictionWithMatrix,
+				1E-8);
+		
+		System.out.println("Successful test on constant trend modifier with double and matrix!");
+	}
+
 	
 	
 }
