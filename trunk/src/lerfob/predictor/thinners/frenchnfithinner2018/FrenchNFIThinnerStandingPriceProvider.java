@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProviderSubModel.PriceModifier;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProviderSubModel.BasicTrendModifier;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.util.ObjectUtility;
@@ -71,9 +71,9 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 		init();
 	}
 		
-	void setPriceModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
-		PriceModifier modifier = new PriceModifier(fromYear, toYear, relativeChange);
-		subModels.get(species).setPriceModifier(modifier);
+	void setBasicTrendModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		BasicTrendModifier modifier = new BasicTrendModifier(fromYear, toYear, relativeChange);
+		subModels.get(species).setBasicTrendModifier(modifier);
 	}
 	
 	

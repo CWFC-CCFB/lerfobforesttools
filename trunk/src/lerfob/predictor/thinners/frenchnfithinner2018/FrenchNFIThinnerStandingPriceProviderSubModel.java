@@ -61,13 +61,13 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		}
 	}
 
-	static class PriceModifier {
+	static class BasicTrendModifier {
 		final int fromYear;
 		final int toYear;
 		final double relativeChange;
 		final double slope;
 		
-		PriceModifier(int fromYear, int toYear, double relativeChange) {
+		BasicTrendModifier(int fromYear, int toYear, double relativeChange) {
 			if (toYear <= fromYear) {
 				throw new InvalidParameterException("The toYear parameter must be greater than the fromYear parameter!");
 			}
@@ -92,7 +92,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	final FrenchNFIThinnerStandingPriceProvider caller;
 	final Map<Integer, Double> observedPriceMap;
 	private List<Integer> knownYears;
-	private PriceModifier modifier;
+	private BasicTrendModifier basicTrendModifier;
 
 	FrenchNFIThinnerStandingPriceProviderSubModel(boolean isVariabilityEnabled, FrenchNFIThinnerStandingPriceProvider caller) {
 		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
@@ -101,8 +101,8 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		observedPriceMap = new HashMap<Integer, Double>();
 	}
 
-	void setPriceModifier(PriceModifier modifier) {
-		this.modifier = modifier;
+	void setBasicTrendModifier(BasicTrendModifier modifier) {
+		this.basicTrendModifier = modifier;
 	}
 	
 	@Override
@@ -142,10 +142,10 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 
 	private double getModifier(int yearDate) {
 		double innerModifier;
-		if (modifier == null) {
+		if (basicTrendModifier == null) {
 			innerModifier = 1d;
 		} else {
-			innerModifier = modifier.getRelativeChangePercentPlusOne(yearDate);
+			innerModifier = basicTrendModifier.getRelativeChangePercentPlusOne(yearDate);
 		}
 		return getParameterEstimates().getMean().m_afData[0][0] * (innerModifier - 1d);
 	}
