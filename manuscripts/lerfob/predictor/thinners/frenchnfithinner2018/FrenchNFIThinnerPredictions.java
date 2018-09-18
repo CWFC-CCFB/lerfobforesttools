@@ -101,7 +101,6 @@ class FrenchNFIThinnerPredictions {
 			writer = new CSVWriter(new File(filename), false);
 			List<FormatField> fields = new ArrayList<FormatField>();
 			fields.add(new CSVField("Species"));
-			fields.add(new CSVField("Price"));
 			fields.add(new CSVField("Pred"));
 			fields.add(new CSVField("Lower95"));
 			fields.add(new CSVField("Upper95"));
@@ -114,18 +113,18 @@ class FrenchNFIThinnerPredictions {
 				for (int real = 0; real < 10000; real++) {
 					plot.monteCarloRealization = real;
 					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1);
+					double regPred = thinner.predictEventProbability(plot, null, year0, year1);
+					double incPred = thinner.predictEventProbability(plot, null, year0, year1, .15);
+					realization.m_afData[0][0] = incPred / regPred - 1d;
 					estimate.addRealization(realization);
 				}
-				writer.addRecord(getRecord(plot.targetSpecies, estimate, "regular"));
-				estimate = new MonteCarloEstimate();
-				for (int real = 0; real < 10000; real++) {
-					plot.monteCarloRealization = real;
-					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = thinner.predictEventProbability(plot, null, year0, year1, .15);
-					estimate.addRealization(realization);
-				}
-				writer.addRecord(getRecord(plot.targetSpecies, estimate, "increased"));
+				Object[] record = new Object[4];
+				record[0] = plot.targetSpecies.name();
+				record[1] = estimate.getMean().m_afData[0][0];
+				ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
+				record[2] = ci.getLowerLimit().m_afData[0][0];
+				record[3] = ci.getUpperLimit().m_afData[0][0];
+				writer.addRecord(record);
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to predict harvest probability for predictHarvestProbabilityAgainstIncreasingStandingPriceForAllSpecies!");
@@ -136,16 +135,6 @@ class FrenchNFIThinnerPredictions {
 		}
 	}
 	
-	private Object[] getRecord(FrenchNFIThinnerSpecies species, MonteCarloEstimate estimate, String price) {
-		Object[] record = new Object[5];
-		record[0] = species.name();
-		record[1] = price;
-		record[2] = estimate.getMean().m_afData[0][0];
-		ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(.95);
-		record[3] = ci.getLowerLimit().m_afData[0][0];
-		record[4] = ci.getUpperLimit().m_afData[0][0];
-		return record;
-	}
  
 	void predictHarvestProbabilityAgainstSlope(int startingYear, 
 			FrenchNFIThinnerSpecies targetSpecies, 
