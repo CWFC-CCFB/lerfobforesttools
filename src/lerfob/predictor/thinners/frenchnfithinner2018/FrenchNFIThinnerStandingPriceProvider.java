@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerStandingPriceProviderSubModel.BasicTrendModifier;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.util.ObjectUtility;
@@ -72,8 +71,7 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	}
 		
 	void setBasicTrendModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
-		BasicTrendModifier modifier = new BasicTrendModifier(fromYear, toYear, relativeChange);
-		subModels.get(species).setBasicTrendModifier(modifier);
+		subModels.get(species).setBasicTrendModifier(fromYear, toYear, relativeChange);
 	}
 	
 	
@@ -184,22 +182,19 @@ class FrenchNFIThinnerStandingPriceProvider extends REpiceaPredictor {
 	 * @param multiplier a double to be multiplied by the annual prices
 	 * @return an array of double
 	 */
-	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId, double multiplier) {
-		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId, multiplier);
+	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId) {
+		return subModels.get(species).getStandingPrices(startingYear, endingYear, monteCarloId);
 	}
 
-	/**
-	 * This method returns the array of the prices for standing volume. If the year is smaller than 2006, it is assumed that the
-	 * price is that of 2006. If the year is larger than 2016, it is assumed that the price is that of 2016.
-	 * @param species a Species enum
-	 * @param startingYear not included in the array
-	 * @param endingYear included in the array
-	 * @param monteCarloId the id of the Monte Carlo realization
-	 * @param eurosToAdd a double to be added to annual prices
-	 * @return an array of double
-	 */
-	double[] getStandingPrices(FrenchNFIThinnerSpecies species, int startingYear, int endingYear, int monteCarloId) {
-		return getStandingPrices(species, startingYear, endingYear, monteCarloId, 0d);
+	void setMultiplierModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		subModels.get(species).setMultiplierModifier(fromYear, toYear, relativeChange);
 	}
+
+	void resetModifiers() {
+		for (FrenchNFIThinnerSpecies species : FrenchNFIThinnerSpecies.values()) {
+			subModels.get(species).resetModifiers();
+		}
+	}
+
 
 }
