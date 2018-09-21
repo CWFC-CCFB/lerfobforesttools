@@ -240,8 +240,16 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		}
 		return targetSpecies;
 	}
-	
-	
+
+	/**
+	 * This method makes it possible to retrieve the prices for a given period and a given
+	 * target species.
+	 * @param targetSpecies a FrenchNFIThinnerSpecies enum 
+	 * @param year0 the beginning of the interval
+	 * @param year1 the end of the interval
+	 * @param monteCarloRealizationId the id of the Monte Carlo realization if needed
+	 * @return an array of doubles
+	 */
 	public double[] getStandingPrices(FrenchNFIThinnerSpecies targetSpecies, int year0, int year1, int monteCarloRealizationId) {
 		return priceProvider.getStandingPrices(targetSpecies, year0, year1, monteCarloRealizationId);
 	}
