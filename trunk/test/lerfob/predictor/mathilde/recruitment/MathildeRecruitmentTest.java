@@ -214,7 +214,7 @@ public class MathildeRecruitmentTest {
 			double actualVariance = estimate.getVariance().m_afData[0][0];
 			double expectedVariance = expectedMean * expectedMean / MathildeRecruitDbhPredictor.Dispersion;
 			System.out.println("Prediction of stochastic recruit diameter (variance), expected = " + expectedVariance + " vs actual = " + actualVariance);
-			Assert.assertEquals(expectedVariance, actualVariance, 1E-2);
+			Assert.assertEquals(expectedVariance, actualVariance, 2E-2);
 			
 		}
 		

@@ -261,14 +261,15 @@ public class FrenchNFIThinnerPredictorTests {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		int i = 0;
-		FrenchNFIThinnerPlot plot = plots.get(i);
+		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(i);
 		while (!plot.getSubjectId().equals("310480")) {
 			i++;
-			plot = plots.get(i);
+			plot = (FrenchNFIThinnerPlotImpl) plots.get(i);
 		}
 
 		double unModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
-		double modifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020, .5);
+		thinner.setMultiplierModifier(plot.getTargetSpecies(), 2015, 2020, .5);
+		double modifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
 		double actualDifference = modifiedPrediction - unModifiedPrediction;
 		Assert.assertEquals("Probability difference with 50% increase in stumpage price",
 				0.17374675683611285, 
@@ -280,7 +281,7 @@ public class FrenchNFIThinnerPredictorTests {
 
 	
 	@Test
-	public void testChangeInPredictionsWithConstantTrendMatrix() {
+	public void testResetAfterChangeInPredictions() {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
@@ -291,16 +292,18 @@ public class FrenchNFIThinnerPredictorTests {
 			plot = plots.get(i);
 		}
 
-		double predictionWithDouble = thinner.predictEventProbability(plot, null, 2015, 2020, .5);
-		Matrix constantModifier = new Matrix(FrenchNFIThinnerSpecies.values().length, 1);
-		constantModifier.m_afData[((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies().ordinal()][0] = .5;
-		double predictionWithMatrix = thinner.predictEventProbability(plot, null, 2015, 2020, constantModifier);
-		Assert.assertEquals("Comparison modified predictions with double and matrix",
-				predictionWithDouble, 
-				predictionWithMatrix,
+		double originalPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		thinner.setMultiplierModifier(2015, 2020, .5);
+		double firstModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		Assert.assertTrue(Math.abs(originalPrediction - firstModifiedPrediction) > 1E-8); // They should be different due to the modifier
+		thinner.resetModifiers();
+		double secondModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		Assert.assertEquals("Comparison reset predictions ",
+				originalPrediction, 
+				secondModifiedPrediction,
 				1E-8);
 		
-		System.out.println("Successful test on constant trend modifier with double and matrix!");
+		System.out.println("Successful test on the resetting of modifiers!");
 	}
 
 	

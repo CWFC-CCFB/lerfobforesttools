@@ -18,7 +18,6 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
-import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,13 +128,11 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 	}
 
-	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot stand, FrenchNFIThinnerSpecies targetSpecies) {
+	private double getBaseline(Matrix beta, double[] prices, FrenchNFIThinnerPlot plot, int year0) {
+		FrenchNFIThinnerSpecies targetSpecies = getTargetSpecies(plot, year0);
 		int parameterIndex = targetSpecies.ordinal() - 1;
 		
 		double intercept = beta.m_afData[0][0];
-//		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
-//			intercept += beta.m_afData[1][0];
-//		}
 		
 		double slope = beta.m_afData[1][0];
 		if (parameterIndex >= 0) { // if oak then it is smaller than 0
@@ -150,27 +147,24 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		return baselineResult;
 	}
 
-	private double getProportionalPart(FrenchNFIThinnerPlot stand, Matrix beta, FrenchNFIThinnerSpecies targetSpecies) {
-		double basalAreaM2Ha = stand.getBasalAreaM2Ha();
+	private double getProportionalPart(FrenchNFIThinnerPlot plot, Matrix beta, int year0) {
+		FrenchNFIThinnerSpecies targetSpecies = getTargetSpecies(plot, year0);
+		double basalAreaM2Ha = plot.getBasalAreaM2Ha();
 		double probabilityPrivateLand;
-		if (stand instanceof LandOwnershipProvider) {		// priority is given to the interface
-			boolean isPrivate = ((LandOwnershipProvider) stand).getLandOwnership() == LandOwnership.Private;
+		if (plot instanceof LandOwnershipProvider) {		// priority is given to the interface
+			boolean isPrivate = ((LandOwnershipProvider) plot).getLandOwnership() == LandOwnership.Private;
 			if (isPrivate) {
 				probabilityPrivateLand = 1d;
 			} else {
 				probabilityPrivateLand = 0d;
 			}
 		} else {
-			probabilityPrivateLand = stand.getProbabilityOfBeingOnPrivateLand();
+			probabilityPrivateLand = plot.getProbabilityOfBeingOnPrivateLand();
 		}
 		int dummy_res = 0;
 		if (targetSpecies.getSpeciesType() == SpeciesType.ConiferousSpecies) {
 			dummy_res = 1;
 		}
-
-		
-		
-		
 		
 		int index = 0;
 		oXVector.m_afData[0][index] = dummy_res;
@@ -179,24 +173,24 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		oXVector.m_afData[0][index] = basalAreaM2Ha;
 		index++;
 
-		oXVector.m_afData[0][index] = stand.getNumberOfStemsHa() * basalAreaM2Ha * .001;
+		oXVector.m_afData[0][index] = plot.getNumberOfStemsHa() * basalAreaM2Ha * .001;
 		index++;
 
-		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent();
+		oXVector.m_afData[0][index] = plot.getSlopeInclinationPercent();
 		index++;
 
-		oXVector.m_afData[0][index] = stand.getSlopeInclinationPercent() * dummy_res;
+		oXVector.m_afData[0][index] = plot.getSlopeInclinationPercent() * dummy_res;
 		index++;
 		
 		oXVector.m_afData[0][index] = probabilityPrivateLand;
 		index++;
 		
-		if (stand.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
+		if (plot.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
 			oXVector.m_afData[0][index] = 1d * probabilityPrivateLand;
 		}
 		index++;
 		
-		Matrix dummy = DummyRegion.get(stand.getFrenchRegion2016());
+		Matrix dummy = DummyRegion.get(plot.getFrenchRegion2016());
 		oXVector.setSubMatrix(dummy, 0, index);
 		index += dummy.m_iCols;
 		
@@ -224,41 +218,34 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 		
 		int year0 = (Integer) parms[0];
 		int year1 = (Integer) parms[1];
-		
+
+		Matrix beta = getParametersForThisRealization(plot);
+		double proportionalPart = getProportionalPart(plot, beta, year0);
+		double[] prices = getStandingPrices(getTargetSpecies(plot, year0), 
+				year0, 
+				year1, 
+				plot.getMonteCarloRealizationId());
+		double baseline = getBaseline(beta, prices, plot, year0);
+		double survival = Math.exp(-proportionalPart * baseline);
+
+		return 1 - survival;
+	}
+
+	private FrenchNFIThinnerSpecies getTargetSpecies(FrenchNFIThinnerPlot plot, int year0) {
 		FrenchNFIThinnerSpecies targetSpecies;
 		if (plot instanceof InnerValidationPlot) {
 			targetSpecies = ((InnerValidationPlot) plot).getTargetSpecies(); 
 		} else {
 			targetSpecies = priceProvider.getTargetSpecies(plot, year0);
 		}
-
-		double multiplier = 0d;
-		if (parms.length > 2) {
-			Object additionalParameter = parms[2];
-			if (additionalParameter instanceof Double) {
-				multiplier = (Double) parms[2];
-			} else if (additionalParameter instanceof Matrix) {
-				Matrix addParms = (Matrix) additionalParameter;
-				if (addParms.m_iRows != FrenchNFIThinnerSpecies.values().length) {
-					throw new InvalidParameterException("The matrix set as additional parameters in FrenchNFIThinnerPredictor.predictEventProbability() does not have the proper number of rows!");
-				} else {
-					multiplier = addParms.m_afData[targetSpecies.ordinal()][0];
-				}
-			} else {
-				throw new InvalidParameterException("The additional parameters in FrenchNFIThinnerPredictor.predictEventProbability() must be either a Double or a Matrix!");
-			}
-		}
-		
-
-		Matrix beta = getParametersForThisRealization(plot);
-		double proportionalPart = getProportionalPart(plot, beta, targetSpecies);
-		double[] prices = priceProvider.getStandingPrices(targetSpecies, year0, year1, plot.getMonteCarloRealizationId(), multiplier);
-		double baseline = getBaseline(beta, prices, plot, targetSpecies);
-		double survival = Math.exp(-proportionalPart * baseline);
-
-		return 1 - survival;
+		return targetSpecies;
 	}
-
+	
+	
+	public double[] getStandingPrices(FrenchNFIThinnerSpecies targetSpecies, int year0, int year1, int monteCarloRealizationId) {
+		return priceProvider.getStandingPrices(targetSpecies, year0, year1, monteCarloRealizationId);
+	}
+	
 	/**
 	 * This method makes it possible to induce price changes over time for a particular species.
 	 * Note that this change DOES not affect observed prices
@@ -283,5 +270,33 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 			setBasicTrendModifier(species, fromYear, toYear, relativeChange);
 		}
 	}
+	
+	/**
+	 * This method makes it possible to induce a proportional price changes for a given period and a give species. 
+	 * Note that this change DOES affect observed prices.
+	 * @param species a FrenchNFIThinnerSpecies instance
+	 * @param fromYear the starting year 
+	 * @param toYear the final year
+	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
+	 */
+	public void setMultiplierModifier(FrenchNFIThinnerSpecies species, int fromYear, int toYear, double relativeChange) {
+		priceProvider.setMultiplierModifier(species, fromYear, toYear, relativeChange);
+	}
 
+	/**
+	 * This method makes it possible to induce a proportional price changes for a given period for all species. 
+	 * Note that this change DOES affect observed prices.
+	 * @param fromYear the starting year 
+	 * @param toYear the final year
+	 * @param relativeChange the relative change over the period. For example, 0.1 would be a 10% increase over the period.
+	 */
+	public void setMultiplierModifier(int fromYear, int toYear, double relativeChange) {
+		for (FrenchNFIThinnerSpecies species : FrenchNFIThinnerSpecies.values()) {
+			setMultiplierModifier(species, fromYear, toYear, relativeChange);
+		}
+	}
+
+	public void resetModifiers() {
+		priceProvider.resetModifiers();
+	}
 }

@@ -61,38 +61,53 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		}
 	}
 
-	static class BasicTrendModifier {
+	static class Modifier {
 		final int fromYear;
 		final int toYear;
 		final double relativeChange;
-		final double slope;
+		double slope;
+		final boolean gradual;
 		
-		BasicTrendModifier(int fromYear, int toYear, double relativeChange) {
+		Modifier(int fromYear, int toYear, double relativeChange, boolean gradual) {
 			if (toYear <= fromYear) {
 				throw new InvalidParameterException("The toYear parameter must be greater than the fromYear parameter!");
 			}
 			this.fromYear = fromYear;
 			this.toYear = toYear;
 			this.relativeChange = relativeChange;
-			slope = relativeChange / (toYear - fromYear);
+			this.gradual = gradual;
+			if (gradual) {
+				this.slope = relativeChange / (toYear - fromYear);
+			}
 		}
 		
 		double getRelativeChangePercentPlusOne(int toThisYear) {
-			if (toThisYear >= toYear) {
-				return 1d + relativeChange;
-			} else if (toThisYear <= fromYear) {
-				return 1d;
+			if (gradual) {
+				if (toThisYear >= toYear) {
+					return 1d + relativeChange;
+				} else if (toThisYear <= fromYear) {
+					return 1d;
+				} else {
+					return 1d + (toThisYear - fromYear) * slope;
+				}
 			} else {
-				return 1d + (toThisYear - fromYear) * slope;
+				return 1d + relativeChange;
 			}
 		}
 	}
+
+
+	
+	
+	
+	
 	
 	final Map<Integer, Year> yearDateMap;
 	final FrenchNFIThinnerStandingPriceProvider caller;
 	final Map<Integer, Double> observedPriceMap;
 	private List<Integer> knownYears;
-	private BasicTrendModifier basicTrendModifier;
+	private Modifier basicTrendModifier;		// this one does not affect observed prices
+	private Modifier multiplierModifier;		// this one does affect observed prices as well
 
 	FrenchNFIThinnerStandingPriceProviderSubModel(boolean isVariabilityEnabled, FrenchNFIThinnerStandingPriceProvider caller) {
 		super(false, isVariabilityEnabled, false); // although it was a residual error, it is handled through the random effects for convenience
@@ -101,8 +116,12 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		observedPriceMap = new HashMap<Integer, Double>();
 	}
 
-	void setBasicTrendModifier(BasicTrendModifier modifier) {
-		this.basicTrendModifier = modifier;
+	void setBasicTrendModifier(int year0, int year1, double relativeChange) {
+		this.basicTrendModifier = new Modifier(year0, year1, relativeChange, true);
+	}
+	
+	void setMultiplierModifier(int year0, int year1, double relativeChange) {
+		this.multiplierModifier = new Modifier(year0, year1, relativeChange, false);
 	}
 	
 	@Override
@@ -122,25 +141,25 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	}
 	
 	double getStandingPriceForThisYear(int yearDate, int monteCarloID) {
+		double price;
 		if (observedPriceMap.containsKey(yearDate)) {
-			return observedPriceMap.get(yearDate);
+			price = observedPriceMap.get(yearDate);
 		} else {
-			double price;
 			if (isRandomEffectsVariabilityEnabled) {
 				if (!yearDateMap.containsKey(yearDate)) {
 					yearDateMap.put(yearDate, new Year(yearDate));
 				}
 				Year year = yearDateMap.get(yearDate);
 				year.monteCarloId = monteCarloID;
-				price = getRandomEffectsForThisSubject(year).m_afData[0][0] + getModifier(yearDate);
+				price = getRandomEffectsForThisSubject(year).m_afData[0][0] + getBasicTrendModifier(yearDate);
 			} else {
-				price = getParameterEstimates().getMean().m_afData[0][0] + getModifier(yearDate);
+				price = getParameterEstimates().getMean().m_afData[0][0] + getBasicTrendModifier(yearDate);
 			}
-			return price;
 		}
+		return price * getMultiplierModifier();
 	}
 
-	private double getModifier(int yearDate) {
+	private double getBasicTrendModifier(int yearDate) {
 		double innerModifier;
 		if (basicTrendModifier == null) {
 			innerModifier = 1d;
@@ -148,6 +167,14 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 			innerModifier = basicTrendModifier.getRelativeChangePercentPlusOne(yearDate);
 		}
 		return getParameterEstimates().getMean().m_afData[0][0] * (innerModifier - 1d);
+	}
+	
+	private double getMultiplierModifier() {
+		if (multiplierModifier == null) {
+			return 1d;
+		} else {
+			return multiplierModifier.getRelativeChangePercentPlusOne(0); // the argument is useless here
+		}
 	}
 	
 	private List<Integer> getKnownYears() {
@@ -176,7 +203,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		return randomDeviates.getDeepClone();
 	}
 
-	double[] getStandingPrices(int startingYear, int endingYear, int monteCarloID, double multiplier) {
+	double[] getStandingPrices(int startingYear, int endingYear, int monteCarloID) {
 		if (endingYear <= startingYear) {
 			throw new InvalidParameterException("The ending year must be greater than the starting year!");
 		}
@@ -184,7 +211,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		double[] priceArray = new double[length];
 		for (int yearIndex = 0; yearIndex < priceArray.length; yearIndex++) {
 			int yearDate = startingYear + yearIndex + 1;
-			priceArray[yearIndex] = getStandingPriceForThisYear(yearDate, monteCarloID) * (1 + multiplier);
+			priceArray[yearIndex] = getStandingPriceForThisYear(yearDate, monteCarloID);
 		}
 		return priceArray;
 	}
@@ -196,6 +223,11 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	@Override
 	protected ModelParameterEstimates getParameterEstimates() {
 		return super.getParameterEstimates();
+	}
+
+	void resetModifiers() {
+		basicTrendModifier = null;
+		multiplierModifier = null;
 	}
 
 }
