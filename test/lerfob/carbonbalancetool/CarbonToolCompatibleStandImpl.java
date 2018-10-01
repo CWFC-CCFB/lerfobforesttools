@@ -15,9 +15,11 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleEvenAgedStand {
 	@SuppressWarnings("rawtypes")
 	private final Map<StatusClass, Collection> treeMap;
 	private final String standID;
+	private final String species;
 	
 	@SuppressWarnings("rawtypes")
-	protected CarbonToolCompatibleStandImpl(String standID, double areaHa, int dateYr) {
+	protected CarbonToolCompatibleStandImpl(String species, String standID, double areaHa, int dateYr) {
+		this.species = species;
 		this.standID = standID;
 		this.areaHa = areaHa;
 		this.dateYr = dateYr;
@@ -53,7 +55,7 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleEvenAgedStand {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public CATCompatibleStand getHarvestedStand() {
-		CarbonToolCompatibleStandImpl newStand = new CarbonToolCompatibleStandImpl(standID, areaHa, dateYr);
+		CarbonToolCompatibleStandImpl newStand = new CarbonToolCompatibleStandImpl(species, standID, areaHa, dateYr);
 		Collection coll = getTrees(StatusClass.alive);
 		for (Object obj : coll) {
 			CarbonToolCompatibleTreeImpl tree = (CarbonToolCompatibleTreeImpl) obj;

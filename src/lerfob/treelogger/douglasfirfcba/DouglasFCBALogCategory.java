@@ -20,6 +20,7 @@ package lerfob.treelogger.douglasfirfcba;
 
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LogCategory;
+import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
 
 @SuppressWarnings("serial")
@@ -119,6 +120,12 @@ class DouglasFCBALogCategory extends LogCategory {
 	@Override
 	public boolean isVisible() {
 		return guiInterface != null && guiInterface.isVisible();
+	}
+
+	@Override
+	protected WoodPiece extractFromTree(LoggableTree tree, Object... parms) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

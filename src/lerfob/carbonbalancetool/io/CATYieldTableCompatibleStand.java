@@ -124,6 +124,7 @@ class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 			}
 		}
 	}
+
 	
 	
 }

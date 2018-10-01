@@ -38,6 +38,7 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 	private final Map<Integer, CATGrowthSimulationPlotSample> realizationMap;
 	private final int dateYr;
 	protected final CATGrowthSimulationRecordReader reader;
+
 	
 	CATGrowthSimulationCompositeStand(int dateYr, String standIdentification, CATGrowthSimulationRecordReader reader) {
 		this.dateYr = dateYr;
@@ -81,5 +82,6 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 			realizationMap.put(realization, new CATGrowthSimulationPlotSample(this));
 		}
 	}
+
 
 }

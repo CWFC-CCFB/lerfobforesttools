@@ -22,6 +22,7 @@ import java.util.List;
 
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
+import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 
 public final class DouglasFCBATreeLogger extends TreeLogger<DouglasFCBATreeLoggerParameters, DouglasFCBALoggableTree> {
 
@@ -84,8 +85,8 @@ public final class DouglasFCBATreeLogger extends TreeLogger<DouglasFCBATreeLogge
 	}
 
 	@Override
-	public boolean isCompatibleWith(Object referent) {
-		return referent instanceof DouglasFCBALoggableTree;
+	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
+		return check.getTreeInstance() instanceof DouglasFCBALoggableTree;
 	}
 
 	public static void main(String[] args) {

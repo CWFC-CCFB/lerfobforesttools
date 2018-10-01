@@ -54,12 +54,15 @@ import repicea.gui.genericwindows.REpiceaSplashWindow;
 import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
+import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerManager;
 import repicea.stats.Distribution;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
+import repicea.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
+import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
@@ -78,6 +81,15 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 
 	static {
 		XmlSerializerChangeMonitor.registerClassNameChange("repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider$SpeciesType", "repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider$SpeciesType");
+		
+		TreeLoggerManager.registerTreeLoggerName(BasicTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(EuropeanBeechBasicTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(MaritimePineBasicTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(WBirchProdVolTreeLogger.class.getName());
+		
+		TreeLoggerManager.registerTreeLoggerName(MathildeTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(DouglasFCBATreeLogger.class.getName());
 	}
 
 	private static class StandComparator implements Comparator<CATCompatibleStand> {
@@ -310,16 +322,18 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Object getAReferentTree() {
+	private TreeLoggerCompatibilityCheck getTreeLoggerCompatibilityCheck() {
+		Object treeInstance = null;
 		for (CATCompatibleStand stand : carbonCompartmentManager.getStandList()) {
 			for (StatusClass status : StatusClass.values()) {
 				Collection coll = stand.getTrees(status);
 				if (coll != null && !coll.isEmpty()) {
-					return coll.iterator().next();
+					treeInstance =  coll.iterator().next();
 				}
 			}
 		}
-		return null;
+		TreeLoggerCompatibilityCheck c = new TreeLoggerCompatibilityCheck(treeInstance);
+		return c;
 	}
 	
 	protected void setStandList() {
@@ -327,7 +341,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		clearTreeCollections();
 		carbonCompartmentManager.init(waitingStandList);
 		setReferentForBiomassParameters(carbonCompartmentManager.getStandList());
-		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(getAReferentTree()));
+		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(getTreeLoggerCompatibilityCheck()));
 		if (isGuiEnabled()) {
 			Runnable doRun = new Runnable() {
 				@Override
@@ -366,10 +380,10 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		getCarbonToolSettings().setReferentForBiomassParameters(referent);
 	}
 
-	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
+	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(TreeLoggerCompatibilityCheck check) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
-		if (referent != null) {
-			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLoggerManager.getInstance().getCompatibleTreeLoggers(referent);
+		if (check != null) {
+			List<TreeLoggerDescription> availableCompatibleTreeLoggerDescription = TreeLoggerManager.getInstance().getCompatibleTreeLoggers(check);
 			defaultTreeLoggerDescriptions.addAll(availableCompatibleTreeLoggerDescription);
 		} else {
 			defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));

@@ -21,6 +21,7 @@ package lerfob.treelogger.mathilde;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LogCategory;
+import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
 
 @SuppressWarnings("serial")
@@ -89,6 +90,15 @@ class MathildeTreeLogCategory extends LogCategory {
 	public String getName() {
 		Grade grade = Grade.valueOf(super.getName());
 		return grade.toString();
+	}
+
+	/*
+	 * Useless for this logger (non-Javadoc)
+	 * @see repicea.simulation.treelogger.LogCategory#extractFromTree(repicea.simulation.treelogger.LoggableTree, java.lang.Object[])
+	 */
+	@Override
+	protected WoodPiece extractFromTree(LoggableTree tree, Object... parms) {
+		return null;
 	}
 
 }
