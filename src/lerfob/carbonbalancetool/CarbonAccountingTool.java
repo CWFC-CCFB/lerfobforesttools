@@ -602,6 +602,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		tool.initializeTool(null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(DiameterBasedTreeLogger.class));
+		
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
