@@ -325,6 +325,9 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		int index = findSelectedTreeLoggerAmongAvailableTreeLoggers();
 		if (index > -1) {
 			availableTreeLoggerParameters.setElementAt(selectedTreeLoggerParameters, index);
+			if (guiInterface != null) {						// 20180926 BUG CORRECTION the combobox model was not updated if it already contained the selected tree logger 
+				guiInterface.synchronizeUIWithOwner();
+			}
 		} else {
 //			if (guiInterface != null) {
 //				guiInterface.setVisible(true);

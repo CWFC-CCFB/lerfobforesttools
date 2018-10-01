@@ -24,6 +24,7 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies
 import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
+import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 
 public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParameters, MathildeLoggableTree> {
 
@@ -78,8 +79,11 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 	}
 
 	@Override
-	public boolean isCompatibleWith(Object referent) {
-		return referent instanceof MathildeLoggableTree;
+	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
+		if (check instanceof MathildeLoggableTree) {		// exclusive relationship
+			return true;
+		} 
+		return false;
 	}
 
 }

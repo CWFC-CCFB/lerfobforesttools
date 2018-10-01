@@ -41,9 +41,12 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 	private final double areaHa;
 	private final String standID;
 	private final int dateYr;
+	private final List<String> speciesList;
 	
-	PythonCarbonToolCompatibleStand(double areaHa, String standID, int dateYr) {
+	PythonCarbonToolCompatibleStand(String species, double areaHa, String standID, int dateYr) {
 		trees = new HashMap<StatusClass, List<PythonCarbonToolCompatibleTree>>();
+		speciesList = new ArrayList<String>();
+		speciesList.add(species);
 		this.areaHa = areaHa;
 		this.standID = standID;
 		this.dateYr = dateYr;
@@ -106,6 +109,7 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 	public boolean isInterventionResult() {
 		return false;
 	}
+
 	
 	
 }

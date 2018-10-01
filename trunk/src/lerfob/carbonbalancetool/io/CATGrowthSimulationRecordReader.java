@@ -294,4 +294,6 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		}
 		return standList;
 	}
+	
+	protected List<String> getSpeciesList() {return speciesList;}
 }

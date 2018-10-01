@@ -41,6 +41,7 @@ import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
+import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.treelogger.basictreelogger.BasicTreeLogger;
@@ -97,7 +98,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	}
 	
 	@Override
-	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(Object referent) {
+	protected Vector<TreeLoggerDescription> findMatchingTreeLoggers(TreeLoggerCompatibilityCheck referent) {
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
@@ -168,7 +169,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		for (Integer dateYr : years) {
 			Map innerMap = (Map) ((Map) inputMap.get(dateYr)).get(keyFirstInnerMap);
 			
-			stand = new PythonCarbonToolCompatibleStand(areaHa, standID, dateYr);
+			stand = new PythonCarbonToolCompatibleStand(speciesForSimulation.name(), areaHa, standID, dateYr);
 			standList.add(stand);
 			
 			if (innerMap != null) {

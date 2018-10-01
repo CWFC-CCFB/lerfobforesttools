@@ -46,5 +46,6 @@ class CATGrowthSimulationPlot implements CATCompatibleStand {
 	protected void addTree(CATGrowthSimulationTree tree) {
 		getTrees(tree.getStatusClass()).add(tree);
 	}
+
 	
 }

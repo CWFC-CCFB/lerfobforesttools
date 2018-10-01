@@ -60,7 +60,7 @@ public class CarbonAccountingToolTest {
 		CATCompatibleStand stand;
 		CATCompatibleTree tree;
 		for (int i = 1; i <= 10; i++) {
-			stand = new CarbonToolCompatibleStandImpl(standID, areaHa, i*10);
+			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, i*10);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
 				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
@@ -93,7 +93,7 @@ public class CarbonAccountingToolTest {
 		CATCompatibleStand stand;
 		CATCompatibleTree tree;
 		for (int i = 1; i <= 10; i++) {
-			stand = new CarbonToolCompatibleStandImpl(standID, areaHa, i*10);
+			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, i*10);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
 				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
