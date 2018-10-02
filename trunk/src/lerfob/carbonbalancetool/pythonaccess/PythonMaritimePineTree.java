@@ -19,7 +19,7 @@
 package lerfob.carbonbalancetool.pythonaccess;
 
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
-import repicea.treelogger.maritimepine.MaritimePineBasicLoggableTree;
+import lerfob.treelogger.maritimepine.MaritimePineBasicLoggableTree;
 
 class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements MaritimePineBasicLoggableTree {
 
@@ -46,6 +46,7 @@ class PythonMaritimePineTree extends PythonCarbonToolCompatibleTree implements M
 	@Override
 	public double getHarvestedCrownVolumeM3() {return branchesVolume;}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public double getBasicWoodDensity() {
 		return AverageBasicDensity.MaritimePine.getBasicDensity();			// to ensure that the JUnit test will be validated

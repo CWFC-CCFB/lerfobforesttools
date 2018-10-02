@@ -19,7 +19,7 @@
 package lerfob.carbonbalancetool.pythonaccess;
 
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTree;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTree;
 
 class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements EuropeanBeechBasicTree {
 
@@ -41,6 +41,7 @@ class PythonEuropeanBeechTree extends PythonCarbonToolCompatibleTree implements 
 	@Override
 	public double getDbhCmStandardDeviation() {return dbhCmStandardDeviation;}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public double getBasicWoodDensity() {
 		return AverageBasicDensity.EuropeanBeech.getBasicDensity();		// to ensure that the JUnit test will be validated

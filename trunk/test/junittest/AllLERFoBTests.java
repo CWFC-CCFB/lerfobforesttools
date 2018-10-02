@@ -25,5 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
 				lerfob.predictor.dopalep.DopalepDbhIncPredictorTest.class,
 				lerfob.predictor.mathilde.recruitment.MathildeRecruitmentTest.class,
-				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTests.class})
+				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTests.class,
+				lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerTests.class,
+				lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTests.class})
 public class AllLERFoBTests {}
