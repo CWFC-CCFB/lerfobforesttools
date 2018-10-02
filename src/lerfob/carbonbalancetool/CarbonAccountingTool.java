@@ -62,7 +62,7 @@ import lerfob.treelogger.basictreelogger.BasicTreeLogger;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
-import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
+//import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
@@ -86,7 +86,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(EuropeanBeechBasicTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(MaritimePineBasicTreeLogger.class.getName());
-		TreeLoggerManager.registerTreeLoggerName(WBirchProdVolTreeLogger.class.getName());
+//		TreeLoggerManager.registerTreeLoggerName(WBirchProdVolTreeLogger.class.getName());
 		
 		TreeLoggerManager.registerTreeLoggerName(MathildeTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(DouglasFCBATreeLogger.class.getName());
