@@ -53,6 +53,9 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		TreeStatusDescription("Tree status", "Etat de l'arbre"),
 		TreeStatusHelp("This field must contain the status of the tree. It must be one of these four values:  alive, cut, dead, or windfall.", 
 				"Ce champ doit contenir l'\u00E9tat de l'arbre. La valeur doit \u00EAtre l'une des quatre valeurs suivantes: alive, cut, dead, or windfall."),
+		TreeDBHDescription("Tree DBH", "Diam\u00E8tre d'arbre"),
+		TreeDBHHelp("This field must contain the diameter at breast height (cm). It is a double. This field is optional.",
+				"Ce champ doit contenir le diam\u00E8tre \u00E0 1,3 m (cm). Il s'agit d'un double. Ce champ est facultatif."),
 		TreeFreqDescription("Tree frequency", "Fr\u00E9quence d'arbre"),
 		TreeFreqHelp("This field must contain the number of trees represented by the record in the plot. It is a double. This field is optional. If it is not specified, CAT assumes that the frequency is one.",
 				"Ce champ doit contenir le nombre d'arbres repr\u00E9sent\u00E9s par cet enregistrement dans la placette. Il s'agit d'un double. Ce champ est facultatif. S'il n'est pas sp\u00E9cifi\u00E9, CAT utilise une fr\u00E9quence unitaire."),
@@ -84,6 +87,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		PlotArea(CATGrowthSimulationFieldLevel.Stand),
 		Species(CATGrowthSimulationFieldLevel.Tree),
 		Status(CATGrowthSimulationFieldLevel.Tree),
+		DBH(CATGrowthSimulationFieldLevel.Tree),
 		Freq(CATGrowthSimulationFieldLevel.Tree),
 		Volume(CATGrowthSimulationFieldLevel.Tree);
 		
@@ -171,6 +175,13 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 				MessageID.TreeStatusHelp.toString(),
 				FieldType.String);
 		ifeList.add(ife);
+		ife = new ImportFieldElement(CATGrowthSimulationFieldID.DBH,
+				MessageID.TreeDBHDescription.toString(), 
+				getClass().getSimpleName() + ".treeDBHDescription", 
+				true, 
+				MessageID.TreeDBHHelp.toString(),
+				FieldType.String);
+		ifeList.add(ife);
 		ife = new ImportFieldElement(CATGrowthSimulationFieldID.Freq,
 				MessageID.TreeFreqDescription.toString(), 
 				getClass().getSimpleName() + ".treeFreqDescription", 
@@ -213,7 +224,13 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		
 		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Status);
 		StatusClass statusClass = StatusClass.valueOf(oArray[index].toString().toLowerCase().trim());
-		
+
+		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.DBH);
+		double dbhCm = -1d;
+		if (oArray[index] != null) { 	// means that a realization field has been specified
+			dbhCm = Double.parseDouble(oArray[index].toString());
+		}
+
 		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Freq);
 		double numberOfTrees = 1d;		// default value for this optional field
 		if (oArray[index] != null) { 	// means that a realization field has been specified
@@ -232,7 +249,15 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		CATGrowthSimulationPlotSample plotSample = compositeStand.getRealization(realization);
 		plotSample.createPlot(plotID, plotAreaHa);
 		CATGrowthSimulationPlot plot = plotSample.getPlot(plotID);
-		plot.addTree(new CATGrowthSimulationTree(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName));
+
+		CATGrowthSimulationTree tree;
+		if (dbhCm > 0d) {
+			tree = new CATGrowthSimulationTreeWithDBH(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
+		} else {
+			tree = new CATGrowthSimulationTree(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName);
+		}
+		
+		plot.addTree(tree);
 		if (!speciesList.contains(originalSpeciesName)) {
 			speciesList.add(originalSpeciesName);
 		}
