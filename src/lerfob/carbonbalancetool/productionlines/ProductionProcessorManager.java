@@ -54,9 +54,10 @@ import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
-import repicea.treelogger.basictreelogger.BasicTreeLogger;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -80,6 +81,20 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.defaulttreelogger.CATDefaultTreeLoggerParameters", "repicea.treelogger.basictreelogger.BasicTreeLoggerParameters");
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.defaulttreelogger.CATDefaultTreeLoggerParametersDialog", "repicea.treelogger.basictreelogger.BasicTreeLoggerParametersDialog");
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.defaulttreelogger.CATWoodPiece", "repicea.treelogger.basictreelogger.BasicTreeLoggerWoodPiece");
+		
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.basictreelogger.BasicTreeLogger", "lerfob.treelogger.basictreelogger.BasicTreeLogger");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.basictreelogger.BasicTreeLoggerParameters", "lerfob.treelogger.basictreelogger.BasicTreeLoggerParameters");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.basictreelogger.BasicLogCategory", "lerfob.treelogger.basictreelogger.BasicLogCategory");
+		
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger", "lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters", "lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogCategory", "lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogCategory");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters$Grade", "lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters$Grade");
+
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger", "lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters", "lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.maritimepine.MaritimePineBasicTreeLogCategory", "lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogCategory");
+		XmlSerializerChangeMonitor.registerClassNameChange("repicea.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters$Grade", "lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters$Grade");
 	}
 	
 	/**
@@ -147,6 +162,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(DiameterBasedTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
 //		try {

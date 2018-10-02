@@ -44,9 +44,9 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.stats.estimates.MonteCarloEstimate;
-import repicea.treelogger.basictreelogger.BasicTreeLogger;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;

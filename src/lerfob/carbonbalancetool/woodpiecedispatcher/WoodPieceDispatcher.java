@@ -34,7 +34,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionLineEvent;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManagerChangeListener;
 import repicea.simulation.treelogger.TreeLoggerWrapper;
-import repicea.treelogger.basictreelogger.BasicTreeLoggerParameters;
+import lerfob.treelogger.basictreelogger.BasicTreeLoggerParameters;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;

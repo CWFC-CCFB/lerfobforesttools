@@ -15,19 +15,20 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters;
 import repicea.io.javacsv.CSVReader;
 import repicea.serial.xml.XmlDeserializer;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.WoodPiece;
-import repicea.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import repicea.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters;
-import repicea.treelogger.maritimepine.MaritimePineBasicTreeLogger;
-import repicea.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters;
 import repicea.util.ObjectUtility;
 
+@SuppressWarnings("deprecation")
 public class PythonAccessTests {
 
 	private static Map<?,?> InputMap;
