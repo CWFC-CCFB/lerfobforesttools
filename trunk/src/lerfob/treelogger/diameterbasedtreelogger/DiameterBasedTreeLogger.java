@@ -46,7 +46,7 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 
 	@Override
 	public DiameterBasedTreeLoggerParameters createDefaultTreeLoggerParameters() {
-		return new DiameterBasedTreeLoggerParameters(DiameterBasedTreeLogger.class);
+		return new DiameterBasedTreeLoggerParameters();
 	}
 	
 	@Override

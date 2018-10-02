@@ -55,9 +55,6 @@ public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<Diameter
 		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
-	
-	
-	
 	protected DiameterBasedTreeLogCategoryPanel(DiameterBasedTreeLogCategory logCategory) {
 		super(logCategory);
 		nameTextField.setText(logCategory.getName());

@@ -77,9 +77,20 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 	
 	private transient DiameterBasedTreeLoggerParametersDialog guiInterface;
 
+	/**
+	 * Constructor for derived classes
+	 * @param clazz a TreeLogger-derived class
+	 */
 	protected DiameterBasedTreeLoggerParameters(Class<? extends TreeLogger<?,?>> clazz) {
 		super(clazz);
 		initializeDefaultLogCategories();
+	}
+	
+	/**
+	 * Official constructor.
+	 */
+	public DiameterBasedTreeLoggerParameters() {
+		this(DiameterBasedTreeLogger.class);
 	}
 
 	@Override
