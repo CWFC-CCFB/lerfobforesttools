@@ -19,6 +19,9 @@
 package lerfob.treelogger.basictreelogger;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.LogCategoryPanel;
 import repicea.simulation.treelogger.LoggableTree;
@@ -85,10 +88,12 @@ public class BasicLogCategory extends LogCategory {
 
 
 	@Override
-	protected BasicTreeLoggerWoodPiece extractFromTree(LoggableTree tree, Object... parms) {
+	protected List<BasicTreeLoggerWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
+		List<BasicTreeLoggerWoodPiece> pieces = new ArrayList<BasicTreeLoggerWoodPiece>();
 		double volumeM3 = tree.getCommercialVolumeM3() * volumeProportionToBeProcessedInThisCategory;
 		BasicTreeLoggerWoodPiece piece = new BasicTreeLoggerWoodPiece(this, tree, volumeM3); 
-		return piece;
+		pieces.add(piece);
+		return pieces;
 	}
 
 }

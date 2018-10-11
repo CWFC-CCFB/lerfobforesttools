@@ -18,6 +18,9 @@
  */
 package lerfob.treelogger.diameterbasedtreelogger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
@@ -26,7 +29,9 @@ import repicea.simulation.treelogger.WoodPiece;
 public class DiameterBasedTreeLogCategory extends LogCategory {
 	
 	protected final Double minimumDbhCm;
-	protected double proportionCommercialVolume;
+	protected double conversionFactor;
+	
+	protected DiameterBasedTreeLogCategory subCategory;
 	
 	private transient DiameterBasedTreeLogCategoryPanel guiInterface;
 	protected final Enum<?> logGrade;
@@ -38,7 +43,12 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	 * @param minimumDbhCm the minimum dbh for the tree to be eligible
 	 * @param isFromStump true if this volume comes from the stump
 	 */
-	public DiameterBasedTreeLogCategory(Enum<?> logGrade, String species, double minimumDbhCm, boolean isFromStump) {
+	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
+			String species, 
+			double minimumDbhCm, 
+			double conversionFactor, 
+			boolean isFromStump, 
+			DiameterBasedTreeLogCategory subCategory) {
 		super(logGrade.toString(), isFromStump);
 		setSpecies(species);
 		this.logGrade = logGrade;
@@ -47,6 +57,8 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 		} else {
 			this.minimumDbhCm = minimumDbhCm;
 		}
+		this.conversionFactor = conversionFactor;
+		this.subCategory = subCategory;
 	}
 
 		
@@ -83,31 +95,45 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	}
 
 	@Override
-	protected DiameterBasedWoodPiece extractFromTree(LoggableTree tree, Object... parms) {
-		DiameterBasedWoodPiece piece = null;
+	protected List<DiameterBasedWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
+		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
-			DiameterBasedTreeLoggerParameters parameters = (DiameterBasedTreeLoggerParameters) parms[0];
-			boolean isEligibleToSmallLumberWood = !parameters.getLargeLumberWoodLogCategory().isEligible(tree);
-			double volumeToBeProcessed = 0d;
-			switch((DiameterBasedTreeLoggerParameters.Grade) logGrade) {
-			case EnergyWood:
-				volumeToBeProcessed = tree.getCommercialVolumeM3() * (1 - proportionCommercialVolume); 
-				break;
-			case SmallLumberWood:
-				if (isEligibleToSmallLumberWood) {
-					volumeToBeProcessed = tree.getCommercialVolumeM3() * proportionCommercialVolume; 
-				}
-				break;
-			case LargeLumberWood:
-				volumeToBeProcessed = tree.getCommercialVolumeM3() * proportionCommercialVolume; 
-				break;
+			pieces = new ArrayList<DiameterBasedWoodPiece>();
+			double potentialVolume = tree.getCommercialVolumeM3();
+			if (parms != null && parms[0] instanceof Double) {
+				potentialVolume = (Double) parms[0];
 			}
-			if (volumeToBeProcessed > 0) {
-				piece = new DiameterBasedWoodPiece(this, tree, volumeToBeProcessed);
-			} 
-		}
-		return piece;
+//			DiameterBasedTreeLoggerParameters parameters = (DiameterBasedTreeLoggerParameters) parms[0];
+//			boolean isEligibleToSmallLumberWood = !parameters.getLargeLumberWoodLogCategory().isEligible(tree);
+//			double volumeToBeProcessed = 0d;
+//			switch((DiameterBasedTreeLoggerParameters.Grade) logGrade) {
+//			case EnergyWood:
+//				volumeToBeProcessed = tree.getCommercialVolumeM3(); 
+//				break;
+//			case SmallLumberWood:
+//				if (isEligibleToSmallLumberWood) {
+//					volumeToBeProcessed = tree.getCommercialVolumeM3() * conversionFactor; 
+//				}
+//				break;
+//			case LargeLumberWood:
+//				volumeToBeProcessed = tree.getCommercialVolumeM3() * conversionFactor; 
+//				break;
+//			}
+//			if (volumeToBeProcessed > 0) {
+//				piece = new DiameterBasedWoodPiece(this, tree, volumeToBeProcessed);
+//			} 
+			double volumeToBeProcessed = potentialVolume * conversionFactor;
+			if (volumeToBeProcessed > 0d) {
+				pieces.add(new DiameterBasedWoodPiece(this, tree, volumeToBeProcessed));
+			}
+			if (subCategory != null) {
+				volumeToBeProcessed = potentialVolume * (1 - conversionFactor);
+				pieces.addAll(subCategory.extractFromTree(tree, volumeToBeProcessed));
+			}
+ 		}
+		return pieces;
 	}
+
 	
 	
 }

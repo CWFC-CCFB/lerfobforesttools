@@ -18,13 +18,16 @@
  */
 package lerfob.treelogger.europeanbeech;
 
-import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
-import repicea.simulation.treelogger.LoggableTree;
-import repicea.stats.distributions.utility.GaussianUtility;
+import java.util.ArrayList;
+import java.util.List;
+
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters.Grade;
+import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
+import repicea.simulation.treelogger.LoggableTree;
+import repicea.stats.distributions.utility.GaussianUtility;
 
 @SuppressWarnings("serial")
 public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCategory {
@@ -37,7 +40,7 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 	 * @param merchantableVolumeProportion the proportion of the merchantable volume that falls into this category
 	 */
 	protected EuropeanBeechBasicTreeLogCategory(Grade logGrade, String species, double smallEndDiameter) {
-		super(logGrade, species, smallEndDiameter, false);
+		super(logGrade, species, smallEndDiameter, 0d, false, null);	// conversion factors are not used in this TreeLogger class
 	}
 
 	@Override
@@ -61,9 +64,10 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 	
 	
 	@Override
-	protected DiameterBasedWoodPiece extractFromTree(LoggableTree tree, Object... parms) {
-		DiameterBasedWoodPiece piece = null;
+	protected List<DiameterBasedWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
+		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
+			pieces = new ArrayList<DiameterBasedWoodPiece>();
 			double mqd = ((DiameterBasedLoggableTree) tree).getDbhCm();
 			double dbhStandardDeviation = 0d;
 			if (tree instanceof DbhCmStandardDeviationProvider) {
@@ -121,32 +125,32 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 			switch(grade) {
 			case EnergyWood:
 				if (energyWoodProportion > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3());
+					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3()));
 				} 
 				break;
 			case IndustryWood:
 				if (industryWoodProportion > 0) {
-						piece = new DiameterBasedWoodPiece(this, tree, industryWoodProportion * tree.getCommercialVolumeM3());
+						pieces.add(new DiameterBasedWoodPiece(this, tree, industryWoodProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			case SawlogLowQuality:
 				if (lowQualitySawlogProportion > 0) {
-						piece = new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3());
+						pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			case SawlogRegularQuality:
 				if (regularQualitySawlogProportion > 0) {
-						piece = new DiameterBasedWoodPiece(this, tree, regularQualitySawlogProportion * tree.getCommercialVolumeM3());
+						pieces.add(new DiameterBasedWoodPiece(this, tree, regularQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			case VeneerQuality: 
 				if (veneerProportion > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, veneerProportion * tree.getCommercialVolumeM3());
+					pieces.add(new DiameterBasedWoodPiece(this, tree, veneerProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			}
 		}
-		return piece;
+		return pieces;
 	}
 
 }

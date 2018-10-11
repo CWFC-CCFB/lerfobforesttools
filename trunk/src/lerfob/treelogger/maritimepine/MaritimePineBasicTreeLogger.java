@@ -32,6 +32,14 @@ public class MaritimePineBasicTreeLogger extends DiameterBasedTreeLogger {
 
 	protected static double LowQualityPercentageWithinHighQualityGrade = 0.65;
 
+	/**
+	 * General constructor
+	 */
+	public MaritimePineBasicTreeLogger() {
+		super(false);
+	}
+	
+	
 	@Override
 	public MaritimePineBasicTreeLoggerParameters createDefaultTreeLoggerParameters() {
 		return new MaritimePineBasicTreeLoggerParameters();
