@@ -27,5 +27,6 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.mathilde.recruitment.MathildeRecruitmentTest.class,
 				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTests.class,
 				lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerTests.class,
-				lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTests.class})
+				lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTests.class,
+				lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLoggerTests.class})
 public class AllLERFoBTests {}

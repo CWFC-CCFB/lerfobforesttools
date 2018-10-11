@@ -18,12 +18,19 @@
  */
 package lerfob.treelogger.europeanbeech;
 
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 
 public class EuropeanBeechBasicTreeLogger extends DiameterBasedTreeLogger {
 
+
+	/**
+	 * General constructor
+	 */
+	public EuropeanBeechBasicTreeLogger() {
+		super(false);
+	}
 	
 	@Override
 	public EuropeanBeechBasicTreeLoggerParameters createDefaultTreeLoggerParameters() {
@@ -45,6 +52,6 @@ public class EuropeanBeechBasicTreeLogger extends DiameterBasedTreeLogger {
 		return check.getTreeInstance() instanceof EuropeanBeechBasicTree; 
 	}
 	
-	
+
 }
 

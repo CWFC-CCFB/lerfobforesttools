@@ -18,6 +18,8 @@
  */
 package lerfob.treelogger.douglasfirfcba;
 
+import java.util.List;
+
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerParameters.Grade;
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.LoggableTree;
@@ -123,8 +125,7 @@ class DouglasFCBALogCategory extends LogCategory {
 	}
 
 	@Override
-	protected WoodPiece extractFromTree(LoggableTree tree, Object... parms) {
-		// TODO Auto-generated method stub
+	protected List<WoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
 		return null;
 	}
 

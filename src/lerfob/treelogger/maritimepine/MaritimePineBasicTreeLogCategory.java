@@ -1,18 +1,21 @@
 package lerfob.treelogger.maritimepine;
 
-import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
-import repicea.simulation.treelogger.LoggableTree;
-import repicea.stats.distributions.utility.GaussianUtility;
+import java.util.ArrayList;
+import java.util.List;
+
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters.Grade;
+import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
+import repicea.simulation.treelogger.LoggableTree;
+import repicea.stats.distributions.utility.GaussianUtility;
 
 @SuppressWarnings("serial")
 public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCategory {
 
 	protected MaritimePineBasicTreeLogCategory(Enum<?> logGrade, String species, double smallEndDiameter, boolean isFromStump) {
-		super(logGrade, species, smallEndDiameter, isFromStump);
+		super(logGrade, species, smallEndDiameter, 0d, isFromStump, null);	// conversion factors are not used in this TreeLogger class
 	}
 	
 	@Override
@@ -32,9 +35,10 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 	}
 	
 	@Override
-	protected DiameterBasedWoodPiece extractFromTree(LoggableTree tree, Object... parms) {
-		DiameterBasedWoodPiece piece = null;
+	protected List<DiameterBasedWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
+		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
+			pieces = new ArrayList<DiameterBasedWoodPiece>();
 			double mqd = ((DiameterBasedLoggableTree) tree).getDbhCm();
 			double dbhStandardDeviation = 0d;
 			if (tree instanceof DbhCmStandardDeviationProvider) {
@@ -74,34 +78,34 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 			case Stump:
 				double stumpVolumeM3 = ((MaritimePineBasicLoggableTree) tree).getHarvestedStumpVolumeM3();
 				if  (stumpVolumeM3 > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, stumpVolumeM3);
+					pieces.add(new DiameterBasedWoodPiece(this, tree, stumpVolumeM3));
 				} 
 				break;
 			case Crown:
 				double crownVolumeM3 = ((MaritimePineBasicLoggableTree) tree).getHarvestedCrownVolumeM3();
 				if  (crownVolumeM3 > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, crownVolumeM3);
+					pieces.add(new DiameterBasedWoodPiece(this, tree, crownVolumeM3));
 				} 
 				break;
 			case IndustryWood:
 				if (energyWoodProportion > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3());
+					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3()));
 				} 
 				break;
 			case SawlogLowQuality:
 				if (lowQualitySawlogProportion > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3());
+					pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			case SawlogHighQuality:
 				if (highQualitySawlogProportion > 0) {
-					piece = new DiameterBasedWoodPiece(this, tree, highQualitySawlogProportion * tree.getCommercialVolumeM3());
+					pieces.add(new DiameterBasedWoodPiece(this, tree, highQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			}
 
 		}
-		return piece;
+		return pieces;
 	}
 
 }

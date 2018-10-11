@@ -26,17 +26,33 @@ import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 
 public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerParameters, DiameterBasedLoggableTree> {
 
+	protected final boolean shouldBreakAfterGettingPieces;
+	
+	public DiameterBasedTreeLogger() {
+		this(true);
+	}
 
-	public DiameterBasedTreeLogger() {}
+	/**
+	 * Constructor for derived class. 
+	 * @param shouldBreakAfterGettingPieces true should be preferred to false which is a former implementation
+	 */
+	protected DiameterBasedTreeLogger(boolean shouldBreakAfterGettingPieces) {
+		this.shouldBreakAfterGettingPieces = shouldBreakAfterGettingPieces;
+	}
 	
 	@Override
 	protected void logThisTree(DiameterBasedLoggableTree tree) {
 		List<DiameterBasedTreeLogCategory> logCategories = params.getSpeciesLogCategories(params.getSpeciesName());
-		DiameterBasedWoodPiece piece;
+		List<DiameterBasedWoodPiece> pieces;
 		for (DiameterBasedTreeLogCategory logCategory : logCategories) {
-			piece = logCategory.extractFromTree(tree, params);
-			if (piece != null) {
-				addWoodPiece(tree, piece);	
+			pieces = logCategory.extractFromTree(tree, params);
+			if (pieces != null && !pieces.isEmpty()) {
+				for (DiameterBasedWoodPiece piece : pieces) {
+					addWoodPiece(tree, piece);	
+				}
+				if (shouldBreakAfterGettingPieces) {
+					break;
+				}
 			} 
 		}
 	}

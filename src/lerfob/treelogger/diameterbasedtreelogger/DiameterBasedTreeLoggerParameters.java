@@ -73,10 +73,8 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 		}
 	}
 
-	private static DiameterBasedTreeLogCategory LargeLumber;
-	
 	private transient DiameterBasedTreeLoggerParametersDialog guiInterface;
-
+	
 	/**
 	 * Constructor for derived classes
 	 * @param clazz a TreeLogger-derived class
@@ -99,14 +97,16 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 		String species = getSpeciesName();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
-		categories.add(new DiameterBasedTreeLogCategory(Grade.LargeLumberWood, species, 37.5, false));	// not small end but dbh in this case
-		categories.add(new DiameterBasedTreeLogCategory(Grade.SmallLumberWood, species, 27.5, false));
-		categories.add(new DiameterBasedTreeLogCategory(Grade.EnergyWood, species, 7, false));
+		DiameterBasedTreeLogCategory energyWood = new DiameterBasedTreeLogCategory(Grade.EnergyWood, species, 7, 1d, false, null);
+		categories.add(new DiameterBasedTreeLogCategory(Grade.LargeLumberWood, species, 37.5, 0.84, false, energyWood));	// not small end but dbh in this case
+		categories.add(new DiameterBasedTreeLogCategory(Grade.SmallLumberWood, species, 27.5, 0.50, false, energyWood));
+		categories.add(energyWood);
 	}
 
 	@Override
 	public boolean isCorrect() {return true;}
 
+	
 	@Override
 	public DiameterBasedTreeLoggerParametersDialog getUI(Container parent) {
 		if (guiInterface == null) {
@@ -120,16 +120,16 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
-	protected DiameterBasedTreeLogCategory getLargeLumberWoodLogCategory() {
-		if (LargeLumber == null) {
-			for (DiameterBasedTreeLogCategory lc : this.getLogCategories().get(TreeLoggerParameters.ANY_SPECIES)) {
-				if (lc.getGrade() == Grade.LargeLumberWood) {
-					LargeLumber = lc;
-				}
-			}
-		}
-		return LargeLumber;
-	}
+//	protected DiameterBasedTreeLogCategory getLargeLumberWoodLogCategory() {
+//		if (LargeLumber == null) {
+//			for (DiameterBasedTreeLogCategory lc : this.getLogCategories().get(TreeLoggerParameters.ANY_SPECIES)) {
+//				if (lc.getGrade() == Grade.LargeLumberWood) {
+//					LargeLumber = lc;
+//				}
+//			}
+//		}
+//		return LargeLumber;
+//	}
 	
 	public static void main(String[] args) {
 		DiameterBasedTreeLoggerParameters params = new DiameterBasedTreeLoggerParameters(DiameterBasedTreeLogger.class);

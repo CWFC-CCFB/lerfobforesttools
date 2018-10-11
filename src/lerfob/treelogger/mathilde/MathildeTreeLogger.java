@@ -72,11 +72,6 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 		}
 	}
 
-	public static void main(String[] args) {
-		MathildeTreeLogger treeLogger = new MathildeTreeLogger();
-		MathildeTreeLoggerParameters params = treeLogger.createDefaultTreeLoggerParameters();
-		params.showUI(null);
-	}
 
 	@Override
 	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
@@ -85,5 +80,12 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 		} 
 		return false;
 	}
+	
+	public static void main(String[] args) {
+		MathildeTreeLogger treeLogger = new MathildeTreeLogger();
+		MathildeTreeLoggerParameters params = treeLogger.createDefaultTreeLoggerParameters();
+		params.showUI(null);
+	}
+
 
 }
