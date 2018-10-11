@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.pythonaccess;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,11 @@ import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
@@ -44,9 +49,6 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.stats.estimates.MonteCarloEstimate;
-import lerfob.treelogger.basictreelogger.BasicTreeLogger;
-import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
@@ -139,7 +141,13 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return super.getCarbonToolSettings();
 	}
 	
-	
+	@Override
+	protected void shutdown(int shutdownCode) {
+		System.out.println("Shutting down CAT...");
+		CATSensitivityAnalysisSettings.getInstance().clear();
+		System.exit(shutdownCode);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
 
@@ -235,12 +243,14 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			Map<String, Double> innerOutputMap1 = outputMap.get(year);
 			Map<UseClass, Map<Element, MonteCarloEstimate>> innerInputMap2 = productEvolutionMap.get(year);
 			for (UseClass useClass : UseClass.values()) {
-				String key = "BiomassMgHa" + useClass.name().toUpperCase();
-				if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
-					Map<Element, MonteCarloEstimate> amountMap = innerInputMap2.get(useClass);
-					innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().m_afData[0][0]);
-				} else {
-					innerOutputMap1.put(key, 0d);
+				if (useClass != UseClass.EXTRACTIVE) {
+					String key = "BiomassMgHa" + useClass.name().toUpperCase();
+					if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
+						Map<Element, MonteCarloEstimate> amountMap = innerInputMap2.get(useClass);
+						innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().m_afData[0][0]);
+					} else {
+						innerOutputMap1.put(key, 0d);
+					}
 				}
 			}
 			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.m_afData[years.indexOf(year)][0]);
@@ -269,7 +279,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return lerfobRevision;
 	}
 	
-	
+	private static final String LISTEN = "-listen";
+	private static final String CALLBACK = "-callback";
 	
 	/**
 	 * Start method for connection to Python.
@@ -288,11 +299,51 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		System.out.println("Parameters received:" + inputString);
 		REpiceaSystem.setLanguageFromMain(args, Language.English);
 		System.out.println("Language set to: " + REpiceaTranslator.getCurrentLanguage().name());
+		
+		List<String> argumentList = Arrays.asList(args);
+		Integer listeningPort = null;
+		Integer callbackPort = null;
+
+		if (argumentList.contains(LISTEN) && argumentList.contains(CALLBACK)) {
+			int indexListen = argumentList.indexOf(LISTEN) + 1;
+			int indexCallback = argumentList.indexOf(CALLBACK) + 1;
+			if (indexListen < argumentList.size() && indexCallback < argumentList.size()) {
+				String newListeningPort = argumentList.get(indexListen);
+				try {
+					listeningPort = Integer.parseInt(newListeningPort);
+					String newCallbackPort = argumentList.get(indexCallback);
+					try {
+						if (newCallbackPort.equals(newListeningPort)) {
+							throw new InvalidParameterException("The callback and the listing ports should be different!");
+						}
+						callbackPort = Integer.parseInt(newCallbackPort);
+					} catch (NumberFormatException e) {
+						System.out.println("Unable to set callback port to " + newCallbackPort +".");
+						System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
+					} catch (InvalidParameterException e) {
+						System.out.println(e.getMessage());
+						System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Unable to listen port " + newListeningPort +".");
+					System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
+				}
+			}
+		} 
+		
 		PythonAccessPoint pap = new PythonAccessPoint();
-//		pap.showInterface();
-		GatewayServer gatewayServer = new GatewayServer(pap);
+		
+		GatewayServer gatewayServer;
+		String portMessage;
+		if (listeningPort != null && callbackPort != null) {
+			portMessage = "ports " + listeningPort.toString() + " and " + callbackPort.toString() + "...";
+			gatewayServer = new GatewayServer(pap, listeningPort, callbackPort, 0, 0, null);
+		} else {
+			portMessage = "default ports 25333 and 25334...";
+			gatewayServer = new GatewayServer(pap); // default port
+		}
 		gatewayServer.start();
-		System.out.println("Gateway Server Started");
+		System.out.println("Gateway Server started on " + portMessage);
 	}
 	
 }
