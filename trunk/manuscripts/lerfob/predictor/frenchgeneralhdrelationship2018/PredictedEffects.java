@@ -81,7 +81,7 @@ public class PredictedEffects {
 		
 	}
 	
-	static class Stand implements FrenchHDRelationship2018Stand {
+	static class Stand implements FrenchHDRelationship2018ExtStand {
 
 		private final double plotAreaHa = 15d * 15d * Math.PI * .0001;
 
@@ -131,6 +131,15 @@ public class PredictedEffects {
 
 		@Override
 		public double getMeanPrecipitationOfGrowingSeason() {return meanPrecipitationGrowingSeason;}
+
+		@Override
+		public double getLatitudeDeg() {return 0;}
+
+		@Override
+		public double getLongitudeDeg() {return 0;}
+
+		@Override
+		public double getElevationM() {return 0;}
 		
 	}
 	
@@ -298,7 +307,8 @@ public class PredictedEffects {
 
 	public void predictVolumeChangeForTemperatureIncrease() {
 		System.out.println("Running climate warming simulation...");
-		List<FrenchHDRelationship2018StandImpl> Stands = FrenchHDRelationship2018PredictorTest.readTrees();
+		FrenchHDRelationship2018PredictorTest.readTrees();
+		List<FrenchHDRelationship2018ExtStandImpl> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
 		Map<FrenchHd2018Species, List<Double>> obsMap = new HashMap<FrenchHd2018Species, List<Double>>();
 		Map<FrenchHd2018Species, List<Double>> predMap = new HashMap<FrenchHd2018Species, List<Double>>();
 		for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
@@ -313,7 +323,7 @@ public class PredictedEffects {
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				obsMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}
-			((FrenchHDRelationship2018StandImpl) stand).meanTemp = stand.getMeanTemperatureOfGrowingSeason() + 1.5;
+			((FrenchHDRelationship2018ExtStandImpl) stand).meanTemp = ((FrenchHDRelationship2018ExtStandImpl) stand).getMeanTemperatureOfGrowingSeason() + 1.5;
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;

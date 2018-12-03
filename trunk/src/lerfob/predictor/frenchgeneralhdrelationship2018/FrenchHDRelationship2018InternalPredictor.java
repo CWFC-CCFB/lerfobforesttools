@@ -1,7 +1,7 @@
 /*
  * This file is part of the lerfob-forestools library.
  *
- * Copyright (C) 2010-2014 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ * Copyright (C) 2010-2018 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
+import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.ClimatePoint;
 import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -53,13 +54,17 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	private List<Integer> effectList;
 	private final FrenchHd2018Species species;
 	private FertilityClass currentFertilityClass;
+	private final FrenchHDRelationship2018Predictor mainPredictor;
+	
 	
 	protected FrenchHDRelationship2018InternalPredictor(boolean isParameterVariabilityEnabled, 
 			boolean isRandomEffectVariabilityEnabled, 
 			boolean isResidualVariabilityEnabled, 
-			FrenchHd2018Species species) {
+			FrenchHd2018Species species,
+			FrenchHDRelationship2018Predictor mainPredictor) {
 		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 		this.species = species;
+		this.mainPredictor = mainPredictor;
 		currentFertilityClass = FertilityClass.Unknown;	// default value
 	}
 
@@ -159,10 +164,19 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 		oXVector.resetMatrix();
 		int pointer = 0;
 		
-		double meanPrec = stand.getMeanPrecipitationOfGrowingSeason();
-		double meanTemp = stand.getMeanTemperatureOfGrowingSeason();
+		double meanPrec;
+		double meanTemp;
+		if (stand instanceof FrenchHDRelationship2018ExtStand) {
+			FrenchHDRelationship2018ExtStand s = (FrenchHDRelationship2018ExtStand) stand;
+			meanPrec = s.getMeanPrecipitationOfGrowingSeason();
+			meanTemp = s.getMeanTemperatureOfGrowingSeason();
+		} else {
+			ClimatePoint cp = mainPredictor.getNearestClimatePoint(stand);
+			meanPrec = cp.meanSeasonalPrec;
+			meanTemp = cp.meanSeasonalTemp;
+		}
+		
 		double lnDbh = tree.getLnDbhCmPlus1();
-//		double socialIndex = tree.getDbhCm() - stand.getMeanQuadraticDiameterCm(); // former version changed for next line MF2018-09-10
 		double socialIndex = tree.getDbhCm() / stand.getMeanQuadraticDiameterCm(); // former version changed for next line MF2018-09-10
 		
 		double lnDbh2 = tree.getSquaredLnDbhCmPlus1();

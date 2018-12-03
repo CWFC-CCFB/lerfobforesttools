@@ -18,10 +18,12 @@
  */
 package lerfob.predictor.frenchgeneralhdrelationship2018;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
+import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.ClimatePoint;
 import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -50,7 +52,9 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	
 	private final Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> predictorMap;
 		
-	
+	private final Map<String, ClimatePoint> originalClimateVariableMap;
+	private final FrenchHDRelationship2018ClimateGenerator climateGenerator;
+
 	/**
 	 * General constructor for all combinations of uncertainty sources.
 	 * @param isVariabilityEnabled a boolean that enables the variability at the parameter level
@@ -62,8 +66,26 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	FrenchHDRelationship2018Predictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariablityEnabled, boolean isResidualErrorVariabilityEnabled) {
 		super(isParameterVariabilityEnabled, isRandomEffectVariablityEnabled, isResidualErrorVariabilityEnabled);
 		predictorMap = new HashMap<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor>();
+		originalClimateVariableMap = new HashMap<String, ClimatePoint>();
+		climateGenerator = new FrenchHDRelationship2018ClimateGenerator();
 		init();
 	}
+	
+	
+	ClimatePoint getNearestClimatePoint(FrenchHDRelationship2018Stand stand) { 
+		if (originalClimateVariableMap.containsKey(stand.getSubjectId())) {
+			return originalClimateVariableMap.get(stand.getSubjectId());
+		} else {
+			ClimatePoint cp = climateGenerator.getNearestClimatePoint(stand.getLongitudeDeg(), stand.getLatitudeDeg());
+			if (cp == null) {
+				throw new InvalidParameterException("The geographical coordinates are not located in France!");
+			} else {
+				originalClimateVariableMap.put(stand.getSubjectId(), cp);
+				return cp;
+			}
+		}
+	}
+	
 	
 	/**
 	 * Default constructor with all sources of uncertainty disabled.
@@ -97,7 +119,8 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 				FrenchHDRelationship2018InternalPredictor internalPredictor = new FrenchHDRelationship2018InternalPredictor(isParametersVariabilityEnabled,
 						isRandomEffectsVariabilityEnabled,
 						isResidualVariabilityEnabled,
-						species);
+						species,
+						this);
 				int index = species.getIndex();
 				
 				Matrix mean = betaMap.get(index);
