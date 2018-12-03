@@ -1,5 +1,7 @@
 package lerfob.predictor.frenchgeneralhdrelationship2018;
 
+import java.security.InvalidParameterException;
+
 import repicea.simulation.HierarchicalLevel;
 
 class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
@@ -22,7 +24,13 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 		this.reference = pred;
 		this.stand = stand;
 		this.weight = weight;
-		((FrenchHDRelationship2018StandImpl) this.stand).addTree(this); 
+		if (stand instanceof FrenchHDRelationship2018StandImpl) {
+			((FrenchHDRelationship2018StandImpl) this.stand).addTree(this); 
+		} else if (stand instanceof FrenchHDRelationship2018ExtStandImpl) {
+			((FrenchHDRelationship2018ExtStandImpl) this.stand).addTree(this); 
+		} else {
+			throw new InvalidParameterException("The stand instance is not appropriate!");
+		}
 	}
 	
 	@Override

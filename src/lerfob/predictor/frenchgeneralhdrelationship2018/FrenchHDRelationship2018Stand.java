@@ -20,6 +20,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 
 import java.util.Collection;
 
+import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
@@ -34,7 +35,8 @@ import repicea.simulation.hdrelationships.HDRelationshipStand;
 public interface FrenchHDRelationship2018Stand extends HDRelationshipStand,
 														MeanQuadraticDiameterCmProvider, 
 														InterventionResultProvider,
-														SlopeInclinationPercentProvider {
+														SlopeInclinationPercentProvider,
+														GeographicalCoordinatesProvider {
 	
 	
 	/**
@@ -53,16 +55,16 @@ public interface FrenchHDRelationship2018Stand extends HDRelationshipStand,
 	public Collection<FrenchHDRelationship2018Tree> getTreesForFrenchHDRelationship();
 	
 	
-	/**
-	 * This method returns the mean temperature from March to September for the period 1961-1990.
-	 * @return a value in Celsius degree (double)
-	 */
-	public double getMeanTemperatureOfGrowingSeason();
+//	/**
+//	 * This method returns the mean temperature from March to September for the period 1961-1990.
+//	 * @return a value in Celsius degree (double)
+//	 */
+//	public double getMeanTemperatureOfGrowingSeason();
 
-	/**
-	 * This method returns the mean precipitation from March to September for the period 1961-1990.
-	 * @return a value in mm (double)
-	 */
-	public double getMeanPrecipitationOfGrowingSeason();
+//	/**
+//	 * This method returns the mean precipitation from March to September for the period 1961-1990.
+//	 * @return a value in mm (double)
+//	 */
+//	public double getMeanPrecipitationOfGrowingSeason();
 	
 }

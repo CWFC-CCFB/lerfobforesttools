@@ -14,8 +14,8 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 	private double pent2;
 	private double hasBeenHarvestedInLast5Years;
 	private final int index;
-	double meanTemp;
-	double meanPrec;
+	double xCoord;
+	double yCoord;
 	final List<FrenchHDRelationship2018StandImpl> standList;
 	
 	List<FrenchHDRelationship2018Tree> treeList;
@@ -26,16 +26,16 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 			double mqd, 
 			double pent2, 
 			double hasBeenHarvestedInLast5Years,
-			double meanTemp,
-			double meanPrec,
+			double xCoord,
+			double yCoord,
 			List<FrenchHDRelationship2018StandImpl> standList) {
 		this.index = index;
 		this.idp = idp;
 		this.mqd = mqd;
 		this.pent2 = pent2;
 		this.hasBeenHarvestedInLast5Years = hasBeenHarvestedInLast5Years;
-		this.meanTemp = meanTemp;
-		this.meanPrec = meanPrec;
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
 		treeList = new ArrayList<FrenchHDRelationship2018Tree>();
 		this.standList = standList; 
 	}
@@ -93,15 +93,15 @@ class FrenchHDRelationship2018StandImpl implements FrenchHDRelationship2018Stand
 
 
 	@Override
-	public double getMeanTemperatureOfGrowingSeason() {
-		return meanTemp;
-	}
+	public double getLatitudeDeg() {return yCoord;}
 
 
 	@Override
-	public double getMeanPrecipitationOfGrowingSeason() {
-		return meanPrec;
-	}
+	public double getLongitudeDeg() {return xCoord;}
+
+
+	@Override
+	public double getElevationM() {return 0;}
 
 	
 }
