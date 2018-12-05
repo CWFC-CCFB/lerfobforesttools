@@ -29,4 +29,9 @@ class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 		return 50d;
 	}
 
+	@Override
+	public double getPlotWeight() {
+		return 1d;
+	}
+
 }
