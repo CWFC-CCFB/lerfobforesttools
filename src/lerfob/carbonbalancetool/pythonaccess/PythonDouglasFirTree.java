@@ -42,4 +42,5 @@ class PythonDouglasFirTree extends PythonCarbonToolCompatibleTree implements Dou
 		return AverageBasicDensity.DouglasFir.getBasicDensity();		// to ensure that the JUnit test will be validated
 	}
 
+
 }

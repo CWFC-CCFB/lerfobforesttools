@@ -90,4 +90,7 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 	@Override
 	public double getBelowGroundVolumeM3() {return rootsVolume;}
 
+	@Override
+	public double getPlotWeight() {return 1d;}
+
 }

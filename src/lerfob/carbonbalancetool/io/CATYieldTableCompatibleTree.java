@@ -66,5 +66,8 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 
 	@Override
 	public CATSpecies getCATSpecies() {return stand.species;}
+
+	@Override
+	public double getPlotWeight() {return 1d;}
 	
 }

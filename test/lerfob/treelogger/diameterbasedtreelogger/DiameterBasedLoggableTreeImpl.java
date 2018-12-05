@@ -22,4 +22,9 @@ class DiameterBasedLoggableTreeImpl implements DiameterBasedLoggableTree {
 	@Override
 	public double getDbhCm() {return dbhCm;}
 
+	@Override
+	public double getPlotWeight() {
+		return 1d;
+	}
+
 }

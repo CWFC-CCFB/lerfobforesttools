@@ -53,5 +53,8 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 	public CATSpecies getCATSpecies() {
 		return species;
 	}
+
+	@Override
+	public double getPlotWeight() {return 1d;}
 	
 }

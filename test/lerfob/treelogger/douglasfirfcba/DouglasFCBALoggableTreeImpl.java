@@ -29,4 +29,9 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 		return treeDbhCm;
 	}
 
+	@Override
+	public double getPlotWeight() {
+		return 1d;
+	}
+
 }
