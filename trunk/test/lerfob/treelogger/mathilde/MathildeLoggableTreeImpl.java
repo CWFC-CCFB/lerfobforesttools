@@ -4,10 +4,6 @@ import lerfob.treelogger.mathilde.MathildeLoggableTree;
 
 class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 
-	@Override
-	public double getNumber() {
-		return 1;
-	}
 
 	@Override
 	public double getCommercialVolumeM3() {
@@ -27,11 +23,6 @@ class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 	@Override
 	public double getDbhCm() {
 		return 50d;
-	}
-
-	@Override
-	public double getPlotWeight() {
-		return 1d;
 	}
 
 }

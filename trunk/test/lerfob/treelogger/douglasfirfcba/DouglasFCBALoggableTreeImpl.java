@@ -9,10 +9,6 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 		this.treeDbhCm = treeDbhCm;
 	}
 	
-	@Override
-	public double getNumber() {
-		return 1;
-	}
 
 	@Override
 	public double getCommercialVolumeM3() {
@@ -27,11 +23,6 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 	@Override
 	public double getDbhCm() {
 		return treeDbhCm;
-	}
-
-	@Override
-	public double getPlotWeight() {
-		return 1d;
 	}
 
 }

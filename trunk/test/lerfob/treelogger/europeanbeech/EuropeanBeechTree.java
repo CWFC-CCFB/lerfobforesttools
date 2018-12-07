@@ -60,9 +60,4 @@ public class EuropeanBeechTree implements EuropeanBeechBasicTree {
 		return standardDeviationCm;
 	}
 
-	@Override
-	public double getPlotWeight() {
-		return 1d;
-	}
-
 }

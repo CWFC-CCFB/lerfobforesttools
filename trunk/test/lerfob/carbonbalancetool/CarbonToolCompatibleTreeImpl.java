@@ -26,9 +26,6 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 	@Override
 	public double getNumber() {return number;}
 
-/*	@Override
-	public TreeStatusPriorToLogging getTreeStatusPriorToLogging() {return TreeStatusPriorToLogging.Alive;}
-*/
 	@Override
 	public double getCommercialVolumeM3() {return volM3;}
 
@@ -41,9 +38,6 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
 
-//	@Override
-//	public SpeciesType getSpeciesType() {return SpeciesType.BroadleavedSpecies;}
-
 	@Override
 	public CATCompatibleTree clone() {
 		return new CarbonToolCompatibleTreeImpl(number, volM3, speciesName);
@@ -54,7 +48,4 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 		return species;
 	}
 
-	@Override
-	public double getPlotWeight() {return 1d;}
-	
 }

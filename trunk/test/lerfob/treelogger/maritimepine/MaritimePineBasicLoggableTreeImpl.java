@@ -48,9 +48,5 @@ class MaritimePineBasicLoggableTreeImpl implements MaritimePineBasicLoggableTree
 	@Override
 	public double getHarvestedCrownVolumeM3() {return branchVolumeM3;}
 
-	@Override
-	public double getPlotWeight() {
-		return 1d;
-	}
 
 }

@@ -17,14 +17,7 @@ class DiameterBasedLoggableTreeImpl implements DiameterBasedLoggableTree {
 	public String getSpeciesName() {return REpiceaSpecies.Species.Pinus_pinaster.toString();}
 
 	@Override
-	public double getNumber() {return 1d;}
-
-	@Override
 	public double getDbhCm() {return dbhCm;}
 
-	@Override
-	public double getPlotWeight() {
-		return 1d;
-	}
 
 }
