@@ -1,5 +1,5 @@
 /** 
- * Copyright (C) 2010-2012 LERFoB INRA/AgroParisTech - FVA Baden-Württemberg 
+ * Copyright (C) 2010-2012 LERFoB INRA/AgroParisTech - FVA Baden-Wï¿½rttemberg 
  * 
  * Authors: Mathieu Fortin, Axel Albrecht 
  * 
@@ -83,6 +83,4 @@ public abstract class AWSTreeImpl implements AWSTree {
 	@Override 
 	public double getDbhCm() {return -1d;}
 	
-	@Override 
-	public double getNumber() {return 1d;}
 }

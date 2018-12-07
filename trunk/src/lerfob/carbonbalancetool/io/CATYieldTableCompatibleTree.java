@@ -45,9 +45,6 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	public String getSpeciesName() {return stand.species.toString();}
 
 	@Override
-	public double getNumber() {return 1d;}
-
-	@Override
 	public void setStatusClass(StatusClass statusClass) {
 		this.statusClass = statusClass;
 	}
@@ -67,7 +64,4 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	@Override
 	public CATSpecies getCATSpecies() {return stand.species;}
 
-	@Override
-	public double getPlotWeight() {return 1d;}
-	
 }
