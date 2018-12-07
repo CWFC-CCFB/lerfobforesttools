@@ -62,8 +62,4 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
 
-	@Override
-	public double getPlotWeight() {return 1d;}
-
-
 }
