@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Tree;
+import repicea.simulation.HierarchicalLevel;
 
 public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl implements FrenchCommercialVolume2014Tree {
 
@@ -80,5 +81,10 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 	double getDiff() {
 		double diff = reference - getHeightM();
 		return diff;		// reference is the true height here and the prediction has been stored into heightM.
+	}
+
+	@Override
+	public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.TREE;
 	}
 }

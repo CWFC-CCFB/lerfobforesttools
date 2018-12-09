@@ -1,7 +1,5 @@
 package lerfob.predictor.frenchgeneralhdrelationship2014;
 
-import repicea.simulation.HierarchicalLevel;
-
 class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 
 	protected static boolean BlupPrediction = false;
@@ -25,9 +23,6 @@ class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 	
 	@Override
 	public String getSubjectId() {return ((Integer) hashCode()).toString();}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return stand.getMonteCarloRealizationId();}

@@ -22,6 +22,7 @@ import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
@@ -33,6 +34,12 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 												SlopeInclinationPercentProvider,
 												MonteCarloSimulationCompliantObject {
 	
+	
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
+
 	/**
 	 * This method returns true if any silvicultural treatment was carried out in the
 	 * plot during the last five years.

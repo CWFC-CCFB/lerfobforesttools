@@ -1,7 +1,6 @@
 package lerfob.predictor.mathilde.recruitment;
 
 import lerfob.predictor.mathilde.MathildeTree;
-import repicea.simulation.HierarchicalLevel;
 
 class MathildeTreeImpl implements MathildeTree {
 
@@ -24,9 +23,6 @@ class MathildeTreeImpl implements MathildeTree {
 
 	@Override
 	public String getSubjectId() {return null;}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public int getMonteCarloRealizationId() {

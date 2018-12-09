@@ -19,6 +19,7 @@
 package lerfob.predictor.frenchcommercialvolume2014;
 
 import repicea.math.Matrix;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
@@ -29,6 +30,11 @@ public interface FrenchCommercialVolume2014Tree extends DbhCmProvider,
 														HeightMProvider,
 														MonteCarloSimulationCompliantObject {
 	
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.TREE;
+	}
+
 	public static enum FrenchCommercialVolume2014TreeSpecies {
 		ABIES_ALBA,
 		ABIES_CONCOLOR,

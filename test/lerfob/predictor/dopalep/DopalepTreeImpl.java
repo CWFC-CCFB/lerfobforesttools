@@ -18,8 +18,6 @@
  */
 package lerfob.predictor.dopalep;
 
-import repicea.simulation.HierarchicalLevel;
-
 class DopalepTreeImpl implements DopalepTree {
 
 	private final double BAL;
@@ -44,9 +42,6 @@ class DopalepTreeImpl implements DopalepTree {
 
 	@Override
 	public String getSubjectId() {return "";}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return plot.getMonteCarloRealizationId();}

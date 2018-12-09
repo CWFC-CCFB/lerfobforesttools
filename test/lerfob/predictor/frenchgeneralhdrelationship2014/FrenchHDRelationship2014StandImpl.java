@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import repicea.simulation.HierarchicalLevel;
-
 class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand, Comparable<FrenchHDRelationship2014StandImpl> {
 
 	private int monteCarloId;
@@ -32,10 +30,6 @@ class FrenchHDRelationship2014StandImpl implements FrenchHDRelationship2014Stand
 	
 	@Override
 	public String getSubjectId() {return ((Integer) idp).toString();}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
-
 
 	@Override
 	public int getMonteCarloRealizationId() {return monteCarloId;}

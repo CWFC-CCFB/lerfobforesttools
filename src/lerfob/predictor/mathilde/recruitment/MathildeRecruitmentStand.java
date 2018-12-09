@@ -19,6 +19,7 @@
 package lerfob.predictor.mathilde.recruitment;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
@@ -32,6 +33,12 @@ public interface MathildeRecruitmentStand extends MonteCarloSimulationCompliantO
 													GrowthStepLengthYrProvider, 
 													BasalAreaM2HaProvider,
 													InterventionPlannedProvider {
+	
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
+
 	/**
 	 * This method returns the basal area of a particular species in the stand.
 	 * @param species a MathildeTreeSpecies instance

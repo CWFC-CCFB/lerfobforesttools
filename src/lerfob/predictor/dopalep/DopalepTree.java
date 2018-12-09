@@ -18,12 +18,18 @@
  */
 package lerfob.predictor.dopalep;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.BasalAreaLargerThanSubjectM2Provider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 
 public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject, BasalAreaLargerThanSubjectM2Provider {
 	
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.TREE;
+	}
+
 	/**
 	 * This method returns the basal area of the other trees.
 	 * @return a double

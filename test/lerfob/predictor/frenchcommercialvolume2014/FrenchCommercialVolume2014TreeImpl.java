@@ -1,7 +1,5 @@
 package lerfob.predictor.frenchcommercialvolume2014;
 
-import repicea.simulation.HierarchicalLevel;
-
 public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolume2014Tree {
 
 	protected double pred;
@@ -32,9 +30,6 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 
 	@Override
 	public String getSubjectId() {return ((Integer) id).toString();}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return 0;}

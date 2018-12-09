@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
-import repicea.simulation.HierarchicalLevel;
 
 class MathildeRecruitmentStandImpl implements MathildeRecruitmentStand {
 
@@ -24,9 +23,6 @@ class MathildeRecruitmentStandImpl implements MathildeRecruitmentStand {
 	
 	@Override
 	public String getSubjectId() {return idp;}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return 0;}

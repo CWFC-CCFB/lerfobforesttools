@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde.diameterincrement;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
@@ -32,7 +33,12 @@ public interface MathildeDiameterIncrementStand extends MonteCarloSimulationComp
 										BasalAreaM2HaProvider,
 										InterventionPlannedProvider {
 
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
 
+	
 	/**
 	 * This method returns the monthly mean temperature above 6 degrees Celsius.
 	 * @return a double
