@@ -3,7 +3,6 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import repicea.simulation.HierarchicalLevel;
 
 class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationPlot {
 
@@ -69,9 +68,6 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 
 	@Override
 	public String getSubjectId() {return plotID;}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return monteCarloRealization;}

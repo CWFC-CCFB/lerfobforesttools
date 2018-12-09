@@ -18,9 +18,14 @@
  */
 package lerfob.predictor.dopalep;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 
 public interface DopalepPlot extends MonteCarloSimulationCompliantObject {
-	
+
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
 	
 }

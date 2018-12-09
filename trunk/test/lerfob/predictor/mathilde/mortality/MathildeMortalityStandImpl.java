@@ -1,7 +1,5 @@
 package lerfob.predictor.mathilde.mortality;
 
-import repicea.simulation.HierarchicalLevel;
-
 public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 
 	private boolean isGoingToBeHarvested;
@@ -40,11 +38,6 @@ public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 	@Override
 	public String getSubjectId() {
 		return "0";
-	}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.PLOT;
 	}
 
 	protected void setMonteCarloRealizationId(int i) {

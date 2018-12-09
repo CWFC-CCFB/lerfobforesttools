@@ -1,7 +1,6 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
 import lerfob.predictor.mathilde.MathildeTree;
-import repicea.simulation.HierarchicalLevel;
 
 public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 
@@ -62,15 +61,6 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 		return ((Integer) hashCode()).toString();
 	}
 
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.TREE;
-	}
-
-//	@Override
-//	public void setMonteCarloRealizationId(int i) {
-//		monteCarloRealization = i;
-//	}
 
 	@Override
 	public int getMonteCarloRealizationId() {

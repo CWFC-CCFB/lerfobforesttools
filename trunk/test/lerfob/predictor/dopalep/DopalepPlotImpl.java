@@ -21,8 +21,6 @@ package lerfob.predictor.dopalep;
 import java.util.ArrayList;
 import java.util.List;
 
-import repicea.simulation.HierarchicalLevel;
-
 class DopalepPlotImpl implements DopalepPlot {
 
 	
@@ -36,9 +34,6 @@ class DopalepPlotImpl implements DopalepPlot {
 	public String getSubjectId() {
 		return "";
 	}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return 0;}

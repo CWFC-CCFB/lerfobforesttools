@@ -1,7 +1,5 @@
 package lerfob.predictor.mathilde.thinning;
 
-import repicea.simulation.HierarchicalLevel;
-
 class MathildeThinningStandImpl implements MathildeThinningStand {
 
 	private final String id;
@@ -24,9 +22,6 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	
 	@Override
 	public String getSubjectId() {return id;}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return 0;}

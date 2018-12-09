@@ -2,8 +2,6 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 
 import java.security.InvalidParameterException;
 
-import repicea.simulation.HierarchicalLevel;
-
 class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 	
 	protected static boolean BlupPrediction = false;
@@ -35,9 +33,6 @@ class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
 	
 	@Override
 	public String getSubjectId() {return ((Integer) hashCode()).toString();}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return stand.getMonteCarloRealizationId();}

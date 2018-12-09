@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde.thinning;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
@@ -35,5 +36,10 @@ public interface MathildeThinningStand extends MonteCarloSimulationCompliantObje
 												BasalAreaM2HaProvider,
 												MeanQuadraticDiameterCmProvider,
 												DateYrProvider {
+
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
 
 }

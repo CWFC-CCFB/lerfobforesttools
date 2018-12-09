@@ -20,6 +20,7 @@ package lerfob.predictor.mathilde.climate;
 
 import java.util.List;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
@@ -31,6 +32,11 @@ import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesP
 public interface MathildeClimatePlot extends MonteCarloSimulationCompliantObject, 
 										DateYrProvider,
 										GeographicalCoordinatesProvider {
+
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
 
 	/**
 	 * This method returns all the plots of the sample so that it is possible

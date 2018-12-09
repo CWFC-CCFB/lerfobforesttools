@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde.mortality;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
@@ -29,6 +30,11 @@ import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvid
 public interface MathildeMortalityStand extends MonteCarloSimulationCompliantObject, 
 										GrowthStepLengthYrProvider, 
 										DateYrProvider {
+
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.PLOT;
+	}
 
 	/**
 	 * This method returns true if a cut was planned in the upcoming growth interval.

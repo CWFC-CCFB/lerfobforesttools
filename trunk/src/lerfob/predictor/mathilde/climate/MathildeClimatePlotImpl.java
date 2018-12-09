@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import repicea.simulation.HierarchicalLevel;
-
 class MathildeClimatePlotImpl implements MathildeClimatePlot {
 
 	final String name;
@@ -48,9 +46,6 @@ class MathildeClimatePlotImpl implements MathildeClimatePlot {
 	public String getSubjectId() {
 		return name;
 	}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.PLOT;}
 
 	@Override
 	public int getDateYr() {

@@ -18,6 +18,7 @@
  */
 package lerfob.predictor.mathilde;
 
+import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.LnDbhCmProvider;
@@ -31,6 +32,11 @@ public interface MathildeTree extends DbhCmProvider,
 									MonteCarloSimulationCompliantObject,
 									MathildeTreeSpeciesProvider {
 	
+	@Override
+	default public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.TREE;
+	}
+
 	/**
 	 * This method returns the basal area of all the trees of the species with dbh larger than this tree instance.
 	 * @param species the species that is to be considered
