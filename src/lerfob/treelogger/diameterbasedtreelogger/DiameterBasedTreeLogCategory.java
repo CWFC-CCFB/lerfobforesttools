@@ -187,8 +187,8 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 		if (isEqual) {
 			if (obj instanceof DiameterBasedTreeLogCategory) {
 				DiameterBasedTreeLogCategory lc = (DiameterBasedTreeLogCategory) obj;
-				if (lc.conversionFactor == conversionFactor) {
-					if (lc.downgradingProportion == downgradingProportion) {
+				if (lc.conversionFactor == conversionFactor || (!isConversionEnabled && !lc.isConversionEnabled)) {
+					if (lc.downgradingProportion == downgradingProportion || (!isDowngradingEnabled && !lc.isDowngradingEnabled)) {
 						if (lc.minimumDbhCm == minimumDbhCm) {
 							if (lc.subCategory == null && subCategory == null) {
 								return true;
