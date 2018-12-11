@@ -15,7 +15,8 @@ import repicea.stats.distributions.utility.GaussianUtility;
 public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCategory {
 
 	protected MaritimePineBasicTreeLogCategory(Enum<?> logGrade, String species, double smallEndDiameter, boolean isFromStump) {
-		super(logGrade, species, smallEndDiameter, 0d, isFromStump, null);	// conversion factors are not used in this TreeLogger class
+		super(logGrade, species, smallEndDiameter, isFromStump, null);	// conversion factors are not used in this TreeLogger class
+		this.isChangeAllowed = false;
 	}
 	
 	@Override
