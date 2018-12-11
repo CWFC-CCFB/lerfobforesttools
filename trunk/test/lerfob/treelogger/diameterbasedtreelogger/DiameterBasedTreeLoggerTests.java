@@ -146,6 +146,7 @@ public class DiameterBasedTreeLoggerTests {
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "testSmallTree.xml";
 		String loggerFilename = ObjectUtility.getPackagePath(getClass()) + "dbTreeLogger.xml";
 		DiameterBasedTreeLogger logger = new DiameterBasedTreeLogger();
+//		UNCOMMENT THIS PART TO SAVE A NEW TreeLoggerParameters instance
 //		logger.setTreeLoggerParameters(logger.createDefaultTreeLoggerParameters());
 //		logger.getTreeLoggerParameters().save(loggerFilename);
 		DiameterBasedTreeLoggerParameters params = new DiameterBasedTreeLoggerParameters();
