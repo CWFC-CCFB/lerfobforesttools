@@ -72,11 +72,11 @@ public class MaritimePineBasicTreeLoggerParameters extends DiameterBasedTreeLogg
 		String species = getSpeciesName();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
-		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Stump, species, -1, true));
+		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Stump, species, 0, true));
 		categories.add(new MaritimePineBasicTreeLogCategory(Grade.SawlogHighQuality, species, 25, false));
 		categories.add(new MaritimePineBasicTreeLogCategory(Grade.SawlogLowQuality, species, 16, false));
 		categories.add(new MaritimePineBasicTreeLogCategory(Grade.IndustryWood, species, 10, false));
-		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Crown, species, -1, false));
+		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Crown, species, 0, false));
 	}
 
 	protected String getSpeciesName() {return REpiceaSpecies.Species.Pinus_pinaster.toString();}
@@ -86,6 +86,7 @@ public class MaritimePineBasicTreeLoggerParameters extends DiameterBasedTreeLogg
 		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
 		params.showUI(null);
 		params.showUI(null);
+		System.exit(0);
 	}
 
 }

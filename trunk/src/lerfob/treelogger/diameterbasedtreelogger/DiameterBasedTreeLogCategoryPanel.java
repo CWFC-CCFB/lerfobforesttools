@@ -22,25 +22,34 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 import repicea.gui.UIControlManager;
+import repicea.gui.components.NumberFormatFieldFactory;
+import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
+import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
+import repicea.gui.components.NumberFormatFieldFactory.NumberFieldListener;
+import repicea.gui.components.REpiceaSlider;
 import repicea.simulation.treelogger.LogCategoryPanel;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<DiameterBasedTreeLogCategory> {
+public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<DiameterBasedTreeLogCategory> implements NumberFieldListener, PropertyChangeListener {
 	
 	protected static enum MessageID implements TextableEnum {
-		MinimumDBH("Minimum DBH (cm)", "DHP minimum (cm)");
+		MinimumDBH("Minimum DBH (cm)", "DHP minimum (cm)"),
+		PotentialUse("Proportion of commercial volume (%)", "Proportion du volume commercial (%)"),
+		DownGrading("Proportion downgraded (%)", "Proportion de d\u00E9class\u00E9s (%)");
 
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -55,10 +64,29 @@ public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<Diameter
 		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
+	private final JFormattedNumericField minimumDiameterField;
+	private final REpiceaSlider downgradingProportionSlider;
+	private final REpiceaSlider potentialSlider;
+
+	
 	protected DiameterBasedTreeLogCategoryPanel(DiameterBasedTreeLogCategory logCategory) {
 		super(logCategory);
 		nameTextField.setText(logCategory.getName());
-		nameTextField.setEditable(false);
+		nameTextField.setEditable(logCategory.isChangeAllowed);
+		minimumDiameterField = NumberFormatFieldFactory.createNumberFormatField(10,
+				NumberFormatFieldFactory.Type.Double,
+				NumberFormatFieldFactory.Range.Positive,
+				false);
+		minimumDiameterField.setText(((Double) getTreeLogCategory().minimumDbhCm).toString());
+		minimumDiameterField.setEditable(logCategory.isChangeAllowed);
+		
+		potentialSlider = new REpiceaSlider();
+		potentialSlider.setValue((int) (logCategory.conversionFactor * 100));
+		potentialSlider.setEnabled(logCategory.isChangeAllowed);
+		
+		downgradingProportionSlider = new REpiceaSlider();
+		downgradingProportionSlider.setValue((int) (logCategory.downgradingProportion * 100));
+		downgradingProportionSlider.setEnabled(logCategory.isChangeAllowed);
 		createUI();
 	}
 
@@ -95,15 +123,63 @@ public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<Diameter
 		featurePanel.add(Box.createHorizontalStrut(5));
 		featurePanel.add(UIControlManager.getLabel(MessageID.MinimumDBH));
 		featurePanel.add(Box.createHorizontalStrut(5));
-		JTextField textField = new JTextField(5);
-		if (!Double.isNaN(getTreeLogCategory().minimumDbhCm)) {
-			textField.setText(getTreeLogCategory().minimumDbhCm.toString());
-		}
-		textField.setEditable(false);
-		featurePanel.add(textField);
+		featurePanel.add(minimumDiameterField);
 		featurePanel.add(Box.createHorizontalGlue());
-		
 		panel.add(featurePanel);
 
+		if (getTreeLogCategory().isConversionEnabled) {
+			JPanel potentialLumberWoodPanel = getPotentialPanel();
+			if (potentialLumberWoodPanel != null) {
+				panel.add(potentialLumberWoodPanel);
+			}
+		}
+
+		if (getTreeLogCategory().isDowngradingEnabled) {
+			JPanel downgradingPanel = new JPanel();
+			downgradingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), MessageID.DownGrading.toString()));
+			panel.add(downgradingPanel);
+			downgradingPanel.add(downgradingProportionSlider);
+		}
 	}
+	
+	
+	protected JPanel getPotentialPanel() {
+		JPanel potentialLumberWoodPanel = new JPanel();
+		potentialLumberWoodPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), MessageID.PotentialUse.toString()));
+		potentialLumberWoodPanel.add(potentialSlider);
+		return potentialLumberWoodPanel;
+	}
+	
+	@Override
+	public void listenTo() {
+		super.listenTo();
+		minimumDiameterField.addNumberFieldListener(this);
+		potentialSlider.addPropertyChangeListener(this);
+		downgradingProportionSlider.addPropertyChangeListener(this);
+	}
+
+	@Override
+	public void doNotListenToAnymore() {
+		super.doNotListenToAnymore();
+		minimumDiameterField.removeNumberFieldListener(this);
+		potentialSlider.removePropertyChangeListener(this);
+		downgradingProportionSlider.removePropertyChangeListener(this);
+	}
+
+	@Override
+	public void numberChanged(NumberFieldEvent e) {
+		if (e.getSource().equals(minimumDiameterField)) {
+			getTreeLogCategory().minimumDbhCm = minimumDiameterField.getValue().doubleValue();
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource().equals(downgradingProportionSlider)) {
+			getTreeLogCategory().downgradingProportion = downgradingProportionSlider.getValue() * .01;
+		} else if (evt.getSource().equals(potentialSlider)) {
+			getTreeLogCategory().conversionFactor = potentialSlider.getValue() * .01;
+		}
+	}
+	
 }

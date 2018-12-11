@@ -40,7 +40,8 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 	 * @param merchantableVolumeProportion the proportion of the merchantable volume that falls into this category
 	 */
 	protected EuropeanBeechBasicTreeLogCategory(Grade logGrade, String species, double smallEndDiameter) {
-		super(logGrade, species, smallEndDiameter, 0d, false, null);	// conversion factors are not used in this TreeLogger class
+		super(logGrade, species, smallEndDiameter, null);	// conversion factors are not used in this TreeLogger class
+		this.isChangeAllowed = false;
 	}
 
 	@Override

@@ -78,6 +78,7 @@ public class EuropeanBeechBasicTreeLoggerParameters extends DiameterBasedTreeLog
 		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
 		params.showUI(null);
 		params.showUI(null);
+		System.exit(0);
 	}
 
 }

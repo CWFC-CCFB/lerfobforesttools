@@ -18,6 +18,7 @@
  */
 package lerfob.treelogger.diameterbasedtreelogger;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,12 @@ import repicea.simulation.treelogger.WoodPiece;
 @SuppressWarnings("serial")
 public class DiameterBasedTreeLogCategory extends LogCategory {
 	
-	protected final Double minimumDbhCm;
+	protected boolean isChangeAllowed;
+	protected double minimumDbhCm;
 	protected double conversionFactor;
+	protected double downgradingProportion;
+	protected final boolean isConversionEnabled;
+	protected final boolean isDowngradingEnabled;
 	
 	protected DiameterBasedTreeLogCategory subCategory;
 	
@@ -37,30 +42,89 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	protected final Enum<?> logGrade;
 
 	/**
-	 * Constructor under the assumption that all the commercial volume falls into this category.
-	 * @param logGrade an Enum defined in the parameter
-	 * @param species the species name
-	 * @param minimumDbhCm the minimum dbh for the tree to be eligible
-	 * @param isFromStump true if this volume comes from the stump
+	 * General contructor.
+	 * @param logGrade an Enum that represents the log category
+	 * @param species a species name
+	 * @param minimumDbhCm a minimum diameter for this log grade either null or positive
+	 * @param conversionFactor a conversion factor either null or within the interval [0,1]
+	 * @param downgradingFactor a downgrading factor either null or within the interval [0,1]
+	 * @param isFromStump a boolean
+	 * @param subCategory a DiameterBasedTreeLogCategory for by products
 	 */
 	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
 			String species, 
 			double minimumDbhCm, 
 			double conversionFactor, 
+			double downgradingFactor,
+			boolean isFromStump, 
+			DiameterBasedTreeLogCategory subCategory) {
+		this(logGrade, species, minimumDbhCm, conversionFactor, true, downgradingFactor, true, isFromStump, subCategory);
+	}
+	
+	
+	private DiameterBasedTreeLogCategory(Enum<?> logGrade, 
+			String species, 
+			double minimumDbhCm, 
+			double conversionFactor, 
+			boolean conversionEnabled,
+			double downgradingFactor,
+			boolean downgradingEnabled,
 			boolean isFromStump, 
 			DiameterBasedTreeLogCategory subCategory) {
 		super(logGrade.toString(), isFromStump);
 		setSpecies(species);
 		this.logGrade = logGrade;
-		if (minimumDbhCm == -1) {
-			this.minimumDbhCm = Double.NaN;
-		} else {
-			this.minimumDbhCm = minimumDbhCm;
+		if (minimumDbhCm < 0) {
+			throw new InvalidParameterException("The minimumDbhCm parameter must be positive!");
+		}
+		this.minimumDbhCm = minimumDbhCm;
+		
+		if (conversionFactor < 0 || conversionFactor > 1) {
+			throw new InvalidParameterException("The conversion factor must be within the interval [0,1]!");
 		}
 		this.conversionFactor = conversionFactor;
+		this.isConversionEnabled = conversionEnabled;
+		
+		if (downgradingFactor < 0 || downgradingFactor > 1) {
+			throw new InvalidParameterException("The downgrading factor must be within the interval [0,1]!");
+		}
+		this.downgradingProportion = downgradingFactor;
+		this.isDowngradingEnabled = downgradingEnabled;
+		
 		this.subCategory = subCategory;
+		this.isChangeAllowed = true;
 	}
 
+	/**
+	 * A default constructor with 100% conversion factor and no downgrading.
+	 * @param logGrade an Enum that represents the log category
+	 * @param species a species name
+	 * @param minimumDbhCm a minimum diameter for this log grade either null or positive
+	 * @param isFromStump a boolean
+	 * @param subCategory a DiameterBasedTreeLogCategory for by products
+	 */
+	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
+			String species, 
+			double minimumDbhCm, 
+			boolean isFromStump,
+			DiameterBasedTreeLogCategory subCategory) {
+		this(logGrade, species, minimumDbhCm, 1d, false, 0d, false, isFromStump, subCategory);
+	}
+	
+	/**
+	 * A default constructor with 100% conversion factor, no downgrading and not from stump.
+	 * @param logGrade an Enum that represents the log category
+	 * @param species a species name
+	 * @param minimumDbhCm a minimum diameter for this log grade either null or positive
+	 * @param subCategory a DiameterBasedTreeLogCategory for by products
+	 */
+	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
+			String species, 
+			double minimumDbhCm, 
+			DiameterBasedTreeLogCategory subCategory) {
+		this(logGrade, species, minimumDbhCm, false, subCategory);
+	}
+	
 		
 	/*
 	 * Useless for this class (non-Javadoc)
@@ -103,37 +167,21 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 			if (parms != null && parms[0] instanceof Double) {
 				potentialVolume = (Double) parms[0];
 			}
-//			DiameterBasedTreeLoggerParameters parameters = (DiameterBasedTreeLoggerParameters) parms[0];
-//			boolean isEligibleToSmallLumberWood = !parameters.getLargeLumberWoodLogCategory().isEligible(tree);
-//			double volumeToBeProcessed = 0d;
-//			switch((DiameterBasedTreeLoggerParameters.Grade) logGrade) {
-//			case EnergyWood:
-//				volumeToBeProcessed = tree.getCommercialVolumeM3(); 
-//				break;
-//			case SmallLumberWood:
-//				if (isEligibleToSmallLumberWood) {
-//					volumeToBeProcessed = tree.getCommercialVolumeM3() * conversionFactor; 
-//				}
-//				break;
-//			case LargeLumberWood:
-//				volumeToBeProcessed = tree.getCommercialVolumeM3() * conversionFactor; 
-//				break;
-//			}
-//			if (volumeToBeProcessed > 0) {
-//				piece = new DiameterBasedWoodPiece(this, tree, volumeToBeProcessed);
-//			} 
-			double volumeToBeProcessed = potentialVolume * conversionFactor;
+			double volumeToBeProcessed = potentialVolume * (1 - downgradingProportion) * conversionFactor;
 			if (volumeToBeProcessed > 0d) {
 				pieces.add(new DiameterBasedWoodPiece(this, tree, volumeToBeProcessed));
 			}
 			if (subCategory != null) {
-				volumeToBeProcessed = potentialVolume * (1 - conversionFactor);
-				pieces.addAll(subCategory.extractFromTree(tree, volumeToBeProcessed));
+				volumeToBeProcessed = potentialVolume - volumeToBeProcessed;
+				if (volumeToBeProcessed > 0d) {
+					pieces.addAll(subCategory.extractFromTree(tree, volumeToBeProcessed));
+				}
 			}
  		}
 		return pieces;
 	}
 
+	
 	
 	
 }

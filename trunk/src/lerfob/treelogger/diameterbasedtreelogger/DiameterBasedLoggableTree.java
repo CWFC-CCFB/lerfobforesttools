@@ -1,5 +1,5 @@
 /*
- * This file is part of the repicea library.
+ * This file is part of the lerfob-foresttools library.
  *
  * Copyright (C) 2009-2015 Mathieu Fortin for Rouge-Epicea
  *
@@ -22,12 +22,6 @@ import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
 public interface DiameterBasedLoggableTree extends LoggableTree, DbhCmProvider {
-
 	
-//	/**
-//	 * This method returns the standard deviation of the dbh.
-//	 * @return a double
-//	 */
-//	public double getDbhCmStandardDeviation();
 
 }

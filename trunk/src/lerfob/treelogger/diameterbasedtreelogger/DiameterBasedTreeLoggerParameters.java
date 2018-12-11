@@ -32,26 +32,6 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("serial")
 public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<DiameterBasedTreeLogCategory> {
 
-//	public static enum MessageID implements TextableEnum {
-//		WoodProducts("Wood products", "Produits bois"),
-//		ProductType("Product type", "Type de produit"),
-//		;
-//
-//		MessageID(String englishText, String frenchText) {
-//			setText(englishText, frenchText);
-//		}
-//
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//		
-//		@Override
-//		public String toString() {
-//			return REpiceaTranslator.getString(this);
-//		}
-//	}
-	
 	public static enum Grade implements TextableEnum {
 		EnergyWood("Industry and energy wood", "Bois d'industrie et bois \u00E9nergie (BIBE)"),
 		SmallLumberWood("Small lumber wood", "Petit bois d'oeuvre (BO)"),
@@ -97,9 +77,9 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 		String species = getSpeciesName();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
-		DiameterBasedTreeLogCategory energyWood = new DiameterBasedTreeLogCategory(Grade.EnergyWood, species, 7, 1d, false, null);
-		categories.add(new DiameterBasedTreeLogCategory(Grade.LargeLumberWood, species, 37.5, 0.84, false, energyWood));	// not small end but dbh in this case
-		categories.add(new DiameterBasedTreeLogCategory(Grade.SmallLumberWood, species, 27.5, 0.50, false, energyWood));
+		DiameterBasedTreeLogCategory energyWood = new DiameterBasedTreeLogCategory(Grade.EnergyWood, species, 7.0d, 1d, 0d, false, null);
+		categories.add(new DiameterBasedTreeLogCategory(Grade.LargeLumberWood, species, 37.5, 0.84, 0d, false, energyWood));	// not small end but dbh in this case
+		categories.add(new DiameterBasedTreeLogCategory(Grade.SmallLumberWood, species, 27.5, 0.50, 0d, false, energyWood));
 		categories.add(energyWood);
 	}
 
@@ -136,6 +116,7 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
 		params.showUI(null);
 		params.showUI(null);
+		System.exit(0);
 	}
 
 	protected String getSpeciesName() {

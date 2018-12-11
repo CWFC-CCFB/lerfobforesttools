@@ -23,6 +23,7 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
+import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -85,4 +86,13 @@ public final class DouglasFCBATreeLoggerParameters extends TreeLoggerParameters<
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
+	public static void main(String[] args) {
+		DouglasFCBATreeLoggerParameters params = new DouglasFCBATreeLoggerParameters();
+		params.initializeDefaultLogCategories();
+		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
+		params.showUI(null);
+		params.showUI(null);
+		System.exit(0);
+
+	}
 }
