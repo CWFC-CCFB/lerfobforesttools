@@ -252,7 +252,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 				+ "; Carbon : " + getInitialCarbon();
 	}
 	
-	protected CarbonUnitStatus getLastStatus() {return status.get(status.size() - 1);}
+	protected CarbonUnitStatus getLastStatus() {
+		return status.get(status.size() - 1);
+	}
 	
 	protected void addStatus(CarbonUnitStatus currentStatus) {status.add(currentStatus);}
 	

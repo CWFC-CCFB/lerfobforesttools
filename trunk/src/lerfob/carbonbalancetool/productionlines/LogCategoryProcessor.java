@@ -87,7 +87,7 @@ public class LogCategoryProcessor extends LeftHandSideProcessor {
 	
 	@Override
 	public String getName() {
-		String speciesName = logCategory.getSpecies();
+		String speciesName = logCategory.getSpecies().toString();
 		if (speciesName.equals(TreeLoggerParameters.ANY_SPECIES)) {
 			speciesName = MessageID.ALL_SPECIES.toString();
 		}
