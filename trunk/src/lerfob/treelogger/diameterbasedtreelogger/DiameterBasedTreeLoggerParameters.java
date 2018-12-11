@@ -111,16 +111,16 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 //		return LargeLumber;
 //	}
 	
+	protected String getSpeciesName() {
+		return TreeLoggerParameters.ANY_SPECIES;
+	}
+
 	public static void main(String[] args) {
 		DiameterBasedTreeLoggerParameters params = new DiameterBasedTreeLoggerParameters(DiameterBasedTreeLogger.class);
 		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
 		params.showUI(null);
 		params.showUI(null);
 		System.exit(0);
-	}
-
-	protected String getSpeciesName() {
-		return TreeLoggerParameters.ANY_SPECIES;
 	}
 
 }

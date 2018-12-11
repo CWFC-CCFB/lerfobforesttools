@@ -181,7 +181,28 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 		return pieces;
 	}
 
-	
-	
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = super.equals(obj);
+		if (isEqual) {
+			if (obj instanceof DiameterBasedTreeLogCategory) {
+				DiameterBasedTreeLogCategory lc = (DiameterBasedTreeLogCategory) obj;
+				if (lc.conversionFactor == conversionFactor) {
+					if (lc.downgradingProportion == downgradingProportion) {
+						if (lc.minimumDbhCm == minimumDbhCm) {
+							if (lc.subCategory == null && subCategory == null) {
+								return true;
+							} else if (lc.subCategory != null && lc.subCategory.equals(subCategory)) {
+								return true;
+							} else if (subCategory != null && subCategory.equals(lc.subCategory)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		} 
+		return false;
+	}
 	
 }
