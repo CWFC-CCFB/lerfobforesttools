@@ -126,10 +126,6 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	}
 	
 		
-	/*
-	 * Useless for this class (non-Javadoc)
-	 * @see capsis.extension.treelogger.TreeLogCategory#getTreeLogCategoryPanel()
-	 */
 	@Override
 	public DiameterBasedTreeLogCategoryPanel getUI() {
 		if (guiInterface == null) {
