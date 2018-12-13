@@ -22,7 +22,7 @@ public class DiameterBasedTreeLoggerTests {
 		DiameterBasedTreeLogger logger = new DiameterBasedTreeLogger();
 		logger.setTreeLoggerParameters(logger.createDefaultTreeLoggerParameters());
 		
-		DiameterBasedLoggableTree tree = new DiameterBasedLoggableTreeImpl(60d);
+		DiameterBasedLoggableTreeImpl tree = new DiameterBasedLoggableTreeImpl(60d);
 		logger.logThisTree(tree);
 
 		Collection<WoodPiece> woodPieces = logger.getWoodPieces().get(tree);
@@ -64,7 +64,7 @@ public class DiameterBasedTreeLoggerTests {
 		DiameterBasedTreeLogger logger = new DiameterBasedTreeLogger();
 		logger.setTreeLoggerParameters(logger.createDefaultTreeLoggerParameters());
 		
-		DiameterBasedLoggableTree tree = new DiameterBasedLoggableTreeImpl(30d);
+		DiameterBasedLoggableTreeImpl tree = new DiameterBasedLoggableTreeImpl(30d);
 		logger.logThisTree(tree);
 
 		Collection<WoodPiece> woodPieces = logger.getWoodPieces().get(tree);
@@ -105,7 +105,7 @@ public class DiameterBasedTreeLoggerTests {
 		DiameterBasedTreeLogger logger = new DiameterBasedTreeLogger();
 		logger.setTreeLoggerParameters(logger.createDefaultTreeLoggerParameters());
 		
-		DiameterBasedLoggableTree tree = new DiameterBasedLoggableTreeImpl(15d);
+		DiameterBasedLoggableTreeImpl tree = new DiameterBasedLoggableTreeImpl(15d);
 		logger.logThisTree(tree);
 
 		Collection<WoodPiece> woodPieces = logger.getWoodPieces().get(tree);
@@ -155,7 +155,7 @@ public class DiameterBasedTreeLoggerTests {
 		logger.setTreeLoggerParameters(params);
 		
 		
-		DiameterBasedLoggableTree tree = new DiameterBasedLoggableTreeImpl(15d);
+		DiameterBasedLoggableTreeImpl tree = new DiameterBasedLoggableTreeImpl(15d);
 		logger.logThisTree(tree);
 
 		Collection<WoodPiece> woodPieces = logger.getWoodPieces().get(tree);

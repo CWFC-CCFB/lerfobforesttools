@@ -20,11 +20,12 @@ package lerfob.treelogger.diameterbasedtreelogger;
 
 import java.util.List;
 
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 
-public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerParameters, DiameterBasedLoggableTree> {
+public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerParameters, LoggableTree> {
 
 	protected final boolean shouldBreakAfterGettingPieces;
 	
@@ -41,8 +42,8 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 	}
 	
 	@Override
-	protected void logThisTree(DiameterBasedLoggableTree tree) {
-		List<DiameterBasedTreeLogCategory> logCategories = params.getSpeciesLogCategories(params.getSpeciesName());
+	protected void logThisTree(LoggableTree tree) {
+		List<DiameterBasedTreeLogCategory> logCategories = params.getSpeciesLogCategories(params.getDefaultSpecies());
 		List<DiameterBasedWoodPiece> pieces;
 		for (DiameterBasedTreeLogCategory logCategory : logCategories) {
 			pieces = logCategory.extractFromTree(tree, params);
@@ -66,9 +67,10 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 	}
 	
 	@Override
-	public DiameterBasedLoggableTree getEligible(LoggableTree t) {
-		if (t instanceof DiameterBasedLoggableTree) {
-			return (DiameterBasedLoggableTree) t;
+	public LoggableTree getEligible(LoggableTree t) {
+		if (t instanceof DbhCmProvider) {
+//			return (DiameterBasedLoggableTree) t;
+			return t;
 		} else {
 			return null;
 		}
@@ -76,7 +78,8 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 
 	@Override
 	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
-		return check.getTreeInstance() instanceof DiameterBasedLoggableTree;
+		Object instance = check.getTreeInstance();
+		return instance instanceof LoggableTree && instance instanceof DbhCmProvider;
 	}
 }
 

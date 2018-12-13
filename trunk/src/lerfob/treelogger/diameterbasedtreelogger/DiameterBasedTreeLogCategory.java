@@ -22,6 +22,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
@@ -52,7 +53,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	 * @param subCategory a DiameterBasedTreeLogCategory for by products
 	 */
 	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
-			String species, 
+			Object species, 
 			double minimumDbhCm, 
 			double conversionFactor, 
 			double downgradingFactor,
@@ -63,7 +64,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	
 	
 	private DiameterBasedTreeLogCategory(Enum<?> logGrade, 
-			String species, 
+			Object species, 
 			double minimumDbhCm, 
 			double conversionFactor, 
 			boolean conversionEnabled,
@@ -104,7 +105,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	 * @param subCategory a DiameterBasedTreeLogCategory for by products
 	 */
 	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
-			String species, 
+			Object species, 
 			double minimumDbhCm, 
 			boolean isFromStump,
 			DiameterBasedTreeLogCategory subCategory) {
@@ -119,7 +120,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 	 * @param subCategory a DiameterBasedTreeLogCategory for by products
 	 */
 	public DiameterBasedTreeLogCategory(Enum<?> logGrade, 
-			String species, 
+			Object species, 
 			double minimumDbhCm, 
 			DiameterBasedTreeLogCategory subCategory) {
 		this(logGrade, species, minimumDbhCm, false, subCategory);
@@ -147,8 +148,8 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 
 	
 	protected boolean isEligible(LoggableTree tree) {
-		if (tree instanceof DiameterBasedLoggableTree && tree.getCommercialVolumeM3() > 0d) {
-			return ((DiameterBasedLoggableTree) tree).getDbhCm() >= minimumDbhCm;
+		if (tree instanceof DbhCmProvider && tree.getCommercialVolumeM3() > 0d) {
+			return ((DbhCmProvider) tree).getDbhCm() >= minimumDbhCm;
 		} else {
 			return false;
 		}

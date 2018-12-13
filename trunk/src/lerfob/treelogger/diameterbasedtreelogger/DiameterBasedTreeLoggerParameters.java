@@ -74,7 +74,7 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 	@Override
 	protected void initializeDefaultLogCategories() {
 		List<DiameterBasedTreeLogCategory> categories = new ArrayList<DiameterBasedTreeLogCategory>();
-		String species = getSpeciesName();
+		Object species = getDefaultSpecies();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
 		DiameterBasedTreeLogCategory energyWood = new DiameterBasedTreeLogCategory(Grade.EnergyWood, species, 7.0d, 1d, 0d, false, null);
@@ -110,8 +110,9 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 //		}
 //		return LargeLumber;
 //	}
-	
-	protected String getSpeciesName() {
+
+	@Override
+	protected Object getDefaultSpecies() {
 		return TreeLoggerParameters.ANY_SPECIES;
 	}
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of the repicea library.
+ * This file is part of the lerfob-foresttools library.
  *
  * Copyright (C) 2009-2015 Mathieu Fortin for Rouge-Epicea
  *
@@ -18,25 +18,10 @@
  */
 package lerfob.treelogger.europeanbeech;
 
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
+import repicea.simulation.treelogger.LoggableTree;
 
-public interface EuropeanBeechBasicTree extends DiameterBasedLoggableTree, DbhCmStandardDeviationProvider {
+public interface EuropeanBeechBasicTree extends LoggableTree, DbhCmProvider, DbhCmStandardDeviationProvider {
 
-//	public static enum Species implements TextableEnum {
-//		EuropeanBeech("European beech", "H\u00EAtre europ\u00E9en");
-//		
-//		Species(String englishText, String frenchText) {
-//			setText(englishText, frenchText);
-//		}
-//		
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//		
-//		@Override
-//		public String toString() {return REpiceaTranslator.getString(this);}
-//	}
-	
 }

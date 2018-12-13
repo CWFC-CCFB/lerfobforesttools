@@ -3,10 +3,10 @@ package lerfob.treelogger.maritimepine;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters.Grade;
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.stats.distributions.utility.GaussianUtility;
@@ -14,7 +14,7 @@ import repicea.stats.distributions.utility.GaussianUtility;
 @SuppressWarnings("serial")
 public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCategory {
 
-	protected MaritimePineBasicTreeLogCategory(Enum<?> logGrade, String species, double smallEndDiameter, boolean isFromStump) {
+	protected MaritimePineBasicTreeLogCategory(Enum<?> logGrade, Object species, double smallEndDiameter, boolean isFromStump) {
 		super(logGrade, species, smallEndDiameter, isFromStump, null);	// conversion factors are not used in this TreeLogger class
 		this.isChangeAllowed = false;
 	}
@@ -40,7 +40,7 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
 			pieces = new ArrayList<DiameterBasedWoodPiece>();
-			double mqd = ((DiameterBasedLoggableTree) tree).getDbhCm();
+			double mqd = ((DbhCmProvider) tree).getDbhCm();
 			double dbhStandardDeviation = 0d;
 			if (tree instanceof DbhCmStandardDeviationProvider) {
 				dbhStandardDeviation = ((DbhCmStandardDeviationProvider) tree).getDbhCmStandardDeviation();
