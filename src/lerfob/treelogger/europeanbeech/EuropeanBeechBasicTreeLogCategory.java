@@ -1,5 +1,5 @@
 /*
- * This file is part of the repicea library.
+ * This file is part of the lerfob-foresttools library.
  *
  * Copyright (C) 2009-2015 Mathieu Fortin for Rouge-Epicea
  *
@@ -21,10 +21,10 @@ package lerfob.treelogger.europeanbeech;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters.Grade;
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.stats.distributions.utility.GaussianUtility;
@@ -39,7 +39,7 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 	 * @param species the species name
 	 * @param merchantableVolumeProportion the proportion of the merchantable volume that falls into this category
 	 */
-	protected EuropeanBeechBasicTreeLogCategory(Grade logGrade, String species, double smallEndDiameter) {
+	protected EuropeanBeechBasicTreeLogCategory(Grade logGrade, Object species, double smallEndDiameter) {
 		super(logGrade, species, smallEndDiameter, null);	// conversion factors are not used in this TreeLogger class
 		this.isChangeAllowed = false;
 	}
@@ -69,7 +69,7 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
 			pieces = new ArrayList<DiameterBasedWoodPiece>();
-			double mqd = ((DiameterBasedLoggableTree) tree).getDbhCm();
+			double mqd = ((DbhCmProvider) tree).getDbhCm();
 			double dbhStandardDeviation = 0d;
 			if (tree instanceof DbhCmStandardDeviationProvider) {
 				dbhStandardDeviation = ((DbhCmStandardDeviationProvider) tree).getDbhCmStandardDeviation();

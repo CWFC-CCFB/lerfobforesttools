@@ -80,10 +80,6 @@ public class CATDiameterBasedTreeLoggerParametersDialog extends DiameterBasedTre
 		return currentCATSpecies;
 	}
 
-	@Override
-	protected Object getDefaultSpecies() {
-		return CATDiameterBasedTreeLoggerParameters.DefaultSpecies.Default;
-	}
 	
 	@Override
 	protected CATDiameterBasedTreeLoggerParameters getTreeLoggerParameters() {

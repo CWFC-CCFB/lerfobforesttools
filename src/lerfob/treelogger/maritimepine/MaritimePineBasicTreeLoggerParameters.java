@@ -69,7 +69,7 @@ public class MaritimePineBasicTreeLoggerParameters extends DiameterBasedTreeLogg
 	@Override
 	protected void initializeDefaultLogCategories() {
 		List<DiameterBasedTreeLogCategory> categories = new ArrayList<DiameterBasedTreeLogCategory>();
-		String species = getSpeciesName();
+		Object species = getDefaultSpecies();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
 		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Stump, species, 0, true));
@@ -79,7 +79,8 @@ public class MaritimePineBasicTreeLoggerParameters extends DiameterBasedTreeLogg
 		categories.add(new MaritimePineBasicTreeLogCategory(Grade.Crown, species, 0, false));
 	}
 
-	protected String getSpeciesName() {return REpiceaSpecies.Species.Pinus_pinaster.toString();}
+	@Override
+	protected Object getDefaultSpecies() {return REpiceaSpecies.Species.Pinus_pinaster;}
 	
 	public static void main(String[] args) {
 		MaritimePineBasicTreeLoggerParameters params = new MaritimePineBasicTreeLoggerParameters();

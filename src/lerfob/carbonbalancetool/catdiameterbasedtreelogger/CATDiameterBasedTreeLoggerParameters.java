@@ -70,7 +70,11 @@ public class CATDiameterBasedTreeLoggerParameters extends DiameterBasedTreeLogge
 		createLogCategoriesForThisSpecies(DefaultSpecies.Default);
 	}
 	
-	
+	@Override
+	protected Object getDefaultSpecies() {
+		return CATDiameterBasedTreeLoggerParameters.DefaultSpecies.Default;
+	}
+
 	
 	protected final void createLogCategoriesForThisSpecies(Enum<?> species) {
 		List<DiameterBasedTreeLogCategory> categories = new ArrayList<DiameterBasedTreeLogCategory>();

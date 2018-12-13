@@ -61,7 +61,7 @@ public class EuropeanBeechBasicTreeLoggerParameters extends DiameterBasedTreeLog
 	@Override
 	protected void initializeDefaultLogCategories() {
 		List<DiameterBasedTreeLogCategory> categories = new ArrayList<DiameterBasedTreeLogCategory>();
-		String species = getSpeciesName();
+		Object species = getDefaultSpecies();
 		getLogCategories().clear();
 		getLogCategories().put(species, categories);
 		categories.add(new EuropeanBeechBasicTreeLogCategory(Grade.VeneerQuality, species, 47.5));	// not small end but dbh in this case
@@ -70,8 +70,9 @@ public class EuropeanBeechBasicTreeLoggerParameters extends DiameterBasedTreeLog
 		categories.add(new EuropeanBeechBasicTreeLogCategory(Grade.IndustryWood, species, 17.5));
 		categories.add(new EuropeanBeechBasicTreeLogCategory(Grade.EnergyWood, species, 5));
 	}
-	
-	protected String getSpeciesName() {return REpiceaSpecies.Species.Fagus_sylvatica.toString();}
+
+	@Override
+	protected Object getDefaultSpecies() {return REpiceaSpecies.Species.Fagus_sylvatica;}
 	
 	public static void main(String[] args) {
 		EuropeanBeechBasicTreeLoggerParameters params = new EuropeanBeechBasicTreeLoggerParameters();

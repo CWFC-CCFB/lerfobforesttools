@@ -1,8 +1,10 @@
 package lerfob.treelogger.diameterbasedtreelogger;
 
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.treelogger.LoggableTree;
 
-class DiameterBasedLoggableTreeImpl implements DiameterBasedLoggableTree {
+class DiameterBasedLoggableTreeImpl implements LoggableTree, DbhCmProvider {
 
 	final double dbhCm;
 	

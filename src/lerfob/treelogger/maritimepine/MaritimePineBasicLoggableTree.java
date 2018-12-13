@@ -18,31 +18,17 @@
  */
 package lerfob.treelogger.maritimepine;
 
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedLoggableTree;
+import repicea.simulation.treelogger.LoggableTree;
 
 /**
  * This interface ensures the tree can provide the basic features to be eligible for
  * the MaritimePineBasicTreeLogger.
  * @author Mathieu Fortin - November 2014
  */
-public interface MaritimePineBasicLoggableTree extends DiameterBasedLoggableTree, DbhCmStandardDeviationProvider {
+public interface MaritimePineBasicLoggableTree extends LoggableTree, DbhCmProvider, DbhCmStandardDeviationProvider {
 
-//	public static enum Species implements TextableEnum {
-//		MaritimePine("Maritime pine", "Pin maritime");
-//		
-//		Species(String englishText, String frenchText) {
-//			setText(englishText, frenchText);
-//		}
-//		
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//		
-//		@Override
-//		public String toString() {return REpiceaTranslator.getString(this);}
-//	}
 	
 	/**
 	 * This method returns the volume (m3) of harvest stump and roots.

@@ -18,9 +18,45 @@
  */
 package lerfob.carbonbalancetool.catdiameterbasedtreelogger;
 
+import lerfob.carbonbalancetool.CATCompatibleTree;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
+import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
+import repicea.simulation.treelogger.LoggableTree;
+import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 
+/**
+ * The CATDiameterBasedTreeLogger class implements a tree logger for CAT. It is 
+ * based on a default species. However, the user can add different specification 
+ * for some species.
+ * @author Mathieu Fortin - December 2018
+ */
 public class CATDiameterBasedTreeLogger extends DiameterBasedTreeLogger {
 
-	// TODO FP implement the algorithm for the logging defaultspecies enum should be used by default
+
+	@Override
+	public CATDiameterBasedTreeLoggerParameters createDefaultTreeLoggerParameters() {
+		return new CATDiameterBasedTreeLoggerParameters();
+	}
+	
+	@Override
+	public CATCompatibleTree getEligible(LoggableTree t) {
+		if (isCompatibleTree(t)) {
+			return (CATCompatibleTree) t;
+		} else {
+			return null;
+		}
+	}
+
+	
+	private boolean isCompatibleTree(Object treeInstance) {
+		return treeInstance instanceof CATCompatibleTree && treeInstance instanceof DbhCmProvider; 
+	}
+	
+	
+	@Override
+	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
+		return isCompatibleTree(check.getTreeInstance());
+	}
+
+
 }
