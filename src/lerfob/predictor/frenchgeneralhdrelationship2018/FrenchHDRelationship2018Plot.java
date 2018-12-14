@@ -28,11 +28,11 @@ import repicea.simulation.hdrelationships.HDRelationshipStand;
 
 
 /**
- * This interface ensures the compatibility between an instance representing a particular stand
+ * This interface ensures the compatibility between an instance representing a particular plot
  * and the French general HD relationship.
  * @author Mathieu Fortin - May 2014
  */
-public interface FrenchHDRelationship2018Stand extends HDRelationshipStand,
+public interface FrenchHDRelationship2018Plot extends HDRelationshipStand,
 														MeanQuadraticDiameterCmProvider, 
 														InterventionResultProvider,
 														SlopeInclinationPercentProvider,
@@ -53,18 +53,5 @@ public interface FrenchHDRelationship2018Stand extends HDRelationshipStand,
 	 * @return A collection of FrenchHDRelationship2014Tree instances
 	 */
 	public Collection<FrenchHDRelationship2018Tree> getTreesForFrenchHDRelationship();
-	
-	
-//	/**
-//	 * This method returns the mean temperature from March to September for the period 1961-1990.
-//	 * @return a value in Celsius degree (double)
-//	 */
-//	public double getMeanTemperatureOfGrowingSeason();
-
-//	/**
-//	 * This method returns the mean precipitation from March to September for the period 1961-1990.
-//	 * @return a value in mm (double)
-//	 */
-//	public double getMeanPrecipitationOfGrowingSeason();
 	
 }

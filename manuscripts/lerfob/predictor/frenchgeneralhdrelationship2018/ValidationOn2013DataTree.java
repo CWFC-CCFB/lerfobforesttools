@@ -6,7 +6,7 @@ import java.util.Map;
 import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Tree;
 import repicea.simulation.HierarchicalLevel;
 
-public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl implements FrenchCommercialVolume2014Tree {
+public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImplForTest implements FrenchCommercialVolume2014Tree {
 
 	protected static final Map<FrenchHd2018Species, FrenchCommercialVolume2014TreeSpecies> MatchTable = new HashMap<FrenchHd2018Species, FrenchCommercialVolume2014TreeSpecies>();
 	static {
@@ -65,7 +65,7 @@ public class ValidationOn2013DataTree extends FrenchHDRelationship2018TreeImpl i
 			String speciesName, 
 			double pred,
 			double w,
-			FrenchHDRelationship2018Stand stand) {
+			FrenchHDRelationship2018PlotImpl stand) {
 		super(heightM, dbhCm, gOther, speciesName, w, pred, stand);
 	}
 	

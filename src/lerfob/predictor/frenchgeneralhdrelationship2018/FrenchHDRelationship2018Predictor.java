@@ -72,7 +72,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	}
 	
 	
-	ClimatePoint getNearestClimatePoint(FrenchHDRelationship2018Stand stand) { 
+	ClimatePoint getNearestClimatePoint(FrenchHDRelationship2018Plot stand) { 
 		if (originalClimateVariableMap.containsKey(stand.getSubjectId())) {
 			return originalClimateVariableMap.get(stand.getSubjectId());
 		} else {
@@ -154,7 +154,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	 * @param tree a HeightableTree object
 	 * @return the predicted height (m)
 	 */
-	public double predictHeightM(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
+	public double predictHeightM(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		FrenchHDRelationship2018InternalPredictor internalPred = getInternalPredictorMap().get(tree.getFrenchHDTreeSpecies());
 		double prediction = internalPred.predictHeight(stand, tree);
 		return prediction;
@@ -166,7 +166,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	 * For testing purpose only
 	 * @param stand
 	 */
-	protected Estimate<? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
+	protected Estimate<? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		FrenchHDRelationship2018InternalPredictor internalPred = getInternalPredictorMap().get(tree.getFrenchHDTreeSpecies());
 		return internalPred.getBlupsForThisSubject(stand);
 	}

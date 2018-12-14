@@ -41,7 +41,7 @@ import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
-class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<FrenchHDRelationship2018Stand, FrenchHDRelationship2018Tree> implements FertilityClassEmulator {
+class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<FrenchHDRelationship2018Plot, FrenchHDRelationship2018Tree> implements FertilityClassEmulator {
 
 	private static final Map<SpeciesType, Double> PhiParameters = new HashMap<SpeciesType, Double>();
 	static {
@@ -120,7 +120,7 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	}
 	
 	@Override
-	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2018Stand stand) {
+	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2018Plot stand) {
 		if (currentFertilityClass == FertilityClass.Unknown) {
 			super.predictHeightRandomEffects(stand);
 		} else {	// we have tweaked the plot random effect to account for the site index class
@@ -151,7 +151,7 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	 * @return a RegressionElement instance
 	 */
 	@Override
-	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree, Matrix beta) {
+	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree, Matrix beta) {
 		Matrix modelParameters = beta;
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
@@ -166,8 +166,8 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 		
 		double meanPrec;
 		double meanTemp;
-		if (stand instanceof FrenchHDRelationship2018ExtStand) {
-			FrenchHDRelationship2018ExtStand s = (FrenchHDRelationship2018ExtStand) stand;
+		if (stand instanceof FrenchHDRelationship2018ExtPlot) {
+			FrenchHDRelationship2018ExtPlot s = (FrenchHDRelationship2018ExtPlot) stand;
 			meanPrec = s.getMeanPrecipitationOfGrowingSeason();
 			meanTemp = s.getMeanTemperatureOfGrowingSeason();
 		} else {
@@ -255,13 +255,13 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 	}
 
 
-	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2018Stand stand) {
+	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2018Plot stand) {
 		return super.getBlupsForThisSubject(stand);
 	}
 
 
 	@Override
-	protected Collection<FrenchHDRelationship2018Tree> getTreesFromStand(FrenchHDRelationship2018Stand stand) {
+	protected Collection<FrenchHDRelationship2018Tree> getTreesFromStand(FrenchHDRelationship2018Plot stand) {
 		Collection<FrenchHDRelationship2018Tree> treesToBeReturned = new ArrayList<FrenchHDRelationship2018Tree>();
 		Collection<?> trees = stand.getTreesForFrenchHDRelationship();
 		if (trees != null && !trees.isEmpty()) {
@@ -299,7 +299,7 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<Fren
 		return effectList.contains(5);
 	}
 
-	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Stand stand, FrenchHDRelationship2018Tree tree) {
+	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		Matrix pred = new Matrix(1,1);
 		pred.m_afData[0][0] = predictHeight(stand, tree);
 		Matrix variance = oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose());
