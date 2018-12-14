@@ -148,27 +148,22 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		System.exit(shutdownCode);
 	}
 
+	@SuppressWarnings("rawtypes")
+	private double convertStringToDouble(Map innerMap, String key) {
+		if (innerMap.containsKey(key)) {
+			return Double.parseDouble(innerMap.get(key).toString());
+		} else {
+			return 0d;
+		}
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
 
-//		String filename = ObjectUtility.getPackagePath(getClass()) + "testMapPythonAccess.ref";
-//		XmlSerializer serializer = new XmlSerializer(filename);
-//		serializer.writeObject(inputMap);
-		
-		
 		final String keyFirstInnerMap = "RECOLTE";
 		List<CATCompatibleStand> standList = new ArrayList<CATCompatibleStand>();
 		PythonCarbonToolCompatibleStand stand;
 		PythonCarbonToolCompatibleTree tree;
-//		if (speciesForSimulation == CATSpecies.FAGUS_SYLVATICA) {
-//			type = SpeciesType.BroadleavedSpecies;
-//		} else  if (speciesForSimulation == CATSpecies.PINUS_PINASTER) {
-//			type = SpeciesType.ConiferousSpecies;
-//		} else  if (speciesForSimulation == CATSpecies.PSEUDOTSUGA_MENZIESII) {
-//			type = SpeciesType.ConiferousSpecies;
-//		} else {
-//			throw new InvalidParameterException("The species has not been properly set!");
-//		}
 		
 		List<Integer> years = new ArrayList<Integer>();
 		years.addAll(inputMap.keySet());
@@ -183,7 +178,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			if (innerMap != null) {
 				double nbTreesHa = Double.parseDouble(innerMap.get("NbTrees").toString());
 				double mqd = Double.parseDouble(innerMap.get("DBHmy").toString());
-				double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
+				double weightCrownKg_M2 = convertStringToDouble(innerMap, "Wcrown");		// TODO FP this is a patch while waiting for Christophe's reply
+//				double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
 				double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
 				double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
 				double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
