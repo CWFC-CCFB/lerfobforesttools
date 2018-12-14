@@ -17,8 +17,8 @@ import repicea.util.ObjectUtility;
 
 public class FrenchHDRelationship2018PredictorTest {
 
-	static List<FrenchHDRelationship2018StandImpl> Stands;
-	static List<FrenchHDRelationship2018ExtStandImpl> ExtStands;
+	static List<FrenchHDRelationship2018PlotImplForTest> Stands;
+	static List<FrenchHDRelationship2018ExtPlotImplForTest> ExtStands;
 	static Map<Integer, Map<Integer, Blup>> Blups = readBlups();
 	
 	static class Blup {
@@ -35,12 +35,12 @@ public class FrenchHDRelationship2018PredictorTest {
 	@Test
 	public void validation1FixedEffectPredictions() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = false;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
 		int nbTrees = 0;
-		for (FrenchHDRelationship2018Stand stand : ExtStands) {
+		for (FrenchHDRelationship2018Plot stand : ExtStands) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getPred();
 				if (expected >= 1.3) {
@@ -56,12 +56,12 @@ public class FrenchHDRelationship2018PredictorTest {
 	@Test
 	public void validation1FixedEffectPredictionsWithClimateGenerator() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = false;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
 		int nbTrees = 0;
-		for (FrenchHDRelationship2018Stand stand : Stands) {
+		for (FrenchHDRelationship2018Plot stand : Stands) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getPred();
 				if (expected >= 1.3) {
@@ -81,20 +81,20 @@ public class FrenchHDRelationship2018PredictorTest {
 	@Test
 	public void validation2BlupsPredictionsAndVariance() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor(true);
 		int nbBlups = 0;
 
-		FrenchHDRelationship2018ExtStandImpl s = ExtStands.get(0);
-		List<FrenchHDRelationship2018ExtStandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		FrenchHDRelationship2018ExtPlotImplForTest s = ExtStands.get(0);
+		List<FrenchHDRelationship2018ExtPlotImplForTest> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 		for (int i = 0; i < 400; i++) {
-			retainedPlots.add(s.standList.get(i));
+			retainedPlots.add(s.plotList.get(i));
 		}
-		s.standList.retainAll(retainedPlots);
+		s.plotList.retainAll(retainedPlots);
 		
-		for (FrenchHDRelationship2018Stand stand : s.standList) {
+		for (FrenchHDRelationship2018Plot stand : s.plotList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				if (tree.getFrenchHDTreeSpecies().getIndex() <= 4) {
 					int index = tree.getFrenchHDTreeSpecies().getIndex();
 					predictor.predictHeightM(stand, tree);
@@ -119,24 +119,28 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbBlups + " blups.");
 	}
 
-	
+	/*
+	 * Check if the predicted height + the error term and the predicted blup will be 
+	 * equal to observed height
+	 * @throws IOException
+	 */
 	@Test
 	public void validationErrorTermForKnownHeightWithStochasticSimulationRandomEffectPlusResiduals() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor(false, true, true);	// variability of residual error terms only
 		int nbTrees = 0;
 		
-		FrenchHDRelationship2018ExtStandImpl s = ExtStands.get(0);
-		List<FrenchHDRelationship2018ExtStandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		FrenchHDRelationship2018ExtPlotImplForTest s = ExtStands.get(0);
+		List<FrenchHDRelationship2018ExtPlotImplForTest> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 		for (int i = 0; i < 400; i++) {
-			retainedPlots.add(s.standList.get(i));
+			retainedPlots.add(s.plotList.get(i));
 		}
-		s.standList.retainAll(retainedPlots);
+		s.plotList.retainAll(retainedPlots);
 
-		for (FrenchHDRelationship2018Stand stand : s.standList) {
+		for (FrenchHDRelationship2018Plot stand : s.plotList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getHeightM();
 				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
@@ -146,23 +150,28 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 
+	/*
+	 * Check if the predicted height + the error term and the predicted blup will be 
+	 * equal to observed height
+	 * @throws IOException
+	 */
 	@Test
 	public void validationErrorTermForKnownHeightWithStochasticSimulationRandomEffectWithoutResiduals() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor(false, true, false);	// variability of residual error terms only
 		int nbTrees = 0;
 		
-		FrenchHDRelationship2018ExtStandImpl s = ExtStands.get(0);
-		List<FrenchHDRelationship2018ExtStandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		FrenchHDRelationship2018ExtPlotImplForTest s = ExtStands.get(0);
+		List<FrenchHDRelationship2018ExtPlotImplForTest> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 		for (int i = 0; i < 400; i++) {
-			retainedPlots.add(s.standList.get(i));
+			retainedPlots.add(s.plotList.get(i));
 		}
-		s.standList.retainAll(retainedPlots);
+		s.plotList.retainAll(retainedPlots);
 
-		for (FrenchHDRelationship2018Stand stand : s.standList) {
+		for (FrenchHDRelationship2018Plot stand : s.plotList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getHeightM();
 				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
@@ -172,23 +181,28 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 
+	/*
+	 * Check if the predicted height + the error term and the predicted blup will be 
+	 * equal to observed height
+	 * @throws IOException
+	 */
 	@Test
 	public void validationErrorTermForKnownHeightWithStochasticSimulationWithoutRandomEffectButWithResiduals() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor(false, false, true);	// variability of residual error terms only
 		int nbTrees = 0;
 		
-		FrenchHDRelationship2018ExtStandImpl s = ExtStands.get(0);
-		List<FrenchHDRelationship2018ExtStandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		FrenchHDRelationship2018ExtPlotImplForTest s = ExtStands.get(0);
+		List<FrenchHDRelationship2018ExtPlotImplForTest> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 		for (int i = 0; i < 400; i++) {
-			retainedPlots.add(s.standList.get(i));
+			retainedPlots.add(s.plotList.get(i));
 		}
-		s.standList.retainAll(retainedPlots);
+		s.plotList.retainAll(retainedPlots);
 
-		for (FrenchHDRelationship2018Stand stand : s.standList) {
+		for (FrenchHDRelationship2018Plot stand : s.plotList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getHeightM();
 				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
@@ -198,23 +212,28 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 	
+	/*
+	 * Check if the predicted height + the error term and the predicted blup will be 
+	 * equal to observed height
+	 * @throws IOException
+	 */
 	@Test
 	public void validationErrorTermForKnownHeightWithStochasticSimulationWithoutRandomEffectNorResiduals() throws IOException {
 		readTrees();
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = true;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor(false);	// variability of residual error terms only
 		int nbTrees = 0;
 		
-		FrenchHDRelationship2018ExtStandImpl s = ExtStands.get(0);
-		List<FrenchHDRelationship2018ExtStandImpl> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		FrenchHDRelationship2018ExtPlotImplForTest s = ExtStands.get(0);
+		List<FrenchHDRelationship2018ExtPlotImplForTest> retainedPlots = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 		for (int i = 0; i < 400; i++) {
-			retainedPlots.add(s.standList.get(i));
+			retainedPlots.add(s.plotList.get(i));
 		}
-		s.standList.retainAll(retainedPlots);
+		s.plotList.retainAll(retainedPlots);
 
-		for (FrenchHDRelationship2018Stand stand : s.standList) {
+		for (FrenchHDRelationship2018Plot stand : s.plotList) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double actual = predictor.predictHeightM(stand, tree);
 				double expected = tree.getHeightM();
 				Assert.assertEquals("Comparting tree in plot " + stand.getSubjectId(), expected, actual, 1E-6);
@@ -227,8 +246,8 @@ public class FrenchHDRelationship2018PredictorTest {
 	
 	static void readTrees() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
-		List<FrenchHDRelationship2018StandImpl> standList = new ArrayList<FrenchHDRelationship2018StandImpl>();
-		List<FrenchHDRelationship2018ExtStandImpl> extStandList = new ArrayList<FrenchHDRelationship2018ExtStandImpl>();
+		List<FrenchHDRelationship2018PlotImplForTest> standList = new ArrayList<FrenchHDRelationship2018PlotImplForTest>();
+		List<FrenchHDRelationship2018ExtPlotImplForTest> extStandList = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 
 		CSVReader reader = null;
 		try {
@@ -248,8 +267,8 @@ public class FrenchHDRelationship2018PredictorTest {
 			double weight;
 			double xCoord;
 			double yCoord;
-			Map<Integer, FrenchHDRelationship2018StandImpl> standMap = new HashMap<Integer, FrenchHDRelationship2018StandImpl>();
-			Map<Integer, FrenchHDRelationship2018ExtStandImpl> extStandMap = new HashMap<Integer, FrenchHDRelationship2018ExtStandImpl>();
+			Map<Integer, FrenchHDRelationship2018PlotImplForTest> standMap = new HashMap<Integer, FrenchHDRelationship2018PlotImplForTest>();
+			Map<Integer, FrenchHDRelationship2018ExtPlotImplForTest> extStandMap = new HashMap<Integer, FrenchHDRelationship2018ExtPlotImplForTest>();
 			int counter = 0;
 			while ((record = reader.nextRecord()) != null) {
 				idp = Integer.parseInt(record[0].toString());
@@ -282,14 +301,14 @@ public class FrenchHDRelationship2018PredictorTest {
 				double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
 				if (!standMap.containsKey(idp)) {
 					int count = counter++;
-					FrenchHDRelationship2018StandImpl stand = new FrenchHDRelationship2018StandImpl(count, idp, mqd, pent2, harvestInLastFiveYears, xCoord, yCoord, standList);
+					FrenchHDRelationship2018PlotImplForTest stand = new FrenchHDRelationship2018PlotImplForTest(count, idp, mqd, pent2, harvestInLastFiveYears, xCoord, yCoord, standList);
 					standMap.put(idp, stand);
 					//						FrenchHDRelationship2018StandImpl stand = new FrenchHDRelationship2018StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, standList);
-					FrenchHDRelationship2018ExtStandImpl extStand = new FrenchHDRelationship2018ExtStandImpl(count, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, extStandList);
+					FrenchHDRelationship2018ExtPlotImplForTest extStand = new FrenchHDRelationship2018ExtPlotImplForTest(count, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, extStandList);
 					extStandMap.put(idp, extStand);
 				}
-				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, weight, pred, standMap.get(idp));
-				new FrenchHDRelationship2018TreeImpl(htot, d130, gOther, species, weight, pred, extStandMap.get(idp));
+				new FrenchHDRelationship2018TreeImplForTest(htot, d130, gOther, species, weight, pred, standMap.get(idp));
+				new FrenchHDRelationship2018TreeImplForTest(htot, d130, gOther, species, weight, pred, extStandMap.get(idp));
 			}
 			standList.addAll(standMap.values());
 			Collections.sort(standList);

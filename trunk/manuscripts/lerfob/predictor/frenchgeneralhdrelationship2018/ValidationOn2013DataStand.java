@@ -11,7 +11,7 @@ import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.stats.StatisticalUtility;
 
-public class ValidationOn2013DataStand extends FrenchHDRelationship2018StandImpl {
+public class ValidationOn2013DataStand extends FrenchHDRelationship2018PlotImplForTest {
 
 	
 	private final FrenchDepartment department;

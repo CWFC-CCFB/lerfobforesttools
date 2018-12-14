@@ -81,7 +81,7 @@ public class PredictedEffects {
 		
 	}
 	
-	static class Stand implements FrenchHDRelationship2018ExtStand {
+	static class Stand implements FrenchHDRelationship2018ExtPlot {
 
 		private final double plotAreaHa = 15d * 15d * Math.PI * .0001;
 
@@ -308,24 +308,24 @@ public class PredictedEffects {
 	public void predictVolumeChangeForTemperatureIncrease() {
 		System.out.println("Running climate warming simulation...");
 		FrenchHDRelationship2018PredictorTest.readTrees();
-		List<FrenchHDRelationship2018ExtStandImpl> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
+		List<FrenchHDRelationship2018ExtPlotImplForTest> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
 		Map<FrenchHd2018Species, List<Double>> obsMap = new HashMap<FrenchHd2018Species, List<Double>>();
 		Map<FrenchHd2018Species, List<Double>> predMap = new HashMap<FrenchHd2018Species, List<Double>>();
 		for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
 			obsMap.put(species, new ArrayList<Double>());
 			predMap.put(species, new ArrayList<Double>());
 		}
-		FrenchHDRelationship2018TreeImpl.BlupPrediction = false;
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		for (FrenchHDRelationship2018Stand stand : Stands) {
+		for (FrenchHDRelationship2018Plot stand : Stands) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				obsMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}
-			((FrenchHDRelationship2018ExtStandImpl) stand).meanTemp = ((FrenchHDRelationship2018ExtStandImpl) stand).getMeanTemperatureOfGrowingSeason() + 1.5;
+			((FrenchHDRelationship2018ExtPlotImplForTest) stand).meanTemp = ((FrenchHDRelationship2018ExtPlotImplForTest) stand).getMeanTemperatureOfGrowingSeason() + 1.5;
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImpl tree = (FrenchHDRelationship2018TreeImpl) obj;
+				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				predMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}

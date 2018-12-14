@@ -23,7 +23,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
  * It ensures the stand instance can provide its mean seasonal temperature and precipitation.
  * @author Mathieu Fortin - December 2018
  */
-public interface FrenchHDRelationship2018ExtStand extends FrenchHDRelationship2018Stand {
+public interface FrenchHDRelationship2018ExtPlot extends FrenchHDRelationship2018Plot {
 
 	
 	/**
