@@ -43,16 +43,12 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
-import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
-import repicea.util.REpiceaSystem;
-import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.Language;
 
 /**
  * This class is the entry point for a coupling with a Python application. Once exported as a .jar with the main function set to this
@@ -60,6 +56,9 @@ import repicea.util.REpiceaTranslator.Language;
  * @author Mathieu Fortin - May 2014
  */
 public class PythonAccessPoint extends CarbonAccountingTool {
+
+	private static final String LISTEN = "-listen";
+	private static final String CALLBACK = "-callback";
 
 	protected CATSpecies speciesForSimulation; 
 	protected double areaHa = 1d;
@@ -275,8 +274,6 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return lerfobRevision;
 	}
 	
-	private static final String LISTEN = "-listen";
-	private static final String CALLBACK = "-callback";
 	
 	/**
 	 * Start method for connection to Python.
@@ -284,18 +281,6 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		String repiceaRevision = REpiceaJARSVNAppVersion.getInstance().getName() + "; " + REpiceaJARSVNAppVersion.getInstance().getRevision();
-		System.out.println(repiceaRevision);
-		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
-		System.out.println(lerfobRevision);
-		String inputString = "";
-		for (String str : args) {
-			inputString = inputString + str + "; ";
-		}
-		System.out.println("Parameters received:" + inputString);
-		REpiceaSystem.setLanguageFromMain(args, Language.English);
-		System.out.println("Language set to: " + REpiceaTranslator.getCurrentLanguage().name());
-		
 		List<String> argumentList = Arrays.asList(args);
 		Integer listeningPort = null;
 		Integer callbackPort = null;
