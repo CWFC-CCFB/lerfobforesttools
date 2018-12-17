@@ -41,7 +41,11 @@ import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.io.CATExportTool;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
@@ -58,15 +62,10 @@ import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerManager;
 import repicea.stats.Distribution;
-import lerfob.treelogger.basictreelogger.BasicTreeLogger;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
-import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 //import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.Language;
 
 /**
  * LERFoBCarbonAccountingTool is the class that implements a tool for the calculation of the carbon balance in a series
@@ -593,11 +592,11 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	public boolean isInitialized() {return initialized;}
 	
 	/*
-	 * Entry point for FCBA in GESFOR project
+	 * Entry point for CAT in standalone modes
 	 */
 	public static void main(String[] args) throws Exception {
 //		REpiceaTranslator.setCurrentLanguage(Language.French);
-		REpiceaTranslator.setCurrentLanguage(Language.English);
+//		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool(null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
