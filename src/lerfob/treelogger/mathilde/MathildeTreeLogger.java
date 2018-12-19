@@ -60,10 +60,10 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 		boolean largeLumberProduced = false;
 		for (MathildeTreeLogCategory logCategory : logCategories) {
 			if (volume > 0d && logCategory.isEligible(tree)) {
-				if (!logCategory.getName().equals(Grade.SmallLumberWood.name()) || !largeLumberProduced) {
+				if (!logCategory.getName().equals(Grade.SmallLumberWood.toString()) || !largeLumberProduced) {
 					woodPiece = new MathildeWoodPiece(logCategory, tree, volume);
 					addWoodPiece(tree, woodPiece);
-					if (logCategory.getName().equals(Grade.LargeLumberWood.name())) {
+					if (logCategory.getName().equals(Grade.LargeLumberWood.toString())) {
 						largeLumberProduced = true;
 					}
 					volume -= woodPiece.getVolumeM3();
