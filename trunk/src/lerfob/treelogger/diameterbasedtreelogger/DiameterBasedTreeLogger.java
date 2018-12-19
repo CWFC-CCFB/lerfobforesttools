@@ -38,6 +38,7 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 	 * @param shouldBreakAfterGettingPieces true should be preferred to false which is a former implementation
 	 */
 	protected DiameterBasedTreeLogger(boolean shouldBreakAfterGettingPieces) {
+		super();
 		this.shouldBreakAfterGettingPieces = shouldBreakAfterGettingPieces;
 	}
 	
