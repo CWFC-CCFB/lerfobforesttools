@@ -39,7 +39,11 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
 	 * @param stand a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
-	public FrenchHDRelationship2018TreeImpl(double heightM, double dbhCm, double gOther, String speciesName, FrenchHDRelationship2018PlotImpl stand) {
+	public FrenchHDRelationship2018TreeImpl(double heightM, 
+			double dbhCm, 
+			double gOther, 
+			String speciesName, 
+			FrenchHDRelationship2018PlotImpl stand) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;

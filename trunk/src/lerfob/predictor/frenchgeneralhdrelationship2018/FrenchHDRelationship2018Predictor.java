@@ -160,8 +160,6 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		return prediction;
 	}	
 
-
-	
 	/**
 	 * For testing purpose only
 	 * @param stand
