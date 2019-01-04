@@ -29,13 +29,13 @@ import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
 import repicea.app.AbstractGenericTask;
+import repicea.lang.MemoryWatchDog;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.WoodPiece;
-import repicea.util.MemoryWatchDog;
 
 @SuppressWarnings({ "serial", "deprecation" })
 public class CATTask extends AbstractGenericTask {
