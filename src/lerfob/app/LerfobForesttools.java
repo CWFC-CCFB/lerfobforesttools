@@ -24,7 +24,7 @@ import java.util.List;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.pythonaccess.PythonAccessPoint;
 import repicea.app.REpiceaJARSVNAppVersion;
-import repicea.util.REpiceaSystem;
+import repicea.lang.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.Language;
 
@@ -56,12 +56,9 @@ public class LerfobForesttools {
 			String application = argumentList.get(argumentList.indexOf(APPLICATION) + 1);
 			if (application.toLowerCase().equals("python")) {
 				PythonAccessPoint.main(args);
-			}
+			} 
 		} else {
 			CarbonAccountingTool.main(args);
 		}
-
-		
-		
 	}
 }

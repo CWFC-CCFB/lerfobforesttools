@@ -38,6 +38,7 @@ import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.carbonbalancetool.catdiameterbasedtreelogger.CATDiameterBasedTreeLogger;
 import lerfob.carbonbalancetool.io.CATExportTool;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
@@ -55,6 +56,7 @@ import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
 import repicea.gui.genericwindows.REpiceaLicenseWindow;
 import repicea.gui.genericwindows.REpiceaSplashWindow;
+import repicea.lang.REpiceaSystem;
 import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -64,7 +66,6 @@ import repicea.simulation.treelogger.TreeLoggerManager;
 import repicea.stats.Distribution;
 //import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
 import repicea.util.ObjectUtility;
-import repicea.util.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
 
 /**
@@ -83,6 +84,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		
 		TreeLoggerManager.registerTreeLoggerName(BasicTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
+		TreeLoggerManager.registerTreeLoggerName(CATDiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(EuropeanBeechBasicTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(MaritimePineBasicTreeLogger.class.getName());
 //		TreeLoggerManager.registerTreeLoggerName(WBirchProdVolTreeLogger.class.getName());
@@ -601,7 +603,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		tool.initializeTool(null);
 		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
-		treeLoggerDescriptions.add(new TreeLoggerDescription(DiameterBasedTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(CATDiameterBasedTreeLogger.class));
 		
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
 		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
