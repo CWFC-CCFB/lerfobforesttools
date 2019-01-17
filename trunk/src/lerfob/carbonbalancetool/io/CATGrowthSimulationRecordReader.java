@@ -203,7 +203,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 	protected Enum<?> defineGroupFieldEnum() {return null;}
 
 	@Override
-	protected void readLineRecord(Object[] oArray, int lineCounter) throws VariableValueException, Exception {
+	protected void readLineRecord(Object[] oArray) throws VariableValueException, Exception {
 		int index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Date);
 		int dateYr = Integer.parseInt(oArray[index].toString());
 
@@ -226,7 +226,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		StatusClass statusClass = StatusClass.valueOf(oArray[index].toString().toLowerCase().trim());
 
 		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.DBH);
-		double dbhCm = -1d;
+		Double dbhCm = null;
 		if (oArray[index] != null) { 	// means that a realization field has been specified
 			dbhCm = Double.parseDouble(oArray[index].toString());
 		}
@@ -251,10 +251,10 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		CATGrowthSimulationPlot plot = plotSample.getPlot(plotID);
 
 		CATGrowthSimulationTree tree;
-		if (dbhCm > 0d) {
-			tree = new CATGrowthSimulationTreeWithDBH(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
-		} else {
+		if (dbhCm == null) {
 			tree = new CATGrowthSimulationTree(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName);
+		} else {
+			tree = new CATGrowthSimulationTreeWithDBH(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
 		}
 		
 		plot.addTree(tree);

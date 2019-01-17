@@ -127,7 +127,7 @@ public class CATYieldTableRecordReader extends REpiceaRecordReader {
 	protected Enum<?> defineGroupFieldEnum() {return null;}
 
 	@Override
-	protected void readLineRecord(Object[] oArray, int lineCounter) throws VariableValueException, Exception {
+	protected void readLineRecord(Object[] oArray) throws VariableValueException, Exception {
 		int dateYr = Integer.parseInt(oArray[0].toString());
 		double standingVolumeM3 = Double.parseDouble(oArray[1].toString());
 		double harvestedVolumeM3 = Double.parseDouble(oArray[2].toString());
