@@ -29,7 +29,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	protected double dbhCm;
 	protected final FrenchHd2018Species species;
 	protected final FrenchHDRelationship2018PlotImpl plot;
-	protected double gOther;
+	protected Double gOther;
 
 	/**
 	 * Constructor.
@@ -39,9 +39,9 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
 	 * @param stand a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
-	public FrenchHDRelationship2018TreeImpl(double heightM, 
+	protected FrenchHDRelationship2018TreeImpl(double heightM, 
 			double dbhCm, 
-			double gOther, 
+			Double gOther, 
 			String speciesName, 
 			FrenchHDRelationship2018PlotImpl stand) {
 		this.heightM = heightM;
@@ -51,6 +51,26 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 		this.plot = stand;
 		stand.addTree(this); 
 	}
+
+	/**
+	 * Constructor for NFI data. The basal area of other trees is calculated using the plot basal area.
+	 * @param heightM the height of the tree (m) or -1 if it was not observed
+	 * @param dbhCm the diameter at breast height (cm)
+	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
+	 * @param stand a FrenchHDRelationship2018StandImpl instance that hosts the tree
+	 */
+	public FrenchHDRelationship2018TreeImpl(double heightM, 
+			double dbhCm, 
+			String speciesName, 
+			FrenchHDRelationship2018PlotImpl stand) {
+		this.heightM = heightM;
+		this.dbhCm = dbhCm;
+		this.gOther = null;
+		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
+		this.plot = stand;
+		stand.addTree(this); 
+	}
+
 	
 	@Override
 	public int getErrorTermIndex() {
@@ -87,6 +107,6 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	public FrenchHd2018Species getFrenchHDTreeSpecies() {return species;}
 
 	protected double getGOther() {return gOther;}
-
+	protected double getBasalAreaM2() {return getDbhCm() * getDbhCm() * Math.PI * 0.000025;}
 
 }

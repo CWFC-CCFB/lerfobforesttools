@@ -163,7 +163,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Generic constructor.
 	 * @param mode defines how CAT is to be used. See the CATMode enum variable.
 	 */
-	protected CarbonAccountingTool(CATMode mode) {
+	public CarbonAccountingTool(CATMode mode) {
 		this.mode = mode;
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
@@ -201,7 +201,23 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	protected CATSettings getCarbonToolSettings() {
 		return carbonCompartmentManager.getCarbonToolSettings();
 	}
-	
+
+	/**
+	 * Initializes CAT without parent window.
+	 * @throws Exception
+	 */
+	public void initializeTool() throws Exception {
+		initializeTool(null);
+		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
+		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(CATDiameterBasedTreeLogger.class));
+		
+		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
+		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
+		getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
+	}
 	
 	/**
 	 * This method initializes the carbon accounting tool either in script or in GUI mode. This method can
@@ -600,16 +616,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 //		REpiceaTranslator.setCurrentLanguage(Language.French);
 //		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
-		tool.initializeTool(null);
-		Vector<TreeLoggerDescription> treeLoggerDescriptions = new Vector<TreeLoggerDescription>();
-		treeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
-		treeLoggerDescriptions.add(new TreeLoggerDescription(CATDiameterBasedTreeLogger.class));
-		
-		treeLoggerDescriptions.add(new TreeLoggerDescription(MathildeTreeLogger.class));
-		treeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
-		treeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
-		treeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
-		tool.getCarbonToolSettings().setTreeLoggerDescriptions(treeLoggerDescriptions);
+		tool.initializeTool();
 	}
 
 
