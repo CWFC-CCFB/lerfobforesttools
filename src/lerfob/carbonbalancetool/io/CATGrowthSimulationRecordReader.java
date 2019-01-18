@@ -203,7 +203,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 	protected Enum<?> defineGroupFieldEnum() {return null;}
 
 	@Override
-	protected void readLineRecord(Object[] oArray) throws VariableValueException, Exception {
+	protected void readLineRecord(Object[] oArray, int lineCounter) throws VariableValueException, Exception {
 		int index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Date);
 		int dateYr = Integer.parseInt(oArray[index].toString());
 
