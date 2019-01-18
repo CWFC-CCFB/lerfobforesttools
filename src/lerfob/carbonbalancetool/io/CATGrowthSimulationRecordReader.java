@@ -240,8 +240,14 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Volume);
 		double treeVolumeDm3 = Double.parseDouble(oArray[index].toString());
 
+		instantiatePlotAndTree(getImportFieldManager().getFileSpecifications()[0], dateYr, realization, plotID, plotAreaHa, 
+				statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
+	}
+	
+	protected void instantiatePlotAndTree(String standIdentification, int dateYr, int realization, String plotID, double plotAreaHa,
+			StatusClass statusClass, double treeVolumeDm3, double numberOfTrees, String originalSpeciesName, Double dbhCm) {
 		if (!standMap.containsKey(dateYr)) {
-			standMap.put(dateYr, new CATGrowthSimulationCompositeStand(dateYr, getImportFieldManager().getFileSpecifications()[0], this));
+			standMap.put(dateYr, new CATGrowthSimulationCompositeStand(dateYr, standIdentification, this));
 		}
 		
 		CATGrowthSimulationCompositeStand compositeStand = standMap.get(dateYr);
@@ -261,6 +267,7 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		if (!speciesList.contains(originalSpeciesName)) {
 			speciesList.add(originalSpeciesName);
 		}
+
 	}
 
 	@Override
