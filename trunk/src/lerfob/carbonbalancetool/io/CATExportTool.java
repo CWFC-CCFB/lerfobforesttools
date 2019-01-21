@@ -415,6 +415,11 @@ public class CATExportTool extends REpiceaExportTool {
 		setHelper();
 	}
 
+	@Override
+	public void setSaveFileEnabled(boolean bool) {
+		super.setSaveFileEnabled(bool);
+	}
+	
 	private void setHelper() throws NoSuchMethodException, SecurityException {
 		Method callHelp = BrowserCaller.class.getMethod("openUrl", String.class);
 		String url = "http://www.inra.fr/capsis/help_"+ 
@@ -472,4 +477,12 @@ public class CATExportTool extends REpiceaExportTool {
 		return new InternalSwingWorker(this, selectedOption, recordSet);
 	}
 
+	/**
+	 * This method sets the selected options to all the possible options. It is 
+	 * typically called by external applications. 
+	 * @throws Exception
+	 */
+	public void setAllAvailableOptions() throws Exception {
+		setSelectedOptions(getAvailableExportOptions());
+	}
 }
