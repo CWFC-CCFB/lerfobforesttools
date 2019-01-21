@@ -679,8 +679,33 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		setTitle(UIControlManager.getTitle(getClass()) + suffix);
 	}
 
+	/*
+	 * Entry point of the drag and drop event (non-Javadoc)
+	 * @see repicea.gui.dnd.AcceptableDropComponent#acceptThisObject(java.lang.Object, java.awt.dnd.DropTargetDropEvent)
+	 */
 	@Override
 	public void acceptThisObject(ArrayList<CATCompatibleStand> stands, DropTargetDropEvent arg0) {
+		acceptTheseStands(stands);
+//		if (stands != null && !stands.isEmpty()) {
+//			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
+//			String lastStandID = lastStand.getStandIdentification();
+//			if (JOptionPane.showConfirmDialog(this, 
+//					MessageID.ImportStandList.toString() + " " + lastStandID, 
+//					UIControlManager.InformationMessageTitle.Warning.toString(), 
+//					JOptionPane.YES_NO_CANCEL_OPTION, 
+//					JOptionPane.WARNING_MESSAGE) == 0) {
+//				caller.setStandList(stands);
+//			}
+//		}
+	}
+
+	/**
+	 * This method is either called by a drag and drop event or externally by another application. It
+	 * asks the user if he/she accepts the import.
+	 * 
+	 * @param stands an ArrayList of CATCompatibleStand instances
+	 */
+	public void acceptTheseStands(ArrayList<CATCompatibleStand> stands) {
 		if (stands != null && !stands.isEmpty()) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 			String lastStandID = lastStand.getStandIdentification();
@@ -693,7 +718,6 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			}
 		}
 	}
-
 
 
 	@Override
