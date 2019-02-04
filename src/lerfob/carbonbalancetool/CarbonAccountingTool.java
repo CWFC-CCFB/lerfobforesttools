@@ -150,6 +150,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 
 	private final CATMode mode;
 	private boolean initialized;
+
+	private boolean isShuttedDown;
 	
 	/**
 	 * Constructor for stand alone application.
@@ -165,6 +167,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 */
 	public CarbonAccountingTool(CATMode mode) {
 		this.mode = mode;
+		isShuttedDown = false;
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
 		
 		finalCutHadToBeCarriedOut = false;
@@ -189,10 +192,17 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	protected void shutdown(int shutdownCode) {
 		System.out.println("Shutting down CAT...");
 		CATSensitivityAnalysisSettings.getInstance().clear();
+		isShuttedDown = true;
 		if (mode == CATMode.STANDALONE) {		// only the stand alone mode will shutdown the JVM
 			System.exit(shutdownCode);
 		}
 	}
+
+	/**
+	 * This method returns true if CAT has been shutted down or false otherwise.
+	 * @return a boolean
+	 */
+	public boolean isShuttedDown() {return isShuttedDown;}
 	
 	/**
 	 * This method returns the settings of the carbon accounting tool.
