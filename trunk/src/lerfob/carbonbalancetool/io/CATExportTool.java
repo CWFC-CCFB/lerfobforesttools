@@ -482,7 +482,10 @@ public class CATExportTool extends REpiceaExportTool {
 	 * typically called by external applications. 
 	 * @throws Exception
 	 */
-	public void setAllAvailableOptions() throws Exception {
-		setSelectedOptions(getAvailableExportOptions());
+	@SuppressWarnings("rawtypes")
+	public List<Enum> setAllAvailableOptions() throws Exception {
+		List<Enum> availableOptions = getAvailableExportOptions();
+		setSelectedOptions(availableOptions);
+		return availableOptions;
 	}
 }
