@@ -44,6 +44,11 @@ import repicea.util.ObjectUtility;
  * The 2018 version has been updated with climate variables. More specifically, the mean temperature and mean 
  * precipitation of the growth season are now explanatory variables for most species.
  * @author Mathieu Fortin - December 2017
+ * 
+ * @see <a href=https://link.springer.com/article/10.1007/s13595-018-0784-9> Fortin, M., R. Van Couwenberghe, V. Perez 
+ * and C. Piedallu. 2019. Evidence of climate effects on the height-diameter relationships of tree species. Annals of 
+ * Forest Science 76: 1. 
+ * </a>
  */
 public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor implements FertilityClassEmulator {
 

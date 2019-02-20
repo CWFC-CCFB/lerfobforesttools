@@ -9,7 +9,7 @@ import java.util.Map;
 
 import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
-import repicea.stats.StatisticalUtility;
+import repicea.stats.sampling.SamplingUtility;
 
 public class ValidationOn2013DataStand extends FrenchHDRelationship2018PlotImplForTest {
 
@@ -41,7 +41,7 @@ public class ValidationOn2013DataStand extends FrenchHDRelationship2018PlotImplF
 		}
 		if (i > 0) {
 			try {
-				List<FrenchHDRelationship2018Tree> sample = (List) StatisticalUtility.getSampleFromPopulation(treeList, i, false);
+				List<FrenchHDRelationship2018Tree> sample = (List) SamplingUtility.getSample(treeList, i, false);
 				for (FrenchHDRelationship2018Tree tree : sample) {
 					((ValidationOn2013DataTree) tree).heightM = ((ValidationOn2013DataTree) tree).reference;
 					((ValidationOn2013DataTree) tree).knownHeight = true;
