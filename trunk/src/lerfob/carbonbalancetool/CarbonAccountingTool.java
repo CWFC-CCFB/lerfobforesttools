@@ -432,9 +432,9 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 
 	/**
 	 * This method retrieves the simulation results after calling the calculateCarbon method.
-	 * @return a CATSingleSimulationResult instance
+	 * @return a CATSimulationResult instance
 	 */
-	public CATSingleSimulationResult retrieveSimulationSummary() {
+	public CATSimulationResult retrieveSimulationSummary() {
 		return getCarbonCompartmentManager().getSimulationSummary();
 	}
 	
