@@ -72,8 +72,8 @@ public interface CATSimulationResult {
 	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass();
 
 	/**
-	 * This method returns the volume and biomass by log grade categories.
-	 * @return a Map of String and VolumeBiomassCarrier
+	 * This method returns total volume and biomass by log grade categories over the simulation period or rotation.
+	 * @return a Map instance
 	 */
 	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa();
 	
