@@ -83,7 +83,7 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		return volume;
 	}
 
-	private double fixedEffectPrediction(FrenchCommercialVolume2014Tree tree) {
+	private synchronized double fixedEffectPrediction(FrenchCommercialVolume2014Tree tree) {
 		oXVector.resetMatrix();
 		Matrix beta = getParametersForThisRealization(tree);
 		
