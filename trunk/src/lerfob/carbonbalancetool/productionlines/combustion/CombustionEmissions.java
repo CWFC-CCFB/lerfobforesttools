@@ -81,7 +81,7 @@ public class CombustionEmissions {
 
 	protected static void init() {
 		try {
-			String filename = ObjectUtility.getPackagePath(CombustionEmissions.class) + "CombustionFactors.csv";
+			String filename = ObjectUtility.getRelativePackagePath(CombustionEmissions.class) + "CombustionFactors.csv";
 			
 			CSVReader reader = new CSVReader(filename);
 			Object[] record;
