@@ -131,6 +131,12 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		}
 		
 		combustionProcessList = new JComboBox(CombustionProcess.values());
+		CombustionProcess combustionProcess = getCaller().getCombustionProcess();
+		if (combustionProcess == null) {
+			combustionProcessList.setSelectedItem(CombustionProcess.None);
+		} else {
+			combustionProcessList.setSelectedItem(combustionProcess);
+		}
 		
 		emissionsByFUField = NumberFormatFieldFactory.createNumberFormatField(NumberFormatFieldFactory.Type.Double,
 				NumberFormatFieldFactory.Range.Positive,

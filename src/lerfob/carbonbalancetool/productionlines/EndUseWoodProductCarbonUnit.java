@@ -242,7 +242,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	private double getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(double dryBiomassMg) {
 		double emissionFactor = getCarbonUnitFeature().getCombustionEmissionFactorsInCO2Eq();
 		if (emissionFactor > 0) {
-			return - dryBiomassMg * (emissionFactor - 1);
+			return - dryBiomassMg * emissionFactor;
 		} else {
 			return 0d;
 		}

@@ -37,7 +37,7 @@ public class CombustionEmissions {
 	public static enum CombustionProcess implements TextableEnum {
 		None("None", "Aucun"),
 		Stove_log("Stove with logs", "Po\u00EAle \u00E0 b\u00FBches"),
-		Boiler_log("Boiler with logs", "Chaudi\u00E8re \u00E0 b\\u00FBches"),
+		Boiler_log("Boiler with logs", "Chaudi\u00E8re \u00E0 b\u00FBches"),
 		Stove_pellet("Stove with pellets", "Po\u00EAle \u00E0 granul\u00E9s"),
 		Boiler_pellet("Boiler with pellets", "Chaudi\u00E8re \u00E0 granul\u00E9s"),
 		Boiler_chips("Boiler with chips", "Chaudi\u00E8re \u00E0 plaquettes");

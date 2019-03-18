@@ -67,6 +67,7 @@ import repicea.stats.Distribution;
 //import repicea.treelogger.wbirchprodvol.WBirchProdVolTreeLogger;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 
 /**
  * LERFoBCarbonAccountingTool is the class that implements a tool for the calculation of the carbon balance in a series
@@ -623,7 +624,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Entry point for CAT in standalone modes
 	 */
 	public static void main(String[] args) throws Exception {
-//		REpiceaTranslator.setCurrentLanguage(Language.French);
+		REpiceaTranslator.setCurrentLanguage(Language.French);
 //		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool();

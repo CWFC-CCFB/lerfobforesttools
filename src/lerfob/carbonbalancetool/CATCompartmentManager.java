@@ -194,6 +194,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		carbonCompartments.get(CompartmentInfo.CarbEmis).setCarbonUnitsArray(endUseWoodProductCarbonUnits);
 		carbonCompartments.get(CompartmentInfo.EnerSubs).setCarbonUnitsArray(endUseWoodProductCarbonUnits);
 		carbonCompartments.get(CompartmentInfo.Products).setCarbonUnitsArray(endUseWoodProductCarbonUnits);
+		carbonCompartments.get(CompartmentInfo.WComb).setCarbonUnitsArray(endUseWoodProductCarbonUnits);
 
 		// dead biomass
 		carbonCompartments.get(CompartmentInfo.DeadBiom).setCarbonUnitsArray(leftInForestCarbonUnits);
@@ -233,6 +234,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			case CarbEmis:
 			case Products:
 			case EnerSubs:
+			case WComb:
 				carbonCompartments.put(compartmentInfo, new CATProductCompartment(this, compartmentInfo));
 				break;
 			case LivingBiomass:

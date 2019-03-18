@@ -183,6 +183,37 @@ public class CATCompartmentCompileLibrary {
 			carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
 
 			break;
+			
+		case WComb:
+			
+			for (int i = 0; i < timeScale.size(); i++) {
+				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
+				if (carbonUnits != null && !carbonUnits.isEmpty()) {
+					for (CarbonUnit carbonUnit : carbonUnits) {
+						EndUseWoodProductCarbonUnit endUseCarbonProduct = (EndUseWoodProductCarbonUnit) carbonUnit;
+
+						double[] currentEmission = endUseCarbonProduct.getCombustionEmissionsArrayCO2Eq();	
+						for (int j = 0; j < timeScale.size(); j++) {
+							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
+						}
+						integratedCarbon += endUseCarbonProduct.getTotalCombustionEmissionsCO2Eq() * CATSettings.CO2_C_FACTOR;
+					}
+				}
+			}
+			
+			for (int i = 0; i < timeScale.size(); i++) {
+				if (i > 0) {
+					carbon[i] += carbon[i - 1];
+				}
+			}
+
+			for (int i = 0; i < timeScale.size(); i++) {
+				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
+			}
+			
+			carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
+			break;
+			
 
 		case LfillND:
 			

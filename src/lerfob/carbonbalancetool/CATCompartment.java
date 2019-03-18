@@ -94,7 +94,11 @@ public class CATCompartment implements Comparable {
 		 */
 		LfillEm("SWDS (Methane emissions)", "Site d'enfouissement (Emissions de m\u00E9thane)", false, new Color(150,150,150)),
 		/**
-		 * The libing biomass, i.e. the aboveground biomass + the belowground biomass.
+		 * Emissions due to wood combustion 
+		 */
+		WComb("Wood combustion (CH4, CO and VOC emissions)", "Combustion du bois (Emissions de CH4, CO et COV)", false, new Color(150,150,150)),
+		/**
+		 * The living biomass, i.e. the aboveground biomass + the belowground biomass.
 		 */
 		LivingBiomass("Living biomass", "Biomasse vivante", true, new Color(0,200,0)),
 		/**
@@ -141,6 +145,7 @@ public class CATCompartment implements Comparable {
 				poolCategoryMap.put(CarbEmis, PoolCategory.Others);
 				poolCategoryMap.put(LfillEm, PoolCategory.Others);
 				poolCategoryMap.put(LfillND, PoolCategory.Others);
+				poolCategoryMap.put(WComb, PoolCategory.Others);
 			}
 			return poolCategoryMap.get(this);
 		}
@@ -175,6 +180,7 @@ public class CATCompartment implements Comparable {
 				naturalOrder.add(CarbEmis);
 				naturalOrder.add(LfillEm);
 				naturalOrder.add(LfillND);
+				naturalOrder.add(WComb);
 			}
 			return naturalOrder;
 		}
