@@ -81,6 +81,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
 	private final Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> hwpContentByUseClass;
 	private final Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap;
+	private final MonteCarloEstimate heatProductionEvolutionKWhHa;
+	private final MonteCarloEstimate totalHeatProductionKWhHa;
 	private final ParameterSetup setup;
 	private final String resultId;
 		
@@ -101,6 +103,9 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		hwpContentByUseClass = new HashMap<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
 		productEvolutionMap = new HashMap<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
 		
+		heatProductionEvolutionKWhHa = new MonteCarloEstimate();
+		totalHeatProductionKWhHa = new MonteCarloEstimate();
+		
 		this.resultId = resultId;
 	}
 	
@@ -109,6 +114,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		CATCompartment compartment;
 		Matrix value;
 		double plotAreaHa = manager.getLastStand().getAreaHa();
+		
 		for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
 			compartment = manager.getCompartments().get(compartmentID);
 			
@@ -124,6 +130,12 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				evolutionMap.put(compartmentID, new MonteCarloEstimate());
 			}
 			evolutionMap.get(compartmentID).addRealization(value);
+			
+			if (compartmentID == CompartmentInfo.WComb) {
+				CATProductCompartment productCompartment = (CATProductCompartment) compartment;
+				heatProductionEvolutionKWhHa.addRealization(productCompartment.getHeatProductionEvolutionKWhHa(plotAreaHa));
+				totalHeatProductionKWhHa.addRealization(productCompartment.getTotalHeatProductionKWhHa(plotAreaHa));
+			}
 		}
 
 		CATProductCompartment productCompartment = (CATProductCompartment) manager.getCompartments().get(CompartmentInfo.Products);
@@ -250,5 +262,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 
 	@Override
 	public boolean isEvenAged() {return isEvenAged;}
+
+	@Override
+	public MonteCarloEstimate getHeatProductionEvolutionKWhPerHa() {return heatProductionEvolutionKWhHa;}
 
 }

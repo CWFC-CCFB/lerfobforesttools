@@ -238,8 +238,7 @@ public class CATCompartment implements Comparable {
 	}
 	
 	/**
-	 * This method return a Map object whose keys are the steps and values are
-	 * the carbon mass.
+	 * This method return a Matrix with the carbon stock per ha.
 	 * @param plotAreaHa the area of the plot in ha
 	 * @return a Matrix instance
 	 */
@@ -257,7 +256,7 @@ public class CATCompartment implements Comparable {
 	
 	
 	/**
-	 * This method returns a random variable that contains the integrated carbon.
+	 * This method returns a random variable that contains the integrated carbon per ha.
 	 * @param plotArea the plot area in ha (double) 
 	 * @return a double 
 	 */

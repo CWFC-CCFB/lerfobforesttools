@@ -57,6 +57,7 @@ class CATSingleViewPanel extends REpiceaPanel implements ItemListener, PropertyC
 			selector.addItem(new CATResultLogGradesPanel(summary));
 			selector.addItem(new CATResultHWPPanel(summary));
 			selector.addItem(new CATResultHWPWithRecyclingPanel(summary));
+			selector.addItem(new CATResultKWhHeatProduction(summary));
 			if (summary.isEvenAged()) {
 				selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
 			}

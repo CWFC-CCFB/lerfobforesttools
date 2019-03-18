@@ -166,4 +166,10 @@ public class CATSimulationDifference implements CATSimulationResult {
 	@Override
 	public boolean isEvenAged() {return baseline.isEvenAged();}
 
+
+	@Override
+	public MonteCarloEstimate getHeatProductionEvolutionKWhPerHa() {
+		return null;
+	}
+
 }
