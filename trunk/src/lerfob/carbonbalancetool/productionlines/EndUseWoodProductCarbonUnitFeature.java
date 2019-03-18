@@ -114,6 +114,7 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		useClass = UseClass.NONE;
 	}
 	
+	protected CombustionProcess getCombustionProcess() {return combustionProcess;}
 	
 	protected double getEmissionsMgCO2ByFunctionalUnit() {return emissionsByFunctionalUnit;}
 	
@@ -182,8 +183,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	 * @return a double
 	 */
 	protected double getCombustionEmissionFactorsInCO2Eq() {
-		if (combustionProcess != null && combustionProcess != CombustionProcess.None) {
-			return CombustionEmissions.CombustionEmissionsMap.get(combustionProcess).getEmissionFactorInCO2EqForOneMgOfDryBiomass();
+		if (getCombustionProcess() != null && getCombustionProcess() != CombustionProcess.None) {
+			return CombustionEmissions.CombustionEmissionsMap.get(getCombustionProcess()).getEmissionFactorInCO2EqForOneMgOfDryBiomass();
 		} else {
 			return 0d;
 		}
@@ -194,8 +195,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	 * @return a double
 	 */
 	protected double getHeatProductionKWh() {
-		if (combustionProcess != null && combustionProcess != CombustionProcess.None) {
-			return CombustionEmissions.CombustionEmissionsMap.get(combustionProcess).getHeatProductionInKWhForOneMgOfDryBiomass();
+		if (getCombustionProcess() != null && getCombustionProcess() != CombustionProcess.None) {
+			return CombustionEmissions.CombustionEmissionsMap.get(getCombustionProcess()).getHeatProductionInKWhForOneMgOfDryBiomass();
 		} else {
 			return 0d;
 		}
