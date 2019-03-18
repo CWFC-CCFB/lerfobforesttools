@@ -209,11 +209,11 @@ public class CATCompartmentCompileLibrary {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						LandfillCarbonUnit landfillCarbonProduct = (LandfillCarbonUnit) carbonUnit;
 
-						double[] currentEmission = landfillCarbonProduct.getCO2EquivalentMethaneEmissionsArray();	
+						double[] currentEmission = landfillCarbonProduct.getMethaneEmissionsArrayCO2Eq();	
 						for (int j = 0; j < timeScale.size(); j++) {
 							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
 						}
-						integratedCarbon += landfillCarbonProduct.getTotalCO2EqMethaneEmissions() * CATSettings.CO2_C_FACTOR;
+						integratedCarbon += landfillCarbonProduct.getTotalMethaneEmissionsCO2Eq() * CATSettings.CO2_C_FACTOR;
 					}
 				}
 			}

@@ -141,10 +141,12 @@ public final class CATSettings {
 		
 		private final double ch4ToCo2Eq;
 		private final double n2oToCo2Eq;
+		private final double coToCo2Eq;
 		
-		GWP(double ch4ToCo2Eq, double n2oToCo2Eq) {
+		GWP(double ch4ToCo2Eq, double n2oToCo2Eq, double coToCo2Eq) {
 			this.ch4ToCo2Eq = ch4ToCo2Eq;
 			this.n2oToCo2Eq = n2oToCo2Eq;
+			this.coToCo2Eq = coToCo2Eq;
 		}
 		
 		/**
@@ -154,17 +156,24 @@ public final class CATSettings {
 		public double getCH4Factor() {return ch4ToCo2Eq;}
 		
 		/**
-		 * This method returns the CO2 eq of the N2O gaz
+		 * This method returns the CO2 eq of the N2O gas
 		 * @return a double
 		 */
 		public double getN2OFactor() {return n2oToCo2Eq;}
+		
+		
+		/**
+		 * This method returns the CO2 eq of the CO gas
+		 * @return a double
+		 */
+		public double getCOFactor() {return coToCo2Eq;}
 	}
 
 	private static Map<AssessmentReport, GWP> GlobalWarmingPotentialMap = new HashMap<AssessmentReport, GWP>();
 	static {
-		GlobalWarmingPotentialMap.put(AssessmentReport.Second, new GWP(21, 310));
-		GlobalWarmingPotentialMap.put(AssessmentReport.Fourth, new GWP(25, 298));	// from IPCC(2007, Table 2.14)
-		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265));	// from IPCC(2013, Ch.8 p.714)
+		GlobalWarmingPotentialMap.put(AssessmentReport.Second, new GWP(21, 310, 1.9));	// from IPCC(1995, WG1 Table 2.9 p. 121)
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fourth, new GWP(25, 298, 1.9));	// from IPCC(2007, Table 2.14 and paragraph p. 214)
+		GlobalWarmingPotentialMap.put(AssessmentReport.Fifth, new GWP(28, 265, 1.9));	// from IPCC(2013, Ch.8 p.714 and Table 8.SM.16)
 	}
 
 	private final CATExponentialFunction decayFunction = new CATExponentialFunction();
@@ -173,6 +182,8 @@ public final class CATSettings {
 	
 	public static final double CO2_C_FACTOR = 12d / 44;
 	public static final double C_C02_FACTOR = 44d / 12;
+	public static final double CH4_C_FACTOR = 12d / 16;
+	public static final double C_CH4_FACTOR = 16d / 12;
 
 	protected static AssessmentReport selectedAR = AssessmentReport.Fifth;
 	

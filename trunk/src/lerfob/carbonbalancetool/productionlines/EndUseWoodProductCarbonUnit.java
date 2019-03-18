@@ -27,6 +27,7 @@ import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
+import repicea.util.ObjectUtility;
 
 
 /**
@@ -238,4 +239,76 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	}
 	
 	
+	private double getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(double dryBiomassMg) {
+		double emissionFactor = getCarbonUnitFeature().getCombustionEmissionFactorsInCO2Eq();
+		if (emissionFactor > 0) {
+			return - dryBiomassMg * (emissionFactor - 1);
+		} else {
+			return 0d;
+		}
+	}
+
+	private double getHeatProductionForAParticularAmountOfDryBiomass(double dryBiomassMg) {
+		double heatFactor = getCarbonUnitFeature().getHeatProductionKWh();
+		return heatFactor * dryBiomassMg;
+	}
+
+
+	/**
+	 * This method returns the total emissions due to combusion in CO2 eq.
+	 * @return a double
+	 */
+	public double getTotalCombustionEmissionsCO2Eq() {
+		return getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(getAmountMap().get(Element.Biomass));
+	}
+
+	
+	/**
+	 * This method returns the emissions through out the lifetime of the end use wood product. 
+	 * NOTE: if the array of released carbon is null this method returns null
+	 * @return an array of double based on the time scale 
+	 */
+	public double[] getCombustionEmissionsArrayCO2Eq() {
+		double[] releasedCarbonArray = getReleasedCarbonArray();
+		if (releasedCarbonArray != null) {
+			double carbonToBiomassFactor = getAmountMap().get(Element.Biomass) / getInitialCarbon(); 
+			double[] releasedBiomass = ObjectUtility.multiplyArrayByScalar(releasedCarbonArray, carbonToBiomassFactor);
+			double[] combustionEmissionsCO2Eq = new double[releasedBiomass.length];
+			for (int i = 0; i < releasedBiomass.length; i++) {
+				combustionEmissionsCO2Eq[i] = getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(releasedBiomass[i]);
+			}
+			return combustionEmissionsCO2Eq;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * This method returns the emissions through out the lifetime of the end use wood product. 
+	 * NOTE: if the array of released carbon is null this method returns null
+	 * @return an array of double based on the time scale 
+	 */
+	public double[] getHeatProductionArrayKWh() {
+		double[] releasedCarbonArray = getReleasedCarbonArray();
+		if (releasedCarbonArray != null) {
+			double carbonToBiomassFactor = getAmountMap().get(Element.Biomass) / getInitialCarbon(); 
+			double[] releasedBiomass = ObjectUtility.multiplyArrayByScalar(releasedCarbonArray, carbonToBiomassFactor);
+			double[] heatProductionArrayKWh = new double[releasedBiomass.length];
+			for (int i = 0; i < releasedBiomass.length; i++) {
+				heatProductionArrayKWh[i] = getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(releasedBiomass[i]);
+			}
+			return heatProductionArrayKWh;
+		} else {
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * This method returns the total heat production from this carbon unit in KWh.
+	 * @return a double
+	 */
+	public double getTotalHeatProductionKWh() {
+		return getHeatProductionForAParticularAmountOfDryBiomass(getAmountMap().get(Element.Biomass));
+	}
 }
