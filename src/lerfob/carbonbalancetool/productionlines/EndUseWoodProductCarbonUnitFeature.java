@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.CATCompartmentManager;
+import lerfob.carbonbalancetool.productionlines.combustion.CombustionEmissions;
 import lerfob.carbonbalancetool.productionlines.combustion.CombustionEmissions.CombustionProcess;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
@@ -175,6 +176,30 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		}
 	}
 	protected void setDisposableProportion(double disposableProportion) {this.disposableProportion = disposableProportion;} 
+	
+	/**
+	 * Returns the combustion emission factors in CO2 eq. for one Mg of dry biomass.
+	 * @return a double
+	 */
+	protected double getCombustionEmissionFactorsInCO2Eq() {
+		if (combustionProcess != null && combustionProcess != CombustionProcess.None) {
+			return CombustionEmissions.CombustionEmissionsMap.get(combustionProcess).getEmissionFactorInCO2EqForOneMgOfDryBiomass();
+		} else {
+			return 0d;
+		}
+	}
+	
+	/**
+	 * Returns the combustion emission factors in CO2 eq. for one Mg of dry biomass.
+	 * @return a double
+	 */
+	protected double getHeatProductionKWh() {
+		if (combustionProcess != null && combustionProcess != CombustionProcess.None) {
+			return CombustionEmissions.CombustionEmissionsMap.get(combustionProcess).getHeatProductionInKWhForOneMgOfDryBiomass();
+		} else {
+			return 0d;
+		}
+	}
 	
 	/*
 	 * Called when the document in the averageSubstitutionTextField member is updated.

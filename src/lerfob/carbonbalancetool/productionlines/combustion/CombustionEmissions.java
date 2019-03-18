@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.productionlines.combustion;
 import java.util.HashMap;
 import java.util.Map;
 
+import lerfob.carbonbalancetool.CATSettings;
 import repicea.io.javacsv.CSVReader;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -55,15 +56,18 @@ public class CombustionEmissions {
 		public String toString() {return REpiceaTranslator.getString(this);}
 	}
 	
+//	private static final double CInOneMgDryBiomass = 0.483;
+	
 	public static final Map<CombustionProcess, CombustionEmissions> CombustionEmissionsMap = new HashMap<CombustionProcess, CombustionEmissions>();
 	static {
 		init();
 	}
 	
+	@SuppressWarnings("unused")
 	private final double co2EmissionMg_MgDryBiomassFactor;
 	private final double ch4EmissionMg_MgDryBiomassFactor;
 	private final double coEmissionMg_MgDryBiomassFactor;
-	private final double covEmissionMg_MgDryBiomassFactor;
+	private final double vocEmissionMg_MgDryBiomassFactor;
 	private final double heatEmissionKWh_MgDryBiomassFactor;
 	
 	
@@ -71,7 +75,7 @@ public class CombustionEmissions {
 		co2EmissionMg_MgDryBiomassFactor = Double.parseDouble(record[1].toString());
 		ch4EmissionMg_MgDryBiomassFactor = Double.parseDouble(record[2].toString());
 		coEmissionMg_MgDryBiomassFactor = Double.parseDouble(record[3].toString());
-		covEmissionMg_MgDryBiomassFactor = Double.parseDouble(record[4].toString());
+		vocEmissionMg_MgDryBiomassFactor = Double.parseDouble(record[4].toString());
 		heatEmissionKWh_MgDryBiomassFactor = Double.parseDouble(record[5].toString());
 	}
 
@@ -92,8 +96,24 @@ public class CombustionEmissions {
 		}
 	}
 
-	public static void main(String[] args) {
-		
+	/**
+	 * This method returns the total emissions in Mg of CO2 eq. by other gases than CO2 for
+	 * the combustion of 1 Mg of dry biomass. 
+	 * @return a double
+	 */
+	public double getEmissionFactorInCO2EqForOneMgOfDryBiomass() {
+		double ch4Part = ch4EmissionMg_MgDryBiomassFactor * (CATSettings.getGlobalWarmingPotential().getCH4Factor() - 1); 
+		double coPart = coEmissionMg_MgDryBiomassFactor * (CATSettings.getGlobalWarmingPotential().getCOFactor() - 1); 
+		double vocPart = vocEmissionMg_MgDryBiomassFactor * (5 - 1);	// GWP estimated to 5 for VOC
+		return ch4Part + coPart + vocPart;
 	}
-
+	
+	/**
+	 * This methods returns the total heat production in KWh for one Mg of dry biomass.
+	 * @return a double
+	 */
+	public double getHeatProductionInKWhForOneMgOfDryBiomass() {
+		return heatEmissionKWh_MgDryBiomassFactor;
+	}
+	
 }
