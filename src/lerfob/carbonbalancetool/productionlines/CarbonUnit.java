@@ -64,7 +64,7 @@ public class CarbonUnit extends ProcessUnit<Element> {
 		P, 
 		/** Potassium */
 		K,
-		/** Emissions CO2 eq. **/
+		/** Emissions CO2 eq. related to the production and transport and others **/
 		EmissionsCO2Eq;
 		
 		private static List<Element> nutrientList;

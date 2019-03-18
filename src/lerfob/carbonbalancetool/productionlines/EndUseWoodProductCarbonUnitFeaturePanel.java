@@ -32,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
+import lerfob.carbonbalancetool.productionlines.combustion.CombustionEmissions.CombustionProcess;
 import repicea.gui.UIControlManager;
 import repicea.gui.components.NumberFormatFieldFactory;
 import repicea.gui.components.NumberFormatFieldFactory.JFormattedNumericField;
@@ -52,7 +53,8 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 //		LandfillSiteCheckBoxLabel("Send to landfill after useful life", "Envoyer \u00E0 la d\u00E9charge apr\u00E8s vie utile"),
 //		PercentageSentToTheLandfill("Percentage sent to landfill", "Pourcentage envoy\u00E9 \u00E0 la d\u00E9charge"),
 		RelativeSubstitution("Relative substitution (Mg CO2 eq. / Funct. Unit)", "Substitution relative (Mg CO2 eq. / Unit\u00E9 fonct.)"),
-		UseClassCategory("Use class", "Cat\u00E9gorie d'usage");
+		UseClassCategory("Use class", "Cat\u00E9gorie d'usage"),
+		CombustionProcessName("Combustion process", "Proc\u00E9d\u00E9 de combustion");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -67,6 +69,9 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 	
 	@SuppressWarnings("rawtypes")
 	private JComboBox useClassList;
+	@SuppressWarnings("rawtypes")
+	private JComboBox combustionProcessList;
+	
 	protected JFormattedNumericField substitutionTextField;
 
 	protected JCheckBox isDisposableCheckBox;
@@ -125,6 +130,7 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 			}
 		}
 		
+		combustionProcessList = new JComboBox(CombustionProcess.values());
 		
 		emissionsByFUField = NumberFormatFieldFactory.createNumberFormatField(NumberFormatFieldFactory.Type.Double,
 				NumberFormatFieldFactory.Range.Positive,
@@ -159,6 +165,12 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				5,
 				true);
 		
+		JPanel combustionProcessPanel = UIControlManager.createSimpleHorizontalPanel(UIControlManager.getLabel(MessageID.CombustionProcessName),
+				combustionProcessList, 
+				10, 
+				true);
+		
+		
 		mainPanel.add(biomassFUPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(emissionFUPanel);
@@ -166,6 +178,8 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		mainPanel.add(averageSubstitutionPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 		mainPanel.add(useClassPanel);
+		mainPanel.add(Box.createVerticalStrut(5));
+		mainPanel.add(combustionProcessPanel);
 		mainPanel.add(Box.createVerticalStrut(5));
 
 	}
@@ -191,6 +205,12 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 			if (isEnabled()) {
 				disposableProportionSlider.setEnabled(isDisposableCheckBox.isSelected());
 			}
+		} else if (evt.getSource().equals(useClassList)) {
+			boolean isMeantForEnergy = getCaller().getUseClass().isMeantForEnergyProduction();
+			if (!isMeantForEnergy) {
+				combustionProcessList.setSelectedItem(CombustionProcess.None);
+			}
+			combustionProcessList.setEnabled(isMeantForEnergy);
 		}
 	}
 	
@@ -203,6 +223,8 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		disposableProportionSlider.addChangeListener(getCaller());
 		substitutionTextField.addNumberFieldListener(getCaller());
 		useClassList.addItemListener(getCaller());
+		useClassList.addItemListener(this);
+		combustionProcessList.addItemListener(getCaller());
 		biomassFUTextField.addNumberFieldListener(getCaller());
 		emissionsByFUField.addNumberFieldListener(getCaller());
 	}
@@ -216,6 +238,8 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		disposableProportionSlider.removeChangeListener(getCaller());
 		substitutionTextField.removeNumberFieldListener(getCaller());
 		useClassList.removeItemListener(getCaller());
+		useClassList.removeItemListener(this);
+		combustionProcessList.removeItemListener(getCaller());
 		biomassFUTextField.removeNumberFieldListener(getCaller());
 		emissionsByFUField.removeNumberFieldListener(getCaller());
 	}
