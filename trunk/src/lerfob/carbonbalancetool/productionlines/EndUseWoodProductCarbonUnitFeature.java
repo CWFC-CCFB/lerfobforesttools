@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lerfob.carbonbalancetool.CATCompartmentManager;
+import lerfob.carbonbalancetool.productionlines.combustion.CombustionEmissions.CombustionProcess;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import repicea.gui.components.NumberFormatFieldFactory.NumberFieldDocument.NumberFieldEvent;
@@ -44,22 +45,27 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	private static final long serialVersionUID = 20101020L;
 	
 	public static enum UseClass implements TextableEnum {
-		NONE("Industrial loss", "Perte industrielle"), 
-		ENERGY("Energy wood", "Bois \u00E9nergie"), 
-		PAPER("Paper", "Papier"), 
-		WRAPPING("Packages", "Emballages"), 
-		FURNITURE("Furniture", "Ameublement"), 
-		BARREL("Staves", "Tonnellerie"), 
-		BUILDING("Building", "Construction"),
-		FIREWOOD("Fire wood", "Bois de feu"),
-		RESIDUALS_FOR_ENERGY("Residues energy", "R\u00E9sidus pour \u00E9nergie"),
-		BRANCHES_FOR_ENERGY("Branches", "Menus bois"),
-		STUMPS_FOR_ENERGY("Stumps", "Souches"),
-		EXTRACTIVE("Wood extractives", "Extractibles du bois");
+		NONE("Industrial loss", "Perte industrielle", true), 
+		ENERGY("Energy wood", "Bois \u00E9nergie", true), 
+		PAPER("Paper", "Papier", false), 
+		WRAPPING("Packages", "Emballages", false), 
+		FURNITURE("Furniture", "Ameublement", false), 
+		BARREL("Staves", "Tonnellerie", false), 
+		BUILDING("Building", "Construction", false),
+		FIREWOOD("Fire wood", "Bois de feu", true),
+		RESIDUALS_FOR_ENERGY("Residues energy", "R\u00E9sidus pour \u00E9nergie", true),
+		BRANCHES_FOR_ENERGY("Branches", "Menus bois", true),
+		STUMPS_FOR_ENERGY("Stumps", "Souches", true),
+		EXTRACTIVE("Wood extractives", "Extractibles du bois", false);
 
-		UseClass(String englishText, String frenchText) {
+		private final boolean meantForEnergyProduction;
+		
+		UseClass(String englishText, String frenchText, boolean meantForEnergyProduction) {
 			setText(englishText, frenchText);
+			this.meantForEnergyProduction = meantForEnergyProduction;
 		}
+		
+		public boolean isMeantForEnergyProduction() {return meantForEnergyProduction;}
 		
 		@Override
 		public void setText(String englishText, String frenchText) {
@@ -79,6 +85,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	@Deprecated
 	private double disposableProportion;
 	private UseClass useClass;
+	
+	private CombustionProcess combustionProcess;
 	
 	/**
 	 * The average C to m3 of raw material substitution ratio.
@@ -218,6 +226,12 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 				}
 			} else if (obj instanceof LifetimeMode) {
 				super.itemStateChanged(evt);
+			} else if (obj instanceof CombustionProcess) {
+				CombustionProcess newCombustionProcess = (CombustionProcess) obj;
+				if (newCombustionProcess != combustionProcess) {
+					((AbstractProcessorButton) getProcessor().getUI()).setChanged(true);
+					combustionProcess = newCombustionProcess;
+				}
 			}
 		} else if (evt.getSource().equals(getUserInterfacePanel().isDisposableCheckBox)) {
 			if (getUserInterfacePanel().isEnabled()) {
