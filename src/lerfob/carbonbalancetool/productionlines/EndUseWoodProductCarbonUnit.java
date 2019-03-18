@@ -295,7 +295,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			double[] releasedBiomass = ObjectUtility.multiplyArrayByScalar(releasedCarbonArray, carbonToBiomassFactor);
 			double[] heatProductionArrayKWh = new double[releasedBiomass.length];
 			for (int i = 0; i < releasedBiomass.length; i++) {
-				heatProductionArrayKWh[i] = getCombustionEmissionsInCO2EqForAParticularAmountOfDryBiomass(releasedBiomass[i]);
+				heatProductionArrayKWh[i] = getHeatProductionForAParticularAmountOfDryBiomass(releasedBiomass[i]);
 			}
 			return heatProductionArrayKWh;
 		} else {

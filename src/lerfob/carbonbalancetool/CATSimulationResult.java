@@ -102,4 +102,10 @@ public interface CATSimulationResult {
 	 * @return a boolean
 	 */
 	public boolean isEvenAged();
+
+	/**
+	 * This method returns the heat production (KWh) for one ha.
+	 * @return a MonteCarlo estimate
+	 */
+	public MonteCarloEstimate getHeatProductionEvolutionKWhPerHa();
 }

@@ -31,6 +31,7 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import repicea.math.Matrix;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
@@ -42,6 +43,10 @@ import repicea.simulation.treelogger.WoodPiece;
  */
 public class CATProductCompartment extends CATCompartment {
 
+	
+	private double[] heatProductionArray;
+	private double totalHeatProduction;
+	
 
 	/**
 	 * Constructor.
@@ -271,5 +276,23 @@ public class CATProductCompartment extends CATCompartment {
 		return outerMap;
 	}
 
+	protected void setHeatProductionArray(double[] heatProductionArray) {
+		this.heatProductionArray = heatProductionArray;
+	}
+	
+	protected void setTotalHeathProduction(double totalHeatProduction) {
+		this.totalHeatProduction = totalHeatProduction;
+	}
 
+	protected Matrix getHeatProductionEvolutionKWhHa(double plotAreaHa) {
+		Matrix mat = new Matrix(heatProductionArray);
+		return mat.scalarMultiply(1d / plotAreaHa);
+	}
+	
+	protected Matrix getTotalHeatProductionKWhHa(double plotAreaHa) {
+		Matrix mat = new Matrix(1,1);
+		mat.m_afData[0][0] = totalHeatProduction * 1d / plotAreaHa;
+		return mat;
+	}
+	
 }
