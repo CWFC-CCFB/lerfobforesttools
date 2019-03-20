@@ -53,6 +53,7 @@ public class CATExportTool extends REpiceaExportTool {
 		Year("Year", "Annee"),
 		Compartment("Compart", "Compart"),
 		CarbonHaMean("tCHaMean", "tCHaMoy"),
+		HeatKWhPerHa("KWhHaMean", "KWhHaMoy"),
 		Variance("Variance", "Variance");
 			
 		MessageID(String englishText, String frenchText) {
@@ -105,6 +106,9 @@ public class CATExportTool extends REpiceaExportTool {
 			case HWPEvolution:
 				createHWPEvolutionRecordSet();
 				break;
+			case HeatProduction:
+				createCumulativeHeatProductionRecordSet();
+				break;
 			default:
 				throw new Exception("Unrecognized Export Format");
 			}
@@ -113,6 +117,45 @@ public class CATExportTool extends REpiceaExportTool {
 		
 		
 		
+		private void createCumulativeHeatProductionRecordSet() throws Exception {
+			GExportRecord r;
+			
+			CATTimeTable timeScale = caller.summary.getTimeTable();
+			
+			String standID = caller.summary.getStandID();
+			if (standID == null || standID.isEmpty()) {
+				standID = "Unknown";
+			}
+			
+			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
+			MonteCarloEstimate estimate = caller.summary.getHeatProductionEvolutionKWhPerHa();
+			int nbRealizations = estimate.getNumberOfRealizations();
+			for (int i = 0; i < timeScale.size(); i++) {
+				for (int j = 0; j < nbRealizations; j++) {
+					double value = estimate.getRealizations().get(j).m_afData[i][0];
+					if (caller.summary.isEvenAged() && i == 0) {
+						r = new GExportRecord();
+						r.addField(standIDField);
+						r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
+						r.addField(new GExportFieldDetails(MessageID.HeatKWhPerHa.toString(), (Double) 0d));
+						if (nbRealizations > 0) {
+							r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+						}
+						addRecord(r);
+					}
+					r = new GExportRecord();
+					r.addField(standIDField);
+					r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.get(i)));
+					r.addField(new GExportFieldDetails(MessageID.HeatKWhPerHa.toString(), value));
+					if (nbRealizations > 0) {
+						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+					}
+
+					addRecord(r);
+				}
+			}
+		}
+
 		private void createHWPEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 						
@@ -240,7 +283,6 @@ public class CATExportTool extends REpiceaExportTool {
 		 */
 		private void createTotalHWPbyCategoriesRecordSet() throws Exception {
 			GExportRecord r;
-			// TODO change the units
 			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
 			
 			double nutrientKg;
@@ -386,7 +428,8 @@ public class CATExportTool extends REpiceaExportTool {
 		TotalHWPbyCategories("Total production of HWP by categories", "Production totale des produits bois par cat\u00E9gories"),
 		AnnualVolumeNutrientFluxes("Annual volume and nutrient fluxes", "Flux annuels en volume et min\u00E9ralomasse"),
 		TotalLogVolumeByCategories("Total production of logs by categories", "Production totale de billons par cat\u00E9gories"),
-		HWPEvolution("HWP production by date and categories", "Production des produits bois par dates et cat\u00E9gories");
+		HWPEvolution("HWP production by date and categories", "Production des produits bois par dates et cat\u00E9gories"),
+		HeatProduction("Cumulative heat production", "Production cumulative de chaleur");
 
 		ExportOption(String englishText, String frenchText) {
 			setText(englishText, frenchText);
