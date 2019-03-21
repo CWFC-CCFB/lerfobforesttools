@@ -57,7 +57,7 @@ public class FrenchNFIThinnerPredictorTests {
 				int year0 = Integer.parseInt(record[10].toString());
 				int year1 = Integer.parseInt(record[11].toString());
 				
-				FrenchNFIThinnerPlot plot = new FrenchNFIThinnerPlotImpl(idp, 
+				FrenchNFIThinnerPlot plot = new FrenchNFIThinnerPlotInnerImpl(idp, 
 						department.getFrenchRegion2016(), 
 						basalAreaM2Ha, 
 						stemDensityHa,	
@@ -92,7 +92,7 @@ public class FrenchNFIThinnerPredictorTests {
 
 		int nbPlots = 0;
 		for (FrenchNFIThinnerPlot plot : plots) {
-			FrenchNFIThinnerPlotImpl p = (FrenchNFIThinnerPlotImpl) plot;
+			FrenchNFIThinnerPlotInnerImpl p = (FrenchNFIThinnerPlotInnerImpl) plot;
 			double actual = thinner.predictEventProbability(plot, null, p.getYear0(), p.getYear1());
 			double expected = p.getPredictedProbability();
 			Assert.assertEquals(expected, actual, 1E-8);
@@ -110,7 +110,7 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
-		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
+		FrenchNFIThinnerPlotInnerImpl plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(0); // we pick the first plot
 		FrenchNFIThinnerSpecies species = plot.targetSpecies;
 
 		double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, plot.getMonteCarloRealizationId());
@@ -144,7 +144,7 @@ public class FrenchNFIThinnerPredictorTests {
 		List<FrenchNFIThinnerPlot> plots = readPlots();
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, true);
 
-		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(0); // we pick the first plot
+		FrenchNFIThinnerPlotInnerImpl plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(0); // we pick the first plot
 		FrenchNFIThinnerSpecies species = plot.targetSpecies;
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
@@ -176,7 +176,7 @@ public class FrenchNFIThinnerPredictorTests {
 
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
-			((FrenchNFIThinnerPlotImpl) plot).monteCarloRealization = mc;
+			((FrenchNFIThinnerPlotInnerImpl) plot).monteCarloRealization = mc;
 			double predictedProbability = thinner.predictEventProbability(plot, null, 2016, 2017);
 			estimate.addRealization(new Matrix(new double[]{predictedProbability}));
 		}
@@ -198,11 +198,11 @@ public class FrenchNFIThinnerPredictorTests {
 			plot = plots.get(i);
 		}
 
-		double priceIn2016 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
+		double priceIn2016 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
 		
 		thinner.setBasicTrendModifier(2016, 2017, .5);
 
-		double priceIn2016WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
+		double priceIn2016WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2016, plot.getMonteCarloRealizationId());
 
 		Assert.assertEquals("Price in 2016", priceIn2016, priceIn2016WithModifier, 1E-8);
 		
@@ -221,11 +221,11 @@ public class FrenchNFIThinnerPredictorTests {
 			plot = plots.get(i);
 		}
 
-		double priceIn2017 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
+		double priceIn2017 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
 		
 		thinner.setBasicTrendModifier(2016, 2017, .5);
 
-		double priceIn2017WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
+		double priceIn2017WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2017, plot.getMonteCarloRealizationId());
 
 		Assert.assertEquals("Price in 2017", priceIn2017 * 1.5, priceIn2017WithModifier, 1E-8);
 		
@@ -244,11 +244,11 @@ public class FrenchNFIThinnerPredictorTests {
 			plot = plots.get(i);
 		}
 
-		double priceIn2018 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
+		double priceIn2018 = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
 		
 		thinner.setBasicTrendModifier(2016, 2020, .5);
 
-		double priceIn2018WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
+		double priceIn2018WithModifier = thinner.priceProvider.getStandingPriceForThisYear(((FrenchNFIThinnerPlotInnerImpl) plot).getTargetSpecies(), 2018, plot.getMonteCarloRealizationId());
 
 		Assert.assertEquals("Price in 2018", priceIn2018 * 1.25, priceIn2018WithModifier, 1E-8);
 		
@@ -261,10 +261,10 @@ public class FrenchNFIThinnerPredictorTests {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		int i = 0;
-		FrenchNFIThinnerPlotImpl plot = (FrenchNFIThinnerPlotImpl) plots.get(i);
+		FrenchNFIThinnerPlotInnerImpl plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(i);
 		while (!plot.getSubjectId().equals("310480")) {
 			i++;
-			plot = (FrenchNFIThinnerPlotImpl) plots.get(i);
+			plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(i);
 		}
 
 		double unModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);

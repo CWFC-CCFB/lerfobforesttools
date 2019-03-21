@@ -24,7 +24,7 @@ class FrenchNFIThinnerPredictions {
 			double slopeInclination,
 			boolean underManagement) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("standingPrice" + targetSpecies.name() + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+		FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 				region,
 				basalAreaM2Ha,
 				stemDensityHa,	
@@ -79,9 +79,9 @@ class FrenchNFIThinnerPredictions {
 			double slopeInclination,
 			boolean underManagement) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("standingPriceAllSpecies.csv");
-		List<FrenchNFIThinnerPlotImpl> plots = new ArrayList<FrenchNFIThinnerPlotImpl>();
+		List<FrenchNFIThinnerPlotInnerImpl> plots = new ArrayList<FrenchNFIThinnerPlotInnerImpl>();
 		for (FrenchNFIThinnerSpecies sp : FrenchNFIThinnerSpecies.values()) {
-			FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+			FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 					FrenchRegion2016.NOUVELLE_AQUITAINE,
 					basalAreaM2Ha,
 					stemDensityHa,	
@@ -108,7 +108,7 @@ class FrenchNFIThinnerPredictions {
 
 			int year0 = startingYear;
 			int year1 = startingYear + 5;
-			for (FrenchNFIThinnerPlotImpl plot : plots) {
+			for (FrenchNFIThinnerPlotInnerImpl plot : plots) {
 				MonteCarloEstimate estimate = new MonteCarloEstimate();
 				for (int real = 0; real < 10000; real++) {
 					plot.monteCarloRealization = real;
@@ -143,7 +143,7 @@ class FrenchNFIThinnerPredictions {
 			double stemDensityHa,
 			boolean underManagement) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("slope" + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+		FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 				region,
 				basalAreaM2Ha,
 				stemDensityHa,	
@@ -206,7 +206,7 @@ class FrenchNFIThinnerPredictions {
 			boolean underManagement,
 			double slope) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("region" + targetSpecies.name() + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+		FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 				FrenchRegion2016.AUVERGNE_RHONE_ALPES,
 				basalAreaM2Ha,
 				stemDensityHa,	
@@ -263,7 +263,7 @@ class FrenchNFIThinnerPredictions {
 			double stemDensityHa,
 			double slope) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("landownership" + targetSpecies.name() + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+		FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 				region,
 				basalAreaM2Ha,
 				stemDensityHa,	
@@ -335,7 +335,7 @@ class FrenchNFIThinnerPredictions {
 			boolean underManagement,
 			double slope) {
 		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "manuscripts").concat("BAStemDensity" + targetSpecies.name() + startingYear + ".csv");
-		FrenchNFIThinnerPlotImpl plot = new FrenchNFIThinnerPlotImpl("plotTest", 
+		FrenchNFIThinnerPlotInnerImpl plot = new FrenchNFIThinnerPlotInnerImpl("plotTest", 
 				FrenchRegion2016.GRAND_EST,
 				24,
 				700,	
