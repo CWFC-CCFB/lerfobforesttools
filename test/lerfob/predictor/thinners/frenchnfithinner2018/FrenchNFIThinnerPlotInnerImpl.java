@@ -4,7 +4,7 @@ import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
 
-class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationPlot {
+class FrenchNFIThinnerPlotInnerImpl implements FrenchNFIThinnerPlot, InnerValidationPlot {
 
 	final String plotID;
 	FrenchRegion2016 region2016;
@@ -22,7 +22,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	/**
 	 * Constructor for prediction purpose.
 	 */
-	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
+	FrenchNFIThinnerPlotInnerImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, FrenchNFIThinnerSpecies targetSpecies, boolean interventionInPrevious5Years,
 							double probabilityPrivateLand,
 							double predictedProb, int year0, int year1) {
@@ -37,7 +37,7 @@ class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot, InnerValidationP
 	/**
 	 * Constructor for prediction.
 	 */
-	FrenchNFIThinnerPlotImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
+	FrenchNFIThinnerPlotInnerImpl(String plotID, FrenchRegion2016 region2016, double basalAreaM2Ha, double stemDensityHa,	
 							double slopeInclination, FrenchNFIThinnerSpecies targetSpecies, boolean interventionInPrevious5Years,
 							double probabilityPrivateLand) {
 		this.plotID = plotID;
