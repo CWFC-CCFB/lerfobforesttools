@@ -69,8 +69,7 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 	}
 	
 	/**
-	 * Constructor for French NFI. The basal area of other trees is calculated
-	 * as the plot basal area minus the basal area of a particular tree times 14.14.
+	 * Constructor for French NFI. 
 	 * @param id the id of the plot
 	 * @param pentInc the inclination of the slope in % (for 1% it is 1 and not .01)
 	 * @param xCoord the latitude in geographic coordinates

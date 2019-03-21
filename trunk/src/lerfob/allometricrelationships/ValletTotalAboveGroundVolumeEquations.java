@@ -24,7 +24,7 @@ import lerfob.fagacees.FagaceesSpeciesProvider.FgSpecies;
 
 /**
  * This method implements the models developed in Vallet et al. to predict the total aboveground over-bark volume.
- * @see <a href=http://www.sciencedirect.com/science?_ob=MImg&_imagekey=B6T6X-4JTR93P-3-10&_cdi=5042&_user=4296857&_pii=S0378112706002040&_origin=browse&_zone=rslt_list_item&_coverDate=07%2F01%2F2006&_sk=997709998&wchp=dGLzVtz-zSkWA&md5=58cf607d3a3abfe21c29b083cc2d6947&ie=/sdarticle.pdf> 
+ * @see <a href=https://www.sciencedirect.com/science/article/pii/S0378112706002040> 
  * Vallet, P., Dhote, J.-F., Le Moguedec, G., Ravart, M., Pignard, G. 2006. Development of total aboveground volume equations for seven important forest tree species in France. Forest Ecology Management 229: 98-110.
  * </a> 
  * @author Mathieu Fortin - November 2011

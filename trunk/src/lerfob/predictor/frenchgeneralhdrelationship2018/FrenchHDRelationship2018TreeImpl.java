@@ -37,19 +37,19 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param gOther the basal area of other trees (m2/ha)
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
-	 * @param stand a FrenchHDRelationship2018StandImpl instance that hosts the tree
+	 * @param plot a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
 	protected FrenchHDRelationship2018TreeImpl(double heightM, 
 			double dbhCm, 
 			Double gOther, 
 			String speciesName, 
-			FrenchHDRelationship2018PlotImpl stand) {
+			FrenchHDRelationship2018PlotImpl plot) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
 		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
-		this.plot = stand;
-		stand.addTree(this); 
+		this.plot = plot;
+		plot.addTree(this); 
 	}
 
 	/**
@@ -57,18 +57,18 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	 * @param heightM the height of the tree (m) or -1 if it was not observed
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
-	 * @param stand a FrenchHDRelationship2018StandImpl instance that hosts the tree
+	 * @param plot a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
 	public FrenchHDRelationship2018TreeImpl(double heightM, 
 			double dbhCm, 
 			String speciesName, 
-			FrenchHDRelationship2018PlotImpl stand) {
+			FrenchHDRelationship2018PlotImpl plot) {
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = null;
 		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
-		this.plot = stand;
-		stand.addTree(this); 
+		this.plot = plot;
+		plot.addTree(this); 
 	}
 
 	
