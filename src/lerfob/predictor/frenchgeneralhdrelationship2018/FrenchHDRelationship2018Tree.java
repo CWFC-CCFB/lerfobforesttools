@@ -35,6 +35,13 @@ public interface FrenchHDRelationship2018Tree extends HDRelationshipTree,
 										LnDbhCmPlus1Provider,
 										SquaredLnDbhCmPlus1Provider {
 
+	/**
+	 * This method returns a FrenchHd2018Species instance that matches the species name. 
+	 * The species name is processed to replace all occurrences of " ", "'", and "-" by
+	 * "_". 
+	 * @param speciesName a String that represents the common species name in French.
+	 * @return a FrenchHd2018Species enum
+	 */
 	public static FrenchHd2018Species getFrenchHd2018SpeciesFromThisString(String speciesName) {
 		speciesName = speciesName.trim().toUpperCase().replace(" ", "_");
 		speciesName = speciesName.replace("'", "_");

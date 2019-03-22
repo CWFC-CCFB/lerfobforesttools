@@ -20,6 +20,21 @@ package lerfob.simulation.covariateproviders.standlevel;
 
 public abstract interface FrenchRegion2016Provider {
 
+	/**
+	 * This method returns a FrenchRegion2016 instance that matches the region name. 
+	 * The region name is processed to replace all occurrences of " ", "'", and "-" by
+	 * "_". 
+	 * @param regionName a String that represents the 2016 new administrative region in French.
+	 * @return a FrenchRegion2016 enum
+	 */
+	public static FrenchRegion2016 getFrenchRegion2016FromThisString(String regionName) {
+		regionName = regionName.trim().toUpperCase().replace(" ", "_");
+		regionName = regionName.replace("'", "_");
+		regionName = regionName.replace("-", "_");
+		FrenchRegion2016 region = FrenchRegion2016.valueOf(regionName);
+		return region;
+	}
+
 	public static enum FrenchRegion2016 {
 		AUVERGNE_RHONE_ALPES,
 		BOURGOGNE_FRANCHE_COMTE,

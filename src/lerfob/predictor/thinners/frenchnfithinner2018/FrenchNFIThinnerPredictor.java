@@ -307,4 +307,20 @@ public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNF
 	public void resetModifiers() {
 		priceProvider.resetModifiers();
 	}
+	
+	
+	/**
+	 * This method returns a FrenchNFIThinnerSpecies instance that matches the species name. 
+	 * The species name is formatted. 
+	 * @param speciesName a String that represents the common species name in French.
+	 * @return a FrenchNFIThinnerSpecies enum
+	 */
+	protected static FrenchNFIThinnerSpecies getFrenchNFIThinnerSpeciesFromThisString(String speciesName) {
+		String firstLetter = speciesName.substring(0, 1).toUpperCase();
+		String rest = speciesName.substring(1).trim();
+		String formattedSpeciesName = firstLetter.concat(rest);
+		return FrenchNFIThinnerSpecies.valueOf(formattedSpeciesName);
+	}
+	
+	
 }
