@@ -18,10 +18,16 @@
  */
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
+import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 
+/**
+ * Basic implementation of the FrenchNFIThinnerPlot interface.
+ * @author Mathieu Fortin - March 2019
+ */
 public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	private final String plotId;
@@ -30,9 +36,21 @@ public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	private final double slopeInclinationPercent;
 	private final boolean wasThereAnySiliviculturalTreatmentInTheLast5Years;
 	private final double probabilityOfBeingOnPrivateLand;
+	private final FrenchRegion2016 region;
+	private final Map<FrenchNFIThinnerSpecies, Double> volumeMap;
 	
+	/**
+	 * Constructor.
+	 * @param plotId
+	 * @param regionName
+	 * @param basalAreaM2Ha
+	 * @param nbStemsHa
+	 * @param slopeInclinationPercent
+	 * @param wasThereAnySiliviculturalTreatmentInTheLast5Years
+	 * @param probabilityOfBeingOnPrivateLand
+	 */
 	public FrenchNFIThinnerPlotImpl(String plotId,
-			String region, 
+			String regionName, 
 			double basalAreaM2Ha, 
 			double nbStemsHa, 
 			double slopeInclinationPercent,
@@ -44,14 +62,23 @@ public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 		this.slopeInclinationPercent = slopeInclinationPercent;
 		this.wasThereAnySiliviculturalTreatmentInTheLast5Years = wasThereAnySiliviculturalTreatmentInTheLast5Years;
 		this.probabilityOfBeingOnPrivateLand = probabilityOfBeingOnPrivateLand;
-		// TODO See how the volume by species can be constructed here
+		this.region = FrenchRegion2016Provider.getFrenchRegion2016FromThisString(regionName);
+		this.volumeMap = new HashMap<FrenchNFIThinnerSpecies, Double>();
+	}
+
+	/**
+	 * This method sets the volume of the difference species that compose the plot.
+	 * @param speciesName a String that represents the species name
+	 * @param volumeHa a double (volume per hectare) 
+	 */
+	public void setVolumeForThisSpecies(String speciesName, double volumeHa) {
+		FrenchNFIThinnerSpecies species = FrenchNFIThinnerPredictor.getFrenchNFIThinnerSpeciesFromThisString(speciesName);
+		volumeMap.put(species, volumeHa);
 	}
 	
+	
 	@Override
-	public FrenchRegion2016 getFrenchRegion2016() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public FrenchRegion2016 getFrenchRegion2016() {return region;}
 
 	@Override
 	public double getBasalAreaM2Ha() {return basalAreaM2Ha;}
@@ -80,8 +107,7 @@ public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 
 	@Override
 	public Map<FrenchNFIThinnerSpecies, Double> getVolumeM3BySpecies() {
-		// TODO Auto-generated method stub
-		return null;
+		return volumeMap;
 	}
 
 }
