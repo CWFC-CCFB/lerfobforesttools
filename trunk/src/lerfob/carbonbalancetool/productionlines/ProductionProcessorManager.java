@@ -438,11 +438,11 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 	/**
 	 * This method actualizes the different carbon units. It proceeds in the following order : </br>
-	 * &nbsp	1- the carbon units left in the forest</br>
-	 * &nbsp	2- the carbon units in the wood products</br>
-	 * &nbsp	3- the carbon units at the landfill site</br>
-	 * &nbsp	4- the carbon units recycled from the disposed wood products</br>
-	 * @param timeScale is an Array of integer that indicates the years of actualization
+	 * &nbsp	1- the carbon units in the wood products</br>
+	 * &nbsp	2- the carbon units recycled from the disposed wood products</br>
+	 * &nbsp	3- the carbon units left in the forest</br>
+	 * &nbsp	4- the carbon units at the landfill site</br>
+	 * @param compartmentManager the CATCompartmentManager instance 
 	 * @throws Exception
 	 */
 	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {
@@ -455,9 +455,16 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CATCompartmentManager compartmentManager) throws Exception {
 		try {
 			CarbonUnitList list = getCarbonUnits(type);
-			for (int i = 0; i < list.size(); i++) {		// FIXME risk of endless loop here
+			if (compartmentManager.getCarbonToolSettings().isVerboseEnabled()) {
+				System.out.println("Carbon units of type " + type.name() + ". Before actualization, " + list.toString());
+			}
+			for (int i = 0; i < list.size(); i++) {		// the condition based on the size of the list makes sure that newly created HWPs will be actualized.
 				CarbonUnit carbonUnit = list.get(i);
 				carbonUnit.actualizeCarbon(compartmentManager);
+			}
+			
+			if (compartmentManager.getCarbonToolSettings().isVerboseEnabled()) {
+				System.out.println("Carbon units of type " + type.name() + " actualized. After actualization, " + list.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

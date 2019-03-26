@@ -165,6 +165,10 @@ public class CATTask extends AbstractGenericTask {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void logAndBuckTrees() throws Exception {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Bucking harvested trees into wood pieces...");
+		}
+
 		manager.setSimulationValid(false);
 		
 		CATCompatibleStand lastStand = manager.getLastStand(); 
@@ -220,6 +224,9 @@ public class CATTask extends AbstractGenericTask {
 	@SuppressWarnings({ "unchecked", "rawtypes"})
 	private void createEndUseWoodProductsFromWoodPieces() throws Exception {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Creating HWP from wood pieces...");
+		}
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		if (!caller.getCarbonToolSettings().formerImplementation) {
 			getProcessorManager().resetCarbonUnitMap();
@@ -500,6 +507,9 @@ public class CATTask extends AbstractGenericTask {
 	 */
 	private void calculateCarbonInCompartments() throws Exception {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Calculating carbon in the different compartments...");
+		}
 		manager.resetCompartmentsAndSetCarbonUnitCollections();
 		
 		double progressFactor = (double) 100d / manager.getCompartments().size() / Task.values().length;
@@ -511,6 +521,9 @@ public class CATTask extends AbstractGenericTask {
 			carbonCompartment.calculateAndIntegrateCarbon();
 			compIter++;
 			setProgress((int) (compIter * progressFactor + (double) (currentTask.ordinal() * 100 / Task.getNumberOfLongTasks())));
+			if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+				System.out.println("Integrated carbon in compartment " + carbonCompartment.getCompartmentID().name() + " = " + carbonCompartment.getIntegratedCarbon());
+			}
 		}
 		manager.setSimulationValid(true);
 		manager.storeResults();

@@ -112,6 +112,11 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			double[] releasedCarbonArray = getReleasedCarbonArray();
 			double proportion;
 			for (int i = getIndexInTimeScale(); i < getTimeTable().size(); i++) {
+				if (getCreationDate() == 2010) {
+					if (getCarbonUnitFeature().toString().startsWith("Charpentes")) {
+						System.out.println("Released carbon = " + releasedCarbonArray[i] + " initial Carbon = " + getInitialCarbon());
+					}
+				}
 				proportion = releasedCarbonArray[i] / getInitialCarbon();
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
 				AbstractProductionLineProcessor disposedToProcessor = (AbstractProductionLineProcessor) ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;

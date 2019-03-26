@@ -214,6 +214,16 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	}
 
 	/**
+	 * This method enables messages all along the process chain. By default, the
+	 * verbose is disabled
+	 * @param bool
+	 */
+	public void setVerboseEnabled(boolean bool) {
+		getCarbonToolSettings().setVerboseEnabled(bool);
+	}
+	
+	
+	/**
 	 * Initializes CAT without parent window.
 	 * @throws Exception
 	 */

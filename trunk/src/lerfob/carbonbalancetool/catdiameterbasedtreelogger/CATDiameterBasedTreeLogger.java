@@ -18,8 +18,13 @@
  */
 package lerfob.carbonbalancetool.catdiameterbasedtreelogger;
 
+import java.util.List;
+
 import lerfob.carbonbalancetool.CATCompatibleTree;
+import lerfob.carbonbalancetool.CATSettings.CATSpecies;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
@@ -56,6 +61,30 @@ public class CATDiameterBasedTreeLogger extends DiameterBasedTreeLogger {
 	@Override
 	public boolean isCompatibleWith(TreeLoggerCompatibilityCheck check) {
 		return isCompatibleTree(check.getTreeInstance());
+	}
+
+	@Override
+	public CATDiameterBasedTreeLoggerParameters getTreeLoggerParameters() {
+		return (CATDiameterBasedTreeLoggerParameters) super.getTreeLoggerParameters();
+	}
+	
+	
+	@Override
+	protected void logThisTree(LoggableTree tree) {
+		CATSpecies species = ((CATCompatibleTree) tree).getCATSpecies();
+		List<DiameterBasedTreeLogCategory> logCategories = getTreeLoggerParameters().getSpeciesLogCategories(species);
+		List<DiameterBasedWoodPiece> pieces;
+		for (DiameterBasedTreeLogCategory logCategory : logCategories) {
+			pieces = ((CATDiameterBasedTreeLogCategory) logCategory).extractFromTree(tree, params);
+			if (pieces != null && !pieces.isEmpty()) {
+				for (DiameterBasedWoodPiece piece : pieces) {
+					addWoodPiece(tree, piece);	
+				}
+				if (shouldBreakAfterGettingPieces) {
+					break;
+				}
+			} 
+		}
 	}
 
 
