@@ -114,7 +114,11 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		CATCompartment compartment;
 		Matrix value;
 		double plotAreaHa = manager.getLastStand().getAreaHa();
-		
+
+		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Updating results... Plot area (ha) is " + plotAreaHa);
+		}
+
 		for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
 			compartment = manager.getCompartments().get(compartmentID);
 			

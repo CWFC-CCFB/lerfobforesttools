@@ -163,6 +163,9 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 
 	@SuppressWarnings({ "unchecked"})
 	public void resetCompartmentsAndSetCarbonUnitCollections() {
+		if (getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Resetting compartment...");
+		}
 		CarbonUnitList joinEndUseProductRecyclageList = new CarbonUnitList();
 		CarbonUnitList leftInForestList;
 		CarbonUnitList degradableLandfillList;

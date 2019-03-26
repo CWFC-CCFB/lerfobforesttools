@@ -205,11 +205,14 @@ public final class CATSettings {
 	protected ProductionManagerName currentProcessorManager = ProductionManagerName.values()[0];
 	protected BiomassParametersName currentBiomassParameters = BiomassParametersName.values()[0]; 
 
+	private boolean verbose;
+	
 	/**
 	 * Constructor.
 	 */
 	public CATSettings(SettingMemory settings) {			
 		this.settings = settings;
+		verbose = false;
 		readProcessorManagers();
 		readBiomassParametersVector();
 		productionLines = new ProductionLineManager();
@@ -461,6 +464,12 @@ public final class CATSettings {
 	@Deprecated
 	protected WoodPieceDispatcher getWoodSupplySetup() {return woodSupply;}
 
+
+	protected void setVerboseEnabled(boolean bool) {
+		this.verbose = bool;
+	}
+
+	public boolean isVerboseEnabled() {return verbose;}
 
 	
 	

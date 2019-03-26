@@ -77,7 +77,7 @@ public class ComparisonWithMathildeTests {
 
 	@Test
 	public void testOakSmallLumberWood() throws IOException {
-		MathildeLoggableTreeImpl loggableTree = new MathildeLoggableTreeImpl(MathildeTreeSpecies.QUERCUS, 30d);
+		MathildeLoggableTreeImpl loggableTree = new MathildeLoggableTreeImpl(MathildeTreeSpecies.QUERCUS, 45d);
 		Collection<MathildeLoggableTreeImpl> trees = new ArrayList<MathildeLoggableTreeImpl>();
 		trees.add(loggableTree);
 		commonCode(trees, loggableTree);
