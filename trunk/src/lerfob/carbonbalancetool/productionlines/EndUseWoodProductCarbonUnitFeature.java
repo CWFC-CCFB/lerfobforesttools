@@ -283,41 +283,44 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		this.lca = lca;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof EndUseWoodProductCarbonUnitFeature)) {
-			return false;
-		} else {
-			EndUseWoodProductCarbonUnitFeature cuf = (EndUseWoodProductCarbonUnitFeature) obj;
-			if (cuf.disposable != disposable) {
-				return false;
-			}
-			if (cuf.disposableProportion != disposableProportion) {
-				return false;
-			}
-			if (cuf.useClass != useClass) {
-				return false;
-			}
-			if (cuf.averageSubstitution != averageSubstitution) {
-				return false;
-			}
-			if (cuf.relativeSubstitutionCO2EqFonctionalUnit != this.relativeSubstitutionCO2EqFonctionalUnit) {
-				return false;
-			}
-			if (cuf.biomassOfFunctionalUnit != this.biomassOfFunctionalUnit) {
-				return false;
-			}
-			if (cuf.emissionsByFunctionalUnit != this.emissionsByFunctionalUnit) {
-				return false;
-			}
-			if (cuf.lca != null) {
-				if (!cuf.lca.equals(lca)) {
-					return false;
-				}
-			}
-		}
-		return super.equals(obj);
-	}
+//	@SuppressWarnings("deprecation")
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (!(obj instanceof EndUseWoodProductCarbonUnitFeature)) {
+//			return false;
+//		} else {
+//			EndUseWoodProductCarbonUnitFeature cuf = (EndUseWoodProductCarbonUnitFeature) obj;
+//			if (!cuf.getProcessor().getName().equals(getProcessor().getName())) {	// make sure the name is the same
+//				return false;
+//			}
+//			if (cuf.disposable != disposable) {
+//				return false;
+//			}
+//			if (cuf.disposableProportion != disposableProportion) {
+//				return false;
+//			}
+//			if (cuf.useClass != useClass) {
+//				return false;
+//			}
+//			if (cuf.averageSubstitution != averageSubstitution) {
+//				return false;
+//			}
+//			if (cuf.relativeSubstitutionCO2EqFonctionalUnit != this.relativeSubstitutionCO2EqFonctionalUnit) {
+//				return false;
+//			}
+//			if (cuf.biomassOfFunctionalUnit != this.biomassOfFunctionalUnit) {
+//				return false;
+//			}
+//			if (cuf.emissionsByFunctionalUnit != this.emissionsByFunctionalUnit) {
+//				return false;
+//			}
+//			if (cuf.lca != null) {
+//				if (!cuf.lca.equals(lca)) {
+//					return false;
+//				}
+//			}
+//		}
+//		return super.equals(obj);
+//	}
 
 }
