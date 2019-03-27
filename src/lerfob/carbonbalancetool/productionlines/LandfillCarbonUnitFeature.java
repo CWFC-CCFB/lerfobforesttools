@@ -113,18 +113,18 @@ public class LandfillCarbonUnitFeature extends CarbonUnitFeature implements Chan
 		}
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof LandfillCarbonUnitFeature)) {
-			return false;
-		} else {
-			LandfillCarbonUnitFeature cuf = (LandfillCarbonUnitFeature) obj;
-			if (cuf.degradableOrganicCarbonFraction != degradableOrganicCarbonFraction) {
-				return false;
-			}
-		}
-		return super.equals(obj);
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (!(obj instanceof LandfillCarbonUnitFeature)) {
+//			return false;
+//		} else {
+//			LandfillCarbonUnitFeature cuf = (LandfillCarbonUnitFeature) obj;
+//			if (cuf.degradableOrganicCarbonFraction != degradableOrganicCarbonFraction) {
+//				return false;
+//			}
+//		}
+//		return super.equals(obj);
+//	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {

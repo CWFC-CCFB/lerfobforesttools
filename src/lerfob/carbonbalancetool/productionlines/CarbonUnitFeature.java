@@ -122,18 +122,18 @@ public class CarbonUnitFeature implements Serializable, REpiceaUIObject, NumberF
 		return getUserInterfacePanel() != null && getUserInterfacePanel().isVisible();
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof CarbonUnitFeature)) {
-			return false;
-		} else {
-			CarbonUnitFeature cuf = (CarbonUnitFeature) obj;
-			if (cuf.averageLifetime != averageLifetime) {
-				return false;
-			}
-		}
-		return true;
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (!(obj instanceof CarbonUnitFeature)) {
+//			return false;
+//		} else {
+//			CarbonUnitFeature cuf = (CarbonUnitFeature) obj;
+//			if (cuf.averageLifetime != averageLifetime) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
 
 	@Override
 	public void numberChanged(NumberFieldEvent e) {
