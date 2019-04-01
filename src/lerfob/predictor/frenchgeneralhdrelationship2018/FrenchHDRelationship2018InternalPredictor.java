@@ -32,7 +32,7 @@ import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
-import repicea.simulation.hdrelationships.HDRelationshipModel;
+import repicea.simulation.hdrelationships.HDRelationshipPredictor;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
@@ -41,7 +41,7 @@ import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
-class FrenchHDRelationship2018InternalPredictor extends HDRelationshipModel<FrenchHDRelationship2018Plot, FrenchHDRelationship2018Tree> implements FertilityClassEmulator {
+class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<FrenchHDRelationship2018Plot, FrenchHDRelationship2018Tree> implements FertilityClassEmulator {
 
 	private static final Map<SpeciesType, Double> PhiParameters = new HashMap<SpeciesType, Double>();
 	static {
