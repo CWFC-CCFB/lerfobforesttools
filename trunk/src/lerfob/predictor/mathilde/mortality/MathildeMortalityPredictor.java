@@ -32,7 +32,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.simulation.REpiceaLogisticPredictor;
+import repicea.simulation.REpiceaBinaryEventPredictor;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
@@ -50,7 +50,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Mathieu Fortin - October 2013
  */
 @SuppressWarnings("serial")
-public class MathildeMortalityPredictor extends REpiceaLogisticPredictor<MathildeMortalityStand, MathildeTree> {
+public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<MathildeMortalityStand, MathildeTree> {
 
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	

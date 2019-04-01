@@ -25,7 +25,7 @@ import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.
 import repicea.math.Matrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
-import repicea.simulation.REpiceaLogisticPredictor;
+import repicea.simulation.REpiceaBinaryEventPredictor;
 import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider;
 import repicea.simulation.covariateproviders.standlevel.LandOwnershipProvider.LandOwnership;
@@ -40,7 +40,7 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - May 2018
  */
 @SuppressWarnings("serial")
-public class FrenchNFIThinnerPredictor extends REpiceaLogisticPredictor<FrenchNFIThinnerPlot, Object> {
+public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<FrenchNFIThinnerPlot, Object> {
 
 	private final static Map<FrenchRegion2016, Matrix> DummyRegion = new HashMap<FrenchRegion2016, Matrix>();
 	static {
