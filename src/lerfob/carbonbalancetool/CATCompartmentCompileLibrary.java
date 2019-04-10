@@ -194,14 +194,14 @@ public class CATCompartmentCompileLibrary {
 						EndUseWoodProductCarbonUnit endUseCarbonProduct = (EndUseWoodProductCarbonUnit) carbonUnit;
 
 						double[] currentEmission = endUseCarbonProduct.getCombustionEmissionsArrayCO2Eq();	
-						double[] currentHeatProduction = endUseCarbonProduct.getHeatProductionArrayKWh();
+						double[] currentHeatProduction = endUseCarbonProduct.getHeatProductionArrayMgWh();
 						for (int j = 0; j < timeScale.size(); j++) {
 							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
 							heatProduction[j] += currentHeatProduction[j];
 						}
 						
 						integratedCarbon += endUseCarbonProduct.getTotalCombustionEmissionsCO2Eq() * CATSettings.CO2_C_FACTOR;
-						totalHeatProduction += endUseCarbonProduct.getTotalHeatProductionKWh();
+						totalHeatProduction += endUseCarbonProduct.getTotalHeatProductionMgWh();
 					}
 				}
 			}
@@ -220,7 +220,7 @@ public class CATCompartmentCompileLibrary {
 			carbonCompartment.setIntegratedCarbon(integratedCarbon / revolutionPeriod);
 			
 			((CATProductCompartment) carbonCompartment).setHeatProductionArray(heatProduction);
-			((CATProductCompartment) carbonCompartment).setTotalHeathProduction(totalHeatProduction);
+			((CATProductCompartment) carbonCompartment).setTotalHeatProduction(totalHeatProduction);
 			
 			break;
 			

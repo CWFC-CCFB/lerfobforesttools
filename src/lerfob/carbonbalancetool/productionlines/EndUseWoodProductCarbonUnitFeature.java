@@ -191,12 +191,12 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 	}
 	
 	/**
-	 * Returns the combustion emission factors in CO2 eq. for one Mg of dry biomass.
+	 * Returns the heat production in MgWh for one Mg of dry biomass.
 	 * @return a double
 	 */
-	protected double getHeatProductionKWh() {
+	protected double getHeatProductionMgWh() {
 		if (getCombustionProcess() != null && getCombustionProcess() != CombustionProcess.None) {
-			return CombustionEmissions.CombustionEmissionsMap.get(getCombustionProcess()).getHeatProductionInKWhForOneMgOfDryBiomass();
+			return CombustionEmissions.CombustionEmissionsMap.get(getCombustionProcess()).getHeatProductionInMgWhForOneMgOfDryBiomass();
 		} else {
 			return 0d;
 		}
