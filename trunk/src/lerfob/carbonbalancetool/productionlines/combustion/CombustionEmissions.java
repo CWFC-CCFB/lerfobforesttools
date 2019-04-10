@@ -68,7 +68,7 @@ public class CombustionEmissions {
 	private final double ch4EmissionMg_MgDryBiomassFactor;
 	private final double coEmissionMg_MgDryBiomassFactor;
 	private final double vocEmissionMg_MgDryBiomassFactor;
-	private final double heatEmissionKWh_MgDryBiomassFactor;
+	private final double heatEmissionMgWh_MgDryBiomassFactor;
 	
 	
 	protected CombustionEmissions(Object[] record) {
@@ -76,7 +76,7 @@ public class CombustionEmissions {
 		ch4EmissionMg_MgDryBiomassFactor = Double.parseDouble(record[2].toString());
 		coEmissionMg_MgDryBiomassFactor = Double.parseDouble(record[3].toString());
 		vocEmissionMg_MgDryBiomassFactor = Double.parseDouble(record[4].toString());
-		heatEmissionKWh_MgDryBiomassFactor = Double.parseDouble(record[5].toString());
+		heatEmissionMgWh_MgDryBiomassFactor = Double.parseDouble(record[5].toString());
 	}
 
 	protected static void init() {
@@ -112,8 +112,8 @@ public class CombustionEmissions {
 	 * This methods returns the total heat production in KWh for one Mg of dry biomass.
 	 * @return a double
 	 */
-	public double getHeatProductionInKWhForOneMgOfDryBiomass() {
-		return heatEmissionKWh_MgDryBiomassFactor;
+	public double getHeatProductionInMgWhForOneMgOfDryBiomass() {
+		return heatEmissionMgWh_MgDryBiomassFactor;
 	}
 	
 }

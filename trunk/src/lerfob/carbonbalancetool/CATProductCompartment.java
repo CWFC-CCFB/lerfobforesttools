@@ -280,7 +280,7 @@ public class CATProductCompartment extends CATCompartment {
 		this.heatProductionArray = heatProductionArray;
 	}
 	
-	protected void setTotalHeathProduction(double totalHeatProduction) {
+	protected void setTotalHeatProduction(double totalHeatProduction) {
 		this.totalHeatProduction = totalHeatProduction;
 	}
 

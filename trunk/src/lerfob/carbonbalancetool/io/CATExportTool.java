@@ -52,8 +52,8 @@ public class CATExportTool extends REpiceaExportTool {
 	private static enum MessageID implements TextableEnum {
 		Year("Year", "Annee"),
 		Compartment("Compart", "Compart"),
-		CarbonHaMean("tCHaMean", "tCHaMoy"),
-		HeatKWhPerHa("KWhHaMean", "KWhHaMoy"),
+		CarbonHaMean("MgCHaMean", "MgCHaMoy"),
+		HeatMgWhPerHa("MgWhHaMean", "MgWhHaMoy"),
 		Variance("Variance", "Variance");
 			
 		MessageID(String englishText, String frenchText) {
@@ -137,7 +137,7 @@ public class CATExportTool extends REpiceaExportTool {
 						r = new GExportRecord();
 						r.addField(standIDField);
 						r.addField(new GExportFieldDetails(MessageID.Year.toString(), (Integer) 0));
-						r.addField(new GExportFieldDetails(MessageID.HeatKWhPerHa.toString(), (Double) 0d));
+						r.addField(new GExportFieldDetails(MessageID.HeatMgWhPerHa.toString(), (Double) 0d));
 						if (nbRealizations > 0) {
 							r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 						}
@@ -146,7 +146,7 @@ public class CATExportTool extends REpiceaExportTool {
 					r = new GExportRecord();
 					r.addField(standIDField);
 					r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.get(i)));
-					r.addField(new GExportFieldDetails(MessageID.HeatKWhPerHa.toString(), value));
+					r.addField(new GExportFieldDetails(MessageID.HeatMgWhPerHa.toString(), value));
 					if (nbRealizations > 0) {
 						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 					}

@@ -254,7 +254,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	}
 
 	private double getHeatProductionForAParticularAmountOfDryBiomass(double dryBiomassMg) {
-		double heatFactor = getCarbonUnitFeature().getHeatProductionKWh();
+		double heatFactor = getCarbonUnitFeature().getHeatProductionMgWh();
 		return heatFactor * dryBiomassMg;
 	}
 
@@ -293,16 +293,16 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * NOTE: if the array of released carbon is null this method returns null
 	 * @return an array of double based on the time scale 
 	 */
-	public double[] getHeatProductionArrayKWh() {
+	public double[] getHeatProductionArrayMgWh() {
 		double[] releasedCarbonArray = getReleasedCarbonArray();
 		if (releasedCarbonArray != null) {
 			double carbonToBiomassFactor = getAmountMap().get(Element.Biomass) / getInitialCarbon(); 
 			double[] releasedBiomass = ObjectUtility.multiplyArrayByScalar(releasedCarbonArray, carbonToBiomassFactor);
-			double[] heatProductionArrayKWh = new double[releasedBiomass.length];
+			double[] heatProductionArrayMgWh = new double[releasedBiomass.length];
 			for (int i = 0; i < releasedBiomass.length; i++) {
-				heatProductionArrayKWh[i] = getHeatProductionForAParticularAmountOfDryBiomass(releasedBiomass[i]);
+				heatProductionArrayMgWh[i] = getHeatProductionForAParticularAmountOfDryBiomass(releasedBiomass[i]);
 			}
-			return heatProductionArrayKWh;
+			return heatProductionArrayMgWh;
 		} else {
 			return null;
 		}
@@ -313,7 +313,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	 * This method returns the total heat production from this carbon unit in KWh.
 	 * @return a double
 	 */
-	public double getTotalHeatProductionKWh() {
+	public double getTotalHeatProductionMgWh() {
 		return getHeatProductionForAParticularAmountOfDryBiomass(getAmountMap().get(Element.Biomass));
 	}
 }
