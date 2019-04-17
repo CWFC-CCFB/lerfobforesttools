@@ -51,7 +51,7 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 
 
 	@Override
-	public Management getManagement() {return Management.EvenAged;}
+	public ManagementType getManagementType() {return ManagementType.EvenAged;}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -71,5 +71,8 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 	public boolean isInterventionResult() {
 		return false;
 	}
+
+	@Override
+	public ApplicationScale getApplicationScale() {return ApplicationScale.Stand;}
 
 }

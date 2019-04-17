@@ -110,6 +110,12 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 		return false;
 	}
 
+	@Override
+	public ManagementType getManagementType() {return ManagementType.UnevenAged;}
+
+	@Override
+	public ApplicationScale getApplicationScale() {return ApplicationScale.FMU;}
+
 	
 	
 }
