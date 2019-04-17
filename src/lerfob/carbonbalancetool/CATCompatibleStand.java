@@ -21,6 +21,8 @@ package lerfob.carbonbalancetool;
 import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * This method ensures the stand is compatible with LERFoB-CAT
@@ -30,7 +32,22 @@ public interface CATCompatibleStand extends AreaHaProvider,
 											TreeStatusCollectionsProvider, 
 											InterventionResultProvider {
 
-	public static enum Management {UnevenAged, EvenAged}
+	public static enum Management implements TextableEnum {
+		UnevenAged("Uneven-aged", "Irr\u00E9gulier"), 
+		EvenAged("Even-aged", "R\u00E9gulier");
+
+		Management(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+	}
 
 	
 	/**
