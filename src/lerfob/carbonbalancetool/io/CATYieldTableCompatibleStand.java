@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lerfob.carbonbalancetool.CATCompatibleEvenAgedStand;
 import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATCompatibleTree;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
@@ -34,7 +33,7 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
  * This class represents the stand in a yield table import in CAT.
  * @author Mathieu Fortin - June 2016
  */
-class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
+class CATYieldTableCompatibleStand implements CATCompatibleStand {
 
 	private final String standId;
 	private final int dateYr;
@@ -82,7 +81,7 @@ class CATYieldTableCompatibleStand implements CATCompatibleEvenAgedStand {
 	public boolean isInterventionResult() {return isInterventionResult;}
 
 	@Override
-	public int getAgeYr() {return getDateYr();}
+	public Management getManagement() {return Management.EvenAged;}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override

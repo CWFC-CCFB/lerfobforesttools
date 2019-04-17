@@ -30,6 +30,25 @@ public interface CATCompatibleStand extends AreaHaProvider,
 											TreeStatusCollectionsProvider, 
 											InterventionResultProvider {
 
+	public static enum Management {UnevenAged, EvenAged}
+
+	
+	/**
+	 * This method returns the current management of the stand. An even-aged management, allows for 
+	 * carbon balances calculated in infinite sequence. By default, it returns Management.UnevenAged.
+	 * @return a Management enum
+	 */
+	public default Management getManagement() {return Management.UnevenAged;}
+	
+	/**
+	 * This method returns a CarbonToolCompatibleStand with all its trees
+	 * set to cut. It is called only if the management mode is Management.EvenAged.
+	 * Since the default Management is Management.UnevenAged, this method returns
+	 * null by default.
+	 * @return a CarbonToolCompatibleStand stand
+	 */
+	public default CATCompatibleStand getHarvestedStand() {return null;}
+
 	
 	/**
 	 * This method returns the identification of the stand.

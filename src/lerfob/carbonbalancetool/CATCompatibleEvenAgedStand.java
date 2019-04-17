@@ -18,16 +18,8 @@
  */
 package lerfob.carbonbalancetool;
 
-import repicea.simulation.covariateproviders.standlevel.AgeYrProvider;
+@Deprecated
+public interface CATCompatibleEvenAgedStand {
 
-
-public interface CATCompatibleEvenAgedStand extends CATCompatibleStand, AgeYrProvider {
-
-	/**
-	 * This method returns a CarbonToolCompatibleStand with all its trees
-	 * set to cut.
-	 * @return a CarbonToolCompatibleStand stand
-	 */
-	public CATCompatibleStand getHarvestedStand();
 
 }
