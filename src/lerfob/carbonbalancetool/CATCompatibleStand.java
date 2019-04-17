@@ -18,7 +18,7 @@
  */
 package lerfob.carbonbalancetool;
 
-import repicea.simulation.covariateproviders.standlevel.ApplicationScaleProvider;
+import repicea.simulation.ApplicationScaleProvider;
 import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.ManagementTypeProvider;
