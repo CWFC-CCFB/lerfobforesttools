@@ -57,4 +57,10 @@ class CATGrowthSimulationPlotSample implements CATCompatibleStand {
 	
 	CATGrowthSimulationPlot getPlot(String plotID) {return getPlotMap().get(plotID);}
 
+	@Override
+	public ManagementType getManagementType() {return compositeStand.getManagementType();}
+
+	@Override
+	public ApplicationScale getApplicationScale() {return compositeStand.getApplicationScale();}
+
 }

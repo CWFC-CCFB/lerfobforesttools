@@ -81,7 +81,7 @@ class CATYieldTableCompatibleStand implements CATCompatibleStand {
 	public boolean isInterventionResult() {return isInterventionResult;}
 
 	@Override
-	public Management getManagement() {return Management.EvenAged;}
+	public ManagementType getManagementType() {return ManagementType.EvenAged;}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -124,6 +124,7 @@ class CATYieldTableCompatibleStand implements CATCompatibleStand {
 		}
 	}
 
-	
+	@Override
+	public ApplicationScale getApplicationScale() {return ApplicationScale.Stand;}
 	
 }

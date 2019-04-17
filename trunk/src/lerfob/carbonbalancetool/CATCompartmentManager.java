@@ -25,14 +25,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
-import lerfob.carbonbalancetool.CATCompatibleStand.Management;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.StochasticInformationProvider;
@@ -82,7 +81,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		if (stands != null) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 //			isEvenAged = lastStand instanceof CATCompatibleEvenAgedStand;
-			isEvenAged = lastStand.getManagement() == Management.EvenAged;
+			isEvenAged = lastStand.canBeRunInInfiniteSequence();
 			boolean isStochastic = false;
 			int nRealizations = 1;
 			if (lastStand instanceof StochasticInformationProvider) {

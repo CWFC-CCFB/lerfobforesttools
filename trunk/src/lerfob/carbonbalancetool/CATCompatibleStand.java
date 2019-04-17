@@ -18,11 +18,11 @@
  */
 package lerfob.carbonbalancetool;
 
+import repicea.simulation.covariateproviders.standlevel.ApplicationScaleProvider;
 import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
+import repicea.simulation.covariateproviders.standlevel.ManagementTypeProvider;
 import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
-import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * This method ensures the stand is compatible with LERFoB-CAT
@@ -30,38 +30,14 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  */
 public interface CATCompatibleStand extends AreaHaProvider, 
 											TreeStatusCollectionsProvider, 
-											InterventionResultProvider {
+											InterventionResultProvider,
+											ManagementTypeProvider,
+											ApplicationScaleProvider {
 
-	public static enum Management implements TextableEnum {
-		UnevenAged("Uneven-aged", "Irr\u00E9gulier"), 
-		EvenAged("Even-aged", "R\u00E9gulier");
-
-		Management(String englishText, String frenchText) {
-			setText(englishText, frenchText);
-		}
-
-		@Override
-		public void setText(String englishText, String frenchText) {
-			REpiceaTranslator.setString(this, englishText, frenchText);
-		}
-		
-		@Override
-		public String toString() {return REpiceaTranslator.getString(this);}
-	}
-
-	
-	/**
-	 * This method returns the current management of the stand. An even-aged management, allows for 
-	 * carbon balances calculated in infinite sequence. By default, it returns Management.UnevenAged.
-	 * @return a Management enum
-	 */
-	public default Management getManagement() {return Management.UnevenAged;}
 	
 	/**
 	 * This method returns a CarbonToolCompatibleStand with all its trees
-	 * set to cut. It is called only if the management mode is Management.EvenAged.
-	 * Since the default Management is Management.UnevenAged, this method returns
-	 * null by default.
+	 * set to cut. It is called only if canBeRunInInfiniteSequence returns true.
 	 * @return a CarbonToolCompatibleStand stand
 	 */
 	public default CATCompatibleStand getHarvestedStand() {return null;}
@@ -80,4 +56,15 @@ public interface CATCompatibleStand extends AreaHaProvider,
 	 */
 	public int getDateYr();
 
+
+	/**
+	 * This method returns true if the carbon balance can be calculated in infinite sequence. 
+	 * This is possible when the management type is even-aged and the application scale is at the
+	 * stand level.
+	 * @return a boolean
+	 */
+	public default boolean canBeRunInInfiniteSequence() {
+		return getManagementType() == ManagementType.EvenAged && getApplicationScale() == ApplicationScale.Stand;
+	}
+	
 }

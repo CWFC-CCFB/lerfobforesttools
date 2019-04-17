@@ -83,5 +83,11 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 		}
 	}
 
+	@Override
+	public ManagementType getManagementType() {return ManagementType.UnevenAged;}
+
+	@Override
+	public ApplicationScale getApplicationScale() {return ApplicationScale.FMU;}
+
 
 }
