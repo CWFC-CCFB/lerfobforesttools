@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import lerfob.carbonbalancetool.CATCompatibleStand.Management;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
@@ -174,9 +175,11 @@ public class CATTask extends AbstractGenericTask {
 		CATCompatibleStand lastStand = manager.getLastStand(); 
 
 		// performing a final cut if has not been done and only if the stand implements the CarbonToolCompatibleEvenAgedStand interface
-		if (lastStand instanceof CATCompatibleEvenAgedStand && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
+//		if (lastStand instanceof CATCompatibleEvenAgedStand && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
+		if (lastStand.getManagement() == Management.EvenAged && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
 			List<CATCompatibleStand> stands = manager.getStandList();
-			CATCompatibleStand stand = ((CATCompatibleEvenAgedStand) lastStand).getHarvestedStand();
+//			CATCompatibleStand stand = ((CATCompatibleEvenAgedStand) lastStand).getHarvestedStand();
+			CATCompatibleStand stand = lastStand.getHarvestedStand();
 			stands.add(stand);
 			manager.init(stands);				
 			caller.setFinalCutHadToBeCarriedOut(true);

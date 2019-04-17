@@ -7,7 +7,7 @@ import java.util.Map;
 
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
-class CarbonToolCompatibleStandImpl implements CATCompatibleEvenAgedStand {
+class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 
 	
 	private final double areaHa;
@@ -49,9 +49,10 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleEvenAgedStand {
 	@Override
 	public int getDateYr() {return dateYr;}
 
-	@Override
-	public int getAgeYr() {return getDateYr();}
 
+	@Override
+	public Management getManagement() {return Management.EvenAged;}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public CATCompatibleStand getHarvestedStand() {

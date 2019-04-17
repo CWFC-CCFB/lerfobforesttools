@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATCompatibleStand.Management;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
@@ -80,7 +81,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		this.currentStands = null;
 		if (stands != null) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
-			isEvenAged = lastStand instanceof CATCompatibleEvenAgedStand;
+//			isEvenAged = lastStand instanceof CATCompatibleEvenAgedStand;
+			isEvenAged = lastStand.getManagement() == Management.EvenAged;
 			boolean isStochastic = false;
 			int nRealizations = 1;
 			if (lastStand instanceof StochasticInformationProvider) {
@@ -94,7 +96,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			CATSensitivityAnalysisSettings.getInstance().setNumberOfMonteCarloRealizations(nRealizations);
 			int nbExtraYears = 0;
 			if (isEvenAged) {
-				rotationLength = ((CATCompatibleEvenAgedStand) lastStand).getAgeYr();
+//				rotationLength = ((CATCompatibleEvenAgedStand) lastStand).getAgeYr();
+				rotationLength = lastStand.getDateYr();
 				nbExtraYears = NumberOfExtraYrs;
 			} else {
 				rotationLength = lastStand.getDateYr() - stands.get(0).getDateYr();
@@ -109,11 +112,11 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			int size = stands.size() + nbExtraYears / averageTimeStep;
 			for (int i = 0; i < size; i++) {
 				if (i < stands.size()) {
-					if (isEvenAged) {
-						timeTable.add(((CATCompatibleEvenAgedStand) stands.get(i)).getAgeYr());
-					} else {
-						timeTable.add(stands.get(i).getDateYr());
-					}
+					//					if (isEvenAged) {
+					//						timeTable.add(((CATCompatibleEvenAgedStand) stands.get(i)).getAgeYr());
+					//					} else {
+					timeTable.add(stands.get(i).getDateYr());
+					//					}
 				} else  {
 					timeTable.add(timeTable.get(i - 1) + averageTimeStep);
 				}
