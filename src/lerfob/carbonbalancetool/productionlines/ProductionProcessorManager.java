@@ -36,10 +36,14 @@ import javax.swing.filechooser.FileFilter;
 import lerfob.carbonbalancetool.CATCompartmentManager;
 import lerfob.carbonbalancetool.CATDecayFunction;
 import lerfob.carbonbalancetool.CATExponentialFunction;
+import lerfob.carbonbalancetool.catdiameterbasedtreelogger.CATDiameterBasedTreeLogger;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog.MessageID;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.gui.UIControlManager;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.serial.Memorizable;
@@ -54,10 +58,6 @@ import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
-import lerfob.treelogger.basictreelogger.BasicTreeLogger;
-import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
-import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -162,7 +162,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 
 		Vector<TreeLoggerDescription> defaultTreeLoggerDescriptions = new Vector<TreeLoggerDescription>();
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(BasicTreeLogger.class));
-		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(DiameterBasedTreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(CATDiameterBasedTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class.getName()));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class.getName()));
 //		try {
