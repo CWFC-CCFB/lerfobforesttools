@@ -63,4 +63,7 @@ class CATGrowthSimulationPlotSample implements CATCompatibleStand {
 	@Override
 	public ApplicationScale getApplicationScale() {return compositeStand.getApplicationScale();}
 
+	@Override
+	public CATCompatibleStand getHarvestedStand() {return null;}
+
 }

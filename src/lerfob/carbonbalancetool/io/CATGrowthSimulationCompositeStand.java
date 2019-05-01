@@ -89,5 +89,8 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 	@Override
 	public ApplicationScale getApplicationScale() {return ApplicationScale.FMU;}
 
+	@Override
+	public CATCompatibleStand getHarvestedStand() {return null;}
+
 
 }
