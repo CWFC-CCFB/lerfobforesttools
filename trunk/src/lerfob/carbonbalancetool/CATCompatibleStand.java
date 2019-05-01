@@ -38,9 +38,10 @@ public interface CATCompatibleStand extends AreaHaProvider,
 	/**
 	 * This method returns a CarbonToolCompatibleStand with all its trees
 	 * set to cut. It is called only if canBeRunInInfiniteSequence returns true.
+	 * Otherwise the method can return null.
 	 * @return a CarbonToolCompatibleStand stand
 	 */
-	public default CATCompatibleStand getHarvestedStand() {return null;}
+	public CATCompatibleStand getHarvestedStand();
 
 	
 	/**
