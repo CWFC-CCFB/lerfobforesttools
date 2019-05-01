@@ -20,8 +20,6 @@ package lerfob.predictor.mathilde.climate;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,15 +39,17 @@ import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
 /**
- * The MathildeClimatePredictor class is a model based on the safran grid values in the LERFoB network of permanent plots. 
+ * The MathildeClimatePredictor class is a model based on the SAFRAN grid values in the LERFoB network of permanent plots. 
  * The model has plot random effects that are spatially correlated. If the plot coordinates are not available, then the
- * GeographicalCoordinatesGenerator class provides the mean coordinates for the department.
+ * GeographicalCoordinatesGenerator class provides the mean coordinates for the department. The instance that implements the
+ * MathildeClimatePlot interface provides the date. The class is meant to work with dates from 1900 and later. If the date 
+ * is earlier than 1900, then the class assumes that the climate is similar to that of 1900.
  * @author Mathieu Fortin - October 2017
  */
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends REpiceaPredictor {
 	
-	private final static GregorianCalendar SystemDate = new GregorianCalendar();
+//	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimatePlot> referenceStands;
 
 	private List<String> listStandID;
@@ -140,10 +140,14 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
 		double dateMinus1950 = stand.getDateYr() - 1950;
-		if (dateMinus1950 < 0) {
-			dateMinus1950 = SystemDate.get(Calendar.YEAR) - 1950;
+//		if (dateMinus1950 < 0) {
+//			dateMinus1950 = SystemDate.get(Calendar.YEAR) - 1950;
+//		}
+
+		if (dateMinus1950 < -50d) {		// if the date is earlier than 1900 then we set it to 1900
+			dateMinus1950 = -50d;
 		}
-		
+
 		int pointer = 0;
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
