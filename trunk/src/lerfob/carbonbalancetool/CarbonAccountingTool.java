@@ -43,7 +43,6 @@ import lerfob.carbonbalancetool.io.CATExportTool;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import lerfob.treelogger.basictreelogger.BasicTreeLogger;
-import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogger;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
@@ -84,7 +83,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		XmlSerializerChangeMonitor.registerClassNameChange("repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider$SpeciesType", "repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider$SpeciesType");
 		
 		TreeLoggerManager.registerTreeLoggerName(BasicTreeLogger.class.getName());
-		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
+//		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(CATDiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(EuropeanBeechBasicTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(MaritimePineBasicTreeLogger.class.getName());

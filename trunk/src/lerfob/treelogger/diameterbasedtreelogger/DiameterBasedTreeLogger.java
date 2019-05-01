@@ -29,7 +29,7 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 
 	protected final boolean shouldBreakAfterGettingPieces;
 	
-	public DiameterBasedTreeLogger() {
+	protected DiameterBasedTreeLogger() {
 		this(true);
 	}
 
@@ -70,7 +70,6 @@ public class DiameterBasedTreeLogger extends TreeLogger<DiameterBasedTreeLoggerP
 	@Override
 	public LoggableTree getEligible(LoggableTree t) {
 		if (t instanceof DbhCmProvider) {
-//			return (DiameterBasedLoggableTree) t;
 			return t;
 		} else {
 			return null;

@@ -67,7 +67,7 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 	/**
 	 * Official constructor.
 	 */
-	public DiameterBasedTreeLoggerParameters() {
+	protected DiameterBasedTreeLoggerParameters() {
 		this(DiameterBasedTreeLogger.class);
 	}
 
