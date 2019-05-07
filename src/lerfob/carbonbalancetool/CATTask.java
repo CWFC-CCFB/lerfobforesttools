@@ -288,7 +288,7 @@ public class CATTask extends AbstractGenericTask {
 //								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
 //								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
-
+							
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
 									caller.getDateIndexForThisTree(tree), 
 									samplingUnitID, 
@@ -491,7 +491,7 @@ public class CATTask extends AbstractGenericTask {
 					amountMap.put(Element.Volume, volume);
 					amountMap.put(Element.Biomass, biomass);	
 					amountMap.put(Element.C, carbonContent);	
-
+					
 					getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, speciesName, type);
 				}				
 			}

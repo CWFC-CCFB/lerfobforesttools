@@ -85,18 +85,19 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	}
 	
 	private CATTimeTable timeTable;
+	
 	private final int dateIndex;
 	protected final String samplingUnitID;
 	private final List<CarbonUnitStatus> status; 
+	private final CarbonUnitFeature carbonUnitFeature;
+	private final String speciesName;
 	
 	/**
 	 * Initial carbon in this product (Mg)
 	 */
 	private double[] currentCarbonArray;
 	
-	private CarbonUnitFeature carbonUnitFeature;
 	private boolean actualized;
-	private final String speciesName;
 
 	/**
 	 * General constructor.
@@ -244,7 +245,9 @@ public class CarbonUnit extends ProcessUnit<Element> {
 				if (dateIndex == otherUnit.dateIndex) {
 					if (status.equals(otherUnit.status)) {
 						if (samplingUnitID.equals(otherUnit.samplingUnitID)) {
-							return true;
+							if (speciesName.equals(otherUnit.speciesName)) {
+								return true;
+							}
 						}
 					}
 				}

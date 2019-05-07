@@ -33,7 +33,11 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 	private final String originalSpeciesName;
 	protected final CATGrowthSimulationPlot plot;
 	
-	CATGrowthSimulationTree(CATGrowthSimulationPlot plot, StatusClass statusClass, double treeVolumeDm3, double numberOfTrees, String originalSpeciesName) {
+	CATGrowthSimulationTree(CATGrowthSimulationPlot plot, 
+			StatusClass statusClass, 
+			double treeVolumeDm3, 
+			double numberOfTrees, 
+			String originalSpeciesName) {
 		this.plot = plot;
 		commercialVolumeM3 = treeVolumeDm3 * .001;
 		this.numberOfTrees = numberOfTrees;
