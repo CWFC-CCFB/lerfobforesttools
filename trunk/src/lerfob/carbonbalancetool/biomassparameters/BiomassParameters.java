@@ -483,7 +483,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @return a double
 	 */
 	private double getCommercialCarbonMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		return getCommercialVolumeM3(tree) * getCarbonContentFromThisTree(tree, subject);
+		return getCommercialBiomassMg(tree, subject) * getCarbonContentFromThisTree(tree, subject);
 	}
 	
 
