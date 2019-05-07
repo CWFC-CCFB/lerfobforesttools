@@ -289,12 +289,17 @@ public class CATTask extends AbstractGenericTask {
 //								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
-							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), caller.getDateIndexForThisTree(tree), samplingUnitID, amountMap);		
+							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
+									caller.getDateIndexForThisTree(tree), 
+									samplingUnitID, 
+									amountMap, 
+									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());		
 						}
 						
 						double totalAboveGroundVolumeM3 = biomassParameters.getAboveGroundVolumeM3(tree, manager);
 						double unconsideredAboveGroundVolumeM3 = totalAboveGroundVolumeM3 - totalAboveGroundWoodPieceVolume;
-						processUnaccountedVolume(unconsideredAboveGroundVolumeM3, 
+						processUnaccountedVolume(t.getSpeciesName(),
+								unconsideredAboveGroundVolumeM3, 
 								basicWoodDensityMgM3, 
 								carbonContentRatio, 
 								caller.getDateIndexForThisTree(tree), 
@@ -302,7 +307,8 @@ public class CATTask extends AbstractGenericTask {
 								WoodyDebrisProcessorID.FineWoodyDebris);
 						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
 						double unconsideredBelowGroundVolume = totalBelowGroundVolume - totalBelowGroundWoodPieceVolume;
-						processUnaccountedVolume(unconsideredBelowGroundVolume, 
+						processUnaccountedVolume(t.getSpeciesName(),
+								unconsideredBelowGroundVolume, 
 								basicWoodDensityMgM3, 
 								carbonContentRatio, 
 								caller.getDateIndexForThisTree(tree), 
@@ -405,8 +411,11 @@ public class CATTask extends AbstractGenericTask {
 					}
 					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CATCompatibleTree> trees = new ArrayList<CATCompatibleTree>();
-					for (Collection<CATCompatibleTree> coll : caller.getTrees(StatusClass.cut).get(stand).values()) {
-						trees.addAll(coll);
+					Map<String, Map<String, Collection<CATCompatibleTree>>> innerMap = caller.getTrees(StatusClass.cut).get(stand);
+					for (String key : innerMap.keySet()) {
+						for (Collection<CATCompatibleTree> coll : innerMap.get(key).values()) {
+							trees.addAll(coll);
+						}
 					}
 					double volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
 					double biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
@@ -430,7 +439,7 @@ public class CATTask extends AbstractGenericTask {
 		additionalElement.remove(Element.C);
 	}
 	
-	private void processUnaccountedVolume(double volume, double basicWoodDensity, double carbonContentRatio, int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
+	private void processUnaccountedVolume(String speciesName, double volume, double basicWoodDensity, double carbonContentRatio, int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
 		if (volume > 0) {
 			double biomass = volume * basicWoodDensity;
 			double carbon = biomass * carbonContentRatio;
@@ -439,13 +448,13 @@ public class CATTask extends AbstractGenericTask {
 			amountMap.put(Element.Biomass, biomass);
 			amountMap.put(Element.C, carbon);
 			
-			getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, type);
+			getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, speciesName, type);
 		}
 	}
 	
 	
 	
-	private void createWoodyDebris(Map<CATCompatibleStand, Map<String, Collection<CATCompatibleTree>>> treeMap, WoodyDebrisProcessorID type) {
+	private void createWoodyDebris(Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>> treeMap, WoodyDebrisProcessorID type) {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		for (CATCompatibleStand stand : treeMap.keySet()) {
@@ -453,36 +462,38 @@ public class CATTask extends AbstractGenericTask {
 				break;
 			}
 			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
-			Map<String, Collection<CATCompatibleTree>> oMap = treeMap.get(stand);
+			Map<String, Map<String, Collection<CATCompatibleTree>>> oMap = treeMap.get(stand);
 			for (String samplingUnitID : oMap.keySet()) {
-				Collection<CATCompatibleTree> trees = oMap.get(samplingUnitID);
-				double volume = 0d;
-				double biomass = 0d;
-				double carbonContent = 0d;
-				switch(type) {
-				case FineWoodyDebris:
-					volume = biomassParameters.getAboveGroundVolumeM3(trees, manager) - biomassParameters.getCommercialVolumeM3(trees);
-					biomass = biomassParameters.getAboveGroundBiomassMg(trees, manager) - biomassParameters.getCommercialBiomassMg(trees, manager);
-					carbonContent = biomassParameters.getAboveGroundCarbonMg(trees, manager) - biomassParameters.getCommercialCarbonMg(trees, manager);
-					break;
-				case CommercialWoodyDebris:
-					volume = biomassParameters.getCommercialVolumeM3(trees);
-					biomass = biomassParameters.getCommercialBiomassMg(trees, manager);
-					carbonContent = biomassParameters.getCommercialCarbonMg(trees, manager);
-					break;
-				case CoarseWoodyDebris:
-					volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
-					biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
-					carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
-					break;
-				}
-				AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
-				amountMap.put(Element.Volume, volume);
-				amountMap.put(Element.Biomass, biomass);	
-				amountMap.put(Element.C, carbonContent);	
+				Map<String, Collection<CATCompatibleTree>> oInnerMap = oMap.get(samplingUnitID);
+				for (String speciesName : oInnerMap.keySet()) {
+					Collection<CATCompatibleTree> trees = oInnerMap.get(speciesName);
+					double volume = 0d;
+					double biomass = 0d;
+					double carbonContent = 0d;
+					switch(type) {
+					case FineWoodyDebris:
+						volume = biomassParameters.getAboveGroundVolumeM3(trees, manager) - biomassParameters.getCommercialVolumeM3(trees);
+						biomass = biomassParameters.getAboveGroundBiomassMg(trees, manager) - biomassParameters.getCommercialBiomassMg(trees, manager);
+						carbonContent = biomassParameters.getAboveGroundCarbonMg(trees, manager) - biomassParameters.getCommercialCarbonMg(trees, manager);
+						break;
+					case CommercialWoodyDebris:
+						volume = biomassParameters.getCommercialVolumeM3(trees);
+						biomass = biomassParameters.getCommercialBiomassMg(trees, manager);
+						carbonContent = biomassParameters.getCommercialCarbonMg(trees, manager);
+						break;
+					case CoarseWoodyDebris:
+						volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
+						biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
+						carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
+						break;
+					}
+					AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
+					amountMap.put(Element.Volume, volume);
+					amountMap.put(Element.Biomass, biomass);	
+					amountMap.put(Element.C, carbonContent);	
 
-				getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, type);
-				
+					getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, speciesName, type);
+				}				
 			}
 		}
 	}
@@ -533,9 +544,11 @@ public class CATTask extends AbstractGenericTask {
 
 	private Collection<CATCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
 		Collection<CATCompatibleTree> loggableTreesCollection = new ArrayList<CATCompatibleTree>();
-		for (Map<String, Collection<CATCompatibleTree>> oMap : caller.getTrees(StatusClass.cut).values()) {
-			for (Collection<CATCompatibleTree> oColl : oMap.values()) {
-				loggableTreesCollection.addAll(oColl);
+		for (Map<String, Map<String, Collection<CATCompatibleTree>>> oMap : caller.getTrees(StatusClass.cut).values()) {
+			for (Map<String, Collection<CATCompatibleTree>> oInnerMap : oMap.values()) {
+				for (Collection<CATCompatibleTree> oColl : oInnerMap.values()) {
+					loggableTreesCollection.addAll(oColl);
+				}
 			}
 		}
 		return loggableTreesCollection;

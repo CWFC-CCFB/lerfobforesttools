@@ -103,7 +103,7 @@ public class ProductionLinesTest {
 			amountMap.put(Element.Biomass, volume * basicWoodDensity);
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
 
-			CarbonUnit carbonUnit = new CarbonUnit(2013, "", null, amountMap);
+			CarbonUnit carbonUnit = new CarbonUnit(2013, "", null, amountMap, "Unknown");
 			
 			int index = wpmm.getProductionLineNames().indexOf("Sawing");
 			if (index == -1) {
@@ -169,7 +169,7 @@ public class ProductionLinesTest {
 			}
 
 //			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
-			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap);
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap, "Unknown");
 			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
 			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
 				endProducts.addAll(processorManager.getCarbonUnits(status));
@@ -223,7 +223,7 @@ public class ProductionLinesTest {
 				i--;
 			}
 //			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
-			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap);
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap, "Unknown");
 				
 			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
 			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {

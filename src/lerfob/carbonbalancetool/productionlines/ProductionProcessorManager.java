@@ -401,9 +401,13 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param dateIndex the index of the date in the time scale
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 */
-	public void processWoodPiece(LogCategory logCategory, int dateIndex, String samplingUnitID, AmountMap<Element> amountMap) {
+	public void processWoodPiece(LogCategory logCategory, 
+			int dateIndex, 
+			String samplingUnitID, 
+			AmountMap<Element> amountMap,
+			String speciesName) {
 		Processor processor = findLeftHandSideProcessor(logCategory);
-		processAmountMap(processor, dateIndex, samplingUnitID, amountMap);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMap, speciesName);
 	}
 
 	/**
@@ -412,9 +416,13 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * @param amountMap a Map which contains the amounts of the different elements
 	 * @param type a WoodyDebrisProcessorID enum variable
 	 */
-	public void processWoodyDebris(int dateIndex, String samplingUnitID, AmountMap<Element> amountMap, WoodyDebrisProcessorID type) {
+	public void processWoodyDebris(int dateIndex, 
+			String samplingUnitID, 
+			AmountMap<Element> amountMap,
+			String speciesName,
+			WoodyDebrisProcessorID type) {
 		Processor processor = findWoodyDebrisProcessor(type);
-		processAmountMap(processor, dateIndex, samplingUnitID, amountMap);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMap, speciesName);
 	}
 	
 //	/**
@@ -428,9 +436,13 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 //	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection<CarbonUnit> processAmountMap(Processor processor, int dateIndex, String samplingUnitID, AmountMap<Element> amountMap) {
+	private Collection<CarbonUnit> processAmountMap(Processor processor, 
+			int dateIndex, 
+			String samplingUnitID, 
+			AmountMap<Element> amountMap,
+			String speciesName) {
 		List<ProcessUnit> inputUnits = new ArrayList<ProcessUnit>();
-		inputUnits.add(new CarbonUnit(dateIndex, samplingUnitID, null, amountMap));
+		inputUnits.add(new CarbonUnit(dateIndex, samplingUnitID, null, amountMap, speciesName));
 		Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
 		getCarbonUnitMap().add(processedUnits);
 		return processedUnits;
