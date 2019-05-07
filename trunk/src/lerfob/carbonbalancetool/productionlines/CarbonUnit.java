@@ -96,18 +96,26 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	
 	private CarbonUnitFeature carbonUnitFeature;
 	private boolean actualized;
+	private final String speciesName;
 
 	/**
 	 * General constructor.
 	 * @param dateIndex the creation date index of the time scale
+	 * @param samplingUnitID the id of the sample unit
 	 * @param carbonUnitFeature a CarbonUnitFeature instance
 	 * @param initialAmounts a map that contains the amount of each element to be processed
+	 * @param species a CATSpecies enum
 	 */
-	protected CarbonUnit(int dateIndex, String samplingUnitID, CarbonUnitFeature carbonUnitFeature, AmountMap<Element> initialAmounts) {
+	protected CarbonUnit(int dateIndex, 
+			String samplingUnitID, 
+			CarbonUnitFeature carbonUnitFeature, 
+			AmountMap<Element> initialAmounts,
+			String speciesName) {
 		super(initialAmounts);
 		this.dateIndex = dateIndex;
 		this.carbonUnitFeature = carbonUnitFeature;
 		this.samplingUnitID = samplingUnitID;
+		this.speciesName = speciesName;
 		status = new ArrayList<CarbonUnitStatus>();
 		actualized = false;
 	}
@@ -120,6 +128,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 
 	
 	protected boolean isActualized() {return actualized;}
+	
+	protected String getSpeciesName() {return speciesName;}
 
 	/**
 	 * This method returns the creation date of the product

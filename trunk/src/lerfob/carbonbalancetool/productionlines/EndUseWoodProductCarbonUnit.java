@@ -53,8 +53,9 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	protected EndUseWoodProductCarbonUnit(double initialVolumeBeforeFirstTransformation,
 			int dateIndex,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
-			AmountMap<Element> amountMap) {
-		super(dateIndex, "", carbonUnitFeature, amountMap);
+			AmountMap<Element> amountMap,
+			String speciesName) {
+		super(dateIndex, "", carbonUnitFeature, amountMap, speciesName);
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	}
 	
@@ -67,8 +68,9 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	protected EndUseWoodProductCarbonUnit(int dateIndex,
 			String sampleUnitID,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
-			AmountMap<Element> amountMap) {
-		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap);
+			AmountMap<Element> amountMap,
+			String speciesName) {
+		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap, speciesName);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
 		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnitMg(), carbonUnitFeature.getEmissionsMgCO2ByFunctionalUnit());
 	}
@@ -112,20 +114,14 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			double[] releasedCarbonArray = getReleasedCarbonArray();
 			double proportion;
 			for (int i = getIndexInTimeScale(); i < getTimeTable().size(); i++) {
-//				if (getCreationDate() == 2010) {
-//					if (getCarbonUnitFeature().toString().startsWith("Charpentes")) {
-//						System.out.println("Released carbon = " + releasedCarbonArray[i] + " initial Carbon = " + getInitialCarbon());
-//					}
-//				}
 				proportion = releasedCarbonArray[i] / getInitialCarbon();
 				AmountMap<Element> updatedMap = getAmountMap().multiplyByAScalar(proportion * getCarbonUnitFeature().getDisposableProportion());
 				AbstractProductionLineProcessor disposedToProcessor = (AbstractProductionLineProcessor) ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
-						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap);
+						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap, getSpeciesName());
 						newUnit.getAmountMap().put(Element.EmissionsCO2Eq, 0d);		// reset the emissions to 0 after useful lifetime - otherwise there is a double count
 						List<ProcessUnit> disposedUnits = disposedToProcessor.createProcessUnitsFromThisProcessor(newUnit, 100);
-//						disposedUnits.add(new CarbonUnit(i, samplingUnitID, null, updatedMap));
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
 						for (CarbonUnit carbonUnit : processedUnits) {
 							if (carbonUnit.getLastStatus().equals(CarbonUnitStatus.EndUseWoodProduct)) {
