@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATUtilityMaps.SpeciesMonteCarloEstimateMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
@@ -129,18 +129,18 @@ public class CATSimulationDifference implements CATSimulationResult {
 	}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {
+	public Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> getHWPPerHaByUseClass() {
 		return null;
 	}
 
 
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {
+	public Map<String, SpeciesMonteCarloEstimateMap> getLogGradePerHa() {
 		return null;
 	}
 
 	@Override
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {
+	public Map<Integer, UseClassSpeciesMonteCarloEstimateMap> getProductEvolutionPerHa() {
 		return null;
 	}
 
@@ -158,7 +158,7 @@ public class CATSimulationDifference implements CATSimulationResult {
 
 
 	@Override
-	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling) {
+	public UseClassSpeciesMonteCarloEstimateMap getHWPSummaryPerHa(boolean includeRecycling) {
 		return null;
 	}
 
@@ -170,6 +170,12 @@ public class CATSimulationDifference implements CATSimulationResult {
 	@Override
 	public MonteCarloEstimate getHeatProductionEvolutionKWhPerHa() {
 		return null;
+	}
+
+
+	@Override
+	public boolean isValid() {
+		return true;
 	}
 
 }

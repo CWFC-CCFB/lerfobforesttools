@@ -21,9 +21,9 @@ package lerfob.carbonbalancetool;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATUtilityMaps.SpeciesMonteCarloEstimateMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 
@@ -33,6 +33,11 @@ import repicea.stats.estimates.MonteCarloEstimate;
  */
 public interface CATSimulationResult {
 
+	/**
+	 * Returns false if the simulation went wrong at some place.
+	 * @return a boolean
+	 */
+	public boolean isValid();
 	
 	/**
 	 * This method returns the "rotation-averaged" carbon stocks in each compartment.
@@ -69,19 +74,19 @@ public interface CATSimulationResult {
 	 * @param includeRecycling a boolean true to include the recycled products into the map
 	 * @return a Map with CarbonUnitType and Maps as keys and values
 	 */
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass();
+	public Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> getHWPPerHaByUseClass();
 
 	/**
 	 * This method returns total volume and biomass by log grade categories over the simulation period or rotation.
 	 * @return a Map instance
 	 */
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa();
+	public Map<String, SpeciesMonteCarloEstimateMap> getLogGradePerHa();
 	
 	/**
 	 * This method returns the HWPs by use class at the different steps of the simulation.
 	 * @return a Map of integer and maps.
 	 */
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa();
+	public Map<Integer, UseClassSpeciesMonteCarloEstimateMap> getProductEvolutionPerHa();
 	
 	/**
 	 * This method returns the result id for this instance. For example, it could be "sim1".
@@ -94,7 +99,7 @@ public interface CATSimulationResult {
 	 * @param includeRecycling a boolean
 	 * @return a Map of Useclass and Map instances
 	 */
-	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling);
+	public UseClassSpeciesMonteCarloEstimateMap getHWPSummaryPerHa(boolean includeRecycling);
 
 	/**
 	 * This method returns the nature of the CarbonToolCompatibleStand stand. The summary of even-aged stands can be

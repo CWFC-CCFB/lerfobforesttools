@@ -18,6 +18,9 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -69,4 +72,34 @@ public class CarbonUnitList extends ArrayList<CarbonUnit> {
 		}
 		return "Volume = " + volume;
 	}
+	
+
+	/**
+	 * This method filters the CarbonUnitList instance.
+	 * @param clazz
+	 * @param methodName
+	 * @param expectedValue
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public CarbonUnitList filterList(Class<? extends CarbonUnit> clazz, String methodName, Object expectedValue) {
+		try {
+			CarbonUnitList subList = new CarbonUnitList();
+			Method method = clazz.getDeclaredMethod(methodName);
+			for (CarbonUnit carbonUnit : this) {
+				Object res = method.invoke(carbonUnit);
+				if (expectedValue.equals(res)) {
+					subList.add(carbonUnit);
+				}
+			}
+			return subList;
+		} catch (Exception e) {
+			throw new InvalidParameterException("Unable to filter the CarbonUnitList instance with this method name : " + methodName);
+		}
+	}
+	
 }

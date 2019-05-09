@@ -28,6 +28,7 @@ import lerfob.carbonbalancetool.CATExponentialFunction;
 import lerfob.carbonbalancetool.CATTimeTable;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
+import repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
 
@@ -36,8 +37,9 @@ import repicea.simulation.processsystem.ProcessUnit;
  * A CarbonUnit instance is a piece of carbon.
  * @author Mathieu Fortin - November 2010
  */
-public class CarbonUnit extends ProcessUnit<Element> {
+public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvider {
 
+	public final static String AllSpecies = "AllSpecies";
 	
 	public static enum CarbonUnitStatus {
 		EndUseWoodProduct, 
@@ -130,7 +132,8 @@ public class CarbonUnit extends ProcessUnit<Element> {
 	
 	protected boolean isActualized() {return actualized;}
 	
-	protected String getSpeciesName() {return speciesName;}
+	@Override
+	public String getSpeciesName() {return speciesName;}
 
 	/**
 	 * This method returns the creation date of the product

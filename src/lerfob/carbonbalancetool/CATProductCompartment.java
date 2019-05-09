@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lerfob.carbonbalancetool.CATUtilityMaps.CATSpeciesAmountMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.CATUseClassSpeciesAmountMap;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
@@ -62,8 +64,8 @@ public class CATProductCompartment extends CATCompartment {
 	
 	
 	@SuppressWarnings("deprecation")
-	private Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getAmountByUseClass(boolean withRecycling) {
-		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> outputMap = new HashMap<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>>();
+	private Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> getAmountByUseClass(boolean withRecycling) {
+		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> outputMap = new HashMap<CarbonUnitStatus, CATUseClassSpeciesAmountMap>();
 		if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
 			CarbonUnitList endUseProductList = getCompartmentManager().getCarbonToolSettings().getProductionLines().getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct);
 			outputMap.put(CarbonUnitStatus.EndUseWoodProduct, summarizeWoodProductsInMap(endUseProductList));
@@ -71,9 +73,9 @@ public class CATProductCompartment extends CATCompartment {
 			outputMap.put(CarbonUnitStatus.IndustrialLosses, summarizeWoodProductsInMap(endUseProductList));
 			if (withRecycling) {
 				endUseProductList = getCompartmentManager().getCarbonToolSettings().getProductionLines().getCarbonUnits(CarbonUnitStatus.Recycled);
-				outputMap.put (CarbonUnitStatus.Recycled, summarizeWoodProductsInMap(endUseProductList));
+				outputMap.put(CarbonUnitStatus.Recycled, summarizeWoodProductsInMap(endUseProductList));
 				endUseProductList = getCompartmentManager().getCarbonToolSettings().getProductionLines().getCarbonUnits(CarbonUnitStatus.RecycledLosses);
-				outputMap.put (CarbonUnitStatus.RecycledLosses, summarizeWoodProductsInMap(endUseProductList));
+				outputMap.put(CarbonUnitStatus.RecycledLosses, summarizeWoodProductsInMap(endUseProductList));
 			}
 		} else {
 			CarbonUnitList endUseProductList = getProductionProcessorManager().getCarbonUnits(CarbonUnitStatus.EndUseWoodProduct);
@@ -91,26 +93,8 @@ public class CATProductCompartment extends CATCompartment {
 		return outputMap;
 	}
 
-	
-	private Map<UseClass, AmountMap<Element>> summarizeWoodProductsInMap(CarbonUnitList carbonUnits) {
-		Map<UseClass, AmountMap<Element>> outputMap = new HashMap<UseClass, AmountMap<Element>>();
-		if (carbonUnits != null && !carbonUnits.isEmpty()) {
-			for (CarbonUnit carbonUnit : carbonUnits) {
-				EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit; 
-				UseClass useClass = endProduct.getUseClass();
-				if (!outputMap.containsKey(useClass)) {
-					outputMap.put(useClass, new AmountMap<Element>());
-				}
-				AmountMap<Element> carrier = outputMap.get(useClass);
-				carrier.putAll(endProduct.getAmountMap());
-			}
-		}
-		return outputMap;
-	}
-	
-
 	@SuppressWarnings("deprecation")
-	private Map<Integer, Map<UseClass, AmountMap<Element>>> getWoodProductEvolution() {
+	private Map<Integer, CATUseClassSpeciesAmountMap> getWoodProductEvolution() {
 		CarbonUnitList endUseProductList;
 		CarbonUnitList industrialLosses;
 		if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
@@ -124,25 +108,38 @@ public class CATProductCompartment extends CATCompartment {
 		return summarizeWoodProductEvolution(endUseProductList);
 	}
 
-	private Map<Integer, Map<UseClass, AmountMap<Element>>> summarizeWoodProductEvolution(CarbonUnitList carbonUnits) {
-		CATTimeTable timeScale = getCompartmentManager().getTimeTable();
-		Map<Integer, Map<UseClass, AmountMap<Element>>> outputMap = new HashMap<Integer, Map<UseClass, AmountMap<Element>>>();
+	
+	private CATUseClassSpeciesAmountMap summarizeWoodProductsInMap(CarbonUnitList carbonUnits) {
+		CATUseClassSpeciesAmountMap outputMap = new CATUseClassSpeciesAmountMap();
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
-			int date;
-			AmountMap<Element> carrier;
-			for (CarbonUnit carbonUnit : carbonUnits) {
-				EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit; 
-				UseClass useClass = endProduct.getUseClass();
-				date = timeScale.get(endProduct.getIndexInTimeScale());
-				if (!outputMap.containsKey(date)) {
-					outputMap.put(date, new HashMap<UseClass,AmountMap<Element>>());
+			for (UseClass useClass : UseClass.values()) {
+				CarbonUnitList subList = carbonUnits.filterList(EndUseWoodProductCarbonUnit.class, "getUseClass", useClass);
+				CATSpeciesAmountMap oMap = CATUtilityMaps.convertToSpeciesMap(subList);
+				if (!oMap.isEmpty()) {
+					outputMap.put(useClass, oMap);
 				}
-				Map<UseClass,AmountMap<Element>> innerMap = outputMap.get(date);
-				if (!innerMap.containsKey(useClass)) {
-					innerMap.put (useClass, new AmountMap<Element>());
+			}
+		}
+		return outputMap;
+	}
+
+	private Map<Integer, CATUseClassSpeciesAmountMap> summarizeWoodProductEvolution(CarbonUnitList carbonUnits) {
+		CATTimeTable timeScale = getCompartmentManager().getTimeTable();
+		Map<Integer, CATUseClassSpeciesAmountMap> outputMap = new HashMap<Integer, CATUseClassSpeciesAmountMap>();
+		if (carbonUnits != null && !carbonUnits.isEmpty()) {
+			for (Integer date : timeScale) {
+				CarbonUnitList subList = carbonUnits.filterList(CarbonUnit.class, "getCreationDate", date);
+				for (UseClass useClass : UseClass.values()) {
+					CarbonUnitList subSubList = subList.filterList(EndUseWoodProductCarbonUnit.class, "getUseClass", useClass);
+					CATSpeciesAmountMap oMap = CATUtilityMaps.convertToSpeciesMap(subSubList);
+					if (!oMap.isEmpty()) {
+						if (!outputMap.containsKey(date)) {
+							outputMap.put(date, new CATUseClassSpeciesAmountMap());
+						}
+						CATUseClassSpeciesAmountMap innerMap = outputMap.get(date);
+						innerMap.put(useClass, oMap);
+					}
 				}
-				carrier = innerMap.get(useClass);
-				carrier.putAll(endProduct.getAmountMap());
 			}
 		}
 		return outputMap;
@@ -155,125 +152,94 @@ public class CATProductCompartment extends CATCompartment {
 	 * @param withRecycling a boolean that takes the value true if recycled products are to be included
 	 * @return a TreeMap instance
 	 */
-	protected TreeMap<UseClass, Double> getProductProportions(boolean withRecycling) {
-		TreeMap<UseClass, Double> outputMap = new TreeMap<UseClass, Double>();
-		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> tmpMap = getAmountByUseClass(withRecycling);
+	protected TreeMap<UseClass, Map<String, Double>> getProductProportions(boolean withRecycling, Element element) {
+		TreeMap<UseClass, Map<String, Double>> outputMap = new TreeMap<UseClass, Map<String, Double>>();  // UseClass / SpeciesName
+		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> tmpMap = getAmountByUseClass(withRecycling);
 
-		Map<UseClass, AmountMap<Element>> oMap;
-		if (tmpMap.get(CarbonUnitStatus.Recycled) != null) {
-			oMap = getMergedMap(tmpMap.get(CarbonUnitStatus.EndUseWoodProduct), tmpMap.get(CarbonUnitStatus.Recycled));
+		CATUseClassSpeciesAmountMap oMap;
+		if (tmpMap.containsKey(CarbonUnitStatus.Recycled)) {
+			oMap = tmpMap.get(CarbonUnitStatus.EndUseWoodProduct).mergeWith(tmpMap.get(CarbonUnitStatus.Recycled));
 		} else {
 			oMap = tmpMap.get(CarbonUnitStatus.EndUseWoodProduct);
 		}
 
 		if (!oMap.isEmpty()) {
-			double sum = 0d;
-			for (AmountMap<Element> carrier : oMap.values()) {
-				sum += carrier.get(Element.Volume);
-			}
+			AmountMap<Element> sum = oMap.getSum();
 			for (UseClass useClass : oMap.keySet()) {
-				outputMap.put(useClass, oMap.get(useClass).get(Element.Volume) / sum);
+				if (!outputMap.containsKey(useClass)) {
+					outputMap.put(useClass, new TreeMap<String, Double>());
+				}
+				CATSpeciesAmountMap innerMap = oMap.get(useClass);
+				for (String speciesName : innerMap.keySet()) {
+					outputMap.get(useClass).put(speciesName, innerMap.get(speciesName).get(element) / sum.get(element));
+				}
 			}
 		}
 		return outputMap;
 	}
 
-	/**
-	 * This method merges the two maps of recycled and first use products.
-	 * @param oMap1
-	 * @param oMap2
-	 * @return a new Map instance
-	 */
-	private Map<UseClass, AmountMap<Element>> getMergedMap(Map<UseClass, AmountMap<Element>> oMap1, Map<UseClass, AmountMap<Element>> oMap2) {
-		Map<UseClass, AmountMap<Element>> outputMap = new HashMap<UseClass, AmountMap<Element>>();
-		AmountMap<Element> amountMap;
-		for (UseClass key : oMap1.keySet()) {
-			amountMap = new AmountMap<Element>();
-			outputMap.put(key, amountMap);
-			amountMap.putAll(oMap1.get(key));
-			amountMap.putAll(oMap2.get(key));
-		}
-		for (UseClass key : oMap2.keySet()) {
-			if (!outputMap.containsKey(key)) {
-				amountMap = new AmountMap<Element>();
-				outputMap.put(key, amountMap);
-				amountMap.putAll(oMap2.get(key));
-			}
-		}
-		return outputMap;
-	}
-
-
-	/**
-	 * This method returns the amount of nutrients per hectare (kg/ha) for each use class.
-	 * @param plotArea the plot area in m2 in order to scale the result at the hectare level.
-	 * @return a Map instance
-	 */
-	protected Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> getHWPContentByUseClassPerHa(boolean withRecycling) {
-		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
-		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> outputMap = getAmountByUseClass(withRecycling);
-		for (CarbonUnitStatus type : outputMap.keySet()) {
-			Map<UseClass, AmountMap<Element>> innerMap = outputMap.get(type);
-			for (UseClass useClass : innerMap.keySet()) {
-				AmountMap<Element> innerInnerMap = innerMap.get(useClass);
-				innerMap.put(useClass, innerInnerMap.multiplyByAScalar(areaFactor));
-			}
-		}
-		return outputMap;
-	}
-
-
+	// TODO refactor this one
 	/**
 	 * This method returns the list of the different log grades and their associated volumes and biomasses.
 	 * @return a TreeMap instance
 	 */
-	protected TreeMap<String, AmountMap<Element>> getVolumeByLogGradePerHa() {
+	protected TreeMap<String, CATSpeciesAmountMap> getVolumeByLogGradePerHa() {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
 
 		BiomassParameters biomassParameters = getCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
 		Map<LoggableTree, Collection<WoodPiece>> woodPieceMap = this.getCompartmentManager().getCarbonToolSettings().getTreeLogger().getWoodPieces();
-		TreeMap<String, AmountMap<Element>> volumeByLogGrade = new TreeMap<String, AmountMap<Element>>();
+		TreeMap<String, CATSpeciesAmountMap> volumeByLogGrade = new TreeMap<String, CATSpeciesAmountMap>();
 		String logCategoryName;
 		double volume;
 
 		AmountMap<Element> carrier;
 		for (LoggableTree tree : woodPieceMap.keySet()) {
+			String speciesName = tree.getSpeciesName();
 			Collection<WoodPiece> coll = woodPieceMap.get(tree);
 			double basicDensity = biomassParameters.getBasicWoodDensityFromThisTree((CATCompatibleTree) tree, getCompartmentManager());
 			for (WoodPiece piece : coll) {
 				logCategoryName = piece.getLogCategory().getName();
 				volume = piece.getWeightedVolumeM3();
 				if (!volumeByLogGrade.containsKey(logCategoryName)) {
-					volumeByLogGrade.put(logCategoryName, new AmountMap<Element>());
+					volumeByLogGrade.put(logCategoryName, new CATSpeciesAmountMap());
 				}
-				carrier = volumeByLogGrade.get(logCategoryName);
+				CATSpeciesAmountMap speciesAmountMap = volumeByLogGrade.get(logCategoryName);
+				if (!speciesAmountMap.containsKey(speciesName)) {
+					speciesAmountMap.put(speciesName, new AmountMap<Element>());
+				}
+				
+				carrier = speciesAmountMap.get(speciesName);
 				carrier.add(Element.Volume, volume);
 				carrier.add(Element.Biomass, volume * basicDensity);
 			}
 		}
-		for (String logName : volumeByLogGrade.keySet()) {
-			carrier = volumeByLogGrade.get(logName);
-			volumeByLogGrade.put(logName, carrier.multiplyByAScalar(areaFactor));
+		for (CATSpeciesAmountMap speciesAmountMap : volumeByLogGrade.values()) {
+			for (String speciesName : speciesAmountMap.keySet()) {
+				speciesAmountMap.put(speciesName, speciesAmountMap.get(speciesName).multiplyByAScalar(areaFactor));
+			}
 		}
 
 		return volumeByLogGrade;
 	}
 
-	protected Map<Integer, Map<UseClass, AmountMap<Element>>> getWoodProductEvolutionPerHa() {
+	/**
+	 * This method returns the amount of nutrients per hectare (kg/ha) for each use class.
+	 * @return a Map instance
+	 */
+	@SuppressWarnings("unchecked")
+	protected Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> getHWPContentByUseClassPerHa(boolean withRecycling) {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> outputMap = getAmountByUseClass(withRecycling);
+		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> scaledMap = AmountMap.scaleMap(outputMap, areaFactor);
+		return scaledMap;
+	}
 
-		Map<Integer, Map<UseClass, AmountMap<Element>>> outerMap = getWoodProductEvolution();
-
-		Map<UseClass, AmountMap<Element>> innerMap;
-		for (Integer date : outerMap.keySet()) {
-			innerMap = outerMap.get(date);
-			for (UseClass useClass : innerMap.keySet()) {
-				AmountMap<Element> carrier = innerMap.get(useClass);
-				innerMap.put(useClass, carrier.multiplyByAScalar(areaFactor));
-			}
-		}
-
-		return outerMap;
+	@SuppressWarnings("unchecked")
+	protected Map<Integer, CATUseClassSpeciesAmountMap> getWoodProductEvolutionPerHa() {
+		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+		Map<Integer, CATUseClassSpeciesAmountMap> outerMap = getWoodProductEvolution();
+		Map<Integer, CATUseClassSpeciesAmountMap> scaledMap = AmountMap.scaleMap(outerMap, areaFactor);
+		return scaledMap;
 	}
 
 	protected void setHeatProductionArray(double[] heatProductionArray) {

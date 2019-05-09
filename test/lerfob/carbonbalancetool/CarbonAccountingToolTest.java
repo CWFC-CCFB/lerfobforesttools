@@ -75,7 +75,7 @@ public class CarbonAccountingToolTest {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
 			tool.calculateCarbon();
 			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
-			Assert.assertTrue(result != null);
+			Assert.assertTrue(result != null && result.isValid());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail("Unable to calculate carbon!");
@@ -108,7 +108,7 @@ public class CarbonAccountingToolTest {
 			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
 			tool.calculateCarbon();
 			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
-			Assert.assertTrue(result != null);
+			Assert.assertTrue(result != null && result.isValid());
 			Matrix obsLivingBiomass = result.getEvolutionMap().get(CompartmentInfo.LivingBiomass).getMean();
 			Matrix obsDOM = result.getEvolutionMap().get(CompartmentInfo.DeadBiom).getMean();
 			Matrix obsProducts = result.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();

@@ -534,7 +534,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	
 	/**
 	 * This method returns the CarbonUnitList instance that match the type of carbon.
-	 * @param type a CarbonUnitType enum (EndUseWoodProduct, Landfille, Recycled, LeftInForest)
+	 * @param type a CarbonUnitType enum (EndUseWoodProduct, Landfill, Recycled, LeftInForest)
 	 * @return a CarbonUnitList instance
 	 */
 	public CarbonUnitList getCarbonUnits(CarbonUnitStatus type) {

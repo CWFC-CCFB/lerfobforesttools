@@ -19,12 +19,6 @@
 package lerfob.carbonbalancetool;
 
 import java.awt.Color;
-import java.util.Map;
-
-import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
-import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -32,6 +26,11 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
+import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -74,11 +73,11 @@ class CATResultHWPPanel extends CATResultPanel {
 	@Override
 	protected final ChartPanel createChart() {
 		AsymmetricalCategoryDataset dataset = new AsymmetricalCategoryDataset(1d, getCICoverage());
-		Map<UseClass, Map<Element, MonteCarloEstimate>> oMap = ((CATSingleSimulationResult) summary).getHWPSummaryPerHa(includeRecycling);
+		UseClassSpeciesMonteCarloEstimateMap oMap = ((CATSingleSimulationResult) summary).getHWPSummaryPerHa(includeRecycling);
 		
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				MonteCarloEstimate basicEstimate = oMap.get(useClass).get(Element.Volume);
+				MonteCarloEstimate basicEstimate = oMap.get(useClass).getSumAcrossSpecies().get(Element.Volume);
 				dataset.add((MonteCarloEstimate) basicEstimate.getProductEstimate(1d / summary.getRotationLength()),
 						getColor(useClass.ordinal()),
 						useClass.toString(), 

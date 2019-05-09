@@ -5,16 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
-import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
+import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
+import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -57,7 +56,7 @@ class CATResultLogGradesPanel extends CATResultPanel {
 		
 		for (String logCategoryName : logCategoryNames) {
 			int index = logCategoryNames.indexOf(logCategoryName);
-			MonteCarloEstimate estimate = summary.getLogGradePerHa().get(logCategoryName).get(Element.Volume);
+			MonteCarloEstimate estimate = summary.getLogGradePerHa().get(logCategoryName).getSumAcrossSpecies().get(Element.Volume);
 			dataset.add((MonteCarloEstimate) estimate.getProductEstimate(1d / summary.getRotationLength()),
 					getColor(index),
 					logCategoryName, 
