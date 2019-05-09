@@ -404,9 +404,14 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 	
 	private void actualizeCarbonUnitsOfThisType(CarbonUnitStatus type, CATCompartmentManager compartmentManager) throws Exception {
 		try {
-			for (CarbonUnit carbonUnit : getCarbonUnits(type)) {
+			CarbonUnitList carbonUnitList = getCarbonUnits(type);
+			for (int i = 0; i < carbonUnitList.size(); i++) {
+				CarbonUnit carbonUnit = carbonUnitList.get(i);
 				carbonUnit.actualizeCarbon(compartmentManager);
 			}
+//			for (CarbonUnit carbonUnit : getCarbonUnits(type)) {
+//				carbonUnit.actualizeCarbon(compartmentManager);
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("An exception occurred while actualizing carbon units of type " + type.name() + " : " + e.getMessage());
