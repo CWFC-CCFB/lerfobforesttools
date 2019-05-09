@@ -102,6 +102,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		Default("<Default>","<D\u00E9faut>"),
 		CalculateCarbonBalance("Calculate carbon balance", "Calculer bilan carbone"),
 		ShowSomethingOptions("Show pool(s)", "Afficher le(s) pool(s)"),
+		OtherOpptions("Other options", "Autres options"),
+		BySpecies("By species", "Par esp\u00E8ces"),
 		Component("Component", "Composante"),
 		DefaultParameters("Default parameters", "Param\u00E8tres par d\u00e9faut"),
 		Name("Name", "Nom"),

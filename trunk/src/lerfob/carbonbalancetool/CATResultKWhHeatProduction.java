@@ -61,8 +61,8 @@ class CATResultKWhHeatProduction extends CATResultPanel {
 	}
 
 
-	protected CATResultKWhHeatProduction(CATSimulationResult summary) {
-		super(summary);
+	protected CATResultKWhHeatProduction(CATSimulationResult summary, CATOptionPanel optionPanel) {
+		super(summary, optionPanel);
 	}
 
 	@Override

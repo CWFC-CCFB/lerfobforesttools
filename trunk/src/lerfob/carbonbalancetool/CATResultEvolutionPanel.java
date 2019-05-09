@@ -56,11 +56,8 @@ class CATResultEvolutionPanel extends CATResultPanel {
 		
 	}
 
-	private CATOptionPanel optionPanel;
-
 	protected CATResultEvolutionPanel(CATSimulationResult summary, 	CATOptionPanel optionPanel) {
-		super(summary);
-		this.optionPanel = optionPanel;
+		super(summary, optionPanel);
 	}
 
 	

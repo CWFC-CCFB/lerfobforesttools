@@ -50,11 +50,16 @@ abstract class CATResultPanel extends REpiceaPanel {
 	}
 
 	private JPanel viewer;
-	protected CATSimulationResult summary;
+	protected final CATSimulationResult summary;
+	protected final CATOptionPanel optionPanel;
+
 	
-	protected CATResultPanel(CATSimulationResult summary) {
+	
+	
+	protected CATResultPanel(CATSimulationResult summary, CATOptionPanel optionPanel) {
 		super();
 		this.summary = summary;
+		this.optionPanel = optionPanel;
 		createUI();
 	}
 	

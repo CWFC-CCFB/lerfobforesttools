@@ -26,6 +26,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 
+import lerfob.carbonbalancetool.CATUtilityMaps.SpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.gui.AsymmetricalCategoryDataset;
 import lerfob.carbonbalancetool.gui.EnhancedStatisticalBarRenderer;
@@ -61,12 +62,12 @@ class CATResultHWPPanel extends CATResultPanel {
 
 	private final boolean includeRecycling;
 	
-	protected CATResultHWPPanel(CATSimulationResult summary) {
-		this(summary, false);
+	protected CATResultHWPPanel(CATSimulationResult summary, CATOptionPanel optionPanel) {
+		this(summary, optionPanel, false);
 	}
 
-	protected CATResultHWPPanel(CATSimulationResult summary, boolean includeRecycling) {
-		super(summary);
+	protected CATResultHWPPanel(CATSimulationResult summary, CATOptionPanel optionPanel, boolean includeRecycling) {
+		super(summary, optionPanel);
 		this.includeRecycling = includeRecycling;
 	}
 
@@ -77,11 +78,23 @@ class CATResultHWPPanel extends CATResultPanel {
 		
 		for (UseClass useClass : UseClass.values()) {
 			if (oMap.containsKey(useClass)) {
-				MonteCarloEstimate basicEstimate = oMap.get(useClass).getSumAcrossSpecies().get(Element.Volume);
-				dataset.add((MonteCarloEstimate) basicEstimate.getProductEstimate(1d / summary.getRotationLength()),
-						getColor(useClass.ordinal()),
-						useClass.toString(), 
-						summary.getResultId());
+				SpeciesMonteCarloEstimateMap smcem = oMap.get(useClass);
+				MonteCarloEstimate estimate;
+				if (optionPanel.isBySpeciesEnabled()) {
+					for (String speciesName : smcem.keySet()) {
+						estimate = smcem.get(speciesName).get(Element.Volume);
+						dataset.add((MonteCarloEstimate) estimate.getProductEstimate(1d / summary.getRotationLength()),
+								getColor(useClass.ordinal()),
+								useClass.toString(), 
+								speciesName);
+					}
+				}  else {
+					estimate = smcem.getSumAcrossSpecies().get(Element.Volume);
+					dataset.add((MonteCarloEstimate) estimate.getProductEstimate(1d / summary.getRotationLength()),
+							getColor(useClass.ordinal()),
+							useClass.toString(), 
+							summary.getResultId());
+				}
 			}
 		}
 		

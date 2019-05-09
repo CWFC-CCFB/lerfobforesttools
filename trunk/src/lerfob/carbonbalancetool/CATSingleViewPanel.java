@@ -54,10 +54,10 @@ class CATSingleViewPanel extends REpiceaPanel implements ItemListener, PropertyC
 			selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
 		} else {
 			selector.addItem(new CATResultEvolutionPanel(summary, optionPanel));
-			selector.addItem(new CATResultLogGradesPanel(summary));
-			selector.addItem(new CATResultHWPPanel(summary));
-			selector.addItem(new CATResultHWPWithRecyclingPanel(summary));
-			selector.addItem(new CATResultKWhHeatProduction(summary));
+			selector.addItem(new CATResultLogGradesPanel(summary, optionPanel));
+			selector.addItem(new CATResultHWPPanel(summary, optionPanel));
+			selector.addItem(new CATResultHWPWithRecyclingPanel(summary, optionPanel));
+			selector.addItem(new CATResultKWhHeatProduction(summary, optionPanel));
 			if (summary.isEvenAged()) {
 				selector.addItem(new CATResultBudgetPanel(summary, optionPanel));
 			}
@@ -93,13 +93,15 @@ class CATSingleViewPanel extends REpiceaPanel implements ItemListener, PropertyC
 	@Override
 	public void listenTo() {
 		selector.addItemListener(this);
-		optionPanel.addPropertyChangeListener("compartmentSelection", this);
+		optionPanel.addPropertyChangeListener(CATOptionPanel.CompartmentSelectionProperty, this);
+		optionPanel.addPropertyChangeListener(CATOptionPanel.BySpeciesSelectionProperty, this);
 	}
 
 	@Override
 	public void doNotListenToAnymore() {
 		selector.removeItemListener(this);
-		optionPanel.removePropertyChangeListener("compartmentSelection", this);
+		optionPanel.removePropertyChangeListener(CATOptionPanel.CompartmentSelectionProperty, this);
+		optionPanel.removePropertyChangeListener(CATOptionPanel.BySpeciesSelectionProperty, this);
 	}
 
 	@Override

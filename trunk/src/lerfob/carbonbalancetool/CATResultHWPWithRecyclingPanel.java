@@ -43,8 +43,8 @@ class CATResultHWPWithRecyclingPanel extends CATResultHWPPanel {
 		
 	}
 
-	protected CATResultHWPWithRecyclingPanel(CATSimulationResult summary) {
-		super(summary, true);
+	protected CATResultHWPWithRecyclingPanel(CATSimulationResult summary, CATOptionPanel optionPanel) {
+		super(summary, optionPanel, true);
 	}
 
 
