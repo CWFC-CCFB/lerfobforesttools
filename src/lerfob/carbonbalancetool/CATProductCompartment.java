@@ -128,7 +128,17 @@ public class CATProductCompartment extends CATCompartment {
 		Map<Integer, CATUseClassSpeciesAmountMap> outputMap = new HashMap<Integer, CATUseClassSpeciesAmountMap>();
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
 			for (Integer date : timeScale) {
-				CarbonUnitList subList = carbonUnits.filterList(CarbonUnit.class, "getCreationDate", date);
+				CarbonUnitList subList;
+				if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
+					subList = new CarbonUnitList();
+					for (CarbonUnit carbonUnit : carbonUnits) {
+						if (getCompartmentManager().getTimeTable().get(carbonUnit.getIndexInTimeScale()) == date) {
+							subList.add(carbonUnit);
+						}
+					}
+				} else {
+					subList	= carbonUnits.filterList(CarbonUnit.class, "getCreationDate", date);
+				}
 				for (UseClass useClass : UseClass.values()) {
 					CarbonUnitList subSubList = subList.filterList(EndUseWoodProductCarbonUnit.class, "getUseClass", useClass);
 					CATSpeciesAmountMap oMap = CATUtilityMaps.convertToSpeciesMap(subSubList);
