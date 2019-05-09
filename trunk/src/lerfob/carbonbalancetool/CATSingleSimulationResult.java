@@ -23,11 +23,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
+import lerfob.carbonbalancetool.CATUtilityMaps.CATSpeciesAmountMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.CATUseClassSpeciesAmountMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.SpeciesMonteCarloEstimateMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
-import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import repicea.math.Matrix;
-import repicea.simulation.processsystem.AmountMap;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.REpiceaTranslator;
@@ -77,17 +78,20 @@ class CATSingleSimulationResult implements CATSimulationResult {
 	private final CATTimeTable timeTable;
 	private final boolean isEvenAged;
 	private final Map<CompartmentInfo, Estimate<?>> budgetMap;
-	private final Map<String, Map<Element, MonteCarloEstimate>> logGradeMap;
+	private final Map<String, SpeciesMonteCarloEstimateMap> logGradeMap;
 	private final Map<CompartmentInfo, MonteCarloEstimate> evolutionMap;
-	private final Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> hwpContentByUseClass;
-	private final Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap;
+	private final Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> hwpContentByUseClass;
+	private final Map<Integer, UseClassSpeciesMonteCarloEstimateMap> productEvolutionMap;
 	private final MonteCarloEstimate heatProductionEvolutionKWhHa;
 	private final MonteCarloEstimate totalHeatProductionKWhHa;
 	private final ParameterSetup setup;
 	private final String resultId;
+	private boolean isValid;
 		
 	CATSingleSimulationResult(String resultId, CATCompartmentManager manager) {
 
+		isValid = true;
+		
 		isEvenAged = manager.isEvenAged();
 		setup = new ParameterSetup(manager.getCarbonToolSettings());
 		
@@ -98,10 +102,10 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		
 		budgetMap = new HashMap<CompartmentInfo, Estimate<?>>();
 		evolutionMap = new HashMap<CompartmentInfo, MonteCarloEstimate>();
-		logGradeMap = new TreeMap<String, Map<Element, MonteCarloEstimate>>();
+		logGradeMap = new TreeMap<String, SpeciesMonteCarloEstimateMap>();
 		
-		hwpContentByUseClass = new HashMap<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
-		productEvolutionMap = new HashMap<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>>();
+		hwpContentByUseClass = new HashMap<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap>();
+		productEvolutionMap = new HashMap<Integer, UseClassSpeciesMonteCarloEstimateMap>();
 		
 		heatProductionEvolutionKWhHa = new MonteCarloEstimate();
 		totalHeatProductionKWhHa = new MonteCarloEstimate();
@@ -109,84 +113,99 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		this.resultId = resultId;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void updateResult(CATCompartmentManager manager) {
-		CATCompartment compartment;
-		Matrix value;
-		double plotAreaHa = manager.getLastStand().getAreaHa();
+		try {
+			CATCompartment compartment;
+			Matrix value;
+			double plotAreaHa = manager.getLastStand().getAreaHa();
 
-		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
-			System.out.println("Updating results... Plot area (ha) is " + plotAreaHa);
-		}
+			if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+				System.out.println("Updating results... Plot area (ha) is " + plotAreaHa);
+			}
 
-		for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
-			compartment = manager.getCompartments().get(compartmentID);
-			
-			value = new Matrix(1,1);
-			value.m_afData[0][0] = compartment.getIntegratedCarbon(plotAreaHa);
-			if (!budgetMap.containsKey(compartmentID)) {
-				budgetMap.put(compartmentID, new MonteCarloEstimate());
+			for (CompartmentInfo compartmentID : CompartmentInfo.values()) {
+				compartment = manager.getCompartments().get(compartmentID);
+				
+				value = new Matrix(1,1);
+				value.m_afData[0][0] = compartment.getIntegratedCarbon(plotAreaHa);
+				if (!budgetMap.containsKey(compartmentID)) {
+					budgetMap.put(compartmentID, new MonteCarloEstimate());
+				}
+				((MonteCarloEstimate) budgetMap.get(compartmentID)).addRealization(value);
+				
+				value = compartment.getCarbonEvolution(plotAreaHa);
+				if (!evolutionMap.containsKey(compartmentID)) {
+					evolutionMap.put(compartmentID, new MonteCarloEstimate());
+				}
+				evolutionMap.get(compartmentID).addRealization(value);
+				
+				if (compartmentID == CompartmentInfo.WComb) {
+					CATProductCompartment productCompartment = (CATProductCompartment) compartment;
+					heatProductionEvolutionKWhHa.addRealization(productCompartment.getHeatProductionEvolutionKWhHa(plotAreaHa));
+					totalHeatProductionKWhHa.addRealization(productCompartment.getTotalHeatProductionKWhHa(plotAreaHa));
+				}
 			}
-			((MonteCarloEstimate) budgetMap.get(compartmentID)).addRealization(value);
-			
-			value = compartment.getCarbonEvolution(plotAreaHa);
-			if (!evolutionMap.containsKey(compartmentID)) {
-				evolutionMap.put(compartmentID, new MonteCarloEstimate());
-			}
-			evolutionMap.get(compartmentID).addRealization(value);
-			
-			if (compartmentID == CompartmentInfo.WComb) {
-				CATProductCompartment productCompartment = (CATProductCompartment) compartment;
-				heatProductionEvolutionKWhHa.addRealization(productCompartment.getHeatProductionEvolutionKWhHa(plotAreaHa));
-				totalHeatProductionKWhHa.addRealization(productCompartment.getTotalHeatProductionKWhHa(plotAreaHa));
-			}
-		}
 
-		CATProductCompartment productCompartment = (CATProductCompartment) manager.getCompartments().get(CompartmentInfo.Products);
-		Map<String, AmountMap<Element>> volumes = productCompartment.getVolumeByLogGradePerHa();
-		addOneLevelMapToRealization((Map) logGradeMap, (Map) volumes);
-		
-		Map<CarbonUnitStatus, Map<UseClass, AmountMap<Element>>> hWPMap = productCompartment.getHWPContentByUseClassPerHa(true);		
-		for (CarbonUnitStatus type : hWPMap.keySet()) {
-			if (!hwpContentByUseClass.containsKey(type)) {
-				hwpContentByUseClass.put(type, new HashMap<UseClass, Map<Element, MonteCarloEstimate>>());
+			CATProductCompartment productCompartment = (CATProductCompartment) manager.getCompartments().get(CompartmentInfo.Products);
+			Map<String, CATSpeciesAmountMap> volumes = productCompartment.getVolumeByLogGradePerHa();
+			for (String key : volumes.keySet()) {
+				CATSpeciesAmountMap aMap = volumes.get(key);
+				if (!logGradeMap.containsKey(key)) {
+					logGradeMap.put(key, new SpeciesMonteCarloEstimateMap());
+				}
+				SpeciesMonteCarloEstimateMap estimateMap = logGradeMap.get(key);
+				aMap.recordAsRealization(estimateMap);
 			}
-			Map<UseClass, AmountMap<Element>> innerHWPMap = hWPMap.get(type);
-			Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = hwpContentByUseClass.get(type);
-			addOneLevelMapToRealization((Map) innerMap, (Map) innerHWPMap);
-		}
-		
-		Map<Integer, Map<UseClass, AmountMap<Element>>> tmpMap = productCompartment.getWoodProductEvolutionPerHa();
-		for (Integer year : tmpMap.keySet()) {
-			if (!productEvolutionMap.containsKey(year)) {
-				productEvolutionMap.put(year, new HashMap<UseClass, Map<Element, MonteCarloEstimate>>());
+			
+//			addOneLevelMapToRealization((Map) logGradeMap, (Map) volumes);
+			
+			Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> hWPMap = productCompartment.getHWPContentByUseClassPerHa(true);		// true : with recycling
+			for (CarbonUnitStatus type : hWPMap.keySet()) {
+				if (!hwpContentByUseClass.containsKey(type)) {
+					hwpContentByUseClass.put(type, new UseClassSpeciesMonteCarloEstimateMap());
+				}
+				CATUseClassSpeciesAmountMap innerHWPMap = hWPMap.get(type);
+				UseClassSpeciesMonteCarloEstimateMap innerMap = hwpContentByUseClass.get(type);
+				innerHWPMap.recordAsRealization(innerMap);
+//				addOneLevelMapToRealization((Map) innerMap, (Map) innerHWPMap);
 			}
-			Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productEvolutionMap.get(year);
-			Map<UseClass, AmountMap<Element>> innerTmpMap = tmpMap.get(year);
-			addOneLevelMapToRealization((Map) innerMap, (Map) innerTmpMap);
+			
+			Map<Integer, CATUseClassSpeciesAmountMap> tmpMap = productCompartment.getWoodProductEvolutionPerHa();
+			for (Integer year : tmpMap.keySet()) {
+				if (!productEvolutionMap.containsKey(year)) {
+					productEvolutionMap.put(year, new UseClassSpeciesMonteCarloEstimateMap());
+				}
+				UseClassSpeciesMonteCarloEstimateMap innerMap = productEvolutionMap.get(year);
+				CATUseClassSpeciesAmountMap innerTmpMap = tmpMap.get(year);
+				innerTmpMap.recordAsRealization(innerMap);
+//				addOneLevelMapToRealization((Map) innerMap, (Map) );
+			}
+		} catch (Exception e) {
+			isValid = false;
+			throw e;
 		}
 	}
 	
-	private void addAmountMapToRealization(Map<Element, MonteCarloEstimate> receivingMap, AmountMap<Element> amountMap) {
-		Matrix value;
-		for (Element element : amountMap.keySet()) {
-			value = new Matrix(1,1);
-			value.m_afData[0][0] = amountMap.get(element);
-			if (!receivingMap.containsKey(element)) {
-				receivingMap.put(element, new MonteCarloEstimate());
-			}
-			receivingMap.get(element).addRealization(value);
-		}
-	}
+//	private void addAmountMapToRealization(Map<Element, MonteCarloEstimate> receivingMap, AmountMap<Element> amountMap) {
+//		Matrix value;
+//		for (Element element : amountMap.keySet()) {
+//			value = new Matrix(1,1);
+//			value.m_afData[0][0] = amountMap.get(element);
+//			if (!receivingMap.containsKey(element)) {
+//				receivingMap.put(element, new MonteCarloEstimate());
+//			}
+//			receivingMap.get(element).addRealization(value);
+//		}
+//	}
 	
-	private void addOneLevelMapToRealization(Map<Object, Map<Element, MonteCarloEstimate>> receivingMap, Map<Object, AmountMap<Element>> oMap) {
-		for (Object key : oMap.keySet()) {
-			if (!receivingMap.containsKey(key)) {
-				receivingMap.put(key, new HashMap<Element, MonteCarloEstimate>());
-			}
-			addAmountMapToRealization(receivingMap.get(key), oMap.get(key));
-		}
-	}
+//	private void addOneLevelMdapToRealization(Map<Object, Map<Element, MonteCarloEstimate>> receivingMap, Map<Object, AmountMap<Element>> oMap) {
+//		for (Object key : oMap.keySet()) {
+//			if (!receivingMap.containsKey(key)) {
+//				receivingMap.put(key, new HashMap<Element, MonteCarloEstimate>());
+//			}
+//			addAmountMapToRealization(receivingMap.get(key), oMap.get(key));
+//		}
+//	}
 	
 	@Override
 	public String toString() {
@@ -213,52 +232,23 @@ class CATSingleSimulationResult implements CATSimulationResult {
 	public Map<CompartmentInfo, MonteCarloEstimate> getEvolutionMap() {return evolutionMap;}
 
 	@Override
-	public Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> getHWPPerHaByUseClass() {return hwpContentByUseClass;}
+	public Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> getHWPPerHaByUseClass() {return hwpContentByUseClass;}
 	
 	@Override
-	public Map<String, Map<Element, MonteCarloEstimate>> getLogGradePerHa() {return logGradeMap;}
+	public Map<String, SpeciesMonteCarloEstimateMap> getLogGradePerHa() {return logGradeMap;}
 
 	@Override
-	public Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> getProductEvolutionPerHa() {return productEvolutionMap;}
+	public Map<Integer, UseClassSpeciesMonteCarloEstimateMap> getProductEvolutionPerHa() {return productEvolutionMap;}
 	
 	@Override
 	public String getResultId() {return resultId;}
 	
 	@Override
-	public Map<UseClass, Map<Element, MonteCarloEstimate>> getHWPSummaryPerHa(boolean includeRecycling) {
+	public UseClassSpeciesMonteCarloEstimateMap getHWPSummaryPerHa(boolean includeRecycling) {
 		if (includeRecycling) {
-			Map<UseClass, Map<Element, MonteCarloEstimate>> outputMap = new TreeMap<UseClass, Map<Element, MonteCarloEstimate>>();
-			Map<UseClass, Map<Element, MonteCarloEstimate>> oMapProduct = getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
-			Map<UseClass, Map<Element, MonteCarloEstimate>> oMapRecycling = getHWPPerHaByUseClass().get(CarbonUnitStatus.Recycled);
-			for (UseClass useClass : oMapProduct.keySet()) {
-				Map<Element, MonteCarloEstimate> carrier = oMapProduct.get(useClass);
-				Map<Element, MonteCarloEstimate> newCarrier = new HashMap<Element, MonteCarloEstimate>();
-				outputMap.put(useClass, newCarrier);
-				newCarrier.putAll(carrier);
-			}
-
-			for (UseClass useClass : oMapRecycling.keySet()) {
-				Map<Element, MonteCarloEstimate> carrier = oMapRecycling.get(useClass);
-				Map<Element, MonteCarloEstimate> newCarrier = outputMap.get(useClass);
-				if (newCarrier != null) {
-					for (Element element : Element.values()) {
-						MonteCarloEstimate estimate1 = carrier.get(element);
-						MonteCarloEstimate estimate2 = newCarrier.get(element);
-						if (estimate1 != null) {
-							if (estimate2 == null) {
-								newCarrier.put(element, estimate1);
-							} else {
-								newCarrier.put(element, (MonteCarloEstimate) estimate1.getSumEstimate(estimate2));
-							}
-						}
-					}
-				} else {
-					newCarrier = new HashMap<Element, MonteCarloEstimate>();
-					outputMap.put(useClass, newCarrier);
-					newCarrier.putAll(carrier);
-				}
-			}
-			return outputMap;
+			UseClassSpeciesMonteCarloEstimateMap oMapProduct = getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
+			UseClassSpeciesMonteCarloEstimateMap oMapRecycling = getHWPPerHaByUseClass().get(CarbonUnitStatus.Recycled);
+			return oMapProduct.mergeWith(oMapRecycling);
 		} else {
 			return getHWPPerHaByUseClass().get(CarbonUnitStatus.EndUseWoodProduct);
 		}
@@ -269,5 +259,10 @@ class CATSingleSimulationResult implements CATSimulationResult {
 
 	@Override
 	public MonteCarloEstimate getHeatProductionEvolutionKWhPerHa() {return heatProductionEvolutionKWhHa;}
+
+	@Override
+	public boolean isValid() {
+		return isValid;
+	}
 
 }

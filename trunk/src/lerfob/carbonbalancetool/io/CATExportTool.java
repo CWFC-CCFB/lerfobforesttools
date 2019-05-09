@@ -29,6 +29,8 @@ import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATSimulationDifference;
 import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CATTimeTable;
+import lerfob.carbonbalancetool.CATUtilityMaps.MonteCarloEstimateMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -159,7 +161,7 @@ public class CATExportTool extends REpiceaExportTool {
 		private void createHWPEvolutionRecordSet() throws Exception {
 			GExportRecord r;
 						
-			Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productMap = caller.summary.getProductEvolutionPerHa();
+			Map<Integer, UseClassSpeciesMonteCarloEstimateMap> productMap = caller.summary.getProductEvolutionPerHa();
 			
 			String standID = caller.summary.getStandID();
 			if (standID == null || standID.isEmpty()) {
@@ -173,11 +175,11 @@ public class CATExportTool extends REpiceaExportTool {
 			
 			for (Integer date : dates) {
 				GExportFieldDetails dateIDField = new GExportFieldDetails("Date", date);
-				Map<UseClass, Map<Element, MonteCarloEstimate>> innerMap = productMap.get(date);
+				UseClassSpeciesMonteCarloEstimateMap innerMap = productMap.get(date);
 				Map<Element, MonteCarloEstimate> carrier;
 				for (UseClass useClass : UseClass.values()) {
 					if (innerMap.containsKey(useClass)) {
-						carrier = innerMap.get(useClass);
+						carrier = innerMap.get(useClass).getSumAcrossSpecies();
 						MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
 						MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
 						int nbRealizations = volumeEstimate.getNumberOfRealizations();
@@ -283,7 +285,7 @@ public class CATExportTool extends REpiceaExportTool {
 		 */
 		private void createTotalHWPbyCategoriesRecordSet() throws Exception {
 			GExportRecord r;
-			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
+			Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> volumeProducts = caller.summary.getHWPPerHaByUseClass();		// no recycling
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -294,11 +296,11 @@ public class CATExportTool extends REpiceaExportTool {
 			
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) {
 				if (volumeProducts.containsKey(type)) {
-					Map<UseClass, Map<Element, MonteCarloEstimate>> innerVolumeMap = volumeProducts.get(type);
+					UseClassSpeciesMonteCarloEstimateMap innerVolumeMap = volumeProducts.get(type);
 					Map<Element, MonteCarloEstimate> carrier;
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
-							carrier = innerVolumeMap.get(useClass);
+							carrier = innerVolumeMap.get(useClass).getSumAcrossSpecies();
 							MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
 							MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
 							int nbRealizations = volumeEstimate.getNumberOfRealizations();
@@ -335,7 +337,7 @@ public class CATExportTool extends REpiceaExportTool {
 			GExportRecord r;
 			double annualFactor = 1d / caller.summary.getRotationLength();
 			
-			Map<CarbonUnitStatus, Map<UseClass, Map<Element, MonteCarloEstimate>>> volumeProducts = caller.summary.getHWPPerHaByUseClass();
+			Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> volumeProducts = caller.summary.getHWPPerHaByUseClass();
 			
 			double nutrientKg;
 			String standID = caller.summary.getStandID();
@@ -346,11 +348,11 @@ public class CATExportTool extends REpiceaExportTool {
 			
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) { 
 				if (volumeProducts.containsKey(type)) {
-					Map<UseClass, Map<Element, MonteCarloEstimate>> innerVolumeMap = volumeProducts.get(type);
+					UseClassSpeciesMonteCarloEstimateMap innerVolumeMap = volumeProducts.get(type);
 					Map<Element, MonteCarloEstimate> carrier;
 					for (UseClass useClass : UseClass.values()) {
 						if (innerVolumeMap.containsKey(useClass)) {
-							carrier = innerVolumeMap.get(useClass);
+							carrier = innerVolumeMap.get(useClass).getSumAcrossSpecies();
 							MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
 							MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
 							int nbRealizations = volumeEstimate.getNumberOfRealizations();
@@ -390,13 +392,13 @@ public class CATExportTool extends REpiceaExportTool {
 				standID = "Unknown";
 			}
 			GExportFieldDetails standIDField = new GExportFieldDetails("StandID", standID);
-			Map<Element, MonteCarloEstimate> carrier;
+			MonteCarloEstimateMap carrier;
 			
 			List<String> logNames = new ArrayList<String>(caller.summary.getLogGradePerHa().keySet());
 			Collections.sort(logNames);
 			
 			for (String logName : logNames) {
-				carrier = caller.summary.getLogGradePerHa().get(logName);
+				carrier = caller.summary.getLogGradePerHa().get(logName).getSumAcrossSpecies();
 				MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
 				MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
 				int nbRealizations = volumeEstimate.getNumberOfRealizations();

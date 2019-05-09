@@ -70,10 +70,10 @@ import repicea.util.REpiceaTranslator.Language;
 
 /**
  * LERFoBCarbonAccountingTool is the class that implements a tool for the calculation of the carbon balance in a series
- * of CarbonToolCompatibleStand instances (LERFoB-CAT). 
- * 
+ * of CarbonToolCompatibleStand instances (LERFoB-CAT). <br>
+ * <br>
  * ARCHITECTURE : The LERFoBCarbonAccountingTool has a GUI interface and it is in charge of calculating the carbon for all the compartments. It contains a CarbonCompartmentManager instance,
- * which contains in turn a collection of CarbonCompartment objects that can provide their carbon content on their own.
+ * which contains in turn a collection of CarbonCompartment objects that can provide their carbon content on their own. <br>
  * 
  * @author Mathieu Fortin (INRA) - January 2010
  */

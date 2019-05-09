@@ -21,7 +21,6 @@ package lerfob.carbonbalancetool;
 import java.util.Collection;
 import java.util.List;
 
-import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnit;
 import lerfob.carbonbalancetool.productionlines.LandfillCarbonUnit;

@@ -34,6 +34,8 @@ import lerfob.carbonbalancetool.CATCompatibleStand;
 import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import lerfob.carbonbalancetool.CATSimulationResult;
+import lerfob.carbonbalancetool.CATUtilityMaps.MonteCarloEstimateMap;
+import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -47,7 +49,6 @@ import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
-import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
 /**
@@ -221,7 +222,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		setStandList(standList);
 		calculateCarbon();
 		CATSimulationResult simulationResult = retrieveSimulationSummary();
-		Map<Integer, Map<UseClass, Map<Element, MonteCarloEstimate>>> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
+		Map<Integer, UseClassSpeciesMonteCarloEstimateMap> productEvolutionMap = simulationResult.getProductEvolutionPerHa();
 		
 		Matrix carbonInHWP = simulationResult.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 		
@@ -236,12 +237,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				outputMap.put(year, new HashMap<String, Double>());
 			}
 			Map<String, Double> innerOutputMap1 = outputMap.get(year);
-			Map<UseClass, Map<Element, MonteCarloEstimate>> innerInputMap2 = productEvolutionMap.get(year);
+			UseClassSpeciesMonteCarloEstimateMap innerInputMap2 = productEvolutionMap.get(year);
 			for (UseClass useClass : UseClass.values()) {
 				if (useClass != UseClass.EXTRACTIVE) {
 					String key = "BiomassMgHa" + useClass.name().toUpperCase();
 					if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
-						Map<Element, MonteCarloEstimate> amountMap = innerInputMap2.get(useClass);
+						MonteCarloEstimateMap amountMap = innerInputMap2.get(useClass).getSumAcrossSpecies();
 						innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().m_afData[0][0]);
 					} else {
 						innerOutputMap1.put(key, 0d);
