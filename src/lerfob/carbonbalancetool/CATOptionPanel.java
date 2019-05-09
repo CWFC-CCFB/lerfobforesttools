@@ -26,12 +26,15 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.border.BevelBorder;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompartment.PoolCategory;
@@ -43,7 +46,12 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  * This inner class is just a JPanel with check boxes to display the compartment options. 
  * @author Mathieu Fortin - November 2012
  */
+@SuppressWarnings("serial")
 public class CATOptionPanel extends JScrollPane implements ItemListener {
+	
+	protected static final String CompartmentSelectionProperty = "compartmentSelection";
+	protected static final String BySpeciesSelectionProperty = "bySpeciesSelection";
+	
 	
 	private static enum MessageID implements TextableEnum {
 		ForestPools("Forest", "For\u00EAt"),
@@ -66,14 +74,19 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 
 	
 	
-	private static final long serialVersionUID = 1L;
 	private List<CATCompartmentCheckBox> booleanSettings;
+	private final JCheckBox bySpeciesCheckBox;
 
 	public CATOptionPanel() {
 		booleanSettings = new ArrayList<CATCompartmentCheckBox>();
 
+		JPanel topContainer = new JPanel();
+		topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
+		
 		JPanel optionPanel = new JPanel(new BorderLayout());
-
+		optionPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		topContainer.add(optionPanel);
+		
 		JLabel showSomethingLabel = UIControlManager.getLabel(CATFrame.MessageID.ShowSomethingOptions);
 		JPanel showSomethingLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		showSomethingLabelPanel.add(showSomethingLabel);
@@ -132,23 +145,52 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		intermediatePanel.add(checkBoxPanel);
 		
 		optionPanel.add(intermediatePanel, BorderLayout.CENTER);
-		setViewportView(optionPanel);
+		
+		
+		JPanel otherOptionsPanel = new JPanel(new BorderLayout());
+		otherOptionsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		topContainer.add(otherOptionsPanel);
+		
+		JLabel otherOptionsLabel = UIControlManager.getLabel(CATFrame.MessageID.OtherOpptions);
+		JPanel otherOptionsLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		otherOptionsLabelPanel.add(otherOptionsLabel);
+		otherOptionsPanel.add(otherOptionsLabelPanel, BorderLayout.NORTH);
+
+		checkBoxPanel = new JPanel();
+		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+		checkBoxPanel.add(new JSeparator());
+
+		bySpeciesCheckBox = new JCheckBox(CATFrame.MessageID.BySpecies.toString()); 
+		checkBoxPanel.add(getCheckBoxPanel(bySpeciesCheckBox, false));
+		
+		intermediatePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		intermediatePanel.add(Box.createHorizontalStrut(20));
+		intermediatePanel.add(checkBoxPanel);
+		
+		otherOptionsPanel.add(intermediatePanel, BorderLayout.CENTER);
+		
+		setViewportView(topContainer);
 		Dimension preferredSize = new Dimension(300, 668);
 		setPreferredSize(preferredSize);
 	}
 	
 	
 	private JPanel getCheckBoxPanel(CompartmentInfo compartmentID, boolean offset) {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		CATCompartmentCheckBox checkBox = new CATCompartmentCheckBox(compartmentID);
 		booleanSettings.add(checkBox);
-		checkBox.addItemListener(this);
 		if (compartmentID == CompartmentInfo.EnerSubs) {
 			checkBox.setToolTipText(MessageID.TooltipSubstitution.toString());
 		}
 		if (compartmentID == CompartmentInfo.CarbEmis) {
 			checkBox.setToolTipText(MessageID.TooltipFossilFuelEmission.toString());
 		}
+		return getCheckBoxPanel(checkBox, offset);
+	}
+
+	
+	private JPanel getCheckBoxPanel(JCheckBox checkBox, boolean offset) {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		checkBox.addItemListener(this);
 		if (offset) {
 			panel.add(Box.createHorizontalStrut(10));
 		}
@@ -156,6 +198,8 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 		return panel;
 	}
 
+	
+	
 	/**
 	 * This method iterates on the Setting map to find the compartment 
 	 * that are requested by the used
@@ -187,8 +231,13 @@ public class CATOptionPanel extends JScrollPane implements ItemListener {
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		firePropertyChange("compartmentSelection", null, null);
+		if (e.getSource() instanceof CATCompartmentCheckBox) {
+			firePropertyChange(CompartmentSelectionProperty, null, null);
+		} else if (e.getSource().equals(bySpeciesCheckBox)) {
+			firePropertyChange(BySpeciesSelectionProperty, null, null);
+		}
 	}
 	
+	protected boolean isBySpeciesEnabled() {return bySpeciesCheckBox.isSelected();}
 	
 }

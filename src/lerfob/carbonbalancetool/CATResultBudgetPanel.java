@@ -57,14 +57,12 @@ class CATResultBudgetPanel extends CATResultPanel {
 		
 	}
 
-	private CATOptionPanel optionPanel;
 	
 	/**
 	 * Default constructor.
 	 */
 	protected CATResultBudgetPanel(CATSimulationResult summary, CATOptionPanel optionPanel) {
-		super(summary);
-		this.optionPanel = optionPanel;
+		super(summary, optionPanel);
 	}
 
 
