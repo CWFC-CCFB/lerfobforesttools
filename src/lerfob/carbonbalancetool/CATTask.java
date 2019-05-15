@@ -54,6 +54,7 @@ public class CATTask extends AbstractGenericTask {
 		UNLOCK_ENGINE(false),
 		SHOW_INTERFACE(false),
 		RESET_MANAGER(false), 
+		REGISTER_TREES(false),
 		DISPLAY_RESULT(false),
 		SET_BIOMASS_PARMS(false),
 		SET_PRODUCTION_MANAGER(false);
@@ -112,6 +113,9 @@ public class CATTask extends AbstractGenericTask {
 		case SET_REALIZATION:
 			caller.getCarbonCompartmentManager().setRealization(((SetProperRealizationTask) this).realizationID);
 			break;
+		case REGISTER_TREES:
+			registerTrees();
+			break;
 		case DISPLAY_RESULT:
 			caller.showResult();
 			break;
@@ -158,19 +162,13 @@ public class CATTask extends AbstractGenericTask {
 
 	
 
-	/**
-	 * Task no 1 : log the trees and buck them into wood pieces
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void logAndBuckTrees() throws Exception {
+	@SuppressWarnings("unchecked")
+	private void registerTrees() {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
-			System.out.println("Bucking harvested trees into wood pieces...");
+			System.out.println("Creating last stand if needs be and registering trees...");
 		}
 
-		manager.setSimulationValid(false);
-		
 		CATCompatibleStand lastStand = manager.getLastStand(); 
 
 		// performing a final cut if has not been done and only if the stand implements the CarbonToolCompatibleEvenAgedStand interface
@@ -186,22 +184,41 @@ public class CATTask extends AbstractGenericTask {
 
 		// retrieve the loggable trees
 		Collection<CATCompatibleTree> retrievedTreesFromStep;
-		caller.clearTreeCollections();
+//		manager.clearTreeCollections();
 		for (CATCompatibleStand stand : manager.getStandList()) {
 			for (StatusClass statusClass : StatusClass.values()) {
-				if (statusClass != StatusClass.alive) {
-					retrievedTreesFromStep = stand.getTrees(statusClass);
-					if (!retrievedTreesFromStep.isEmpty()) {
-						for (CATCompatibleTree t : retrievedTreesFromStep) {
-							caller.registerTree(statusClass, stand, t);
+				retrievedTreesFromStep = stand.getTrees(statusClass);
+				if (!retrievedTreesFromStep.isEmpty()) {
+					for (CATCompatibleTree t : retrievedTreesFromStep) {
+						if (statusClass != StatusClass.alive) {
+							manager.registerTree(statusClass, stand, t);
 						}
+						manager.registerTreeSpecies(t);	// we register all the possible species regardless of tree status
 					} 
 				}
 			}
 		}
 
+		
+	}
+
+
+	/**
+	 * Task no 1 : log the trees and buck them into wood pieces
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void logAndBuckTrees() throws Exception {
+		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
+			System.out.println("Bucking harvested trees into wood pieces...");
+		}
+
+		manager.setSimulationValid(false);
+		
+
 		TreeLogger logger = caller.getCarbonToolSettings().getTreeLogger();
-		if (!caller.getTrees(StatusClass.cut).isEmpty()) {
+		if (!manager.getTrees(StatusClass.cut).isEmpty()) {
 			if (caller.guiInterface != null) {
 				logger.addTreeLoggerListener(caller.getUI()); 
 			}
@@ -290,7 +307,7 @@ public class CATTask extends AbstractGenericTask {
 							}
 							
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
-									caller.getDateIndexForThisTree(tree), 
+									manager.getDateIndexForThisTree(tree), 
 									samplingUnitID, 
 									amountMap, 
 									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());		
@@ -302,7 +319,7 @@ public class CATTask extends AbstractGenericTask {
 								unconsideredAboveGroundVolumeM3, 
 								basicWoodDensityMgM3, 
 								carbonContentRatio, 
-								caller.getDateIndexForThisTree(tree), 
+								manager.getDateIndexForThisTree(tree), 
 								samplingUnitID,
 								WoodyDebrisProcessorID.FineWoodyDebris);
 						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
@@ -311,19 +328,19 @@ public class CATTask extends AbstractGenericTask {
 								unconsideredBelowGroundVolume, 
 								basicWoodDensityMgM3, 
 								carbonContentRatio, 
-								caller.getDateIndexForThisTree(tree), 
+								manager.getDateIndexForThisTree(tree), 
 								samplingUnitID,
 								WoodyDebrisProcessorID.CoarseWoodyDebris);
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
 			}
-			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CoarseWoodyDebris);
-			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CommercialWoodyDebris);
-			createWoodyDebris(caller.getTrees(StatusClass.dead), WoodyDebrisProcessorID.FineWoodyDebris);
-			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CoarseWoodyDebris);
-			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CommercialWoodyDebris);
-			createWoodyDebris(caller.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.FineWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CoarseWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.dead), WoodyDebrisProcessorID.CommercialWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.dead), WoodyDebrisProcessorID.FineWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CoarseWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.CommercialWoodyDebris);
+			createWoodyDebris(manager.getTrees(StatusClass.windfall), WoodyDebrisProcessorID.FineWoodyDebris);
 		} else {
 			ProductionLineManager productionLineManager = caller.getCarbonToolSettings().getProductionLines();
 			productionLineManager.resetCarbonUnitMap();							// reinitialize the land fill carbon unit and left in forest carbon unit collections
@@ -382,7 +399,7 @@ public class CATTask extends AbstractGenericTask {
 //									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 								}
 
-								productionLineManager.processWoodPiece(productionLineName, caller.getDateIndexForThisTree(tree), amountMap);		
+								productionLineManager.processWoodPiece(productionLineName, manager.getDateIndexForThisTree(tree), amountMap);		
 							}
 						}
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
@@ -394,7 +411,7 @@ public class CATTask extends AbstractGenericTask {
 							amountMap.put(Element.Volume, volume);
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
-							productionLineManager.leftThisPieceInTheForest(caller.getDateIndexForThisTree(tree), amountMap);		
+							productionLineManager.leftThisPieceInTheForest(manager.getDateIndexForThisTree(tree), amountMap);		
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
@@ -404,14 +421,14 @@ public class CATTask extends AbstractGenericTask {
 
 
 			// The belowground biomass of the logged trees must be considered as left in the forest
-			if (!caller.getTrees(StatusClass.cut).isEmpty()) {
-				for (CATCompatibleStand stand : caller.getTrees(StatusClass.cut).keySet()) {
+			if (!manager.getTrees(StatusClass.cut).isEmpty()) {
+				for (CATCompatibleStand stand : manager.getTrees(StatusClass.cut).keySet()) {
 					if (isCancelled) {
 						break;
 					}
 					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CATCompatibleTree> trees = new ArrayList<CATCompatibleTree>();
-					Map<String, Map<String, Collection<CATCompatibleTree>>> innerMap = caller.getTrees(StatusClass.cut).get(stand);
+					Map<String, Map<String, Collection<CATCompatibleTree>>> innerMap = manager.getTrees(StatusClass.cut).get(stand);
 					for (String key : innerMap.keySet()) {
 						for (Collection<CATCompatibleTree> coll : innerMap.get(key).values()) {
 							trees.addAll(coll);
@@ -543,8 +560,9 @@ public class CATTask extends AbstractGenericTask {
 	}
 
 	private Collection<CATCompatibleTree> convertMapIntoCollectionOfLoggableTrees() {
+		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		Collection<CATCompatibleTree> loggableTreesCollection = new ArrayList<CATCompatibleTree>();
-		for (Map<String, Map<String, Collection<CATCompatibleTree>>> oMap : caller.getTrees(StatusClass.cut).values()) {
+		for (Map<String, Map<String, Collection<CATCompatibleTree>>> oMap : manager.getTrees(StatusClass.cut).values()) {
 			for (Map<String, Collection<CATCompatibleTree>> oInnerMap : oMap.values()) {
 				for (Collection<CATCompatibleTree> oColl : oInnerMap.values()) {
 					loggableTreesCollection.addAll(oColl);

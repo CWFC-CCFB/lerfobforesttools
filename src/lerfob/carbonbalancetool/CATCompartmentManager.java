@@ -20,6 +20,7 @@ package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,11 +36,17 @@ import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettin
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.StochasticInformationProvider;
+import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
+import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 @SuppressWarnings("deprecation")
 public class CATCompartmentManager implements MonteCarloSimulationCompliantObject {
 
 	private static int NumberOfExtraYrs = 80;	// number of years after the final cut
+
+	private final Map<StatusClass, Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>> treeCollections;
+	private final Map<CATCompatibleTree, CATCompatibleStand> treeRegister;
+	private final List<String> speciesList;
 
 	private List<CATCompatibleStand> currentStands;	
 	private List<CATCompatibleStand> stands;
@@ -65,12 +72,81 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	 * @param tool a CarbonAccountingTool instance
 	 */
 	public CATCompartmentManager(CATSettings settings) {
+		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>>();
+		treeRegister = new HashMap<CATCompatibleTree, CATCompatibleStand>();
+		speciesList = new ArrayList<String>();
+		
 		this.carbonAccountingToolSettings = settings;
 		this.carbonCompartments = new TreeMap<CompartmentInfo, CATCompartment>();	// TreeMap to make sure the merge compartments are not called before the regular compartment
 		isSimulationValid = false;
 		initializeCompartments();
 	}
 		
+	protected void registerTree(StatusClass statusClass, CATCompatibleStand stand, CATCompatibleTree tree) {
+		if (!treeCollections.containsKey(statusClass)) {
+			treeCollections.put(statusClass, new HashMap<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>());
+		}
+		Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>> innerMap = treeCollections.get(statusClass);
+		if (!innerMap.containsKey(stand)) {
+			innerMap.put(stand, new HashMap<String, Map<String, Collection<CATCompatibleTree>>>());
+		}
+		
+		Map<String, Map<String, Collection<CATCompatibleTree>>> innerInnerMap = innerMap.get(stand);
+		
+		String samplingUnitID;
+		if (tree instanceof SamplingUnitIDProvider) {
+			samplingUnitID = ((SamplingUnitIDProvider) tree).getSamplingUnitID(); 
+		} else {
+			samplingUnitID = "";
+		}
+		if (!innerInnerMap.containsKey(samplingUnitID)) {
+			innerInnerMap.put(samplingUnitID, new HashMap<String, Collection<CATCompatibleTree>>());
+		}
+		
+		Map<String, Collection<CATCompatibleTree>> mostInsideMap = innerInnerMap.get(samplingUnitID);
+		if (!mostInsideMap.containsKey(tree.getSpeciesName())) {
+			mostInsideMap.put(tree.getSpeciesName(), new ArrayList<CATCompatibleTree>());
+		}
+		
+		Collection<CATCompatibleTree> trees = mostInsideMap.get(tree.getSpeciesName());
+		trees.add(tree);
+		treeRegister.put(tree, stand);
+	}
+
+	
+	protected int getDateIndexForThisTree(CATCompatibleTree tree) {
+		if (treeRegister.containsKey(tree)) {
+			CATCompatibleStand stand = treeRegister.get(tree);
+			return getStandList().indexOf(stand);
+		} else {
+			return -1;
+		}
+	}
+
+	protected Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>> getTrees(StatusClass statusClass) {
+		if (treeCollections.containsKey(statusClass)) {
+			return treeCollections.get(statusClass);
+		} else {
+			return new HashMap<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>();
+		}
+	}
+
+	private void clearTreeCollections() {
+		treeCollections.clear();
+		treeRegister.clear();
+		speciesList.clear();
+	}
+
+	protected List<String> getSpeciesList() {
+		return speciesList;
+	}
+
+	protected void registerTreeSpecies(CATCompatibleTree tree) {
+		if (!speciesList.contains(tree.getSpeciesName())) {
+			speciesList.add(tree.getSpeciesName());
+		}
+	}
+
 	protected void setSimulationValid(boolean isSimulationValid) {
 		this.isSimulationValid = isSimulationValid;
 	}
@@ -111,11 +187,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			int size = stands.size() + nbExtraYears / averageTimeStep;
 			for (int i = 0; i < size; i++) {
 				if (i < stands.size()) {
-					//					if (isEvenAged) {
-					//						timeTable.add(((CATCompatibleEvenAgedStand) stands.get(i)).getAgeYr());
-					//					} else {
 					timeTable.add(stands.get(i).getDateYr());
-					//					}
 				} else  {
 					timeTable.add(timeTable.get(i - 1) + averageTimeStep);
 				}
@@ -125,6 +197,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	}
 	
 	protected void resetManager() {
+		clearTreeCollections();
 		resetCompartments();
 		if (getCarbonToolSettings().formerImplementation) {
 			ProductionLineManager productionLines = carbonAccountingToolSettings.getProductionLines();
