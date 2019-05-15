@@ -147,6 +147,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 			}
 
 			CATProductCompartment productCompartment = (CATProductCompartment) manager.getCompartments().get(CompartmentInfo.Products);
+			
 			Map<String, CATSpeciesAmountMap> volumes = productCompartment.getVolumeByLogGradePerHa();
 			for (String key : volumes.keySet()) {
 				CATSpeciesAmountMap aMap = volumes.get(key);
@@ -154,10 +155,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 					logGradeMap.put(key, new SpeciesMonteCarloEstimateMap());
 				}
 				SpeciesMonteCarloEstimateMap estimateMap = logGradeMap.get(key);
-				aMap.recordAsRealization(estimateMap);
+				aMap.recordAsRealization(estimateMap, manager.getMonteCarloRealizationId());
 			}
-			
-//			addOneLevelMapToRealization((Map) logGradeMap, (Map) volumes);
 			
 			Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> hWPMap = productCompartment.getHWPContentByUseClassPerHa(true);		// true : with recycling
 			for (CarbonUnitStatus type : hWPMap.keySet()) {
@@ -166,8 +165,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				}
 				CATUseClassSpeciesAmountMap innerHWPMap = hWPMap.get(type);
 				UseClassSpeciesMonteCarloEstimateMap innerMap = hwpContentByUseClass.get(type);
-				innerHWPMap.recordAsRealization(innerMap);
-//				addOneLevelMapToRealization((Map) innerMap, (Map) innerHWPMap);
+				innerHWPMap.recordAsRealization(innerMap, manager.getMonteCarloRealizationId());
 			}
 			
 			Map<Integer, CATUseClassSpeciesAmountMap> tmpMap = productCompartment.getWoodProductEvolutionPerHa();
@@ -177,8 +175,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				}
 				UseClassSpeciesMonteCarloEstimateMap innerMap = productEvolutionMap.get(year);
 				CATUseClassSpeciesAmountMap innerTmpMap = tmpMap.get(year);
-				innerTmpMap.recordAsRealization(innerMap);
-//				addOneLevelMapToRealization((Map) innerMap, (Map) );
+				innerTmpMap.recordAsRealization(innerMap, manager.getMonteCarloRealizationId());
 			}
 		} catch (Exception e) {
 			isValid = false;
