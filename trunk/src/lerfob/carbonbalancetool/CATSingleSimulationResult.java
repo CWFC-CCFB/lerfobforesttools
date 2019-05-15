@@ -141,8 +141,8 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				
 				if (compartmentID == CompartmentInfo.WComb) {
 					CATProductCompartment productCompartment = (CATProductCompartment) compartment;
-					heatProductionEvolutionKWhHa.addRealization(productCompartment.getHeatProductionEvolutionKWhHa(plotAreaHa));
-					totalHeatProductionKWhHa.addRealization(productCompartment.getTotalHeatProductionKWhHa(plotAreaHa));
+					heatProductionEvolutionKWhHa.addRealization(productCompartment.getHeatProductionEvolutionMgWhHa(plotAreaHa));
+					totalHeatProductionKWhHa.addRealization(productCompartment.getTotalHeatProductionMgWhHa(plotAreaHa));
 				}
 			}
 

@@ -156,6 +156,10 @@ public class CATProductCompartment extends CATCompartment {
 	}
 
 
+	
+	
+	
+	
 
 	/**
 	 * This method returns the proportion of use class.
@@ -188,7 +192,6 @@ public class CATProductCompartment extends CATCompartment {
 		return outputMap;
 	}
 
-	// TODO refactor this one
 	/**
 	 * This method returns the list of the different log grades and their associated volumes and biomasses.
 	 * @return a TreeMap instance
@@ -197,7 +200,7 @@ public class CATProductCompartment extends CATCompartment {
 		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
 
 		BiomassParameters biomassParameters = getCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
-		Map<LoggableTree, Collection<WoodPiece>> woodPieceMap = this.getCompartmentManager().getCarbonToolSettings().getTreeLogger().getWoodPieces();
+		Map<LoggableTree, Collection<WoodPiece>> woodPieceMap = getCompartmentManager().getCarbonToolSettings().getTreeLogger().getWoodPieces();
 		TreeMap<String, CATSpeciesAmountMap> volumeByLogGrade = new TreeMap<String, CATSpeciesAmountMap>();
 		String logCategoryName;
 		double volume;
@@ -260,12 +263,12 @@ public class CATProductCompartment extends CATCompartment {
 		this.totalHeatProduction = totalHeatProduction;
 	}
 
-	protected Matrix getHeatProductionEvolutionKWhHa(double plotAreaHa) {
+	protected Matrix getHeatProductionEvolutionMgWhHa(double plotAreaHa) {
 		Matrix mat = new Matrix(heatProductionArray);
 		return mat.scalarMultiply(1d / plotAreaHa);
 	}
 	
-	protected Matrix getTotalHeatProductionKWhHa(double plotAreaHa) {
+	protected Matrix getTotalHeatProductionMgWhHa(double plotAreaHa) {
 		Matrix mat = new Matrix(1,1);
 		mat.m_afData[0][0] = totalHeatProduction * 1d / plotAreaHa;
 		return mat;
