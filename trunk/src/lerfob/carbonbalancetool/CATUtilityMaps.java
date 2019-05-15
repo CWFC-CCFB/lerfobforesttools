@@ -86,14 +86,14 @@ public class CATUtilityMaps {
 			return amountMap;
 		}
 		
-		void recordAsRealization(UseClassSpeciesMonteCarloEstimateMap map) {
+		void recordAsRealization(UseClassSpeciesMonteCarloEstimateMap map, int currentRealizationID) {
 			for (UseClass useClass : keySet()) {
 				if (!map.containsKey(useClass)) {
 					map.put(useClass, new SpeciesMonteCarloEstimateMap());
 				}
 				SpeciesMonteCarloEstimateMap innerEstimateMap = map.get(useClass);
 				CATSpeciesAmountMap speciesAmountMap = get(useClass);
-				speciesAmountMap.recordAsRealization(innerEstimateMap);
+				speciesAmountMap.recordAsRealization(innerEstimateMap, currentRealizationID);
 			}
 		}
 		
@@ -109,6 +109,12 @@ public class CATUtilityMaps {
 	@SuppressWarnings("serial")
 	public static class CATSpeciesAmountMap extends HashMap<String, AmountMap<Element>> implements Cloneable {
 
+//		private final List<String> speciesList;
+		
+//		CATSpeciesAmountMap(List<String> speciesList) {
+//			this.speciesList = speciesList;
+//		}
+		
 		/**
 		 * Combines two CATSpeciesAmountMap instances into a single one. If the keys exist in 
 		 * both instances, then the AmountMap instances are summed up. Otherwise, they are copied into
@@ -165,7 +171,7 @@ public class CATUtilityMaps {
 		}
 
 		
-		void recordAsRealization(SpeciesMonteCarloEstimateMap map) {
+		void recordAsRealization(SpeciesMonteCarloEstimateMap map, int currentRealizationID) {
 			for (String speciesName : keySet()) {
 				if (!map.containsKey(speciesName)) {
 					map.put(speciesName, new MonteCarloEstimateMap());
@@ -176,9 +182,15 @@ public class CATUtilityMaps {
 					if (!innerEstimateMap.containsKey(e)) {
 						innerEstimateMap.put(e, new MonteCarloEstimate());
 					}
-					Matrix realization = new Matrix(1,1);
+					MonteCarloEstimate estimate = innerEstimateMap.get(e);
+					Matrix realization;
+					while (estimate.getNumberOfRealizations() < currentRealizationID) {  // here we fill the missing realization, i.e. those with value 0, in the MonteCarloEstimate instance
+						realization = new Matrix(1,1);
+						estimate.addRealization(realization);
+					}
+					realization = new Matrix(1,1);
 					realization.m_afData[0][0] = amountMap.get(e);
-					innerEstimateMap.get(e).addRealization(realization);
+					estimate.addRealization(realization);
 				}
 			}
 		}
