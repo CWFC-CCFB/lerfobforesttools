@@ -155,7 +155,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 					logGradeMap.put(key, new SpeciesMonteCarloEstimateMap());
 				}
 				SpeciesMonteCarloEstimateMap estimateMap = logGradeMap.get(key);
-				aMap.recordAsRealization(estimateMap, manager.getMonteCarloRealizationId());
+				aMap.recordAsRealization(estimateMap);
 			}
 			
 			Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> hWPMap = productCompartment.getHWPContentByUseClassPerHa(true);		// true : with recycling
@@ -165,7 +165,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				}
 				CATUseClassSpeciesAmountMap innerHWPMap = hWPMap.get(type);
 				UseClassSpeciesMonteCarloEstimateMap innerMap = hwpContentByUseClass.get(type);
-				innerHWPMap.recordAsRealization(innerMap, manager.getMonteCarloRealizationId());
+				innerHWPMap.recordAsRealization(innerMap);
 			}
 			
 			Map<Integer, CATUseClassSpeciesAmountMap> tmpMap = productCompartment.getWoodProductEvolutionPerHa();
@@ -175,7 +175,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				}
 				UseClassSpeciesMonteCarloEstimateMap innerMap = productEvolutionMap.get(year);
 				CATUseClassSpeciesAmountMap innerTmpMap = tmpMap.get(year);
-				innerTmpMap.recordAsRealization(innerMap, manager.getMonteCarloRealizationId());
+				innerTmpMap.recordAsRealization(innerMap);
 			}
 		} catch (Exception e) {
 			isValid = false;

@@ -20,6 +20,7 @@ package lerfob.carbonbalancetool;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -47,6 +48,15 @@ public class CATUtilityMaps {
 	@SuppressWarnings("serial")
 	public static class CATUseClassSpeciesAmountMap extends HashMap<UseClass, CATSpeciesAmountMap> {
 
+		private final List<String> speciesList;
+		
+		protected CATUseClassSpeciesAmountMap(List<String> speciesList) {
+			this.speciesList = speciesList;
+			for (UseClass uc : UseClass.values()) {
+				put(uc, new CATSpeciesAmountMap(speciesList));
+			}
+		}
+		
 		/**
 		 * Combines two CATUseClassSpeciesAmountMap instances into a single one. If the keys exist in 
 		 * both instances, then the AmountMap instances are summed up. Otherwise, they are copied into
@@ -56,7 +66,7 @@ public class CATUtilityMaps {
 		 * @return a CATUseClassSpeciesAmountMap instance
 		 */
 		CATUseClassSpeciesAmountMap mergeWith(CATUseClassSpeciesAmountMap otherMap) {
-			CATUseClassSpeciesAmountMap outputMap = new CATUseClassSpeciesAmountMap();
+			CATUseClassSpeciesAmountMap outputMap = new CATUseClassSpeciesAmountMap(speciesList);
 			for (UseClass key : keySet()) {
 				CATSpeciesAmountMap innerMap = get(key);
 				if (otherMap.containsKey(key)) {
@@ -86,14 +96,14 @@ public class CATUtilityMaps {
 			return amountMap;
 		}
 		
-		void recordAsRealization(UseClassSpeciesMonteCarloEstimateMap map, int currentRealizationID) {
+		void recordAsRealization(UseClassSpeciesMonteCarloEstimateMap map) {
 			for (UseClass useClass : keySet()) {
 				if (!map.containsKey(useClass)) {
 					map.put(useClass, new SpeciesMonteCarloEstimateMap());
 				}
 				SpeciesMonteCarloEstimateMap innerEstimateMap = map.get(useClass);
 				CATSpeciesAmountMap speciesAmountMap = get(useClass);
-				speciesAmountMap.recordAsRealization(innerEstimateMap, currentRealizationID);
+				speciesAmountMap.recordAsRealization(innerEstimateMap);
 			}
 		}
 		
@@ -109,11 +119,22 @@ public class CATUtilityMaps {
 	@SuppressWarnings("serial")
 	public static class CATSpeciesAmountMap extends HashMap<String, AmountMap<Element>> implements Cloneable {
 
-//		private final List<String> speciesList;
+		private final List<String> speciesList;
 		
-//		CATSpeciesAmountMap(List<String> speciesList) {
-//			this.speciesList = speciesList;
-//		}
+		CATSpeciesAmountMap(List<String> speciesList) {
+			this.speciesList = speciesList;
+			for (String speciesName : speciesList) {
+				put(speciesName, getNewAmountMap());
+			}
+		}
+		
+		private AmountMap<Element> getNewAmountMap() {
+			AmountMap<Element> aMap = new AmountMap<Element>();
+			for (Element e : Element.values()) {
+				aMap.put(e, 0d);
+			}
+			return aMap;
+		}
 		
 		/**
 		 * Combines two CATSpeciesAmountMap instances into a single one. If the keys exist in 
@@ -127,7 +148,7 @@ public class CATUtilityMaps {
 			if (otherMap == null) {
 				throw new InvalidParameterException("The otherMap parameter cannot be null!");
 			}
-			CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap();
+			CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap(speciesList);
 			AmountMap<Element> newAmountMap;
 			for (String speciesName : keySet()) {
 				newAmountMap = new AmountMap<Element>();
@@ -150,7 +171,7 @@ public class CATUtilityMaps {
 
 		@Override
 		public CATSpeciesAmountMap clone() {
-			CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap();
+			CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap(speciesList);
 			for (String speciesName : keySet()) {
 				outputMap.put(speciesName, get(speciesName).clone());
 			}
@@ -171,7 +192,7 @@ public class CATUtilityMaps {
 		}
 
 		
-		void recordAsRealization(SpeciesMonteCarloEstimateMap map, int currentRealizationID) {
+		void recordAsRealization(SpeciesMonteCarloEstimateMap map) {
 			for (String speciesName : keySet()) {
 				if (!map.containsKey(speciesName)) {
 					map.put(speciesName, new MonteCarloEstimateMap());
@@ -183,12 +204,12 @@ public class CATUtilityMaps {
 						innerEstimateMap.put(e, new MonteCarloEstimate());
 					}
 					MonteCarloEstimate estimate = innerEstimateMap.get(e);
-					Matrix realization;
-					while (estimate.getNumberOfRealizations() < currentRealizationID) {  // here we fill the missing realization, i.e. those with value 0, in the MonteCarloEstimate instance
-						realization = new Matrix(1,1);
-						estimate.addRealization(realization);
-					}
-					realization = new Matrix(1,1);
+//					Matrix realization;
+//					while (estimate.getNumberOfRealizations() < currentRealizationID) {  // here we fill the missing realization, i.e. those with value 0, in the MonteCarloEstimate instance
+//						realization = new Matrix(1,1);
+//						estimate.addRealization(realization);
+//					}
+					Matrix realization = new Matrix(1,1);
 					realization.m_afData[0][0] = amountMap.get(e);
 					estimate.addRealization(realization);
 				}
@@ -202,8 +223,8 @@ public class CATUtilityMaps {
 	 * An additional key is also set in the map. That is the all-species amount map.
 	 * @return a Map instance
 	 */
-	public static CATSpeciesAmountMap convertToSpeciesMap(CarbonUnitList list) {
-		CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap();
+	public static CATSpeciesAmountMap convertToSpeciesMap(CarbonUnitList list, List<String> speciesList) {
+		CATSpeciesAmountMap outputMap = new CATSpeciesAmountMap(speciesList);
 		for (CarbonUnit carbonUnit : list) {
 			String speciesName = carbonUnit.getSpeciesName();
 //			if (!outputMap.containsKey(CarbonUnit.AllSpecies)) {
