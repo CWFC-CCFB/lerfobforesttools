@@ -82,19 +82,21 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 
 	public void add(Estimate<?> estimate, Color color, Comparable category, Comparable group) {
-		if (!estimateMap.containsKey(category)) {
-			if (!rowKeys.contains(category)) {
-				rowKeys.add(category);
+		if (estimate.getMean().m_afData[0][0] > 0d) {
+			if (!estimateMap.containsKey(category)) {
+				if (!rowKeys.contains(category)) {
+					rowKeys.add(category);
+				}
+				estimateMap.put(category, new HashMap<Comparable, EstimateWrapper>());
 			}
-			estimateMap.put(category, new HashMap<Comparable, EstimateWrapper>());
-		}
-		Map<Comparable, EstimateWrapper> innerMap = estimateMap.get(category);
-		if (!innerMap.containsKey(group)) {
-			if (!columnKeys.contains(group)) {
-				columnKeys.add(group);
+			Map<Comparable, EstimateWrapper> innerMap = estimateMap.get(category);
+			if (!innerMap.containsKey(group)) {
+				if (!columnKeys.contains(group)) {
+					columnKeys.add(group);
+				}
 			}
+			innerMap.put(group, new EstimateWrapper(estimate.getProductEstimate(carbonFactor), color));
 		}
-		innerMap.put(group, new EstimateWrapper(estimate.getProductEstimate(carbonFactor), color));
 	}
 	
 	@Override

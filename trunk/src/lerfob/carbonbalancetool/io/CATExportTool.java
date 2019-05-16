@@ -190,22 +190,23 @@ public class CATExportTool extends REpiceaExportTool {
 								carrier = smcem.get(speciesName);
 							}
 							MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
-							MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
-							int nbRealizations = volumeEstimate.getNumberOfRealizations();
-							for (int j = 0; j < nbRealizations; j++) {
-								r = new GExportRecord();
-								r.addField(standIDField);
-								r.addField(dateIDField);
-								r.addField(new GExportFieldDetails("UseClass", useClass.name()));
-								r.addField(new GExportFieldDetails("Species", speciesName));
-								r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
-								r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
-								if (nbRealizations > 0) {
-									r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+							if (volumeEstimate.getMean().m_afData[0][0] > 0d) {
+								MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+								int nbRealizations = volumeEstimate.getNumberOfRealizations();
+								for (int j = 0; j < nbRealizations; j++) {
+									r = new GExportRecord();
+									r.addField(standIDField);
+									r.addField(dateIDField);
+									r.addField(new GExportFieldDetails("UseClass", useClass.name()));
+									r.addField(new GExportFieldDetails("Species", speciesName));
+									r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+									r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+									if (nbRealizations > 0) {
+										r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+									}
+									addRecord(r);
 								}
-								addRecord(r);
 							}
-							
 						}
 					}
 				}
@@ -330,30 +331,32 @@ public class CATExportTool extends REpiceaExportTool {
 									carrier = smcem.get(speciesName);
 								}
 								MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
-								MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
-								int nbRealizations = volumeEstimate.getNumberOfRealizations();
-								for (int j = 0; j < nbRealizations; j++) {
-									r = new GExportRecord();
-									r.addField(standIDField);
-									r.addField(new GExportFieldDetails("Type", type.name()));
-									r.addField(new GExportFieldDetails("Class", useClass.toString()));
-									r.addField(new GExportFieldDetails("Species", speciesName));
-									r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
-									r.addField(new GExportFieldDetails("Biomass_Mgha", biomassEstimate.getRealizations().get(j).m_afData[0][0]));
-									for (Element nutrient : Element.getNutrients()) {
-										nutrientKg = 0d;
-										if (carrier != null && carrier.containsKey(nutrient)) {
-											nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+								if (volumeEstimate.getMean().m_afData[0][0] > 0d) {
+									MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+									int nbRealizations = volumeEstimate.getNumberOfRealizations();
+									for (int j = 0; j < nbRealizations; j++) {
+										r = new GExportRecord();
+										r.addField(standIDField);
+										r.addField(new GExportFieldDetails("Type", type.name()));
+										r.addField(new GExportFieldDetails("Class", useClass.toString()));
+										r.addField(new GExportFieldDetails("Species", speciesName));
+										r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+										r.addField(new GExportFieldDetails("Biomass_Mgha", biomassEstimate.getRealizations().get(j).m_afData[0][0]));
+										for (Element nutrient : Element.getNutrients()) {
+											nutrientKg = 0d;
+											if (carrier != null && carrier.containsKey(nutrient)) {
+												nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+											}
+											if (nutrient.equals(Element.C)) {
+												nutrientKg *= 1000;
+											}
+											r.addField(new GExportFieldDetails(nutrient.name() + "_kg_ha", (Double) nutrientKg));
 										}
-										if (nutrient.equals(Element.C)) {
-											nutrientKg *= 1000;
+										if (nbRealizations > 0) {
+											r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 										}
-										r.addField(new GExportFieldDetails(nutrient.name() + "_kg_ha", (Double) nutrientKg));
+										addRecord(r);
 									}
-									if (nbRealizations > 0) {
-										r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
-									}
-									addRecord(r);
 								}
 							}
 						}
@@ -390,32 +393,33 @@ public class CATExportTool extends REpiceaExportTool {
 									carrier = smcem.get(speciesName);
 								}
 								MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
-								MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
-								int nbRealizations = volumeEstimate.getNumberOfRealizations();
-								for (int j = 0; j < nbRealizations; j++) {
-									r = new GExportRecord();
-									r.addField(standIDField);
-									r.addField(new GExportFieldDetails("Type", type.name()));
-									r.addField(new GExportFieldDetails("Class", useClass.toString()));
-									r.addField(new GExportFieldDetails("Species", speciesName));
-									r.addField(new GExportFieldDetails("Volume_m3hayr", volumeEstimate.getRealizations().get(j).m_afData[0][0] * annualFactor));
-									r.addField(new GExportFieldDetails("Biomass_kghayr", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000 * annualFactor));
-									for (Element nutrient : Element.getNutrients()) {
-										nutrientKg = 0d;
-										if (carrier != null && carrier.containsKey(nutrient)) {
-											nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+								if (volumeEstimate.getMean().m_afData[0][0] > 0d) {
+									MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+									int nbRealizations = volumeEstimate.getNumberOfRealizations();
+									for (int j = 0; j < nbRealizations; j++) {
+										r = new GExportRecord();
+										r.addField(standIDField);
+										r.addField(new GExportFieldDetails("Type", type.name()));
+										r.addField(new GExportFieldDetails("Class", useClass.toString()));
+										r.addField(new GExportFieldDetails("Species", speciesName));
+										r.addField(new GExportFieldDetails("Volume_m3hayr", volumeEstimate.getRealizations().get(j).m_afData[0][0] * annualFactor));
+										r.addField(new GExportFieldDetails("Biomass_kghayr", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000 * annualFactor));
+										for (Element nutrient : Element.getNutrients()) {
+											nutrientKg = 0d;
+											if (carrier != null && carrier.containsKey(nutrient)) {
+												nutrientKg = carrier.get(nutrient).getRealizations().get(j).m_afData[0][0];
+											}
+											if (nutrient.equals(Element.C)) {
+												nutrientKg *= 1000;
+											}
+											r.addField(new GExportFieldDetails(nutrient.name() + "_kghayr", (Double) (nutrientKg * annualFactor)));
 										}
-										if (nutrient.equals(Element.C)) {
-											nutrientKg *= 1000;
+										if (nbRealizations > 0) {
+											r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
 										}
-										r.addField(new GExportFieldDetails(nutrient.name() + "_kghayr", (Double) (nutrientKg * annualFactor)));
+										addRecord(r);
 									}
-									if (nbRealizations > 0) {
-										r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
-									}
-									addRecord(r);
 								}
-								
 							}
 						}
 					}
@@ -446,22 +450,23 @@ public class CATExportTool extends REpiceaExportTool {
 						carrier = smcem.get(speciesName);
 					}
 					MonteCarloEstimate volumeEstimate = carrier.get(Element.Volume);
-					MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
-					int nbRealizations = volumeEstimate.getNumberOfRealizations();
-					for (int j = 0; j < nbRealizations; j++) {
-						r = new GExportRecord();
-						r.addField(standIDField);
-						r.addField(new GExportFieldDetails("LogCategory", logName));
-						r.addField(new GExportFieldDetails("Species", speciesName));
-						r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
-						r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
-						if (nbRealizations > 0) {
-							r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
-						}
-				
-						addRecord(r);
-					}
+					if (volumeEstimate.getMean().m_afData[0][0] > 0d) {
+						MonteCarloEstimate biomassEstimate = carrier.get(Element.Biomass);
+						int nbRealizations = volumeEstimate.getNumberOfRealizations();
+						for (int j = 0; j < nbRealizations; j++) {
+							r = new GExportRecord();
+							r.addField(standIDField);
+							r.addField(new GExportFieldDetails("LogCategory", logName));
+							r.addField(new GExportFieldDetails("Species", speciesName));
+							r.addField(new GExportFieldDetails("Volume_m3ha", volumeEstimate.getRealizations().get(j).m_afData[0][0]));
+							r.addField(new GExportFieldDetails("Biomass_kgha", biomassEstimate.getRealizations().get(j).m_afData[0][0] * 1000));
+							if (nbRealizations > 0) {
+								r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
+							}
 					
+							addRecord(r);
+						}
+					}
 				}
 			}
 		}
