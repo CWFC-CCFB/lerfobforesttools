@@ -164,7 +164,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * @param stand a MathildeMortalityStand stand
 	 * @return
 	 */
-	public double getMeanTemperatureForGrowthInterval(MathildeClimatePlot stand) {
+	public double predictMeanTemperatureForGrowthInterval(MathildeClimatePlot stand) {
 		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}

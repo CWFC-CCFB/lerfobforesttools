@@ -140,6 +140,16 @@ public class PredictedEffects {
 
 		@Override
 		public double getElevationM() {return 0;}
+
+		/*
+		 * Useless for this class (non-Javadoc)
+		 * @see repicea.simulation.covariateproviders.standlevel.DateYrProvider#getDateYr()
+		 */
+		@Override
+		public int getDateYr() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 	}
 	

@@ -40,6 +40,8 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 	protected final double yCoord;
 	protected final List<FrenchHDRelationship2018Tree> treeList;
 
+	protected int dateYr;
+	
 	/**
 	 * Constructor.
 	 * @param id the id of the plot
@@ -49,6 +51,7 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 	 * @param hasBeenHarvestedInLast5Years a boolean that takes the value of true if the plot was managed in the last five years
 	 * @param monteCarloId the Monte Carlo id if needed
 	 * @param mqdCm the mean quadratic diameter of the plot (cm)
+	 * @param dateYr the current date in years
 	 */
 	public FrenchHDRelationship2018PlotImpl(String id, 
 			double pentInc, 
@@ -56,7 +59,8 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 			double yCoord,
 			boolean hasBeenHarvestedInLast5Years,
 			int monteCarloId,
-			double mqdCm) {
+			double mqdCm,
+			int dateYr) {
 		this.id = id;
 		this.pent2 = pentInc;
 		this.xCoord = xCoord;
@@ -66,6 +70,7 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 		this.hasBeenHarvestedInLast5Years = hasBeenHarvestedInLast5Years;
 		this.mqdCm = mqdCm;
 		this.monteCarloId = monteCarloId;
+		this.dateYr = dateYr;
 	}
 	
 	/**
@@ -137,5 +142,8 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 	protected void addTree(FrenchHDRelationship2018TreeImpl tree) {
 		treeList.add(tree);
 	}
+
+	@Override
+	public int getDateYr() {return dateYr;}
 
 }
