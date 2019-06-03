@@ -32,6 +32,9 @@ import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
+import repicea.simulation.climate.REpiceaClimateGenerator;
+import repicea.simulation.climate.REpiceaClimateVariableMap;
+import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -47,8 +50,8 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - October 2017
  */
 @SuppressWarnings("serial")
-public class MathildeClimatePredictor extends REpiceaPredictor {
-	
+public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateGenerator<MathildeClimatePlot> {
+
 //	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimatePlot> referenceStands;
 
@@ -164,7 +167,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	 * @param stand a MathildeMortalityStand stand
 	 * @return
 	 */
-	public double predictMeanTemperatureForGrowthInterval(MathildeClimatePlot stand) {
+	private double predictMeanTemperatureForGrowthInterval(MathildeClimatePlot stand) {
 		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}
@@ -307,7 +310,16 @@ public class MathildeClimatePredictor extends REpiceaPredictor {
 	protected final Matrix getRandomEffects(MonteCarloSimulationCompliantObject subject) {
 		return super.getRandomEffectsForThisSubject(subject);
 	}
+
+	@Override
+	public REpiceaClimateVariableMap getClimateVariables(MathildeClimatePlot plot) {
+		REpiceaClimateVariableMap map = new REpiceaClimateVariableMap();
+		map.put(ClimateVariable.MeanSeasonalTempC, predictMeanTemperatureForGrowthInterval(plot));
+		return map;
+	}
+
 //	public static void main(String[] args) {
 //		new MathildeClimatePredictor(false);
 //	}
+
 }
