@@ -25,21 +25,36 @@ import java.util.List;
 import java.util.Map;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.simulation.climate.REpiceaClimateGenerator;
+import repicea.simulation.climate.REpiceaClimateVariableMap;
+import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.util.ObjectUtility;
 
-public class FrenchHDRelationship2018ClimateGenerator {
+/**
+ * The FrenchHDRelationship2018ClimateGenerator class implements a model of climate that provides
+ * the seasonal mean temperature and precipitation (e.g. from March to September). The climate variable
+ * are calculated over the 1961-1990 period.
+ * @author Mathieu Fortin - December 2017
+ */
+public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator {
 
-	static class ClimatePoint {
+	@SuppressWarnings("serial")
+	static class FrenchHDClimateVariableMap extends REpiceaClimateVariableMap {
+		
 		final double xCoord;
 		final double yCoord;
-		final double meanSeasonalTemp;
-		final double meanSeasonalPrec;
+//		final double meanSeasonalTemp;
+//		final double meanSeasonalPrec;
+		final String ser;
 		
-		ClimatePoint(double xCoord, double yCoord, double meanSeasonalTemp, double meanSeasonalPrec) {
+		FrenchHDClimateVariableMap(double xCoord, double yCoord, double meanSeasonalTemp, double meanSeasonalPrec, String ser) {
 			this.xCoord = xCoord;
 			this.yCoord = yCoord;
-			this.meanSeasonalTemp = meanSeasonalTemp;
-			this.meanSeasonalPrec = meanSeasonalPrec; 
+//			this.meanSeasonalTemp = meanSeasonalTemp;
+//			this.meanSeasonalPrec = meanSeasonalPrec; 
+			put(ClimateVariable.MeanSeasonalTempC, meanSeasonalTemp);
+			put(ClimateVariable.MeanSeasonalPrecMm, meanSeasonalPrec);
+			this.ser = ser;
 		}
 		
 		double getDistanceFromTheseCoordinates(double x, double y) {
@@ -47,12 +62,14 @@ public class FrenchHDRelationship2018ClimateGenerator {
 			double yDiff = y - yCoord;
 			return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 		}
+		
+		String getSer() {return ser;}
 	}
 	
-	private final Map<Integer, Map<Integer, List<ClimatePoint>>> zoneMap;
+	private final Map<Integer, Map<Integer, List<FrenchHDClimateVariableMap>>> zoneMap;
 	
 	FrenchHDRelationship2018ClimateGenerator() {
-		zoneMap = new HashMap<Integer, Map<Integer, List<ClimatePoint>>>();
+		zoneMap = new HashMap<Integer, Map<Integer, List<FrenchHDClimateVariableMap>>>();
 		try {
 			init();
 		} catch (IOException e) {
@@ -68,42 +85,43 @@ public class FrenchHDRelationship2018ClimateGenerator {
 		while ((record = reader.nextRecord()) != null) {
 			double xCoord = Double.parseDouble(record[1].toString());
 			double yCoord = Double.parseDouble(record[2].toString());
-			double meanSeasonalTemp = Double.parseDouble(record[3].toString());
-			double meanSeasonalPrec = Double.parseDouble(record[4].toString());
-			ClimatePoint point = new ClimatePoint(xCoord, yCoord, meanSeasonalTemp, meanSeasonalPrec);
+			String ser = record[3].toString().trim();
+			double meanSeasonalTemp = Double.parseDouble(record[4].toString());
+			double meanSeasonalPrec = Double.parseDouble(record[5].toString());
+			FrenchHDClimateVariableMap point = new FrenchHDClimateVariableMap(xCoord, yCoord, meanSeasonalTemp, meanSeasonalPrec, ser);
 			registerClimatePoint(point);
 		}
 		reader.close();
 	}
 
-	private void registerClimatePoint(ClimatePoint point) {
+	private void registerClimatePoint(FrenchHDClimateVariableMap point) {
 		int xKey = Math.round((float) point.xCoord);
 		int yKey = Math.round((float) point.yCoord); 
 		
 		if (!zoneMap.containsKey(xKey)) {
-			zoneMap.put(xKey, new HashMap<Integer, List<ClimatePoint>>());
+			zoneMap.put(xKey, new HashMap<Integer, List<FrenchHDClimateVariableMap>>());
 		}
 		
-		Map<Integer, List<ClimatePoint>> innerMap = zoneMap.get(xKey);
+		Map<Integer, List<FrenchHDClimateVariableMap>> innerMap = zoneMap.get(xKey);
 		if (!innerMap.containsKey(yKey)) {
-			innerMap.put(yKey, new ArrayList<ClimatePoint>());
+			innerMap.put(yKey, new ArrayList<FrenchHDClimateVariableMap>());
 		}
 		
 		innerMap.get(yKey).add(point);
 	}
 	
-	ClimatePoint getNearestClimatePoint(double x, double y) {
-		ClimatePoint nearestPoint = null;
+	FrenchHDClimateVariableMap getNearestClimatePoint(double x, double y) {
+		FrenchHDClimateVariableMap nearestPoint = null;
 		int xKey = Math.round((float) x);
 		int yKey = Math.round((float) y); 
 		
 		if (zoneMap.containsKey(xKey)) {
-			Map<Integer, List<ClimatePoint>> innerMap = zoneMap.get(xKey);
+			Map<Integer, List<FrenchHDClimateVariableMap>> innerMap = zoneMap.get(xKey);
 			if (innerMap.containsKey(yKey)) {
-				List<ClimatePoint> possibleClimatePoints = innerMap.get(yKey);
+				List<FrenchHDClimateVariableMap> possibleClimatePoints = innerMap.get(yKey);
 				double minDistance = Double.MAX_VALUE;
 				double distanceToThisPoint;
-				for (ClimatePoint cp : possibleClimatePoints) {
+				for (FrenchHDClimateVariableMap cp : possibleClimatePoints) {
 					distanceToThisPoint = cp.getDistanceFromTheseCoordinates(x, y);
 					if (distanceToThisPoint < minDistance) {
 						nearestPoint = cp;
@@ -114,6 +132,23 @@ public class FrenchHDRelationship2018ClimateGenerator {
 		}
 		return nearestPoint;
 	}
+	
+	List<FrenchHDClimateVariableMap> getClimatePoints() {
+		List<FrenchHDClimateVariableMap> points = new ArrayList<FrenchHDClimateVariableMap>();
+		for (Map<Integer, List<FrenchHDClimateVariableMap>> oMap : zoneMap.values()) {
+			for (List<FrenchHDClimateVariableMap> pp : oMap.values()) {
+				points.addAll(pp);
+			}
+		}
+		return points;
+	}
+
+	@Override
+	public REpiceaClimateVariableMap getClimateVariables(GeographicalCoordinatesProvider plot) {
+		return null;
+//		return getNearestClimatePoint(plot.getLongitudeDeg(), plot.getLatitudeDeg());
+	}
+	
 	
 //	public static void main(String[] args) {
 //		FrenchHDRelationship2018ClimateGenerator gen = new FrenchHDRelationship2018ClimateGenerator();

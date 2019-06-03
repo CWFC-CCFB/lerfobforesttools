@@ -97,7 +97,7 @@ public class MathildeClimatePredictorTest {
 		int nbStands = 0;
 		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
-			climatePredictor.getMeanTemperatureForGrowthInterval(stand);
+			climatePredictor.predictMeanTemperatureForGrowthInterval(stand);
 			Estimate<? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
 			String experiment = stand.getSubjectId();
 			
@@ -133,7 +133,7 @@ public class MathildeClimatePredictorTest {
 			for (MathildeClimatePlot stand : MathildeClimatePredictor.getReferenceStands()) {
 				((MathildeClimatePlotImpl) stand).realization = i;
 			}
-			climatePredictor.getMeanTemperatureForGrowthInterval(s);
+			climatePredictor.predictMeanTemperatureForGrowthInterval(s);
 			estimate.addRealization(climatePredictor.getRandomEffects(s));
 		}
 		

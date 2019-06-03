@@ -20,6 +20,7 @@ package lerfob.predictor.frenchgeneralhdrelationship2018;
 
 import java.util.Collection;
 
+import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
@@ -36,7 +37,8 @@ public interface FrenchHDRelationship2018Plot extends HDRelationshipStand,
 														MeanQuadraticDiameterCmProvider, 
 														InterventionResultProvider,
 														SlopeInclinationPercentProvider,
-														GeographicalCoordinatesProvider {
+														GeographicalCoordinatesProvider,
+														DateYrProvider {
 	
 	
 	/**
