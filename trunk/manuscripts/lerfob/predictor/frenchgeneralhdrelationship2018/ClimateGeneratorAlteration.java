@@ -11,6 +11,7 @@ import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVWriter;
 import repicea.math.Matrix;
+import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.util.ObjectUtility;
 
@@ -74,8 +75,8 @@ public class ClimateGeneratorAlteration {
 		@Override
 		public List<MathildeClimatePlot> getAllMathildeClimatePlots() {return (List) plots;}
 		
-		void recordTemperature(double temp) {
-			predictedSeasonalTemperature.add(temp);
+		void recordTemperature(REpiceaClimateVariableMap temp) {
+			predictedSeasonalTemperature.add(temp.get(ClimateVariable.MeanSeasonalTempC));
 		}
 		
 		List<Double> getRecordedTemperature() {return predictedSeasonalTemperature;}
@@ -112,7 +113,7 @@ public class ClimateGeneratorAlteration {
 		for (i = 1961; i < 1990; i = i + 5) {
 			mcp.setDateYr(i);
 			for (ClimatePlotImpl plot : mcp) {
-				plot.recordTemperature(climPred.predictMeanTemperatureForGrowthInterval(plot));
+				plot.recordTemperature(climPred.getClimateVariables(plot));
 			}
 		}
 

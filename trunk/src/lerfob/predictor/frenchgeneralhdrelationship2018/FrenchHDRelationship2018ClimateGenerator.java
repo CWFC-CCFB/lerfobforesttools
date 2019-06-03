@@ -36,7 +36,7 @@ import repicea.util.ObjectUtility;
  * are calculated over the 1961-1990 period.
  * @author Mathieu Fortin - December 2017
  */
-public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator {
+public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator<GeographicalCoordinatesProvider> {
 
 	@SuppressWarnings("serial")
 	static class FrenchHDClimateVariableMap extends REpiceaClimateVariableMap {
@@ -110,7 +110,7 @@ public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateG
 		innerMap.get(yKey).add(point);
 	}
 	
-	FrenchHDClimateVariableMap getNearestClimatePoint(double x, double y) {
+	private FrenchHDClimateVariableMap getNearestClimatePoint(double x, double y) {
 		FrenchHDClimateVariableMap nearestPoint = null;
 		int xKey = Math.round((float) x);
 		int yKey = Math.round((float) y); 
@@ -144,9 +144,8 @@ public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateG
 	}
 
 	@Override
-	public REpiceaClimateVariableMap getClimateVariables(GeographicalCoordinatesProvider plot) {
-		return null;
-//		return getNearestClimatePoint(plot.getLongitudeDeg(), plot.getLatitudeDeg());
+	public FrenchHDClimateVariableMap getClimateVariables(GeographicalCoordinatesProvider plot) {
+		return getNearestClimatePoint(plot.getLongitudeDeg(), plot.getLatitudeDeg());
 	}
 	
 	
