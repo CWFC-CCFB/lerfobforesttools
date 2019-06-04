@@ -29,6 +29,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	protected double dbhCm;
 	protected final FrenchHd2018Species species;
 	protected final FrenchHDRelationship2018PlotImpl plot;
+	protected final int id;
 	protected Double gOther;
 
 	/**
@@ -39,11 +40,13 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
 	 * @param plot a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
-	protected FrenchHDRelationship2018TreeImpl(double heightM, 
+	protected FrenchHDRelationship2018TreeImpl(int id,
+			double heightM, 
 			double dbhCm, 
 			Double gOther, 
 			String speciesName, 
 			FrenchHDRelationship2018PlotImpl plot) {
+		this.id = id;
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
@@ -54,15 +57,18 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 
 	/**
 	 * Constructor for NFI data. The basal area of other trees is calculated using the plot basal area.
+	 * @param tree id an integer
 	 * @param heightM the height of the tree (m) or -1 if it was not observed
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
 	 * @param plot a FrenchHDRelationship2018StandImpl instance that hosts the tree
 	 */
-	public FrenchHDRelationship2018TreeImpl(double heightM, 
+	public FrenchHDRelationship2018TreeImpl(int id,
+			double heightM, 
 			double dbhCm, 
 			String speciesName, 
 			FrenchHDRelationship2018PlotImpl plot) {
+		this.id = id;
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = null;
@@ -83,7 +89,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	}
 
 	@Override
-	public String getSubjectId() {return ((Integer) hashCode()).toString();}
+	public String getSubjectId() {return ((Integer) id).toString();}
 
 	@Override
 	public int getMonteCarloRealizationId() {return plot.getMonteCarloRealizationId();}
