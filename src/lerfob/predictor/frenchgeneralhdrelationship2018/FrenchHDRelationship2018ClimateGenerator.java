@@ -27,6 +27,7 @@ import java.util.Map;
 import repicea.io.javacsv.CSVReader;
 import repicea.simulation.climate.REpiceaClimateGenerator;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
+import repicea.simulation.climate.REpiceaClimateVariableMap.UpdatableClimateVariableMap;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.util.ObjectUtility;
 
@@ -39,19 +40,15 @@ import repicea.util.ObjectUtility;
 public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator<GeographicalCoordinatesProvider> {
 
 	@SuppressWarnings("serial")
-	static class FrenchHDClimateVariableMap extends REpiceaClimateVariableMap {
+	static class FrenchHDClimateVariableMap extends REpiceaClimateVariableMap implements UpdatableClimateVariableMap {
 		
 		final double xCoord;
 		final double yCoord;
-//		final double meanSeasonalTemp;
-//		final double meanSeasonalPrec;
 		final String ser;
 		
 		FrenchHDClimateVariableMap(double xCoord, double yCoord, double meanSeasonalTemp, double meanSeasonalPrec, String ser) {
 			this.xCoord = xCoord;
 			this.yCoord = yCoord;
-//			this.meanSeasonalTemp = meanSeasonalTemp;
-//			this.meanSeasonalPrec = meanSeasonalPrec; 
 			put(ClimateVariable.MeanSeasonalTempC, meanSeasonalTemp);
 			put(ClimateVariable.MeanSeasonalPrecMm, meanSeasonalPrec);
 			this.ser = ser;
@@ -64,6 +61,28 @@ public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateG
 		}
 		
 		String getSer() {return ser;}
+
+		@Override
+		public REpiceaClimateVariableMap getUpdatedClimateVariableMap(Map<ClimateVariable, Double> annualChanges, int dateYr) {
+			int since2015 = dateYr - 2015;
+			if (annualChanges == null || annualChanges.isEmpty()) {
+				return this;
+			} if (since2015 <= 0) {
+				return this;
+			} else {
+				REpiceaClimateVariableMap updatedMap = new REpiceaClimateVariableMap();
+				for (ClimateVariable var : keySet()) {
+					if (annualChanges.containsKey(var)) {
+						double annualChange = annualChanges.get(var);
+						double newValue = get(var) + annualChange * since2015;
+						updatedMap.put(var, newValue);
+					} else {
+						updatedMap.put(var, get(var)); // here we just copy the value since there is no change
+					}
+				}
+				return updatedMap;
+			}
+		}
 	}
 	
 	private final Map<Integer, Map<Integer, List<FrenchHDClimateVariableMap>>> zoneMap;

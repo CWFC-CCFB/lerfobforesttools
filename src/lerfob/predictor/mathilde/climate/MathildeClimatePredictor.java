@@ -32,7 +32,7 @@ import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
-import repicea.simulation.climate.REpiceaClimateGenerator;
+import repicea.simulation.climate.REpiceaClimateChangeGenerator;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.stats.distributions.StandardGaussianDistribution;
@@ -50,7 +50,7 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - October 2017
  */
 @SuppressWarnings("serial")
-public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateGenerator<MathildeClimatePlot> {
+public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateChangeGenerator<MathildeClimatePlot> {
 
 //	private final static GregorianCalendar SystemDate = new GregorianCalendar();
 	private static List<MathildeClimatePlot> referenceStands;
@@ -143,12 +143,9 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
 		double dateMinus1950 = stand.getDateYr() - 1950;
-//		if (dateMinus1950 < 0) {
-//			dateMinus1950 = SystemDate.get(Calendar.YEAR) - 1950;
-//		}
 
-		if (dateMinus1950 < -50d) {		// if the date is earlier than 1900 then we set it to 1900
-			dateMinus1950 = -50d;
+		if (dateMinus1950 < 0d) {		// if the date is earlier than 1950 then we set it to 1950
+			dateMinus1950 = 0d;
 		}
 
 		int pointer = 0;
@@ -318,6 +315,14 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		return map;
 	}
 
+
+	@Override
+	public Map<ClimateVariable, Double> getAnnualChangesForThisStand(MonteCarloSimulationCompliantObject plot) {
+		Map<ClimateVariable, Double> oMap = new HashMap<ClimateVariable, Double>();
+		oMap.put(ClimateVariable.MeanSeasonalTempC, getParametersForThisRealization(plot).m_afData[1][0]);
+		return oMap;
+	}
+	
 //	public static void main(String[] args) {
 //		new MathildeClimatePredictor(false);
 //	}

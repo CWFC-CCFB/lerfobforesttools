@@ -33,6 +33,10 @@ import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
+import repicea.simulation.climate.REpiceaClimateChangeGenerator;
+import repicea.simulation.climate.REpiceaClimateVariableMap;
+import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
+import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -59,6 +63,8 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		
 	private final Map<String, FrenchHDClimateVariableMap> originalClimateVariableMap;
 	private final FrenchHDRelationship2018ClimateGenerator climateGenerator;
+	private REpiceaClimateChangeGenerator<? extends GeographicalCoordinatesProvider> climateChangeGenerator; 
+	private Map<Integer, Map<ClimateVariable, Double>> climateChangeFactorMap;
 
 	/**
 	 * General constructor for all combinations of uncertainty sources.
@@ -76,27 +82,50 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		init();
 	}
 	
-	
-	FrenchHDClimateVariableMap getNearestClimatePoint(FrenchHDRelationship2018Plot stand) { 
-		if (originalClimateVariableMap.containsKey(stand.getSubjectId())) {
-			return originalClimateVariableMap.get(stand.getSubjectId());
-		} else {
-			FrenchHDClimateVariableMap cp = climateGenerator.getNearestClimatePoint(stand.getLongitudeDeg(), stand.getLatitudeDeg());
-			if (cp == null) {
-				throw new InvalidParameterException("The geographical coordinates are not located in France!");
-			} else {
-				originalClimateVariableMap.put(stand.getSubjectId(), cp);
-				return cp;
-			}
-		}
-	}
-	
-	
 	/**
 	 * Default constructor with all sources of uncertainty disabled.
 	 */
 	public FrenchHDRelationship2018Predictor() {
 		this(false);
+	}
+
+	
+	REpiceaClimateVariableMap getNearestClimatePoint(FrenchHDRelationship2018Plot stand) { 
+		FrenchHDClimateVariableMap cp;
+		if (originalClimateVariableMap.containsKey(stand.getSubjectId())) {
+			cp = originalClimateVariableMap.get(stand.getSubjectId());
+		} else {
+			cp = climateGenerator.getClimateVariables(stand);
+			if (cp == null) {
+				throw new InvalidParameterException("The geographical coordinates are not located in France!");
+			} else {
+				originalClimateVariableMap.put(stand.getSubjectId(), cp);
+			}
+		}
+		if (climateChangeGenerator == null) {
+			return cp;
+		} else {
+			Map<ClimateVariable, Double> annualChanges =  getClimateChangeMap(stand);
+			REpiceaClimateVariableMap updatedClimateVariableMap = cp.getUpdatedClimateVariableMap(annualChanges, stand.getDateYr()); // TODO this object could be stored somewhere to avoid reconstructing it every time 
+			return updatedClimateVariableMap;
+		}
+	}
+	
+	
+	private synchronized Map<ClimateVariable, Double> getClimateChangeMap(FrenchHDRelationship2018Plot stand) {
+		int id = stand.getMonteCarloRealizationId();
+		Map<Integer, Map<ClimateVariable, Double>> oMap = getClimateChangeMap();
+		if (!oMap.containsKey(id)) {
+			oMap.put(id, climateChangeGenerator.getAnnualChangesForThisStand(stand));
+		} 
+		return oMap.get(id);
+	}
+
+	private Map<Integer, Map<ClimateVariable, Double>> getClimateChangeMap() {
+		if (climateChangeFactorMap == null) {
+			climateChangeFactorMap = new HashMap<Integer, Map<ClimateVariable, Double>>();
+		}
+		return climateChangeFactorMap;
 	}
 
 	@Override
@@ -191,5 +220,16 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> getInternalPredictorMap() {
 		return predictorMap;
 	}
+
+	/**
+	 * Sets a climate change generator that will impact the internal climate generator for the 
+	 * HD relationship.
+	 * @param generator a REpiceaClimateChangeGenerator instance
+	 */
+	public void setClimateChangeGenerator(REpiceaClimateChangeGenerator<? extends GeographicalCoordinatesProvider> generator) {
+		this.climateChangeGenerator = generator;
+	}
+	
+	
 	
 }

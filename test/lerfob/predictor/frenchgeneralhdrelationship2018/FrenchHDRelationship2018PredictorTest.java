@@ -10,7 +10,9 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import lerfob.predictor.mathilde.climate.MathildeClimatePredictor;
 import repicea.io.javacsv.CSVReader;
+import repicea.serial.xml.XmlDeserializer;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
@@ -31,7 +33,6 @@ public class FrenchHDRelationship2018PredictorTest {
 	}
 	
 	
-
 	@Test
 	public void validation1FixedEffectPredictions() throws IOException {
 		readTrees();
@@ -243,6 +244,94 @@ public class FrenchHDRelationship2018PredictorTest {
 		System.out.println("Successfully compared " + nbTrees + " trees.");
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void validationFixedEffectPredictionsWithClimateChangeWithoutBlupInDeterministicMode() throws Exception {
+		readTrees();
+		
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
+		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
+		predictor.setClimateChangeGenerator(new MathildeClimatePredictor(false));
+		
+		int nbTrees = 0;
+		FrenchHDRelationship2018Plot stand = Stands.get(0);
+		((FrenchHDRelationship2018PlotImpl) stand).setDateYr(2035);
+		Map<String, Double> predictedMap = new HashMap<String, Double>();
+		for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+			FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
+			
+			double actual = predictor.predictHeightM(stand, tree);
+			predictedMap.put(tree.getSubjectId(), actual);
+			nbTrees++;
+		}
+
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "test") + "ClimateChangeDeterministic.xml";
+		// UNCOMMENT THESE TWO LINES TO UPDATE THE RESULTS OF THE TEST
+//		XmlSerializer serializer = new XmlSerializer(filename);
+//		serializer.writeObject(predictedMap);
+		
+		
+		XmlDeserializer deserializer = new XmlDeserializer(filename);
+		Map refMap = (Map) deserializer.readObject();
+		
+		Assert.assertEquals("Testing map sizes", predictedMap.size(), refMap.size());
+
+		for (Object key : predictedMap.keySet()) {
+			double expected = (Double) refMap.get(key);
+			double actual = predictedMap.get(key);
+			Assert.assertEquals("Testing values for tree " + key, expected, actual, 1E-8);
+		}
+		
+		System.out.println("Successfully compared " + nbTrees + " trees for climate change in deterministic mode.");
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void validationFixedEffectPredictionsWithClimateChangeWithBlupsInDeterministicMode() throws Exception {
+		readTrees();
+		
+		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
+		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
+		predictor.setClimateChangeGenerator(new MathildeClimatePredictor(false));
+		
+		FrenchHDRelationship2018Plot stand = Stands.get(0);
+		((FrenchHDRelationship2018PlotImpl) stand).setDateYr(2035);
+		Map<String, Double> predictedMap = new HashMap<String, Double>();
+		FrenchHDRelationship2018TreeImplForTest tree = null;
+		for (Object obj : stand.getTreesForFrenchHDRelationship()) {
+			tree = (FrenchHDRelationship2018TreeImplForTest) obj;
+			predictor.predictHeightM(stand, tree);
+			Estimate est = predictor.getBlups(stand, tree);
+			String speciesName = tree.getFrenchHDTreeSpecies().name();
+			if (!predictedMap.containsKey(speciesName)) {
+				predictedMap.put(speciesName, est.getMean().m_afData[0][0]);
+			}
+		}
+
+		String filename = ObjectUtility.getPackagePath(getClass()).replace("bin", "test") + "ClimateChangeBlupsDeterministic.xml";
+		// UNCOMMENT THESE TWO LINES TO UPDATE THE RESULTS OF THE TEST
+//		XmlSerializer serializer = new XmlSerializer(filename);
+//		serializer.writeObject(predictedMap);
+		
+		
+		XmlDeserializer deserializer = new XmlDeserializer(filename);
+		Map refMap = (Map) deserializer.readObject();
+		
+		Assert.assertEquals("Testing map sizes", predictedMap.size(), refMap.size());
+
+		int nbSpecies = 0;
+		for (Object key : predictedMap.keySet()) {
+			double expected = (Double) refMap.get(key);
+			double actual = predictedMap.get(key);
+			Assert.assertEquals("Testing blup values for species " + key, expected, actual, 1E-8);
+			nbSpecies++;
+		}
+		
+		System.out.println("Successfully compared the blups of " + nbSpecies + " species for climate change in deterministic mode.");
+	}
+
+
 	
 	static void readTrees() {
 		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
@@ -270,6 +359,7 @@ public class FrenchHDRelationship2018PredictorTest {
 			Map<Integer, FrenchHDRelationship2018PlotImplForTest> standMap = new HashMap<Integer, FrenchHDRelationship2018PlotImplForTest>();
 			Map<Integer, FrenchHDRelationship2018ExtPlotImplForTest> extStandMap = new HashMap<Integer, FrenchHDRelationship2018ExtPlotImplForTest>();
 			int counter = 0;
+			int treeCounter = 0;
 			while ((record = reader.nextRecord()) != null) {
 				idp = Integer.parseInt(record[0].toString());
 				species = record[1].toString();
@@ -301,14 +391,15 @@ public class FrenchHDRelationship2018PredictorTest {
 				double meanTemp = (meanTemp_3 + meanTemp_4 + meanTemp_5 + meanTemp_6 + meanTemp_7 + meanTemp_8 + meanTemp_9) / 7d;
 				if (!standMap.containsKey(idp)) {
 					int count = counter++;
-					FrenchHDRelationship2018PlotImplForTest stand = new FrenchHDRelationship2018PlotImplForTest(count, idp, mqd, pent2, harvestInLastFiveYears, xCoord, yCoord, standList);
+					FrenchHDRelationship2018PlotImplForTest stand = new FrenchHDRelationship2018PlotImplForTest(count, idp, mqd, pent2, harvestInLastFiveYears, xCoord, yCoord,  2010, standList);
 					standMap.put(idp, stand);
 					//						FrenchHDRelationship2018StandImpl stand = new FrenchHDRelationship2018StandImpl(counter++, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, standList);
 					FrenchHDRelationship2018ExtPlotImplForTest extStand = new FrenchHDRelationship2018ExtPlotImplForTest(count, idp, mqd, pent2, harvestInLastFiveYears, meanTemp, meanPrec, extStandList);
 					extStandMap.put(idp, extStand);
 				}
-				new FrenchHDRelationship2018TreeImplForTest(htot, d130, gOther, species, weight, pred, standMap.get(idp));
-				new FrenchHDRelationship2018TreeImplForTest(htot, d130, gOther, species, weight, pred, extStandMap.get(idp));
+				new FrenchHDRelationship2018TreeImplForTest(treeCounter, htot, d130, gOther, species, weight, pred, standMap.get(idp));
+				new FrenchHDRelationship2018TreeImplForTest(treeCounter, htot, d130, gOther, species, weight, pred, extStandMap.get(idp));
+				treeCounter++;
 			}
 			standList.addAll(standMap.values());
 			Collections.sort(standList);

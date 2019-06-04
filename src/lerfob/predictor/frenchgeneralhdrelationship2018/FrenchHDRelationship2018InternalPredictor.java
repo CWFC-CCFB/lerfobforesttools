@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.FrenchHDClimateVariableMap;
 import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
+import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.hdrelationships.HDRelationshipPredictor;
@@ -176,7 +176,7 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 			meanPrec = s.getMeanPrecipitationOfGrowingSeason();
 			meanTemp = s.getMeanTemperatureOfGrowingSeason();
 		} else {
-			FrenchHDClimateVariableMap cp = mainPredictor.getNearestClimatePoint(stand);
+			REpiceaClimateVariableMap cp = mainPredictor.getNearestClimatePoint(stand);
 			meanPrec = cp.get(ClimateVariable.MeanSeasonalPrecMm);
 			meanTemp = cp.get(ClimateVariable.MeanSeasonalTempC);
 		}

@@ -16,8 +16,9 @@ class FrenchHDRelationship2018PlotImplForTest extends FrenchHDRelationship2018Pl
 			double hasBeenHarvestedInLast5Years,
 			double xCoord,
 			double yCoord,
+			int dateYr,
 			List<FrenchHDRelationship2018PlotImplForTest> standList) {
-		super(((Integer) idp).toString(), pent2, xCoord, yCoord, hasBeenHarvestedInLast5Years == 1d, 0, mqd);
+		super(((Integer) idp).toString(), pent2, xCoord, yCoord, hasBeenHarvestedInLast5Years == 1d, 0, mqd, dateYr);
 		this.index = index;
 		this.standList = standList; 
 	}

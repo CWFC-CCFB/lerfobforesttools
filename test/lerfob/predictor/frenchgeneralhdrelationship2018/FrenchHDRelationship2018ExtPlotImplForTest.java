@@ -20,7 +20,7 @@ class FrenchHDRelationship2018ExtPlotImplForTest extends FrenchHDRelationship201
 			double meanTemp,
 			double meanPrec,
 			List<FrenchHDRelationship2018ExtPlotImplForTest> standList) {
-		super(((Integer) idp).toString(), pent2, 0d, 0d, hasBeenHarvestedInLast5Years == 1d, 0, mqd);
+		super(((Integer) idp).toString(), pent2, 0d, 0d, hasBeenHarvestedInLast5Years == 1d, 0, mqd, 2010);
 		this.index = index;
 		this.plotList = standList; 
 		this.meanTemp = meanTemp;
