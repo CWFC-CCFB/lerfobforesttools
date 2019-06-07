@@ -1,10 +1,10 @@
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.FrenchHDClimateVariableMap;
+import lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.FrenchHDClimateVariableMap;
 import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
 import lerfob.predictor.mathilde.climate.MathildeClimatePredictor;
 import repicea.io.FormatField;

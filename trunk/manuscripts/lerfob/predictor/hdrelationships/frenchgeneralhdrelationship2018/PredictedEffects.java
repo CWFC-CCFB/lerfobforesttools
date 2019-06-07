@@ -1,4 +1,4 @@
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,13 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
+import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVReader;
 import repicea.io.javacsv.CSVWriter;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
+import repicea.simulation.hdrelationships.HDRelationshipTree;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 
@@ -38,11 +39,11 @@ public class PredictedEffects {
 	}
 	
 	static class Tree implements FrenchHDRelationship2018Tree {
-		final FrenchHd2018Species species;
+		final FrenchHdSpecies species;
 		double dbhCm;
 		int reference;
 		
-		Tree(FrenchHd2018Species species) {
+		Tree(FrenchHdSpecies species) {
 			this.species = species;
 		}
 		
@@ -74,7 +75,7 @@ public class PredictedEffects {
 		public double getSquaredLnDbhCmPlus1() {return getLnDbhCmPlus1() * getLnDbhCmPlus1();}
 
 		@Override
-		public FrenchHd2018Species getFrenchHDTreeSpecies() {
+		public FrenchHdSpecies getFrenchHDTreeSpecies() {
 			return species;
 		}
 		
@@ -114,7 +115,8 @@ public class PredictedEffects {
 		public boolean isInterventionResult() {return false;}
 
 		@Override
-		public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2018Tree tree) {
+		public double getBasalAreaM2HaMinusThisSubject(HDRelationshipTree t) {
+			FrenchHDRelationship2018Tree tree = (FrenchHDRelationship2018Tree) t;
 			return basalAreaM2Ha - tree.getDbhCm() * tree.getDbhCm() * Math.PI * .000025 / getPlotAreaHa();
 		}
 
@@ -123,8 +125,9 @@ public class PredictedEffects {
 		@Override
 		public double getSlopeInclinationPercent() {return slopeInclination;}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
-		public Collection<FrenchHDRelationship2018Tree> getTreesForFrenchHDRelationship() {return trees;}
+		public Collection<HDRelationshipTree> getTreesForFrenchHDRelationship() {return (List) trees;}
 
 		@Override
 		public double getMeanTemperatureOfGrowingSeason() {return meanTemperatureGrowingSeason;}
@@ -166,10 +169,10 @@ public class PredictedEffects {
 	}
 	
 	
-	final Map<Variable, Map<FrenchHd2018Species, Range>> rangeMap;
+	final Map<Variable, Map<FrenchHdSpecies, Range>> rangeMap;
 	
 	PredictedEffects() throws IOException {
-		rangeMap = new HashMap<Variable, Map<FrenchHd2018Species, Range>>();
+		rangeMap = new HashMap<Variable, Map<FrenchHdSpecies, Range>>();
 		rangeMap.put(Variable.DBH, readVariableRange(Variable.DBH));
 		rangeMap.put(Variable.BasalArea, readVariableRange(Variable.BasalArea));
 		rangeMap.put(Variable.Dg, readVariableRange(Variable.Dg));
@@ -179,8 +182,8 @@ public class PredictedEffects {
 	}
 	
 
-	private Map<FrenchHd2018Species, Range> readVariableRange(Variable var) throws IOException {
-		Map<FrenchHd2018Species, Range> rangeMap = new HashMap<FrenchHd2018Species, Range>();
+	private Map<FrenchHdSpecies, Range> readVariableRange(Variable var) throws IOException {
+		Map<FrenchHdSpecies, Range> rangeMap = new HashMap<FrenchHdSpecies, Range>();
 		Object[] record;
 		String filenameTempRange = ObjectUtility.getPackagePath(PredictedEffects.class) + var.inputFilename;
 		CSVReader reader = new CSVReader(filenameTempRange);
@@ -188,7 +191,7 @@ public class PredictedEffects {
 			String speciesName = record[0].toString();
 			speciesName = speciesName.replaceAll("-", " ");
 			speciesName = speciesName.replaceAll("'", " ");
-			FrenchHd2018Species species = FrenchHd2018Species.valueOf(speciesName.toUpperCase().replace(" ", "_"));
+			FrenchHdSpecies species = FrenchHdSpecies.valueOf(speciesName.toUpperCase().replace(" ", "_"));
 			double mean = Double.parseDouble(record[1].toString());
 			double min = Double.parseDouble(record[2].toString());
 			double max = Double.parseDouble(record[3].toString());
@@ -200,7 +203,7 @@ public class PredictedEffects {
 	}
 	
 	private void setStandAndTreeMeanVariables(Stand s, Tree t, Variable var) {
-		FrenchHd2018Species species = t.getFrenchHDTreeSpecies();
+		FrenchHdSpecies species = t.getFrenchHDTreeSpecies();
 		if (var == Variable.Dg) {
 			t.dbhCm = rangeMap.get(Variable.Dg).get(species).mean;
 		} else {
@@ -240,14 +243,14 @@ public class PredictedEffects {
 	private void testVariable(Variable var) {
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
 		
-		Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
+		Map<FrenchHdSpecies, FrenchHDRelationship2018InternalPredictor> internalPredictorMap = predictor.getInternalPredictorMap();
 		String filename = ObjectUtility.getPackagePath(PredictedEffects.class) + var.outputFilename;
 		filename = filename.replace("bin", "manuscripts");
 		CSVWriter writer = null;
 		try {
 			writer = instantiateWriter(filename);
 
-			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+			for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
 				Tree t = new Tree(species);
 				Stand s = new Stand();
 				setStandAndTreeMeanVariables(s, t, var);  // default value for each species
@@ -319,9 +322,9 @@ public class PredictedEffects {
 		System.out.println("Running climate warming simulation...");
 		FrenchHDRelationship2018PredictorTest.readTrees();
 		List<FrenchHDRelationship2018ExtPlotImplForTest> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
-		Map<FrenchHd2018Species, List<Double>> obsMap = new HashMap<FrenchHd2018Species, List<Double>>();
-		Map<FrenchHd2018Species, List<Double>> predMap = new HashMap<FrenchHd2018Species, List<Double>>();
-		for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+		Map<FrenchHdSpecies, List<Double>> obsMap = new HashMap<FrenchHdSpecies, List<Double>>();
+		Map<FrenchHdSpecies, List<Double>> predMap = new HashMap<FrenchHdSpecies, List<Double>>();
+		for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
 			obsMap.put(species, new ArrayList<Double>());
 			predMap.put(species, new ArrayList<Double>());
 		}
@@ -352,7 +355,7 @@ public class PredictedEffects {
 			fields.add(new CSVField("before"));
 			fields.add(new CSVField("after"));
 			writer.setFields(fields);
-			for (FrenchHd2018Species species : obsMap.keySet()) {
+			for (FrenchHdSpecies species : obsMap.keySet()) {
 				List<Double> obs = obsMap.get(species);
 				List<Double> pred = predMap.get(species);
 				if (obs.size() != pred.size()) {
