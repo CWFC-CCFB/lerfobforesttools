@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 /**
  * The FrenchHDRelationship2018TreeImpl class is a basic implementation of the
@@ -27,7 +27,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 
 	protected double heightM;
 	protected double dbhCm;
-	protected final FrenchHd2018Species species;
+	protected final FrenchHdSpecies species;
 	protected final FrenchHDRelationship2018PlotImpl plot;
 	protected final int id;
 	protected Double gOther;
@@ -50,7 +50,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = gOther;
-		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
+		this.species = FrenchHdSpecies.getFrenchHdSpeciesFromThisString(speciesName);
 		this.plot = plot;
 		plot.addTree(this); 
 	}
@@ -72,7 +72,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 		this.heightM = heightM;
 		this.dbhCm = dbhCm;
 		this.gOther = null;
-		this.species = FrenchHDRelationship2018Tree.getFrenchHd2018SpeciesFromThisString(speciesName);
+		this.species = FrenchHdSpecies.getFrenchHdSpeciesFromThisString(speciesName);
 		this.plot = plot;
 		plot.addTree(this); 
 	}
@@ -110,7 +110,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	}
 
 	@Override
-	public FrenchHd2018Species getFrenchHDTreeSpecies() {return species;}
+	public FrenchHdSpecies getFrenchHDTreeSpecies() {return species;}
 
 	protected double getGOther() {return gOther;}
 	protected double getBasalAreaM2() {return getDbhCm() * getDbhCm() * Math.PI * 0.000025;}

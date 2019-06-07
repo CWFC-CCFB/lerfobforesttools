@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2014;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2014;
 
 import java.util.Collection;
 
@@ -24,6 +24,7 @@ import repicea.simulation.covariateproviders.standlevel.InterventionResultProvid
 import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
 import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
+import repicea.simulation.hdrelationships.HDRelationshipTree;
 
 
 /**
@@ -42,7 +43,7 @@ public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
 	 * @param tree a FrenchHDRelationship2014Tree instance
 	 * @return the basal area (m2/ha)
 	 */
-	public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2014Tree tree);
+	public double getBasalAreaM2HaMinusThisSubject(HDRelationshipTree tree);
 	
 	
 	/**
@@ -50,7 +51,7 @@ public interface FrenchHDRelationship2014Stand extends HDRelationshipStand,
 	 * is called when the blups of the random effects are initially estimated:
 	 * @return A collection of FrenchHDRelationship2014Tree instances
 	 */
-	public Collection<FrenchHDRelationship2014Tree> getTreesForFrenchHDRelationship();
+	public Collection<HDRelationshipTree> getTreesForFrenchHDRelationship();
 	
 	
 	

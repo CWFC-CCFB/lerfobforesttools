@@ -16,15 +16,15 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.FrenchHDClimateVariableMap;
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
+import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
+import lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018.FrenchHDRelationship2018ClimateGenerator.FrenchHDClimateVariableMap;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
@@ -37,6 +37,7 @@ import repicea.simulation.climate.REpiceaClimateChangeGenerator;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.hdrelationships.HeightPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -54,12 +55,13 @@ import repicea.util.ObjectUtility;
  * Forest Science 76: 1. 
  * </a>
  */
-public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor implements FertilityClassEmulator {
+public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor implements FertilityClassEmulator,
+																						HeightPredictor<FrenchHDRelationship2018Plot, FrenchHDRelationship2018Tree> {
 
 	private static final long serialVersionUID = -8769528746292724237L;
 	
 	
-	private final Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> predictorMap;
+	private final Map<FrenchHdSpecies, FrenchHDRelationship2018InternalPredictor> predictorMap;
 		
 	private final Map<String, FrenchHDClimateVariableMap> originalClimateVariableMap;
 	private final FrenchHDRelationship2018ClimateGenerator climateGenerator;
@@ -76,7 +78,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 
 	FrenchHDRelationship2018Predictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariablityEnabled, boolean isResidualErrorVariabilityEnabled) {
 		super(isParameterVariabilityEnabled, isRandomEffectVariablityEnabled, isResidualErrorVariabilityEnabled);
-		predictorMap = new HashMap<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor>();
+		predictorMap = new HashMap<FrenchHdSpecies, FrenchHDRelationship2018InternalPredictor>();
 		originalClimateVariableMap = new HashMap<String, FrenchHDClimateVariableMap>();
 		climateGenerator = new FrenchHDRelationship2018ClimateGenerator();
 		init();
@@ -149,7 +151,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 			ParameterMap covparmMap = ParameterLoader.loadVectorFromFile(1, covparmsFilename);
 			ParameterMap effectList = ParameterLoader.loadVectorFromFile(1, effectListFilename);
 
-			for (FrenchHd2018Species species : FrenchHd2018Species.values()) {
+			for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
 				FrenchHDRelationship2018InternalPredictor internalPredictor = new FrenchHDRelationship2018InternalPredictor(isParametersVariabilityEnabled,
 						isRandomEffectsVariabilityEnabled,
 						isResidualVariabilityEnabled,
@@ -179,18 +181,10 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		}
 	}
 	
-	
-	/**
-	 * This method calculates the height for individual trees and also implements the 
-	 * Monte Carlo simulation automatically. In case of exception, it also returns -1.
-	 * If the predicted height is lower than 1.3, this method returns 1.3.
-	 * @param stand a HeightableStand object
-	 * @param tree a HeightableTree object
-	 * @return the predicted height (m)
-	 */
+	@Override
 	public double predictHeightM(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		FrenchHDRelationship2018InternalPredictor internalPred = getInternalPredictorMap().get(tree.getFrenchHDTreeSpecies());
-		double prediction = internalPred.predictHeight(stand, tree);
+		double prediction = internalPred.predictHeightM(stand, tree);
 		return prediction;
 	}	
 
@@ -217,7 +211,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		}
 	}
 	
-	Map<FrenchHd2018Species, FrenchHDRelationship2018InternalPredictor> getInternalPredictorMap() {
+	Map<FrenchHdSpecies, FrenchHDRelationship2018InternalPredictor> getInternalPredictorMap() {
 		return predictorMap;
 	}
 

@@ -16,13 +16,13 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2014;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2014;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
-import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
+import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
@@ -31,6 +31,7 @@ import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
+import repicea.simulation.hdrelationships.HeightPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -41,7 +42,8 @@ import repicea.util.ObjectUtility;
  * This class implements the general height-diameter relationships for the French National Forest Inventory.
  * @author Mathieu Fortin - June 2012
  */
-public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor implements FertilityClassEmulator {
+public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor implements FertilityClassEmulator,
+																						HeightPredictor<FrenchHDRelationship2014Stand, FrenchHDRelationship2014Tree>{
 
 	private static final long serialVersionUID = -8769528746292724237L;
 	
@@ -91,12 +93,13 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 			ParameterMap covparmMap = ParameterLoader.loadVectorFromFile(1, covparmsFilename);
 			ParameterMap effectList = ParameterLoader.loadVectorFromFile(1, effectListFilename);
 
-			for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
+			for (FrenchHdSpecies species : FrenchHdSpecies.getSpeciesIn2014()) {
 				FrenchHDRelationship2014InternalPredictor internalPredictor = new FrenchHDRelationship2014InternalPredictor(isParametersVariabilityEnabled,
 						isRandomEffectsVariabilityEnabled,
 						isResidualVariabilityEnabled,
 						species);
-				int index = species.ordinal() + 1;
+//				int index = species.ordinal() + 1;
+				int index = species.getIndexIn2014();
 				
 				Matrix mean = betaMap.get(index);
 				Matrix variance = omegaMap.get(index).squareSym();
@@ -120,18 +123,10 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 		}
 	}
 	
-	
-	/**
-	 * This method calculates the height for individual trees and also implements the 
-	 * Monte Carlo simulation automatically. In case of exception, it also returns -1.
-	 * If the predicted height is lower than 1.3, this method returns 1.3.
-	 * @param stand a HeightableStand object
-	 * @param tree a HeightableTree object
-	 * @return the predicted height (m)
-	 */
+	@Override
 	public double predictHeightM(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
-		double prediction = internalPred.predictHeight(stand, tree);
+		double prediction = internalPred.predictHeightM(stand, tree);
 		return prediction;
 	}	
 
