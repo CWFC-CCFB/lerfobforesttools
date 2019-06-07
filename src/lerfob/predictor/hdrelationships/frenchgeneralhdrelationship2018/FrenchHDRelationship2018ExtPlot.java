@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 /**
  * The FrenchHDRelationship2018ExtStand interface is an extension of the FrenchHDRelationship2018Stand interface.

@@ -16,11 +16,13 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import repicea.simulation.hdrelationships.HDRelationshipTree;
 
 /**
  * The FrenchHDRelationship2018PlotImpl class is a basic implementation of the
@@ -137,7 +139,7 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 	public double getElevationM() {return 0;}
 
 	@Override
-	public double getBasalAreaM2HaMinusThisSubject(FrenchHDRelationship2018Tree tree) {
+	public double getBasalAreaM2HaMinusThisSubject(HDRelationshipTree tree) {
 		FrenchHDRelationship2018TreeImpl t = (FrenchHDRelationship2018TreeImpl) tree;
 		if (t.gOther == null) {
 			return basalAreaM2Ha - t.getBasalAreaM2() * 14.14; 
@@ -146,8 +148,9 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Collection<FrenchHDRelationship2018Tree> getTreesForFrenchHDRelationship() {return treeList;}
+	public Collection<HDRelationshipTree> getTreesForFrenchHDRelationship() {return (List) treeList;}
 
 	protected void addTree(FrenchHDRelationship2018TreeImpl tree) {
 		treeList.add(tree);

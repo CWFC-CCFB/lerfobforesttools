@@ -22,9 +22,9 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014InternalPredictor;
-import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Stand;
-import lerfob.predictor.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Tree.FrenchHdSpecies;
+import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
+import lerfob.predictor.hdrelationships.FrenchHeightPredictor;
+import lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2014.FrenchHDRelationship2014Stand;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
@@ -287,8 +287,8 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void modelBasedSimulatorDidThis(REpiceaPredictorEvent event) {
-		if (event.getSource() instanceof FrenchHDRelationship2014InternalPredictor) {
-			FrenchHDRelationship2014InternalPredictor hdPredictor = (FrenchHDRelationship2014InternalPredictor) event.getSource();
+		if (event.getSource() instanceof FrenchHeightPredictor) {
+			FrenchHeightPredictor hdPredictor = (FrenchHeightPredictor) event.getSource();
 			FrenchHdSpecies species = hdPredictor.getSpecies();
 			if (species == FrenchHdSpecies.CHENE_SESSILE || 
 					species == FrenchHdSpecies.CHENE_PEDONCULE || 
@@ -329,9 +329,10 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setDiameterBlupFromHeightBlup(MonteCarloSimulationCompliantObject subject,
 			Estimate<? extends StandardGaussianDistribution> defaultHeightRandomEffects,
-			FrenchHDRelationship2014InternalPredictor hdPredictor) {
+			FrenchHeightPredictor hdPredictor) {
 		if (subject instanceof FrenchHDRelationship2014Stand) {
 			if (subject.getHierarchicalLevel().equals(HierarchicalLevel.PLOT)) {
 				Estimate<? extends StandardGaussianDistribution> heightBlups = hdPredictor.getBlupsForThisSubject((FrenchHDRelationship2014Stand) subject);

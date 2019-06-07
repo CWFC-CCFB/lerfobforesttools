@@ -1,7 +1,7 @@
 /*
  * This file is part of the lerfob-forestools library.
  *
- * Copyright (C) 2010-2018 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ * Copyright (C) 2010-2014 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchgeneralhdrelationship2018;
+package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2014;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -26,23 +26,23 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.FertilityClassEmulator;
-import lerfob.predictor.frenchgeneralhdrelationship2018.FrenchHDRelationship2018Tree.FrenchHd2018Species;
+import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
+import lerfob.predictor.hdrelationships.FrenchHeightPredictor;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
-import repicea.simulation.climate.REpiceaClimateVariableMap;
-import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.hdrelationships.HDRelationshipPredictor;
 import repicea.stats.StatisticalUtility.TypeMatrixR;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
-import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.estimates.TruncatedGaussianEstimate;
 
 @SuppressWarnings("serial")
-class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<FrenchHDRelationship2018Plot, FrenchHDRelationship2018Tree> implements FertilityClassEmulator {
+public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipPredictor<FrenchHDRelationship2014Stand, FrenchHDRelationship2014Tree> 
+														implements FertilityClassEmulator, 
+																	FrenchHeightPredictor<FrenchHDRelationship2014Stand, FrenchHDRelationship2014Tree> {
 
 	private static final Map<SpeciesType, Double> PhiParameters = new HashMap<SpeciesType, Double>();
 	static {
@@ -53,19 +53,15 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 	private static Map<FertilityClass, TruncatedGaussianEstimate> fertilityClassMap;
 
 	private List<Integer> effectList;
-	private final FrenchHd2018Species species;
+	private final FrenchHdSpecies species;
 	private FertilityClass currentFertilityClass;
-	private final FrenchHDRelationship2018Predictor mainPredictor;
 	
-	
-	protected FrenchHDRelationship2018InternalPredictor(boolean isParameterVariabilityEnabled, 
+	protected FrenchHDRelationship2014InternalPredictor(boolean isParameterVariabilityEnabled, 
 			boolean isRandomEffectVariabilityEnabled, 
 			boolean isResidualVariabilityEnabled, 
-			FrenchHd2018Species species,
-			FrenchHDRelationship2018Predictor mainPredictor) {
+			FrenchHdSpecies species) {
 		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 		this.species = species;
-		this.mainPredictor = mainPredictor;
 		currentFertilityClass = FertilityClass.Unknown;	// default value
 	}
 
@@ -109,24 +105,30 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 	}
 	
+
 	/**
 	 * This method sets the fertility class. However, it must be set before estimating the random effects. 
 	 * Otherwise, it has no effect.
 	 */
 	@Override
 	public void emulateFertilityClass(FertilityClass fertilityClass) {
+//		if (areBlupsEstimated()) {
+//			System.out.println("Blup estimation has already been carried out. The fertility class cannot be changed at this point.");
+//		} else 
 		if (fertilityClass != null && this.currentFertilityClass != fertilityClass) {
 			currentFertilityClass = fertilityClass;
 		}
 	}
 	
 	@Override
-	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2018Plot stand) {
+	protected synchronized void predictHeightRandomEffects(FrenchHDRelationship2014Stand stand) {
 		if (currentFertilityClass == FertilityClass.Unknown) {
 			super.predictHeightRandomEffects(stand);
 		} else {	// we have tweaked the plot random effect to account for the site index class
 			TruncatedGaussianEstimate estimate = getFertilityClassMap().get(currentFertilityClass);
 			setBlupsForThisSubject(stand, estimate);
+//			setDefaultRandomEffects(stand.getHierarchicalLevel(), estimate);
+//			setBlupsEstimated(true);		// to make sure we won't come here after the blup prediction
 		}
 	}
 	
@@ -152,38 +154,22 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 	 * @return a RegressionElement instance
 	 */
 	@Override
-	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree, Matrix beta) {
+	protected synchronized RegressionElements fixedEffectsPrediction(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree, Matrix beta) {
+//		Matrix modelParameters = getParametersForThisRealization(stand);
 		Matrix modelParameters = beta;
 		
 		double basalAreaMinusSubj = stand.getBasalAreaM2HaMinusThisSubject(tree);
 		if (basalAreaMinusSubj < 0d) {
-			if (basalAreaMinusSubj > -1E-8) {		// negative values only due to decimal rounding
-				basalAreaMinusSubj = 0d;
-			} else {
-				System.out.println("Error in HD relationship: The basal area of the plot has not been calculated yet!");
-				throw new InvalidParameterException("The basal area of the plot has not been calculated yet!");
-			}
+			System.out.println("Error in HD relationship: The basal area of the plot has not been calculated yet!");
+			throw new InvalidParameterException("The basal area of the plot has not been calculated yet!");
 		}
 		double slope = stand.getSlopeInclinationPercent();
 		
 		oXVector.resetMatrix();
 		int pointer = 0;
 		
-		double meanPrec;
-		double meanTemp;
-		if (stand instanceof FrenchHDRelationship2018ExtPlot) {
-			FrenchHDRelationship2018ExtPlot s = (FrenchHDRelationship2018ExtPlot) stand;
-			meanPrec = s.getMeanPrecipitationOfGrowingSeason();
-			meanTemp = s.getMeanTemperatureOfGrowingSeason();
-		} else {
-			REpiceaClimateVariableMap cp = mainPredictor.getNearestClimatePoint(stand);
-			meanPrec = cp.get(ClimateVariable.MeanSeasonalPrecMm);
-			meanTemp = cp.get(ClimateVariable.MeanSeasonalTempC);
-		}
-		
 		double lnDbh = tree.getLnDbhCmPlus1();
-		double socialIndex = tree.getDbhCm() / stand.getMeanQuadraticDiameterCm(); // former version changed for next line MF2018-09-10
-		
+		double socialIndex = tree.getDbhCm() - stand.getMeanQuadraticDiameterCm();
 		double lnDbh2 = tree.getSquaredLnDbhCmPlus1();
 
 		double harvested = 0d;
@@ -210,35 +196,19 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 				pointer++;
 				break;
 			case 5:
-				oXVector.m_afData[0][pointer] = lnDbh * meanPrec;
-				pointer++;
-				break;
-			case 6:
-				oXVector.m_afData[0][pointer] = lnDbh * meanTemp * meanTemp;
-				pointer++;
-				break;
-			case 7:
-				oXVector.m_afData[0][pointer] = lnDbh * meanTemp;
-				pointer++;
-				break;
-			case 8:
 				oXVector.m_afData[0][pointer] = lnDbh * slope;
 				pointer++;
 				break;
-			case 9:
+			case 6:
 				oXVector.m_afData[0][pointer] = socialIndex * lnDbh;
 				pointer++;
 				break;
-			case 10:
+			case 7:
 				oXVector.m_afData[0][pointer] = socialIndex * socialIndex * lnDbh;
 				pointer++;
 				break;
-			case 11:
+			case 8:
 				oXVector.m_afData[0][pointer] = lnDbh2;
-				pointer++;
-				break;
-			case 12:
-				oXVector.m_afData[0][pointer] = socialIndex * lnDbh2;
 				pointer++;
 				break;
 			default:
@@ -260,19 +230,20 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 	}
 
 
-	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2018Plot stand) {
+	@Override
+	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2014Stand stand) {
 		return super.getBlupsForThisSubject(stand);
 	}
 
 
 	@Override
-	protected Collection<FrenchHDRelationship2018Tree> getTreesFromStand(FrenchHDRelationship2018Plot stand) {
-		Collection<FrenchHDRelationship2018Tree> treesToBeReturned = new ArrayList<FrenchHDRelationship2018Tree>();
+	protected Collection<FrenchHDRelationship2014Tree> getTreesFromStand(FrenchHDRelationship2014Stand stand) {
+		Collection<FrenchHDRelationship2014Tree> treesToBeReturned = new ArrayList<FrenchHDRelationship2014Tree>();
 		Collection<?> trees = stand.getTreesForFrenchHDRelationship();
 		if (trees != null && !trees.isEmpty()) {
 			for (Object tree : trees) {
-				if (tree instanceof FrenchHDRelationship2018Tree) {
-					FrenchHDRelationship2018Tree t = (FrenchHDRelationship2018Tree) tree;
+				if (tree instanceof FrenchHDRelationship2014Tree) {
+					FrenchHDRelationship2014Tree t = (FrenchHDRelationship2014Tree) tree;
 					if (t.getFrenchHDTreeSpecies() == species) {
 						treesToBeReturned.add(t);
 					}
@@ -289,46 +260,8 @@ class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPredictor<
 	@Override
 	protected void init() {}
 	
-	/**
-	 * This method returns the species of this HD relationship.
-	 * @return a FrenchHdSpecies instance
-	 */
-	public FrenchHd2018Species getSpecies() {return species;}
-
-
-	boolean hasTemperatureEffect() {
-		return effectList.contains(7) || effectList.contains(6);
-	}
-	
-	boolean hasPrecipitationEffect() {
-		return effectList.contains(5);
-	}
-
-	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
-		Matrix pred = new Matrix(1,1);
-		pred.m_afData[0][0] = predictHeight(stand, tree);
-		Matrix variance = oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose());
-		return new GaussianEstimate(pred, variance);
-	}
+	@Override
+	public FrenchHdSpecies getSpecies() {return species;}
 	
 	
-	
-//	GaussianEstimate getGaussianEstimateFromTemperatureEffect() {
-//		List<Integer> indices = new ArrayList<Integer>();
-//		if (effectList.contains(7)) {
-//			indices.add(effectList.indexOf(7));
-//		}
-//		if (effectList.contains(6)) {
-//			indices.add(effectList.indexOf(6));
-//		}
-//		
-//		if (indices.isEmpty()) {
-//			return null;
-//		} else {
-//			Matrix mean = getParameterEstimates().getMean().getSubMatrix(indices, new ArrayList<Integer>(0));
-//			Matrix variance = getParameterEstimates().getVariance().getSubMatrix(indices, indices); 
-//			return new GaussianEstimate(mean, variance);
-//		}
-//	
-//	}
 }
