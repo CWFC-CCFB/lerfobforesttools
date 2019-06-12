@@ -24,9 +24,30 @@ import repicea.simulation.hdrelationships.HDRelationshipTree;
 import repicea.simulation.hdrelationships.HeightPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 public interface FrenchHeightPredictor<Stand extends HDRelationshipStand, Tree extends HDRelationshipTree> extends HeightPredictor<Stand, Tree> {
 
+	public static enum FrenchHeightPredictorVersion implements TextableEnum {
+		Version2014("Version 2014", "Version 2014"),
+		Version2018("Version 2018", "Version 2018");
+		
+		FrenchHeightPredictorVersion(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+
+		@Override
+		public String toString() {
+			return REpiceaTranslator.getString(this);
+		}
+	}
+	
 	/**
 	 * Returns the species for the internal species-specific height predictor. 
 	 * @return a FrenchHdSpecies instance
