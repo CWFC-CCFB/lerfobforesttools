@@ -16,47 +16,32 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde.climate;
+package lerfob.predictor.mathilde.climate.formerversion;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
+
 class MathildeClimatePlotImpl implements MathildeClimatePlot {
 
 	final String name;
 	final double meanAnnualTempAbove6C;
 	final int dateYr;
-	final int growthStepLengthYr;
-	final int nbDroughtsInUpcomingGrowthStep;
 	final double xCoord;
 	final double yCoord;
 	final double pred;
-	final double varPred;
-	final double scaledResid;
 	int realization;
 	
-	MathildeClimatePlotImpl(String name, 
-			double xCoord, 
-			double yCoord,
-			int dateYr, 
-			int growthStepLengthYr,
-			int nbDroughtsInUpcomingGrowthStep,
-			double meanAnnualTempAbove6C, 
-			double pred, 
-			double varPred,
-			double scaledResid) {
+	MathildeClimatePlotImpl(String name, double xCoord, double yCoord, int dateYr, double meanAnnualTempAbove6C, double pred) {
 		this.name = name;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.dateYr = dateYr;
-		this.growthStepLengthYr = growthStepLengthYr;
-		this.nbDroughtsInUpcomingGrowthStep = nbDroughtsInUpcomingGrowthStep;
 		this.meanAnnualTempAbove6C = meanAnnualTempAbove6C;
 		this.pred = pred;
-		this.varPred = varPred;
-		this.scaledResid = scaledResid;
 	}
 	
 	@Override
@@ -70,7 +55,7 @@ class MathildeClimatePlotImpl implements MathildeClimatePlot {
 	}
 
 
-	double getPrediction() {return pred;}
+	protected double getPrediction() {return pred;}
 
 	@Override
 	public int getMonteCarloRealizationId() {return realization;}
@@ -101,18 +86,22 @@ class MathildeClimatePlotImpl implements MathildeClimatePlot {
 		return stands;
 	}
 
+	/*
+	 * Useless for this predictor (non-Javadoc)
+	 * @see repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider#getGrowthStepLengthYr()
+	 */
 	@Override
-	public double getGrowthStepLengthYr() {return growthStepLengthYr;}
-
-	@Override
-	public int getNumberOfDroughtsDuringUpcomingGrowthStep() {return nbDroughtsInUpcomingGrowthStep;}
-
-	double getPredictionVariance() {
-		return varPred;
+	public double getGrowthStepLengthYr() {
+		return 0;
 	}
-	
-	double getScaledResidual() {
-		return scaledResid;
+
+	/*
+	 * Useless for this predictor (non-Javadoc)
+	 * @see repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider#getGrowthStepLengthYr()
+	 */
+	@Override
+	public int getNumberOfDroughtsDuringUpcomingGrowthStep() {
+		return 0;
 	}
 
 
