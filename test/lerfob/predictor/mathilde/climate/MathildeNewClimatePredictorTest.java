@@ -10,13 +10,14 @@ import org.junit.Test;
 import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
+import repicea.math.Matrix;
+import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
-public class MathildeClimatePredictorTest {
-
+public class MathildeNewClimatePredictorTest {
 	static Map<String, Double> blupMean;
 	static Map<String, Double> blupStdErr;
 	static Map<FrenchDepartment, Double> meanLongitude;
@@ -27,7 +28,7 @@ public class MathildeClimatePredictorTest {
 		try {
 			blupMean = new HashMap<String, Double>();
 			blupStdErr = new HashMap<String, Double>();
-			String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "dataBaseClimateBlups.csv";
+			String filename = ObjectUtility.getRelativePackagePath(MathildeNewClimatePredictorTest.class) + "dataBaseNewClimateBlups.csv";
 			reader = new CSVReader(filename);
 			Object[] record;
 			while ((record = reader.nextRecord()) != null) {
@@ -51,7 +52,7 @@ public class MathildeClimatePredictorTest {
 		try {
 			meanLongitude = new HashMap<FrenchDepartment, Double>();
 			meanLatitude = new HashMap<FrenchDepartment, Double>();
-			String filename = ObjectUtility.getRelativePackagePath(MathildeClimatePredictorTest.class) + "meanPlotCoordinates.csv";
+			String filename = ObjectUtility.getRelativePackagePath(MathildeNewClimatePredictorTest.class) + "meanPlotCoordinates.csv";
 			reader = new CSVReader(filename);
 			Object[] record;
 			while ((record = reader.nextRecord()) != null) {
@@ -78,11 +79,27 @@ public class MathildeClimatePredictorTest {
 		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
 			double actualPrediction = climatePredictor.getFixedEffectPrediction(stand);
+			double actualVariance = climatePredictor.getFixedEffectPredictionVariance(stand);
 			double expectedPrediction = stand.getPrediction();
+			double expectedVariance = stand.getPredictionVariance();
 			Assert.assertEquals("Comparing predictions for stand : " + stand.name + stand.dateYr,
 					expectedPrediction, 
 					actualPrediction, 
 					1E-6);
+			Assert.assertEquals("Comparing prediction variance for stand : " + stand.name + stand.dateYr,
+					expectedVariance, 
+					actualVariance, 
+					1E-6);
+			// MF2019-06-27 The comparison of scaled residual is hindered by the fact that matrix G is complex. It works
+			// only for the first residual.
+//			double residual = stand.meanAnnualTempAbove6C - expectedPrediction; // should include the blup here
+//			double residualVariance = climatePredictor.getResidualVariance(stand);
+//			double actualScaledResidual = residual / Math.sqrt(residualVariance);
+//			double expectedScaledResidual = stand.getScaledResidual();
+//			Assert.assertEquals("Comparing scaled residual for stand : " + stand.name + stand.dateYr,
+//					expectedScaledResidual, 
+//					actualScaledResidual, 
+//					1E-6);
 			nbStands++;
 		}
 		System.out.println("MathildeClimatePredictorTest, Number of stands successfully tested : " + nbStands);
@@ -113,7 +130,7 @@ public class MathildeClimatePredictorTest {
 			Assert.assertEquals("Comparing blup stdErr for stand : " + stand.name + stand.dateYr,
 					expectedStdErr, 
 					actualStdErr, 
-					1E-6);
+					4E-4);
 
 			nbStands++;
 		}
@@ -144,9 +161,29 @@ public class MathildeClimatePredictorTest {
 		Assert.assertEquals("Comparing blup means",	expectedMean, actualMean, 5E-3);
 		Assert.assertEquals("Comparing blup variances",	expectedVariance, actualVariance, 1E-3);
 		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of blups successfully tested!");
-
 	}
 
+	@Test
+	public void testResidualErrorInStochasticMode() throws Exception {
+		MathildeClimatePredictor climatePredictor = new MathildeClimatePredictor(false, false, true); // only residual variability enabled
+		int nbRealizations = 50000;
+		MonteCarloEstimate estimate = new MonteCarloEstimate();
+		MathildeClimatePlot s = MathildeClimatePredictor.getReferenceStands().get(10);
+		
+		Matrix real;
+		for (int i = 0; i < nbRealizations; i++) {
+			((MathildeClimatePlotImpl) s).realization = i;
+			real = new Matrix(1,1);
+			real.m_afData[0][0] = climatePredictor.getClimateVariables(s).get(ClimateVariable.MeanSeasonalTempC);
+			estimate.addRealization(real);
+		}
+		
+		double expectedVariance = climatePredictor.getResidualVariance((MathildeClimatePlotImpl) s);
+		double actualVariance = estimate.getVariance().m_afData[0][0];
+		Assert.assertEquals("Comparing residual variances",	expectedVariance, actualVariance, 1E-3);
+		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of residual variance successfully tested!");
+	}
+	
 	@Test
 	public void testMeanPlotCoordinates() throws IOException {
 		readMeanPlotCoordinates();
@@ -167,4 +204,5 @@ public class MathildeClimatePredictorTest {
 		}
 		System.out.println("Successful comparison of mean plot coordinates:" + i);
 	}
+
 }
