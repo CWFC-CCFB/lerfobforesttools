@@ -24,6 +24,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
@@ -31,7 +32,8 @@ import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesP
  */
 public interface MathildeClimatePlot extends MonteCarloSimulationCompliantObject, 
 										DateYrProvider,
-										GeographicalCoordinatesProvider {
+										GeographicalCoordinatesProvider,
+										GrowthStepLengthYrProvider {
 
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {
@@ -45,5 +47,12 @@ public interface MathildeClimatePlot extends MonteCarloSimulationCompliantObject
 	 * @return a List of MathildeClimateStand which will be concatenated with the reference stands.
 	 */
 	public List<MathildeClimatePlot> getAllMathildeClimatePlots();
+
 	
+	/**
+	 * This method returns the number of droughts that will occur during the upcoming
+	 * growth step.
+	 * @return an integer
+	 */
+	public int getNumberOfDroughtsDuringUpcomingGrowthStep();
 }

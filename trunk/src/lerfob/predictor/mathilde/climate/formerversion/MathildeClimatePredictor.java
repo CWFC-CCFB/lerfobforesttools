@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.mathilde.climate;
+package lerfob.predictor.mathilde.climate.formerversion;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
@@ -63,11 +64,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	private GaussianEstimate blups;
 	
 	public MathildeClimatePredictor(boolean isVariabilityEnabled) {
-		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
-	}
-	
-	protected MathildeClimatePredictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
-		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
+		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
 		init();
 	}
 
@@ -75,9 +72,9 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	protected final void init() {
 		try {
 			String path = ObjectUtility.getRelativePackagePath(getClass());
-			String betaFilename = path + "0_MathildeNewClimateBeta.csv";
-			String omegaFilename = path + "0_MathildeNewClimateOmega.csv";
-			String covparmsFilename = path + "0_MathildeNewClimateCovparms.csv";
+			String betaFilename = path + "0_MathildeClimateBeta.csv";
+			String omegaFilename = path + "0_MathildeClimateOmega.csv";
+			String covparmsFilename = path + "0_MathildeClimateCovparms.csv";
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
 			ParameterMap covparmsMap = ParameterLoader.loadVectorFromFile(covparmsFilename);
@@ -121,7 +118,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 			if (referenceStands == null) {
 				referenceStands = new ArrayList<MathildeClimatePlot>();
 				String path = ObjectUtility.getRelativePackagePath(MathildeClimatePredictor.class);
-				String referenceStandsFilename = path + "dataBaseNewClimatePredictions.csv";
+				String referenceStandsFilename = path + "dataBaseClimatePredictions.csv";
 				reader = new CSVReader(referenceStandsFilename);
 				Object[] record;
 	 			while ((record = reader.nextRecord()) != null) {
@@ -129,22 +126,9 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	 				double xCoord = Double.parseDouble(record[1].toString());
 	 				double yCoord = Double.parseDouble(record[2].toString());
 	 				int dateYr = Integer.parseInt(record[3].toString());
-	 				int growthStepLengthYr = Integer.parseInt(record[4].toString());
-	 				int nbDroughtsInUpcomingGrowthStep = Integer.parseInt(record[5].toString());
-	 				double meanTempGrowthSeason = Double.parseDouble(record[6].toString());
-	 				double predicted = Double.parseDouble(record[7].toString());
-	 				double stdErrPred = Double.parseDouble(record[8].toString());
-	 				double scaledResid = Double.parseDouble(record[9].toString());
-	 				MathildeClimatePlotImpl stand = new MathildeClimatePlotImpl(experimentName, 
-	 						xCoord, 
-	 						yCoord, 
-	 						dateYr, 
-	 						growthStepLengthYr,
-	 						nbDroughtsInUpcomingGrowthStep,
-	 						meanTempGrowthSeason, 
-	 						predicted,
-	 						stdErrPred * stdErrPred,
-	 						scaledResid);
+	 				double meanTempGrowthSeason = Double.parseDouble(record[5].toString());
+	 				double predicted = Double.parseDouble(record[6].toString());
+	 				MathildeClimatePlotImpl stand = new MathildeClimatePlotImpl(experimentName, xCoord, yCoord, dateYr, meanTempGrowthSeason, predicted);
 	 				referenceStands.add(stand);
 	 			}
 			}
@@ -157,24 +141,18 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		}
 	}
 
-	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot plot, Matrix currentBeta) {
+	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot stand, Matrix currentBeta) {
 		oXVector.resetMatrix();
-		double dateMinus1950 = plot.getDateYr() - 1950;
+		double dateMinus1950 = stand.getDateYr() - 1950;
 
 		if (dateMinus1950 < 0d) {		// if the date is earlier than 1950 then we set it to 1950
 			dateMinus1950 = 0d;
 		}
 
-		double growthStepLength = plot.getGrowthStepLengthYr();
-		double nbDroughts = plot.getNumberOfDroughtsDuringUpcomingGrowthStep();
-		
-		
 		int pointer = 0;
 		oXVector.m_afData[0][pointer] = 1d;
 		pointer++;
 		oXVector.m_afData[0][pointer] = dateMinus1950;
-		pointer++;
-		oXVector.m_afData[0][pointer] = nbDroughts / growthStepLength;
 		pointer++;
 		
 		double pred = oXVector.multiply(currentBeta).m_afData[0][0];
@@ -195,7 +173,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		double pred = getFixedEffectPrediction(stand, currentBeta);
 		double randomEffect = getRandomEffectsForThisSubject(stand).m_afData[0][0];
 		pred += randomEffect;
-		double residualError = getResidualError().m_afData[0][0] / Math.sqrt(stand.getGrowthStepLengthYr());
+		double residualError = getResidualError().m_afData[0][0];
 		pred += residualError;
 		return pred;
 	}
@@ -205,29 +183,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	 * @param stand
 	 * @return
 	 */
-	final double getFixedEffectPrediction(MathildeClimatePlot stand) {
+	protected final double getFixedEffectPrediction(MathildeClimatePlot stand) {
 		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
-	}
-
-	
-	/*
-	 * For test purpose. 
-	 * @param stand
-	 * @return
-	 */
-	final double getFixedEffectPredictionVariance(MathildeClimatePlot stand) {
-		Matrix omegaRelatedVariance = oXVector.multiply(getParameterEstimates().getVariance()).multiply(oXVector.transpose());
-		return omegaRelatedVariance.m_afData[0][0];
-	}
-
-	/*
-	 * For test purpose. 
-	 * @param stand
-	 * @return
-	 */
-	double getResidualVariance(MathildeClimatePlotImpl stand) {
-		double residualVariance = getDefaultResidualError(ErrorTermGroup.Default).getVariance().scalarMultiply(1d / stand.getGrowthStepLengthYr()).m_afData[0][0];
-		return residualVariance;
 	}
 	
 	private synchronized void predictBlups(MathildeClimatePlot stand) {
@@ -249,13 +206,11 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 			Matrix defaultBeta = getParameterEstimates().getMean();
 			Matrix omega = getParameterEstimates().getVariance();
 			Matrix residuals = new Matrix(knownStandIndex,1);
-			
-			Matrix matX = new Matrix(stands.size(), oXVector.m_iCols);
-			Matrix matL = new Matrix(stands.size(),1);
+			Matrix matX = new Matrix(stands.size(),2);
 			
 			for (int i = 0; i < knownStandIndex; i++) {
 				MathildeClimatePlotImpl standImpl = (MathildeClimatePlotImpl) stands.get(i);
-				residuals.m_afData[i][0] = (standImpl.meanAnnualTempAbove6C - getFixedEffectPrediction(standImpl, defaultBeta));
+				residuals.m_afData[i][0] = standImpl.meanAnnualTempAbove6C - getFixedEffectPrediction(standImpl, defaultBeta);
 			}
 
 			
@@ -267,7 +222,6 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 				matZ.setSubMatrix(z_i, i, 0);
 				getFixedEffectPrediction(s, defaultBeta);
 				matX.setSubMatrix(oXVector.getSubMatrix(0, 0, 0, 1), i, 0);
-				matL.m_afData[i][0] = 1d / s.getGrowthStepLengthYr();
 			}
 			
 			Matrix matG = new Matrix(tempListStandID.size(), tempListStandID.size());
@@ -297,8 +251,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 				}
 			}
 			double residualVariance = getDefaultResidualError(ErrorTermGroup.Default).getVariance().m_afData[0][0];
-//			Matrix matR = Matrix.getIdentityMatrix(stands.size()).scalarMultiply(residualVariance);
-			Matrix matR = matL.matrixDiagonal().scalarMultiply(residualVariance);
+			Matrix matR = Matrix.getIdentityMatrix(stands.size()).scalarMultiply(residualVariance);
 			Matrix matV = matZ.multiply(matG).multiply(matZ.transpose()).add(matR); 
 
 			Matrix invVk = matV.getSubMatrix(0, knownStandIndex - 1, 0, knownStandIndex-1).getInverseMatrix();
@@ -370,7 +323,6 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		oMap.put(ClimateVariable.MeanSeasonalTempC, getParametersForThisRealization(plot).m_afData[1][0]);
 		return oMap;
 	}
-
 	
 //	public static void main(String[] args) {
 //		new MathildeClimatePredictor(false);
