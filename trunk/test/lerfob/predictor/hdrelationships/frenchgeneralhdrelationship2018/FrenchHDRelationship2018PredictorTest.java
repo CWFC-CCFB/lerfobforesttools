@@ -10,7 +10,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lerfob.predictor.mathilde.climate.MathildeClimatePredictor;
 import repicea.io.javacsv.CSVReader;
 import repicea.serial.xml.XmlDeserializer;
 import repicea.stats.distributions.StandardGaussianDistribution;
@@ -246,12 +245,12 @@ public class FrenchHDRelationship2018PredictorTest {
 
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void validationFixedEffectPredictionsWithClimateChangeWithoutBlupInDeterministicMode() throws Exception {
+	public void validationFixedEffectPredictionsWithFormerClimateChangeWithoutBlupInDeterministicMode() throws Exception {
 		readTrees();
 		
 		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		predictor.setClimateChangeGenerator(new MathildeClimatePredictor(false));
+		predictor.setClimateChangeGenerator(new lerfob.predictor.mathilde.climate.formerversion.MathildeClimatePredictor(false));
 		
 		int nbTrees = 0;
 		FrenchHDRelationship2018Plot stand = Stands.get(0);
@@ -288,12 +287,12 @@ public class FrenchHDRelationship2018PredictorTest {
 	
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void validationFixedEffectPredictionsWithClimateChangeWithBlupsInDeterministicMode() throws Exception {
+	public void validationFixedEffectPredictionsWithFormerClimateChangeWithBlupsInDeterministicMode() throws Exception {
 		readTrees();
 		
 		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = true;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
-		predictor.setClimateChangeGenerator(new MathildeClimatePredictor(false));
+		predictor.setClimateChangeGenerator(new lerfob.predictor.mathilde.climate.formerversion.MathildeClimatePredictor(false));
 		
 		FrenchHDRelationship2018Plot stand = Stands.get(0);
 		((FrenchHDRelationship2018PlotImpl) stand).setDateYr(2035);
