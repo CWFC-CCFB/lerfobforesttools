@@ -92,6 +92,18 @@ public class ClimateGeneratorAlteration {
 			record[5] = originalPoint.get(ClimateVariable.MeanSeasonalTempC);
 			return record;
 		}
+
+		@Override
+		public double getGrowthStepLengthYr() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getNumberOfDroughtsDuringUpcomingGrowthStep() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 	}
 	
