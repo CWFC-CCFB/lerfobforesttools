@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import lerfob.app.LERFOBJARSVNAppVersion;
 import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
@@ -243,6 +244,18 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 			this.parentFrame = parentFrame;
 			CATSettings carbonToolSettings = new CATSettings(getSettingMemory());
 			carbonCompartmentManager = new CATCompartmentManager(carbonToolSettings);
+			
+			if (mode == CATMode.STANDALONE) {
+				String lastLookAndFeelClass = getCarbonToolSettings().getSettingMemory().getProperty("last.look.and.feel.class", UIManager.getSystemLookAndFeelClassName());
+				try {
+					UIManager.setLookAndFeel(lastLookAndFeelClass);
+				} catch (Exception e) {
+					System.out.println("Unable to set the look and feel to " + lastLookAndFeelClass);
+				}
+			}
+			
+			System.out.println("Look and feel set to " + UIManager.getLookAndFeel().getName());
+
 			if (isGuiEnabled()) {
 				if (!hasAlreadyBeenInstanciated) {
 					String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
@@ -250,9 +263,9 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 					String bottomSplashWindowString = "Build " +  LERFOBJARSVNAppVersion.getInstance().getBuild() + "-" + REpiceaJARSVNAppVersion.getInstance().getBuild();
 					new REpiceaSplashWindow(iconPath, 4, parentFrame, bottomSplashWindowString);
 
-					String licensePath = packagePath + "CATLicense_en.txt";
+					String licensePath = packagePath + "CATLicense_en.html";
 					if (REpiceaTranslator.getCurrentLanguage() == REpiceaTranslator.Language.French) {
-						licensePath = packagePath + "CATLicense_fr.txt";
+						licensePath = packagePath + "CATLicense_fr.html";
 					}
 
 					REpiceaLicenseWindow licenseDlg;
@@ -450,6 +463,10 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * overriden with empty content to disable the automatic shut down.
 	 */
 	protected void respondToWindowClosing() {
+		if (mode == CATMode.STANDALONE) {
+			String className = UIManager.getLookAndFeel().getClass().getName();
+			getCarbonToolSettings().getSettingMemory().setProperty("last.look.and.feel.class", className);
+		}
 		addTask(new CATTask(Task.SHUT_DOWN, this));
 	}
 	
@@ -567,7 +584,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	public boolean isInitialized() {return initialized;}
 	
 	/*
-	 * Entry point for CAT in standalone modes
+	 * Entry point for CAT in stand alone modes
 	 */
 	public static void main(String[] args) throws Exception {
 		REpiceaTranslator.setCurrentLanguage(Language.French);

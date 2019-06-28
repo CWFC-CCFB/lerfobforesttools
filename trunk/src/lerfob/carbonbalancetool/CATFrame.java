@@ -1,6 +1,7 @@
 package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -58,6 +59,7 @@ import repicea.gui.CommonGuiUtility;
 import repicea.gui.CommonGuiUtility.FileChooserOutput;
 import repicea.gui.REpiceaAWTProperty;
 import repicea.gui.REpiceaFrame;
+import repicea.gui.REpiceaLookAndFeelMenu;
 import repicea.gui.Refreshable;
 import repicea.gui.UIControlManager;
 import repicea.gui.UIControlManager.CommonControlID;
@@ -166,7 +168,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		ImportYieldTable("Yield table", "Table de production"),
 		ImportGrowthSimulation("Growth simulation", "Simulation de croissance"),
 		ErrorWhileLoadingData("An error occured while loading the data:", "Une erreur est survenue lors de lecture des donn\u00E9es :"),
-		;
+		LookAndFeel("Skin", "Pr\u00E9sentation");
 		
 		MessageID(String englishText, String frenchText) {
 			setText(englishText, frenchText);
@@ -194,6 +196,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
 	
 	private final JMenu file;
+	private final JMenu view;
 	private final JMenu options;
 	private final JMenuItem sensitivityAnalysisMenuItem;
 	private final JMenuItem calculateCarbonMenuItem;
@@ -222,6 +225,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	private final JLabel minorProgressBarMessage;
 
 	private boolean vetoEnabled;
+	
 	
 	/**
 	 * General constructor of this class.
@@ -284,7 +288,12 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		calculateCarbonButton.setIcon(carbonIcon);
 		calculateCarbonButton.setMargin(new Insets(2,2,2,2));
 		calculateCarbonButton.setToolTipText(MessageID.CalculateCarbonBalance.toString());
-	
+
+		view = UIControlManager.createCommonMenu(CommonMenuTitle.View);
+		menuBar.add(view);
+		JMenu lafs = new REpiceaLookAndFeelMenu(this);
+		view.add(lafs);
+		
 		options = UIControlManager.createCommonMenu(CommonMenuTitle.Options);
 		menuBar.add(options);
 		JMenu units = new JMenu(MessageID.Units.toString());
@@ -355,8 +364,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		refreshInterface();
 		setSimulationRunning(false);
 		createUI();
+		setPreferredSize(new Dimension(800,600));
 		pack();
-//		setMinimumSize(getSize());
 	}
 
 	/*
