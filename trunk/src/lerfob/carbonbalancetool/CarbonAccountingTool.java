@@ -254,7 +254,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				}
 			}
 			
-			System.out.println("Look and feel set to " + UIManager.getLookAndFeel().getName());
+//			System.out.println("Look and feel set to " + UIManager.getLookAndFeel().getName());
 
 			if (isGuiEnabled()) {
 				if (!hasAlreadyBeenInstanciated) {
