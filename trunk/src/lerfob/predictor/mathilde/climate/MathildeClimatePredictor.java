@@ -52,15 +52,24 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateChangeGenerator<MathildeClimatePlot> {
 
-//	private final static GregorianCalendar SystemDate = new GregorianCalendar();
+	private final static Map<RepresentativeConcentrationPathway, Double> ExpectedChangeByTheEndOfThe21stCentury = new HashMap<RepresentativeConcentrationPathway, Double>();
+	static {
+		ExpectedChangeByTheEndOfThe21stCentury.put(RepresentativeConcentrationPathway.RCP2_6, 1.5d);
+		ExpectedChangeByTheEndOfThe21stCentury.put(RepresentativeConcentrationPathway.RCP4_5, 2.5d);
+		ExpectedChangeByTheEndOfThe21stCentury.put(RepresentativeConcentrationPathway.RCP6_0, 3.5d);
+		ExpectedChangeByTheEndOfThe21stCentury.put(RepresentativeConcentrationPathway.RCP8_5, 6.0d);
+	}
+	
 	private static List<MathildeClimatePlot> referenceStands;
 
 	private List<String> listStandID;
-//	private List<MathildeClimatePlot> standsForWhichBlupsWillBePredicted;
 	
 	private double rho;
 	
 	private GaussianEstimate blups;
+	
+	private RepresentativeConcentrationPathway rcp = RepresentativeConcentrationPathway.RCP2_6; // default rcp
+	
 	
 	public MathildeClimatePredictor(boolean isVariabilityEnabled) {
 		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);
@@ -69,6 +78,14 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	protected MathildeClimatePredictor(boolean isParameterVariabilityEnabled, boolean isRandomEffectVariabilityEnabled, boolean isResidualVariabilityEnabled) {
 		super(isParameterVariabilityEnabled, isRandomEffectVariabilityEnabled, isResidualVariabilityEnabled);
 		init();
+	}
+
+	/**
+	 * Sets the Representative Concentration Pathway rcp for the climate generator.
+	 * @param rcp an RepresentativeConcentrationPathway enum
+	 */
+	public void setRepresentativeConcentrationPathway(RepresentativeConcentrationPathway rcp) {
+		this.rcp = rcp;
 	}
 
 	@Override
@@ -191,7 +208,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}
-		Matrix currentBeta = getParametersForThisRealization(stand);
+		Matrix currentBeta = getParametersForThisRealization(stand, rcp);
 		double pred = getFixedEffectPrediction(stand, currentBeta);
 		double randomEffect = getRandomEffectsForThisSubject(stand).m_afData[0][0];
 		pred += randomEffect;
@@ -199,6 +216,14 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		pred += residualError;
 		return pred;
 	}
+	
+	private Matrix getParametersForThisRealization(MathildeClimatePlot stand, RepresentativeConcentrationPathway rcp) {
+		Matrix currentBeta = getParametersForThisRealization(stand);
+		double rcpFactor = MathildeClimatePredictor.ExpectedChangeByTheEndOfThe21stCentury.get(rcp) / MathildeClimatePredictor.ExpectedChangeByTheEndOfThe21stCentury.get(RepresentativeConcentrationPathway.RCP2_6);
+		currentBeta.m_afData[1][0] *= rcpFactor;
+		return currentBeta;
+	}
+
 	
 	/*
 	 * For test purpose. 
@@ -367,7 +392,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	@Override
 	public Map<ClimateVariable, Double> getAnnualChangesForThisStand(MonteCarloSimulationCompliantObject plot) {
 		Map<ClimateVariable, Double> oMap = new HashMap<ClimateVariable, Double>();
-		oMap.put(ClimateVariable.MeanSeasonalTempC, getParametersForThisRealization(plot).m_afData[1][0]);
+		oMap.put(ClimateVariable.MeanSeasonalTempC, getParametersForThisRealization((MathildeClimatePlot) plot, rcp).m_afData[1][0]);
 		return oMap;
 	}
 
