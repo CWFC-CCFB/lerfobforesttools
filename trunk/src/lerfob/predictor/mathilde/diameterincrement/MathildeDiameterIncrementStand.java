@@ -23,6 +23,7 @@ import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionPlannedProvider;
+import repicea.simulation.covariateproviders.standlevel.MeanSeasonalTemperatureProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
@@ -31,7 +32,8 @@ import repicea.simulation.covariateproviders.standlevel.InterventionPlannedProvi
 public interface MathildeDiameterIncrementStand extends MonteCarloSimulationCompliantObject, 
 										GrowthStepLengthYrProvider, 
 										BasalAreaM2HaProvider,
-										InterventionPlannedProvider {
+										InterventionPlannedProvider,
+										MeanSeasonalTemperatureProvider {
 
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {
@@ -39,10 +41,10 @@ public interface MathildeDiameterIncrementStand extends MonteCarloSimulationComp
 	}
 
 	
-	/**
-	 * This method returns the monthly mean temperature above 6 degrees Celsius.
-	 * @return a double
-	 */
-	public double getMeanAnnualTempAbove6C();
+//	/**
+//	 * This method returns the monthly mean temperature above 6 degrees Celsius.
+//	 * @return a double
+//	 */
+//	public double getMeanAnnualTempAbove6C();
 
 }
