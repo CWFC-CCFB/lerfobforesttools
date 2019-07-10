@@ -50,7 +50,7 @@ import repicea.util.ObjectUtility;
  * is earlier than 1900, then the class assumes that the climate is similar to that of 1900.
  * @author Mathieu Fortin - October 2017
  */
-@SuppressWarnings("serial")
+@Deprecated
 public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateChangeGenerator<MathildeClimatePlot> {
 
 //	private final static GregorianCalendar SystemDate = new GregorianCalendar();

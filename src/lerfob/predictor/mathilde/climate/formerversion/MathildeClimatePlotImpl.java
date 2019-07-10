@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
 
+@Deprecated
 class MathildeClimatePlotImpl implements MathildeClimatePlot {
 
 	final String name;
