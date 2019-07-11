@@ -35,7 +35,6 @@ import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.climate.REpiceaClimateChangeGenerator;
 import repicea.simulation.climate.REpiceaClimateChangeTrend;
-import repicea.simulation.climate.REpiceaClimateVariableChangeMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.hdrelationships.HeightPredictor;
