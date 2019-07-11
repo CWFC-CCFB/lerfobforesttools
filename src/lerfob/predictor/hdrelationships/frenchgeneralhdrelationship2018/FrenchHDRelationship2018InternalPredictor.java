@@ -180,8 +180,8 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 			meanTemp = s.getMeanTemperatureOfGrowingSeason();
 		} else {
 			REpiceaClimateVariableMap cp = mainPredictor.getNearestClimatePoint(stand);
-			meanPrec = cp.get(ClimateVariable.MeanSeasonalPrecMm);
-			meanTemp = cp.get(ClimateVariable.MeanSeasonalTempC);
+			meanPrec = cp.get(ClimateVariable.MeanGrowingSeasonPrecMm);
+			meanTemp = cp.get(ClimateVariable.MeanGrowingSeasonTempC);
 		}
 		
 		double lnDbh = tree.getLnDbhCmPlus1();

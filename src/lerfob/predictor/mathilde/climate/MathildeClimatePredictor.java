@@ -384,7 +384,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	@Override
 	public REpiceaClimateVariableMap getClimateVariables(MathildeClimatePlot plot) {
 		REpiceaClimateVariableMap map = new REpiceaClimateVariableMap();
-		map.put(ClimateVariable.MeanSeasonalTempC, predictMeanTemperatureForGrowthInterval(plot));
+		map.put(ClimateVariable.MeanGrowingSeasonTempC, predictMeanTemperatureForGrowthInterval(plot));
 		return map;
 	}
 
@@ -392,7 +392,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	@Override
 	public Map<ClimateVariable, Double> getAnnualChangesForThisStand(MonteCarloSimulationCompliantObject plot) {
 		Map<ClimateVariable, Double> oMap = new HashMap<ClimateVariable, Double>();
-		oMap.put(ClimateVariable.MeanSeasonalTempC, getParametersForThisRealization((MathildeClimatePlot) plot, rcp).m_afData[1][0]);
+		oMap.put(ClimateVariable.MeanGrowingSeasonTempC, getParametersForThisRealization((MathildeClimatePlot) plot, rcp).m_afData[1][0]);
 		return oMap;
 	}
 

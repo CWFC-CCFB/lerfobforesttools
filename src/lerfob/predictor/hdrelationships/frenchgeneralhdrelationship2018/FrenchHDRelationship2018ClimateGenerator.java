@@ -46,11 +46,11 @@ public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateG
 		final double yCoord;
 		final String ser;
 		
-		FrenchHDClimateVariableMap(double xCoord, double yCoord, double meanSeasonalTemp, double meanSeasonalPrec, String ser) {
+		FrenchHDClimateVariableMap(double xCoord, double yCoord, double meanGrowingSeasonTemp, double meanGrowingSeasonPrec, String ser) {
 			this.xCoord = xCoord;
 			this.yCoord = yCoord;
-			put(ClimateVariable.MeanSeasonalTempC, meanSeasonalTemp);
-			put(ClimateVariable.MeanSeasonalPrecMm, meanSeasonalPrec);
+			put(ClimateVariable.MeanGrowingSeasonTempC, meanGrowingSeasonTemp);
+			put(ClimateVariable.MeanGrowingSeasonPrecMm, meanGrowingSeasonPrec);
 			this.ser = ser;
 		}
 		
