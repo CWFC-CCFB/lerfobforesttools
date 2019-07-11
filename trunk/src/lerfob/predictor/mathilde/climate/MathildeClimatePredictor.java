@@ -174,9 +174,13 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		}
 	}
 
-	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot plot, Matrix currentBeta) {
+	protected final synchronized double getFixedEffectPrediction(MathildeClimatePlot plot, Matrix currentBeta, Matrix rcpModifiedBeta) {
 		oXVector.resetMatrix();
-		double dateMinus1950 = plot.getDateYr() - 1950;
+		double dateMinus1950 = plot.getDateYr() > 2015 ? 2015 - 1950 : plot.getDateYr() - 1950; 
+		
+		double nbYearsAfter2015 = plot.getDateYr() > 2015 ? plot.getDateYr() - 2015 : 0d;
+		
+//		double dateMinus1950 = plot.getDateYr() - 1950;
 
 		if (dateMinus1950 < 0d) {		// if the date is earlier than 1950 then we set it to 1950
 			dateMinus1950 = 0d;
@@ -194,7 +198,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		oXVector.m_afData[0][pointer] = nbDroughts / growthStepLength;
 		pointer++;
 		
-		double pred = oXVector.multiply(currentBeta).m_afData[0][0];
+		double pred = oXVector.multiply(currentBeta).m_afData[0][0] + nbYearsAfter2015 * rcpModifiedBeta.m_afData[1][0];
 		
 		return pred;
 	}
@@ -208,8 +212,9 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		if (!doBlupsExistForThisSubject(stand)) {
 			predictBlups(stand);
 		}
-		Matrix currentBeta = getParametersForThisRealization(stand, rcp);
-		double pred = getFixedEffectPrediction(stand, currentBeta);
+		Matrix currentBeta = getParametersForThisRealization(stand);
+		Matrix rcpModifiedBeta = getParametersForThisRealization(stand, rcp);
+		double pred = getFixedEffectPrediction(stand, currentBeta, rcpModifiedBeta);
 		double randomEffect = getRandomEffectsForThisSubject(stand).m_afData[0][0];
 		pred += randomEffect;
 		double residualError = getResidualError().m_afData[0][0] / Math.sqrt(stand.getGrowthStepLengthYr());
@@ -218,7 +223,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	}
 	
 	private Matrix getParametersForThisRealization(MathildeClimatePlot stand, RepresentativeConcentrationPathway rcp) {
-		Matrix currentBeta = getParametersForThisRealization(stand);
+		Matrix currentBeta = getParametersForThisRealization(stand).getDeepClone();
 		double rcpFactor = MathildeClimatePredictor.ExpectedChangeByTheEndOfThe21stCentury.get(rcp) / MathildeClimatePredictor.ExpectedChangeByTheEndOfThe21stCentury.get(RepresentativeConcentrationPathway.RCP2_6);
 		currentBeta.m_afData[1][0] *= rcpFactor;
 		return currentBeta;
@@ -231,10 +236,15 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	 * @return
 	 */
 	final double getFixedEffectPrediction(MathildeClimatePlot stand) {
-		return getFixedEffectPrediction(stand, getParameterEstimates().getMean());
+		return getFixedEffectPredictionWithoutRCP(stand, getParameterEstimates().getMean());
 	}
 
 	
+
+	private double getFixedEffectPredictionWithoutRCP(MathildeClimatePlot stand, Matrix mean) {
+		return getFixedEffectPrediction(stand, mean, mean);
+	}
+
 	/*
 	 * For test purpose. 
 	 * @param stand
@@ -280,7 +290,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 			
 			for (int i = 0; i < knownStandIndex; i++) {
 				MathildeClimatePlotImpl standImpl = (MathildeClimatePlotImpl) stands.get(i);
-				residuals.m_afData[i][0] = (standImpl.meanAnnualTempAbove6C - getFixedEffectPrediction(standImpl, defaultBeta));
+				residuals.m_afData[i][0] = (standImpl.meanAnnualTempAbove6C - getFixedEffectPredictionWithoutRCP(standImpl, defaultBeta));
 			}
 
 			
@@ -290,7 +300,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 				MathildeClimatePlot s = stands.get(i);
 				z_i.m_afData[0][tempListStandID.indexOf(s.getSubjectId())] = 1d;
 				matZ.setSubMatrix(z_i, i, 0);
-				getFixedEffectPrediction(s, defaultBeta);
+				getFixedEffectPredictionWithoutRCP(s, defaultBeta);
 				matX.setSubMatrix(oXVector.getSubMatrix(0, 0, 0, 1), i, 0);
 				matL.m_afData[i][0] = 1d / s.getGrowthStepLengthYr();
 			}
