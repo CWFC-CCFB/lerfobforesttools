@@ -174,7 +174,7 @@ public class MathildeNewClimatePredictorTest {
 		for (int i = 0; i < nbRealizations; i++) {
 			((MathildeClimatePlotImpl) s).realization = i;
 			real = new Matrix(1,1);
-			real.m_afData[0][0] = climatePredictor.getClimateVariables(s).get(ClimateVariable.MeanSeasonalTempC);
+			real.m_afData[0][0] = climatePredictor.getClimateVariables(s).get(ClimateVariable.MeanGrowingSeasonTempC);
 			estimate.addRealization(real);
 		}
 		

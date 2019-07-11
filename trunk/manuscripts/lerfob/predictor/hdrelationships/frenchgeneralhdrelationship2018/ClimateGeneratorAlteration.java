@@ -76,7 +76,7 @@ public class ClimateGeneratorAlteration {
 		public List<MathildeClimatePlot> getAllMathildeClimatePlots() {return (List) plots;}
 		
 		void recordTemperature(REpiceaClimateVariableMap temp) {
-			predictedSeasonalTemperature.add(temp.get(ClimateVariable.MeanSeasonalTempC));
+			predictedSeasonalTemperature.add(temp.get(ClimateVariable.MeanGrowingSeasonTempC));
 		}
 		
 		List<Double> getRecordedTemperature() {return predictedSeasonalTemperature;}
@@ -89,7 +89,7 @@ public class ClimateGeneratorAlteration {
 			record[2] = originalPoint.xCoord;
 			record[3] = originalPoint.ser;
 			record[4] = mat.getSumOfElements() / mat.m_iRows;
-			record[5] = originalPoint.get(ClimateVariable.MeanSeasonalTempC);
+			record[5] = originalPoint.get(ClimateVariable.MeanGrowingSeasonTempC);
 			return record;
 		}
 
