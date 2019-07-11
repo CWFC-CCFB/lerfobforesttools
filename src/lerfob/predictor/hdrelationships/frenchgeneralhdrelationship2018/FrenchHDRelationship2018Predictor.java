@@ -34,8 +34,9 @@ import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorListener;
 import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.climate.REpiceaClimateChangeGenerator;
+import repicea.simulation.climate.REpiceaClimateChangeTrend;
+import repicea.simulation.climate.REpiceaClimateVariableChangeMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
-import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.hdrelationships.HeightPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
@@ -66,7 +67,7 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 	private final Map<String, FrenchHDClimateVariableMap> originalClimateVariableMap;
 	private final FrenchHDRelationship2018ClimateGenerator climateGenerator;
 	private REpiceaClimateChangeGenerator<? extends GeographicalCoordinatesProvider> climateChangeGenerator; 
-	private Map<Integer, Map<ClimateVariable, Double>> climateChangeFactorMap;
+	private Map<Integer, REpiceaClimateChangeTrend> climateTrendMap;
 
 	/**
 	 * General constructor for all combinations of uncertainty sources.
@@ -107,27 +108,27 @@ public final class FrenchHDRelationship2018Predictor extends REpiceaPredictor im
 		if (climateChangeGenerator == null) {
 			return cp;
 		} else {
-			Map<ClimateVariable, Double> annualChanges =  getClimateChangeMap(stand);
-			REpiceaClimateVariableMap updatedClimateVariableMap = cp.getUpdatedClimateVariableMap(annualChanges, stand.getDateYr()); // TODO this object could be stored somewhere to avoid reconstructing it every time 
+			REpiceaClimateChangeTrend trend =  getClimateTrend(stand);
+			REpiceaClimateVariableMap updatedClimateVariableMap = cp.getUpdatedClimateVariableMap(trend, stand.getDateYr()); // TODO this object could be stored somewhere to avoid reconstructing it every time 
 			return updatedClimateVariableMap;
 		}
 	}
 	
 	
-	private synchronized Map<ClimateVariable, Double> getClimateChangeMap(FrenchHDRelationship2018Plot stand) {
+	private synchronized REpiceaClimateChangeTrend getClimateTrend(FrenchHDRelationship2018Plot stand) {
 		int id = stand.getMonteCarloRealizationId();
-		Map<Integer, Map<ClimateVariable, Double>> oMap = getClimateChangeMap();
+		Map<Integer, REpiceaClimateChangeTrend> oMap = getClimateTrendMap();
 		if (!oMap.containsKey(id)) {
-			oMap.put(id, climateChangeGenerator.getAnnualChangesForThisStand(stand));
+			oMap.put(id, climateChangeGenerator.getClimateTrendForThisStand(stand));
 		} 
 		return oMap.get(id);
 	}
 
-	private Map<Integer, Map<ClimateVariable, Double>> getClimateChangeMap() {
-		if (climateChangeFactorMap == null) {
-			climateChangeFactorMap = new HashMap<Integer, Map<ClimateVariable, Double>>();
+	private Map<Integer, REpiceaClimateChangeTrend> getClimateTrendMap() {
+		if (climateTrendMap == null) {
+			climateTrendMap = new HashMap<Integer, REpiceaClimateChangeTrend>();
 		}
-		return climateChangeFactorMap;
+		return climateTrendMap;
 	}
 
 	@Override

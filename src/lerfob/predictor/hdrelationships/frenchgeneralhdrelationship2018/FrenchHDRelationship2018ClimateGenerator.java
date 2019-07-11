@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.simulation.climate.REpiceaClimateChangeTrend;
 import repicea.simulation.climate.REpiceaClimateGenerator;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.UpdatableClimateVariableMap;
@@ -39,6 +40,9 @@ import repicea.util.ObjectUtility;
  */
 public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator<GeographicalCoordinatesProvider> {
 
+	private static int MidReferencePeriod = 1975;
+	protected static boolean UseCorrectedYears = true;
+	
 	@SuppressWarnings("serial")
 	static class FrenchHDClimateVariableMap extends REpiceaClimateVariableMap implements UpdatableClimateVariableMap {
 		
@@ -63,22 +67,19 @@ public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateG
 		String getSer() {return ser;}
 
 		@Override
-		public REpiceaClimateVariableMap getUpdatedClimateVariableMap(Map<ClimateVariable, Double> annualChanges, int dateYr) {
-			int since2015 = dateYr - 2015;
+		public REpiceaClimateVariableMap getUpdatedClimateVariableMap(REpiceaClimateChangeTrend annualChanges, int dateYr) {
 			if (annualChanges == null || annualChanges.isEmpty()) {
 				return this;
-			} if (since2015 <= 0) {
-				return this;
 			} else {
+				double averageChange = annualChanges.getAverageChangeOverThisPeriod(MidReferencePeriod,
+						dateYr - 55,
+						dateYr - 25,
+						ClimateVariable.MeanGrowingSeasonTempC);
 				REpiceaClimateVariableMap updatedMap = new REpiceaClimateVariableMap();
-				for (ClimateVariable var : keySet()) {
-					if (annualChanges.containsKey(var)) {
-						double annualChange = annualChanges.get(var);
-						double newValue = get(var) + annualChange * since2015;
-						updatedMap.put(var, newValue);
-					} else {
-						updatedMap.put(var, get(var)); // here we just copy the value since there is no change
-					}
+				updatedMap.putAll(this);
+				if (updatedMap.containsKey(ClimateVariable.MeanGrowingSeasonTempC)) {
+					updatedMap.put(ClimateVariable.MeanGrowingSeasonTempC,
+							get(ClimateVariable.MeanGrowingSeasonTempC) + averageChange);
 				}
 				return updatedMap;
 			}
