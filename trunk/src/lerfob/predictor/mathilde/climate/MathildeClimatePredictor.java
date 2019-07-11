@@ -33,6 +33,8 @@ import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.climate.REpiceaClimateChangeGenerator;
+import repicea.simulation.climate.REpiceaClimateChangeTrend;
+import repicea.simulation.climate.REpiceaClimateVariableChangeMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.stats.distributions.StandardGaussianDistribution;
@@ -400,10 +402,15 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 
 
 	@Override
-	public Map<ClimateVariable, Double> getAnnualChangesForThisStand(MonteCarloSimulationCompliantObject plot) {
-		Map<ClimateVariable, Double> oMap = new HashMap<ClimateVariable, Double>();
+	public REpiceaClimateChangeTrend getClimateTrendForThisStand(MonteCarloSimulationCompliantObject plot) {
+		REpiceaClimateChangeTrend trend = new REpiceaClimateChangeTrend();
+		REpiceaClimateVariableChangeMap oMap = new REpiceaClimateVariableChangeMap();
+		oMap.put(ClimateVariable.MeanGrowingSeasonTempC, getParametersForThisRealization((MathildeClimatePlot) plot).m_afData[1][0]);
+		trend.addSegment(1950, 2015, oMap);
+		oMap = new REpiceaClimateVariableChangeMap();
 		oMap.put(ClimateVariable.MeanGrowingSeasonTempC, getParametersForThisRealization((MathildeClimatePlot) plot, rcp).m_afData[1][0]);
-		return oMap;
+		trend.addSegment(2015, 2100, oMap);
+		return trend;
 	}
 
 	
