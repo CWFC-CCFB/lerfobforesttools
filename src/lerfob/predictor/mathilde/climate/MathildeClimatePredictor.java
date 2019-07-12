@@ -181,7 +181,9 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 		double dateMinus1950 = plot.getDateYr() > 2015 ? 2015 - 1950 : plot.getDateYr() - 1950; 
 		
 		double nbYearsAfter2015 = plot.getDateYr() > 2015 ? plot.getDateYr() - 2015 : 0d;
-		
+		if (nbYearsAfter2015 > 85) {
+			nbYearsAfter2015 = 85;		// after 2100 the climate stabilizes
+		}
 //		double dateMinus1950 = plot.getDateYr() - 1950;
 
 		if (dateMinus1950 < 0d) {		// if the date is earlier than 1950 then we set it to 1950
