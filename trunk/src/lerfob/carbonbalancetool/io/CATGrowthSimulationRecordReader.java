@@ -39,13 +39,13 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 
 	protected static enum MessageID implements TextableEnum {
-		DateDescription("Date (years)","Date (ann\u00E9es"),
+		DateDescription("Date (years)","Date (ann\u00E9es)"),
 		DateHelp("This field must contains the date. It is an integer.", "Ce champ doit contenir la date. Il s'agit d'un entier."),
 		RealizationDescription("Realization", "R\u00E9alisation"),
 		RealizationHelp("This field must contain the realization identifier. It is an integer. This field is optional. If it is not specified, CAT considers that the simulation is deterministic.", 
 				"Ce champ doit contenir l'identifiant de la r\u00E9alisation. Il s'agit d'un entier. Ce champ est facultatif. S'il n'est pas sp\u00E9cifi\u00E9, CAT consid\u00E8re qu'il s'agit d'un simulation d\u00E9terministe."),
 		PlotDescription("Plot ID", "Identifiant de placette"),
-		PlotHelp("This field must contain the plot identifier. It is a string.", "Ce champ doit contenir l'identifiant de la placette. Il s'agit d'une cha\u00EEine de caract\u00E8res."),
+		PlotHelp("This field must contain the plot identifier. It is a string.", "Ce champ doit contenir l'identifiant de la placette. Il s'agit d'une cha\u00EEne de caract\u00E8res."),
 		PlotAreaDescription("Plot area (ha)", "Surface de la placette (ha)"),
 		PlotAreaHelp("This field must contain the plot area in hectare. It is a double.", "Ce champ doit contenir la surface de la placette en hectare. Il s'agit d'un double."),
 		TreeSpeciesDescription("Species", "Esp\u00E8ce"),
