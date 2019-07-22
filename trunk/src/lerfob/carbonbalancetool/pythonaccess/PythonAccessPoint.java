@@ -45,6 +45,7 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
+import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
@@ -282,6 +283,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		System.out.println("Running on repicea " + REpiceaJARSVNAppVersion.getInstance().getRevision());
+		System.out.println("Running on lerfob-foresttools " + LERFOBJARSVNAppVersion.getInstance().getRevision());
 		List<String> argumentList = Arrays.asList(args);
 		Integer listeningPort = null;
 		Integer callbackPort = null;
