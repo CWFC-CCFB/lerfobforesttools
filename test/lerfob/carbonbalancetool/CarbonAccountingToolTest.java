@@ -60,7 +60,9 @@ public class CarbonAccountingToolTest {
 		CATCompatibleStand stand;
 		CATCompatibleTree tree;
 		for (int i = 1; i <= 10; i++) {
-			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, i*10);
+			int dateYr = i * 10;
+			int ageYr = dateYr;
+			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, dateYr, ageYr);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
 				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
@@ -93,7 +95,9 @@ public class CarbonAccountingToolTest {
 		CATCompatibleStand stand;
 		CATCompatibleTree tree;
 		for (int i = 1; i <= 10; i++) {
-			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, i*10);
+			int dateYr = i * 10;
+			int ageYr = dateYr;
+			stand = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, dateYr, ageYr);
 			stands.add(stand);
 			for (int j = 1; j <= 10; j++) {
 				tree = new CarbonToolCompatibleTreeImpl(stand.getDateYr() * .01, "Fagus sylvatica");
@@ -134,6 +138,65 @@ public class CarbonAccountingToolTest {
 		}
 	}
 
+	
+	@Test
+	public void testWithAgeDifferentFromDate() throws Exception {
+		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
+		final String standID = "StandTest";
+		final double areaHa = .04;
+		List<CATCompatibleStand> standsWithDifferentDates = new ArrayList<CATCompatibleStand>();
+		List<CATCompatibleStand> standsWithSameDates = new ArrayList<CATCompatibleStand>();
+		CATCompatibleStand stand0, stand1;
+		CATCompatibleTree tree0, tree1;
+		for (int i = 1; i <= 10; i++) {
+			int ageYr = i * 10;
+			int dateYr = 2000 + ageYr;
+			stand0 = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, dateYr, ageYr);
+			stand1 = new CarbonToolCompatibleStandImpl("beech", standID, areaHa, ageYr, ageYr);
+			standsWithDifferentDates.add(stand0);
+			standsWithSameDates.add(stand1);
+			for (int j = 1; j <= 10; j++) {
+				tree0 = new CarbonToolCompatibleTreeImpl(ageYr * .01, "Fagus sylvatica");
+				((CarbonToolCompatibleStandImpl) stand0).addTree(tree0);
+				tree1 = new CarbonToolCompatibleTreeImpl(ageYr * .01, "Fagus sylvatica");
+				((CarbonToolCompatibleStandImpl) stand1).addTree(tree1);
+			}
+		}
+		
+		CarbonAccountingTool tool = new CarbonAccountingTool(CATMode.SCRIPT);
+		tool.initializeTool(null);
+		tool.setStandList(standsWithDifferentDates);
+		try {
+			tool.getCarbonToolSettings().getCurrentProductionProcessorManager().load(managerFilename);
+			tool.calculateCarbon();
+			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
+			Assert.assertTrue(result != null && result.isValid());
+			
+			double obsLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().m_afData[0][0];
+			double obsDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().m_afData[0][0];
+			double obsProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().m_afData[0][0];
+
+			tool.setStandList(standsWithSameDates);
+			tool.calculateCarbon();
+			result = tool.getCarbonCompartmentManager().getSimulationSummary();
+			Assert.assertTrue(result != null && result.isValid());
+
+			double refLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().m_afData[0][0];
+			double refDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().m_afData[0][0];
+			double refProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().m_afData[0][0];
+
+			Assert.assertEquals("Comparing living biomass", refLivingBiomass, obsLivingBiomass, 1E-8);
+			Assert.assertEquals("Comparing DOM", refDOM, obsDOM, 1E-8);
+			Assert.assertEquals("Comparing HWP", refProducts, obsProducts, 1E-8);
+			
+			tool.requestShutdown();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail("Unable to calculate carbon!");
+		}
+	}
+
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testWithYieldTable() throws Exception {

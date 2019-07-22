@@ -302,9 +302,9 @@ public class CATCompartmentCompileLibrary {
 		for (int i = 1; i < timeScale.size(); i++) {
 			
 			if (i == 1 &&  isEvenAged) {
-				currentDate = timeScale.get(i - 1);
+				int initialAgeYr = timeScale.getInitialAgeYr();
 				currentValue = carbonCompartment.getCalculatedCarbonArray()[i - 1];
-				totalCarbon += calculateCarbonForThisPeriod(0, currentDate, 0, currentValue);
+				totalCarbon += calculateCarbonForThisPeriod(0, initialAgeYr, 0, currentValue);
 			}
 			
 			currentDate = timeScale.get(i);

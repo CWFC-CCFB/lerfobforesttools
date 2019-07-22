@@ -25,12 +25,15 @@ import java.util.Vector;
 public class CATTimeTable extends ArrayList<Integer> {
 
 	private final int lastStandDate;
+	private final int initialAgeYr;
 
-	protected CATTimeTable(int lastStandDate) {
+	protected CATTimeTable(int lastStandDate, int initialAgeYr) {
 		this.lastStandDate = lastStandDate;
+		this.initialAgeYr = initialAgeYr;
 	}
 
 	protected int getLastStandDate() {return lastStandDate;}
+	protected int getInitialAgeYr() {return initialAgeYr;}
 	
 	protected Vector<Integer> getListOfDatesUntilLastStandDate() {
 		Vector<Integer> dates = new Vector<Integer>();

@@ -92,5 +92,13 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 	@Override
 	public CATCompatibleStand getHarvestedStand() {return null;}
 
+	/*
+	 * Useless for this class.
+	 */
+	@Override
+	public int getAgeYr() {
+		return getDateYr();
+	}
+
 
 }

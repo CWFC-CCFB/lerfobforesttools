@@ -116,11 +116,10 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 	@Override
 	public ApplicationScale getApplicationScale() {return ApplicationScale.FMU;}
 
-
-
 	@Override
 	public CATCompatibleStand getHarvestedStand() {return null;}
 
-	
+	@Override
+	public int getAgeYr() {return getDateYr();}
 	
 }

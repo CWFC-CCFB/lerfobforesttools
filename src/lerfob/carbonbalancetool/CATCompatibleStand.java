@@ -19,20 +19,26 @@
 package lerfob.carbonbalancetool;
 
 import repicea.simulation.ApplicationScaleProvider;
+import repicea.simulation.covariateproviders.standlevel.AgeYrProvider;
 import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
+import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.standlevel.ManagementTypeProvider;
 import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
 
 /**
- * This method ensures the stand is compatible with LERFoB-CAT
+ * This method ensures the stand is compatible with LERFoB-CAT. The interface DateYrProvider is
+ * used to retrieve the current date at which the stand was measured. The AgeYrProvider interface is
+ * used only in the case of a even-aged stand.
  * @author Mathieu Fortin - August 2013
  */
 public interface CATCompatibleStand extends AreaHaProvider, 
 											TreeStatusCollectionsProvider, 
 											InterventionResultProvider,
 											ManagementTypeProvider,
-											ApplicationScaleProvider {
+											ApplicationScaleProvider,
+											DateYrProvider,
+											AgeYrProvider {
 
 	
 	/**
@@ -50,14 +56,6 @@ public interface CATCompatibleStand extends AreaHaProvider,
 	 */
 	public String getStandIdentification();
 	
-	
-	/**
-	 * This method returns the date at which the plot was measured in years.
-	 * @return an integer
-	 */
-	public int getDateYr();
-
-
 	/**
 	 * This method returns true if the carbon balance can be calculated in infinite sequence. 
 	 * This is possible when the management type is even-aged and the application scale is at the
