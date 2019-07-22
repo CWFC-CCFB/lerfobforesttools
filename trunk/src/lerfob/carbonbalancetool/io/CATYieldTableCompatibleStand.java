@@ -126,5 +126,8 @@ class CATYieldTableCompatibleStand implements CATCompatibleStand {
 
 	@Override
 	public ApplicationScale getApplicationScale() {return ApplicationScale.Stand;}
+
+	@Override
+	public int getAgeYr() {return getDateYr();}
 	
 }

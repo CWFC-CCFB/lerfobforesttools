@@ -12,17 +12,19 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 	
 	private final double areaHa;
 	private final int dateYr;
+	private final int ageYr;
 	@SuppressWarnings("rawtypes")
 	private final Map<StatusClass, Collection> treeMap;
 	private final String standID;
 	private final String species;
 	
 	@SuppressWarnings("rawtypes")
-	protected CarbonToolCompatibleStandImpl(String species, String standID, double areaHa, int dateYr) {
+	protected CarbonToolCompatibleStandImpl(String species, String standID, double areaHa, int dateYr, int ageYr) {
 		this.species = species;
 		this.standID = standID;
 		this.areaHa = areaHa;
 		this.dateYr = dateYr;
+		this.ageYr = ageYr;
 		treeMap = new HashMap<StatusClass, Collection>();
 	}
 	
@@ -56,7 +58,7 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public CATCompatibleStand getHarvestedStand() {
-		CarbonToolCompatibleStandImpl newStand = new CarbonToolCompatibleStandImpl(species, standID, areaHa, dateYr);
+		CarbonToolCompatibleStandImpl newStand = new CarbonToolCompatibleStandImpl(species, standID, areaHa, dateYr, ageYr);
 		Collection coll = getTrees(StatusClass.alive);
 		for (Object obj : coll) {
 			CarbonToolCompatibleTreeImpl tree = (CarbonToolCompatibleTreeImpl) obj;
@@ -74,5 +76,8 @@ class CarbonToolCompatibleStandImpl implements CATCompatibleStand {
 
 	@Override
 	public ApplicationScale getApplicationScale() {return ApplicationScale.Stand;}
+
+	@Override
+	public int getAgeYr() {return ageYr;}
 
 }

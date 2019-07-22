@@ -156,7 +156,6 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		this.currentStands = null;
 		if (stands != null) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
-//			isEvenAged = lastStand instanceof CATCompatibleEvenAgedStand;
 			isEvenAged = lastStand.canBeRunInInfiniteSequence();
 			boolean isStochastic = false;
 			int nRealizations = 1;
@@ -170,9 +169,10 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			CATSensitivityAnalysisSettings.getInstance().setModelStochastic(isStochastic);
 			CATSensitivityAnalysisSettings.getInstance().setNumberOfMonteCarloRealizations(nRealizations);
 			int nbExtraYears = 0;
+			int initialAgeYr = -999;
 			if (isEvenAged) {
-//				rotationLength = ((CATCompatibleEvenAgedStand) lastStand).getAgeYr();
-				rotationLength = lastStand.getDateYr();
+				rotationLength = lastStand.getAgeYr();
+				initialAgeYr = stands.get(0).getAgeYr();
 				nbExtraYears = NumberOfExtraYrs;
 			} else {
 				rotationLength = lastStand.getDateYr() - stands.get(0).getDateYr();
@@ -182,7 +182,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			if (averageTimeStep == 0) {
 				averageTimeStep = 5;	// default value in case there is a single step
 			}
-			timeTable = new CATTimeTable(lastStand.getDateYr());
+			timeTable = new CATTimeTable(lastStand.getDateYr(), initialAgeYr);
 			
 			int size = stands.size() + nbExtraYears / averageTimeStep;
 			for (int i = 0; i < size; i++) {

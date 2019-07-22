@@ -66,4 +66,10 @@ class CATGrowthSimulationPlotSample implements CATCompatibleStand {
 	@Override
 	public CATCompatibleStand getHarvestedStand() {return null;}
 
+	/*
+	 * Useless for this class.
+	 */
+	@Override
+	public int getAgeYr() {return getDateYr();}
+
 }
