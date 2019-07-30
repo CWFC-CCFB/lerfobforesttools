@@ -161,9 +161,10 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			int nRealizations = 1;
 			if (lastStand instanceof StochasticInformationProvider) {
 				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
-				if (stochProv.isStochastic() && stochProv.getRealization(0) instanceof CATCompatibleStand) {
+				List<Integer> monteCarloIds = stochProv.getRealizationIds();
+				if (stochProv.isStochastic() && stochProv.getRealization(monteCarloIds.get(0)) instanceof CATCompatibleStand) {
 					isStochastic = true;
-					nRealizations = stochProv.getNumberRealizations();
+					nRealizations = monteCarloIds.size();
 				}
 			}
 			CATSensitivityAnalysisSettings.getInstance().setModelStochastic(isStochastic);
@@ -421,7 +422,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			currentStands = new ArrayList<CATCompatibleStand>();
 			for (CATCompatibleStand stand : stands) {
 				currentRealization = realizationID;
-				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(realizationID));
+				List<Integer> monteCarloIds = ((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealizationIds();
+				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(monteCarloIds.get(realizationID)));
 			}
 		} else {
 			currentRealization = realizationID;

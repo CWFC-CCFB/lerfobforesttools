@@ -21,6 +21,7 @@ package lerfob.carbonbalancetool.io;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.CATCompatibleStand;
@@ -69,10 +70,14 @@ class CATGrowthSimulationCompositeStand implements CATCompatibleStand, Stochasti
 	public int getDateYr() {return dateYr;}
 
 	@Override
-	public int getNumberRealizations() {return realizationMap.size();}
+	public List<Integer> getRealizationIds() {
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.addAll(realizationMap.keySet());
+		return ids;
+	}
 
 	@Override
-	public boolean isStochastic() {return getNumberRealizations() > 1;}
+	public boolean isStochastic() {return getRealizationIds().size() > 1;}
 
 	@Override
 	public CATGrowthSimulationPlotSample getRealization(int realizationID) {return realizationMap.get(realizationID);}
