@@ -285,26 +285,26 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 	
 	private void ensureValidityInCasesOfEmptyPlots() throws Exception {
 		Map<String, Double> plotIDAndAreaHa = new HashMap<String, Double>();
-		int numberOfRealizations = -1;
+		List<Integer> refList = null;
 		for (CATGrowthSimulationCompositeStand stand : standMap.values()) {
-			for (int i = 0; i < stand.getNumberRealizations(); i++) {
-				if (numberOfRealizations == -1) {
-					numberOfRealizations = stand.getNumberRealizations();
-				}
-				if (numberOfRealizations != stand.getNumberRealizations()) {
-					throw new Exception(MessageID.InconsistentGrowthSimulation.toString());
-				}
-				CATGrowthSimulationPlotSample sample = stand.getRealization(i);
-				for (String pId : sample.getPlotMap().keySet()) {
+			List<Integer> monteCarloIds = stand.getRealizationIds();
+			if (refList == null) {
+				refList = monteCarloIds;
+			} else if (!refList.equals(monteCarloIds)) {
+				throw new Exception(MessageID.InconsistentGrowthSimulation.toString());
+			}
+			for (Integer i : monteCarloIds) {
+				CATGrowthSimulationPlotSample plotSample = stand.getRealization(i);
+				for (String pId : plotSample.getPlotMap().keySet()) {
 					if (!plotIDAndAreaHa.containsKey(pId)) {
-						plotIDAndAreaHa.put(pId, sample.getPlot(pId).getAreaHa());
+						plotIDAndAreaHa.put(pId, plotSample.getPlot(pId).getAreaHa());
 					}
 				}
 			}
 		}
 		
 		for (CATGrowthSimulationCompositeStand stand : standMap.values()) {
-			for (int i = 0; i < stand.getNumberRealizations(); i++) {
+			for (Integer i : refList) {
 				CATGrowthSimulationPlotSample sample = stand.getRealization(i);
 				for (String pId : plotIDAndAreaHa.keySet()) {
 					if (!sample.getPlotMap().containsKey(pId)) {
