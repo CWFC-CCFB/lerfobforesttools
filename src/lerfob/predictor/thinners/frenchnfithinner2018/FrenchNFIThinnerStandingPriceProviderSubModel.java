@@ -29,6 +29,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.REpiceaPredictor;
+import repicea.stats.StatisticalUtility;
 import repicea.stats.distributions.EmpiricalDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -195,7 +196,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	 */
 	@Override
 	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
-		int index = (int) Math.floor(random.nextDouble() * getKnownYears().size());
+		int index = (int) Math.floor(StatisticalUtility.getRandom().nextDouble() * getKnownYears().size());
 		int randomYear = getKnownYears().get(index);
 		Matrix randomDeviates = new Matrix(1,1);
 		randomDeviates.m_afData[0][0] = observedPriceMap.get(randomYear);

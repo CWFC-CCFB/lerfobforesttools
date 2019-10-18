@@ -29,6 +29,7 @@ import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
+import repicea.stats.StatisticalUtility;
 import repicea.util.ObjectUtility;
 
 /**
@@ -107,7 +108,7 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 		Matrix beta = getParametersForThisRealization(stand);
 		double mean = predictFixedEffectOnly(beta, stand, tree);
 		if (isResidualVariabilityEnabled) {
-			return random.nextGamma(Dispersion, mean / Dispersion);
+			return StatisticalUtility.getRandom().nextGamma(Dispersion, mean / Dispersion);
 		} else {
 			return mean;
 		}

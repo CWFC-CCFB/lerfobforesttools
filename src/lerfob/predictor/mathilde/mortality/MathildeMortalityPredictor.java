@@ -34,6 +34,7 @@ import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaBinaryEventPredictor;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
+import repicea.stats.StatisticalUtility;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
@@ -294,11 +295,11 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		if (eventProbability < 0 || eventProbability > 1) {
 			return null;
 		} else if (isResidualVariabilityEnabled) {
-			double residualError = random.nextDouble();
+			double residualError = StatisticalUtility.getRandom().nextDouble();
 			if (residualError < eventProbability) {
 				if (stand.isAWindstormGoingToOccur()) {
 					double eventProbabilityWithoutWindstorm = predictEventProbability(stand, tree, new Object[]{true}); // to disable the windstorm
-					if (random.nextDouble() < eventProbabilityWithoutWindstorm/eventProbability) {
+					if (StatisticalUtility.getRandom().nextDouble() < eventProbabilityWithoutWindstorm/eventProbability) {
 						return StatusClass.dead;
 					} else {
 						return StatusClass.windfall;
