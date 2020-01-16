@@ -257,7 +257,7 @@ public class CATCompartment implements Comparable {
 	
 	/**
 	 * This method returns a random variable that contains the integrated carbon per ha.
-	 * @param plotArea the plot area in ha (double) 
+	 * @param plotAreaHa the plot area in ha (double) 
 	 * @return a double 
 	 */
 	public double getIntegratedCarbon(double plotAreaHa) {

@@ -100,7 +100,8 @@ public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<Frenc
 	
 	/**
 	 * Constructor.
-	 * @param isVariabilityEnabled true to enable the stochastic mode or false for deterministic predictions.
+	 * @param isPredictionVariabilityEnabled true to enable the classic stochastic mode 
+	 * @param isPriceVariabilityEnabled true to enable the stochasticity of the prices
 	 */
 	public FrenchNFIThinnerPredictor(boolean isPredictionVariabilityEnabled, boolean isPriceVariabilityEnabled) {
 		super(isPredictionVariabilityEnabled, false, isPredictionVariabilityEnabled);		// no random effect in this model

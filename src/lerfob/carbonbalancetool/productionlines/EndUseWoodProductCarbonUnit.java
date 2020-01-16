@@ -59,11 +59,14 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	}
 	
+	
 	/**
 	 * The constructor of this class.
-	 * @param initialVolumeBeforeFirstTransformation the volume before the processing (double) (m3)
-	 * @param dateIndex the creation date index of the time scale
-	 * @param carbonUnitFeature a EndProductFeature instance that defines the end product
+	 * @param dateIndex
+	 * @param sampleUnitID
+	 * @param carbonUnitFeature
+	 * @param amountMap
+	 * @param speciesName
 	 */
 	protected EndUseWoodProductCarbonUnit(int dateIndex,
 			String sampleUnitID,
@@ -102,8 +105,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 	/**
 	 * This method actualizes the EndProduct instance on a basis that is specified through the time scale parameter. Landfill products are retrieved 
 	 * through a static collection in the manager.
-	 * @param decayFunction the DecayFunction instance that serves to actualize the product
-	 * @param timeScale a Array of integer that defines the time span over which the product is actualized
+	 * @param compartmentManager a CATCompartmentManager instance
 	 */
 	@SuppressWarnings({ "deprecation", "rawtypes", "unchecked" })
 	@Override

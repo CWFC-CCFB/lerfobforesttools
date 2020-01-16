@@ -268,12 +268,13 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 		getCarbonUnitMap().add(carbonUnits);
 	}
 	
+	
 	/**
 	 * This method sends a log into a specific production line.
-	 * @param productionLineName the production line
-	 * @param creationDate the date at which the wood log is processed
-	 * @param amountMap a Map which contains the amounts of the different elements
-	 * @return a Collection of carbon unit that comes from this log
+	 * @param productionLineName
+	 * @param dateIndex
+	 * @param amountMap
+	 * @return a CarbonUnitMap instance
 	 * @throws Exception
 	 */
 	protected CarbonUnitMap<CarbonUnitStatus> processWoodPieceIntoThisProductionLine(String productionLineName, int dateIndex, AmountMap<Element> amountMap) throws Exception {
@@ -386,13 +387,14 @@ public final class ProductionLineManager extends AbstractDesigner<ProductionLine
 		return productionLineNames;
 	}
 
+	
 	/**
 	 * This method actualizes the different carbon units. It proceeds in the following order : </br>
 	 * &nbsp	1- the carbon units left in the forest</br>
 	 * &nbsp	2- the carbon units in the wood products</br>
 	 * &nbsp	3- the carbon units at the landfill site</br>
 	 * &nbsp	4- the carbon units recycled from the disposed wood products</br>
-	 * @param timeScale is an Array of integer that indicates the years of actualization
+	 * @param compartmentManager
 	 * @throws Exception
 	 */
 	public void actualizeCarbonUnits(CATCompartmentManager compartmentManager) throws Exception {

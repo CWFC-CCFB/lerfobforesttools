@@ -71,7 +71,6 @@ public interface CATSimulationResult {
 	
 	/**
 	 * This method returns the amount of harvested wood products (HWPs) by use class and type (recycled, residues, etc...)
-	 * @param includeRecycling a boolean true to include the recycled products into the map
 	 * @return a Map with CarbonUnitType and Maps as keys and values
 	 */
 	public Map<CarbonUnitStatus, UseClassSpeciesMonteCarloEstimateMap> getHWPPerHaByUseClass();

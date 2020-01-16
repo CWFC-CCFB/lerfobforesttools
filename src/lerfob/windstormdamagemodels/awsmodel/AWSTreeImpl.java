@@ -1,5 +1,5 @@
 /** 
- * Copyright (C) 2010-2012 LERFoB INRA/AgroParisTech - FVA Baden-W�rttemberg 
+ * Copyright (C) 2010-2012 LERFoB INRA/AgroParisTech - FVA Baden-Wurttemberg 
  * 
  * Authors: Mathieu Fortin, Axel Albrecht 
  * 

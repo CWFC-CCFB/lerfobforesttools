@@ -107,7 +107,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 	 * @param samplingUnitID the id of the sample unit
 	 * @param carbonUnitFeature a CarbonUnitFeature instance
 	 * @param initialAmounts a map that contains the amount of each element to be processed
-	 * @param species a CATSpecies enum
+	 * @param speciesName the name of the species
 	 */
 	protected CarbonUnit(int dateIndex, 
 			String samplingUnitID, 
@@ -177,8 +177,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 
 	/**
 	 * This method actualizes the carbon content of this carbon unit.
-	 * @param decayFunction the decay function 
-	 * @param timeScale an array of integers that indicates the dates
+	 * @param compartmentManager a CATCompartmentManager instance
 	 * @throws Exception
 	 */
 	protected void actualizeCarbon(CATCompartmentManager compartmentManager) throws Exception {

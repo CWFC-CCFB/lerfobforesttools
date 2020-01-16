@@ -26,8 +26,13 @@ public class LandfillCarbonUnit extends CarbonUnit {
 	
 	
 	/**
-	 * Constructor
-	 * @param endProduct a EndProduct instance that originates from the landfill market flux.
+	 * Constructor.
+	 * @param dateIndex
+	 * @param sampleUnitID
+	 * @param landfillCarbonUnitFeature
+	 * @param amountMap
+	 * @param speciesName
+	 * @param landfillStatus
 	 */
 	protected LandfillCarbonUnit(int dateIndex, 
 							String sampleUnitID,
