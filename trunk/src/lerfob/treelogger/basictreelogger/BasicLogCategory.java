@@ -49,7 +49,7 @@ public class BasicLogCategory extends LogCategory {
 	 * Constructor.
 	 * @param name the name of the category
 	 * @param species the species name
-	 * @param merchantableVolumeProportion the proportion of the merchantable volume that falls into this category
+	 * @param volumeProportionToBeProcessedInThisCategory the proportion of the merchantable volume that falls into this category
 	 */
 	public BasicLogCategory(String name, String species, double volumeProportionToBeProcessedInThisCategory) {
 		super(name, false);

@@ -80,7 +80,7 @@ public class BouchonVolumeEquations {
 						+ f18 * c130 * c130 * hauteur) / 1000.0;
 
 				// Modified 18.02.2008 by Fred Mothe :
-				// According to Patrick Vallet / Jean-François Dhote :
+				// According to Patrick Vallet / Jean-Francois Dhote :
 				// volume given by Bouchon model is known
 				// to overestimate old trees whereas experimental
 				// data show that it should be around 95% of total
@@ -101,7 +101,7 @@ public class BouchonVolumeEquations {
 	
 	// TODO check where do these four parameters come from
 	private double getStemAndBranchesMerchantableVolumeForBeech(double dbh, double height) {
-		// 2° -> Jean Bouchon's volume tables for "Bois Fort" (Stem + branches) FOR BEECH
+		// 2 -> Jean Bouchon's volume tables for "Bois Fort" (Stem + branches) FOR BEECH
 
 		double a22 = 0.444907; 		// formerly BOIS_FORT_BOUCHON_BEECH_A22;
 		double b22 = -0.107345e3; 	// formerly BOIS_FORT_BOUCHON_BEECH_B22;
@@ -153,9 +153,9 @@ public class BouchonVolumeEquations {
 
 	
 	private double getStemMerchantableVolumeForBeech(double dbh, double height) {
-		// 1b° -> Jean Bouchon's volume tables for "Bois Fort" stem only FOR OAK
+		// 1b -> Jean Bouchon's volume tables for "Bois Fort" stem only FOR OAK
 		// from J.Bouchon, 1974 Les tarifs de cubage. INRA et ENGREF, Nancy(France), 57p + ann
-		// (Annexe E : Tarifs de cubage à deux entrées pour le chêne de futaie Ligérien)
+		// (Annexe E : Tarifs de cubage a deux entrees pour le chene de futaie Ligerien)
 
 		// Jean Bouchon's volume table for STEM commercial wood (>7cm) FOR BEECH
 //		double c130 = dbh * Math.PI;
@@ -194,7 +194,7 @@ public class BouchonVolumeEquations {
 		double hauteur = height;
 		
 		// from J.Bouchon, 1974 Les tarifs de cubage. INRA et ENGREF, Nancy(France), 57p + ann
-		// (Annexe E : Tarifs de cubage à deux entrées pour le chêne de futaie Ligérien)
+		// (Annexe E : Tarifs de cubage a deux entrees pour le chene de futaie Ligerien)
 		double d130 = c130 / Math.PI;
 		double a18 = 222.49; 		// formerly BOIS_FORT_STEM_BOUCHON_OAK_A18;
 		double b18 = -10.263; 	 	// formerly BOIS_FORT_STEM_BOUCHON_OAK_B18;

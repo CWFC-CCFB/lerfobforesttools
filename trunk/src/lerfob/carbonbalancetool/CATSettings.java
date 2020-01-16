@@ -396,7 +396,7 @@ public final class CATSettings {
 
 	/**
 	 * This method sets the wood supply.  
-	 * @param ws the filename without the path (which is assumed to be the workspace)
+	 * @param selectedItem the filename without the path (which is assumed to be the workspace)
 	 */
 	@Deprecated
 	public void setWoodSupply(Object selectedItem) {

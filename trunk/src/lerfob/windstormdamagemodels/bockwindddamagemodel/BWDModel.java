@@ -28,8 +28,8 @@ import repicea.math.Matrix;
 /**
  * This class implements the wind damage model found in Bock et al. 2005. This model is designed for beech stands in NorthEast France.
  * @see <a href=http://documents.irevues.inist.fr/handle/2042/5032>
- * Bock, J., I. Vinkler, P. Duplat, J.-P. Renaud, V. Badeau, and J.-L. Dupouey. 2005 Stabilité au vent des hêtraies : les enseignements
- * de la tempête de 1999. Revue forestière française LVII-2: 143-158.
+ * Bock, J., I. Vinkler, P. Duplat, J.-P. Renaud, V. Badeau, and J.-L. Dupouey. 2005 Stabilite au vent des hetraies : les enseignements
+ * de la tempete de 1999. Revue forestiere francaise LVII-2: 143-158.
  * </a>
  * @author Mathieu Fortin - October 2010
  */
@@ -137,7 +137,7 @@ public final class BWDModel {
 	
 	/**
 	 * This method returns the probability of wind damage for an individual tree. It is designed for wind speeds above 140 km/h.
-	 * The calibration data mostly come from the Forêt de Haye (see Vincent Badeau's thesis).
+	 * The calibration data mostly come from the Forï¿½t de Haye (see Vincent Badeau's thesis).
 	 * @param tree = a BWDTree instance
 	 * @return the probability of stand damage (double)
 	 * @throws Exception

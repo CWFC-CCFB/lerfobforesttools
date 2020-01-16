@@ -57,7 +57,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 
 	/**
 	 * Constructor for NFI data. The basal area of other trees is calculated using the plot basal area.
-	 * @param tree id an integer
+	 * @param id an integer
 	 * @param heightM the height of the tree (m) or -1 if it was not observed
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum

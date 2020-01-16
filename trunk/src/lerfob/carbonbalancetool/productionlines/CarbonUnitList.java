@@ -18,7 +18,6 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -79,12 +78,7 @@ public class CarbonUnitList extends ArrayList<CarbonUnit> {
 	 * @param clazz
 	 * @param methodName
 	 * @param expectedValue
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @return a CarbonUnitList instance
 	 */
 	public CarbonUnitList filterList(Class<? extends CarbonUnit> clazz, String methodName, Object expectedValue) {
 		try {

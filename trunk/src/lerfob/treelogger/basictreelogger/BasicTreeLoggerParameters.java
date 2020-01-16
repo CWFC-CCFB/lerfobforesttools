@@ -59,7 +59,6 @@ public class BasicTreeLoggerParameters extends TreeLoggerParameters<BasicLogCate
 	
 	/**
 	 * Default constructor.
-	 * @param defaultSettings a DefaultSettings instance
 	 */
 	public BasicTreeLoggerParameters() {
 		super(BasicTreeLogger.class);

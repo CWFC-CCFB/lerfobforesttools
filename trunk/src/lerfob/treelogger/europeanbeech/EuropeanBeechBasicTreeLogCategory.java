@@ -35,9 +35,9 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 	
 	/**
 	 * Constructor.
-	 * @param str the name of the category
+	 * @param logGrade a Grade enum 
 	 * @param species the species name
-	 * @param merchantableVolumeProportion the proportion of the merchantable volume that falls into this category
+	 * @param smallEndDiameter the small end diameter (cm)
 	 */
 	protected EuropeanBeechBasicTreeLogCategory(Grade logGrade, Object species, double smallEndDiameter) {
 		super(logGrade, species, smallEndDiameter, null);	// conversion factors are not used in this TreeLogger class

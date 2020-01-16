@@ -47,8 +47,7 @@ public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPred
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param isParametersVariabilityEnabled
+	 * @param isVariabilityEnabled true to enable the stochastic mode
 	 */
 	public MathildeStandThinningPredictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, false, isVariabilityEnabled);

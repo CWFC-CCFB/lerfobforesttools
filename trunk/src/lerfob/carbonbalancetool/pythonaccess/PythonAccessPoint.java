@@ -94,7 +94,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	/**
 	 * This method sets the area of the plot to be processed. By default, this area is set
 	 * to 1 ha.
-	 * @param areaHA the area (ha)
+	 * @param areaHa the area (ha)
 	 */
 	public void setAreaHA(double areaHa) {
 		this.areaHa = areaHa;

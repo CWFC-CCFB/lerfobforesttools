@@ -49,7 +49,7 @@ public interface FertilityClassEmulator {
 
 	/**
 	 * This method allows to tweak the plot random effect in order to reproduce a sort of site index.
-	 * @param siteIndexClass a FertilityClass enum
+	 * @param fertilityClass a FertilityClass enum
 	 */
 	public void emulateFertilityClass(FertilityClass fertilityClass);
 

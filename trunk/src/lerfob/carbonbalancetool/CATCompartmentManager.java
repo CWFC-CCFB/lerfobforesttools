@@ -69,7 +69,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	
 	/**
 	 * Constructor for this class
-	 * @param tool a CarbonAccountingTool instance
+	 * @param settings a CATSettings instance
 	 */
 	public CATCompartmentManager(CATSettings settings) {
 		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>>();
@@ -231,7 +231,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	
 	/**
 	 * This method returns the TimeScale instance the simulation has been run with.
-	 * @return
+	 * @return a CATTimeTable instance
 	 */
 	public CATTimeTable getTimeTable() {return timeTable;}
 	
