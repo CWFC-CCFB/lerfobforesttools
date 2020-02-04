@@ -77,6 +77,24 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 		plot.addTree(this); 
 	}
 
+	/**
+	 * Constructor for NFI data. The basal area of other trees is calculated using the plot basal area.
+	 * The model is used in a deterministic manner. Tree heights are assumed to be all unobserved.
+	 * @param dbhCm the diameter at breast height (cm)
+	 * @param speciesName a String that corresponds to a FrenchHd2018Species enum
+	 * @param plot a FrenchHDRelationship2018StandImpl instance that hosts the tree
+	 */
+	public FrenchHDRelationship2018TreeImpl(double dbhCm, 
+			String speciesName, 
+			FrenchHDRelationship2018PlotImpl plot) {
+		this.id = 0;
+		this.heightM = -1d;
+		this.dbhCm = dbhCm;
+		this.gOther = null;
+		this.species = FrenchHdSpecies.getFrenchHdSpeciesFromThisString(speciesName);
+		this.plot = plot;
+		plot.addTree(this); 
+	}
 	
 	@Override
 	public int getErrorTermIndex() {

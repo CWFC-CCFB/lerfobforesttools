@@ -587,8 +587,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Entry point for CAT in stand alone modes
 	 */
 	public static void main(String[] args) throws Exception {
-		REpiceaTranslator.setCurrentLanguage(Language.French);
-//		REpiceaTranslator.setCurrentLanguage(Language.English);
+//		REpiceaTranslator.setCurrentLanguage(Language.French);
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool();
 	}
