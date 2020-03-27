@@ -1,7 +1,15 @@
-Copyright (C) 2009-2015 Mathieu Fortin, Patrick Vallet, and
-Frederic Mothe for LERFoB AgroParisTech/INRA.
+Copyright (C) 2009-2019 
+
+Mathieu Fortin, Canadian Forest Service (formerly LERFoB, AgroParisTech)
 
 Email: mathieu.fortin.re@gmail.com
+
+Contributors
+	Frederic Mothe, INRAE
+	Patrick Vallet, INRAE
+	Francois de Coligny, INRAE
+	Ruben Manso, formerly LERFoB, AgroParisTech
+	Axel Albrecht, FVA Baden-Wurttenberg 
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
