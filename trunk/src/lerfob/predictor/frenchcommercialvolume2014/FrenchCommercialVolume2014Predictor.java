@@ -28,10 +28,21 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor {
 
+	/**
+	 * General constructor.
+	 * @param isVariabilityEnabled a boolean (true: stochastic mode, false: deterministic mode)
+	 */
 	public FrenchCommercialVolume2014Predictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, false, isVariabilityEnabled);	 // no random effect
 		init();
 		oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
+	}
+	
+	/**
+	 * Default constructor for deterministic mode.
+	 */
+	public FrenchCommercialVolume2014Predictor() {
+		this(false);
 	}
 	
 	@Override

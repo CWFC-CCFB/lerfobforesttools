@@ -18,13 +18,70 @@
  */
 package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Tree;
+import repicea.simulation.HierarchicalLevel;
+
 /**
  * The FrenchHDRelationship2018TreeImpl class is a basic implementation of the
  * FrenchHDRelationship2018Tree. It facilitates the connection to JNI.
  * @author Mathieu Fortin - December 2018
  */
-public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree {
+public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship2018Tree, FrenchCommercialVolume2014Tree {
 
+	private static final Map<FrenchHdSpecies, FrenchCommercialVolume2014TreeSpecies> SpeciesMatchMap = new HashMap<FrenchHdSpecies, FrenchCommercialVolume2014TreeSpecies>();
+	static {
+		SpeciesMatchMap.put(FrenchHdSpecies.ALISIER_BLANC, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ALISIER_TORMINAL, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ARBOUSIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.AUBEPINE_MONOGYNE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.AULNE_GLUTINEUX, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.BOULEAU_VERRUQUEUX, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHARME, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHATAIGNIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_LIEGE, FrenchCommercialVolume2014TreeSpecies.QUERCUS_ROBUR);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_PEDONCULE, FrenchCommercialVolume2014TreeSpecies.QUERCUS_ROBUR);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_PUBESCENT, FrenchCommercialVolume2014TreeSpecies.QUERCUS_ROBUR);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_ROUGE, FrenchCommercialVolume2014TreeSpecies.QUERCUS_RUBRA);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_SESSILE, FrenchCommercialVolume2014TreeSpecies.QUERCUS_PETRAEA);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_TAUZIN, FrenchCommercialVolume2014TreeSpecies.QUERCUS_ROBUR);
+		SpeciesMatchMap.put(FrenchHdSpecies.CHENE_VERT, FrenchCommercialVolume2014TreeSpecies.QUERCUS_ROBUR);
+		SpeciesMatchMap.put(FrenchHdSpecies.DOUGLAS, FrenchCommercialVolume2014TreeSpecies.PSEUDOTSUGA_MENZIESII);
+		SpeciesMatchMap.put(FrenchHdSpecies.EPICEA_COMMUN, FrenchCommercialVolume2014TreeSpecies.PICEA_ABIES);
+		SpeciesMatchMap.put(FrenchHdSpecies.EPICEA_DE_SITKA, FrenchCommercialVolume2014TreeSpecies.PICEA_ABIES);
+		SpeciesMatchMap.put(FrenchHdSpecies.ERABLE_A_FEUILLES_D_OBIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ERABLE_CHAMPETRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ERABLE_DE_MONTPELLIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ERABLE_SYCOMORE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.FRENE_COMMUN, FrenchCommercialVolume2014TreeSpecies.FRAXINUS_EXCELSIOR);
+		SpeciesMatchMap.put(FrenchHdSpecies.HETRE, FrenchCommercialVolume2014TreeSpecies.FAGUS_SYLVATICA);
+		SpeciesMatchMap.put(FrenchHdSpecies.HOUX, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.MELEZE_D_EUROPE, FrenchCommercialVolume2014TreeSpecies.LARIX_DECIDUA);
+		SpeciesMatchMap.put(FrenchHdSpecies.MERISIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.NOISETIER_COUDRIER, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ORME_CHAMPETRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.PEUPLIER_CULTIVE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_A_CROCHETS, FrenchCommercialVolume2014TreeSpecies.PINUS_HALEPENSIS);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_D_ALEP, FrenchCommercialVolume2014TreeSpecies.PINUS_HALEPENSIS);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_LARICIO_DE_CORSE, FrenchCommercialVolume2014TreeSpecies.PINUS_LARICIO);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_MARITIME, FrenchCommercialVolume2014TreeSpecies.PINUS_PINASTER);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_NOIR_D_AUTRICHE, FrenchCommercialVolume2014TreeSpecies.PINUS_NIGRA);
+		SpeciesMatchMap.put(FrenchHdSpecies.PIN_SYLVESTRE, FrenchCommercialVolume2014TreeSpecies.PINUS_SYLVESTRIS);
+		SpeciesMatchMap.put(FrenchHdSpecies.ROBINIER_FAUX_ACACIA, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.SAPIN_PECTINE, FrenchCommercialVolume2014TreeSpecies.ABIES_ALBA);
+		SpeciesMatchMap.put(FrenchHdSpecies.SAULE_CENDRE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.SAULE_MARSAULT, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.SORBIER_DES_OISELEURS, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.TILLEUL_A_GRANDES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.TILLEUL_A_PETITES_FEUILLES, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+		SpeciesMatchMap.put(FrenchHdSpecies.TREMBLE, FrenchCommercialVolume2014TreeSpecies.CARPINUS_BETULUS);
+	}
+	
+	
+	
+	
 	protected double heightM;
 	protected double dbhCm;
 	protected final FrenchHdSpecies species;
@@ -131,6 +188,22 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	public FrenchHdSpecies getFrenchHDTreeSpecies() {return species;}
 
 	protected double getGOther() {return gOther;}
-	protected double getBasalAreaM2() {return getDbhCm() * getDbhCm() * Math.PI * 0.000025;}
+	protected double getBasalAreaM2() {return getSquaredDbhCm() * Math.PI * 0.000025;}
+
+	@Override
+	public double getSquaredDbhCm() {
+		return getDbhCm() * getDbhCm();
+	}
+
+	@Override
+	public HierarchicalLevel getHierarchicalLevel() {
+		return HierarchicalLevel.TREE;
+	}
+
+	@Override
+	public FrenchCommercialVolume2014TreeSpecies getFrenchCommercialVolume2014TreeSpecies() {
+		return SpeciesMatchMap.get(getFrenchHDTreeSpecies());
+	}
+
 
 }
