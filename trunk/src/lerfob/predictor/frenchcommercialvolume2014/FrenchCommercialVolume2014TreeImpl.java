@@ -26,66 +26,69 @@ import java.security.InvalidParameterException;
  */
 public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolume2014Tree {
 
+	protected double pred;
 	private final FrenchCommercialVolume2014TreeSpecies species;
-	private final String subjectId;
-	private int monteCarloId;
-	private double dbhCm;
 	private double heightM;
-
+	private double dbhCm;
+	private final int id;
+	private int monteCarloId;
+	
 	/**
-	 * General constructor.
-	 * @param speciesName a String that represents the species. The valid species name 
-	 * are the enum name of the FrenchCommercialVolume2014TreeSpecies enum variable.
-	 * @param subjectId a String that stands for the tree id
+	 * Protected constructor
+	 * @param id an integer that stands for the tree id
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param heightM the tree height (m)
-	 * 
-	 * @see the FrenchCommercialVolume2014TreeSpecies enum
+	 * @param speciesName the species name. It should be an enum name among the FrenchCommercialVolume2014TreeSpecies enum variable (e.g. Pinus halepensis).
+	 * @param pred an optional prediction for test purposes.
 	 */
-	public FrenchCommercialVolume2014TreeImpl(String speciesName, String subjectId, double dbhCm, double heightM) {
-		try {
-			species = FrenchCommercialVolume2014TreeSpecies.valueOf(speciesName.toUpperCase().replace(" ", "_"));
-		} catch (Exception e) {
-			throw new InvalidParameterException("The species " + speciesName + "is not a valid species name! Please see the FrenchCommercialVolume2014TreeSpecies enum.");
-		}
-		this.subjectId = subjectId;
-		this.monteCarloId = 0;
+	protected FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName, double pred) {
+		this.id = id;
 		this.dbhCm = dbhCm;
 		this.heightM = heightM;
+		this.pred = pred;
+		String newSpeciesName = speciesName.trim().toUpperCase().replace(" ", "_");
+		try {
+			this.species = FrenchCommercialVolume2014TreeSpecies.valueOf(newSpeciesName);
+		} catch (Exception e) {
+			throw new InvalidParameterException("The species name " + speciesName + " is invalid. Please see the FrenchCommercialVolume2014TreeSpecies enum variable.");
+		}
+		this.monteCarloId = 0;
+	}
+
+	/**
+	 * Public constructor
+	 * @param id an integer that stands for the tree id
+	 * @param dbhCm the diameter at breast height (cm)
+	 * @param heightM the tree height (m)
+	 * @param speciesName the species name. It should be an enum name among the FrenchCommercialVolume2014TreeSpecies enum variable (e.g. Pinus halepensis).
+	 */
+	public FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName) {
+		this(id, dbhCm, heightM, speciesName, 0d);
 	}
 	
-	@Override
-	public double getDbhCm() {
-		return dbhCm;
-	}
-
-	@Override
-	public double getSquaredDbhCm() {
-		return getDbhCm() * getDbhCm();
-	}
-
-	@Override
-	public double getHeightM() {
-		return heightM;
-	}
-
-	@Override
-	public String getSubjectId() {
-		return subjectId;
-	}
-
-	@Override
-	public int getMonteCarloRealizationId() {
-		return monteCarloId;
-	}
-
-	public void setMonteCarloRealizationId(int i) {
-		monteCarloId = i;
-	}
+	
+	protected double getPred() {return pred;}
 	
 	@Override
-	public FrenchCommercialVolume2014TreeSpecies getFrenchCommercialVolume2014TreeSpecies() {
-		return species;
-	}
+	public double getDbhCm() {return dbhCm;}
 
+	@Override
+	public double getSquaredDbhCm() {return getDbhCm() * getDbhCm();}
+
+	@Override
+	public double getHeightM() {return heightM;}
+
+	@Override
+	public String getSubjectId() {return ((Integer) id).toString();}
+
+	@Override
+	public int getMonteCarloRealizationId() {return monteCarloId;}
+
+	@Override
+	public FrenchCommercialVolume2014TreeSpecies getFrenchCommercialVolume2014TreeSpecies() {return species;}
+
+	public void setMonteCarloId(int i) {
+		this.monteCarloId = 0;
+	}
+	
 }
