@@ -25,6 +25,13 @@ import repicea.simulation.SASParameterEstimates;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
 import repicea.util.ObjectUtility;
 
+/**
+ * The FrenchCommercialVolume2014Predictor class implements a model of volume for 
+ * individual trees. It predicts the commercial volume from the stump height to a
+ * small diameter of 7 cm without eventual branches. It refers to "volume bois fort 
+ * tige" in French.
+ * @author Mathieu Fortin - 2014
+ */
 @SuppressWarnings("serial")
 public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor {
 
