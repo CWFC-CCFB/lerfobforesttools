@@ -20,11 +20,11 @@ package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.util.Collection;
 
-import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
-import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
-import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
-import repicea.simulation.covariateproviders.standlevel.MeanQuadraticDiameterCmProvider;
-import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
+import repicea.simulation.covariateproviders.plotlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.plotlevel.InterventionResultProvider;
+import repicea.simulation.covariateproviders.plotlevel.MeanQuadraticDiameterCmProvider;
+import repicea.simulation.covariateproviders.plotlevel.SlopeInclinationPercentProvider;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
 import repicea.simulation.hdrelationships.HDRelationshipTree;
 

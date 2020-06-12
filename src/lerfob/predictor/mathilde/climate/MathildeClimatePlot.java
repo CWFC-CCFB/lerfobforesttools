@@ -22,9 +22,9 @@ import java.util.List;
 
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
-import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
-import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.plotlevel.GrowthStepLengthYrProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.

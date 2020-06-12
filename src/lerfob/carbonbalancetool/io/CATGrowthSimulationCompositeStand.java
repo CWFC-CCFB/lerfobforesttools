@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.CATCompatibleStand;
-import repicea.simulation.covariateproviders.standlevel.StochasticInformationProvider;
+import repicea.simulation.covariateproviders.plotlevel.StochasticInformationProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
 /**

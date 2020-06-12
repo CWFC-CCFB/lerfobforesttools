@@ -20,8 +20,8 @@ package lerfob.predictor.mathilde.mortality;
 
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
-import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.GrowthStepLengthYrProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeMortalityPredictor.

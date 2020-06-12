@@ -21,9 +21,9 @@ package lerfob.predictor.mathilde.recruitment;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
-import repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider;
-import repicea.simulation.covariateproviders.standlevel.InterventionPlannedProvider;
+import repicea.simulation.covariateproviders.plotlevel.BasalAreaM2HaProvider;
+import repicea.simulation.covariateproviders.plotlevel.GrowthStepLengthYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.InterventionPlannedProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeRecruitmentNumberPredictor.

@@ -21,9 +21,9 @@ package lerfob.windstormdamagemodels.awsmodel;
 import java.util.Collection;
 
 import lerfob.windstormdamagemodels.awsmodel.AWSTree.AWSTreeSpecies;
-import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
-import repicea.simulation.covariateproviders.standlevel.DominantDiameterCmProvider;
-import repicea.simulation.covariateproviders.standlevel.DominantHeightMProvider;
+import repicea.simulation.covariateproviders.plotlevel.BasalAreaM2HaProvider;
+import repicea.simulation.covariateproviders.plotlevel.DominantDiameterCmProvider;
+import repicea.simulation.covariateproviders.plotlevel.DominantHeightMProvider;
 
 
 

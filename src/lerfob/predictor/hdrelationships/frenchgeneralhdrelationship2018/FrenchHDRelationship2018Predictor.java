@@ -36,7 +36,7 @@ import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.climate.REpiceaClimateChangeGenerator;
 import repicea.simulation.climate.REpiceaClimateChangeTrend;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
-import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.plotlevel.GeographicalCoordinatesProvider;
 import repicea.simulation.hdrelationships.HeightPredictor;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
