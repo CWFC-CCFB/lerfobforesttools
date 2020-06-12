@@ -21,7 +21,7 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.math.Matrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;

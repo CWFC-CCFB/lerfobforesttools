@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator;
 import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchDepartmentProvider.FrenchDepartment;
 import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;

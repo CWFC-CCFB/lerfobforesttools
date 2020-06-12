@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.io.FormatField;
 import repicea.io.javacsv.CSVField;
 import repicea.io.javacsv.CSVWriter;
