@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.plotlevel.SpeciesCompositionProvider.SpeciesComposition;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.FrenchNFIThinnerSpecies;
-import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider;
 
 /**
  * Basic implementation of the FrenchNFIThinnerPlot interface.

@@ -16,12 +16,12 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.simulation.covariateproviders.standlevel;
+package lerfob.simulation.covariateproviders.plotlevel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider.FrenchRegion2016;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.FrenchRegion2016;
 
 /**
  * This interface ensures that the stand instance can provide its department. 

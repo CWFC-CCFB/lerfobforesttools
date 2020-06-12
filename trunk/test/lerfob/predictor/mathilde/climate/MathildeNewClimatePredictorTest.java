@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCoordinates;
-import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
+import lerfob.simulation.covariateproviders.plotlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;

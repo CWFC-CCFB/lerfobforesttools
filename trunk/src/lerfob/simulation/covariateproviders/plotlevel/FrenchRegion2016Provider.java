@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.simulation.covariateproviders.standlevel;
+package lerfob.simulation.covariateproviders.plotlevel;
 
 public abstract interface FrenchRegion2016Provider {
 
