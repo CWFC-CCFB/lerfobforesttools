@@ -29,7 +29,7 @@ import repicea.simulation.climate.REpiceaClimateChangeTrend;
 import repicea.simulation.climate.REpiceaClimateGenerator;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
 import repicea.simulation.climate.REpiceaClimateVariableMap.UpdatableClimateVariableMap;
-import repicea.simulation.covariateproviders.standlevel.GeographicalCoordinatesProvider;
+import repicea.simulation.covariateproviders.plotlevel.GeographicalCoordinatesProvider;
 import repicea.util.ObjectUtility;
 
 /**

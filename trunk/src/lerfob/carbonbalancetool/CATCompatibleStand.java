@@ -19,12 +19,12 @@
 package lerfob.carbonbalancetool;
 
 import repicea.simulation.ApplicationScaleProvider;
-import repicea.simulation.covariateproviders.standlevel.AgeYrProvider;
-import repicea.simulation.covariateproviders.standlevel.AreaHaProvider;
-import repicea.simulation.covariateproviders.standlevel.DateYrProvider;
-import repicea.simulation.covariateproviders.standlevel.InterventionResultProvider;
-import repicea.simulation.covariateproviders.standlevel.ManagementTypeProvider;
-import repicea.simulation.covariateproviders.standlevel.TreeStatusCollectionsProvider;
+import repicea.simulation.covariateproviders.plotlevel.AgeYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.AreaHaProvider;
+import repicea.simulation.covariateproviders.plotlevel.DateYrProvider;
+import repicea.simulation.covariateproviders.plotlevel.InterventionResultProvider;
+import repicea.simulation.covariateproviders.plotlevel.ManagementTypeProvider;
+import repicea.simulation.covariateproviders.plotlevel.TreeStatusCollectionsProvider;
 
 /**
  * This method ensures the stand is compatible with LERFoB-CAT. The interface DateYrProvider is

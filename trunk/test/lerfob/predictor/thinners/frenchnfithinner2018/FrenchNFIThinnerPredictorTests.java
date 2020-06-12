@@ -12,7 +12,7 @@ import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.
 import lerfob.simulation.covariateproviders.standlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
-import repicea.simulation.covariateproviders.standlevel.SpeciesCompositionProvider.SpeciesComposition;
+import repicea.simulation.covariateproviders.plotlevel.SpeciesCompositionProvider.SpeciesComposition;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 

@@ -18,7 +18,7 @@
  */
 package lerfob.windstormdamagemodels.bockwindddamagemodel;
 
-import repicea.simulation.covariateproviders.standlevel.DominantHeightMProvider;
+import repicea.simulation.covariateproviders.plotlevel.DominantHeightMProvider;
 
 /**
  * This interface ensures the compatibility of a Stand instance with 

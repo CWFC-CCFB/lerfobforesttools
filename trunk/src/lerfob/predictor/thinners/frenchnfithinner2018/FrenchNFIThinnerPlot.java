@@ -24,9 +24,9 @@ import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictor.
 import lerfob.simulation.covariateproviders.standlevel.FrenchRegion2016Provider;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.standlevel.BasalAreaM2HaProvider;
-import repicea.simulation.covariateproviders.standlevel.SlopeInclinationPercentProvider;
-import repicea.simulation.covariateproviders.standlevel.StemDensityHaProvider;
+import repicea.simulation.covariateproviders.plotlevel.BasalAreaM2HaProvider;
+import repicea.simulation.covariateproviders.plotlevel.SlopeInclinationPercentProvider;
+import repicea.simulation.covariateproviders.plotlevel.StemDensityHaProvider;
 
 public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 												BasalAreaM2HaProvider,
