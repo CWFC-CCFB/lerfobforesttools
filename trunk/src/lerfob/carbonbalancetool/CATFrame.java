@@ -383,7 +383,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		if (iconImage == null) {
 			String path = ObjectUtility.getRelativePackagePath(CATFrame.class);
 			String iconFilename = path + "LogoLerfob.jpg";
-			InputStream in = ClassLoader.getSystemResourceAsStream(iconFilename);
+//			InputStream in = ClassLoader.getSystemResourceAsStream(iconFilename);
+			InputStream in = getClass().getResourceAsStream("/" + iconFilename);
 			try {
 				iconImage = ImageIO.read(in);
 			}
