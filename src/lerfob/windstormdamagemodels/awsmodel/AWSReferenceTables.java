@@ -124,7 +124,8 @@ public class AWSReferenceTables {
 
 		String path = ObjectUtility.getRelativePackagePath(getClass());
 		
-		InputStream is = ClassLoader.getSystemResourceAsStream(path + "HITAB_FE.txt");
+//		InputStream is = ClassLoader.getSystemResourceAsStream(path + "HITAB_FE.txt");
+		InputStream is = getClass().getResourceAsStream("/" + path + "HITAB_FE.txt");
 		BufferedReader in = new BufferedReader(new InputStreamReader(is));
 		String str = in.readLine();
 		while (str != null) {
@@ -216,7 +217,8 @@ public class AWSReferenceTables {
 
 		String path = ObjectUtility.getRelativePackagePath(getClass());
 		
-		InputStream is = ClassLoader.getSystemResourceAsStream(path + "MeanVal.txt");
+//		InputStream is = ClassLoader.getSystemResourceAsStream(path + "MeanVal.txt");
+		InputStream is = getClass().getResourceAsStream("/" + path + "MeanVal.txt");
 		BufferedReader in = new BufferedReader(new InputStreamReader(is));
 		String str = in.readLine();
 		while (str != null) {
