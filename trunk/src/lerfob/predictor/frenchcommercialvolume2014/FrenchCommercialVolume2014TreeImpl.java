@@ -31,7 +31,7 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	private double heightM;
 	private double dbhCm;
 	private final int id;
-	private final int monteCarloId;
+	private int monteCarloId;
 	
 	/**
 	 * Protected constructor
@@ -87,5 +87,7 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 
 	@Override
 	public FrenchCommercialVolume2014TreeSpecies getFrenchCommercialVolume2014TreeSpecies() {return species;}
+
+	void setMonteCarloId(int id) {this.monteCarloId = id;}
 	
 }

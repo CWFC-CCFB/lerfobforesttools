@@ -72,10 +72,20 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 
 	/**
 	 * This method return the over-bark volume estimate for an individual tree. 
-	 * NOTE: The stochastic implementation is handled through the general constructor.
+	 * The stochastic implementation is handled through the general constructor.
+	 * 
+	 * It is thread safe ONLY if the Monte Carlo Id of trees is not modified. Basically,
+	 * there should be as many instances of FrenchCommercialVolume2014 as the number of 
+	 * realizations. This is the implementation of the Extended type in the CAPSIS platform.
+	 * 
+	 * Another implementation is available through the predictTreeCommercialVolumeDm3(tree, id)
+	 * method. It is specifically designed for FrenchCommercialVolume2014TreeImpl instance and 
+	 * it assumes that the Monte Carlo id of these instances can change. It is thread safe.
+	 * 
 	 * The method returns 0 if the tree is smaller than 7 cm in dbh. It returns -1
 	 * if tree height is not available.
-	 * @param tree a TreeVolumable object
+	 * 
+	 * @param tree a FrenchCommercialVolume2014Tree object
 	 * @return the commercial volume (dm3)
 	 */
 	public double predictTreeCommercialVolumeDm3(FrenchCommercialVolume2014Tree tree) {
@@ -101,6 +111,27 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		return volume;
 	}
 
+	/**
+	 * This method return the over-bark volume estimate for an individual tree. 
+	 * The stochastic implementation is handled through the general constructor.
+	 * 
+	 * 
+	 * It is specifically designed for FrenchCommercialVolume2014TreeImpl instance and 
+	 * it assumes that the Monte Carlo id of these instances can change. It is thread safe.
+	 * 
+	 * The method returns 0 if the tree is smaller than 7 cm in dbh. It returns -1
+	 * if tree height is not available.
+	 * 
+	 * @param tree a FrenchCommercialVolume2014TreeImpl object
+	 * @param id the Monte Carlo id (the realization id)
+	 * @return the commercial volume (dm3)
+	 */
+	public synchronized double predictTreeCommercialVolumeDm3(FrenchCommercialVolume2014TreeImpl tree, int id) {
+		tree.setMonteCarloId(id);
+		return(predictTreeCommercialVolumeDm3(tree));
+	}
+	
+	
 	private synchronized double fixedEffectPrediction(FrenchCommercialVolume2014Tree tree) {
 		oXVector.resetMatrix();
 		Matrix beta = getParametersForThisRealization(tree);
