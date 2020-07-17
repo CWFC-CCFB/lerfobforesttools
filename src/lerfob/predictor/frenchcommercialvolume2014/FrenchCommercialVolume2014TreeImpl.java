@@ -42,7 +42,7 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	 * @param monteCarloId an id for the Monte Carlo run
 	 * @param pred an optional prediction for test purposes.
 	 */
-	protected FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName, int monteCarloId, double pred) {
+	protected FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName, double pred) {
 		this.id = id;
 		this.dbhCm = dbhCm;
 		this.heightM = heightM;
@@ -53,7 +53,6 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 		} catch (Exception e) {
 			throw new InvalidParameterException("The species name " + speciesName + " is invalid. Please see the FrenchCommercialVolume2014TreeSpecies enum variable.");
 		}
-		this.monteCarloId = monteCarloId;
 	}
 
 	/**
@@ -63,8 +62,8 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	 * @param heightM the tree height (m)
 	 * @param speciesName the species name. It should be an enum name among the FrenchCommercialVolume2014TreeSpecies enum variable (e.g. Pinus halepensis).
 	 */
-	public FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName, int monteCarloId) {
-		this(id, dbhCm, heightM, speciesName, monteCarloId, 0d);
+	public FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName) {
+		this(id, dbhCm, heightM, speciesName, 0d);
 	}
 	
 	

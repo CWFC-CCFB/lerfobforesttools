@@ -44,7 +44,7 @@ public class FrenchCommercialVolume2014PredictorTest {
 			speciesName = record[0].toString();
 			pred = Double.parseDouble(record[3].toString());
 			
-			tree = new FrenchCommercialVolume2014TreeImpl(id, dbhCm, heightM, speciesName, 0, pred);
+			tree = new FrenchCommercialVolume2014TreeImpl(id, dbhCm, heightM, speciesName, pred);
 			trees.add(tree);
 			id++;
 		}
