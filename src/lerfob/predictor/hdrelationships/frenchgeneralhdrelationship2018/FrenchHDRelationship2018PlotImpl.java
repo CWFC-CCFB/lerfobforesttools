@@ -31,7 +31,7 @@ import repicea.simulation.hdrelationships.HDRelationshipTree;
  */
 public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship2018Plot {
 
-	private int monteCarloId;
+	private final int monteCarloId;
 	private double mqdCm;
 	private double basalAreaM2Ha;
 	private boolean hasBeenHarvestedInLast5Years;
@@ -104,6 +104,7 @@ public class FrenchHDRelationship2018PlotImpl implements FrenchHDRelationship201
 		this.basalAreaM2Ha = basalAreaM2Ha;
 		this.mqdCm = mqdCm;
 		setDateYr(dateYr);
+		this.monteCarloId = 0;
 	}
 
 	/**
