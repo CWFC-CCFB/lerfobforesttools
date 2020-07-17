@@ -17,7 +17,7 @@ public class WissalTest {
 		private final String originalSpeciesName;
 
 		Tree(int plotID, int treeId, String originalSpeciesName, double dbhCm, double heightM, String speciesName) {
-			super(treeId, dbhCm, heightM, speciesName, 0, 0d);
+			super(treeId, dbhCm, heightM, speciesName, 0d);
 			this.plotID = plotID;
 			this.originalSpeciesName = originalSpeciesName;
 		}
