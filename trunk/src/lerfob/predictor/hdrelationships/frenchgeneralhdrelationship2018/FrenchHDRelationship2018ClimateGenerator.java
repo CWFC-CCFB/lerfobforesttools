@@ -19,6 +19,7 @@
 package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ import repicea.util.ObjectUtility;
  * are calculated over the 1961-1990 period.
  * @author Mathieu Fortin - December 2017
  */
-public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator<GeographicalCoordinatesProvider> {
+public class FrenchHDRelationship2018ClimateGenerator implements REpiceaClimateGenerator<GeographicalCoordinatesProvider>, Serializable {
 
 	private static int MidReferencePeriod = 1975;
 	protected static boolean UseCorrectedYears = true;
