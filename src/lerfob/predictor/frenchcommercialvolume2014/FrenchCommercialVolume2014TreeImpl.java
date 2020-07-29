@@ -39,7 +39,6 @@ public class FrenchCommercialVolume2014TreeImpl implements FrenchCommercialVolum
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param heightM the tree height (m)
 	 * @param speciesName the species name. It should be an enum name among the FrenchCommercialVolume2014TreeSpecies enum variable (e.g. Pinus halepensis).
-	 * @param monteCarloId an id for the Monte Carlo run
 	 * @param pred an optional prediction for test purposes.
 	 */
 	protected FrenchCommercialVolume2014TreeImpl(int id, double dbhCm, double heightM, String speciesName, double pred) {
