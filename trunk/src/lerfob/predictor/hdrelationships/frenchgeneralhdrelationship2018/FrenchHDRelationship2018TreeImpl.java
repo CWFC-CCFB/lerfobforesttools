@@ -21,7 +21,7 @@ package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 import java.util.HashMap;
 import java.util.Map;
 
-import lerfob.predictor.frenchcommercialvolume2014.FrenchCommercialVolume2014Tree;
+import lerfob.predictor.volume.frenchcommercialvolume2014.FrenchCommercialVolume2014Tree;
 import repicea.simulation.HierarchicalLevel;
 
 /**

@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.predictor.frenchcommercialvolume2014;
+package lerfob.predictor.volume.frenchcommercialvolume2014;
 
 import repicea.math.Matrix;
 import repicea.simulation.ParameterLoader;
