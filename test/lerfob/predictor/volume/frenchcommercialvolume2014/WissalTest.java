@@ -1,4 +1,4 @@
-package lerfob.predictor.frenchcommercialvolume2014;
+package lerfob.predictor.volume.frenchcommercialvolume2014;
 
 import java.io.File;
 import java.util.ArrayList;
