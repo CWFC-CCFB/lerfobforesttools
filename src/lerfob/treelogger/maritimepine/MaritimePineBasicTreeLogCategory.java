@@ -90,17 +90,17 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 				break;
 			case IndustryWood:
 				if (energyWoodProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialUnderbarkVolumeM3()));
 				} 
 				break;
 			case SawlogLowQuality:
 				if (lowQualitySawlogProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			case SawlogHighQuality:
 				if (highQualitySawlogProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, highQualitySawlogProportion * tree.getCommercialVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, highQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			}

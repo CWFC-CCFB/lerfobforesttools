@@ -36,7 +36,7 @@ import repicea.util.ObjectUtility;
  * The FrenchCommercialVolume2020Predictor class implements a model of volume for 
  * individual trees. It predicts the commercial volume from the base to a
  * small-end diameter of 7 cm without branches. It refers to "volume bois fort 
- * tige" in French.
+ * tige" in French. It is the OVER bark volume 
  * 
  * <br>
  * <br>
@@ -123,7 +123,7 @@ public final class FrenchCommercialVolume2020Predictor extends REpiceaPredictor 
 	 * @param tree a FrenchCommercialVolume2020Tree object
 	 * @return the commercial volume (dm3)
 	 */
-	public double predictTreeCommercialVolumeDm3(FrenchCommercialVolume2020Tree tree) {
+	public double predictTreeCommercialOverbarkVolumeDm3(FrenchCommercialVolume2020Tree tree) {
 		FrenchCommercialVolume2020InternalPredictor internalPred = internalPredictorMap.get(tree.getFrenchCommercialVolume2020TreeSpecies());
 		return internalPred.predictTreeCommercialVolumeDm3(tree);
 	}
@@ -160,9 +160,9 @@ public final class FrenchCommercialVolume2020Predictor extends REpiceaPredictor 
 	 * @param id the Monte Carlo id (the realization id)
 	 * @return the commercial volume (dm3)
 	 */
-	public synchronized double predictTreeCommercialVolumeDm3(FrenchCommercialVolume2020TreeImpl tree, int id) {
+	public synchronized double predictTreeCommercialOverbarkVolumeDm3(FrenchCommercialVolume2020TreeImpl tree, int id) {
 		tree.setMonteCarloId(id);
-		return(predictTreeCommercialVolumeDm3(tree));
+		return(predictTreeCommercialOverbarkVolumeDm3(tree));
 	}
 	
  

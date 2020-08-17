@@ -18,7 +18,7 @@ public class MathildeTreeLoggerTests {
 		logger.logThisTree(tree);
 		double volume = 0d;
 		for (WoodPiece woodPiece : logger.getWoodPieces().get(tree)) {
-			volume += woodPiece.getWeightedVolumeM3();
+			volume += woodPiece.getWeightedUnderbarkVolumeM3();
 		}
 		Assert.assertEquals("Test volume balance for a large oak", 1d, volume, 1E-8);
 	}

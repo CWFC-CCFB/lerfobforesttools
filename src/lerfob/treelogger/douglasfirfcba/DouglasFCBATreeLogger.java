@@ -57,7 +57,7 @@ public final class DouglasFCBATreeLogger extends TreeLogger<DouglasFCBATreeLogge
 		DouglasFCBAWoodPiece woodPiece;
 		
 		List<DouglasFCBALogCategory> logCategories = params.getLogCategories().get(DouglasFCBALoggableTree.Species.DouglasFir.name());
-		double volumeM3 = tree.getCommercialVolumeM3();
+		double volumeM3 = tree.getCommercialUnderbarkVolumeM3();
 		double proportion;
 		for (DouglasFCBALogCategory logCategory : logCategories) {
 			proportion = logCategory.getGrossProportion(tree);

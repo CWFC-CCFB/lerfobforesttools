@@ -23,7 +23,8 @@ import lerfob.fagacees.FagaceesSpeciesProvider.FgSpecies;
 
 
 /**
- * This method implements the models developed in Vallet et al. to predict the total aboveground over-bark volume.
+ * This method implements the models developed in Vallet et al. to predict the total 
+ * aboveground over-bark volume.
  * @see <a href=https://www.sciencedirect.com/science/article/pii/S0378112706002040> 
  * Vallet, P., Dhote, J.-F., Le Moguedec, G., Ravart, M., Pignard, G. 2006. Development of total aboveground volume equations for seven important forest tree species in France. Forest Ecology Management 229: 98-110.
  * </a> 
@@ -36,9 +37,9 @@ public class ValletTotalAboveGroundVolumeEquations {
 	 * @param dbh the diameter at breast height (cm)
 	 * @param height the height (m)
 	 * @param species a FgSpecies enum variable Oak or Beech
-	 * @return the volume (m3) 
+	 * @return the overbark volume (m3) 
 	 */
-	public double getTotalAboveGroundVolume(double dbh, double height, FgSpecies species) {
+	public double getTotalAboveGroundOverbarkVolume(double dbh, double height, FgSpecies species) {
 		if (species == FgSpecies.OAK) {
 			return getTotalAboveGroundVolumeForOak(dbh, height);
 		} else {

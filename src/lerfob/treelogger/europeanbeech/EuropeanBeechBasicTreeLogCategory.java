@@ -126,27 +126,27 @@ public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCateg
 			switch(grade) {
 			case EnergyWood:
 				if (energyWoodProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialUnderbarkVolumeM3()));
 				} 
 				break;
 			case IndustryWood:
 				if (industryWoodProportion > 0) {
-						pieces.add(new DiameterBasedWoodPiece(this, tree, industryWoodProportion * tree.getCommercialVolumeM3()));
+						pieces.add(new DiameterBasedWoodPiece(this, tree, industryWoodProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			case SawlogLowQuality:
 				if (lowQualitySawlogProportion > 0) {
-						pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialVolumeM3()));
+						pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			case SawlogRegularQuality:
 				if (regularQualitySawlogProportion > 0) {
-						pieces.add(new DiameterBasedWoodPiece(this, tree, regularQualitySawlogProportion * tree.getCommercialVolumeM3()));
+						pieces.add(new DiameterBasedWoodPiece(this, tree, regularQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			case VeneerQuality: 
 				if (veneerProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, veneerProportion * tree.getCommercialVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, veneerProportion * tree.getCommercialUnderbarkVolumeM3()));
 				}
 				break;
 			}

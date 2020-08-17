@@ -18,7 +18,7 @@ public class FrenchCommercialVolume2014PredictorTest {
 		List<FrenchCommercialVolume2014TreeImpl> trees = readTrees();
 		int nbTrees = 0;
 		for (FrenchCommercialVolume2014TreeImpl tree : trees) {
-			double actual = predictor.predictTreeCommercialVolumeDm3(tree);
+			double actual = predictor.predictTreeCommercialOverbarkVolumeDm3(tree);
 			double expected = tree.getPred();
 			Assert.assertEquals("Testing tree " + tree.getSubjectId(), expected, actual, 1E-5);
 			nbTrees++;

@@ -55,7 +55,7 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 	protected void logThisTree(MathildeLoggableTree tree) {
 		MathildeTreeSpecies species = tree.getMathildeTreeSpecies();
 		List<MathildeTreeLogCategory> logCategories = params.getLogCategories().get(species.name());
-		double volume = tree.getCommercialVolumeM3();
+		double volume = tree.getCommercialUnderbarkVolumeM3();
 		MathildeWoodPiece woodPiece;
 		boolean largeLumberProduced = false;
 		for (MathildeTreeLogCategory logCategory : logCategories) {
@@ -66,7 +66,7 @@ public final class MathildeTreeLogger extends TreeLogger<MathildeTreeLoggerParam
 					if (logCategory.getName().equals(Grade.LargeLumberWood.toString())) {
 						largeLumberProduced = true;
 					}
-					volume -= woodPiece.getVolumeM3();
+					volume -= woodPiece.getUnderbarkVolumeM3();
 				}
 			}
 		}

@@ -29,11 +29,10 @@ public class DiameterBasedWoodPiece extends WoodPiece {
 	 * Constructor.
 	 * @param logCategory a MaritimePineBasicTreeLogCategory instance
 	 * @param tree a MaritimePineBasicTree instance
-	 * @param volumeM3 the volume without any expansion factor
+	 * @param volumeForThisWoodPieceM3 the volume without any expansion factor
 	 */
-	public DiameterBasedWoodPiece(DiameterBasedTreeLogCategory logCategory, LoggableTree tree, double volumeM3) {
-		super(logCategory, tree);
-		setVolumeM3(volumeM3);
+	public DiameterBasedWoodPiece(DiameterBasedTreeLogCategory logCategory, LoggableTree tree, double volumeForThisWoodPieceM3) {
+		super(logCategory, tree, false, volumeForThisWoodPieceM3);
 	}
 
 	

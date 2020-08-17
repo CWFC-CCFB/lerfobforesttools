@@ -63,7 +63,7 @@ public class WissalTest {
 			recordIndex = 0;
 			FrenchCommercialVolume2014Predictor predictor = new FrenchCommercialVolume2014Predictor(false);
 			for (Tree t : trees) {
-				t.pred = predictor.predictTreeCommercialVolumeDm3(t) * .001;
+				t.pred = predictor.predictTreeCommercialOverbarkVolumeDm3(t) * .001;
 			}
 			
 			File outputFile = new File(ObjectUtility.getPackagePath(getClass()) + "outputVolume.csv");

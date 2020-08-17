@@ -148,7 +148,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 
 	
 	protected boolean isEligible(LoggableTree tree) {
-		if (tree instanceof DbhCmProvider && tree.getCommercialVolumeM3() > 0d) {
+		if (tree instanceof DbhCmProvider && tree.getCommercialUnderbarkVolumeM3() > 0d) {
 			return ((DbhCmProvider) tree).getDbhCm() >= minimumDbhCm;
 		} else {
 			return false;
@@ -160,7 +160,7 @@ public class DiameterBasedTreeLogCategory extends LogCategory {
 		List<DiameterBasedWoodPiece> pieces = null;
 		if (isEligible(tree)) {
 			pieces = new ArrayList<DiameterBasedWoodPiece>();
-			double potentialVolume = tree.getCommercialVolumeM3();
+			double potentialVolume = tree.getCommercialUnderbarkVolumeM3();
 			if (parms != null && parms[0] instanceof Double) {
 				potentialVolume = (Double) parms[0];
 			}
