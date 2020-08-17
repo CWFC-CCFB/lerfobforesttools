@@ -218,7 +218,7 @@ public class PythonAccessTests {
 		double volume = 0;
 		for (Collection<WoodPiece> woodPieces : manager.getWoodPieces().values()) {
 			for (WoodPiece woodPiece : woodPieces) {
-				volume += woodPiece.getWeightedVolumeM3();
+				volume += woodPiece.getWeightedUnderbarkVolumeM3();
 			}
 		}
 		double biomass = volume * AverageBasicDensity.MaritimePine.getBasicDensity();
@@ -248,7 +248,7 @@ public class PythonAccessTests {
 		double volume = 0;
 		for (Collection<WoodPiece> woodPieces : manager.getWoodPieces().values()) {
 			for (WoodPiece woodPiece : woodPieces) {
-				volume += woodPiece.getWeightedVolumeM3();
+				volume += woodPiece.getWeightedUnderbarkVolumeM3();
 			}
 		}
 		double biomass = volume * AverageBasicDensity.EuropeanBeech.getBasicDensity();

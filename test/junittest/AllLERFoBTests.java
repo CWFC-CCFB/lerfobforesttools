@@ -7,11 +7,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({	junittest.LanguageSettings.class,
-//				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
-//				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,
-//				lerfob.carbonbalancetool.biomassparameters.BiomassParametersTest.class,
-//				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
-//				lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTests.class,
+				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
+				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,
+				lerfob.carbonbalancetool.biomassparameters.BiomassParametersTest.class,
+				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
+				lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTests.class,
 				junittest.windstormdamagemodels.aws.AWSBeechTest.class,	
 				junittest.windstormdamagemodels.aws.AWSTest.class,
 				junittest.windstormdamagemodels.bwd.BWDTest.class,				

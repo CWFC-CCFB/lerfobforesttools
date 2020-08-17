@@ -223,7 +223,7 @@ public class CATProductCompartment extends CATCompartment {
 			double basicDensity = biomassParameters.getBasicWoodDensityFromThisTree((CATCompatibleTree) tree, getCompartmentManager());
 			for (WoodPiece piece : coll) {
 				logCategoryName = piece.getLogCategory().getName();
-				volume = piece.getWeightedVolumeM3();
+				volume = piece.getWeightedUnderbarkVolumeM3();
 //				if (!outputMap.containsKey(logCategoryName)) {
 //					outputMap.put(logCategoryName, new CATSpeciesAmountMap(speciesList));
 //				}

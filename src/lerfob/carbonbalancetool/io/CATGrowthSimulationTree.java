@@ -35,18 +35,18 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 	
 	CATGrowthSimulationTree(CATGrowthSimulationPlot plot, 
 			StatusClass statusClass, 
-			double treeVolumeDm3, 
+			double treeUnderbarkVolumeDm3, 
 			double numberOfTrees, 
 			String originalSpeciesName) {
 		this.plot = plot;
-		commercialVolumeM3 = treeVolumeDm3 * .001;
+		commercialVolumeM3 = treeUnderbarkVolumeDm3 * .001;
 		this.numberOfTrees = numberOfTrees;
 		this.originalSpeciesName = originalSpeciesName;
 		setStatusClass(statusClass);
 	}
 	
 	@Override
-	public double getCommercialVolumeM3() {return commercialVolumeM3;}
+	public double getCommercialUnderbarkVolumeM3() {return commercialVolumeM3;}
 
 	@Override
 	public String getSpeciesName() {return getCATSpecies().toString();}
