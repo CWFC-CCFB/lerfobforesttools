@@ -33,13 +33,13 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	CATYieldTableCompatibleStand stand;
 	
 	
-	CATYieldTableCompatibleTree(double volumeM3, StatusClass statusClass) {
-		this.volumeM3 = volumeM3;
+	CATYieldTableCompatibleTree(double underbarkVolumeM3, StatusClass statusClass) {
+		this.volumeM3 = underbarkVolumeM3;
 		setStatusClass(statusClass);
 	}
 		
 	@Override
-	public double getCommercialVolumeM3() {return volumeM3;}
+	public double getCommercialUnderbarkVolumeM3() {return volumeM3;}
 
 	@Override
 	public String getSpeciesName() {return stand.species.toString();}

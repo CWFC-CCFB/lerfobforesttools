@@ -43,9 +43,9 @@ public class CATYieldTableRecordReader extends REpiceaRecordReader {
 	protected static enum MessageID implements TextableEnum {
 		DateDescription("Stand age (years)","Age du peuplement (ann\u00E9es)"),
 		DateHelp("This field must contains the age of the stand. It is an integer.", "Ce champ doit contenir l'\u00E2ge du peuplement. Il s'agit d'un entier."),
-		StandingVolumeDescription("Standing volume (m3/ha)", "Volume sur pied (m3/ha)"),
+		StandingVolumeDescription("Standing underbark volume (m3/ha)", "Volume sur pied sous \u00E9corce (m3/ha)"),
 		StandingVolumeHelp("This field contains the standing commercial volume (m3/ha). It is a double.", "Ce champ contient le volume commercial sur pied (m3/ha). Il s'agit d'un double."),
-		HarvestedVolumeDescription("Harvested volume (m3/ha)", "Volume r\u00E9colt\u00E9 (m3/ha)"),
+		HarvestedVolumeDescription("Harvested underbark volume (m3/ha)", "Volume r\u00E9colt\u00E9 (m3/ha) sous \u00E9corce"),
 		HarvestedVolumeHelp("This field contains the harvested commercial volume (m3/ha). It is a double.", "Ce champ contient le volume commercial r\u00E9colt\u00E9 (m3/ha). Il s'agit d'un double.");
 		
 		MessageID(String englishText, String frenchText) {

@@ -422,7 +422,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (branchExpansionFactorFromModel) {
 			value = ((CATAboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber() * tree.getPlotWeight();
 		} else {
-			value = getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getCATSpecies().getSpeciesType());
+			value = getCommercialUnderbarkVolumeM3(tree) * branchExpansionFactors.get(tree.getCATSpecies().getSpeciesType());
 		}
 		if (subject != null) {
 			String subjectId = getSubjectId(VariabilitySource.BiomassExpansionFactor, tree);
@@ -464,8 +464,8 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	private double getCommercialVolumeM3(CATCompatibleTree tree) {
-		return tree.getCommercialVolumeM3() * tree.getNumber() * tree.getPlotWeight();
+	private double getCommercialUnderbarkVolumeM3(CATCompatibleTree tree) {
+		return tree.getCommercialUnderbarkVolumeM3() * tree.getNumber() * tree.getPlotWeight();
 	}
 	
 
@@ -475,7 +475,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @return a double
 	 */
 	private double getCommercialBiomassMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		return getCommercialVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
+		return getCommercialUnderbarkVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
 	}
 
 	/**
@@ -569,7 +569,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		double commercialVolumeM3 = 0d;
 		if (trees != null) {
 			for (CATCompatibleTree tree : trees) {
-				commercialVolumeM3 += getCommercialVolumeM3(tree);
+				commercialVolumeM3 += getCommercialUnderbarkVolumeM3(tree);
 			}
 		}
 		return commercialVolumeM3;
