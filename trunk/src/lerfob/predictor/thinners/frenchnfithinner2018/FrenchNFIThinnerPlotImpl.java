@@ -106,7 +106,7 @@ public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	}
 
 	@Override
-	public Map<FrenchNFIThinnerSpecies, Double> getVolumeM3BySpecies() {
+	public Map<FrenchNFIThinnerSpecies, Double> getOverbarkVolumeM3BySpecies() {
 		return volumeMap;
 	}
 
