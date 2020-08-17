@@ -6,7 +6,7 @@ class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 
 
 	@Override
-	public double getCommercialVolumeM3() {
+	public double getCommercialUnderbarkVolumeM3() {
 		return 1;
 	}
 

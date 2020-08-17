@@ -23,9 +23,8 @@ import repicea.simulation.treelogger.WoodPiece;
 @SuppressWarnings("serial")
 class DouglasFCBAWoodPiece extends WoodPiece {
 
-	protected DouglasFCBAWoodPiece(DouglasFCBALogCategory logCategory, DouglasFCBALoggableTree tree, double volumeM3) {
-		super(logCategory, tree);
-		setVolumeM3(volumeM3);
+	protected DouglasFCBAWoodPiece(DouglasFCBALogCategory logCategory, DouglasFCBALoggableTree tree, double volumeForThisWoodPieceM3) {
+		super(logCategory, tree, false, volumeForThisWoodPieceM3);
 	}
 
 }

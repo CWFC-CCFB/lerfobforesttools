@@ -25,7 +25,7 @@ public class DouglasFCBATreeLoggerTests {
 			logger.run();
 			double volume = 0d;
 			for (WoodPiece woodPiece : logger.getWoodPieces().get(trees.get(0))) {
-				volume += woodPiece.getWeightedVolumeM3();
+				volume += woodPiece.getWeightedUnderbarkVolumeM3();
 			}
 			Assert.assertEquals("Test volume balance for a collection of douglas trees", 1d, volume, 1E-8);
 		}

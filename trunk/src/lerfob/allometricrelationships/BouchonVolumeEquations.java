@@ -31,7 +31,8 @@ import lerfob.fagacees.FagaceesSpeciesProvider.FgSpecies;
 public class BouchonVolumeEquations {
 	
 	/**
-	 * Calculates the commercial wood volume for the stem and the branches, using a small end minimum diameter of 7cm.
+	 * Calculates the commercial wood volume for the stem and the branches, using a 
+	 * small-end minimum diameter of 7cm.
 	 * @see Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.
 	 * @param dbh the diameter at breast height (cm)
 	 * @param height the height (m)
@@ -87,7 +88,7 @@ public class BouchonVolumeEquations {
 				// volume for c130 > 120 cm
 				if (c130 > 120.) {	// d130 > 38.2
 					ValletTotalAboveGroundVolumeEquations vtagve = new ValletTotalAboveGroundVolumeEquations();
-					double volTotal = vtagve.getTotalAboveGroundVolume(dbh, height, FgSpecies.OAK);
+					double volTotal = vtagve.getTotalAboveGroundOverbarkVolume(dbh, height, FgSpecies.OAK);
 					volume = Math.min (volTotal * .95, volume);
 				}
 			}
@@ -134,8 +135,8 @@ public class BouchonVolumeEquations {
 	
 	
 	/**
-	 * Calculates the over-bark wood volume for STEM ONLY, using a small end minimum diameter of 7 cm 
-	 * using Bouchon Volume Tables (Bouchon 1982 for beech, Bouchon 1974 for oak)
+	 * Calculates the over-bark wood volume for STEM ONLY, using a small end minimum 
+	 * diameter of 7 cm using Bouchon Volume Tables (Bouchon 1982 for beech, Bouchon 1974 for oak)
 	 * @see Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.
 	 * @param dbh the diameter at breast height (cm)
 	 * @param height the height (m)

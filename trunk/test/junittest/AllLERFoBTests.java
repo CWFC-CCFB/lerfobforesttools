@@ -7,9 +7,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({	junittest.LanguageSettings.class,
-				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
-				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,
-				lerfob.carbonbalancetool.biomassparameters.BiomassParametersTest.class,
+//				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
+//				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,
+//				lerfob.carbonbalancetool.biomassparameters.BiomassParametersTest.class,
+//				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
+//				lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTests.class,
 				junittest.windstormdamagemodels.aws.AWSBeechTest.class,	
 				junittest.windstormdamagemodels.aws.AWSTest.class,
 				junittest.windstormdamagemodels.bwd.BWDTest.class,				
@@ -24,12 +26,11 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.volume.frenchcommercialvolume2020.FrenchCommercialVolume2020PredictorTest.class,
 				lerfob.treelogger.mathilde.MathildeTreeLoggerTests.class,
 				lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerTests.class,
-				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
 				lerfob.predictor.dopalep.DopalepDbhIncPredictorTest.class,
 				lerfob.predictor.mathilde.recruitment.MathildeRecruitmentTest.class,
 				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTests.class,
 				lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerTests.class,
 				lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTests.class,
 				lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLoggerTests.class,
-				lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTests.class})
+				})
 public class AllLERFoBTests {}
