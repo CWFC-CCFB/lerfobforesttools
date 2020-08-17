@@ -64,7 +64,7 @@ public interface FrenchNFIThinnerPlot extends FrenchRegion2016Provider,
 	 * to identify the target species.
 	 * @return a Map instance
 	 */
-	public Map<FrenchNFIThinnerSpecies, Double> getVolumeM3BySpecies();
+	public Map<FrenchNFIThinnerSpecies, Double> getOverbarkVolumeM3BySpecies();
 	
 	
 	
