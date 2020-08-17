@@ -39,16 +39,16 @@ public class BouchonVolumeEquations {
 	 * @param species a Species enum variable Oak or Beech
 	 * @return the volume (m3) 
 	 */
-	public double getStemAndBranchesMerchantableVolume(double dbh, double height, FgSpecies species) {
+	public double getStemAndBranchesCommercialOverbarkVolume(double dbh, double height, FgSpecies species) {
 		if (species.equals(FgSpecies.OAK)) {
-			return getStemAndBranchesMerchantableVolumeForOak(dbh, height);
+			return getStemAndBranchesCommercialOverbarkVolumeForOak(dbh, height);
 		} else {
-			return getStemAndBranchesMerchantableVolumeForBeech(dbh, height);
+			return getStemAndBranchesCommercialOverbarkVolumeForBeech(dbh, height);
 		} 
 	}
 
 	
-	private double getStemAndBranchesMerchantableVolumeForOak(double dbh, double height) {
+	private double getStemAndBranchesCommercialOverbarkVolumeForOak(double dbh, double height) {
 		double c130 = dbh * Math.PI;
 		double hauteur = height;
 
@@ -101,7 +101,7 @@ public class BouchonVolumeEquations {
 
 	
 	// TODO check where do these four parameters come from
-	private double getStemAndBranchesMerchantableVolumeForBeech(double dbh, double height) {
+	private double getStemAndBranchesCommercialOverbarkVolumeForBeech(double dbh, double height) {
 		// 2 -> Jean Bouchon's volume tables for "Bois Fort" (Stem + branches) FOR BEECH
 
 		double a22 = 0.444907; 		// formerly BOIS_FORT_BOUCHON_BEECH_A22;
@@ -143,17 +143,17 @@ public class BouchonVolumeEquations {
 	 * @param species a FgSpecies enum variable Oak or Beech
 	 * @return the volume (m3) 
 	 */
-	public double getStemMerchantableVolume(double dbh, double height, FgSpecies species) {
+	public double getStemCommercialOverbarkVolume(double dbh, double height, FgSpecies species) {
 		if (species == FgSpecies.OAK) {
-			return getStemMerchantableVolumeForOak(dbh, height);
+			return getStemCommercialOverbarkVolumeForOak(dbh, height);
 		} else {
-			return getStemMerchantableVolumeForBeech(dbh, height);
+			return getStemCommercialOverbarkVolumeForBeech(dbh, height);
 		} 
 	}
 
 
 	
-	private double getStemMerchantableVolumeForBeech(double dbh, double height) {
+	private double getStemCommercialOverbarkVolumeForBeech(double dbh, double height) {
 		// 1b -> Jean Bouchon's volume tables for "Bois Fort" stem only FOR OAK
 		// from J.Bouchon, 1974 Les tarifs de cubage. INRA et ENGREF, Nancy(France), 57p + ann
 		// (Annexe E : Tarifs de cubage a deux entrees pour le chene de futaie Ligerien)
@@ -188,7 +188,7 @@ public class BouchonVolumeEquations {
 	}
 	
 	
-	private double getStemMerchantableVolumeForOak(double dbh, double height) {
+	private double getStemCommercialOverbarkVolumeForOak(double dbh, double height) {
 		
 		double stemVolume= 0.;
 		double c130 = dbh * Math.PI;
@@ -211,7 +211,7 @@ public class BouchonVolumeEquations {
 					+ f18 * c130 * c130 * hauteur) / 1000d;
 			// PV suggestion15.01.2010:
 			// (the model overestimates volume for young trees without BF in branches)
-			stemVolume = Math.min (stemVolume, getStemAndBranchesMerchantableVolume(dbh, height, FgSpecies.OAK));
+			stemVolume = Math.min (stemVolume, getStemAndBranchesCommercialOverbarkVolume(dbh, height, FgSpecies.OAK));
 			stemVolume = Math.max (0., stemVolume);
 		}
 		
@@ -221,7 +221,7 @@ public class BouchonVolumeEquations {
 	
 	public static void main(String[] args) {
 		BouchonVolumeEquations bve = new BouchonVolumeEquations();
-		double volume = bve.getStemMerchantableVolume(50, 30, FgSpecies.OAK);
+		double volume = bve.getStemCommercialOverbarkVolume(50, 30, FgSpecies.OAK);
 		System.out.println(volume);
 	}
 	
