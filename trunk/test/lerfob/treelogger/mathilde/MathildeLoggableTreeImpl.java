@@ -1,12 +1,12 @@
 package lerfob.treelogger.mathilde;
 
-import lerfob.treelogger.mathilde.MathildeLoggableTree;
+import repicea.simulation.species.REpiceaSpecies;
 
 class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 
 
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {
+	public double getCommercialVolumeM3() {
 		return 1;
 	}
 
@@ -23,6 +23,11 @@ class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 	@Override
 	public double getDbhCm() {
 		return 50d;
+	}
+
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		return REpiceaSpecies.Species.Quercus_spp.getBarkProportionOfWoodVolume();
 	}
 
 }

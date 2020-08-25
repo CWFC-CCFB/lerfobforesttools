@@ -41,7 +41,7 @@ public class EuropeanBeechTree implements EuropeanBeechBasicTree {
 	}
 */
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {
+	public double getCommercialVolumeM3() {
 		return 1;
 	}
 
@@ -58,6 +58,11 @@ public class EuropeanBeechTree implements EuropeanBeechBasicTree {
 	@Override
 	public double getDbhCmStandardDeviation() {
 		return standardDeviationCm;
+	}
+
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		return REpiceaSpecies.Species.Fagus_sylvatica.getBarkProportionOfWoodVolume();
 	}
 
 }

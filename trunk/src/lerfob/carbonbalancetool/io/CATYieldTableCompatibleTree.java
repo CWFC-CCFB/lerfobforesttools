@@ -39,7 +39,7 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 	}
 		
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {return volumeM3;}
+	public double getCommercialVolumeM3() {return volumeM3;}
 
 	@Override
 	public String getSpeciesName() {return stand.species.toString();}
@@ -63,5 +63,10 @@ class CATYieldTableCompatibleTree implements CATCompatibleTree {
 
 	@Override
 	public CATSpecies getCATSpecies() {return stand.species;}
+
+	@Override
+	public boolean isCommercialVolumeOverbark() {
+		return true;
+	}
 
 }

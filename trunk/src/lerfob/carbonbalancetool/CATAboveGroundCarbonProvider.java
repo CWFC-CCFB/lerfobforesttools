@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATAboveGroundCarbonProvider {
 
 	/**
-	 * This method returns the aboveground carbon of the instance in Mg WITHOUT expansion factor.
+	 * This method returns the aboveground carbon (Mg), INCLUDING bark and WITHOUT expansion factor.
 	 * @return a double
 	 */
 	public double getAboveGroundCarbonMg();

@@ -22,6 +22,12 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
-public interface MathildeLoggableTree extends LoggableTree, MathildeTreeSpeciesProvider, DbhCmProvider {
+public interface MathildeLoggableTree extends LoggableTree, 
+												MathildeTreeSpeciesProvider, 
+												DbhCmProvider {
+
+	@Override
+	public default boolean isCommercialVolumeOverbark() {return true;}
 
 }
+

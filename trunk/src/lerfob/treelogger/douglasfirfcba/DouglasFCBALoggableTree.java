@@ -23,7 +23,8 @@ import repicea.simulation.treelogger.LoggableTree;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
-public interface DouglasFCBALoggableTree extends LoggableTree, DbhCmProvider {
+public interface DouglasFCBALoggableTree extends LoggableTree, 
+												DbhCmProvider {
 
 	public static enum Species implements TextableEnum {
 		DouglasFir("Douglas fir", "Douglas");
@@ -40,5 +41,9 @@ public interface DouglasFCBALoggableTree extends LoggableTree, DbhCmProvider {
 		@Override
 		public String toString() {return REpiceaTranslator.getString(this);}
 	}
+	
+	@Override
+	public default boolean isCommercialVolumeOverbark() {return true;}
+
 
 }

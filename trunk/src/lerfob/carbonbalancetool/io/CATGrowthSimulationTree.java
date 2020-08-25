@@ -46,7 +46,7 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 	}
 	
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {return commercialVolumeM3;}
+	public double getCommercialVolumeM3() {return commercialVolumeM3;}
 
 	@Override
 	public String getSpeciesName() {return getCATSpecies().toString();}
@@ -65,5 +65,10 @@ class CATGrowthSimulationTree implements CATCompatibleTree {
 
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
+
+	@Override
+	public boolean isCommercialVolumeOverbark() {
+		return true;
+	}
 
 }

@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATAboveGroundBiomassProvider {
 
 	/**
-	 * This method returns the total above ground biomass in Mg WITHOUT expansion factor.
+	 * This method returns the total above ground biomass (Mg), INCLUDING bark and WITHOUT expansion factor.
 	 * @return a double
 	 */
 	public double getAboveGroundBiomassMg();

@@ -43,4 +43,11 @@ class PythonDouglasFirTree extends PythonCarbonToolCompatibleTree implements Dou
 	}
 
 
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

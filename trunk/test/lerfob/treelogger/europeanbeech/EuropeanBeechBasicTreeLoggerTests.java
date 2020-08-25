@@ -40,7 +40,7 @@ public class EuropeanBeechBasicTreeLoggerTests {
 		treeLogger.run();
 		double sum = 0;
 		for (WoodPiece piece : treeLogger.getWoodPieces().get(tree)) {
-			double volumeM3 = piece.getUnderbarkVolumeM3();
+			double volumeM3 = piece.getTotalVolumeM3();
 			sum += volumeM3;
 		}
 		Assert.assertEquals("Comparing bole volume", 1d, sum, 1E-8); 

@@ -32,7 +32,7 @@ public class DiameterBasedTreeLoggerTests {
 			if (!obsMap.containsKey(logCatName)) {
 				obsMap.put(logCatName, 0d);
 			}
-			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedUnderbarkVolumeM3());
+			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedTotalVolumeM3());
 		}
 		
 		double volume = 0d;
@@ -74,7 +74,7 @@ public class DiameterBasedTreeLoggerTests {
 			if (!obsMap.containsKey(logCatName)) {
 				obsMap.put(logCatName, 0d);
 			}
-			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedUnderbarkVolumeM3());
+			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedTotalVolumeM3());
 		}
 		
 		double volume = 0d;
@@ -115,7 +115,7 @@ public class DiameterBasedTreeLoggerTests {
 			if (!obsMap.containsKey(logCatName)) {
 				obsMap.put(logCatName, 0d);
 			}
-			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedUnderbarkVolumeM3());
+			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedTotalVolumeM3());
 		}
 		
 		double volume = 0d;
@@ -165,7 +165,7 @@ public class DiameterBasedTreeLoggerTests {
 			if (!obsMap.containsKey(logCatName)) {
 				obsMap.put(logCatName, 0d);
 			}
-			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedUnderbarkVolumeM3());
+			obsMap.put(logCatName, obsMap.get(logCatName) + wp.getWeightedTotalVolumeM3());
 		}
 		
 		double volume = 0d;

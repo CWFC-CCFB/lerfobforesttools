@@ -33,7 +33,7 @@ public class ComparisonWithMathildeTests {
 		}
 		
 		@Override
-		public double getCommercialUnderbarkVolumeM3() {return 1d;}
+		public double getCommercialVolumeM3() {return 1d;}
 
 		@Override
 		public String getSpeciesName() {return species.toString();}
@@ -200,7 +200,7 @@ public class ComparisonWithMathildeTests {
 	
 	private double findValueInMap(Map<String, WoodPiece> oMap, String key) {
 		if (oMap.containsKey(key)) {
-			return oMap.get(key).getWeightedUnderbarkVolumeM3();
+			return oMap.get(key).getWeightedTotalVolumeM3();
 		} else {
 			return -1;
 		}

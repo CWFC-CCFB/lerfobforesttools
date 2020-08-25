@@ -29,19 +29,16 @@ import repicea.simulation.treelogger.LoggableTree;
  */
 public interface CATCompatibleTree extends LoggableTree, TreeStatusProvider {
 
-
-	
-//	/**
-//	 * This method returns the species type, either coniferous or broadleaved.
-//	 * @return a SpeciesType Enum
-//	 */
-//	public SpeciesType getSpeciesType();
 	
 	/**
 	 * This method returns the species of the tree.
 	 * @return a CATSpecies instance
 	 */
 	public CATSpecies getCATSpecies();
-	
+
+	@Override
+	public default double getBarkProportionOfWoodVolume() {
+		return getCATSpecies().getBarkProportionOfWoodVolume();
+	}
 	
 }

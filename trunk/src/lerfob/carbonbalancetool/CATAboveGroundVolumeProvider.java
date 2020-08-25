@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATAboveGroundVolumeProvider {
 
 	/**
-	 * This method returns the total above ground volume in m3 for a single tree, ie. WITHOUT any expansion factor.
+	 * This method returns the total above ground volume (m3) , INCLUDING bark and WITHOUT any expansion factor.
 	 * @return a double
 	 */
 	public double getAboveGroundVolumeM3();
