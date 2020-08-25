@@ -27,7 +27,7 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 	public double getNumber() {return number;}
 
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {return volM3;}
+	public double getCommercialVolumeM3() {return volM3;}
 
 	@Override
 	public String getSpeciesName() {return speciesName;}
@@ -46,6 +46,11 @@ class CarbonToolCompatibleTreeImpl implements CATCompatibleTree, Cloneable {
 	@Override
 	public CATSpecies getCATSpecies() {
 		return species;
+	}
+
+	@Override
+	public boolean isCommercialVolumeOverbark() {
+		return true;
 	}
 
 }

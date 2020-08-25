@@ -27,7 +27,9 @@ import repicea.simulation.treelogger.LoggableTree;
  * the MaritimePineBasicTreeLogger.
  * @author Mathieu Fortin - November 2014
  */
-public interface MaritimePineBasicLoggableTree extends LoggableTree, DbhCmProvider, DbhCmStandardDeviationProvider {
+public interface MaritimePineBasicLoggableTree extends LoggableTree, 
+													DbhCmProvider, 
+													DbhCmStandardDeviationProvider {
 
 	
 	/**
@@ -43,4 +45,8 @@ public interface MaritimePineBasicLoggableTree extends LoggableTree, DbhCmProvid
 	 * @return a double
 	 */
 	public double getHarvestedCrownVolumeM3();
+	
+	@Override
+	public default boolean isCommercialVolumeOverbark() {return true;}
+
 }

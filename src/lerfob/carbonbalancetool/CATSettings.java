@@ -32,16 +32,19 @@ import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.woodpiecedispatcher.WoodPieceDispatcher;
+import lerfob.treelogger.basictreelogger.BasicTreeLogger;
+import lerfob.treelogger.basictreelogger.BasicTreeLoggerParameters;
 import repicea.app.SettingMemory;
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
 import repicea.simulation.Parameterizable;
+import repicea.simulation.covariateproviders.treelevel.BarkProportionProvider;
+import repicea.simulation.covariateproviders.treelevel.BasicWoodDensityProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
+import repicea.simulation.species.REpiceaSpecies;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.simulation.treelogger.TreeLoggerWrapper;
-import lerfob.treelogger.basictreelogger.BasicTreeLogger;
-import lerfob.treelogger.basictreelogger.BasicTreeLoggerParameters;
 import repicea.util.ExtendedFileFilter;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -55,58 +58,142 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("deprecation")
 public final class CATSettings {
 
-	public static enum CATSpecies implements TextableEnum, CATBasicWoodDensityProvider, SpeciesTypeProvider {
+//	/**
+//	 * The enum representing the species. The proportion of bark volume was taken from 
+//	 * Miles, P.D. and W.B. Smith. 2009. Specific gravity and other properties of wood
+//	 * and bark for 156 tree species found in North America. USDA Forest Service,
+//	 * Northern Research Station. Research Note NRS-38.
+//	 * @author Mathieu Fortin - August 2020
+//	 *
+//	 */
+//	public static enum CATSpecies implements TextableEnum, 
+//											CATBasicWoodDensityProvider, 
+//											SpeciesTypeProvider	{
+//		
+//		ABIES(SpeciesType.ConiferousSpecies, 0.40, 0.118, "Abies spp."),
+//		ACER(SpeciesType.BroadleavedSpecies, 0.52, 0.109, "Acer spp."),
+//		ALNUS(SpeciesType.BroadleavedSpecies, 0.45, 0.115, "Alnus spp."),
+//		BETULA(SpeciesType.BroadleavedSpecies, 0.51, 0.110, "Betula spp."),
+//		CARPINUS_BETULUS(SpeciesType.BroadleavedSpecies, 0.63, 0.086, "Carpinus betulus"), // this one is from IPCC guidelines 2003
+//		CASTANEA_SATIVA(SpeciesType.BroadleavedSpecies, 0.48, 0.150, "Castanea sativa"),	// this one is from IPCC guidelines 2003
+//		FAGUS_SYLVATICA(SpeciesType.BroadleavedSpecies, 0.58, 0.060, "Fagus sylvatica"),
+//		FRAXINUS(SpeciesType.BroadleavedSpecies, 0.57, 0.160, "Fraxinus spp."),
+//		JUGLANS(SpeciesType.BroadleavedSpecies, 0.53, 0.150, "Juglans spp."),	// this one is from IPCC guidelines 2003
+//		LARIX_DECIDUA(SpeciesType.ConiferousSpecies, 0.46, 0.140, "Larix decidua"),
+//		PICEA_ABIES(SpeciesType.ConiferousSpecies, 0.40, 0.126, "Picea abies"),
+//		PICEA_SITCHENSIS(SpeciesType.ConiferousSpecies, 0.40, 0.126, "Picea sitchensis"),
+//		PINUS_PINASTER(SpeciesType.ConiferousSpecies, 0.44, 0.160, "Pinus pinaster"),
+//		PINUS_RADIATA(SpeciesType.ConiferousSpecies, 0.38, 0.134, "Pinus radiata"),
+//		PINUS_STROBUS(SpeciesType.ConiferousSpecies, 0.32, 0.160, "Pinus strobus"),
+//		PINUS_SYLVESTRIS(SpeciesType.ConiferousSpecies, 0.42, 0.160, "Pinus sylvestris"),
+//		POPULUS(SpeciesType.BroadleavedSpecies, 0.35, 0.184, "Populus spp."),
+//		PRUNUS(SpeciesType.ConiferousSpecies, 0.49, 0.092, "Prunus spp."),
+//		PSEUDOTSUGA_MENZIESII(SpeciesType.ConiferousSpecies, 0.45, 0.173, "Pseudotsuga menziesii"),
+//		QUERCUS(SpeciesType.BroadleavedSpecies, 0.58, 0.191, "Quercus spp."),
+//		SALIX(SpeciesType.BroadleavedSpecies, 0.45, 0.160, "Salix spp."),
+//		THUJA_PLICATA(SpeciesType.ConiferousSpecies, 0.31, 0.106, "Thuja plicata"), // this one is from IPCC guidelines 2003
+//		TILIA(SpeciesType.BroadleavedSpecies, 0.43, 0.105, "Tilia spp."),
+//		TSUGA(SpeciesType.ConiferousSpecies, 0.42, 0.162, "Tsuga spp.") // this one is from IPCC guidelines 2003
+//		;
+//
+//		final SpeciesType speciesType;
+//		final double basicWoodDensity;
+//		final double barkProportionOfWoodVolume;
+//		
+//		CATSpecies(SpeciesType speciesType, double basicWoodDensity, double barkProportionOfWoodVolume, String latinName) {
+//			this.speciesType = speciesType;
+//			this.basicWoodDensity = basicWoodDensity;
+//			this.barkProportionOfWoodVolume = barkProportionOfWoodVolume;
+//			setText(latinName, latinName);
+//		};
+//
+//		@Override
+//		public void setText(String englishText, String frenchText) {
+//			REpiceaTranslator.setString(this, englishText, frenchText);
+//		}
+//		
+//		
+//		
+//		@Override
+//		public String toString() {return REpiceaTranslator.getString(this);}
+//
+//		@Override
+//		public double getBasicWoodDensity() {return basicWoodDensity;}
+//		
+//		@Override
+//		public SpeciesType getSpeciesType() {return speciesType;}
+//		
+//		/**
+//		 * This method returns the CATSpecies defined by the speciesName parameter.
+//		 * @param speciesName a String
+//		 * @return a CATSpecies instance
+//		 */
+//		public static CATSpecies getCATSpeciesFromThisString(String speciesName) {
+//			String sp = speciesName.trim().replace(" ", "_").toUpperCase();
+//			return CATSpecies.valueOf(sp);
+//		}
+//
+//		@Override
+//		public double getBarkVolumeM3(double woodVolumeM3, Object parm) {
+//			return woodVolumeM3 * barkProportionOfWoodVolume;
+//		}
+//		
+//	}
+	
+	
+	/**
+	 * The enum representing the species. The proportion of bark volume was taken from 
+	 * Miles, P.D. and W.B. Smith. 2009. Specific gravity and other properties of wood
+	 * and bark for 156 tree species found in North America. USDA Forest Service,
+	 * Northern Research Station. Research Note NRS-38.
+	 * @author Mathieu Fortin - August 2020
+	 *
+	 */
+	public static enum CATSpecies implements BasicWoodDensityProvider, 
+											SpeciesTypeProvider,
+											BarkProportionProvider {
 		
-		ABIES(SpeciesType.ConiferousSpecies, 0.40, "Abies spp."),
-		ACER(SpeciesType.BroadleavedSpecies, 0.52, "Acer spp."),
-		ALNUS(SpeciesType.BroadleavedSpecies, 0.45, "Alnus spp."),
-		BETULA(SpeciesType.BroadleavedSpecies, 0.51, "Betula spp."),
-		CARPINUS_BETULUS(SpeciesType.BroadleavedSpecies, 0.63, "Carpinus betulus"), // this one is from IPCC guidelines 2003
-		CASTANEA_SATIVA(SpeciesType.BroadleavedSpecies, 0.48, "Castanea sativa"),	// this one is from IPCC guidelines 2003
-		FAGUS_SYLVATICA(SpeciesType.BroadleavedSpecies, 0.58, "Fagus sylvatica"),
-		FRAXINUS(SpeciesType.BroadleavedSpecies, 0.57, "Fraxinus spp."),
-		JUGLANS(SpeciesType.BroadleavedSpecies, 0.53, "Juglans spp."),	// this one is from IPCC guidelines 2003
-		LARIX_DECIDUA(SpeciesType.ConiferousSpecies, 0.46, "Larix decidua"),
-		PICEA_ABIES(SpeciesType.ConiferousSpecies, 0.40, "Picea abies"),
-		PICEA_SITCHENSIS(SpeciesType.ConiferousSpecies, 0.40, "Picea sitchensis"),
-		PINUS_PINASTER(SpeciesType.ConiferousSpecies, 0.44, "Pinus pinaster"),
-		PINUS_RADIATA(SpeciesType.ConiferousSpecies, 0.38, "Pinus radiata"),
-		PINUS_STROBUS(SpeciesType.ConiferousSpecies, 0.32, "Pinus strobus"),
-		PINUS_SYLVESTRIS(SpeciesType.ConiferousSpecies, 0.42, "Pinus sylvestris"),
-		POPULUS(SpeciesType.BroadleavedSpecies, 0.35, "Populus spp."),
-		PRUNUS(SpeciesType.ConiferousSpecies, 0.49, "Prunus spp."),
-		PSEUDOTSUGA_MENZIESII(SpeciesType.ConiferousSpecies, 0.45, "Pseudotsuga menziesii"),
-		QUERCUS(SpeciesType.BroadleavedSpecies, 0.58, "Quercus spp."),
-		SALIX(SpeciesType.BroadleavedSpecies, 0.45, "Salix spp."),
-		THUJA_PLICATA(SpeciesType.ConiferousSpecies, 0.31, "Thuja plicata"), // this one is from IPCC guidelines 2003
-		TILIA(SpeciesType.BroadleavedSpecies, 0.43, "Tilia spp."),
-		TSUGA(SpeciesType.ConiferousSpecies, 0.42, "Tsuga spp.") // this one is from IPCC guidelines 2003
+		ABIES(REpiceaSpecies.Species.Abies_spp),
+		ACER(REpiceaSpecies.Species.Acer_spp),
+		ALNUS(REpiceaSpecies.Species.Alnus_spp),
+		BETULA(REpiceaSpecies.Species.Betula_spp),
+		CARPINUS_BETULUS(REpiceaSpecies.Species.Carpinus_betulus), // this one is from IPCC guidelines 2003
+		CASTANEA_SATIVA(REpiceaSpecies.Species.Castanea_sativa),	// this one is from IPCC guidelines 2003
+		FAGUS_SYLVATICA(REpiceaSpecies.Species.Fagus_sylvatica),
+		FRAXINUS(REpiceaSpecies.Species.Fraxinus_spp),
+		JUGLANS(REpiceaSpecies.Species.Juglans_spp),	// this one is from IPCC guidelines 2003
+		LARIX_DECIDUA(REpiceaSpecies.Species.Larix_decidua),
+		PICEA_ABIES(REpiceaSpecies.Species.Picea_abies),
+		PICEA_SITCHENSIS(REpiceaSpecies.Species.Picea_sitchensis),
+		PINUS_PINASTER(REpiceaSpecies.Species.Pinus_pinaster),
+		PINUS_RADIATA(REpiceaSpecies.Species.Pinus_radiata),
+		PINUS_STROBUS(REpiceaSpecies.Species.Pinus_strobus),
+		PINUS_SYLVESTRIS(REpiceaSpecies.Species.Pinus_sylvestris),
+		POPULUS(REpiceaSpecies.Species.Populus_spp),
+		PRUNUS(REpiceaSpecies.Species.Prunus_spp),
+		PSEUDOTSUGA_MENZIESII(REpiceaSpecies.Species.Pseudotsuga_menziesii),
+		QUERCUS(REpiceaSpecies.Species.Quercus_spp),
+		SALIX(REpiceaSpecies.Species.Salix_spp),
+		THUJA_PLICATA(REpiceaSpecies.Species.Thuja_plicata), // this one is from IPCC guidelines 2003
+		TILIA(REpiceaSpecies.Species.Tilia_spp),
+		TSUGA(REpiceaSpecies.Species.Tsuga_spp) // this one is from IPCC guidelines 2003
 		;
 
-		final SpeciesType speciesType;
-		final double basicWoodDensity;
+		final REpiceaSpecies.Species species;
 		
-		CATSpecies(SpeciesType speciesType, double basicWoodDensity, String latinName) {
-			this.speciesType = speciesType;
-			this.basicWoodDensity = basicWoodDensity;
-			setText(latinName, latinName);
+		CATSpecies(REpiceaSpecies.Species species) {
+			this.species = species;
 		};
 
-		@Override
-		public void setText(String englishText, String frenchText) {
-			REpiceaTranslator.setString(this, englishText, frenchText);
-		}
-		
-		
 		
 		@Override
-		public String toString() {return REpiceaTranslator.getString(this);}
+		public String toString() {return REpiceaTranslator.getString(species);}
 
 		@Override
-		public double getBasicWoodDensity() {return basicWoodDensity;}
+		public double getBasicWoodDensity() {return species.getBasicWoodDensity();}
 		
 		@Override
-		public SpeciesType getSpeciesType() {return speciesType;}
+		public SpeciesType getSpeciesType() {return species.getSpeciesType();}
 		
 		/**
 		 * This method returns the CATSpecies defined by the speciesName parameter.
@@ -117,7 +204,14 @@ public final class CATSettings {
 			String sp = speciesName.trim().replace(" ", "_").toUpperCase();
 			return CATSpecies.valueOf(sp);
 		}
+
+		@Override
+		public double getBarkProportionOfWoodVolume() {
+			return species.getBarkProportionOfWoodVolume();
+		}
+		
 	}
+
 	
 	public static enum AssessmentReport implements TextableEnum {
 		Second("Second Assessment Report", "Deuxi\u00E8me rapport d'\u00E9valuation"),

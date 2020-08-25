@@ -79,28 +79,28 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 			case Stump:
 				double stumpVolumeM3 = ((MaritimePineBasicLoggableTree) tree).getHarvestedStumpVolumeM3();
 				if  (stumpVolumeM3 > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, stumpVolumeM3));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), stumpVolumeM3));
 				} 
 				break;
 			case Crown:
 				double crownVolumeM3 = ((MaritimePineBasicLoggableTree) tree).getHarvestedCrownVolumeM3();
 				if  (crownVolumeM3 > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, crownVolumeM3));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), crownVolumeM3));
 				} 
 				break;
 			case IndustryWood:
 				if (energyWoodProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, energyWoodProportion * tree.getCommercialUnderbarkVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), energyWoodProportion * tree.getCommercialVolumeM3()));
 				} 
 				break;
 			case SawlogLowQuality:
 				if (lowQualitySawlogProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, lowQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), lowQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			case SawlogHighQuality:
 				if (highQualitySawlogProportion > 0) {
-					pieces.add(new DiameterBasedWoodPiece(this, tree, highQualitySawlogProportion * tree.getCommercialUnderbarkVolumeM3()));
+					pieces.add(new DiameterBasedWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), highQualitySawlogProportion * tree.getCommercialVolumeM3()));
 				}
 				break;
 			}

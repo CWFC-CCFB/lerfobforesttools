@@ -23,11 +23,8 @@ import repicea.simulation.treelogger.WoodPiece;
 @SuppressWarnings("serial")
 class MathildeWoodPiece extends WoodPiece {
 
-	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree, double volumeRemainder) {
-		super(logCategory, 
-				tree, 
-				false, 
-				volumeRemainder * logCategory.conversionFactor * (1 - logCategory.downgradingProportion));
+	protected MathildeWoodPiece(MathildeTreeLogCategory logCategory, MathildeLoggableTree tree, boolean overbark, double volumeRemainder) {
+		super(logCategory, tree, overbark, volumeRemainder * logCategory.conversionFactor * (1 - logCategory.downgradingProportion));
 	}
 
 }

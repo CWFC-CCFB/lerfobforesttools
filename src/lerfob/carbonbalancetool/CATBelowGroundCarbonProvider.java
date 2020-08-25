@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATBelowGroundCarbonProvider {
 
 	/**
-	 * This method returns the belowground carbon in Mg for a single tree WITHOUT expansion factor.
+	 * This method returns the belowground carbon (Mg), INCLUDING bark and WITHOUT expansion factor.
 	 * @return a double
 	 */
 	public double getBelowGroundCarbonMg();

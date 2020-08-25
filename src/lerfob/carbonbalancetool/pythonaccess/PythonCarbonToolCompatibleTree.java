@@ -67,7 +67,7 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 	public double getNumber() {return number;}
 
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {return trunkVolume;}
+	public double getCommercialVolumeM3() {return trunkVolume;}
 
 	@Override
 	public String getSpeciesName() {return species.name();}
@@ -89,5 +89,8 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 
 	@Override
 	public double getBelowGroundVolumeM3() {return rootsVolume;}
+
+	@Override
+	public boolean isCommercialVolumeOverbark() {return true;}
 
 }

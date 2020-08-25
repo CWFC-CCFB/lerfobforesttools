@@ -25,8 +25,8 @@ import repicea.simulation.treelogger.WoodPiece;
 @SuppressWarnings("serial")
 public class BasicTreeLoggerWoodPiece extends WoodPiece {
 
-	protected BasicTreeLoggerWoodPiece(LogCategory logCategory, LoggableTree tree, double volumeForThisPieceM3) {
-		super(logCategory, tree, false, volumeForThisPieceM3);
+	protected BasicTreeLoggerWoodPiece(LogCategory logCategory, LoggableTree tree, boolean overbark, double volumeForThisPieceM3) {
+		super(logCategory, tree, overbark, volumeForThisPieceM3);
 //		double volumeM3 = tree.getCommercialVolumeM3() * ((BasicLogCategory) logCategory).getVolumeProportion();
 //		setVolumeM3(volumeForThisPiece);
 	}

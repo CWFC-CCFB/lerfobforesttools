@@ -27,7 +27,7 @@ class MaritimePineBasicLoggableTreeImpl implements MaritimePineBasicLoggableTree
 	}
 */
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {
+	public double getCommercialVolumeM3() {
 		return 1;
 	}
 
@@ -47,6 +47,11 @@ class MaritimePineBasicLoggableTreeImpl implements MaritimePineBasicLoggableTree
 
 	@Override
 	public double getHarvestedCrownVolumeM3() {return branchVolumeM3;}
+
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume();
+	}
 
 
 }

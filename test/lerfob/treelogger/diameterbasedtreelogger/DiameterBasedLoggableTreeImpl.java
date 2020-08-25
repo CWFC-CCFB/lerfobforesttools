@@ -13,13 +13,23 @@ class DiameterBasedLoggableTreeImpl implements LoggableTree, DbhCmProvider {
 	}
 	
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {return 1d;}
+	public double getCommercialVolumeM3() {return 1d;}
 
 	@Override
 	public String getSpeciesName() {return REpiceaSpecies.Species.Pinus_pinaster.toString();}
 
 	@Override
 	public double getDbhCm() {return dbhCm;}
+
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume();
+	}
+
+	@Override
+	public boolean isCommercialVolumeOverbark() {
+		return true;
+	}
 
 
 }

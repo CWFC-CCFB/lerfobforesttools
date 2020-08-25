@@ -22,6 +22,11 @@ import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
-public interface EuropeanBeechBasicTree extends LoggableTree, DbhCmProvider, DbhCmStandardDeviationProvider {
+public interface EuropeanBeechBasicTree extends LoggableTree, 
+											DbhCmProvider, 
+											DbhCmStandardDeviationProvider {
+
+	@Override
+	public default boolean isCommercialVolumeOverbark() {return true;}
 
 }

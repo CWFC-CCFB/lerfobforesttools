@@ -1,5 +1,6 @@
 package lerfob.treelogger.douglasfirfcba;
 
+import repicea.simulation.species.REpiceaSpecies;
 
 class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 
@@ -11,7 +12,7 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 	
 
 	@Override
-	public double getCommercialUnderbarkVolumeM3() {
+	public double getCommercialVolumeM3() {
 		return 1;
 	}
 
@@ -24,5 +25,13 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 	public double getDbhCm() {
 		return treeDbhCm;
 	}
+
+
+	@Override
+	public double getBarkProportionOfWoodVolume() {
+		return REpiceaSpecies.Species.Pseudotsuga_menziesii.getBarkProportionOfWoodVolume();
+	}
+
+
 
 }

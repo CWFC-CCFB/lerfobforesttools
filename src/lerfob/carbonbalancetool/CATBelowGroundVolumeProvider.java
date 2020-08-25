@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATBelowGroundVolumeProvider {
 
 	/**
-	 * This method returns the belowground volume in m3 WITHOUT expansion factor.
+	 * This method returns the belowground volume (m3), INCLUDING bark and WITHOUT expansion factor.
 	 * @return a double
 	 */
 	public double getBelowGroundVolumeM3();

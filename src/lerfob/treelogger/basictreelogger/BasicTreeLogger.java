@@ -41,7 +41,7 @@ public class BasicTreeLogger extends TreeLogger<BasicTreeLoggerParameters, Logga
 	@Override
 	protected void logThisTree (LoggableTree tree) {
 		List<BasicLogCategory> logCategories = params.getSpeciesLogCategories(BasicTreeLoggerParameters.ANY_SPECIES);
-		if (tree.getCommercialUnderbarkVolumeM3() > 0) {
+		if (tree.getCommercialVolumeM3() > 0) {
 			for (BasicLogCategory logCategory : logCategories) {
 				List<BasicTreeLoggerWoodPiece> pieces = logCategory.extractFromTree(tree);
 				if (pieces != null) {

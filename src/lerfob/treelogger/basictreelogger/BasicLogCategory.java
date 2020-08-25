@@ -90,8 +90,8 @@ public class BasicLogCategory extends LogCategory {
 	@Override
 	protected List<BasicTreeLoggerWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
 		List<BasicTreeLoggerWoodPiece> pieces = new ArrayList<BasicTreeLoggerWoodPiece>();
-		double volumeM3 = tree.getCommercialUnderbarkVolumeM3() * volumeProportionToBeProcessedInThisCategory;
-		BasicTreeLoggerWoodPiece piece = new BasicTreeLoggerWoodPiece(this, tree, volumeM3); 
+		double volumeM3 = tree.getCommercialVolumeM3() * volumeProportionToBeProcessedInThisCategory;
+		BasicTreeLoggerWoodPiece piece = new BasicTreeLoggerWoodPiece(this, tree, tree.isCommercialVolumeOverbark(), volumeM3); 
 		pieces.add(piece);
 		return pieces;
 	}

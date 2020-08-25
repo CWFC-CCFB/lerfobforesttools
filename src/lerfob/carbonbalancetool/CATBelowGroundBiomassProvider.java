@@ -25,7 +25,7 @@ package lerfob.carbonbalancetool;
 public interface CATBelowGroundBiomassProvider {
 
 	/**
-	 * This method returns the dry belowground biomass in Mg for a single tree WITHOUT expansion factor.
+	 * This method returns the dry belowground biomass (Mg), INCLUDING bark and WITHOUT expansion factor.
 	 * @return a double
 	 */
 	public double getBelowGroundBiomassMg();
