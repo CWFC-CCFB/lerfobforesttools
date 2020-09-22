@@ -38,7 +38,7 @@ public class ForkOperationLinkLine extends ValidProcessorLinkLine {
 			BasicStroke.CAP_ROUND, 
 			BasicStroke.JOIN_MITER,
 			1, 
-			new float[]{5,5},
+			new float[]{5,3,2,3},
 			0);
 
 	
@@ -52,6 +52,8 @@ public class ForkOperationLinkLine extends ValidProcessorLinkLine {
 //		fatherButton.addComponentListener(this);
 //		fatherButton.createEndOfLifeLinkRecognizer.setComponent(null); // disable the drag & drop
 		sonProcessor.getUI(panel).addComponentListener(this);
+		setBackground(Color.LIGHT_GRAY);
+		this.setBorderPainted(false);
 	}
 
 	@Override

@@ -18,10 +18,35 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
+
 @SuppressWarnings("serial")
 public class DebarkingProcessor extends AbstractForkOperationProcessor {
 
+	private enum MessageID implements TextableEnum {
+
+		Debarking("Debarking", "Ecor\u00E7age");
+
+		MessageID(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+		
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+
+		@Override
+		public String toString() {return REpiceaTranslator.getString(this);}
+	}
 	
+	
+	
+	protected DebarkingProcessor() {
+		super();
+		setName(MessageID.Debarking.toString());		// default name
+	}
 
 
 }

@@ -12,14 +12,14 @@ import repicea.simulation.processsystem.ValidProcessorLinkLine;
 @SuppressWarnings("serial")
 public class EndOfLifeLinkLine extends ValidProcessorLinkLine {
 
-	protected static final Stroke EndOfLifeLinkLineStrokeBold = new BasicStroke(3, 
+	protected static final Stroke EndOfLifeLinkLineStrokeBold = new BasicStroke(4, 
 			BasicStroke.CAP_SQUARE, 
 			BasicStroke.JOIN_MITER,
 			1, 
 			new float[]{12,12},
 			0);
 
-	protected static final Stroke EndOfLifeLinkLineStrokeDefault = new BasicStroke(1, 
+	protected static final Stroke EndOfLifeLinkLineStrokeDefault = new BasicStroke(2, 
 			BasicStroke.CAP_SQUARE, 
 			BasicStroke.JOIN_MITER,
 			1, 
