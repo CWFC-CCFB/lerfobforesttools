@@ -240,7 +240,6 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 					firePropertyChange(REpiceaAWTProperty.ActionPerformed, null, this);
 				}
 			}
-			
 		}
 	}
 

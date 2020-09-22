@@ -46,6 +46,9 @@ public class LandfillProcessor extends AbstractProductionLineProcessor {
 			super(panel, process);
 		}
 		
+		@Override
+		void setForkOperationPopupMenu() {} // to disable fork options
+
 	}
 	
 	/**

@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -69,8 +68,10 @@ import repicea.gui.components.REpiceaSlider;
 import repicea.gui.components.REpiceaSlider.Position;
 import repicea.gui.dnd.AcceptableDropComponent;
 import repicea.gui.dnd.DropTargetImpl;
+import repicea.gui.dnd.LocatedEvent;
 import repicea.io.GFileFilter;
 import repicea.net.BrowserCaller;
+import repicea.simulation.UseModeProvider.UseMode;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
@@ -482,7 +483,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			}
 			yieldTableFilename = fileChooserOutput.getFilename();
 			CATYieldTableRecordReader catRecordReader = new CATYieldTableRecordReader(dlg.getCATSpecies());
-			catRecordReader.initGUIMode(this, yieldTableFilename);
+			catRecordReader.initGUIMode(this, UseMode.GUI_MODE, yieldTableFilename);
 			catRecordReader.readAllRecords();
 			caller.setStandList(catRecordReader.getStandList());
 			caller.getSettingMemory().setProperty("lerfobcat.yieldTableFilename", yieldTableFilename);
@@ -508,7 +509,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 			} 
 			growthSimulationFilename = fileChooserOutput.getFilename();
 			CATGrowthSimulationRecordReader catRecordReader = new CATGrowthSimulationRecordReader();
-			catRecordReader.initGUIMode(this, growthSimulationFilename);
+			catRecordReader.initGUIMode(this, UseMode.GUI_MODE, growthSimulationFilename);
 			
 			catRecordReader.readAllRecords();
 			catRecordReader.getSelector().showUI(this);
@@ -696,7 +697,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	 * @see repicea.gui.dnd.AcceptableDropComponent#acceptThisObject(java.lang.Object, java.awt.dnd.DropTargetDropEvent)
 	 */
 	@Override
-	public void acceptThisObject(ArrayList<CATCompatibleStand> stands, DropTargetDropEvent arg0) {
+	public void acceptThisObject(ArrayList<CATCompatibleStand> stands, LocatedEvent arg0) {
 		acceptTheseStands(stands);
 //		if (stands != null && !stands.isEmpty()) {
 //			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
