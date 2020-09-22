@@ -45,6 +45,7 @@ public class ForkOperationLinkLine extends ValidProcessorLinkLine {
 	
 	protected ForkOperationLinkLine(SystemPanel panel, ProductionLineProcessor fatherProcessor, AbstractForkOperationProcessor sonProcessor) {
 		super(panel, fatherProcessor.getUI(panel), sonProcessor.getUI(panel));
+		setAnchorPositions(AnchorPosition.TOP, AnchorPosition.LEFT);
 
 		((ProductionLineProcessor) fatherProcessor).addForkProcessor(sonProcessor);
 //		ProductionLineProcessorButton fatherButton = (ProductionLineProcessorButton) fatherProcessor.getUI(panel);
