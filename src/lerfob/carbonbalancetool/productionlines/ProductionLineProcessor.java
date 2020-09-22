@@ -48,7 +48,8 @@ import repicea.util.REpiceaTranslator;
 public final class ProductionLineProcessor extends AbstractProductionLineProcessor implements Serializable, REpiceaUIObject {
 	
 	private static final long serialVersionUID = 20101018L;
-
+	
+	@Deprecated
 	private static ProductionLineProcessor LossProductionLineProcessor;
 	
 	@Deprecated
@@ -64,6 +65,8 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 	private ProductionLineProcessor fatherProcessor;
 
 	protected Processor disposedToProcessor;
+	
+	private List<AbstractForkOperationProcessor> forkProcessors;
 	
 	@Deprecated
 	private ProductionLine market;
@@ -114,6 +117,36 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 		this.fatherProcessor = fatherProcessor;
 	}
 
+	List<AbstractForkOperationProcessor> getForkProcessors() {
+		if (forkProcessors == null) {
+			forkProcessors = new ArrayList<AbstractForkOperationProcessor>();
+		}
+		return forkProcessors;
+	}
+	
+	void addForkProcessor(AbstractForkOperationProcessor p) {
+		if (!containsForkProcessorOfThisKind(p.getClass())) {
+			getForkProcessors().add(p);
+		}
+	}
+	
+	void removeForkProcessor(AbstractForkOperationProcessor p) {
+		getForkProcessors().remove(p);
+	}
+
+	boolean containsForkProcessorOfThisKind(Class<? extends AbstractForkOperationProcessor> clazz) {
+		return getForkProcessorOfThisKind(clazz) != null;
+	}
+
+	AbstractForkOperationProcessor getForkProcessorOfThisKind(Class<? extends AbstractForkOperationProcessor> clazz) {
+		for (AbstractForkOperationProcessor p : getForkProcessors()) {
+			if (clazz.isInstance(p)) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 	protected void patchXmlSerializerBug() {
 		if (!hasSubProcessors()) {
 			this.subProcessors = new ArrayList<Processor>();
@@ -407,5 +440,5 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 		return LossProductionLineProcessor; 
 	}
 	
-	
+
 }

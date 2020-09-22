@@ -18,6 +18,7 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.awt.Point;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,7 +50,15 @@ public class AbstractProcessor extends Processor {
 			double emissions = fonctionalUnits * emissionsMgCO2ByFunctionalUnit;
 			amountMap.add(Element.EmissionsCO2Eq, emissions);
 		}
-
 	}
+	
+	/*
+	 * For extended visibility in the package.
+	 */
+	@Override
+	protected Point getOriginalLocation() {
+		return super.getOriginalLocation();
+	}
+
 	
 }
