@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-
-import junit.framework.Assert;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
-import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
+import java.util.Map;
 
 import org.junit.Test;
 
+import junit.framework.Assert;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.Processor;
@@ -102,8 +104,8 @@ public class ProductionLinesTest {
 			amountMap.put(Element.Volume, volume);
 			amountMap.put(Element.Biomass, volume * basicWoodDensity);
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
-
-			CarbonUnit carbonUnit = new CarbonUnit(2013, "", null, amountMap, "Unknown");
+			
+			CarbonUnit carbonUnit = new CarbonUnit(2013, "", null, amountMap, "Unknown", BiomassType.Wood);
 			
 			int index = wpmm.getProductionLineNames().indexOf("Sawing");
 			if (index == -1) {
@@ -155,6 +157,8 @@ public class ProductionLinesTest {
 			amountMap.put(Element.Volume, volume);
 			amountMap.put(Element.Biomass, volume * basicWoodDensity);
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
+			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+			amountMaps.put(BiomassType.Wood, amountMap);
 
 			List<Processor> processors = processorManager.getPrimaryProcessors();
 			int i = processors.size() - 1;
@@ -169,7 +173,7 @@ public class ProductionLinesTest {
 			}
 
 //			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
-			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap, "Unknown");
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMaps, "Unknown");
 			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
 			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
 				endProducts.addAll(processorManager.getCarbonUnits(status));
@@ -210,7 +214,9 @@ public class ProductionLinesTest {
 			amountMap.put(Element.Volume, volume);
 			amountMap.put(Element.Biomass, volume * basicWoodDensity);
 			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
-
+			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+			amountMaps.put(BiomassType.Wood, amountMap);
+			
 			List<Processor> processors = processorManager.getPrimaryProcessors();
 			int i = processors.size() - 1;
 			LogCategoryProcessor sawingProcessor = null;
@@ -223,7 +229,7 @@ public class ProductionLinesTest {
 				i--;
 			}
 //			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
-			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMap, "Unknown");
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMaps, "Unknown");
 				
 			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
 			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {

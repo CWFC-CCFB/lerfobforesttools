@@ -57,88 +57,8 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  */
 @SuppressWarnings("deprecation")
 public final class CATSettings {
-
-//	/**
-//	 * The enum representing the species. The proportion of bark volume was taken from 
-//	 * Miles, P.D. and W.B. Smith. 2009. Specific gravity and other properties of wood
-//	 * and bark for 156 tree species found in North America. USDA Forest Service,
-//	 * Northern Research Station. Research Note NRS-38.
-//	 * @author Mathieu Fortin - August 2020
-//	 *
-//	 */
-//	public static enum CATSpecies implements TextableEnum, 
-//											CATBasicWoodDensityProvider, 
-//											SpeciesTypeProvider	{
-//		
-//		ABIES(SpeciesType.ConiferousSpecies, 0.40, 0.118, "Abies spp."),
-//		ACER(SpeciesType.BroadleavedSpecies, 0.52, 0.109, "Acer spp."),
-//		ALNUS(SpeciesType.BroadleavedSpecies, 0.45, 0.115, "Alnus spp."),
-//		BETULA(SpeciesType.BroadleavedSpecies, 0.51, 0.110, "Betula spp."),
-//		CARPINUS_BETULUS(SpeciesType.BroadleavedSpecies, 0.63, 0.086, "Carpinus betulus"), // this one is from IPCC guidelines 2003
-//		CASTANEA_SATIVA(SpeciesType.BroadleavedSpecies, 0.48, 0.150, "Castanea sativa"),	// this one is from IPCC guidelines 2003
-//		FAGUS_SYLVATICA(SpeciesType.BroadleavedSpecies, 0.58, 0.060, "Fagus sylvatica"),
-//		FRAXINUS(SpeciesType.BroadleavedSpecies, 0.57, 0.160, "Fraxinus spp."),
-//		JUGLANS(SpeciesType.BroadleavedSpecies, 0.53, 0.150, "Juglans spp."),	// this one is from IPCC guidelines 2003
-//		LARIX_DECIDUA(SpeciesType.ConiferousSpecies, 0.46, 0.140, "Larix decidua"),
-//		PICEA_ABIES(SpeciesType.ConiferousSpecies, 0.40, 0.126, "Picea abies"),
-//		PICEA_SITCHENSIS(SpeciesType.ConiferousSpecies, 0.40, 0.126, "Picea sitchensis"),
-//		PINUS_PINASTER(SpeciesType.ConiferousSpecies, 0.44, 0.160, "Pinus pinaster"),
-//		PINUS_RADIATA(SpeciesType.ConiferousSpecies, 0.38, 0.134, "Pinus radiata"),
-//		PINUS_STROBUS(SpeciesType.ConiferousSpecies, 0.32, 0.160, "Pinus strobus"),
-//		PINUS_SYLVESTRIS(SpeciesType.ConiferousSpecies, 0.42, 0.160, "Pinus sylvestris"),
-//		POPULUS(SpeciesType.BroadleavedSpecies, 0.35, 0.184, "Populus spp."),
-//		PRUNUS(SpeciesType.ConiferousSpecies, 0.49, 0.092, "Prunus spp."),
-//		PSEUDOTSUGA_MENZIESII(SpeciesType.ConiferousSpecies, 0.45, 0.173, "Pseudotsuga menziesii"),
-//		QUERCUS(SpeciesType.BroadleavedSpecies, 0.58, 0.191, "Quercus spp."),
-//		SALIX(SpeciesType.BroadleavedSpecies, 0.45, 0.160, "Salix spp."),
-//		THUJA_PLICATA(SpeciesType.ConiferousSpecies, 0.31, 0.106, "Thuja plicata"), // this one is from IPCC guidelines 2003
-//		TILIA(SpeciesType.BroadleavedSpecies, 0.43, 0.105, "Tilia spp."),
-//		TSUGA(SpeciesType.ConiferousSpecies, 0.42, 0.162, "Tsuga spp.") // this one is from IPCC guidelines 2003
-//		;
-//
-//		final SpeciesType speciesType;
-//		final double basicWoodDensity;
-//		final double barkProportionOfWoodVolume;
-//		
-//		CATSpecies(SpeciesType speciesType, double basicWoodDensity, double barkProportionOfWoodVolume, String latinName) {
-//			this.speciesType = speciesType;
-//			this.basicWoodDensity = basicWoodDensity;
-//			this.barkProportionOfWoodVolume = barkProportionOfWoodVolume;
-//			setText(latinName, latinName);
-//		};
-//
-//		@Override
-//		public void setText(String englishText, String frenchText) {
-//			REpiceaTranslator.setString(this, englishText, frenchText);
-//		}
-//		
-//		
-//		
-//		@Override
-//		public String toString() {return REpiceaTranslator.getString(this);}
-//
-//		@Override
-//		public double getBasicWoodDensity() {return basicWoodDensity;}
-//		
-//		@Override
-//		public SpeciesType getSpeciesType() {return speciesType;}
-//		
-//		/**
-//		 * This method returns the CATSpecies defined by the speciesName parameter.
-//		 * @param speciesName a String
-//		 * @return a CATSpecies instance
-//		 */
-//		public static CATSpecies getCATSpeciesFromThisString(String speciesName) {
-//			String sp = speciesName.trim().replace(" ", "_").toUpperCase();
-//			return CATSpecies.valueOf(sp);
-//		}
-//
-//		@Override
-//		public double getBarkVolumeM3(double woodVolumeM3, Object parm) {
-//			return woodVolumeM3 * barkProportionOfWoodVolume;
-//		}
-//		
-//	}
+	
+	protected static boolean DisinguishingBarkFromWood = false;
 	
 	
 	/**
@@ -407,7 +327,6 @@ public final class CATSettings {
 	 * @param treeLoggerDescriptions a Vector of TreeLoggerDescription instances
 	 */
 	public void setTreeLoggerDescriptions(Vector<TreeLoggerDescription> treeLoggerDescriptions) {
-//		ProductionProcessorManager manager = (ProductionProcessorManager) processorManagers.getFirstInstanceWithThisName(ProductionManagerName.customized);
 		ProductionProcessorManager manager = productionManagerMap.get(ProductionManagerName.customized).manager;
 		if (manager != null) {
 			manager.setAvailableTreeLoggers(treeLoggerDescriptions);
@@ -415,7 +334,6 @@ public final class CATSettings {
 	}
 
 	protected void setReferentForBiomassParameters(Object referent) {
-//		BiomassParameters manager = (BiomassParameters) biomassParametersVector.getFirstInstanceWithThisName(BiomassParametersName.customized);
 		BiomassParameters manager = biomassParametersMap.get(BiomassParametersName.customized).manager;
 		if (manager != null) {
 			manager.setReferent(referent);

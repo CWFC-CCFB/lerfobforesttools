@@ -52,6 +52,10 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 		RecycledLosses;
 	};
 
+	public static enum BiomassType {
+		Wood,
+		Bark;
+	}
 	
 	public static enum Element {
 		Volume,
@@ -93,6 +97,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 	private final List<CarbonUnitStatus> status; 
 	private final CarbonUnitFeature carbonUnitFeature;
 	private final String speciesName;
+	private BiomassType biomassType;
 	
 	/**
 	 * Initial carbon in this product (Mg)
@@ -113,7 +118,8 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 			String samplingUnitID, 
 			CarbonUnitFeature carbonUnitFeature, 
 			AmountMap<Element> initialAmounts,
-			String speciesName) {
+			String speciesName,
+			BiomassType biomassType) {
 		super(initialAmounts);
 		this.dateIndex = dateIndex;
 		this.carbonUnitFeature = carbonUnitFeature;
@@ -121,8 +127,16 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 		this.speciesName = speciesName;
 		status = new ArrayList<CarbonUnitStatus>();
 		actualized = false;
+		this.biomassType = biomassType; 
 	}
 
+	protected BiomassType getBiomassType() {
+		if (biomassType == null) {
+			return BiomassType.Wood;
+		} else {
+			return biomassType;
+		}
+	}
 
 	@Override
 	protected void addProcessUnit(ProcessUnit<Element> unit) {
@@ -248,7 +262,9 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 					if (status.equals(otherUnit.status)) {
 						if (samplingUnitID.equals(otherUnit.samplingUnitID)) {
 							if (speciesName.equals(otherUnit.speciesName)) {
-								return true;
+								if (getBiomassType() == otherUnit.getBiomassType()) {
+									return true;
+								}
 							}
 						}
 					}

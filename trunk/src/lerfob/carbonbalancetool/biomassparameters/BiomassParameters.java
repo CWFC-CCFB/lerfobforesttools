@@ -413,7 +413,8 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 
 	
 	/**
-	 * This method returns the aboveground volume of a particular tree (m3), INCLUDING bark.
+	 * This method returns the aboveground volume of a particular tree (m3), INCLUDING bark and
+	 * all weighting factors.
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
@@ -422,7 +423,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		if (branchExpansionFactorFromModel) {
 			value = ((CATAboveGroundVolumeProvider) tree).getAboveGroundVolumeM3() * tree.getNumber() * tree.getPlotWeight();
 		} else {
-			value = getCommercialVolumeM3(tree) * branchExpansionFactors.get(tree.getCATSpecies().getSpeciesType());
+			value = getCommercialVolumeM3ForThisTree(tree) * branchExpansionFactors.get(tree.getCATSpecies().getSpeciesType());
 		}
 		if (subject != null) {
 			String subjectId = getSubjectId(VariabilitySource.BiomassExpansionFactor, tree);
@@ -464,7 +465,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @param tree a CarbonCompatibleTree
 	 * @return a double
 	 */
-	private double getCommercialVolumeM3(CATCompatibleTree tree) {
+	public double getCommercialVolumeM3ForThisTree(CATCompatibleTree tree) {
 //		double commVolume = tree.getCommercialVolumeM3();
 //		if (!tree.isCommercialVolumeOverbark()) {
 //			commVolume += tree.getBarkProportionOfWoodVolume() * commVolume;
@@ -479,7 +480,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @param tree a CATCompatibleTree instance
 	 * @return the volume of a single tree, i.e. WITHOUT any expansion factor.
 	 */
-	public static double getOverbarkCommercialVolumeM3(CATCompatibleTree tree) {
+	private double getOverbarkCommercialVolumeM3(CATCompatibleTree tree) {
 		double commVolume = tree.getCommercialVolumeM3();
 		if (!tree.isCommercialVolumeOverbark()) {
 			commVolume += tree.getBarkProportionOfWoodVolume() * commVolume;
@@ -493,7 +494,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	 * @return a double
 	 */
 	private double getCommercialBiomassMg(CATCompatibleTree tree, MonteCarloSimulationCompliantObject subject) {
-		return getCommercialVolumeM3(tree) * getBasicWoodDensityFromThisTree(tree, subject);
+		return getCommercialVolumeM3ForThisTree(tree) * getBasicWoodDensityFromThisTree(tree, subject);
 	}
 
 	/**
@@ -587,7 +588,7 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 		double commercialVolumeM3 = 0d;
 		if (trees != null) {
 			for (CATCompatibleTree tree : trees) {
-				commercialVolumeM3 += getCommercialVolumeM3(tree);
+				commercialVolumeM3 += getCommercialVolumeM3ForThisTree(tree);
 			}
 		}
 		return commercialVolumeM3;

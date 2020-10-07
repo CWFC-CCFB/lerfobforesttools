@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.swing.event.CaretEvent;
 
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
@@ -274,7 +275,8 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 					carbonUnit.samplingUnitID, 
 					null, 
 					processedAmountMap, 
-					carbonUnit.getSpeciesName());
+					carbonUnit.getSpeciesName(),
+					carbonUnit.getBiomassType());
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		} else {
@@ -282,7 +284,8 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 					carbonUnit.samplingUnitID, 
 					(EndUseWoodProductCarbonUnitFeature) woodProductFeature,
 					processedAmountMap,
-					carbonUnit.getSpeciesName());
+					carbonUnit.getSpeciesName(),
+					carbonUnit.getBiomassType());
 			outputUnits.add(woodProduct);
 			return outputUnits;
 		}
@@ -324,15 +327,15 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 					double docf = lfcuf.getDegradableOrganicCarbonFraction();
 					
 					AmountMap<Element> landFillMapTmp = processedAmountMap.multiplyByAScalar(docf);
-					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, "Unknown", CarbonUnitStatus.LandFillDegradable);
+					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, "Unknown", BiomassType.Wood, CarbonUnitStatus.LandFillDegradable);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 					landFillMapTmp = processedAmountMap.multiplyByAScalar(1 - docf);
-					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, "Unknown", CarbonUnitStatus.LandFillNonDegradable); 
+					woodProduct = new LandfillCarbonUnit(dateIndex, sampleUnitID, lfcuf, landFillMapTmp, "Unknown", BiomassType.Wood, CarbonUnitStatus.LandFillNonDegradable); 
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.LandFillNonDegradable).add((LandfillCarbonUnit) woodProduct); 
 					
 				} else {				// is left in the forest
-					woodProduct = new CarbonUnit(dateIndex, sampleUnitID, woodProductFeature, processedAmountMap, "Unknown");
+					woodProduct = new CarbonUnit(dateIndex, sampleUnitID, woodProductFeature, processedAmountMap, "Unknown", BiomassType.Wood);
 					getProductionLine().getManager().getCarbonUnits(CarbonUnitStatus.DeadWood).add(woodProduct);
 				}
 

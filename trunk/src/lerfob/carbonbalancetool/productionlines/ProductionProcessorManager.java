@@ -37,6 +37,7 @@ import lerfob.carbonbalancetool.CATCompartmentManager;
 import lerfob.carbonbalancetool.CATDecayFunction;
 import lerfob.carbonbalancetool.CATExponentialFunction;
 import lerfob.carbonbalancetool.catdiameterbasedtreelogger.CATDiameterBasedTreeLogger;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog.MessageID;
@@ -404,12 +405,13 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	public void processWoodPiece(LogCategory logCategory, 
 			int dateIndex, 
 			String samplingUnitID, 
-			AmountMap<Element> amountMap,
+			Map<BiomassType, AmountMap<Element>> amountMaps,
 			String speciesName) {
 		Processor processor = findLeftHandSideProcessor(logCategory);
-		processAmountMap(processor, dateIndex, samplingUnitID, amountMap, speciesName);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMaps, speciesName);
 	}
 
+	
 	/**
 	 * This method calculates the carbon units in the woody debris. 
 	 * @param dateIndex the index of the date in the time scale
@@ -418,34 +420,31 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 */
 	public void processWoodyDebris(int dateIndex, 
 			String samplingUnitID, 
-			AmountMap<Element> amountMap,
+			Map<BiomassType, AmountMap<Element>> amountMaps,
 			String speciesName,
 			WoodyDebrisProcessorID type) {
 		Processor processor = findWoodyDebrisProcessor(type);
-		processAmountMap(processor, dateIndex, samplingUnitID, amountMap, speciesName);
+		processAmountMap(processor, dateIndex, samplingUnitID, amountMaps, speciesName);
 	}
 	
-//	/**
-//	 * This method calculates the carbon units in the coarse woody debris. 
-//	 * @param dateIndex the index of the date in the time scale
-//	 * @param amountMap a Map which contains the amounts of the different elements
-//	 */
-//	public void processCoarseWoodyDebris(int dateIndex, AmountMap<Element> amountMap) {
-//		Processor processor = findWoodyDebrisProcessor(WoodyDebrisProcessorID.CoarseWoodyDebris);
-//		processAmountMap(processor, dateIndex, amountMap);
-//	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<CarbonUnit> processAmountMap(Processor processor, 
 			int dateIndex, 
 			String samplingUnitID, 
-			AmountMap<Element> amountMap,
+			Map<BiomassType, AmountMap<Element>> amountMaps,
 			String speciesName) {
 		List<ProcessUnit> inputUnits = new ArrayList<ProcessUnit>();
-		inputUnits.add(new CarbonUnit(dateIndex, samplingUnitID, null, amountMap, speciesName));
-		Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
-		getCarbonUnitMap().add(processedUnits);
-		return processedUnits;
+		if (!amountMaps.isEmpty()) {
+			for (BiomassType bt : amountMaps.keySet()) {
+				inputUnits.add(new CarbonUnit(dateIndex, samplingUnitID, null, amountMaps.get(bt), speciesName, bt));
+			}
+			Collection<CarbonUnit> processedUnits = (Collection) processor.doProcess(inputUnits);
+			getCarbonUnitMap().add(processedUnits);
+			return processedUnits;
+		} else {
+			return new ArrayList<CarbonUnit>();
+		}
 	}
 	
 	/**

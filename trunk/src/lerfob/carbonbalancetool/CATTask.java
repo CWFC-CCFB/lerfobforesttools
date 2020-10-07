@@ -20,10 +20,12 @@ package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
@@ -289,7 +291,13 @@ public class CATTask extends AbstractGenericTask {
 							}
 
 							AmountMap<Element> woodAmountMap = new AmountMap<Element>();
-							double woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3();
+							double woodVolumeM3;
+							if (CATSettings.DisinguishingBarkFromWood) {
+								woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3();
+							} else {
+								woodVolumeM3 = woodPiece.getWeightedTotalVolumeM3();
+							}
+							
 							double woodBiomassMg = woodVolumeM3 * basicWoodDensityMgM3;
 							double woodCarbonMg = woodBiomassMg * carbonContentRatio;
 							woodAmountMap.put(Element.Volume, woodVolumeM3);
@@ -306,53 +314,53 @@ public class CATTask extends AbstractGenericTask {
 //								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
 
+							Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+							amountMaps.put(BiomassType.Wood, woodAmountMap);
+
+							if (CATSettings.DisinguishingBarkFromWood) {
+								AmountMap<Element> barkAmountMap = new AmountMap<Element>();
+								double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3();
+								double barkBiomassMg = barkVolumeM3 * basicWoodDensityMgM3; // TODO should be the bark basic density here
+								double barkCarbonMg = barkBiomassMg * carbonContentRatio;   // TODO should be the bark content ratio here
+								barkAmountMap.put(Element.Volume, barkVolumeM3);
+								barkAmountMap.put(Element.Biomass, barkBiomassMg);
+								barkAmountMap.put(Element.C, barkCarbonMg);
+								
+								if (nutrientConcentrations != null) {
+									AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedBarkVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+									cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
+									barkAmountMap.putAll(nutrientAmounts);
+//									amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
+//									amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
+//									amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
+//									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
+								}
+								amountMaps.put(BiomassType.Bark, barkAmountMap);
+							}
+
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
 									manager.getDateIndexForThisTree(tree), 
 									samplingUnitID, 
-									woodAmountMap, 
+									amountMaps, 
 									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
-
-							AmountMap<Element> barkAmountMap = new AmountMap<Element>();
-							double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3();
-							double barkBiomassMg = barkVolumeM3 * basicWoodDensityMgM3; // TODO should be the bark basic density here
-							double barkCarbonMg = barkBiomassMg * carbonContentRatio;   // TODO should be the bark content ratio here
-							barkAmountMap.put(Element.Volume, barkVolumeM3);
-							barkAmountMap.put(Element.Biomass, barkBiomassMg);
-							barkAmountMap.put(Element.C, barkCarbonMg);
-							
-							if (nutrientConcentrations != null) {
-								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedBarkVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
-								cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
-								barkAmountMap.putAll(nutrientAmounts);
-//								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
-//								amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
-//								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
-//								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
-							}
-
-//							getProcessorManager().processBark(woodPiece.getLogCategory(), 
-//									manager.getDateIndexForThisTree(tree), 
-//									samplingUnitID, 
-//									barkAmountMap, 
-//									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
 							
 						}
 						
 						double totalAboveGroundVolumeM3 = biomassParameters.getAboveGroundVolumeM3(tree, manager);
 						double unconsideredAboveGroundVolumeM3 = totalAboveGroundVolumeM3 - totalAboveGroundWoodPieceVolume;
-						processUnaccountedVolume(t.getSpeciesName(),
+						processUnaccountedVolume((CATCompatibleTree) t,
 								unconsideredAboveGroundVolumeM3, 
-								basicWoodDensityMgM3, 
-								carbonContentRatio, 
+//								basicWoodDensityMgM3, 
+//								carbonContentRatio, 
 								manager.getDateIndexForThisTree(tree), 
 								samplingUnitID,
 								WoodyDebrisProcessorID.FineWoodyDebris);
 						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
 						double unconsideredBelowGroundVolume = totalBelowGroundVolume - totalBelowGroundWoodPieceVolume;
-						processUnaccountedVolume(t.getSpeciesName(),
+						processUnaccountedVolume((CATCompatibleTree) t,
 								unconsideredBelowGroundVolume, 
-								basicWoodDensityMgM3, 
-								carbonContentRatio, 
+//								basicWoodDensityMgM3, 
+//								carbonContentRatio, 
 								manager.getDateIndexForThisTree(tree), 
 								samplingUnitID,
 								WoodyDebrisProcessorID.CoarseWoodyDebris);
@@ -481,16 +489,44 @@ public class CATTask extends AbstractGenericTask {
 		additionalElement.remove(Element.C);
 	}
 	
-	private void processUnaccountedVolume(String speciesName, double volume, double basicWoodDensity, double carbonContentRatio, int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
-		if (volume > 0) {
-			double biomass = volume * basicWoodDensity;
-			double carbon = biomass * carbonContentRatio;
-			AmountMap<Element> amountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
-			amountMap.put(Element.Volume, volume);
-			amountMap.put(Element.Biomass, biomass);
-			amountMap.put(Element.C, carbon);
+	
+	private void processUnaccountedVolume(CATCompatibleTree tree, double volumeOverBark, 
+			int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
+		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
+		double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
+		double basicWoodDensityMgM3 = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
+		if (volumeOverBark > 0) {
+			double propWood = 1d / (1d + tree.getBarkProportionOfWoodVolume());
+
+			double woodVolume;
+			if (CATSettings.DisinguishingBarkFromWood) {
+				woodVolume = volumeOverBark * propWood;
+			} else {
+				woodVolume = volumeOverBark;
+			}
 			
-			getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, speciesName, type);
+			double woodBiomass = woodVolume * basicWoodDensityMgM3;
+			double woodCarbon = woodBiomass * carbonContentRatio;
+			AmountMap<Element> woodAmountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
+			woodAmountMap.put(Element.Volume, woodVolume);
+			woodAmountMap.put(Element.Biomass, woodBiomass);
+			woodAmountMap.put(Element.C, woodCarbon);
+			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+			amountMaps.put(BiomassType.Wood, woodAmountMap);
+			
+			if (CATSettings.DisinguishingBarkFromWood) {
+				double barkVolume = volumeOverBark - woodVolume;
+				double barkBiomass = barkVolume * basicWoodDensityMgM3;
+				double barkCarbon = barkBiomass * carbonContentRatio;
+				AmountMap<Element> barkAmountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
+				barkAmountMap.put(Element.Volume, barkVolume);
+				barkAmountMap.put(Element.Biomass, barkBiomass);
+				barkAmountMap.put(Element.C, barkCarbon);
+				amountMaps.put(BiomassType.Bark, barkAmountMap);
+			}
+			
+			getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMaps, tree.getSpeciesName(), type);
 		}
 	}
 	
@@ -509,32 +545,21 @@ public class CATTask extends AbstractGenericTask {
 				Map<String, Collection<CATCompatibleTree>> oInnerMap = oMap.get(samplingUnitID);
 				for (String speciesName : oInnerMap.keySet()) {
 					Collection<CATCompatibleTree> trees = oInnerMap.get(speciesName);
-					double volume = 0d;
-					double biomass = 0d;
-					double carbonContent = 0d;
-					switch(type) {
-					case FineWoodyDebris:
-						volume = biomassParameters.getAboveGroundVolumeM3(trees, manager) - biomassParameters.getCommercialVolumeM3(trees);
-						biomass = biomassParameters.getAboveGroundBiomassMg(trees, manager) - biomassParameters.getCommercialBiomassMg(trees, manager);
-						carbonContent = biomassParameters.getAboveGroundCarbonMg(trees, manager) - biomassParameters.getCommercialCarbonMg(trees, manager);
-						break;
-					case CommercialWoodyDebris:
-						volume = biomassParameters.getCommercialVolumeM3(trees);
-						biomass = biomassParameters.getCommercialBiomassMg(trees, manager);
-						carbonContent = biomassParameters.getCommercialCarbonMg(trees, manager);
-						break;
-					case CoarseWoodyDebris:
-						volume = biomassParameters.getBelowGroundVolumeM3(trees, manager);
-						biomass = biomassParameters.getBelowGroundBiomassMg(trees, manager);
-						carbonContent = biomassParameters.getBelowGroundCarbonMg(trees, manager);
-						break;
+					for (CATCompatibleTree t : trees) {
+						double volumeOverBark = 0d;
+						switch(type) {
+						case FineWoodyDebris:
+							volumeOverBark = biomassParameters.getAboveGroundVolumeM3(t, manager) - biomassParameters.getCommercialVolumeM3ForThisTree(t);
+							break;
+						case CommercialWoodyDebris:
+							volumeOverBark = biomassParameters.getCommercialVolumeM3ForThisTree(t);
+							break;
+						case CoarseWoodyDebris:
+							volumeOverBark = biomassParameters.getBelowGroundVolumeM3(t, manager);
+							break;
+						}
+						processUnaccountedVolume(t, volumeOverBark, dateIndex, samplingUnitID, type);
 					}
-					AmountMap<Element> amountMap = new AmountMap<Element>(); 				// No calculation for nutrients left in the forest here
-					amountMap.put(Element.Volume, volume);
-					amountMap.put(Element.Biomass, biomass);	
-					amountMap.put(Element.C, carbonContent);	
-					
-					getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMap, speciesName, type);
 				}				
 			}
 		}

@@ -55,7 +55,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap,
 			String speciesName) {
-		super(dateIndex, "", carbonUnitFeature, amountMap, speciesName);
+		super(dateIndex, "", carbonUnitFeature, amountMap, speciesName, BiomassType.Wood);
 		this.rawRoundWoodVolume = initialVolumeBeforeFirstTransformation;
 	}
 	
@@ -72,8 +72,9 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 			String sampleUnitID,
 			EndUseWoodProductCarbonUnitFeature carbonUnitFeature,
 			AmountMap<Element> amountMap,
-			String speciesName) {
-		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap, speciesName);
+			String speciesName,
+			BiomassType biomassType) {
+		super(dateIndex, sampleUnitID, carbonUnitFeature, amountMap, speciesName, biomassType);
 		addStatus(CarbonUnitStatus.EndUseWoodProduct);
 		AbstractProcessor.updateProcessEmissions(getAmountMap(), carbonUnitFeature.getBiomassOfFunctionalUnitMg(), carbonUnitFeature.getEmissionsMgCO2ByFunctionalUnit());
 	}
@@ -121,7 +122,7 @@ public class EndUseWoodProductCarbonUnit extends CarbonUnit {
 				AbstractProductionLineProcessor disposedToProcessor = (AbstractProductionLineProcessor) ((ProductionLineProcessor) getCarbonUnitFeature().getProcessor()).disposedToProcessor;
 				if (updatedMap.get(Element.Volume) > 0) {
 					if (disposedToProcessor != null) { // new implementation
-						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap, getSpeciesName());
+						CarbonUnit newUnit = new CarbonUnit(i, samplingUnitID, null, updatedMap, getSpeciesName(), getBiomassType());
 						newUnit.getAmountMap().put(Element.EmissionsCO2Eq, 0d);		// reset the emissions to 0 after useful lifetime - otherwise there is a double count
 						List<ProcessUnit> disposedUnits = disposedToProcessor.createProcessUnitsFromThisProcessor(newUnit, 100);
 						Collection<CarbonUnit> processedUnits = (Collection) disposedToProcessor.doProcess(disposedUnits);
