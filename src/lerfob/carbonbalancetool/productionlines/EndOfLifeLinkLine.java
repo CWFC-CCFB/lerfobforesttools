@@ -1,6 +1,7 @@
 package lerfob.carbonbalancetool.productionlines;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
@@ -54,6 +55,7 @@ public class EndOfLifeLinkLine extends ValidProcessorLinkLine {
 	
 	@Override
 	protected void setStroke(Graphics2D g2) {
+		g2.setColor(Color.BLACK);
 		if (isSelected()) {
 			g2.setStroke(EndOfLifeLinkLineStrokeBold);
 		} else {
