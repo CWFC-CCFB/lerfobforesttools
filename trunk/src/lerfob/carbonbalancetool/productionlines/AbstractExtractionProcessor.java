@@ -18,15 +18,21 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Collection;
+import java.util.List;
+
 import repicea.gui.permissions.REpiceaGUIPermission;
+import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.SystemPanel;
 
 /**
- * The ForkOperationAbstractProcessor class defines a process that is carried out before splitting
+ * The AbstractExtractionProcessor class defines a process that extracts something before splitting
  * the ElementUnit instance (e.g. debarking).
  * @author Mathieu Fortin - September 2020
  */
-public abstract class AbstractForkOperationProcessor extends AbstractProcessor {
+public abstract class AbstractExtractionProcessor extends AbstractProcessor {
 
 	
 	protected static class CustomizedREpiceaGUIPermission implements REpiceaGUIPermission {
@@ -56,12 +62,35 @@ public abstract class AbstractForkOperationProcessor extends AbstractProcessor {
 	 * The LandfillProcessorButton has a specific icon for GUI.
 	 * @author Mathieu Fortin - May 2014
 	 */
-	protected static class AbstractForkOperationProcessorButton extends AbstractProcessorButton {
-		protected AbstractForkOperationProcessorButton(SystemPanel panel, AbstractProductionLineProcessor process) {
+	protected static class ExtractionProcessorButton extends AbstractProcessorButton {
+		protected ExtractionProcessorButton(SystemPanel panel, AbstractExtractionProcessor process) {
 			super(panel, process, new CustomizedREpiceaGUIPermission());
 		}
+		
+		
+		@Override
+		public void paint(Graphics g) {
+			if (!getOwner().hasSubProcessors()) {
+				setBorderColor(Color.RED);
+				setBorderWidth(2);
+			} else {
+				setBorderColor(Color.BLACK);
+				setBorderWidth(1);
+			}
+			super.paint(g);
+		}
+
 	}
 	
+	protected Collection<ProcessUnit> extractAndProcess(List<ProcessUnit> processUnits) {
+		List<ProcessUnit> extractedUnits = extract(processUnits);
+		if (!extractedUnits.isEmpty()) {
+			return doProcess(extractedUnits);
+		} else {
+			return extractedUnits;
+		}
+	}
 
+	protected abstract List<ProcessUnit> extract(List<ProcessUnit> processUnits);
 	
 }

@@ -42,8 +42,8 @@ public class ExtendedSystemPanel extends SystemPanel {
 				if (process.disposedToProcessor != null) {
 					addLinkLine(new EndOfLifeLinkLine(this, process, process.disposedToProcessor));
 				}
-				for (AbstractForkOperationProcessor p : process.getForkProcessors()) {	
-					addLinkLine(new ForkOperationLinkLine(this, process, p));	
+				for (AbstractExtractionProcessor p : process.getExtractionProcessors()) {	
+					addLinkLine(new ExtractionLinkLine(this, process, p));	
 				}
 			}
 		}

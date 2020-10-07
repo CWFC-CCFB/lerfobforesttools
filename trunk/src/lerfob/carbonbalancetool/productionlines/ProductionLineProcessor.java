@@ -66,7 +66,7 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 
 	protected Processor disposedToProcessor;
 	
-	private List<AbstractForkOperationProcessor> forkProcessors;
+	private List<AbstractExtractionProcessor> extractionProcessors;
 	
 	@Deprecated
 	private ProductionLine market;
@@ -117,29 +117,43 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 		this.fatherProcessor = fatherProcessor;
 	}
 
-	List<AbstractForkOperationProcessor> getForkProcessors() {
-		if (forkProcessors == null) {
-			forkProcessors = new ArrayList<AbstractForkOperationProcessor>();
+	List<AbstractExtractionProcessor> getExtractionProcessors() {
+		if (extractionProcessors == null) {
+			extractionProcessors = new ArrayList<AbstractExtractionProcessor>();
 		}
-		return forkProcessors;
+		return extractionProcessors;
 	}
 	
-	void addForkProcessor(AbstractForkOperationProcessor p) {
-		if (!containsForkProcessorOfThisKind(p.getClass())) {
-			getForkProcessors().add(p);
+	@Override
+	public Collection<ProcessUnit> doProcess(List<ProcessUnit> inputUnits) {
+		Collection<ProcessUnit> resultingUnits = new ArrayList<ProcessUnit>();
+		if (!getExtractionProcessors().isEmpty()) {
+			for (AbstractExtractionProcessor p : getExtractionProcessors()) {
+				resultingUnits.addAll(p.extractAndProcess(inputUnits));
+			}
+		}
+		if (!inputUnits.isEmpty()) {
+			resultingUnits.addAll(super.doProcess(inputUnits));
+		}
+		return resultingUnits;
+	}
+	
+	void addExtractionProcessor(AbstractExtractionProcessor p) {
+		if (!containsExtractionProcessorOfThisKind(p.getClass())) {
+			getExtractionProcessors().add(p);
 		}
 	}
 	
-	void removeForkProcessor(AbstractForkOperationProcessor p) {
-		getForkProcessors().remove(p);
+	void removeExtractionProcessor(AbstractExtractionProcessor p) {
+		getExtractionProcessors().remove(p);
 	}
 
-	boolean containsForkProcessorOfThisKind(Class<? extends AbstractForkOperationProcessor> clazz) {
-		return getForkProcessorOfThisKind(clazz) != null;
+	boolean containsExtractionProcessorOfThisKind(Class<? extends AbstractExtractionProcessor> clazz) {
+		return getExtractionProcessorOfThisKind(clazz) != null;
 	}
 
-	AbstractForkOperationProcessor getForkProcessorOfThisKind(Class<? extends AbstractForkOperationProcessor> clazz) {
-		for (AbstractForkOperationProcessor p : getForkProcessors()) {
+	AbstractExtractionProcessor getExtractionProcessorOfThisKind(Class<? extends AbstractExtractionProcessor> clazz) {
+		for (AbstractExtractionProcessor p : getExtractionProcessors()) {
 			if (clazz.isInstance(p)) {
 				return p;
 			}

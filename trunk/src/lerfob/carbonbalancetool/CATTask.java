@@ -288,29 +288,54 @@ public class CATTask extends AbstractGenericTask {
 								nutrientConcentrations = ((CATAdditionalElementsProvider) woodPiece).getAdditionalElementConcentrations();
 							}
 
-							AmountMap<Element> amountMap = new AmountMap<Element>();
-							double volumeM3 = woodPiece.getWeightedTotalVolumeM3();
-							double biomassMg = volumeM3 * basicWoodDensityMgM3;
-							double carbonMg = biomassMg * carbonContentRatio;
-							amountMap.put(Element.Volume, volumeM3);
-							amountMap.put(Element.Biomass, biomassMg);
-							amountMap.put(Element.C, carbonMg);
-
+							AmountMap<Element> woodAmountMap = new AmountMap<Element>();
+							double woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3();
+							double woodBiomassMg = woodVolumeM3 * basicWoodDensityMgM3;
+							double woodCarbonMg = woodBiomassMg * carbonContentRatio;
+							woodAmountMap.put(Element.Volume, woodVolumeM3);
+							woodAmountMap.put(Element.Biomass, woodBiomassMg);
+							woodAmountMap.put(Element.C, woodCarbonMg);
+							
 							if (nutrientConcentrations != null) {
-								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedTotalVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedWoodVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
 								cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
-								amountMap.putAll(nutrientAmounts);
+								woodAmountMap.putAll(nutrientAmounts);
 //								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
 //								amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
 //								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
 //								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 							}
-							
+
 							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
 									manager.getDateIndexForThisTree(tree), 
 									samplingUnitID, 
-									amountMap, 
-									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());		
+									woodAmountMap, 
+									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
+
+							AmountMap<Element> barkAmountMap = new AmountMap<Element>();
+							double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3();
+							double barkBiomassMg = barkVolumeM3 * basicWoodDensityMgM3; // TODO should be the bark basic density here
+							double barkCarbonMg = barkBiomassMg * carbonContentRatio;   // TODO should be the bark content ratio here
+							barkAmountMap.put(Element.Volume, barkVolumeM3);
+							barkAmountMap.put(Element.Biomass, barkBiomassMg);
+							barkAmountMap.put(Element.C, barkCarbonMg);
+							
+							if (nutrientConcentrations != null) {
+								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedBarkVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+								cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
+								barkAmountMap.putAll(nutrientAmounts);
+//								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
+//								amountMap.put(Element.S, nutrientAmounts[Nutrient.S.ordinal()]);
+//								amountMap.put(Element.P, nutrientAmounts[Nutrient.P.ordinal()]);
+//								amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
+							}
+
+//							getProcessorManager().processBark(woodPiece.getLogCategory(), 
+//									manager.getDateIndexForThisTree(tree), 
+//									samplingUnitID, 
+//									barkAmountMap, 
+//									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
+							
 						}
 						
 						double totalAboveGroundVolumeM3 = biomassParameters.getAboveGroundVolumeM3(tree, manager);

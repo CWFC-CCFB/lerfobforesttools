@@ -27,14 +27,14 @@ import repicea.simulation.processsystem.SystemPanel;
 import repicea.simulation.processsystem.ValidProcessorLinkLine;
 
 /**
- * The ForkOperationLinkLine class represents a link to a processor that is run before splitting
+ * The ExtractionLinkLine class represents a link to a processor that is run before splitting
  * the ElementUnit instance. A typical example would be that of debarking where the bark is treated
  * in a different manner than the wood.
  * @author Mathieu Fortin - September 2020
  */
-public class ForkOperationLinkLine extends ValidProcessorLinkLine {
+public class ExtractionLinkLine extends ValidProcessorLinkLine {
 
-	protected static final Stroke ForkOperationLinkLineStrokeDefault = new BasicStroke(2, 
+	protected static final Stroke ExtractionLinkLineStrokeDefault = new BasicStroke(2, 
 			BasicStroke.CAP_ROUND, 
 			BasicStroke.JOIN_MITER,
 			1, 
@@ -43,11 +43,11 @@ public class ForkOperationLinkLine extends ValidProcessorLinkLine {
 
 	
 	
-	protected ForkOperationLinkLine(SystemPanel panel, ProductionLineProcessor fatherProcessor, AbstractForkOperationProcessor sonProcessor) {
+	protected ExtractionLinkLine(SystemPanel panel, ProductionLineProcessor fatherProcessor, AbstractExtractionProcessor sonProcessor) {
 		super(panel, fatherProcessor.getUI(panel), sonProcessor.getUI(panel));
 		setAnchorPositions(AnchorPosition.TOP, AnchorPosition.LEFT);
 
-		((ProductionLineProcessor) fatherProcessor).addForkProcessor(sonProcessor);
+		((ProductionLineProcessor) fatherProcessor).addExtractionProcessor(sonProcessor);
 //		ProductionLineProcessorButton fatherButton = (ProductionLineProcessorButton) fatherProcessor.getUI(panel);
 //		fatherButton.addComponentListener(this);
 //		fatherButton.createEndOfLifeLinkRecognizer.setComponent(null); // disable the drag & drop
@@ -63,13 +63,13 @@ public class ForkOperationLinkLine extends ValidProcessorLinkLine {
 	protected void finalize() {
 		super.finalize();
 		ProductionLineProcessor fatherProcessor =  (ProductionLineProcessor) getFatherAnchor().getOwner();
-		fatherProcessor.removeForkProcessor((AbstractForkOperationProcessor) getSonAnchor().getOwner());
+		fatherProcessor.removeExtractionProcessor((AbstractExtractionProcessor) getSonAnchor().getOwner());
 	}
 
 	@Override
 	protected void setStroke(Graphics2D g2) {
 		g2.setColor(Color.MAGENTA);
-		g2.setStroke(ForkOperationLinkLineStrokeDefault);
+		g2.setStroke(ExtractionLinkLineStrokeDefault);
 	}
 
 	@Override

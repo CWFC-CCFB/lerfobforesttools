@@ -60,9 +60,9 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton imple
 	}
 	
 	
-	protected class ForkOperationPopupMenu extends REpiceaPopupMenu implements Refreshable {
+	protected class ExtractionPopupMenu extends REpiceaPopupMenu implements Refreshable {
 
-		ForkOperationPopupMenu() {
+		ExtractionPopupMenu() {
 			super(ProductionLineProcessorButton.this, 
 					ProductionLineProcessorButton.this.addDebarkerItem,
 					ProductionLineProcessorButton.this.removeDebarkerItem);
@@ -71,8 +71,8 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton imple
 		@Override
 		public void refreshInterface() {
 			ProductionLineProcessor owner = (ProductionLineProcessor) ProductionLineProcessorButton.this.getOwner();
-			ProductionLineProcessorButton.this.addDebarkerItem.setEnabled(!owner.containsForkProcessorOfThisKind(DebarkingProcessor.class));
-			ProductionLineProcessorButton.this.removeDebarkerItem.setEnabled(owner.containsForkProcessorOfThisKind(DebarkingProcessor.class));
+			ProductionLineProcessorButton.this.addDebarkerItem.setEnabled(!owner.containsExtractionProcessorOfThisKind(DebarkingProcessor.class));
+			ProductionLineProcessorButton.this.removeDebarkerItem.setEnabled(owner.containsExtractionProcessorOfThisKind(DebarkingProcessor.class));
 		}
 		
 		@Override
@@ -124,11 +124,11 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton imple
 		createEndOfLifeLinkRecognizer.setComponent(null);
 		addDebarkerItem = new JMenuItem(MessageID.AddDebarkerMessage.toString());
 		removeDebarkerItem = new JMenuItem(MessageID.RemoveDebarkerMessage.toString());
-		setForkOperationPopupMenu();
+		setExtractionPopupMenu();
 	}
 	
-	void setForkOperationPopupMenu() {
-		ForkOperationPopupMenu forkOperationPopupMenu = new ForkOperationPopupMenu();
+	void setExtractionPopupMenu() {
+		ExtractionPopupMenu forkOperationPopupMenu = new ExtractionPopupMenu();
 		addMouseListener(new REpiceaPopupListener(forkOperationPopupMenu));
 	}
 	
@@ -176,11 +176,11 @@ public class ProductionLineProcessorButton extends AbstractProcessorButton imple
 			DebarkingProcessor debarkingProcessor = new DebarkingProcessor();
 			LocatedEvent evt = new LocatedEvent(this, newLocation);
 			ExtendedSystemPanel panel = (ExtendedSystemPanel) CommonGuiUtility.getParentComponent(this, SystemPanel.class);
-			panel.addLinkLine(new ForkOperationLinkLine(panel, parentProcessor, debarkingProcessor));
+			panel.addLinkLine(new ExtractionLinkLine(panel, parentProcessor, debarkingProcessor));
 			panel.acceptThisObject(debarkingProcessor, evt);
 		} else if (arg0.getSource().equals(removeDebarkerItem)) {
 			ProductionLineProcessor parentProcessor = (ProductionLineProcessor) getOwner();
-			AbstractForkOperationProcessor forkProcessor = parentProcessor.getForkProcessorOfThisKind(DebarkingProcessor.class) ;
+			AbstractExtractionProcessor forkProcessor = parentProcessor.getExtractionProcessorOfThisKind(DebarkingProcessor.class) ;
 			ExtendedSystemPanel panel = (ExtendedSystemPanel) CommonGuiUtility.getParentComponent(this, SystemPanel.class);
 			panel.deleteFeature(forkProcessor.getUI());
 		}

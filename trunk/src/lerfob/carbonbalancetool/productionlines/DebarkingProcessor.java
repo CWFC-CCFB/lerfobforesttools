@@ -18,11 +18,18 @@
  */
 package lerfob.carbonbalancetool.productionlines;
 
+import java.awt.Container;
+import java.util.ArrayList;
+import java.util.List;
+
+import repicea.simulation.processsystem.ProcessUnit;
+import repicea.simulation.processsystem.ProcessorButton;
+import repicea.simulation.processsystem.SystemPanel;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
-public class DebarkingProcessor extends AbstractForkOperationProcessor {
+public class DebarkingProcessor extends AbstractExtractionProcessor {
 
 	private enum MessageID implements TextableEnum {
 
@@ -47,6 +54,32 @@ public class DebarkingProcessor extends AbstractForkOperationProcessor {
 		super();
 		setName(MessageID.Debarking.toString());		// default name
 	}
+
+	@Override
+	public ProcessorButton getUI(Container container) {
+		if (guiInterface == null) {
+			guiInterface = new ExtractionProcessorButton((SystemPanel) container, this);
+		}
+		return guiInterface;
+	}
+
+
+	@Override
+	protected List<ProcessUnit> extract(List<ProcessUnit> processUnits) {
+		List<ProcessUnit> extractedUnits = new ArrayList<ProcessUnit>();
+		List<ProcessUnit> copyList = new ArrayList<ProcessUnit>();
+		copyList.addAll(processUnits);
+		for (ProcessUnit p : copyList) {
+//			if (p instanceof BarkUnit) {
+//				extractedUnits.add(p);
+//				processUnits.remove(p);
+//			}
+		}
+		return extractedUnits;
+	}
+
+
+
 
 
 }

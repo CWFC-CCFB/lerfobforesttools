@@ -49,7 +49,7 @@ public class LeftInForestProcessor extends AbstractProductionLineProcessor {
 		}
 		
 		@Override
-		void setForkOperationPopupMenu() {} // to disable the fork operations
+		void setExtractionPopupMenu() {} // to disable the fork operations
 	}
 	
 	
