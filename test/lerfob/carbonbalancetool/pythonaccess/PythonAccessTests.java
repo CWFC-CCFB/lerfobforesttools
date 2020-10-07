@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATBasicWoodDensityProvider.AverageBasicDensity;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
@@ -96,11 +97,13 @@ public class PythonAccessTests {
 		ProductionProcessorManager manager = pap.getCarbonToolSettings().getCurrentProductionProcessorManager();
 		AmountMap<Element> amountMap = new AmountMap<Element>();
 		amountMap.put(Element.Volume, 100d);
+		Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+		amountMaps.put(BiomassType.Wood, amountMap);
 		
 		EuropeanBeechBasicTreeLoggerParameters loggerParams = new EuropeanBeechBasicTreeLogger().createDefaultTreeLoggerParameters();
 		for (DiameterBasedTreeLogCategory logCategory : loggerParams.getLogCategoryList()) {
 			manager.resetCarbonUnitMap();
-			manager.processWoodPiece(logCategory, 0, "", amountMap, "Unknown");
+			manager.processWoodPiece(logCategory, 0, "", amountMaps, "Unknown");
 			double volume = 0;
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) {
 				CarbonUnitList list = manager.getCarbonUnits(type);
@@ -123,11 +126,13 @@ public class PythonAccessTests {
 		ProductionProcessorManager manager = pap.getCarbonToolSettings().getCurrentProductionProcessorManager();
 		AmountMap<Element> amountMap = new AmountMap<Element>();
 		amountMap.put(Element.Volume, 100d);
+		Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+		amountMaps.put(BiomassType.Wood, amountMap);
 		
 		MaritimePineBasicTreeLoggerParameters loggerParams = new MaritimePineBasicTreeLogger().createDefaultTreeLoggerParameters();
 		for (DiameterBasedTreeLogCategory logCategory : loggerParams.getLogCategoryList()) {
 			manager.resetCarbonUnitMap();
-			manager.processWoodPiece(logCategory, 0, "", amountMap, "Unknown");
+			manager.processWoodPiece(logCategory, 0, "", amountMaps, "Unknown");
 			double volume = 0;
 			for (CarbonUnitStatus type : CarbonUnitStatus.values()) {
 				CarbonUnitList list = manager.getCarbonUnits(type);

@@ -87,7 +87,8 @@ public class LeftInForestProcessor extends AbstractProductionLineProcessor {
 				carbonUnit.samplingUnitID, 
 				woodProductFeature, 
 				processedAmountMap, 
-				carbonUnit.getSpeciesName());
+				carbonUnit.getSpeciesName(),
+				carbonUnit.getBiomassType());
 		woodProduct.addStatus(CarbonUnitStatus.DeadWood);
 		outputUnits.add(woodProduct);
 		return outputUnits;

@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
+import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.ProcessorButton;
 import repicea.simulation.processsystem.SystemPanel;
@@ -70,10 +71,12 @@ public class DebarkingProcessor extends AbstractExtractionProcessor {
 		List<ProcessUnit> copyList = new ArrayList<ProcessUnit>();
 		copyList.addAll(processUnits);
 		for (ProcessUnit p : copyList) {
-//			if (p instanceof BarkUnit) {
-//				extractedUnits.add(p);
-//				processUnits.remove(p);
-//			}
+			if (p instanceof CarbonUnit) {
+				if (((CarbonUnit) p).getBiomassType() == BiomassType.Bark) {
+					extractedUnits.add(p);
+					processUnits.remove(p);
+				}
+			}
 		}
 		return extractedUnits;
 	}
