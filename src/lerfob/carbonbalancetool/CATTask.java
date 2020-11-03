@@ -292,7 +292,7 @@ public class CATTask extends AbstractGenericTask {
 
 							AmountMap<Element> woodAmountMap = new AmountMap<Element>();
 							double woodVolumeM3;
-							if (CATSettings.DisinguishingBarkFromWood) {
+							if (CATSettings.DistinguishingBarkFromWood) {
 								woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3();
 							} else {
 								woodVolumeM3 = woodPiece.getWeightedTotalVolumeM3();
@@ -317,7 +317,7 @@ public class CATTask extends AbstractGenericTask {
 							Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
 							amountMaps.put(BiomassType.Wood, woodAmountMap);
 
-							if (CATSettings.DisinguishingBarkFromWood) {
+							if (CATSettings.DistinguishingBarkFromWood) {
 								AmountMap<Element> barkAmountMap = new AmountMap<Element>();
 								double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3();
 								double barkBiomassMg = barkVolumeM3 * basicWoodDensityMgM3; // TODO should be the bark basic density here
@@ -490,8 +490,11 @@ public class CATTask extends AbstractGenericTask {
 	}
 	
 	
-	private void processUnaccountedVolume(CATCompatibleTree tree, double volumeOverBark, 
-			int dateIndex, String samplingUnitID, WoodyDebrisProcessorID type) {
+	private void processUnaccountedVolume(CATCompatibleTree tree, 
+			double volumeOverBark, 
+			int dateIndex, 
+			String samplingUnitID, 
+			WoodyDebrisProcessorID type) {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
@@ -500,7 +503,7 @@ public class CATTask extends AbstractGenericTask {
 			double propWood = 1d / (1d + tree.getBarkProportionOfWoodVolume());
 
 			double woodVolume;
-			if (CATSettings.DisinguishingBarkFromWood) {
+			if (CATSettings.DistinguishingBarkFromWood) {
 				woodVolume = volumeOverBark * propWood;
 			} else {
 				woodVolume = volumeOverBark;
@@ -515,7 +518,7 @@ public class CATTask extends AbstractGenericTask {
 			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
 			amountMaps.put(BiomassType.Wood, woodAmountMap);
 			
-			if (CATSettings.DisinguishingBarkFromWood) {
+			if (CATSettings.DistinguishingBarkFromWood) {
 				double barkVolume = volumeOverBark - woodVolume;
 				double barkBiomass = barkVolume * basicWoodDensityMgM3;
 				double barkCarbon = barkBiomass * carbonContentRatio;

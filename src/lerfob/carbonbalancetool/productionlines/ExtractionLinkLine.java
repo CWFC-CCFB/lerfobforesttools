@@ -48,12 +48,9 @@ public class ExtractionLinkLine extends ValidProcessorLinkLine {
 		setAnchorPositions(AnchorPosition.TOP, AnchorPosition.LEFT);
 
 		((ProductionLineProcessor) fatherProcessor).addExtractionProcessor(sonProcessor);
-//		ProductionLineProcessorButton fatherButton = (ProductionLineProcessorButton) fatherProcessor.getUI(panel);
-//		fatherButton.addComponentListener(this);
-//		fatherButton.createEndOfLifeLinkRecognizer.setComponent(null); // disable the drag & drop
 		sonProcessor.getUI(panel).addComponentListener(this);
 		setBackground(Color.LIGHT_GRAY);
-		this.setBorderPainted(false);
+		setBorderPainted(false);
 	}
 
 	@Override
@@ -73,7 +70,7 @@ public class ExtractionLinkLine extends ValidProcessorLinkLine {
 	}
 
 	@Override
-	protected boolean shouldChangeBeRecorder() {return false;}	// No need to record the change here 
+	protected boolean shouldChangeBeRecorded() {return false;}	// No need to record the change here 
 																// because the link is to be deleted 
 																// at the same than the process when 
 																// pressing CTRL-Z. MF2020-09-21

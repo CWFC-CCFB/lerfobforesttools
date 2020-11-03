@@ -8,9 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import junit.framework.Assert;
+import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
@@ -195,6 +196,82 @@ public class ProductionLinesTest {
 
 	}
 
+	
+	
+	/**
+	 * Tests if the amount in is equal to the amount out
+	 */
+	@Test
+	public void testBiomassBalanceInProductionLinesWithNewImplementationAndDebarking() {
+//		CATSettings.DistinguishingBarkFromWood = true;
+		try {
+			String filename = ObjectUtility.getPackagePath(getClass()) + "testHardwoodSimpleWithDebarking.prl";
+			ProductionProcessorManager processorManager = new ProductionProcessorManager();
+			processorManager.load(filename);
+
+			double volume = 100d;
+			double carbonContent = .5;
+			double basicWoodDensity = .5;
+			double barkProportion = 0.11;
+			AmountMap<Element> amountMap = new AmountMap<Element>();
+			amountMap.put(Element.Volume, volume * (1-barkProportion));
+			amountMap.put(Element.Biomass, volume * basicWoodDensity);
+			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
+			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
+			amountMaps.put(BiomassType.Wood, amountMap);
+
+			amountMap = new AmountMap<Element>();
+			amountMap.put(Element.Volume, volume * (barkProportion));
+			amountMap.put(Element.Biomass, volume * basicWoodDensity);
+			amountMap.put(Element.C, volume * basicWoodDensity * carbonContent);
+			amountMaps.put(BiomassType.Bark, amountMap);
+
+			List<Processor> processors = processorManager.getPrimaryProcessors();
+			int i = processors.size() - 1;
+			LogCategoryProcessor sawingProcessor = null;
+			while (i >= 0) {
+				Processor p = processors.get(i);
+				if (p instanceof LogCategoryProcessor) {
+					sawingProcessor = (LogCategoryProcessor) p;
+					break;
+				}
+				i--;
+			}
+
+//			Collection<CarbonUnit> endProducts = processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, amountMap);
+			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMaps, "Unknown");			
+			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
+			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
+				endProducts.addAll(processorManager.getCarbonUnits(status));
+			}
+			double totalVolumeWood = 0d;
+			double totalVolumeBark = 0d;
+			for (CarbonUnit unit : endProducts) {
+				if (unit.getBiomassType() == BiomassType.Wood) {
+					totalVolumeWood += unit.getAmountMap().get(Element.Volume);
+				} else {
+					totalVolumeBark += unit.getAmountMap().get(Element.Volume);
+				}
+			}
+
+			Assert.assertEquals("Test for production line : " + "Sawing",
+					volume * (1 - barkProportion), 
+					totalVolumeWood, 
+					1E-12);
+			Assert.assertEquals("Test for production line : " + "Sawing",
+					volume * (barkProportion), 
+					totalVolumeBark, 
+					1E-12);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} finally {
+//			CATSettings.DistinguishingBarkFromWood = false;
+		}
+
+	}
+
 	/**
 	 * Tests if the amount in is equal to the amount out
 	 */
@@ -254,4 +331,6 @@ public class ProductionLinesTest {
 
 	}
 
+	
+	
 }
