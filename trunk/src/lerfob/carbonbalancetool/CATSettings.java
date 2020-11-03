@@ -58,7 +58,7 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("deprecation")
 public final class CATSettings {
 	
-	protected static boolean DisinguishingBarkFromWood = false;
+	public static final boolean DistinguishingBarkFromWood = true;
 	
 	
 	/**
