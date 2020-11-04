@@ -81,7 +81,7 @@ import repicea.util.REpiceaTranslator.TextableEnum;
  * CarbonAccountingTool class. 
  * @author M. Fortin - June 2010
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial", "deprecation"})
 public class CATFrame extends REpiceaFrame implements PropertyChangeListener, ItemListener,
 																		Refreshable, 
 																		AcceptableDropComponent<ArrayList<CATCompatibleStand>> {
