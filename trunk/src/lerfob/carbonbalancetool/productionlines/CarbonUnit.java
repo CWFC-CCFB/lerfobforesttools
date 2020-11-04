@@ -37,9 +37,10 @@ import repicea.simulation.processsystem.ProcessUnit;
  * A CarbonUnit instance is a piece of carbon.
  * @author Mathieu Fortin - November 2010
  */
-public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvider {
+public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvider, BiomassTypeProvider {
 
 	public final static String AllSpecies = "AllSpecies";
+	
 	
 	public static enum CarbonUnitStatus {
 		EndUseWoodProduct, 
@@ -130,7 +131,8 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 		this.biomassType = biomassType; 
 	}
 
-	protected BiomassType getBiomassType() {
+	@Override
+	public BiomassType getBiomassType() {
 		if (biomassType == null) {
 			return BiomassType.Wood;
 		} else {

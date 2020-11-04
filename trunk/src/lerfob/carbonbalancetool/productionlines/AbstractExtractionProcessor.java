@@ -23,8 +23,10 @@ import java.awt.Graphics;
 import java.util.Collection;
 import java.util.List;
 
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager.CarbonTestProcessUnit;
 import repicea.gui.permissions.REpiceaGUIPermission;
 import repicea.simulation.processsystem.ProcessUnit;
+import repicea.simulation.processsystem.Processor;
 import repicea.simulation.processsystem.SystemPanel;
 
 /**
@@ -82,9 +84,15 @@ public abstract class AbstractExtractionProcessor extends AbstractProcessor {
 
 	}
 	
-	protected Collection<ProcessUnit> extractAndProcess(List<ProcessUnit> processUnits) {
+	protected Collection<ProcessUnit> extractAndProcess(Processor fatherProcessor, List<ProcessUnit> processUnits) {
 		List<ProcessUnit> extractedUnits = extract(processUnits);
 		if (!extractedUnits.isEmpty()) {
+			for (ProcessUnit pu : extractedUnits) {
+				if (pu instanceof CarbonTestProcessUnit) {
+					((CarbonTestProcessUnit) pu).recordProcessor(fatherProcessor);	// we must also record the father processor otherwise it is simply skipped
+					((CarbonTestProcessUnit) pu).recordProcessor(this);
+				}
+			}
 			return doProcess(extractedUnits);
 		} else {
 			return extractedUnits;
