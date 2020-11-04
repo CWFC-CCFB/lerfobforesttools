@@ -130,7 +130,7 @@ public final class ProductionLineProcessor extends AbstractProductionLineProcess
 		Collection<ProcessUnit> resultingUnits = new ArrayList<ProcessUnit>();
 		if (!getExtractionProcessors().isEmpty()) {
 			for (AbstractExtractionProcessor p : getExtractionProcessors()) {
-				resultingUnits.addAll(p.extractAndProcess(inputUnits));
+				resultingUnits.addAll(p.extractAndProcess(this, inputUnits));
 			}
 		}
 		if (!inputUnits.isEmpty()) {

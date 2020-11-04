@@ -55,6 +55,7 @@ import repicea.simulation.processsystem.ProcessUnit;
 import repicea.simulation.processsystem.Processor;
 import repicea.simulation.processsystem.SystemManager;
 import repicea.simulation.processsystem.SystemManagerDialog;
+import repicea.simulation.processsystem.TestProcessUnit;
 import repicea.simulation.treelogger.LogCategory;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -125,7 +126,51 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	}
 
 	
-	protected static List<LeftHandSideProcessor> DefaultLeftHandSideProcessors;
+	static class CarbonTestProcessUnit extends TestProcessUnit {
+		
+		CarbonTestProcessUnit() {
+			super();
+		}
+
+		/*
+		 * For extended visibility in this package.
+		 */
+		@Override
+		protected boolean recordProcessor(Processor processor) {
+			return super.recordProcessor(processor);
+		}
+		
+		@Override
+		protected TestProcessUnit createNewProcessUnitFromThisOne() {
+			CarbonTestProcessUnit ctpu = new CarbonTestProcessUnit();
+			ctpu.processorList.addAll(this.processorList);
+			return ctpu;
+		}
+		
+	}
+	
+	static class BarkTestProcessUnit extends CarbonTestProcessUnit implements BiomassTypeProvider {
+		
+		BarkTestProcessUnit() {
+			super();
+		}
+
+		@Override
+		public BiomassType getBiomassType() {
+			return BiomassType.Bark;
+		}
+		
+		@Override
+		protected TestProcessUnit createNewProcessUnitFromThisOne() {
+			BarkTestProcessUnit ctpu = new BarkTestProcessUnit();
+			ctpu.processorList.addAll(this.processorList);
+			return ctpu;
+		}
+
+	}
+	
+	
+ 	protected static List<LeftHandSideProcessor> DefaultLeftHandSideProcessors;
 	
 	protected static final ProductionLineFileFilter MyFileFilter = new ProductionLineFileFilter();
 	
@@ -370,6 +415,10 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 		return -1;
 	}
 	
+	protected void addTestUnits(List<ProcessUnit> inputUnits) {
+		inputUnits.add(new CarbonTestProcessUnit());
+		inputUnits.add(new BarkTestProcessUnit());
+	}
 	
 	
 	/**

@@ -71,8 +71,8 @@ public class DebarkingProcessor extends AbstractExtractionProcessor {
 		List<ProcessUnit> copyList = new ArrayList<ProcessUnit>();
 		copyList.addAll(processUnits);
 		for (ProcessUnit p : copyList) {
-			if (p instanceof CarbonUnit) {
-				if (((CarbonUnit) p).getBiomassType() == BiomassType.Bark) {
+			if (p instanceof BiomassTypeProvider) {
+				if (((BiomassTypeProvider) p).getBiomassType() == BiomassType.Bark) {
 					extractedUnits.add(p);
 					processUnits.remove(p);
 				}
