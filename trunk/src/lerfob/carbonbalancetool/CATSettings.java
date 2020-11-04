@@ -58,8 +58,6 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 @SuppressWarnings("deprecation")
 public final class CATSettings {
 	
-	public static final boolean DistinguishingBarkFromWood = true;
-	
 	
 	/**
 	 * The enum representing the species. The proportion of bark volume was taken from 
