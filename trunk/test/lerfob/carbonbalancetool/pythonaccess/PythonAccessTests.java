@@ -59,7 +59,7 @@ public class PythonAccessTests {
 		int nbValuesCompared = 0;
 		for (Integer key : resultingMap.keySet()) {
 			Map<String, Double> innerResultingMap = resultingMap.get(key);
-//			innerResultingMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
+			innerResultingMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
 			Map<?,?> innerRefMap = (Map) refMap.get(key);
 			if (innerRefMap == null) {
 				Assert.fail();
@@ -172,6 +172,7 @@ public class PythonAccessTests {
 		int nbValuesCompared = 0;
 		for (Integer key : resultingMap.keySet()) {
 			Map<String, Double> innerResultingMap = resultingMap.get(key);
+			innerResultingMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
 			Map<?,?> innerRefMap = (Map) refMap.get(key);
 			if (innerRefMap == null) {
 				Assert.fail();
@@ -357,7 +358,7 @@ public class PythonAccessTests {
 			} else {
 				Map<String, Double> innerRefMap = inputMap.get(year).get("RESULTS");
 				Map<String, Double> innerActualMap = resultingMap.get(year);
-//				innerActualMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
+				innerActualMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
 				Assert.assertEquals("Testing inner map sizes", innerRefMap.size(), innerActualMap.size());
 				for (String key : innerRefMap.keySet()) {
 					if (!innerActualMap.containsKey(key)) {
@@ -461,7 +462,7 @@ public class PythonAccessTests {
 			} else {
 				Map<String, Double> innerRefMap = inputMap.get(year).get("RESULTS");
 				Map<String, Double> innerActualMap = resultingMap.get(year);
-//				innerActualMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
+				innerActualMap.remove("BiomassMgHaFUEL");  // This class was added after the test was created
 				Assert.assertEquals("Testing inner map sizes", innerRefMap.size(), innerActualMap.size());
 				for (String key : innerRefMap.keySet()) {
 					if (!innerActualMap.containsKey(key)) {
