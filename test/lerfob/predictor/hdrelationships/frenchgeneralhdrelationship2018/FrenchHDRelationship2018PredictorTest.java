@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
 import repicea.serial.xml.XmlDeserializer;
+import repicea.serial.xml.XmlSerializer;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.util.ObjectUtility;
@@ -49,7 +50,7 @@ public class FrenchHDRelationship2018PredictorTest {
 				}
 			}
 		}
-		System.out.println("Successfully compared " + nbTrees + " trees (should be 566 170 - 10 trees with negative predictions).");
+		System.out.println("Successfully compared " + nbTrees + " trees (should be 17 173 trees).");
 	}
 
 	
@@ -70,7 +71,7 @@ public class FrenchHDRelationship2018PredictorTest {
 				}
 			}
 		}
-		System.out.println("Successfully compared " + nbTrees + " trees (should be 566 170 - 10 trees with negative predictions).");
+		System.out.println("Successfully compared " + nbTrees + " trees (should be 17 173 trees).");
 	}
 
 	
@@ -333,7 +334,7 @@ public class FrenchHDRelationship2018PredictorTest {
 
 	
 	static void readTrees() {
-		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testData.csv";
+		String filename = ObjectUtility.getPackagePath(FrenchHDRelationship2018PredictorTest.class) + "testDataNew.csv";
 		List<FrenchHDRelationship2018PlotImplForTest> standList = new ArrayList<FrenchHDRelationship2018PlotImplForTest>();
 		List<FrenchHDRelationship2018ExtPlotImplForTest> extStandList = new ArrayList<FrenchHDRelationship2018ExtPlotImplForTest>();
 
