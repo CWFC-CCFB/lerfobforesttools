@@ -39,7 +39,8 @@ public class FrenchHDRelationship2014PredictorTest {
 		FrenchHDRelationship2014TreeImpl.BlupPrediction = false;
 		FrenchHDRelationship2014Predictor predictor = new FrenchHDRelationship2014Predictor();
 		int nbTrees = 0;
-		for (FrenchHDRelationship2014Stand stand : Stands) {
+		for (int i = 0; i < 10000; i++) {
+			FrenchHDRelationship2014StandImpl stand = Stands.get(i);
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 				FrenchHDRelationship2014TreeImpl tree = (FrenchHDRelationship2014TreeImpl) obj;
 				double actual = predictor.predictHeightM(stand, tree);
