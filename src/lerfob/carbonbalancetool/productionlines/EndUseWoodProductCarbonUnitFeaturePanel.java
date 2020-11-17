@@ -212,12 +212,22 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 				disposableProportionSlider.setEnabled(isDisposableCheckBox.isSelected());
 			}
 		} else if (evt.getSource().equals(useClassList)) {
-			boolean isMeantForEnergy = getCaller().getUseClass().isMeantForEnergyProduction();
-			if (!isMeantForEnergy) {
-				combustionProcessList.setSelectedItem(CombustionProcess.None);
-			}
-			combustionProcessList.setEnabled(isMeantForEnergy);
+			checkIfIsMeantForEnergy();
+//			boolean isMeantForEnergy = getCaller().getUseClass().isMeantForEnergyProduction();
+//			if (!isMeantForEnergy) {
+//				combustionProcessList.setSelectedItem(CombustionProcess.None);
+//			}
+//			combustionProcessList.setEnabled(isMeantForEnergy);
 		}
+	}
+	
+	
+	private void checkIfIsMeantForEnergy() {
+		boolean isMeantForEnergy = getCaller().getUseClass().isMeantForEnergyProduction();
+		if (!isMeantForEnergy) {
+			combustionProcessList.setSelectedItem(CombustionProcess.None);
+		}
+		combustionProcessList.setEnabled(isMeantForEnergy);
 	}
 	
 	@Override
@@ -250,5 +260,14 @@ public class EndUseWoodProductCarbonUnitFeaturePanel extends CarbonUnitFeaturePa
 		emissionsByFUField.removeNumberFieldListener(getCaller());
 	}
 
+
+	/*
+	 * Useless for this class (non-Javadoc)
+	 * @see repicea.gui.Refreshable#refreshInterface()
+	 */
+	@Override
+	public void refreshInterface() {
+		checkIfIsMeantForEnergy();
+	}
 
 }

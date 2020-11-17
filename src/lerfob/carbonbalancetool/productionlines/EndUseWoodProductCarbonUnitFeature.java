@@ -57,7 +57,8 @@ public class EndUseWoodProductCarbonUnitFeature extends CarbonUnitFeature implem
 		RESIDUALS_FOR_ENERGY("Residues energy", "R\u00E9sidus pour \u00E9nergie", true),
 		BRANCHES_FOR_ENERGY("Branches", "Menus bois", true),
 		STUMPS_FOR_ENERGY("Stumps", "Souches", true),
-		EXTRACTIVE("Wood extractives", "Extractibles du bois", false);
+		EXTRACTIVE("Wood extractives", "Extractibles du bois", false),
+		FUEL("Biofuel", "Biocarburant", false);
 
 		private final boolean meantForEnergyProduction;
 		
