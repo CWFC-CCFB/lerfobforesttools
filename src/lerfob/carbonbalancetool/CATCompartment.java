@@ -232,7 +232,7 @@ public class CATCompartment implements Comparable {
 	 * This method initializes the carbon map array.
 	 */
 	protected void resetCarbon() {
-		calculatedCarbonArray = new double[getTimeTable().size()];
+		calculatedCarbonArray = new double[getCompartmentManager().getTimeTable().size()];
 		integratedCarbon = 0d;
 		isMerged = false;
 	}
@@ -245,7 +245,7 @@ public class CATCompartment implements Comparable {
 	protected Matrix getCarbonEvolution(double plotAreaHa) {
 		double areaFactor = 1d / plotAreaHa;
 		
-		Matrix value = new Matrix(getTimeTable().size(),1);
+		Matrix value = new Matrix(getCompartmentManager().getTimeTable().size(),1);
 		
 		for (int i = 0; i < value.m_iRows; i++) {
 			value.m_afData[i][0] = calculatedCarbonArray[i] * areaFactor;
@@ -278,7 +278,7 @@ public class CATCompartment implements Comparable {
 				comp.mergeWithFatherCompartments();			// recursive method to ensure that compartment with father compartments have been merged
 				
 				// for the calculated carbon
-				for (int i = 0; i < getTimeTable().size(); i++) {
+				for (int i = 0; i < getCompartmentManager().getTimeTable().size(); i++) {
 					calculatedCarbonArray[i] += comp.getCalculatedCarbonArray()[i];
 				}
 				
@@ -301,7 +301,6 @@ public class CATCompartment implements Comparable {
 	}
 	
 	
-	protected CATTimeTable getTimeTable() {return getCompartmentManager().getTimeTable();}
 	
 //	protected static Vector<CompartmentInfo> getCompartmentInfoMap(boolean isFlux) {
 //		Vector<CompartmentInfo> outputSet = new Vector<CompartmentInfo>();
