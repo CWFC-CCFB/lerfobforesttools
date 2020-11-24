@@ -80,11 +80,9 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		XmlSerializerChangeMonitor.registerClassNameChange("repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider$SpeciesType", "repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider$SpeciesType");
 		
 		TreeLoggerManager.registerTreeLoggerName(BasicTreeLogger.class.getName());
-//		TreeLoggerManager.registerTreeLoggerName(DiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(CATDiameterBasedTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(EuropeanBeechBasicTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(MaritimePineBasicTreeLogger.class.getName());
-//		TreeLoggerManager.registerTreeLoggerName(WBirchProdVolTreeLogger.class.getName());
 		
 		TreeLoggerManager.registerTreeLoggerName(MathildeTreeLogger.class.getName());
 		TreeLoggerManager.registerTreeLoggerName(DouglasFCBATreeLogger.class.getName());

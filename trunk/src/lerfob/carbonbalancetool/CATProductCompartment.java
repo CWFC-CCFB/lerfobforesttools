@@ -136,7 +136,7 @@ public class CATProductCompartment extends CATCompartment {
 				if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
 					subList = new CarbonUnitList();
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						if (getCompartmentManager().getTimeTable().get(carbonUnit.getIndexInTimeScale()) == date) {
+						if (timeScale.get(carbonUnit.getIndexInTimeScale()) == date) {
 							subList.add(carbonUnit);
 						}
 					}

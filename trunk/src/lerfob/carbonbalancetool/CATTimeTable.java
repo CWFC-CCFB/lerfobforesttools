@@ -19,6 +19,7 @@
 package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 @SuppressWarnings("serial")
@@ -26,12 +27,56 @@ public class CATTimeTable extends ArrayList<Integer> {
 
 	private final int lastStandDate;
 	private final int initialAgeYr;
-
+	
+	
+	/*
+	 * Former implementation with non annual steps.
+	 */
 	protected CATTimeTable(int lastStandDate, int initialAgeYr) {
 		this.lastStandDate = lastStandDate;
 		this.initialAgeYr = initialAgeYr;
 	}
 
+	
+	
+	protected CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears, int averageTimeStep) {
+		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
+		this.lastStandDate = lastStand.getDateYr();
+		int size = stands.size() + nbExtraYears / averageTimeStep;
+		for (int i = 0; i < size; i++) {
+			if (i < stands.size()) {
+				add(stands.get(i).getDateYr());
+			} else  {
+				add(get(i - 1) + averageTimeStep);
+			}
+		}
+		this.initialAgeYr = initialAgeYr;
+	}
+
+	
+	
+//	/*
+//	 * Former implementation with annual steps.
+//	 */
+//	protected CATTimeTable(int lastStandDate, int initialAgeYr, int nbExtraYears, int averageTimeStep) {
+//		this.lastStandDate = lastStandDate;
+//		this.initialAgeYr = initialAgeYr;
+//		if (nbExtraYear != -1) {
+//			int size = stands.size() + nbExtraYears / averageTimeStep;
+//			for (int i = 0; i < size; i++) {
+//				if (i < stands.size()) {
+//					timeTable.add(stands.get(i).getDateYr());
+//				} else  {
+//					timeTable.add(timeTable.get(i - 1) + averageTimeStep);
+//				}
+//			}
+//			
+//		}
+//		this.isFinal = nbExtraYear != -1;
+//	}
+
+	
+	
 	protected int getLastStandDate() {return lastStandDate;}
 	protected int getInitialAgeYr() {return initialAgeYr;}
 	
@@ -44,5 +89,33 @@ public class CATTimeTable extends ArrayList<Integer> {
 		}
 		return dates;
 	}
+
+//	@Override
+//	public boolean add(Integer i) {
+//		if (!isFinal) {
+//			return super.add(i);
+//		} else {
+//			return false;
+//		}
+//	}
+//	
+//	@Override
+//	public boolean remove(Object obj) {
+//		if (!isFinal) {
+//			return super.remove(obj);
+//		} else {
+//			return false;
+//		}
+//	}
+//
+//	@Override
+//	public Integer remove(int i) {
+//		if (!isFinal) {
+//			return super.remove(1);
+//		} else {
+//			return null;
+//		}
+//	}
+
 	
 }
