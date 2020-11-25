@@ -131,7 +131,9 @@ public class CATProductCompartment extends CATCompartment {
 		CATTimeTable timeScale = getCompartmentManager().getTimeTable();
 		Map<Integer, CATUseClassSpeciesAmountMap> outputMap = new HashMap<Integer, CATUseClassSpeciesAmountMap>();
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
-			for (Integer date : timeScale) {
+//			for (Integer date : timeScale) {
+			for (int i = 0; i < timeScale.size(); i++) {
+				int date = timeScale.get(i);
 				CarbonUnitList subList;
 				if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
 					subList = new CarbonUnitList();
