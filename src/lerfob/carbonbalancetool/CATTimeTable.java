@@ -19,40 +19,82 @@
 package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
-@SuppressWarnings("serial")
-public class CATTimeTable extends ArrayList<Integer> {
+public class CATTimeTable {
 
 	private final int lastStandDate;
 	private final int initialAgeYr;
+	private final ArrayList<Integer> internalTimeTable;
+	private final Map<CATCompatibleStand, Integer> standMap;
 	
-	
-	/*
-	 * Former implementation with non annual steps.
+	/**
+	 * Constructor with average time step greater than 1 year.
+	 * @param stands
+	 * @param initialAgeYr
+	 * @param nbExtraYears
+	 * @param averageTimeStep
 	 */
-	protected CATTimeTable(int lastStandDate, int initialAgeYr) {
-		this.lastStandDate = lastStandDate;
-		this.initialAgeYr = initialAgeYr;
-	}
-
-	
-	
-	protected CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears, int averageTimeStep) {
+	@Deprecated
+	CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears, int averageTimeStep) {
+		this.internalTimeTable = new ArrayList<Integer>();
+		this.standMap = new LinkedHashMap<CATCompatibleStand, Integer>();
 		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 		this.lastStandDate = lastStand.getDateYr();
 		int size = stands.size() + nbExtraYears / averageTimeStep;
 		for (int i = 0; i < size; i++) {
 			if (i < stands.size()) {
-				add(stands.get(i).getDateYr());
+				CATCompatibleStand stand = stands.get(i);
+				internalTimeTable.add(stand.getDateYr());
+				standMap.put(stand, internalTimeTable.size() - 1);
 			} else  {
-				add(get(i - 1) + averageTimeStep);
+				internalTimeTable.add(internalTimeTable.get(i - 1) + averageTimeStep);
 			}
 		}
 		this.initialAgeYr = initialAgeYr;
 	}
 
+	/**
+	 * Constructor with annual time step.
+	 * @param stands
+	 * @param initialAgeYr
+	 * @param nbExtraYears
+	 */
+	CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears) {
+		this.internalTimeTable = new ArrayList<Integer>();
+		this.standMap = new HashMap<CATCompatibleStand, Integer>();
+		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
+		this.lastStandDate = lastStand.getDateYr();
+//		int startDateYr = stands.get(0).getDateYr();
+//		int lastDateYr = lastStandDate + nbExtraYears;
+		int currentDateYr = -1;
+		for (int i = 0; i < stands.size(); i++) {
+			CATCompatibleStand stand = stands.get(i);
+			currentDateYr = stand.getDateYr();
+			if (i > 0) {
+				int lastDateYr;
+				while((lastDateYr = internalTimeTable.get(internalTimeTable.size() - 1)) < currentDateYr - 1) {
+					internalTimeTable.add(lastDateYr + 1);
+				}
+			}
+			internalTimeTable.add(currentDateYr); 
+			standMap.put(stand, internalTimeTable.size()-1);
+		}
+		for (int i = 0; i < nbExtraYears; i++) {
+			internalTimeTable.add(++currentDateYr);
+		}
+		this.initialAgeYr = initialAgeYr;
+	}
+
+
+	int getIndexOfThisStandOnTheTimeTable(CATCompatibleStand stand) {
+		return standMap.get(stand);
+	}
+	
 	
 	
 //	/*
@@ -77,45 +119,23 @@ public class CATTimeTable extends ArrayList<Integer> {
 
 	
 	
-	protected int getLastStandDate() {return lastStandDate;}
-	protected int getInitialAgeYr() {return initialAgeYr;}
+	private int getLastStandDate() {return lastStandDate;}
+	int getInitialAgeYr() {return initialAgeYr;}
 	
-	protected Vector<Integer> getListOfDatesUntilLastStandDate() {
+	Vector<Integer> getListOfDatesUntilLastStandDate() {
 		Vector<Integer> dates = new Vector<Integer>();
-		for (int i = 0; i <= lastIndexOf(getLastStandDate()); i++) {
-			if (!dates.contains(get(i))) {
-				dates.add(get(i));
+		for (int i = 0; i <= internalTimeTable.lastIndexOf(getLastStandDate()); i++) {
+			if (!dates.contains(internalTimeTable.get(i))) {
+				dates.add(internalTimeTable.get(i));
 			}
 		}
 		return dates;
 	}
 
-//	@Override
-//	public boolean add(Integer i) {
-//		if (!isFinal) {
-//			return super.add(i);
-//		} else {
-//			return false;
-//		}
-//	}
-//	
-//	@Override
-//	public boolean remove(Object obj) {
-//		if (!isFinal) {
-//			return super.remove(obj);
-//		} else {
-//			return false;
-//		}
-//	}
-//
-//	@Override
-//	public Integer remove(int i) {
-//		if (!isFinal) {
-//			return super.remove(1);
-//		} else {
-//			return null;
-//		}
-//	}
-
+	public int size() {return internalTimeTable.size();}
+	
+	public int get(int i) {return internalTimeTable.get(i);}
+	
+	public int lastIndexOf(int i) {return internalTimeTable.lastIndexOf(i);}
 	
 }

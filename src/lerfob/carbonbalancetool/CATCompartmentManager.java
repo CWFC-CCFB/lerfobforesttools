@@ -186,6 +186,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			
 
 			// TODO change to an annual CATTimeTable instance
+//			timeTable = new CATTimeTable(stands, initialAgeYr, nbExtraYears);
 			timeTable = new CATTimeTable(stands, initialAgeYr, nbExtraYears, averageTimeStep);
 //			timeTable = new CATTimeTable(lastStand.getDateYr(), initialAgeYr);
 //			
