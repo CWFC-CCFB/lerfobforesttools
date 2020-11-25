@@ -171,23 +171,26 @@ public class CATTask extends AbstractGenericTask {
 			System.out.println("Creating last stand if needs be and registering trees...");
 		}
 
-		CATCompatibleStand lastStand = manager.getLastStand(); 
+		List<CATCompatibleStand> stands = manager.getTimeTable().getStandsForThisRealization();
+//		CATCompatibleStand lastStand = manager.getLastStand(); 
+//		CATCompatibleStand lastStand = manager.getTimeTable().getLastStandForThisRealization();
 
-		// performing a final cut if has not been done and only if the stand implements the CarbonToolCompatibleEvenAgedStand interface
-//		if (lastStand instanceof CATCompatibleEvenAgedStand && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
-		if (lastStand.canBeRunInInfiniteSequence() && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
-			List<CATCompatibleStand> stands = manager.getStandList();
-//			CATCompatibleStand stand = ((CATCompatibleEvenAgedStand) lastStand).getHarvestedStand();
-			CATCompatibleStand stand = lastStand.getHarvestedStand();
-			stands.add(stand);
-			manager.init(stands);				
-			caller.setFinalCutHadToBeCarriedOut(true);
-		} 					
+
+//		// performing a final cut if has not been done and only if the stand implements the CarbonToolCompatibleEvenAgedStand interface
+////		if (lastStand instanceof CATCompatibleEvenAgedStand && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
+//		if (lastStand.canBeRunInInfiniteSequence() && !lastStand.getTrees(StatusClass.alive).isEmpty()) {
+////			List<CATCompatibleStand> stands = manager.getTimeTable().getStandsForThisRealization();
+////			List<CATCompatibleStand> stands = manager.getStandList();
+////			CATCompatibleStand stand = ((CATCompatibleEvenAgedStand) lastStand).getHarvestedStand();
+//			CATCompatibleStand stand = lastStand.getHarvestedStand();
+//			stands.add(stand);
+//			manager.init(stands);	// TODO FP this should not be called again because setRealization has been called before. The time table should handle this!			
+//			caller.setFinalCutHadToBeCarriedOut(true);
+//		} 					
 
 		// retrieve the loggable trees
 		Collection<CATCompatibleTree> retrievedTreesFromStep;
-//		manager.clearTreeCollections();
-		for (CATCompatibleStand stand : manager.getStandList()) {
+		for (CATCompatibleStand stand : stands) {
 			for (StatusClass statusClass : StatusClass.values()) {
 				retrievedTreesFromStep = stand.getTrees(statusClass);
 				if (!retrievedTreesFromStep.isEmpty()) {
@@ -452,7 +455,8 @@ public class CATTask extends AbstractGenericTask {
 					if (isCancelled) {
 						break;
 					}
-					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
+					int dateIndex = caller.getCarbonCompartmentManager().getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
+//					int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 					Collection<CATCompatibleTree> trees = new ArrayList<CATCompatibleTree>();
 					Map<String, Map<String, Collection<CATCompatibleTree>>> innerMap = manager.getTrees(StatusClass.cut).get(stand);
 					for (String key : innerMap.keySet()) {
@@ -528,7 +532,8 @@ public class CATTask extends AbstractGenericTask {
 			if (isCancelled) {
 				break;
 			}
-			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
+			int dateIndex = caller.getCarbonCompartmentManager().getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
+//			int dateIndex = caller.getCarbonCompartmentManager().getStandList().indexOf(stand);
 			Map<String, Map<String, Collection<CATCompatibleTree>>> oMap = treeMap.get(stand);
 			for (String samplingUnitID : oMap.keySet()) {
 				Map<String, Collection<CATCompatibleTree>> oInnerMap = oMap.get(samplingUnitID);
