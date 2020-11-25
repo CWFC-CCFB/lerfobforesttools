@@ -18,12 +18,15 @@
  */
 package lerfob.carbonbalancetool;
 
+import java.util.List;
+
 import repicea.simulation.ApplicationScaleProvider;
 import repicea.simulation.covariateproviders.plotlevel.AgeYrProvider;
 import repicea.simulation.covariateproviders.plotlevel.AreaHaProvider;
 import repicea.simulation.covariateproviders.plotlevel.DateYrProvider;
 import repicea.simulation.covariateproviders.plotlevel.InterventionResultProvider;
 import repicea.simulation.covariateproviders.plotlevel.ManagementTypeProvider;
+import repicea.simulation.covariateproviders.plotlevel.StochasticInformationProvider;
 import repicea.simulation.covariateproviders.plotlevel.TreeStatusCollectionsProvider;
 
 /**
@@ -63,7 +66,41 @@ public interface CATCompatibleStand extends AreaHaProvider,
 	 * @return a boolean
 	 */
 	public default boolean canBeRunInInfiniteSequence() {
-		return getManagementType() == ManagementType.EvenAged && getApplicationScale() == ApplicationScale.Stand;
+		return getManagementType() == ManagementType.EvenAged && 
+				getApplicationScale() == ApplicationScale.Stand &&
+				getNumberOfRealizations() == 1;		// we can hardly deal with multiple realizations in an infinite sequence 
+													// because the stand may be ready for final harvesting in one realization 
+													// but not in the others
 	}
+
+	/**
+	 * Check if the stand implements Monte Carlo features and retrieve the number of Monte Carlo 
+	 * realizations.  
+	 * @return the number of Monte Carlo realizations or 1 if either the stand does not implement
+	 * Monte Carlo feature or these are not compatible
+	 */
+	public default int getNumberOfRealizations() {
+		if (this instanceof StochasticInformationProvider) {
+			StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) this;
+			List<Integer> monteCarloIds = stochProv.getRealizationIds();
+			if (stochProv.isStochastic() && stochProv.getRealization(monteCarloIds.get(0)) instanceof CATCompatibleStand) {
+				return monteCarloIds.size();
+			}
+		} 
+		return 1;
+	}
+
+	public default boolean isStochastic() {
+		if (this instanceof StochasticInformationProvider) {
+			StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) this;
+			List<Integer> monteCarloIds = stochProv.getRealizationIds();
+			if (stochProv.isStochastic() && stochProv.getRealization(monteCarloIds.get(0)) instanceof CATCompatibleStand) {
+				return true;
+			}
+		} 
+		return false;
+	}
+
+	
 	
 }

@@ -49,37 +49,46 @@ public class CATCompartmentCompileLibrary {
 		double integratedCarbon = 0d;
 		int revolutionPeriod = manager.getRotationLength();
 		CATExponentialFunction decayFunction;
-		
-		List<CATCompatibleStand> stands = manager.getStandList();
+		List<CATCompatibleStand> stands = timeScale.getStandsForThisRealization();
 
 		switch (carbonCompartment.getCompartmentID()) {
 		
 		case Roots:
 			
-			for (int i = 0; i < timeScale.size(); i++) {
-				double carbonContent = 0d;
-				if (i < stands.size()) {
-					CATCompatibleStand stand = stands.get(i);
-					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-				}
-				carbonCompartment.setCarbonIntoArray(i, carbonContent);
+//			for (int i = 0; i < timeScale.size(); i++) {
+//				double carbonContent = 0d;
+//				if (i < stands.size()) {
+//					CATCompatibleStand stand = stands.get(i);
+//					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
+//				}
+//				carbonCompartment.setCarbonIntoArray(i, carbonContent);
+//			}
+			for (CATCompatibleStand stand : stands) {
+				// TODO FP check if setting 0s is needed here
+				double carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
+				int indexOnTableTable = timeScale.getIndexOfThisStandOnTheTimeTable(stand);
+				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
 			}
-			
 			carbonCompartment.setIntegratedCarbon(integrateCarbonOverHorizon(carbonCompartment) / revolutionPeriod);
 			
 			break;
 			
 		case AbGround:
 			
-			for (int i = 0; i < timeScale.size(); i++) {
-				double carbonContent = 0d;
-				if (i < stands.size()) {
-					CATCompatibleStand stand = stands.get(i);
-					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-				}
-				carbonCompartment.setCarbonIntoArray(i, carbonContent);
+//			for (int i = 0; i < timeScale.size(); i++) {
+//				double carbonContent = 0d;
+//				if (i < stands.size()) {
+//					CATCompatibleStand stand = stands.get(i);
+//					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
+//				}
+//				carbonCompartment.setCarbonIntoArray(i, carbonContent);
+//			}			
+			for (CATCompatibleStand stand : stands) {
+				// TODO FP check if setting 0s is needed here
+				double carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
+				int indexOnTableTable = timeScale.getIndexOfThisStandOnTheTimeTable(stand);
+				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
 			}			
-			
 			carbonCompartment.setIntegratedCarbon(integrateCarbonOverHorizon(carbonCompartment) / revolutionPeriod);
 
 			break;

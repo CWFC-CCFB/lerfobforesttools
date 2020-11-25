@@ -25,12 +25,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
+import repicea.simulation.covariateproviders.plotlevel.StochasticInformationProvider;
+
 public class CATTimeTable {
 
 	private final int lastStandDate;
 	private final int initialAgeYr;
 	private final ArrayList<Integer> internalTimeTable;
 	private final Map<CATCompatibleStand, Integer> standMap;
+	private final Map<CATCompatibleStand, Integer> realizationStandMap;
+	private int monteCarloRealizationId;
+	private final List<CATCompatibleStand> currentStands;
 	
 	/**
 	 * Constructor with average time step greater than 1 year.
@@ -43,6 +49,8 @@ public class CATTimeTable {
 	CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears, int averageTimeStep) {
 		this.internalTimeTable = new ArrayList<Integer>();
 		this.standMap = new LinkedHashMap<CATCompatibleStand, Integer>();
+		this.realizationStandMap = new LinkedHashMap<CATCompatibleStand, Integer>();
+		this.currentStands = new ArrayList<CATCompatibleStand>();
 		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 		this.lastStandDate = lastStand.getDateYr();
 		int size = stands.size() + nbExtraYears / averageTimeStep;
@@ -67,6 +75,8 @@ public class CATTimeTable {
 	CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears) {
 		this.internalTimeTable = new ArrayList<Integer>();
 		this.standMap = new HashMap<CATCompatibleStand, Integer>();
+		this.realizationStandMap = new LinkedHashMap<CATCompatibleStand, Integer>();
+		this.currentStands = new ArrayList<CATCompatibleStand>();
 		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
 		this.lastStandDate = lastStand.getDateYr();
 //		int startDateYr = stands.get(0).getDateYr();
@@ -92,7 +102,7 @@ public class CATTimeTable {
 
 
 	int getIndexOfThisStandOnTheTimeTable(CATCompatibleStand stand) {
-		return standMap.get(stand);
+		return realizationStandMap.get(stand);
 	}
 	
 	
@@ -137,5 +147,42 @@ public class CATTimeTable {
 	public int get(int i) {return internalTimeTable.get(i);}
 	
 	public int lastIndexOf(int i) {return internalTimeTable.lastIndexOf(i);}
+
+	void setMonteCarloRealization(int realizationId) {
+		realizationStandMap.clear();
+		currentStands.clear();
+		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic()) {
+			for (CATCompatibleStand stand : standMap.keySet()) {
+				int indexOfThisStand = standMap.get(stand);
+				List<Integer> monteCarloIds = ((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealizationIds();
+				CATCompatibleStand standForThisRealization = ((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(monteCarloIds.get(realizationId));
+				realizationStandMap.put(standForThisRealization, indexOfThisStand);
+				currentStands.add(standForThisRealization);
+			}
+		} else {
+			realizationStandMap.putAll(standMap);
+			currentStands.addAll(realizationStandMap.keySet());
+		}
+		monteCarloRealizationId = realizationId;
+	}
+	
+	int getCurrentMonteCarloRealizationId() {
+		return monteCarloRealizationId;
+	}
+	
+	List<CATCompatibleStand> getStandsForThisRealization() {
+		return currentStands;
+	}
+	
+	
+	CATCompatibleStand getLastStandForThisRealization() {
+		return currentStands.get(currentStands.size() - 1);
+	}
+	
+//	void synchronize(List<CATCompatibleStand> stands, List<CATCompatibleStand> currentStands) {
+//		for (int i = 0; i < stands.size(); i++) {
+//			
+//		}
+//	}
 	
 }

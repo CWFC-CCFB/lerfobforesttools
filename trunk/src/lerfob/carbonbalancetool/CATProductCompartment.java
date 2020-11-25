@@ -204,7 +204,7 @@ public class CATProductCompartment extends CATCompartment {
 	 */
 	protected TreeMap<String, CATSpeciesAmountMap> getVolumeByLogGradePerHa() {
 		List<String> speciesList = getCompartmentManager().getSpeciesList();
-		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+		double areaFactor = 1d / getCompartmentManager().getTimeTable().getLastStandForThisRealization().getAreaHa();
 
 		BiomassParameters biomassParameters = getCompartmentManager().getCarbonToolSettings().getCurrentBiomassParameters();
 		TreeLogger<?,?> treeLogger = getCompartmentManager().getCarbonToolSettings().getTreeLogger();
@@ -253,7 +253,8 @@ public class CATProductCompartment extends CATCompartment {
 	 * @return a Map instance
 	 */
 	protected Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> getHWPContentByUseClassPerHa(boolean withRecycling) {
-		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+//		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+		double areaFactor = 1d / getCompartmentManager().getTimeTable().getLastStandForThisRealization().getAreaHa();
 		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> outputMap = getAmountByUseClass(withRecycling);
 //		Map<CarbonUnitStatus, CATUseClassSpeciesAmountMap> scaledMap = AmountMap.scaleMap(outputMap, areaFactor);
 		AmountMap.scaleMap(outputMap, areaFactor);
@@ -261,7 +262,7 @@ public class CATProductCompartment extends CATCompartment {
 	}
 
 	protected Map<Integer, CATUseClassSpeciesAmountMap> getWoodProductEvolutionPerHa() {
-		double areaFactor = 1d / getCompartmentManager().getLastStand().getAreaHa();
+		double areaFactor = 1d / getCompartmentManager().getTimeTable().getLastStandForThisRealization().getAreaHa();
 		Map<Integer, CATUseClassSpeciesAmountMap> outerMap = getWoodProductEvolution();
 //		Map<Integer, CATUseClassSpeciesAmountMap> scaledMap = AmountMap.scaleMap(outerMap, areaFactor);
 		AmountMap.scaleMap(outerMap, areaFactor);

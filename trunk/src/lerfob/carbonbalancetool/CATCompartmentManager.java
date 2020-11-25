@@ -2,6 +2,7 @@
  * This file is part of the lerfob-forestools library.
  *
  * Copyright (C) 2010-2013 Mathieu Fortin AgroParisTech/INRA UMR LERFoB, 
+ *				2019-2020 Mathieu Fortin Canadian Forest Service
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +36,6 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.plotlevel.StochasticInformationProvider;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 
@@ -48,21 +48,21 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	private final Map<CATCompatibleTree, CATCompatibleStand> treeRegister;
 	private final List<String> speciesList;
 
-	private List<CATCompatibleStand> currentStands;	
+//	private List<CATCompatibleStand> currentStands;	
 	private List<CATCompatibleStand> stands;
 	private CATSettings carbonAccountingToolSettings;		// reference to the extractor settings
 	
 	private Map<CompartmentInfo, CATCompartment> carbonCompartments;
 	private int rotationLength;
-	private boolean isEvenAged;
+	private boolean isInfiniteSequenceAllowed;
 	private CATTimeTable timeTable;
 
 	private boolean isSimulationValid;
 //	protected boolean isStochastic;
-	private int currentRealization;
+//	private int currenrrtRealization;
 //	protected int nRealizations;
 	private int nbSimulations = 0;
-
+	private final CarbonAccountingTool caller;
 	
 	protected CATSingleSimulationResult summary;
 	
@@ -71,7 +71,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	 * Constructor for this class
 	 * @param settings a CATSettings instance
 	 */
-	public CATCompartmentManager(CATSettings settings) {
+	protected CATCompartmentManager(CarbonAccountingTool caller, CATSettings settings) {
+		this.caller = caller;
 		treeCollections = new HashMap<StatusClass, Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>>>();
 		treeRegister = new HashMap<CATCompatibleTree, CATCompatibleStand>();
 		speciesList = new ArrayList<String>();
@@ -117,7 +118,8 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	protected int getDateIndexForThisTree(CATCompatibleTree tree) {
 		if (treeRegister.containsKey(tree)) {
 			CATCompatibleStand stand = treeRegister.get(tree);
-			return getStandList().indexOf(stand);
+			return getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
+//			return getStandList().indexOf(stand);
 		} else {
 			return -1;
 		}
@@ -151,27 +153,35 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		this.isSimulationValid = isSimulationValid;
 	}
 	
-	public void init(List<CATCompatibleStand> stands) {
+	protected void init(List<CATCompatibleStand> stands) {
 		this.stands = stands;
-		this.currentStands = null;
+//		this.currentStands = null;
 		if (stands != null) {
 			CATCompatibleStand lastStand = stands.get(stands.size() - 1);
-			isEvenAged = lastStand.canBeRunInInfiniteSequence();
-			boolean isStochastic = false;
-			int nRealizations = 1;
-			if (lastStand instanceof StochasticInformationProvider) {
-				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
-				List<Integer> monteCarloIds = stochProv.getRealizationIds();
-				if (stochProv.isStochastic() && stochProv.getRealization(monteCarloIds.get(0)) instanceof CATCompatibleStand) {
-					isStochastic = true;
-					nRealizations = monteCarloIds.size();
-				}
-			}
+			isInfiniteSequenceAllowed = lastStand.canBeRunInInfiniteSequence();
+//			int nRealizations = 1;
+//			boolean isStochastic = false;
+			int nRealizations = lastStand.getNumberOfRealizations();
+			boolean isStochastic = lastStand.isStochastic();
+//			if (lastStand instanceof StochasticInformationProvider) {
+//				StochasticInformationProvider<?> stochProv = (StochasticInformationProvider<?>) lastStand;
+//				List<Integer> monteCarloIds = stochProv.getRealizationIds();
+//				if (stochProv.isStochastic() && stochProv.getRealization(monteCarloIds.get(0)) instanceof CATCompatibleStand) {
+//					isStochastic = true;
+//					nRealizations = monteCarloIds.size();
+//				}
+//			}
 			CATSensitivityAnalysisSettings.getInstance().setModelStochastic(isStochastic);
 			CATSensitivityAnalysisSettings.getInstance().setNumberOfMonteCarloRealizations(nRealizations);
 			int nbExtraYears = 0;
 			int initialAgeYr = -999;
-			if (isEvenAged) {
+			if (isInfiniteSequenceAllowed) {
+				if (!lastStand.getTrees(StatusClass.alive).isEmpty()) {
+					CATCompatibleStand stand = lastStand.getHarvestedStand();
+					stands.add(stand);
+					lastStand = stand;
+					caller.setFinalCutHadToBeCarriedOut(true);
+				} 					
 				rotationLength = lastStand.getAgeYr();
 				initialAgeYr = stands.get(0).getAgeYr();
 				nbExtraYears = NumberOfExtraYrs;
@@ -243,7 +253,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	public CATSettings getCarbonToolSettings() {return carbonAccountingToolSettings;}
 
 	@SuppressWarnings({ "unchecked"})
-	public void resetCompartmentsAndSetCarbonUnitCollections() {
+	protected void resetCompartmentsAndSetCarbonUnitCollections() {
 		if (getCarbonToolSettings().isVerboseEnabled()) {
 			System.out.println("Resetting compartment...");
 		}
@@ -347,26 +357,34 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	}
 	
 
-	public Map<CompartmentInfo, CATCompartment> getCompartments() {return this.carbonCompartments;}
+	protected Map<CompartmentInfo, CATCompartment> getCompartments() {return this.carbonCompartments;}
 
 	/**
 	 * This method returns the last stand from the list of stands.
 	 * @return a CarbonToolCompatibleStand or null if the list is null or empty
 	 */
-	public CATCompatibleStand getLastStand() {
+	protected CATCompatibleStand getLastStand() {
 		if (getStandList() != null && !getStandList().isEmpty()) {
 			return getStandList().get(getStandList().size() - 1);
 		} else {
 			return null;
 		}
 	}
+
 	
+	/**
+	 * Return the list of stands as set by the init method. This method should not be called within
+	 * the realization because the stands refer to wrappers that contain all the realizations. 
+	 * Within the realization, the method CATTimeTable.getStandsForThisRealization should be called 
+	 * instead.
+	 * @return a List of CATCompatibleStand instances
+	 */
 	protected List<CATCompatibleStand> getStandList() {
-		if (currentStands != null) {
-			return currentStands;
-		} else {
+//		if (currentStands != null) {
+//			return currentStands;
+//		} else {
 			return stands;
-		}
+//		}
 	}
 
 	
@@ -375,7 +393,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	 * This method returns the rotation length in year.
 	 * @return an integer
 	 */
-	public int getRotationLength() {return rotationLength;}
+	protected int getRotationLength() {return rotationLength;}
 
 
 	/**
@@ -419,26 +437,28 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		getSimulationSummary().updateResult(this);
 	}
 		
-	protected boolean isEvenAged() {return isEvenAged;}
+	protected boolean isEvenAged() {return isInfiniteSequenceAllowed;}
 
-	@SuppressWarnings("unchecked")
-	protected void setRealization(int realizationID) {
-		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic()) {
-			currentStands = new ArrayList<CATCompatibleStand>();
-			for (CATCompatibleStand stand : stands) {
-				currentRealization = realizationID;
-				List<Integer> monteCarloIds = ((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealizationIds();
-				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(monteCarloIds.get(realizationID)));
-			}
-		} else {
-			currentRealization = realizationID;
-			currentStands = stands;
-		}
+//	@SuppressWarnings("unchecked")
+	protected void setRealization(int realizationId) {
+//		if (CATSensitivityAnalysisSettings.getInstance().isModelStochastic()) {
+//			currentStands = new ArrayList<CATCompatibleStand>();
+//			for (CATCompatibleStand stand : stands) {
+//				currentRealization = realizationID;
+//				List<Integer> monteCarloIds = ((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealizationIds();
+//				currentStands.add(((StochasticInformationProvider<? extends CATCompatibleStand>) stand).getRealization(monteCarloIds.get(realizationID)));
+//			}
+//		} else {
+//			currentRealization = realizationID;
+//			currentStands = stands;
+//		}
+		getTimeTable().setMonteCarloRealization(realizationId);
 	}
 
 	@Override
 	public int getMonteCarloRealizationId() {
-		return currentRealization;
+//		return currentRealization;
+		return getTimeTable().getCurrentMonteCarloRealizationId();
 	}
 	
 	/*

@@ -241,7 +241,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 		} else {
 			this.parentFrame = parentFrame;
 			CATSettings carbonToolSettings = new CATSettings(getSettingMemory());
-			carbonCompartmentManager = new CATCompartmentManager(carbonToolSettings);
+			carbonCompartmentManager = new CATCompartmentManager(this, carbonToolSettings);
 			
 			if (mode == CATMode.STANDALONE) {
 				String lastLookAndFeelClass = getCarbonToolSettings().getSettingMemory().getProperty("last.look.and.feel.class", UIManager.getSystemLookAndFeelClassName());
@@ -308,11 +308,13 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	@SuppressWarnings("rawtypes")
 	private TreeLoggerCompatibilityCheck getTreeLoggerCompatibilityCheck() {
 		Object treeInstance = null;
+		outerloop:
 		for (CATCompatibleStand stand : carbonCompartmentManager.getStandList()) {
 			for (StatusClass status : StatusClass.values()) {
 				Collection coll = stand.getTrees(status);
 				if (coll != null && !coll.isEmpty()) {
 					treeInstance =  coll.iterator().next();
+					break outerloop;	// once we have found at least one instance, we get out of the loop
 				}
 			}
 		}
