@@ -155,7 +155,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 	 * This method returns the creation date of the product
 	 * @return an integer
 	 */
-	protected int getCreationDate() {return timeTable.get(dateIndex);}
+	protected int getCreationDate() {return timeTable.getDateYrAtThisIndex(dateIndex);}
 	
 	protected void setTimeTable(CATTimeTable timeTable) {this.timeTable = timeTable;}
 	protected CATTimeTable getTimeTable() {return timeTable;}
@@ -211,9 +211,9 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 		double formerDate;
 		
 		for (int i = dateIndex; i < timeScale.size(); i++) {
-			date = timeScale.get(i);
+			date = timeScale.getDateYrAtThisIndex(i);
 			if (date > getCreationDate() && currentCarbon > ProductionProcessorManager.VERY_SMALL) {
-				formerDate = timeScale.get(i - 1);
+				formerDate = timeScale.getDateYrAtThisIndex(i - 1);
 				decayFunction.setParameterValue(0, lambdaValue);
 				decayFunction.setVariableValue(0, date - formerDate);
 				factor = decayFunction.getValue();	// last parameter is unnecessary			
@@ -240,7 +240,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 			double[] releasedCarbonArray = new double[currentCarbonArray.length];
 			int date;
 			for (int i = 1; i < currentCarbonArray.length; i++) {
-				date = getTimeTable().get(i);
+				date = getTimeTable().getDateYrAtThisIndex(i);
 				if (date > getCreationDate()) {
 					releasedCarbonArray[i] = currentCarbonArray[i - 1] - currentCarbonArray[i];
 				}

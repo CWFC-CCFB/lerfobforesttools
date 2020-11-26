@@ -19,7 +19,6 @@
 package lerfob.carbonbalancetool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,10 @@ import java.util.Vector;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.simulation.covariateproviders.plotlevel.StochasticInformationProvider;
 
+/**
+ * This class handles the time frame of the simulation and the index related to the time slot.
+ * @author Mathieu Fortin - November 2020
+ */
 public class CATTimeTable {
 
 	private final int lastStandDate;
@@ -74,7 +77,7 @@ public class CATTimeTable {
 	 */
 	CATTimeTable(List<CATCompatibleStand> stands, int initialAgeYr, int nbExtraYears) {
 		this.internalTimeTable = new ArrayList<Integer>();
-		this.standMap = new HashMap<CATCompatibleStand, Integer>();
+		this.standMap = new LinkedHashMap<CATCompatibleStand, Integer>();
 		this.realizationStandMap = new LinkedHashMap<CATCompatibleStand, Integer>();
 		this.currentStands = new ArrayList<CATCompatibleStand>();
 		CATCompatibleStand lastStand = stands.get(stands.size() - 1);
@@ -144,9 +147,9 @@ public class CATTimeTable {
 
 	public int size() {return internalTimeTable.size();}
 	
-	public int get(int i) {return internalTimeTable.get(i);}
+	public int getDateYrAtThisIndex(int i) {return internalTimeTable.get(i);}
 	
-	public int lastIndexOf(int i) {return internalTimeTable.lastIndexOf(i);}
+	public int lastIndexOf(int dateYr) {return internalTimeTable.lastIndexOf(dateYr);}
 
 	void setMonteCarloRealization(int realizationId) {
 		realizationStandMap.clear();
@@ -179,10 +182,20 @@ public class CATTimeTable {
 		return currentStands.get(currentStands.size() - 1);
 	}
 	
-//	void synchronize(List<CATCompatibleStand> stands, List<CATCompatibleStand> currentStands) {
-//		for (int i = 0; i < stands.size(); i++) {
-//			
-//		}
-//	}
+	
+	List<List<CATCompatibleStand>> getSegments() {
+		List<List<CATCompatibleStand>> outputList = new ArrayList<List<CATCompatibleStand>>();
+		List<CATCompatibleStand> innerList = null;
+		for (int i = 0; i < getStandsForThisRealization().size(); i++) {
+			CATCompatibleStand s = getStandsForThisRealization().get(i);
+			if (i == 0 || s.isInterventionResult()) {
+				innerList = new ArrayList<CATCompatibleStand>();
+				outputList.add(innerList);
+			}
+			innerList.add(s);
+		}
+		return outputList;
+	}
+	
 	
 }

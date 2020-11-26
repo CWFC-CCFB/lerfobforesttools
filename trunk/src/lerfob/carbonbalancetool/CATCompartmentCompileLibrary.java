@@ -31,7 +31,7 @@ import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.Status
  * or the evolution of carbon within this compartment.
  * @author Mathieu Fortin - July 2010
  */
-public class CATCompartmentCompileLibrary {
+class CATCompartmentCompileLibrary {
 		
 	/**
 	 * This method implements the functions for calculating and integrating the carbon over
@@ -39,56 +39,43 @@ public class CATCompartmentCompileLibrary {
 	 * @param carbonCompartment = a carbon compartment (CarbonCompartment object)
 	 */
 	@SuppressWarnings("unchecked")
-	public void selectCalculatorFunction(CATCompartment carbonCompartment) throws Exception {
+	void selectCalculatorFunction(CATCompartment carbonCompartment) throws Exception {
 		CATCompartmentManager manager = carbonCompartment.getCompartmentManager();
 		
 
 		Collection<? extends CarbonUnit> carbonUnits;
-		CATTimeTable timeScale = manager.getTimeTable();
-		double[] carbon = new double[timeScale.size()];
+		CATTimeTable timeTable = manager.getTimeTable();
+		double[] carbon = new double[timeTable.size()];
 		double integratedCarbon = 0d;
 		int revolutionPeriod = manager.getRotationLength();
 		CATExponentialFunction decayFunction;
-		List<CATCompatibleStand> stands = timeScale.getStandsForThisRealization();
-
+		List<CATCompatibleStand> stands = timeTable.getStandsForThisRealization();
+		CATIntermediateBiomassCarbonMap oMap;
+		
 		switch (carbonCompartment.getCompartmentID()) {
 		
 		case Roots:
-			
-//			for (int i = 0; i < timeScale.size(); i++) {
-//				double carbonContent = 0d;
-//				if (i < stands.size()) {
-//					CATCompatibleStand stand = stands.get(i);
-//					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-//				}
-//				carbonCompartment.setCarbonIntoArray(i, carbonContent);
-//			}
+			oMap = new CATIntermediateBiomassCarbonMap(timeTable, carbonCompartment);
 			for (CATCompatibleStand stand : stands) {
-				// TODO FP check if setting 0s is needed here
 				double carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getBelowGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-				int indexOnTableTable = timeScale.getIndexOfThisStandOnTheTimeTable(stand);
-				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
+				oMap.put(stand, carbonContent);
+//				int indexOnTableTable = timeTable.getIndexOfThisStandOnTheTimeTable(stand);
+//				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
 			}
+			oMap.interpolateIfNeeded();
 			carbonCompartment.setIntegratedCarbon(integrateCarbonOverHorizon(carbonCompartment) / revolutionPeriod);
 			
 			break;
 			
 		case AbGround:
-			
-//			for (int i = 0; i < timeScale.size(); i++) {
-//				double carbonContent = 0d;
-//				if (i < stands.size()) {
-//					CATCompatibleStand stand = stands.get(i);
-//					carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-//				}
-//				carbonCompartment.setCarbonIntoArray(i, carbonContent);
-//			}			
+			oMap = new CATIntermediateBiomassCarbonMap(timeTable, carbonCompartment);
 			for (CATCompatibleStand stand : stands) {
-				// TODO FP check if setting 0s is needed here
 				double carbonContent = manager.getCarbonToolSettings().getCurrentBiomassParameters().getAboveGroundCarbonMg(stand.getTrees(StatusClass.alive), manager);
-				int indexOnTableTable = timeScale.getIndexOfThisStandOnTheTimeTable(stand);
-				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
-			}			
+				oMap.put(stand, carbonContent);
+//				int indexOnTableTable = timeTable.getIndexOfThisStandOnTheTimeTable(stand);
+//				carbonCompartment.setCarbonIntoArray(indexOnTableTable, carbonContent);
+			}	
+			oMap.interpolateIfNeeded();
 			carbonCompartment.setIntegratedCarbon(integrateCarbonOverHorizon(carbonCompartment) / revolutionPeriod);
 
 			break;
@@ -99,12 +86,12 @@ public class CATCompartmentCompileLibrary {
 		case LfillDeg:
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						double[] actualizedCarbon = carbonUnit.getCurrentCarbonArray();	
-						for (int j = 0; j < timeScale.size(); j++) {
+						for (int j = 0; j < timeTable.size(); j++) {
 							carbon[j] += actualizedCarbon[j];
 						}
 						integratedCarbon += carbonUnit.getIntegratedCarbon(decayFunction, manager);
@@ -112,7 +99,7 @@ public class CATCompartmentCompileLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -134,7 +121,7 @@ public class CATCompartmentCompileLibrary {
 //			carbon = new double[timeScale.size()];
 			
 			// evolution
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
@@ -145,13 +132,13 @@ public class CATCompartmentCompileLibrary {
 				
 			}
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -163,14 +150,14 @@ public class CATCompartmentCompileLibrary {
 			
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						EndUseWoodProductCarbonUnit endProduct = (EndUseWoodProductCarbonUnit) carbonUnit;
 						
 						double[] substitutedCarbon = endProduct.getCurrentCarbonSubstitution(manager);	
-						for (int j = 0; j < timeScale.size(); j++) {
+						for (int j = 0; j < timeTable.size(); j++) {
 							carbon[j] += substitutedCarbon[j];
 						}
 						integratedCarbon += endProduct.getTotalCarbonSubstitution(manager);
@@ -178,13 +165,13 @@ public class CATCompartmentCompileLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -193,9 +180,9 @@ public class CATCompartmentCompileLibrary {
 			break;
 			
 		case WComb:
-			double[] heatProduction = new double[timeScale.size()];
+			double[] heatProduction = new double[timeTable.size()];
 			double totalHeatProduction = 0;
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
@@ -203,7 +190,7 @@ public class CATCompartmentCompileLibrary {
 
 						double[] currentEmission = endUseCarbonProduct.getCombustionEmissionsArrayCO2Eq();	
 						double[] currentHeatProduction = endUseCarbonProduct.getHeatProductionArrayMgWh();
-						for (int j = 0; j < timeScale.size(); j++) {
+						for (int j = 0; j < timeTable.size(); j++) {
 							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
 							heatProduction[j] += currentHeatProduction[j];
 						}
@@ -214,14 +201,14 @@ public class CATCompartmentCompileLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 					heatProduction[i] += heatProduction[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -235,7 +222,7 @@ public class CATCompartmentCompileLibrary {
 
 		case LfillND:
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
@@ -252,14 +239,14 @@ public class CATCompartmentCompileLibrary {
 		case LfillEm:
 			decayFunction = manager.getCarbonToolSettings().getDecayFunction();
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonUnits = carbonCompartment.getCarbonUnitsArray()[i];
 				if (carbonUnits != null && !carbonUnits.isEmpty()) {
 					for (CarbonUnit carbonUnit : carbonUnits) {
 						LandfillCarbonUnit landfillCarbonProduct = (LandfillCarbonUnit) carbonUnit;
 
 						double[] currentEmission = landfillCarbonProduct.getMethaneEmissionsArrayCO2Eq();	
-						for (int j = 0; j < timeScale.size(); j++) {
+						for (int j = 0; j < timeTable.size(); j++) {
 							carbon[j] += currentEmission[j] * CATSettings.CO2_C_FACTOR;
 						}
 						integratedCarbon += landfillCarbonProduct.getTotalMethaneEmissionsCO2Eq() * CATSettings.CO2_C_FACTOR;
@@ -267,13 +254,13 @@ public class CATCompartmentCompileLibrary {
 				}
 			}
 			
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				if (i > 0) {
 					carbon[i] += carbon[i - 1];
 				}
 			}
 
-			for (int i = 0; i < timeScale.size(); i++) {
+			for (int i = 0; i < timeTable.size(); i++) {
 				carbonCompartment.setCarbonIntoArray(i, carbon[i]);
 			}
 			
@@ -302,28 +289,26 @@ public class CATCompartmentCompileLibrary {
 	private double integrateCarbonOverHorizon(CATCompartment carbonCompartment) {
 		CATTimeTable timeScale = carbonCompartment.getCompartmentManager().getTimeTable();
 		boolean isEvenAged = isEvenAged(carbonCompartment);
-		double previousValue;
-		double currentValue;
+		double previousValue, currentValue;
+		int currentDateYr, previousDateYr;
 		double totalCarbon = 0d;
-		int currentDate;
-		int previousDate;
 		
-		for (int i = 1; i < timeScale.size(); i++) {
+		for (int i = 1; i < timeScale.size(); i++) {		// time scale is now 
 			
-			if (i == 1 &&  isEvenAged) {
+			if (i == 1 &&  isEvenAged) {	// then add the first years from 0 to the initial measurement of the stand
 				int initialAgeYr = timeScale.getInitialAgeYr();
 				currentValue = carbonCompartment.getCalculatedCarbonArray()[i - 1];
 				totalCarbon += calculateCarbonForThisPeriod(0, initialAgeYr, 0, currentValue);
 			}
 			
-			currentDate = timeScale.get(i);
+			currentDateYr = timeScale.getDateYrAtThisIndex(i);
 			currentValue = carbonCompartment.getCalculatedCarbonArray()[i];
 
-			previousDate = timeScale.get(i - 1);
+			previousDateYr = timeScale.getDateYrAtThisIndex(i - 1);
 			previousValue = carbonCompartment.getCalculatedCarbonArray()[i - 1];
 		
-			totalCarbon += calculateCarbonForThisPeriod(previousDate, 
-					currentDate, 
+			totalCarbon += calculateCarbonForThisPeriod(previousDateYr, 
+					currentDateYr, 
 					previousValue, 
 					currentValue);
 		}
