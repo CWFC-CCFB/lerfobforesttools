@@ -133,26 +133,26 @@ public class CATProductCompartment extends CATCompartment {
 		if (carbonUnits != null && !carbonUnits.isEmpty()) {
 //			for (Integer date : timeScale) {
 			for (int i = 0; i < timeScale.size(); i++) {
-				int date = timeScale.get(i);
+				int dateYr = timeScale.getDateYrAtThisIndex(i);
 				CarbonUnitList subList;
 				if (getCompartmentManager().getCarbonToolSettings().formerImplementation) {
 					subList = new CarbonUnitList();
 					for (CarbonUnit carbonUnit : carbonUnits) {
-						if (timeScale.get(carbonUnit.getIndexInTimeScale()) == date) {
+						if (timeScale.getDateYrAtThisIndex(carbonUnit.getIndexInTimeScale()) == dateYr) {
 							subList.add(carbonUnit);
 						}
 					}
 				} else {
-					subList	= carbonUnits.filterList(CarbonUnit.class, "getCreationDate", date);
+					subList	= carbonUnits.filterList(CarbonUnit.class, "getCreationDate", dateYr);
 				}
 				for (UseClass useClass : UseClass.values()) {
 					CarbonUnitList subSubList = subList.filterList(EndUseWoodProductCarbonUnit.class, "getUseClass", useClass);
 					CATSpeciesAmountMap oMap = CATUtilityMaps.convertToSpeciesMap(subSubList, speciesList);
 					if (!oMap.isEmpty()) {
-						if (!outputMap.containsKey(date)) {
-							outputMap.put(date, new CATUseClassSpeciesAmountMap(speciesList));
+						if (!outputMap.containsKey(dateYr)) {
+							outputMap.put(dateYr, new CATUseClassSpeciesAmountMap(speciesList));
 						}
-						CATUseClassSpeciesAmountMap innerMap = outputMap.get(date);
+						CATUseClassSpeciesAmountMap innerMap = outputMap.get(dateYr);
 						innerMap.put(useClass, oMap);
 					}
 				}

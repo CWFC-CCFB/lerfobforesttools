@@ -325,7 +325,7 @@ public class CATCompartment implements Comparable {
 			return 1;
 		}
 	}
-	
+
 	
 //	public static void main(String[] args) {
 //		JDialog dlg = new JDialog();

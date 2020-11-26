@@ -150,7 +150,7 @@ public class CATExportTool extends REpiceaExportTool {
 					}
 					r = new GExportRecord();
 					r.addField(standIDField);
-					r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.get(i)));
+					r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.getDateYrAtThisIndex(i)));
 					r.addField(new GExportFieldDetails(MessageID.HeatMgWhPerHa.toString(), value));
 					if (nbRealizations > 0) {
 						r.addField(new GExportFieldDetails("RealizationID", (Integer) j+1));
@@ -243,7 +243,7 @@ public class CATExportTool extends REpiceaExportTool {
 						}
 						r = new GExportRecord();
 						r.addField(standIDField);
-						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.get(i)));
+						r.addField(new GExportFieldDetails(MessageID.Year.toString(), timeScale.getDateYrAtThisIndex(i)));
 						r.addField(new GExportFieldDetails(MessageID.Compartment.toString(), compartmentInfo.toString()));
 						r.addField(new GExportFieldDetails(MessageID.CarbonHaMean.toString(), value));
 						if (nbRealizations > 0) {

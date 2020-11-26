@@ -89,9 +89,9 @@ class CATResultKWhHeatProduction extends CATResultPanel {
 		XYSeriesWithIntegratedRenderer lowerSeries = new XYSeriesWithIntegratedRenderer(dataset, CompartmentInfo.WComb.toString() + "_" + MonteCarloEstimate.MessageID.Lower.toString(), CompartmentInfo.WComb, false, getCarbonFactor());
 		XYSeriesWithIntegratedRenderer upperSeries = new XYSeriesWithIntegratedRenderer(dataset, CompartmentInfo.WComb.toString() + "_" + MonteCarloEstimate.MessageID.Upper.toString(), CompartmentInfo.WComb, false, getCarbonFactor());
 		for (int i = 0; i < summary.getTimeTable().size(); i++) {
-			meanSeries.add((double) summary.getTimeTable().get(i), mean.m_afData[i][0]);
-			lowerSeries.add((double) summary.getTimeTable().get(i), lowerBound.m_afData[i][0]);
-			upperSeries.add((double) summary.getTimeTable().get(i), upperBound.m_afData[i][0]);
+			meanSeries.add((double) summary.getTimeTable().getDateYrAtThisIndex(i), mean.m_afData[i][0]);
+			lowerSeries.add((double) summary.getTimeTable().getDateYrAtThisIndex(i), lowerBound.m_afData[i][0]);
+			upperSeries.add((double) summary.getTimeTable().getDateYrAtThisIndex(i), upperBound.m_afData[i][0]);
 		}
 
 		XYPlot plot = (XYPlot) chart.getPlot();
