@@ -40,8 +40,11 @@ public interface CATSimulationResult {
 	public boolean isValid();
 	
 	/**
-	 * This method returns the "rotation-averaged" carbon stocks in each compartment.
-	 * @return a Map with CompartmentInfo and Double as keys and values
+	 * Returns the "rotation-averaged" carbon stocks in each compartment. 
+	 * @return a Map with CompartmentInfo and Estimate as keys and values. NOTE: the value type
+	 * is different from that of other methods in this interface because this method
+	 * is also used to calculate the difference between two budgets and the result is then
+	 * an SimpleEstimate instance. 
 	 */
 	public Map<CompartmentInfo, Estimate<?>> getBudgetMap();
 	

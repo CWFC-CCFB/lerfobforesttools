@@ -23,6 +23,7 @@ import repicea.serial.xml.XmlDeserializer;
 import repicea.serial.xml.XmlSerializerChangeMonitor;
 import repicea.stats.distributions.utility.GaussianUtility;
 import repicea.stats.estimates.Estimate;
+import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
 
@@ -249,19 +250,25 @@ public class CarbonAccountingToolTest {
 		cat.setStandList(recordReader.getStandList());
 		cat.calculateCarbon();
 		CATSingleSimulationResult result = cat.getCarbonCompartmentManager().getSimulationSummary();
-		Map<CompartmentInfo, Estimate<?>> obsMap = result.getBudgetMap();
+		Map<CompartmentInfo, MonteCarloEstimate> obsMap = result.getEvolutionMap();
 		
 //		XmlSerializer serializer = new XmlSerializer(refFilename);
 //		serializer.writeObject(obsMap);
 
 		XmlDeserializer deserializer = new XmlDeserializer(refFilename);
-		Map<CompartmentInfo, Estimate<?>> refMap = (Map) deserializer.readObject();
+		Map<CompartmentInfo, MonteCarloEstimate> refMap = (Map) deserializer.readObject();
 		int nbCompartmentChecked = 0;
 		Assert.assertTrue("Testing the size of the map", refMap.size() == obsMap.size());
 		for (CompartmentInfo key : refMap.keySet()) {
-			double expected = refMap.get(key).getMean().m_afData[0][0];
-			double observed = obsMap.get(key).getMean().m_afData[0][0];
-			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
+			Matrix expEvolution = refMap.get(key).getMean();
+			Matrix obsEvolution = obsMap.get(key).getMean();
+			Assert.assertEquals("Comparing matrix first dimension", expEvolution.m_iCols, obsEvolution.m_iCols);
+			Assert.assertEquals("Comparing matrix second dimension", expEvolution.m_iRows, obsEvolution.m_iRows);
+			for (int i = 0; i < expEvolution.m_iRows; i++) {
+				double expected = expEvolution.m_afData[i][0];
+				double observed = obsEvolution.m_afData[i][0];
+				Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
+			}
 			nbCompartmentChecked++;
 		}
 		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
