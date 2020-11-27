@@ -32,6 +32,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
 import repicea.app.AbstractGenericTask;
 import repicea.lang.MemoryWatchDog;
+import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
@@ -248,6 +249,8 @@ public class CATTask extends AbstractGenericTask {
 	@SuppressWarnings({ "unchecked", "rawtypes"})
 	private void createEndUseWoodProductsFromWoodPieces() throws Exception {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		ApplicationScale applicationScale = manager.getStandList().get(0).getApplicationScale();
+
 		if (manager.getCarbonToolSettings().isVerboseEnabled()) {
 			System.out.println("Creating HWP from wood pieces...");
 		}
@@ -270,6 +273,9 @@ public class CATTask extends AbstractGenericTask {
 						MemoryWatchDog.checkAvailableMemory();		// memory check before going further on
 
 						CATCompatibleTree tree = (CATCompatibleTree) t;
+						int currentDateIndex = manager.getDateIndexForThisHarvestedTree(tree);
+						int nbYearsToPreviousMeasurement = getNumberOfYearsBetweenStandOfThisHarvestedTreeAndPreviousStand(manager, tree);
+						double annualBreakdownRatio = getAnnualBreakdownRatio(applicationScale, nbYearsToPreviousMeasurement);
 						double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
 						double basicWoodDensityMgM3 = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 
@@ -294,7 +300,7 @@ public class CATTask extends AbstractGenericTask {
 							}
 
 							AmountMap<Element> woodAmountMap = new AmountMap<Element>();
-							double woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3();
+							double woodVolumeM3 = woodPiece.getWeightedWoodVolumeM3() * annualBreakdownRatio;
 							
 							double woodBiomassMg = woodVolumeM3 * basicWoodDensityMgM3;
 							double woodCarbonMg = woodBiomassMg * carbonContentRatio;
@@ -303,7 +309,8 @@ public class CATTask extends AbstractGenericTask {
 							woodAmountMap.put(Element.C, woodCarbonMg);
 							
 							if (nutrientConcentrations != null) {
-								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedWoodVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+//								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodPiece.getWeightedWoodVolumeM3() * basicWoodDensityMgM3);	// the amounts are expressed here in kg
+								AmountMap nutrientAmounts = nutrientConcentrations.multiplyByAScalar(woodBiomassMg * basicWoodDensityMgM3);	// the amounts are expressed here in kg
 								cleanAmountMapOfAdditionalElementsBeforeMerging(nutrientAmounts);	// To make sure volume biomass and carbon will not be double counted
 								woodAmountMap.putAll(nutrientAmounts);
 //								amountMap.put(Element.N, nutrientAmounts[Nutrient.N.ordinal()]);
@@ -316,7 +323,7 @@ public class CATTask extends AbstractGenericTask {
 							amountMaps.put(BiomassType.Wood, woodAmountMap);
 
 							AmountMap<Element> barkAmountMap = new AmountMap<Element>();
-							double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3();
+							double barkVolumeM3 = woodPiece.getWeightedBarkVolumeM3() * annualBreakdownRatio;
 							double barkBiomassMg = barkVolumeM3 * basicWoodDensityMgM3; // TODO should be the bark basic density here
 							double barkCarbonMg = barkBiomassMg * carbonContentRatio;   // TODO should be the bark content ratio here
 							barkAmountMap.put(Element.Volume, barkVolumeM3);
@@ -334,11 +341,22 @@ public class CATTask extends AbstractGenericTask {
 							}
 							amountMaps.put(BiomassType.Bark, barkAmountMap);
 
-							getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
-									manager.getDateIndexForThisTree(tree), 
-									samplingUnitID, 
-									amountMaps, 
-									woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
+							if (shouldBeBrokenDownAnnually(applicationScale, nbYearsToPreviousMeasurement)) {
+								for (int i = 0; i < nbYearsToPreviousMeasurement; i++) {
+									getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
+											currentDateIndex - i, 
+											samplingUnitID, 
+											amountMaps, 
+											woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
+									
+								}
+							} else {
+								getProcessorManager().processWoodPiece(woodPiece.getLogCategory(), 
+										currentDateIndex, 
+										samplingUnitID, 
+										amountMaps, 
+										woodPiece.getTreeFromWhichComesThisPiece().getSpeciesName());
+							}
 							
 						}
 						
@@ -346,20 +364,18 @@ public class CATTask extends AbstractGenericTask {
 						double unconsideredAboveGroundVolumeM3 = totalAboveGroundVolumeM3 - totalAboveGroundWoodPieceVolume;
 						processUnaccountedVolume((CATCompatibleTree) t,
 								unconsideredAboveGroundVolumeM3, 
-//								basicWoodDensityMgM3, 
-//								carbonContentRatio, 
-								manager.getDateIndexForThisTree(tree), 
+								currentDateIndex, 
 								samplingUnitID,
-								WoodyDebrisProcessorID.FineWoodyDebris);
+								WoodyDebrisProcessorID.FineWoodyDebris,
+								applicationScale);
 						double totalBelowGroundVolume = biomassParameters.getBelowGroundVolumeM3(tree, manager);
 						double unconsideredBelowGroundVolume = totalBelowGroundVolume - totalBelowGroundWoodPieceVolume;
 						processUnaccountedVolume((CATCompatibleTree) t,
 								unconsideredBelowGroundVolume, 
-//								basicWoodDensityMgM3, 
-//								carbonContentRatio, 
-								manager.getDateIndexForThisTree(tree), 
+								currentDateIndex, 
 								samplingUnitID,
-								WoodyDebrisProcessorID.CoarseWoodyDebris);
+								WoodyDebrisProcessorID.CoarseWoodyDebris,
+								applicationScale);
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
 					}
@@ -428,7 +444,7 @@ public class CATTask extends AbstractGenericTask {
 //									amountMap.put(Element.K, nutrientAmounts[Nutrient.K.ordinal()]);
 								}
 
-								productionLineManager.processWoodPiece(productionLineName, manager.getDateIndexForThisTree(tree), amountMap);		
+								productionLineManager.processWoodPiece(productionLineName, manager.getDateIndexForThisHarvestedTree(tree), amountMap);		
 							}
 						}
 						double totalAboveGroundCarbon = biomassParameters.getAboveGroundCarbonMg(tree, manager);
@@ -440,7 +456,7 @@ public class CATTask extends AbstractGenericTask {
 							amountMap.put(Element.Volume, volume);
 							amountMap.put(Element.Biomass, biomass);
 							amountMap.put(Element.C, unconsideredAboveGroundCarbon);
-							productionLineManager.leftThisPieceInTheForest(manager.getDateIndexForThisTree(tree), amountMap);		
+							productionLineManager.leftThisPieceInTheForest(manager.getDateIndexForThisHarvestedTree(tree), amountMap);		
 						}
 						numberOfTreesProcessed++;
 						setProgress((int) (numberOfTreesProcessed * progressFactor + (double) (currentTask.ordinal()) * 100 / Task.getNumberOfLongTasks()));
@@ -479,6 +495,32 @@ public class CATTask extends AbstractGenericTask {
 		}
 	}
 
+	private int getNumberOfYearsBetweenStandOfThisHarvestedTreeAndPreviousStand(CATCompartmentManager manager, CATCompatibleTree tree) {
+		int currentDateIndex = manager.getDateIndexForThisHarvestedTree(tree);
+		int previousDateIndex = manager.getDateIndexOfPreviousStandForThisHarvestedTree(tree);
+
+		int nbYears;
+		if (previousDateIndex == -1 && currentDateIndex == 0) { // happens if the first stand is a harvested stand
+			nbYears = 0;
+		} else {
+			nbYears = manager.getTimeTable().getDateYrAtThisIndex(currentDateIndex) - manager.getTimeTable().getDateYrAtThisIndex(previousDateIndex);
+		}
+		return nbYears;
+	}
+	
+	private double getAnnualBreakdownRatio(ApplicationScale applicationScale, int nbYearsToPreviousMeasurement) {
+		double extendToAllYearRatio;
+		if (shouldBeBrokenDownAnnually(applicationScale, nbYearsToPreviousMeasurement)) {
+			extendToAllYearRatio = 1d / nbYearsToPreviousMeasurement;
+		} else {
+			extendToAllYearRatio = 1d;
+		}
+		return extendToAllYearRatio;
+	}
+
+	private boolean shouldBeBrokenDownAnnually(ApplicationScale applicationScale, int nbYearsToPreviousMeasurement) {
+		return applicationScale == ApplicationScale.FMU && nbYearsToPreviousMeasurement > 0;
+	}
 	
 	private void cleanAmountMapOfAdditionalElementsBeforeMerging(AmountMap<Element> additionalElement) {
 		additionalElement.remove(Element.Volume);
@@ -491,15 +533,21 @@ public class CATTask extends AbstractGenericTask {
 			double volumeOverBark, 
 			int dateIndex, 
 			String samplingUnitID, 
-			WoodyDebrisProcessorID type) {
+			WoodyDebrisProcessorID type,
+			ApplicationScale applicationScale) {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
+		int nbYearsToPreviousMeasurement = getNumberOfYearsBetweenStandOfThisHarvestedTreeAndPreviousStand(manager, tree);
+		double annualBreakdownRatio = getAnnualBreakdownRatio(applicationScale, nbYearsToPreviousMeasurement);
+		
+		
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		double carbonContentRatio = biomassParameters.getCarbonContentFromThisTree(tree, manager);
 		double basicWoodDensityMgM3 = biomassParameters.getBasicWoodDensityFromThisTree(tree, manager);
 		if (volumeOverBark > 0) {
+			double brokenDownVolumeOverBark = volumeOverBark * annualBreakdownRatio;
 			double propWood = 1d / (1d + tree.getBarkProportionOfWoodVolume());
 
-			double woodVolume = volumeOverBark * propWood;
+			double woodVolume = brokenDownVolumeOverBark * propWood;
 			
 			double woodBiomass = woodVolume * basicWoodDensityMgM3;
 			double woodCarbon = woodBiomass * carbonContentRatio;
@@ -510,7 +558,7 @@ public class CATTask extends AbstractGenericTask {
 			Map<BiomassType, AmountMap<Element>> amountMaps = new HashMap<BiomassType, AmountMap<Element>>();
 			amountMaps.put(BiomassType.Wood, woodAmountMap);
 			
-			double barkVolume = volumeOverBark - woodVolume;
+			double barkVolume = brokenDownVolumeOverBark - woodVolume;
 			double barkBiomass = barkVolume * basicWoodDensityMgM3;
 			double barkCarbon = barkBiomass * carbonContentRatio;
 			AmountMap<Element> barkAmountMap = new AmountMap<Element>();						// No calculation for nutrients left in the forest here
@@ -518,13 +566,17 @@ public class CATTask extends AbstractGenericTask {
 			barkAmountMap.put(Element.Biomass, barkBiomass);
 			barkAmountMap.put(Element.C, barkCarbon);
 			amountMaps.put(BiomassType.Bark, barkAmountMap);
-			
-			getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMaps, tree.getSpeciesName(), type);
+
+			if (shouldBeBrokenDownAnnually(applicationScale, nbYearsToPreviousMeasurement)) {
+				for (int i = 0; i < nbYearsToPreviousMeasurement; i++) {
+					getProcessorManager().processWoodyDebris(dateIndex - i, samplingUnitID, amountMaps, tree.getSpeciesName(), type);
+				}
+			} else {
+				getProcessorManager().processWoodyDebris(dateIndex, samplingUnitID, amountMaps, tree.getSpeciesName(), type);
+			}
 		}
 	}
-	
-	
-	
+
 	private void createWoodyDebris(Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>> treeMap, WoodyDebrisProcessorID type) {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
@@ -552,7 +604,7 @@ public class CATTask extends AbstractGenericTask {
 							volumeOverBark = biomassParameters.getBelowGroundVolumeM3(t, manager);
 							break;
 						}
-						processUnaccountedVolume(t, volumeOverBark, dateIndex, samplingUnitID, type);
+						processUnaccountedVolume(t, volumeOverBark, dateIndex, samplingUnitID, type, manager.getStandList().get(0).getApplicationScale());
 					}
 				}				
 			}
