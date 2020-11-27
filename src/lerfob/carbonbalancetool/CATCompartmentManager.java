@@ -112,7 +112,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 	}
 
 	
-	protected int getDateIndexForThisTree(CATCompatibleTree tree) {
+	int getDateIndexForThisHarvestedTree(CATCompatibleTree tree) {
 		if (treeRegister.containsKey(tree)) {
 			CATCompatibleStand stand = treeRegister.get(tree);
 			return getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
@@ -120,6 +120,19 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 			return -1;
 		}
 	}
+	
+	int getDateIndexOfPreviousStandForThisHarvestedTree(CATCompatibleTree tree) {
+		if (treeRegister.containsKey(tree)) {
+			CATCompatibleStand stand = treeRegister.get(tree);
+			int currentIndexOfThisStandAmongStands = getTimeTable().getStandsForThisRealization().lastIndexOf(stand);
+			if (currentIndexOfThisStandAmongStands >= 0) {	// must be at least in the second slot
+				stand = getTimeTable().getStandsForThisRealization().get(currentIndexOfThisStandAmongStands - 1); // get the previous stand
+				return getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
+			}
+		} 
+		return -1;
+	}
+	
 
 	protected Map<CATCompatibleStand, Map<String, Map<String, Collection<CATCompatibleTree>>>> getTrees(StatusClass statusClass) {
 		if (treeCollections.containsKey(statusClass)) {
@@ -174,13 +187,13 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 				rotationLength = lastStand.getDateYr() - stands.get(0).getDateYr();
 			}
 				
-			int averageTimeStep = retrieveAverageTimeStep(stands);
-			if (averageTimeStep == 0) {
-				averageTimeStep = 5;	// default value in case there is a single step
-			}
+//			int averageTimeStep = retrieveAverageTimeStep(stands);
+//			if (averageTimeStep == 0) {
+//				averageTimeStep = 5;	// default value in case there is a single step
+//			}
 			
 
-			// TODO change to an annual CATTimeTable instance
+			// MF2020-11-27 changed to an annual CATTimeTable instance
 			timeTable = new CATTimeTable(stands, initialAgeYr, nbExtraYears);
 //			timeTable = new CATTimeTable(stands, initialAgeYr, nbExtraYears, averageTimeStep);
 		}
@@ -228,26 +241,26 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		}
 	}
 
-	/**
-	 * This method provides the duration of the time step
-	 * @param steps a Vector of Step instances
-	 * @return an integer 
-	 */
-	private int retrieveAverageTimeStep(List<CATCompatibleStand> stands) {
-		double averageTimeStep = 0;		// default time step
-		int nbHits = 0;
-		int date;
-		int formerDate;
-		for (int i = 1; i < stands.size(); i++) {
-			date = stands.get(i).getDateYr();
-			formerDate = stands.get(i-1).getDateYr();
-			if (date - formerDate > 0) {
-				averageTimeStep += date - formerDate;
-				nbHits++;
-			}
-		}
-		return (int) Math.round(averageTimeStep / nbHits);
-	}
+//	/**
+//	 * This method provides the duration of the time step
+//	 * @param steps a Vector of Step instances
+//	 * @return an integer 
+//	 */
+//	private int retrieveAverageTimeStep(List<CATCompatibleStand> stands) {
+//		double averageTimeStep = 0;		// default time step
+//		int nbHits = 0;
+//		int date;
+//		int formerDate;
+//		for (int i = 1; i < stands.size(); i++) {
+//			date = stands.get(i).getDateYr();
+//			formerDate = stands.get(i-1).getDateYr();
+//			if (date - formerDate > 0) {
+//				averageTimeStep += date - formerDate;
+//				nbHits++;
+//			}
+//		}
+//		return (int) Math.round(averageTimeStep / nbHits);
+//	}
 	
 	/**
 	 * This method returns the TimeScale instance the simulation has been run with.
