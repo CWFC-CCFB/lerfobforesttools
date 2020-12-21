@@ -125,7 +125,7 @@ public class CATCompartmentManager implements MonteCarloSimulationCompliantObjec
 		if (treeRegister.containsKey(tree)) {
 			CATCompatibleStand stand = treeRegister.get(tree);
 			int currentIndexOfThisStandAmongStands = getTimeTable().getStandsForThisRealization().lastIndexOf(stand);
-			if (currentIndexOfThisStandAmongStands >= 0) {	// must be at least in the second slot
+			if (currentIndexOfThisStandAmongStands > 0) {	// must be at least in the second slot
 				stand = getTimeTable().getStandsForThisRealization().get(currentIndexOfThisStandAmongStands - 1); // get the previous stand
 				return getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
 			}
