@@ -16,7 +16,7 @@
  *
  * Please see the license at http://www.gnu.org/copyleft/lesser.html.
  */
-package lerfob.windstormdamagemodels.bockwindddamagemodel;
+package lerfob.windstormdamagemodels.bockwinddamagemodel;
 
 import java.util.HashMap;
 import java.util.Map;
