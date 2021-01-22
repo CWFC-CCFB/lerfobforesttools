@@ -144,9 +144,7 @@ public class ProductionLinesTest {
 	@Test
 	public void testBiomassBalanceInProductionLinesWithNewImplementation() {
 		try {
-			String filename = ObjectUtility.getPackagePath(getClass()) + File.separator 
-					+ "library" + File.separator 
-					+ "hardwood_simple_en.prl";
+			String filename = ObjectUtility.getRelativePackagePath(ProductionProcessorManager.class) + "library" + ObjectUtility.PathSeparator + "hardwood_simple_en.prl";
 			ProductionProcessorManager processorManager = new ProductionProcessorManager();
 			processorManager.load(filename);
 
@@ -331,7 +329,7 @@ public class ProductionLinesTest {
 	@Test
 	public void testCumulativeEmissionsWithValueForEachProcess() {
 		try {
-			String filename = ObjectUtility.getPackagePath(getClass()) + File.separator 
+			String filename = ObjectUtility.getPackagePath(getClass()) + File.separator
 					+ "testHardwood_simple_enWithEmissions.prl";
 			ProductionProcessorManager processorManager = new ProductionProcessorManager();
 			processorManager.load(filename);
