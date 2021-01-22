@@ -8,7 +8,7 @@ import lerfob.carbonbalancetool.CATBelowGroundBiomassProvider;
 import lerfob.carbonbalancetool.CATBelowGroundCarbonProvider;
 import lerfob.carbonbalancetool.CATCarbonContentRatioProvider;
 
-public class GUITest {
+public class TestingGUIImpl {
 
 	public static class FakeReferent implements CATAboveGroundBiomassProvider, 
 												CATAboveGroundVolumeProvider, 

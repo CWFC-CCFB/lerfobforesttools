@@ -30,14 +30,14 @@ import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.ObjectUtility;
 
 @SuppressWarnings("deprecation")
-public class PythonAccessTests {
+public class PythonAccessTest {
 
 	private static Map<?,?> InputMap;
 	
 	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void testCompleteWithBeech() throws Exception {
-		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referenceBeech.ref";
+		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTest.class) + "referenceBeech.ref";
 		
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("beech");
@@ -150,7 +150,7 @@ public class PythonAccessTests {
 	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void testCompleteWithPine() throws Exception {
-		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "referencePine.ref";
+		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTest.class) + "referencePine.ref";
 		
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("pine");
@@ -265,7 +265,7 @@ public class PythonAccessTests {
 	@SuppressWarnings("rawtypes")
 	private static Map getInputMap() throws Exception {
 		if (InputMap == null) {
-			String filename = ObjectUtility.getPackagePath(PythonAccessTests.class) + "testMapPythonAccess.ref";
+			String filename = ObjectUtility.getPackagePath(PythonAccessTest.class) + "testMapPythonAccess.ref";
 			XmlDeserializer deserializer = new XmlDeserializer(filename);
 			InputMap = (Map) deserializer.readObject();
 		}
@@ -277,7 +277,7 @@ public class PythonAccessTests {
 	public void testWithRealDataFromGoPlusBeech() throws Exception {
 		final String keyName = "RECOLTE";
 		final String shortFilename = "Hetre_SKH810000-8025_new.csv";
-		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + shortFilename;
+		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTest.class) + shortFilename;
 
 		CSVReader reader = null;
 		List<String> harvestFieldnames = new ArrayList<String>();
@@ -381,7 +381,7 @@ public class PythonAccessTests {
 	public void testWithRealDataFromGoPlusPine() throws Exception {
 		final String keyName = "RECOLTE";
 		final String shortFilename = "PinMaritime_PCS300000-7345_new.csv";
-		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTests.class) + shortFilename;
+		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTest.class) + shortFilename;
 
 		CSVReader reader = null;
 		List<String> harvestFieldnames = new ArrayList<String>();

@@ -321,24 +321,24 @@ public class PredictedEffects {
 	public void predictVolumeChangeForTemperatureIncrease() {
 		System.out.println("Running climate warming simulation...");
 		FrenchHDRelationship2018PredictorTest.readTrees();
-		List<FrenchHDRelationship2018ExtPlotImplForTest> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
+		List<FrenchHDRelationship2018ExtPlotImpl2> Stands = FrenchHDRelationship2018PredictorTest.ExtStands;
 		Map<FrenchHdSpecies, List<Double>> obsMap = new HashMap<FrenchHdSpecies, List<Double>>();
 		Map<FrenchHdSpecies, List<Double>> predMap = new HashMap<FrenchHdSpecies, List<Double>>();
 		for (FrenchHdSpecies species : FrenchHdSpecies.values()) {
 			obsMap.put(species, new ArrayList<Double>());
 			predMap.put(species, new ArrayList<Double>());
 		}
-		FrenchHDRelationship2018TreeImplForTest.BlupPrediction = false;
+		FrenchHDRelationship2018TreeImpl2.BlupPrediction = false;
 		FrenchHDRelationship2018Predictor predictor = new FrenchHDRelationship2018Predictor();
 		for (FrenchHDRelationship2018Plot stand : Stands) {
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
+				FrenchHDRelationship2018TreeImpl2 tree = (FrenchHDRelationship2018TreeImpl2) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				obsMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}
-			((FrenchHDRelationship2018ExtPlotImplForTest) stand).meanTemp = ((FrenchHDRelationship2018ExtPlotImplForTest) stand).getMeanTemperatureOfGrowingSeason() + 1.5;
+			((FrenchHDRelationship2018ExtPlotImpl2) stand).meanTemp = ((FrenchHDRelationship2018ExtPlotImpl2) stand).getMeanTemperatureOfGrowingSeason() + 1.5;
 			for (Object obj : stand.getTreesForFrenchHDRelationship()) {
-				FrenchHDRelationship2018TreeImplForTest tree = (FrenchHDRelationship2018TreeImplForTest) obj;
+				FrenchHDRelationship2018TreeImpl2 tree = (FrenchHDRelationship2018TreeImpl2) obj;
 				double cylinder = predictor.predictHeightM(stand, tree) * tree.getDbhCm() * tree.getDbhCm() * tree.weight;
 				predMap.get(tree.getFrenchHDTreeSpecies()).add(cylinder);
 			}

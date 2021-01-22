@@ -1,5 +1,13 @@
 package junittest;
 
+import lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTest;
+import lerfob.carbonbalancetool.pythonaccess.PythonAccessTest;
+import lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTest;
+import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLoggerTest;
+import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerTest;
+import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerTest;
+import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTest;
+import lerfob.treelogger.mathilde.MathildeTreeLoggerTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -10,8 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.carbonbalancetool.CarbonAccountingToolTest.class,
 				lerfob.carbonbalancetool.productionlines.ProductionLinesTest.class,
 				lerfob.carbonbalancetool.biomassparameters.BiomassParametersTest.class,
-				lerfob.carbonbalancetool.pythonaccess.PythonAccessTests.class,
-				lerfob.carbonbalancetool.catdiameterbasedtreelogger.ComparisonWithMathildeTests.class,
+				PythonAccessTest.class,
+				ComparisonWithMathildeTest.class,
 				junittest.windstormdamagemodels.aws.AWSBeechTest.class,	
 				junittest.windstormdamagemodels.aws.AWSTest.class,
 				junittest.windstormdamagemodels.bwd.BWDTest.class,				
@@ -24,13 +32,13 @@ import org.junit.runners.Suite.SuiteClasses;
 				lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018.FrenchHDRelationship2018PredictorTest.class,
 				lerfob.predictor.volume.frenchcommercialvolume2014.FrenchCommercialVolume2014PredictorTest.class,
 				lerfob.predictor.volume.frenchcommercialvolume2020.FrenchCommercialVolume2020PredictorTest.class,
-				lerfob.treelogger.mathilde.MathildeTreeLoggerTests.class,
-				lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerTests.class,
+				MathildeTreeLoggerTest.class,
+				DouglasFCBATreeLoggerTest.class,
 				lerfob.predictor.dopalep.DopalepDbhIncPredictorTest.class,
 				lerfob.predictor.mathilde.recruitment.MathildeRecruitmentTest.class,
-				lerfob.predictor.thinners.frenchnfithinner2018.FrenchNFIThinnerPredictorTests.class,
-				lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerTests.class,
-				lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerTests.class,
-				lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLoggerTests.class,
+				FrenchNFIThinnerPredictorTest.class,
+				EuropeanBeechBasicTreeLoggerTest.class,
+				MaritimePineBasicTreeLoggerTest.class,
+				DiameterBasedTreeLoggerTest.class,
 				})
 public class AllLERFoBTests {}

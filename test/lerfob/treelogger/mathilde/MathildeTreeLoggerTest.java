@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import repicea.simulation.treelogger.WoodPiece;
 
-public class MathildeTreeLoggerTests {
+public class MathildeTreeLoggerTest {
 
 	
 	

@@ -16,7 +16,7 @@ import repicea.simulation.covariateproviders.plotlevel.SpeciesCompositionProvide
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
-public class FrenchNFIThinnerPredictorTests {
+public class FrenchNFIThinnerPredictorTest {
 
 	private List<FrenchNFIThinnerPlot> readPlots() {
 		List<FrenchNFIThinnerPlot> plots = new ArrayList<FrenchNFIThinnerPlot>();

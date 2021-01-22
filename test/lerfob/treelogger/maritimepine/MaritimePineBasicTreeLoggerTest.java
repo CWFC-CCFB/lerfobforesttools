@@ -9,7 +9,7 @@ import org.junit.Test;
 import repicea.simulation.treelogger.WoodPiece;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters.Grade;
 
-public class MaritimePineBasicTreeLoggerTests {
+public class MaritimePineBasicTreeLoggerTest {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test

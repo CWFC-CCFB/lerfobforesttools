@@ -19,7 +19,7 @@ import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters;
 import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.ObjectUtility;
 
-public class ComparisonWithMathildeTests {
+public class ComparisonWithMathildeTest {
 
 	class MathildeLoggableTreeImpl implements MathildeLoggableTree, CATCompatibleTree {
 		
