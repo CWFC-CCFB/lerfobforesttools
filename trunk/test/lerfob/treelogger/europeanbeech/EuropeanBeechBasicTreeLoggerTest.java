@@ -27,7 +27,7 @@ import org.junit.Test;
 import repicea.simulation.treelogger.WoodPiece;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters.Grade;
 
-public class EuropeanBeechBasicTreeLoggerTests {
+public class EuropeanBeechBasicTreeLoggerTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void TestWithSimpleTreeWithStandardDeviation() {

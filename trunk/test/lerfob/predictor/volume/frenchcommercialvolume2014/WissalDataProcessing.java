@@ -10,7 +10,7 @@ import repicea.io.javacsv.CSVReader;
 import repicea.io.javacsv.CSVWriter;
 import repicea.util.ObjectUtility;
 
-public class WissalTest {
+public class WissalDataProcessing {
 
 	private class Tree extends FrenchCommercialVolume2014TreeImpl {
 		private final int plotID;
@@ -98,7 +98,7 @@ public class WissalTest {
 	}
 	
 	public static void main(String[] args) {
-		WissalTest wissalTest = new  WissalTest();
+		WissalDataProcessing wissalTest = new WissalDataProcessing();
 		wissalTest.processWissalDataSet();
 	}
 

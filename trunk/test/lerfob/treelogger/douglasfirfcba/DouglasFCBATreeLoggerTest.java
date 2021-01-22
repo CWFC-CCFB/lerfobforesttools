@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import repicea.simulation.treelogger.WoodPiece;
 
-public class DouglasFCBATreeLoggerTests {
+public class DouglasFCBATreeLoggerTest {
 
 	
 	

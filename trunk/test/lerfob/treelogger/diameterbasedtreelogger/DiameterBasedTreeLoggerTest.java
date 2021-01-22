@@ -12,7 +12,7 @@ import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.ObjectUtility;
 
-public class DiameterBasedTreeLoggerTests {
+public class DiameterBasedTreeLoggerTest {
 
 	
 	@SuppressWarnings("rawtypes")
