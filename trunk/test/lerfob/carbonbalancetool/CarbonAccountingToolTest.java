@@ -40,7 +40,7 @@ public class CarbonAccountingToolTest {
 
 	@Test
 	public void deserializationTest() {
-		String filename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
+		String filename = ObjectUtility.getPackagePath(getClass()) + "productionlines" + File.separator + "exampleProductionLines.prl";
 		ProductionProcessorManager ppm = new ProductionProcessorManager();
 		try {
 			ppm.load(filename);
@@ -54,7 +54,7 @@ public class CarbonAccountingToolTest {
 
 	@Test
 	public void simpleCarbonAccountingTest() throws Exception {
-		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
+		String managerFilename = ObjectUtility.getPackagePath(getClass()) + "productionlines" + File.separator + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;
 		List<CATCompatibleStand> stands = new ArrayList<CATCompatibleStand>();
@@ -89,7 +89,7 @@ public class CarbonAccountingToolTest {
 
 	@Test
 	public void matterBalanceAfterHarvest() throws Exception {
-		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
+		String managerFilename = ObjectUtility.getPackagePath(getClass()) + "productionlines" + File.separator + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;
 		List<CATCompatibleStand> stands = new ArrayList<CATCompatibleStand>();
@@ -142,7 +142,7 @@ public class CarbonAccountingToolTest {
 	
 	@Test
 	public void testWithAgeDifferentFromDate() throws Exception {
-		String managerFilename = ObjectUtility.getPackagePath(ProductionProcessorManager.class) + "exampleProductionLines.prl";
+		String managerFilename = ObjectUtility.getPackagePath(getClass()) + "productionlines" + File.separator + "exampleProductionLines.prl";
 		final String standID = "StandTest";
 		final double areaHa = .04;
 		List<CATCompatibleStand> standsWithDifferentDates = new ArrayList<CATCompatibleStand>();
@@ -360,7 +360,7 @@ public class CarbonAccountingToolTest {
 		String filename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.csv";
 		String ifeFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTable.ife";
 		String refFilename = ObjectUtility.getPackagePath(getClass()) + "io" + File.separator + "ExampleYieldTableWithIPCCReference.xml";
-		String prlFilename = ObjectUtility.getPackagePath(getClass()) + "productionlines" + File.separator + "library" + File.separator + "ipcc2014_en.prl";
+		String prlFilename = ObjectUtility.getRelativePackagePath(ProductionProcessorManager.class) + "library" + ObjectUtility.PathSeparator + "ipcc2014_en.prl";
 		CarbonAccountingTool cat = new CarbonAccountingTool(CATMode.SCRIPT);
 		cat.initializeTool(null);
 		CATYieldTableRecordReader recordReader = new CATYieldTableRecordReader(CATSpecies.ABIES);
