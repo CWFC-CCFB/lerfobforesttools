@@ -10,6 +10,8 @@
 	<property name="java.doc.dir" value="../javadoc" />
 	<property name="test.prod.dir" value="../testprod" />
 	<property name="vendor" value="LERFOB and Canadian Wood Fibre Centre" />
+	<property name="cat.version" value="1.2.0" />
+	
 
 
 	<path id="myJARFile">
@@ -222,4 +224,30 @@
     </target>
 
 
-</project>
+	<!-- CREATE JAR FILE -->
+    <target name="jar-cat" depends="compile">
+        <jar destfile="${ext.dir}/cat_${cat.version}.jar">
+			<fileset dir="${bin.dir}"/>
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+			<fileset dir="." includes="COPYING.LESSER.txt"/>
+			<fileset dir="." includes="README.txt"/>
+			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
+			<zipgroupfileset dir="${ext.dir}/py4j/py4j-0.8.1/py4j-java" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/jaxb" includes="*.jar"/>
+            <manifest>
+                <attribute name="Built-By" value="Mathieu Fortin"/>
+				<attribute name="Specification-Title" value="${project.description}"/>
+				<attribute name="Specification-Version" value="${cat.version}"/>
+				<attribute name="Specification-Vendor" value="${vendor}"/>
+				<attribute name="Implementation-Title" value="${project.name}"/>
+				<attribute name="Implementation-Version" value="build"/>
+				<attribute name="Implementation-Vendor" value="${vendor}"/>
+				<attribute name="Main-Class" value="lerfob.carbonbalancetool.CarbonAccountingTool"/>
+				<attribute name="Class-Path" value="."/>
+            </manifest>
+        </jar>
+    </target>
+
+
+</project>	
