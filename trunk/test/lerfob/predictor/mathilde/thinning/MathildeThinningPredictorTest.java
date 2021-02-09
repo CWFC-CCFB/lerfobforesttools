@@ -1,13 +1,14 @@
 package lerfob.predictor.mathilde.thinning;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.util.ObjectUtility;
@@ -68,9 +69,11 @@ public class MathildeThinningPredictorTest {
 		ReadTrees();
 		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
 		int nbTested = 0;
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (MathildeThinningTreeImpl tree : Trees) {
 			MathildeThinningStandImpl stand = tree.getStand();
-			double standProb = standPredictor.predictEventProbability(stand, null, stand.getExcludedGroup());
+			parms.put(MathildeStandThinningPredictor.ParmSubModuleID, stand.getExcludedGroup());
+			double standProb = standPredictor.predictEventProbability(stand, null, parms);
 			double actualLinearPred = Math.log(standProb/(1-standProb));
 //			if (Math.abs(stand.getLinearPlotPred() - actualLinearPred) > 1E-8) {
 //				int u = 0;
@@ -108,13 +111,16 @@ public class MathildeThinningPredictorTest {
 		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
 		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false);
 		int nbTested = 0;
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (MathildeThinningTreeImpl tree : Trees) {
 //			if (nbTested == 176423) {
 //				int u = 0;
 //			}
 			MathildeThinningStandImpl stand = tree.getStand();
-			double standPred = standPredictor.predictEventProbability(stand, tree, stand.getExcludedGroup());
-			double treePred = treePredictor.predictEventProbability(stand, tree, tree.getExcludedGroup());
+			parms.put(MathildeStandThinningPredictor.ParmSubModuleID, stand.getExcludedGroup());
+			double standPred = standPredictor.predictEventProbability(stand, tree, parms);
+			parms.put(MathildeStandThinningPredictor.ParmSubModuleID, tree.getExcludedGroup());
+			double treePred = treePredictor.predictEventProbability(stand, tree, parms);
 			double marginalPred = standPred * treePred;
 			Assert.assertEquals("Testing obs " + ++nbTested, tree.getPrediction(), marginalPred, 1E-6);
 		}

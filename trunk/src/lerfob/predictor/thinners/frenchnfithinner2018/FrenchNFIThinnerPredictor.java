@@ -42,6 +42,10 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<FrenchNFIThinnerPlot, Object> {
 
+	public final static String ParmYear0 = "year0";
+	public final static String ParmYear1 = "year1";
+	
+	
 	private final static Map<FrenchRegion2016, Matrix> DummyRegion = new HashMap<FrenchRegion2016, Matrix>();
 	static {
 		Matrix dummy = new Matrix(1,12);
@@ -211,14 +215,14 @@ public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<Frenc
 	 * probability of harvesting. 
 	 */
 	@Override
-	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Object... parms) {
+	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Map<String, Object> parms) {
 		if (plot.getBasalAreaM2Ha() == 0d) {	// if the plot is empty then no need for calculating whatsoever
 			return 0d;
 		}
 		oXVector.resetMatrix();
 		
-		int year0 = (Integer) parms[0];
-		int year1 = (Integer) parms[1];
+		int year0 = (Integer) parms.get(ParmYear0);
+		int year1 = (Integer) parms.get(ParmYear1);
 
 		Matrix beta = getParametersForThisRealization(plot);
 		double proportionalPart = getProportionalPart(plot, beta, year0);
