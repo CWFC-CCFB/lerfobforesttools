@@ -53,6 +53,13 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<MathildeMortalityStand, MathildeTree> {
 
+	public static String ParmWindstormDisabledOverride = "windstormDisableOverride";
+	public static String ParmSubmoduleFromCrossValidation = "submoduleFromCrossValidation";
+	
+	protected static final Map<String, Object> ParmsToDisableWindstorm = new HashMap<String, Object>();
+	static {
+		ParmsToDisableWindstorm.put(ParmWindstormDisabledOverride, true);
+	}
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	
 	
@@ -233,10 +240,10 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	}
 	
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Map<String, Object> parms) {
 		boolean windstormDisabledOverride = false;
-		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
-			windstormDisabledOverride = (Boolean) parms[0];
+		if (parms != null && parms.containsKey(ParmWindstormDisabledOverride)) {
+			windstormDisabledOverride = (Boolean) parms.get(ParmWindstormDisabledOverride);
 		}
 		double upcomingWindstorm = 0d;
 		if (stand.isAWindstormGoingToOccur() && !windstormDisabledOverride) {
@@ -244,8 +251,9 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		} 
 		
 		MathildeMortalitySubModule subModule;
-		if (parms.length > 0 && parms[0] instanceof Integer) {
-			subModule = subModules.get(parms[0]);
+		if (parms != null && parms.containsKey(ParmSubmoduleFromCrossValidation)) {
+			int subModuleId = (Integer) parms.get(ParmSubmoduleFromCrossValidation);
+			subModule = subModules.get(subModuleId);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!");
 			} 
@@ -290,7 +298,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	 * @return a Boolean or a double
 	 */
 	@Override
-	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Map<String, Object> parms) {
 		double eventProbability = predictEventProbability(stand, tree, parms);
 		if (eventProbability < 0 || eventProbability > 1) {
 			return null;
@@ -298,7 +306,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 			double residualError = StatisticalUtility.getRandom().nextDouble();
 			if (residualError < eventProbability) {
 				if (stand.isAWindstormGoingToOccur()) {
-					double eventProbabilityWithoutWindstorm = predictEventProbability(stand, tree, new Object[]{true}); // to disable the windstorm
+					double eventProbabilityWithoutWindstorm = predictEventProbability(stand, tree, ParmsToDisableWindstorm); // to disable the windstorm
 					if (StatisticalUtility.getRandom().nextDouble() < eventProbabilityWithoutWindstorm/eventProbability) {
 						return StatusClass.dead;
 					} else {

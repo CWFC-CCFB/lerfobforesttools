@@ -21,6 +21,7 @@ package lerfob.predictor.mathilde.mortality;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree;
 import repicea.math.Matrix;
@@ -74,10 +75,10 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Map<String, Object> parms) {
 		boolean windstormDisabledOverride = false;
-		if (parms != null && parms.length > 0 && parms[0] instanceof Boolean) {
-			windstormDisabledOverride = (Boolean) parms[0];
+		if (parms != null && parms.containsKey(MathildeMortalityPredictor.ParmWindstormDisabledOverride)) {
+			windstormDisabledOverride = (Boolean) parms.get(MathildeMortalityPredictor.ParmWindstormDisabledOverride);
 		}
 		double upcomingWindstorm = 0d;
 		if (stand.isAWindstormGoingToOccur() && !windstormDisabledOverride) {
@@ -85,8 +86,9 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 		} 
 		
 		MathildeMortalitySubModule subModule;
-		if (parms.length > 0 && parms[0] instanceof Integer) {
-			subModule = subModules.get(parms[0]);
+		if (parms != null && parms.containsKey(MathildeMortalityPredictor.ParmSubmoduleFromCrossValidation)) {
+			int subModuleId = (Integer) parms.get(MathildeMortalityPredictor.ParmSubmoduleFromCrossValidation);
+			subModule = subModules.get(subModuleId);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!");
 			} 

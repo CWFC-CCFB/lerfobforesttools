@@ -3,7 +3,9 @@ package lerfob.predictor.thinners.frenchnfithinner2018;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -91,9 +93,12 @@ public class FrenchNFIThinnerPredictorTest {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		int nbPlots = 0;
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (FrenchNFIThinnerPlot plot : plots) {
 			FrenchNFIThinnerPlotInnerImpl p = (FrenchNFIThinnerPlotInnerImpl) plot;
-			double actual = thinner.predictEventProbability(plot, null, p.getYear0(), p.getYear1());
+			parms.put(FrenchNFIThinnerPredictor.ParmYear0, p.getYear0());
+			parms.put(FrenchNFIThinnerPredictor.ParmYear1, p.getYear1());
+			double actual = thinner.predictEventProbability(plot, null, parms);
 			double expected = p.getPredictedProbability();
 			Assert.assertEquals(expected, actual, 1E-8);
 			nbPlots++;
@@ -133,7 +138,10 @@ public class FrenchNFIThinnerPredictorTest {
 			i++;
 			plot = plots.get(i);
 		}
-		double predictedProbability = thinner.predictEventProbability(plot, null, 2016, 2017);
+		Map<String, Object> parms = new HashMap<String, Object>();
+		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2016);
+		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2017);
+		double predictedProbability = thinner.predictEventProbability(plot, null, parms);
 		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, predictedProbability, 1E-8);
 		
 		System.out.println("Successful deterministic test on an oak plot from 2016 to 2017");
@@ -174,10 +182,14 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
+		Map<String, Object> parms = new HashMap<String, Object>();
+		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2016);
+		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2017);
+
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
 			((FrenchNFIThinnerPlotInnerImpl) plot).monteCarloRealization = mc;
-			double predictedProbability = thinner.predictEventProbability(plot, null, 2016, 2017);
+			double predictedProbability = thinner.predictEventProbability(plot, null, parms);
 			estimate.addRealization(new Matrix(new double[]{predictedProbability}));
 		}
 		double estimatedProbability = estimate.getMean().m_afData[0][0];
@@ -266,10 +278,14 @@ public class FrenchNFIThinnerPredictorTest {
 			i++;
 			plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(i);
 		}
+		
+		Map<String, Object> parms = new HashMap<String, Object>();
+		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2015);
+		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2020);
 
-		double unModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		double unModifiedPrediction = thinner.predictEventProbability(plot, null, parms);
 		thinner.setMultiplierModifier(plot.getTargetSpecies(), 2015, 2020, .5);
-		double modifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		double modifiedPrediction = thinner.predictEventProbability(plot, null, parms);
 		double actualDifference = modifiedPrediction - unModifiedPrediction;
 		Assert.assertEquals("Probability difference with 50% increase in stumpage price",
 				0.17374675683611285, 
@@ -292,12 +308,16 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
-		double originalPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		Map<String, Object> parms = new HashMap<String, Object>();
+		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2015);
+		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2020);
+
+		double originalPrediction = thinner.predictEventProbability(plot, null, parms);
 		thinner.setMultiplierModifier(2015, 2020, .5);
-		double firstModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		double firstModifiedPrediction = thinner.predictEventProbability(plot, null, parms);
 		Assert.assertTrue(Math.abs(originalPrediction - firstModifiedPrediction) > 1E-8); // They should be different due to the modifier
 		thinner.resetModifiers();
-		double secondModifiedPrediction = thinner.predictEventProbability(plot, null, 2015, 2020);
+		double secondModifiedPrediction = thinner.predictEventProbability(plot, null, parms);
 		Assert.assertEquals("Comparison reset predictions ",
 				originalPrediction, 
 				secondModifiedPrediction,

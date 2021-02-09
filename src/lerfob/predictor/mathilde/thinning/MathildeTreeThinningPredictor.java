@@ -155,13 +155,14 @@ public final class MathildeTreeThinningPredictor extends REpiceaBinaryEventPredi
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Object... parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Map<String, Object> parms) {
 		MathildeThinningSubModule subModule;
 			
-		if (parms != null && parms.length >= 1 && parms[0] instanceof Integer) {
-			subModule = getSubModule((Integer) parms[0]);
+		if (parms != null && parms.containsKey(MathildeStandThinningPredictor.ParmSubModuleID)) {
+			int subModuleId = (Integer) parms.get(MathildeStandThinningPredictor.ParmSubModuleID);
+			subModule = getSubModule(subModuleId);
 			if (subModule == null) {
-				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + parms[1]);
+				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + subModuleId);
 			}
 		} else {
 			subModule = getSubModule(0);
