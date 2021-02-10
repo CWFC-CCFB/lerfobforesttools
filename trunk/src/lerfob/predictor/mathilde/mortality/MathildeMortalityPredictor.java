@@ -53,10 +53,10 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<MathildeMortalityStand, MathildeTree> {
 
-	public static String ParmWindstormDisabledOverride = "windstormDisableOverride";
-	public static String ParmSubmoduleFromCrossValidation = "submoduleFromCrossValidation";
+	protected final static int ParmWindstormDisabledOverride = 100;
+	public final static int ParmSubmoduleFromCrossValidation = 200;
 	
-	protected static final Map<String, Object> ParmsToDisableWindstorm = new HashMap<String, Object>();
+	protected static final Map<Integer, Object> ParmsToDisableWindstorm = new HashMap<Integer, Object>();
 	static {
 		ParmsToDisableWindstorm.put(ParmWindstormDisabledOverride, true);
 	}
@@ -240,7 +240,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	}
 	
 	@Override
-	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Map<String, Object> parms) {
+	public synchronized double predictEventProbability(MathildeMortalityStand stand, MathildeTree tree, Map<Integer, Object> parms) {
 		boolean windstormDisabledOverride = false;
 		if (parms != null && parms.containsKey(ParmWindstormDisabledOverride)) {
 			windstormDisabledOverride = (Boolean) parms.get(ParmWindstormDisabledOverride);
@@ -298,7 +298,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	 * @return a Boolean or a double
 	 */
 	@Override
-	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Map<String, Object> parms) {
+	public Object predictEvent(MathildeMortalityStand stand, MathildeTree tree, Map<Integer, Object> parms) {
 		double eventProbability = predictEventProbability(stand, tree, parms);
 		if (eventProbability < 0 || eventProbability > 1) {
 			return null;

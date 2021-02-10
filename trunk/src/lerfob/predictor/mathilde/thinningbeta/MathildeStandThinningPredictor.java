@@ -40,7 +40,6 @@ import repicea.util.ObjectUtility;
 @Deprecated
 public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPredictor<MathildeThinningStand, Object> {
 
-	public static final String ParmsSubModuleID = "submoduleId";
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
 	private final LinkFunction linkFunction;
@@ -125,10 +124,10 @@ public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPred
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<String, Object> parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<Integer, Object> parms) {
 		MathildeThinningSubModule subModule;
-		if (parms != null && parms.containsKey(ParmsSubModuleID)) {
-			int subModuleId = (Integer) parms.get(ParmsSubModuleID);
+		if (parms != null && parms.containsKey(lerfob.predictor.mathilde.thinning.MathildeStandThinningPredictor.ParmSubModuleID)) {
+			int subModuleId = (Integer) parms.get(lerfob.predictor.mathilde.thinning.MathildeStandThinningPredictor.ParmSubModuleID);
 			subModule = subModules.get(subModuleId);
 			if (subModule == null) {
 				throw new InvalidParameterException("The integer in the parms parameter is not valid!: " + subModuleId);

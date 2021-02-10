@@ -155,7 +155,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaBinaryEventPredi
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Map<String, Object> parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, MathildeTree tree, Map<Integer, Object> parms) {
 		MathildeThinningSubModule subModule;
 			
 		if (parms != null && parms.containsKey(MathildeStandThinningPredictor.ParmSubModuleID)) {

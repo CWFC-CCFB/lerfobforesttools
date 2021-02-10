@@ -31,6 +31,7 @@ import repicea.simulation.covariateproviders.plotlevel.LandOwnershipProvider;
 import repicea.simulation.covariateproviders.plotlevel.LandOwnershipProvider.LandOwnership;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
+import repicea.simulation.disturbances.DisturbanceParameter;
 import repicea.util.ObjectUtility;
 
 /**
@@ -42,9 +43,6 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<FrenchNFIThinnerPlot, Object> {
 
-	public final static String ParmYear0 = "year0";
-	public final static String ParmYear1 = "year1";
-	
 	
 	private final static Map<FrenchRegion2016, Matrix> DummyRegion = new HashMap<FrenchRegion2016, Matrix>();
 	static {
@@ -215,14 +213,14 @@ public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<Frenc
 	 * probability of harvesting. 
 	 */
 	@Override
-	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Map<String, Object> parms) {
+	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Map<Integer, Object> parms) {
 		if (plot.getBasalAreaM2Ha() == 0d) {	// if the plot is empty then no need for calculating whatsoever
 			return 0d;
 		}
 		oXVector.resetMatrix();
 		
-		int year0 = (Integer) parms.get(ParmYear0);
-		int year1 = (Integer) parms.get(ParmYear1);
+		int year0 = (Integer) parms.get(DisturbanceParameter.ParmYear0);
+		int year1 = (Integer) parms.get(DisturbanceParameter.ParmYear1);
 
 		Matrix beta = getParametersForThisRealization(plot);
 		double proportionalPart = getProportionalPart(plot, beta, year0);
