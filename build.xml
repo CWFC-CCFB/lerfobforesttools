@@ -51,6 +51,17 @@
 		</fileset>
 	</path>
 
+	<!-- REVISION : retrieve the head revision and stores its number in a file -->
+	<target name="revision" description="Retrieve the head revision">
+	
+		<java classname="lerfob.app.LERFOBJARSVNAppVersionCompiler" fork="true">
+			<classpath>
+				<pathelement location="${bin.dir}" />
+				<path refid="repicea"/>
+			</classpath>
+		</java>
+	</target>
+
 
 	<!-- ERASE THE BINARY DIRECTORY -->
     <target name="clean">
@@ -205,7 +216,7 @@
 
 
 	<!-- CREATE JAR FILE -->
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile,revision">
         <jar destfile="${ext.dir}/${project.name}.jar">
 			<fileset dir="${bin.dir}"/>
 			<fileset dir="${src.dir}" includes="**/*.java"/>
@@ -225,7 +236,7 @@
 
 
 	<!-- CREATE JAR FILE -->
-    <target name="jar-cat" depends="compile">
+    <target name="jar-cat" depends="compile,revision">
         <jar destfile="${ext.dir}/cat_${cat.version}.jar">
 			<fileset dir="${bin.dir}"/>
 			<fileset dir="${src.dir}" includes="**/*.java"/>
