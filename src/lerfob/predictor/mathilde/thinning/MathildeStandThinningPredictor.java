@@ -39,8 +39,7 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPredictor<MathildeThinningStand, Object> {
 
-	public final static String ParmSubModuleID = "subModuleId";
-	
+	public final static int ParmSubModuleID = 300;
 	
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
@@ -130,7 +129,7 @@ public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPred
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<String, Object> parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<Integer, Object> parms) {
 		MathildeThinningSubModule subModule;
 		if (parms != null && parms.containsKey(ParmSubModuleID)) {
 			int subModuleId = (Integer) parms.get(ParmSubModuleID);

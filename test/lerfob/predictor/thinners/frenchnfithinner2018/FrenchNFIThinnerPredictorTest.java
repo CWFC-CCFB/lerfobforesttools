@@ -15,6 +15,7 @@ import lerfob.simulation.covariateproviders.plotlevel.FrenchDepartmentProvider.F
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.simulation.covariateproviders.plotlevel.SpeciesCompositionProvider.SpeciesComposition;
+import repicea.simulation.disturbances.DisturbanceParameter;
 import repicea.stats.estimates.MonteCarloEstimate;
 import repicea.util.ObjectUtility;
 
@@ -93,11 +94,11 @@ public class FrenchNFIThinnerPredictorTest {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		int nbPlots = 0;
-		Map<String, Object> parms = new HashMap<String, Object>();
+		Map<Integer, Object> parms = new HashMap<Integer, Object>();
 		for (FrenchNFIThinnerPlot plot : plots) {
 			FrenchNFIThinnerPlotInnerImpl p = (FrenchNFIThinnerPlotInnerImpl) plot;
-			parms.put(FrenchNFIThinnerPredictor.ParmYear0, p.getYear0());
-			parms.put(FrenchNFIThinnerPredictor.ParmYear1, p.getYear1());
+			parms.put(DisturbanceParameter.ParmYear0, p.getYear0());
+			parms.put(DisturbanceParameter.ParmYear1, p.getYear1());
 			double actual = thinner.predictEventProbability(plot, null, parms);
 			double expected = p.getPredictedProbability();
 			Assert.assertEquals(expected, actual, 1E-8);
@@ -138,9 +139,9 @@ public class FrenchNFIThinnerPredictorTest {
 			i++;
 			plot = plots.get(i);
 		}
-		Map<String, Object> parms = new HashMap<String, Object>();
-		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2016);
-		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2017);
+		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		parms.put(DisturbanceParameter.ParmYear0, 2016);
+		parms.put(DisturbanceParameter.ParmYear1, 2017);
 		double predictedProbability = thinner.predictEventProbability(plot, null, parms);
 		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, predictedProbability, 1E-8);
 		
@@ -182,9 +183,9 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
-		Map<String, Object> parms = new HashMap<String, Object>();
-		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2016);
-		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2017);
+		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		parms.put(DisturbanceParameter.ParmYear0, 2016);
+		parms.put(DisturbanceParameter.ParmYear1, 2017);
 
 		MonteCarloEstimate estimate = new MonteCarloEstimate();
 		for (int mc = 0; mc < 50000; mc++) {
@@ -279,9 +280,9 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(i);
 		}
 		
-		Map<String, Object> parms = new HashMap<String, Object>();
-		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2015);
-		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2020);
+		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		parms.put(DisturbanceParameter.ParmYear0, 2015);
+		parms.put(DisturbanceParameter.ParmYear1, 2020);
 
 		double unModifiedPrediction = thinner.predictEventProbability(plot, null, parms);
 		thinner.setMultiplierModifier(plot.getTargetSpecies(), 2015, 2020, .5);
@@ -308,9 +309,9 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
-		Map<String, Object> parms = new HashMap<String, Object>();
-		parms.put(FrenchNFIThinnerPredictor.ParmYear0, 2015);
-		parms.put(FrenchNFIThinnerPredictor.ParmYear1, 2020);
+		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		parms.put(DisturbanceParameter.ParmYear0, 2015);
+		parms.put(DisturbanceParameter.ParmYear1, 2020);
 
 		double originalPrediction = thinner.predictEventProbability(plot, null, parms);
 		thinner.setMultiplierModifier(2015, 2020, .5);
