@@ -25,13 +25,13 @@ import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.F
 import repicea.math.Matrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
-import repicea.simulation.REpiceaBinaryEventPredictor;
 import repicea.simulation.SASParameterEstimates;
 import repicea.simulation.covariateproviders.plotlevel.LandOwnershipProvider;
 import repicea.simulation.covariateproviders.plotlevel.LandOwnershipProvider.LandOwnership;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.disturbances.DisturbanceParameter;
+import repicea.simulation.thinners.REpiceaThinner;
 import repicea.util.ObjectUtility;
 
 /**
@@ -41,7 +41,7 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin - May 2018
  */
 @SuppressWarnings("serial")
-public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<FrenchNFIThinnerPlot, Object> {
+public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPlot, Object> {
 
 	
 	private final static Map<FrenchRegion2016, Matrix> DummyRegion = new HashMap<FrenchRegion2016, Matrix>();
@@ -324,6 +324,9 @@ public class FrenchNFIThinnerPredictor extends REpiceaBinaryEventPredictor<Frenc
 		String formattedSpeciesName = firstLetter.concat(rest);
 		return FrenchNFIThinnerSpecies.valueOf(formattedSpeciesName);
 	}
+
+	@Override
+	public Object getInformationOnThinning(FrenchNFIThinnerPlot stand) {return null;}
 	
 	
 }

@@ -26,7 +26,7 @@ import repicea.math.Matrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.simulation.REpiceaBinaryEventPredictor;
+import repicea.simulation.thinners.REpiceaThinner;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -37,7 +37,7 @@ import repicea.util.ObjectUtility;
  * @author Ruben Manso and Francois de Coligny - June 2015
  */
 @SuppressWarnings("serial")
-public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPredictor<MathildeThinningStand, Object> {
+public final class MathildeStandThinningPredictor extends REpiceaThinner<MathildeThinningStand, Object> {
 
 	public final static int ParmSubModuleID = 300;
 	
@@ -151,6 +151,9 @@ public final class MathildeStandThinningPredictor extends REpiceaBinaryEventPred
 
 		return prob;
 	}
+
+	@Override
+	public Object getInformationOnThinning(MathildeThinningStand stand) {return null;}
 
 //	@Override
 //	public void clearDeviates() {
