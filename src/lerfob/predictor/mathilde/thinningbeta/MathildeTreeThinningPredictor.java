@@ -31,7 +31,7 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
-import repicea.simulation.REpiceaBinaryEventPredictor;
+import repicea.simulation.thinners.REpiceaThinner;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
@@ -46,7 +46,7 @@ import repicea.util.ObjectUtility;
  */
 @SuppressWarnings({ "serial"})
 @Deprecated
-public final class MathildeTreeThinningPredictor extends REpiceaBinaryEventPredictor<MathildeThinningStand, MathildeTree> {
+public final class MathildeTreeThinningPredictor extends REpiceaThinner<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 
@@ -194,6 +194,9 @@ public final class MathildeTreeThinningPredictor extends REpiceaBinaryEventPredi
 
 		return prob;
 	}
+
+	@Override
+	public Object getInformationOnThinning(MathildeThinningStand stand) {return null;}
 
 //	@Override
 //	public void clearDeviates() {
