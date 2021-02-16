@@ -73,7 +73,7 @@
     <target name="compile" description="Compile src only" depends="clean">
         <mkdir dir="${bin.dir}"/>
 		
-        <javac srcdir="${src.dir}" destdir="${bin.dir}">
+        <javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on">
 			<classpath>
 				<path refid="jfreechart"/>
 				<path refid="py4j"/>
