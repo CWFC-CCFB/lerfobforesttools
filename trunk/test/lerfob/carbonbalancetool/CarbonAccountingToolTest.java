@@ -48,7 +48,14 @@ public class CarbonAccountingToolTest {
 			e.printStackTrace();
 			Assert.fail("Error while loading");
 		}
-		Assert.assertTrue(ppm.isValid());
+		boolean isValid;
+		try {
+			ppm.validate();
+			isValid = true;
+		} catch (Exception e) {
+			isValid = false;
+		}
+		Assert.assertTrue(isValid);
 	}
 
 

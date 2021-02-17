@@ -425,23 +425,21 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * This method returns true if the ProductionProcessorManager instance is valid or false otherwise. To be 
 	 * valid, all the LogCategoryProcessor must have at least one sub processor. Moreover, all the processors must be
 	 * valid, i.e. the sum of the fluxes to the sub processors must be equal to 100%.
-	 * @return a boolean
 	 */
-	public boolean isValid() {
+	public void validate() throws ProductionProcessorManagerException {
 		for (Processor logCategoryProcessor : logCategoryProcessors) {
 			if (!logCategoryProcessor.hasSubProcessors()) {
-				return false;
+				throw new ProductionProcessorManagerException("This processor should be linked to sub processors: " + logCategoryProcessor.getName());
 			}
 		}
 		for (Processor processor : getList()) {
 			if (!processor.isValid()) {
-				return false;
+				throw new ProductionProcessorManagerException("This processor is invalid: " + processor.getName());
 			}
 			if (processor.isPartOfEndlessLoop()) {
-				return false;
+				throw new ProductionProcessorManagerException("This processor is part of an endless loop: " + processor.getName());
 			}
 		}
-		return true;
 	}
 	
 	/**

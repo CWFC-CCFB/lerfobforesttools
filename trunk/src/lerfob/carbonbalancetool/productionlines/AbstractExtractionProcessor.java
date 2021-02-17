@@ -90,7 +90,7 @@ public abstract class AbstractExtractionProcessor extends AbstractProcessor {
 			for (ProcessUnit pu : extractedUnits) {
 				if (pu instanceof CarbonTestProcessUnit) {
 					((CarbonTestProcessUnit) pu).recordProcessor(fatherProcessor);	// we must also record the father processor otherwise it is simply skipped
-					((CarbonTestProcessUnit) pu).recordProcessor(this);
+//					((CarbonTestProcessUnit) pu).recordProcessor(this);
 				}
 			}
 			return doProcess(extractedUnits);

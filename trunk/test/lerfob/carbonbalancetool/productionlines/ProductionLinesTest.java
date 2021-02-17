@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -196,13 +197,8 @@ public class ProductionLinesTest {
 
 	
 	
-	/**
-	 * Tests if the amount in is equal to the amount out
-	 */
-	@Test
-	public void testBiomassBalanceInProductionLinesWithNewImplementationAndDebarking() {
+	private static void testBiomassBalanceInProductionLinesWithNewImplementationAndDebarkingUsingThisFile(String filename) {
 		try {
-			String filename = ObjectUtility.getPackagePath(getClass()) + "testHardwoodSimpleWithDebarking.prl";
 			ProductionProcessorManager processorManager = new ProductionProcessorManager();
 			processorManager.load(filename);
 
@@ -224,45 +220,62 @@ public class ProductionLinesTest {
 			amountMaps.put(BiomassType.Bark, amountMap);
 
 			List<Processor> processors = processorManager.getPrimaryProcessors();
-			int i = processors.size() - 1;
-			LogCategoryProcessor sawingProcessor = null;
-			while (i >= 0) {
-				Processor p = processors.get(i);
-				if (p instanceof LogCategoryProcessor) {
-					sawingProcessor = (LogCategoryProcessor) p;
-					break;
-				}
-				i--;
-			}
+			List<LogCategoryProcessor> logCategoryProcessors = (List) processors.stream()
+					.filter(l -> l instanceof LogCategoryProcessor)	// we keep only the entries with values set to true
+					.collect(Collectors.toList());
 
-			processorManager.processWoodPiece(sawingProcessor.logCategory, 2015, "", amountMaps, "Unknown");			
-			Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
-			for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
-				endProducts.addAll(processorManager.getCarbonUnits(status));
-			}
-			double totalVolumeWood = 0d;
-			double totalVolumeBark = 0d;
-			for (CarbonUnit unit : endProducts) {
-				if (unit.getBiomassType() == BiomassType.Wood) {
-					totalVolumeWood += unit.getAmountMap().get(Element.Volume);
-				} else {
-					totalVolumeBark += unit.getAmountMap().get(Element.Volume);
+			for (LogCategoryProcessor logCategoryProcessor : logCategoryProcessors) {
+				processorManager.resetCarbonUnitMap();
+				processorManager.validate();
+				processorManager.processWoodPiece(logCategoryProcessor.logCategory, 2015, "", amountMaps, "Unknown");			
+				Collection<CarbonUnit> endProducts = new ArrayList<CarbonUnit>();
+				for (CarbonUnitStatus status : CarbonUnitStatus.values()) {
+					endProducts.addAll(processorManager.getCarbonUnits(status));
 				}
-			}
+				double totalVolumeWood = 0d;
+				double totalVolumeBark = 0d;
+				for (CarbonUnit unit : endProducts) {
+					if (unit.getBiomassType() == BiomassType.Wood) {
+						totalVolumeWood += unit.getAmountMap().get(Element.Volume);
+					} else {
+						totalVolumeBark += unit.getAmountMap().get(Element.Volume);
+					}
+				}
 
-			Assert.assertEquals("Test for production line : " + "Sawing",
-					volume * (1 - barkProportion), 
-					totalVolumeWood, 
-					1E-12);
-			Assert.assertEquals("Test for production line : " + "Sawing",
-					volume * (barkProportion), 
-					totalVolumeBark, 
-					1E-12);
+				Assert.assertEquals("Test for production line : " + "Sawing",
+						volume * (1 - barkProportion), 
+						totalVolumeWood, 
+						1E-12);
+				Assert.assertEquals("Test for production line : " + "Sawing",
+						volume * (barkProportion), 
+						totalVolumeBark, 
+						1E-12);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} 
+
+	}
+	
+	
+	/**
+	 * Tests if the amount in is equal to the amount out
+	 */
+	@Test
+	public void testBiomassBalanceInProductionLinesWithNewImplementationAndDebarking() {
+		String filename = ObjectUtility.getPackagePath(getClass()) + "testHardwoodSimpleWithDebarking.prl";
+		testBiomassBalanceInProductionLinesWithNewImplementationAndDebarkingUsingThisFile(filename);
+	}
+
+	/**
+	 * Testing Quebec industrial sector 
+	 */
+	@Test
+	public void testBiomassBalanceInProductionLinesOfQuebecIndustrialSector() {
+		String filename = ObjectUtility.getPackagePath(getClass()) + "QuebecIndustrialSectorReference.prl";
+		testBiomassBalanceInProductionLinesWithNewImplementationAndDebarkingUsingThisFile(filename);
 	}
 
 	

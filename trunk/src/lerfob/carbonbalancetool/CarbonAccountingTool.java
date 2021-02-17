@@ -38,6 +38,7 @@ import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
 import lerfob.carbonbalancetool.catdiameterbasedtreelogger.CATDiameterBasedTreeLogger;
 import lerfob.carbonbalancetool.io.CATExportTool;
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerException;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings.VariabilitySource;
 import lerfob.treelogger.basictreelogger.BasicTreeLogger;
@@ -404,10 +405,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * @throws InterruptedException if the engine lock is interrupted
 	 * @throws InvalidParameterException if the CarbonToolSettings instance is invalid
 	 */
-	public void calculateCarbon() throws InvalidParameterException, InterruptedException {
-		if (!carbonCompartmentManager.getCarbonToolSettings().isValid()) {
-			throw new InvalidParameterException("The settings of the carbon accounting tool are invalid. Please check!");
-		} else {
+	public void calculateCarbon() throws ProductionProcessorManagerException, InterruptedException {
+		if (carbonCompartmentManager.getCarbonToolSettings().isValid()) {
 			int nbReals = CATSensitivityAnalysisSettings.getInstance().getNumberOfMonteCarloRealizations();
 			if (nbReals < 1) {
 				nbReals = 1;

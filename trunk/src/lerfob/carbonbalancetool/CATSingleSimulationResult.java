@@ -183,26 +183,6 @@ class CATSingleSimulationResult implements CATSimulationResult {
 		}
 	}
 	
-//	private void addAmountMapToRealization(Map<Element, MonteCarloEstimate> receivingMap, AmountMap<Element> amountMap) {
-//		Matrix value;
-//		for (Element element : amountMap.keySet()) {
-//			value = new Matrix(1,1);
-//			value.m_afData[0][0] = amountMap.get(element);
-//			if (!receivingMap.containsKey(element)) {
-//				receivingMap.put(element, new MonteCarloEstimate());
-//			}
-//			receivingMap.get(element).addRealization(value);
-//		}
-//	}
-	
-//	private void addOneLevelMdapToRealization(Map<Object, Map<Element, MonteCarloEstimate>> receivingMap, Map<Object, AmountMap<Element>> oMap) {
-//		for (Object key : oMap.keySet()) {
-//			if (!receivingMap.containsKey(key)) {
-//				receivingMap.put(key, new HashMap<Element, MonteCarloEstimate>());
-//			}
-//			addAmountMapToRealization(receivingMap.get(key), oMap.get(key));
-//		}
-//	}
 	
 	@Override
 	public String toString() {
