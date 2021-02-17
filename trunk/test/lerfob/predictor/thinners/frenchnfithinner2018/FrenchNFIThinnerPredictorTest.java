@@ -94,7 +94,7 @@ public class FrenchNFIThinnerPredictorTest {
 		FrenchNFIThinnerPredictor thinner = new FrenchNFIThinnerPredictor(false, false);
 
 		int nbPlots = 0;
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (FrenchNFIThinnerPlot plot : plots) {
 			FrenchNFIThinnerPlotInnerImpl p = (FrenchNFIThinnerPlotInnerImpl) plot;
 			parms.put(DisturbanceParameter.ParmYear0, p.getYear0());
@@ -139,7 +139,7 @@ public class FrenchNFIThinnerPredictorTest {
 			i++;
 			plot = plots.get(i);
 		}
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put(DisturbanceParameter.ParmYear0, 2016);
 		parms.put(DisturbanceParameter.ParmYear1, 2017);
 		double predictedProbability = thinner.predictEventProbability(plot, null, parms);
@@ -183,7 +183,7 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put(DisturbanceParameter.ParmYear0, 2016);
 		parms.put(DisturbanceParameter.ParmYear1, 2017);
 
@@ -280,7 +280,7 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = (FrenchNFIThinnerPlotInnerImpl) plots.get(i);
 		}
 		
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put(DisturbanceParameter.ParmYear0, 2015);
 		parms.put(DisturbanceParameter.ParmYear1, 2020);
 
@@ -309,7 +309,7 @@ public class FrenchNFIThinnerPredictorTest {
 			plot = plots.get(i);
 		}
 
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put(DisturbanceParameter.ParmYear0, 2015);
 		parms.put(DisturbanceParameter.ParmYear1, 2020);
 

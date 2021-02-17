@@ -124,7 +124,7 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<Integer, Object> parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<String, Object> parms) {
 		MathildeThinningSubModule subModule;
 		if (parms != null && parms.containsKey(lerfob.predictor.mathilde.thinning.MathildeStandThinningPredictor.ParmSubModuleID)) {
 			int subModuleId = (Integer) parms.get(lerfob.predictor.mathilde.thinning.MathildeStandThinningPredictor.ParmSubModuleID);

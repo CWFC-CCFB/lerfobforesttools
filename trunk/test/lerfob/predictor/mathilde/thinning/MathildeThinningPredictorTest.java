@@ -69,7 +69,7 @@ public class MathildeThinningPredictorTest {
 		ReadTrees();
 		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
 		int nbTested = 0;
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (MathildeThinningTreeImpl tree : Trees) {
 			MathildeThinningStandImpl stand = tree.getStand();
 			parms.put(MathildeStandThinningPredictor.ParmSubModuleID, stand.getExcludedGroup());
@@ -111,11 +111,8 @@ public class MathildeThinningPredictorTest {
 		MathildeStandThinningPredictor standPredictor = new MathildeStandThinningPredictor(false);
 		MathildeTreeThinningPredictor treePredictor = new MathildeTreeThinningPredictor(false);
 		int nbTested = 0;
-		Map<Integer, Object> parms = new HashMap<Integer, Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		for (MathildeThinningTreeImpl tree : Trees) {
-//			if (nbTested == 176423) {
-//				int u = 0;
-//			}
 			MathildeThinningStandImpl stand = tree.getStand();
 			parms.put(MathildeStandThinningPredictor.ParmSubModuleID, stand.getExcludedGroup());
 			double standPred = standPredictor.predictEventProbability(stand, tree, parms);
