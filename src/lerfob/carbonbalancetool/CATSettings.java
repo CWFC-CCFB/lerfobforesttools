@@ -31,6 +31,7 @@ import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
 import lerfob.carbonbalancetool.biomassparameters.BiomassParameters;
 import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerException;
 import lerfob.carbonbalancetool.woodpiecedispatcher.WoodPieceDispatcher;
 import lerfob.treelogger.basictreelogger.BasicTreeLogger;
 import lerfob.treelogger.basictreelogger.BasicTreeLoggerParameters;
@@ -353,7 +354,7 @@ public final class CATSettings {
 	 * This method returns true if the settings are valid.
 	 * @return a boolean
 	 */
-	public boolean isValid() {
+	public boolean isValid() throws ProductionProcessorManagerException {
 		if (formerImplementation) { 			// former implementation
 			if (treeLoggerWrapper.getTreeLogger() != null) {
 				if (woodSupply.isValid()) {
@@ -362,7 +363,8 @@ public final class CATSettings {
 			}
 			return false;
 		} else {
-			return getCurrentProductionProcessorManager().isValid();
+			getCurrentProductionProcessorManager().validate();
+			return true;
 		}
 	}
 

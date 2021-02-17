@@ -18,7 +18,6 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -52,6 +51,7 @@ import lerfob.carbonbalancetool.CATUtility.ProductionProcessorManagerWrapper;
 import lerfob.carbonbalancetool.io.CATGrowthSimulationRecordReader;
 import lerfob.carbonbalancetool.io.CATSpeciesSelectionDialog;
 import lerfob.carbonbalancetool.io.CATYieldTableRecordReader;
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerException;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
 import repicea.gui.AutomatedHelper;
 import repicea.gui.CommonGuiUtility;
@@ -133,8 +133,8 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		Edit("Edit", "Editer"),
 		YouAboutToExport("Please select the simulation you want to export: ",
 				"Veuillez choisir la simulation que vous d\u00E9sirez exporter ? "),
-		ParametersAreInvalid("<html>The flux configuration in the flux manager is invalid. <br> Please carefully check for inconsistent fluxes or endless loops! </html>",
-				"<html>La configuration des flux est incoh\u00E9rente. <br> Veuillez v\u00E9rifier la pr\u00E9sence de flux incoh\u00E9rent et de boucles sans fin! </html>"),
+		ParametersAreInvalid("<html>The flux configuration in the flux manager is invalid for the following reason: <br>",
+				"<html>La configuration des flux est incoh\u00E9rente pour la raison suivante: <br>"),
 		ReadyToCompute("Ready to perform the assessment.",
 				"Pr\u00EAt \u00E0 r\u00E9aliser l'\u00E9valuation."),
 		Forest("Forest", "For\u00EAt"),
@@ -384,7 +384,6 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		if (iconImage == null) {
 			String path = ObjectUtility.getRelativePackagePath(CATFrame.class);
 			String iconFilename = path + "LogoLerfob.jpg";
-//			InputStream in = ClassLoader.getSystemResourceAsStream(iconFilename);
 			InputStream in = getClass().getResourceAsStream("/" + iconFilename);
 			try {
 				iconImage = ImageIO.read(in);
@@ -438,9 +437,9 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 				caller.calculateCarbon();
 				setSimulationRunning(true);
 			} catch (Exception e) {
-				if (e instanceof InvalidParameterException) {
+				if (e instanceof ProductionProcessorManagerException) {
 					JOptionPane.showMessageDialog(this, 
-							MessageID.ParametersAreInvalid.toString(), 
+							MessageID.ParametersAreInvalid.toString() + e.getMessage() + "</html>", 
 							REpiceaTranslator.getString(UIControlManager.InformationMessageTitle.Error),
 							JOptionPane.ERROR_MESSAGE);
 				}

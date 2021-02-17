@@ -259,7 +259,7 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof CarbonUnit) {
 			CarbonUnit otherUnit = (CarbonUnit) obj;
-			if (carbonUnitFeature.equals(otherUnit.carbonUnitFeature)) {
+			if ((otherUnit.carbonUnitFeature == null && carbonUnitFeature == null) || (carbonUnitFeature.equals(otherUnit.carbonUnitFeature)))  {
 				if (dateIndex == otherUnit.dateIndex) {
 					if (status.equals(otherUnit.status)) {
 						if (samplingUnitID.equals(otherUnit.samplingUnitID)) {
