@@ -213,7 +213,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 	 * probability of harvesting. 
 	 */
 	@Override
-	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Map<Integer, Object> parms) {
+	public synchronized double predictEventProbability(FrenchNFIThinnerPlot plot, Object tree, Map<String, Object> parms) {
 		if (plot.getBasalAreaM2Ha() == 0d) {	// if the plot is empty then no need for calculating whatsoever
 			return 0d;
 		}

@@ -39,7 +39,7 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public final class MathildeStandThinningPredictor extends REpiceaThinner<MathildeThinningStand, Object> {
 
-	public final static int ParmSubModuleID = 300;
+	public final static String ParmSubModuleID = "SubmoduleId";
 	
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
@@ -129,7 +129,7 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 	}
 
 	@Override
-	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<Integer, Object> parms) {
+	public synchronized double predictEventProbability(MathildeThinningStand stand, Object tree, Map<String, Object> parms) {
 		MathildeThinningSubModule subModule;
 		if (parms != null && parms.containsKey(ParmSubModuleID)) {
 			int subModuleId = (Integer) parms.get(ParmSubModuleID);
