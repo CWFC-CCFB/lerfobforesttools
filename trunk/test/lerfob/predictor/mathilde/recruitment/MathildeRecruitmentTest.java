@@ -136,7 +136,7 @@ public class MathildeRecruitmentTest {
 				Assert.assertEquals("Testing the number of predicted values", predictions.m_iCols, expectedValues.length);
 				for (int j = 0; j < predictions.m_iCols; j++) {
 					double expected = expectedValues[j];
-					double actual = predictions.m_afData[0][j];
+					double actual = predictions.getValueAt(0, j);
 					Assert.assertEquals(expected, actual, 2E-7);
 				}
 				nbTreesTested++;
@@ -160,9 +160,9 @@ public class MathildeRecruitmentTest {
 				Matrix predictions = pred.getMarginalPredictionsForThisStandAndSpecies(tree.getStand(), tree.getMathildeTreeSpecies(), 50, true);
 				double actualMean = 0;
 				for (int j = 0; j < predictions.m_iCols; j++) {
-					actualMean += j * predictions.m_afData[0][j];
+					actualMean += j * predictions.getValueAt(0, j);
 				}
-				double expectedMean = pred.predictNumberOfRecruits(tree.getStand()).m_afData[tree.getMathildeTreeSpecies().ordinal()][0];
+				double expectedMean = pred.predictNumberOfRecruits(tree.getStand()).getValueAt(tree.getMathildeTreeSpecies().ordinal(), 0);
 				Assert.assertEquals(expectedMean, actualMean, 1E-5);
 				nbTreesTested++;
 			}
@@ -203,15 +203,15 @@ public class MathildeRecruitmentTest {
 			Matrix realization; 
 			for (int i = 0; i < 100000; i++) {
 				realization = new Matrix(1,1);
-				realization.m_afData[0][0] = pred.predictRecruitDiameterWithOffset(tree.getStand(), tree);
+				realization.setValueAt(0, 0, pred.predictRecruitDiameterWithOffset(tree.getStand(), tree));
 				estimate.addRealization(realization);
 			}
 			
-			double actualMean = estimate.getMean().m_afData[0][0];
+			double actualMean = estimate.getMean().getValueAt(0, 0);
 			double expectedMean = tree.getPredictions()[0];
 			System.out.println("Prediction of stochastic recruit diameter (mean), expected = " + expectedMean + " vs actual = " + actualMean);
 			Assert.assertEquals(expectedMean, actualMean, 1E-2);
-			double actualVariance = estimate.getVariance().m_afData[0][0];
+			double actualVariance = estimate.getVariance().getValueAt(0, 0);
 			double expectedVariance = expectedMean * expectedMean / MathildeRecruitDbhPredictor.Dispersion;
 			System.out.println("Prediction of stochastic recruit diameter (variance), expected = " + expectedVariance + " vs actual = " + actualVariance);
 			Assert.assertEquals(expectedVariance, actualVariance, 2E-2);
@@ -239,7 +239,8 @@ public class MathildeRecruitmentTest {
 		for (int k = 0; k < nbRealizations; k++) {
 			Matrix predictedFrequencies = pred.predictNumberOfRecruits(stand);
 			for (int i = 0; i < predictedFrequencies.m_iRows; i++) {
-				averageFrequencies.m_afData[i][(int) predictedFrequencies.m_afData[i][0]] += realizationFactor;  
+				double value = averageFrequencies.getValueAt(i, (int) predictedFrequencies.getValueAt(i, 0));
+				averageFrequencies.setValueAt(i, (int) predictedFrequencies.getValueAt(i, 0), value + realizationFactor);  
 			}
 		}
 		for (MathildeTreeImpl tree : stand.treeList) {
@@ -249,7 +250,7 @@ public class MathildeRecruitmentTest {
 			Assert.assertEquals("Testing the number of predicted values", averageFrequenciesForThisSpecies.m_iCols, predictions.length);
 			for (int j = 0; j < averageFrequenciesForThisSpecies.m_iCols; j++) {
 				double expected = predictions[j];
-				double actual = averageFrequenciesForThisSpecies.m_afData[0][j];
+				double actual = averageFrequenciesForThisSpecies.getValueAt(0, j);
 				Assert.assertEquals(expected, actual, 5E-3);
 			}
 		}

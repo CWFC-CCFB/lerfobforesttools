@@ -88,7 +88,7 @@ public final class FrenchCommercialVolume2020Predictor extends REpiceaPredictor 
 				Matrix omegaSpecies = omega.get(index).squareSym();
 				ModelParameterEstimates parms = new ModelParameterEstimates(betaSpecies, omegaSpecies);
 				Matrix sem = speciesEffectMatch.get(index);
-				double residualVariance = covparms.get(index).m_afData[0][0];
+				double residualVariance = covparms.get(index).getValueAt(0, 0);
 				FrenchCommercialVolume2020InternalPredictor predictor = new FrenchCommercialVolume2020InternalPredictor(isParametersVariabilityEnabled,
 						isResidualVariabilityEnabled,
 						species,

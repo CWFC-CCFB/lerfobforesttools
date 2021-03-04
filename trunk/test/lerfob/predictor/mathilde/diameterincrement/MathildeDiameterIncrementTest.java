@@ -117,11 +117,11 @@ public class MathildeDiameterIncrementTest {
 //			tree.setMonteCarloRealizationId(i);
 			((MathildeDiameterIncrementStandImpl) stand).setMonteCarloRealizationId(i);
 			result = new Matrix(1,1);
-			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
+			result.setValueAt(0, 0, predictor.predictGrowth(stand, tree)); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean().m_afData[0][0];
+		double meanStochastic = dist.getMean().getValueAt(0, 0);
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.02);
 		
@@ -141,11 +141,11 @@ public class MathildeDiameterIncrementTest {
 		for (int i = 0; i < nbReal; i++) {
 			((MathildeDiameterIncrementStandImpl) stand).setMonteCarloRealizationId(i);
 			result = new Matrix(1,1);
-			result.m_afData[0][0] = predictor.predictGrowth(stand, tree); 
+			result.setValueAt(0, 0, predictor.predictGrowth(stand, tree)); 
 			dist.addRealization(result);
 		}
 		double meanDeterministic = ((MathildeDiameterIncrementTreeImpl) tree).getBacktransformedPred(predictor.subModules.get(0).errorTotalVariance);
-		double meanStochastic = dist.getMean().m_afData[0][0];
+		double meanStochastic = dist.getMean().getValueAt(0, 0);
 		
 		assertEquals(meanDeterministic, meanStochastic, 0.05);			// subject to failure since the variability in the parameter estimates increases the error variance
 

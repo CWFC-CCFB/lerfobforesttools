@@ -118,14 +118,14 @@ public class MathildeNewClimatePredictorTest {
 			Estimate<? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
 			String experiment = stand.getSubjectId();
 			
-			double actualMean = blup.getMean().m_afData[0][0]; 
+			double actualMean = blup.getMean().getValueAt(0, 0); 
 			double expectedMean = blupMean.get(experiment);
 			Assert.assertEquals("Comparing blup mean for stand : " + stand.name + stand.dateYr,
 					expectedMean, 
 					actualMean, 
 					1E-6);
 
-			double actualStdErr = Math.sqrt(blup.getVariance().m_afData[0][0]); 
+			double actualStdErr = Math.sqrt(blup.getVariance().getValueAt(0, 0)); 
 			double expectedStdErr = blupStdErr.get(experiment);
 			Assert.assertEquals("Comparing blup stdErr for stand : " + stand.name + stand.dateYr,
 					expectedStdErr, 
@@ -154,10 +154,10 @@ public class MathildeNewClimatePredictorTest {
 			estimate.addRealization(climatePredictor.getRandomEffects(s));
 		}
 		
-		double expectedMean = climatePredictor.getBlupsForThisSubject(s).getMean().m_afData[0][0];
-		double actualMean = estimate.getMean().m_afData[0][0];
-		double expectedVariance = climatePredictor.getBlupsForThisSubject(s).getVariance().m_afData[0][0];
-		double actualVariance = estimate.getVariance().m_afData[0][0];
+		double expectedMean = climatePredictor.getBlupsForThisSubject(s).getMean().getValueAt(0, 0);
+		double actualMean = estimate.getMean().getValueAt(0, 0);
+		double expectedVariance = climatePredictor.getBlupsForThisSubject(s).getVariance().getValueAt(0, 0);
+		double actualVariance = estimate.getVariance().getValueAt(0, 0);
 		Assert.assertEquals("Comparing blup means",	expectedMean, actualMean, 5E-3);
 		Assert.assertEquals("Comparing blup variances",	expectedVariance, actualVariance, 1E-3);
 		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of blups successfully tested!");
@@ -174,12 +174,12 @@ public class MathildeNewClimatePredictorTest {
 		for (int i = 0; i < nbRealizations; i++) {
 			((MathildeClimatePlotImpl) s).realization = i;
 			real = new Matrix(1,1);
-			real.m_afData[0][0] = climatePredictor.getClimateVariables(s).get(ClimateVariable.MeanGrowingSeasonTempC);
+			real.setValueAt(0, 0, climatePredictor.getClimateVariables(s).get(ClimateVariable.MeanGrowingSeasonTempC));
 			estimate.addRealization(real);
 		}
 		
 		double expectedVariance = climatePredictor.getResidualVariance((MathildeClimatePlotImpl) s);
-		double actualVariance = estimate.getVariance().m_afData[0][0];
+		double actualVariance = estimate.getVariance().getValueAt(0, 0);
 		Assert.assertEquals("Comparing residual variances",	expectedVariance, actualVariance, 1E-3);
 		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of residual variance successfully tested!");
 	}

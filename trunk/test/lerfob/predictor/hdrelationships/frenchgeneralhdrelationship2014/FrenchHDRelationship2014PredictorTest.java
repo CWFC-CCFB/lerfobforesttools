@@ -74,8 +74,8 @@ public class FrenchHDRelationship2014PredictorTest {
 					int index = FrenchHdSpecies.getSpeciesIn2014().indexOf(tree.getFrenchHDTreeSpecies()) + 1;
 					predictor.predictHeightM(stand, tree);
 					Estimate<? extends StandardGaussianDistribution> currentBlups = predictor.getBlups(stand, tree);
-					double actualBlup = currentBlups.getMean().m_afData[0][0];
-					double actualVariance = currentBlups.getVariance().m_afData[0][0];
+					double actualBlup = currentBlups.getMean().getValueAt(0, 0);
+					double actualVariance = currentBlups.getVariance().getValueAt(0, 0);
 					int convertedIndex = Integer.parseInt(stand.getSubjectId());
 					double expectedBlup = Blups.get(index).get(convertedIndex).estimate;
 					double expectedVariance = Blups.get(index).get(convertedIndex).variance;

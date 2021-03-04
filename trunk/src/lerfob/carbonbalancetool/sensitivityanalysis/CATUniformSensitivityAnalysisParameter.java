@@ -27,9 +27,9 @@ public class CATUniformSensitivityAnalysisParameter extends CATSensitivityAnalys
 	protected CATUniformSensitivityAnalysisParameter(double initialValue) {
 		super(false);
 		Matrix lowerBoundValue = new Matrix(1,1);
-		lowerBoundValue.m_afData[0][0] = -1d;
+		lowerBoundValue.setValueAt(0, 0, -1d);
 		Matrix upperBoundValue = new Matrix(1,1);
-		upperBoundValue.m_afData[0][0] = 1d;
+		upperBoundValue.setValueAt(0, 0, 1d);
 		setParameterEstimates(new UniformEstimate(lowerBoundValue, upperBoundValue));
 		setMultiplier(initialValue);
 	}

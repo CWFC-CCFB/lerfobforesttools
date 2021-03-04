@@ -210,7 +210,7 @@ public class CATUtilityMaps {
 //						estimate.addRealization(realization);
 //					}
 					Matrix realization = new Matrix(1,1);
-					realization.m_afData[0][0] = amountMap.get(e);
+					realization.setValueAt(0, 0, amountMap.get(e));
 					estimate.addRealization(realization);
 				}
 			}

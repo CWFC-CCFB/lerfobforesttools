@@ -134,7 +134,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		
 		int pointer = 0;
 
-		oXVector.m_afData[0][pointer] = 1d;
+		oXVector.setValueAt(0, pointer, 1d);
 		pointer++;
 
 		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(scaledDbhDg), 0, pointer);
@@ -155,7 +155,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(dbh_m * dbh_m), 0, pointer);
 		pointer += species.getShortDummyVariable().m_iCols;
 		
-		double result = oXVector.multiply(beta).m_afData[0][0];
+		double result = oXVector.multiply(beta).getValueAt(0, 0);
 		return result;
 	}
 
@@ -183,7 +183,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		if (isRandomEffectsVariabilityEnabled) {
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 			Matrix randomEffects = subModule.getRandomEffects(interval);
-			linkFunction.setParameterValue(1, randomEffects.m_afData[0][0]);
+			linkFunction.setParameterValue(1, randomEffects.getValueAt(0, 0));
 			prob = linkFunction.getValue();
 		} else {	// i.e. deterministic mode
 			linkFunction.setParameterValue(1, 0d);

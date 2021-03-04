@@ -102,7 +102,7 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		double residualError = 0d;
 		
 		if (isResidualVariabilityEnabled) {
-			residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).m_afData[0][0];
+			residualError = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().multiply(getResidualError()).scalarMultiply(dbhCm).getValueAt(0, 0);
 			volume += residualError;
 		}
 		if (volume < 0) {		
@@ -141,7 +141,7 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		
 		int pointer = 0;
 		
-		oXVector.m_afData[0][0] = hdratio;
+		oXVector.setValueAt(0, 0, hdratio);
 		pointer++;
 		
 		Matrix tmp = tree.getFrenchCommercialVolume2014TreeSpecies().getDummy().scalarMultiply(cylinder);
@@ -152,7 +152,7 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		oXVector.setSubMatrix(tmp, 0, pointer);
 		pointer += tmp.m_iCols;
 		
-		return oXVector.multiply(beta).m_afData[0][0];
+		return oXVector.multiply(beta).getValueAt(0, 0);
 	}
  
 

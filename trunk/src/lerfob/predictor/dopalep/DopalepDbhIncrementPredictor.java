@@ -79,15 +79,15 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 		double biasCorrection = 0d;
 		
 		if (isRandomEffectsVariabilityEnabled) {
-			pred += getRandomEffectsForThisSubject(stand).m_afData[0][0];
+			pred += getRandomEffectsForThisSubject(stand).getValueAt(0, 0);
 		} else {
-			biasCorrection += getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().m_afData[0][0];
+			biasCorrection += getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().getValueAt(0, 0);
 		}
 		
 		if (isResidualVariabilityEnabled) {
-			pred += getResidualError().m_afData[0][0];
+			pred += getResidualError().getValueAt(0, 0);
 		} else {
-			biasCorrection += getDefaultResidualError(ErrorTermGroup.Default).getVariance().m_afData[0][0];
+			biasCorrection += getDefaultResidualError(ErrorTermGroup.Default).getVariance().getValueAt(0, 0);
 		}
 		
 		double backtransformedPred = pred * pred + biasCorrection - 1;
@@ -102,13 +102,13 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 
 	private double getFixedEffectOnlyPrediction(Matrix currentBeta, DopalepPlot stand, DopalepTree tree) {
 		oXVector.resetMatrix();
-		oXVector.m_afData[0][0] = 1d;
-		oXVector.m_afData[0][1] = tree.getBasalAreaLargerThanSubjectM2Ha();
-		oXVector.m_afData[0][2] = tree.getBasalAreaM2HaOtherTrees();
-		oXVector.m_afData[0][3] = tree.getDbhCm();
-		oXVector.m_afData[0][4] = tree.getDbhCm() * tree.getDbhCm();
+		oXVector.setValueAt(0,0, 1d);
+		oXVector.setValueAt(0, 1, tree.getBasalAreaLargerThanSubjectM2Ha());
+		oXVector.setValueAt(0, 2, tree.getBasalAreaM2HaOtherTrees());
+		oXVector.setValueAt(0, 3, tree.getDbhCm());
+		oXVector.setValueAt(0, 4, tree.getDbhCm() * tree.getDbhCm());
 		
-		return oXVector.multiply(currentBeta).m_afData[0][0];
+		return oXVector.multiply(currentBeta).getValueAt(0, 0);
 	}
 
 	protected double getFixedEffectOnlyPrediction(DopalepPlot stand, DopalepTree tree) {

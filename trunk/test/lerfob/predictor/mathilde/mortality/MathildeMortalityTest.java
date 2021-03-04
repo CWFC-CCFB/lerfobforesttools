@@ -174,12 +174,12 @@ public class MathildeMortalityTest {
 			for (int i = 0; i < nbReal; i++) {
 				((MathildeMortalityStandImpl) stand).setMonteCarloRealizationId(i);
 				result = new Matrix(1,1);
-				result.m_afData[0][0] = stochasticPredictor.predictEventProbability(stand, tree);
+				result.setValueAt(0, 0, stochasticPredictor.predictEventProbability(stand, tree));
 				dist.addRealization(result);
 			}
 
 			double meanDeterministic = deterministicPredictor.predictEventProbability(stand, tree);
-			double meanStochastic = dist.getMean().m_afData[0][0];
+			double meanStochastic = dist.getMean().getValueAt(0, 0);
 
 			System.out.println("Deterministic : " + meanDeterministic + "; Stochastic : " + meanStochastic);			
 			assertEquals(meanDeterministic, meanStochastic, 0.01);
@@ -239,12 +239,12 @@ public class MathildeMortalityTest {
 			for (int i = 0; i < nbReal; i++) {
 				((MathildeMortalityStandImpl) stand).setMonteCarloRealizationId(i);
 				result = new Matrix(1,1);
-				result.m_afData[0][0] = stochasticPredictor.predictEventProbability(stand, tree);
+				result.setValueAt(0, 0, stochasticPredictor.predictEventProbability(stand, tree));
 				dist.addRealization(result);
 			}
 
 			double meanDeterministic = deterministicPredictor.predictEventProbability(stand, tree);
-			double meanStochastic = dist.getMean().m_afData[0][0];
+			double meanStochastic = dist.getMean().getValueAt(0, 0);
 
 			System.out.println("Deterministic : " + meanDeterministic + "; Stochastic : " + meanStochastic);			
 			assertEquals(meanDeterministic, meanStochastic, 0.012);

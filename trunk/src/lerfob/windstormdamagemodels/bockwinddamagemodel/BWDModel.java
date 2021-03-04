@@ -54,32 +54,32 @@ public final class BWDModel {
 	 */
 	public BWDModel() {
 		standLevelParameters = new Matrix(8,1);
-		standLevelParameters.m_afData[0][0] = -29.45;	// intercept
-		standLevelParameters.m_afData[1][0] = 24.52;		// if wind speed is between 120 and 140 km/h
-		standLevelParameters.m_afData[2][0] = 25.58;		// if wind speed exceeds 140 km/h
-		standLevelParameters.m_afData[3][0] = -1.55;		// if dominant height is smaller than or equal to 23.5 m
-		standLevelParameters.m_afData[4][0] = 0.0791;	// continue variable - dominant height if greater than 23.5
-		standLevelParameters.m_afData[5][0] = 1.33;		// compact clay is found within the first 50 cm of soil
-		standLevelParameters.m_afData[6][0] = 1.80;		// if rock is found within the first 50 cm of soil
-		standLevelParameters.m_afData[7][0] = 0.85; 		// if on flat lands		
+		standLevelParameters.setValueAt(0, 0, -29.45);	// intercept
+		standLevelParameters.setValueAt(1, 0, 24.52);		// if wind speed is between 120 and 140 km/h
+		standLevelParameters.setValueAt(2, 0, 25.58);		// if wind speed exceeds 140 km/h
+		standLevelParameters.setValueAt(3, 0, -1.55);		// if dominant height is smaller than or equal to 23.5 m
+		standLevelParameters.setValueAt(4, 0, 0.0791);	// continue variable - dominant height if greater than 23.5
+		standLevelParameters.setValueAt(5, 0, 1.33);		// compact clay is found within the first 50 cm of soil
+		standLevelParameters.setValueAt(6, 0, 1.80);		// if rock is found within the first 50 cm of soil
+		standLevelParameters.setValueAt(7, 0, 0.85); 		// if on flat lands		
 
 		Matrix parameters;
 		treeLevelParameters = new HashMap<TreeLevelVersion, Matrix>();
 		
 		parameters = new Matrix(6,1);
-		parameters.m_afData[0][0] = -7.97;		// intercept 
-		parameters.m_afData[1][0] = 2.99;		// ln(htot)
-		parameters.m_afData[2][0] = -0.015;	// htot/dbh
-		parameters.m_afData[3][0] = 0.54;		// if C horizon is above 50cm
-		parameters.m_afData[4][0] = 0.01;		// if C horizon is between 50 and 70cm
-		parameters.m_afData[5][0] = -0.55;		// if C horizon is below 70cm
+		parameters.setValueAt(0, 0, -7.97);		// intercept 
+		parameters.setValueAt(1, 0, 2.99);		// ln(htot)
+		parameters.setValueAt(2, 0, -0.015);	// htot/dbh
+		parameters.setValueAt(3, 0, 0.54);		// if C horizon is above 50cm
+		parameters.setValueAt(4, 0, 0.01);		// if C horizon is between 50 and 70cm
+		parameters.setValueAt(5, 0, -0.55);		// if C horizon is below 70cm
 		treeLevelParameters.put(TreeLevelVersion.Simple, parameters);
 		
 		parameters = new Matrix(4,1);
-		parameters.m_afData[0][0] = -7.39;	// intercept
-		parameters.m_afData[1][0] = 6.21;	// ln(ln(lever height * ln(crown radius)))
-		parameters.m_afData[2][0] = 1.14;	// if C horizon is above 50cm
-		parameters.m_afData[3][0] = 0.52;	// if C horizon is between 50 and 70cm
+		parameters.setValueAt(0, 0, -7.39);	// intercept
+		parameters.setValueAt(1, 0, 6.21);	// ln(ln(lever height * ln(crown radius)))
+		parameters.setValueAt(2, 0, 1.14);	// if C horizon is above 50cm
+		parameters.setValueAt(3, 0, 0.52);	// if C horizon is between 50 and 70cm
 		treeLevelParameters.put(TreeLevelVersion.Enhanced, parameters);
 	}
 	
@@ -98,36 +98,36 @@ public final class BWDModel {
 	public double getProportionOfDamagedTrees(BWDStand stand, double windSpeed) throws Exception {
 		Matrix xVector = new Matrix(1,8);
 		
-		xVector.m_afData[0][0] = 1d;
+		xVector.setValueAt(0, 0, 1d);
 		
 		if (windSpeed >= 120 && windSpeed <= 140) {
-			xVector.m_afData[0][1] = 1d;
+			xVector.setValueAt(0, 1, 1d);
 		} else {
 			if (windSpeed > 140) {
-				xVector.m_afData[0][2] = 1d;
+				xVector.setValueAt(0, 2, 1d);
 			}
 		}
 		
 		double dominantHeight = stand.getDominantHeightM();
 		if (dominantHeight <= 23.5) {
-			xVector.m_afData[0][3] = 1d;
+			xVector.setValueAt(0, 3, 1d);
 		} else  {
-			xVector.m_afData[0][4] = dominantHeight;
+			xVector.setValueAt(0, 4, dominantHeight);
 		}
 		
 		if (stand.isCompactClayInFirst50cm()) {
-			xVector.m_afData[0][5] = 1d;
+			xVector.setValueAt(0, 5, 1d);
 		}
 		
 		if (stand.isRockInTheFirst50cm()) {
-			xVector.m_afData[0][6] = 1d;
+			xVector.setValueAt(0, 6, 1d);
 		}
 		
 		if (stand.isFlatLand()) {
-			xVector.m_afData[0][7] = 1d;
+			xVector.setValueAt(0, 7, 1d);
 		}
 		
-		double xBeta = xVector.multiply(standLevelParameters).m_afData[0][0];
+		double xBeta = xVector.multiply(standLevelParameters).getValueAt(0, 0);
 		
 		double proportion = Math.exp(xBeta) / (1 + Math.exp(xBeta));
 		
@@ -167,29 +167,29 @@ public final class BWDModel {
 		if (modelVersion == TreeLevelVersion.Simple) {
 			
 			xVector = new Matrix(1,6);
-			xVector.m_afData[0][0] = 1d;
-			xVector.m_afData[0][1] = Math.log(treeHeight);
-			xVector.m_afData[0][2] = treeHeight / treeDbh * 100;
+			xVector.setValueAt(0, 0, 1d);
+			xVector.setValueAt(0, 1, Math.log(treeHeight));
+			xVector.setValueAt(0, 2, treeHeight / treeDbh * 100);
 			
 			if (cHorizonDepth < 50) {
-				xVector.m_afData[0][3] = 1d;
+				xVector.setValueAt(0, 3, 1d);
 			} else if (cHorizonDepth < 70) {
-				xVector.m_afData[0][4] = 1d;
+				xVector.setValueAt(0, 4, 1d);
 			} else {
-				xVector.m_afData[0][5] = 1d;
+				xVector.setValueAt(0, 5, 1d);
 			}
 		} else  {
 			xVector = new Matrix(1,4);
-			xVector.m_afData[0][0] = 1d;
-			xVector.m_afData[0][1] = Math.log(Math.log(hLever_LnCrownRadius));
+			xVector.setValueAt(0, 0, 1d);
+			xVector.setValueAt(0, 1, Math.log(Math.log(hLever_LnCrownRadius)));
 			if (cHorizonDepth < 50) {
-				xVector.m_afData[0][2] = 1d;
+				xVector.setValueAt(0, 2, 1d);
 			} else if (cHorizonDepth < 70) {
-				xVector.m_afData[0][3] = 1d;
+				xVector.setValueAt(0, 3, 1d);
 			} 
 		}
 		
-		double xBeta = xVector.multiply(parameters).m_afData[0][0];
+		double xBeta = xVector.multiply(parameters).getValueAt(0, 0);
 		double probability = Math.exp(xBeta) / (1 + Math.exp(xBeta));
 		return probability;
 	}

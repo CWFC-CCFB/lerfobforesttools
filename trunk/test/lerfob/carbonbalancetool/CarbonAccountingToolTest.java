@@ -126,7 +126,7 @@ public class CarbonAccountingToolTest {
 			Matrix obsProducts = result.getEvolutionMap().get(CompartmentInfo.TotalProducts).getMean();
 			int indexFirstProducts = -1;
 			for (int i = 0; i < obsProducts.m_iRows; i++) {
-				if (obsProducts.m_afData[i][0] > 0d) {
+				if (obsProducts.getValueAt(i, 0) > 0d) {
 					indexFirstProducts = i;
 					break;
 				}
@@ -134,8 +134,8 @@ public class CarbonAccountingToolTest {
 			if (indexFirstProducts == -1) {
 				Assert.fail("Cannot find the first occurrence of HWP!");
 			} else {
-				double totalBefore = obsLivingBiomass.add(obsDOM).m_afData[indexFirstProducts - 1][0];
-				double totalAfter = obsLivingBiomass.add(obsDOM).m_afData[indexFirstProducts][0] + obsProducts.m_afData[indexFirstProducts][0];
+				double totalBefore = obsLivingBiomass.add(obsDOM).getValueAt(indexFirstProducts - 1, 0);
+				double totalAfter = obsLivingBiomass.add(obsDOM).getValueAt(indexFirstProducts, 0) + obsProducts.getValueAt(indexFirstProducts, 0);
 				Assert.assertEquals("Testing total biomass before and biomass after harvesting", totalBefore, totalAfter, 1E-8);
 			}
 			tool.requestShutdown();
@@ -180,18 +180,18 @@ public class CarbonAccountingToolTest {
 			CATSingleSimulationResult result = tool.getCarbonCompartmentManager().getSimulationSummary();
 			Assert.assertTrue(result != null && result.isValid());
 			
-			double obsLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().m_afData[0][0];
-			double obsDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().m_afData[0][0];
-			double obsProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().m_afData[0][0];
+			double obsLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().getValueAt(0, 0);
+			double obsDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().getValueAt(0, 0);
+			double obsProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().getValueAt(0, 0);
 
 			tool.setStandList(standsWithSameDates);
 			tool.calculateCarbon();
 			result = tool.getCarbonCompartmentManager().getSimulationSummary();
 			Assert.assertTrue(result != null && result.isValid());
 
-			double refLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().m_afData[0][0];
-			double refDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().m_afData[0][0];
-			double refProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().m_afData[0][0];
+			double refLivingBiomass = result.getBudgetMap().get(CompartmentInfo.LivingBiomass).getMean().getValueAt(0, 0);
+			double refDOM = result.getBudgetMap().get(CompartmentInfo.DeadBiom).getMean().getValueAt(0, 0);
+			double refProducts = result.getBudgetMap().get(CompartmentInfo.TotalProducts).getMean().getValueAt(0, 0);
 
 			Assert.assertEquals("Comparing living biomass", refLivingBiomass, obsLivingBiomass, 1E-8);
 			Assert.assertEquals("Comparing DOM", refDOM, obsDOM, 1E-8);
@@ -230,8 +230,8 @@ public class CarbonAccountingToolTest {
 		int nbCompartmentChecked = 0;
 		Assert.assertTrue("Testing the size of the map", refMap.size() == obsMap.size());
 		for (CompartmentInfo key : refMap.keySet()) {
-			double expected = refMap.get(key).getMean().m_afData[0][0];
-			double observed = obsMap.get(key).getMean().m_afData[0][0];
+			double expected = refMap.get(key).getMean().getValueAt(0, 0);
+			double observed = obsMap.get(key).getMean().getValueAt(0, 0);
 			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
 			nbCompartmentChecked++;
 		}
@@ -272,8 +272,8 @@ public class CarbonAccountingToolTest {
 			Assert.assertEquals("Comparing matrix first dimension", expEvolution.m_iCols, obsEvolution.m_iCols);
 			Assert.assertEquals("Comparing matrix second dimension", expEvolution.m_iRows, obsEvolution.m_iRows);
 			for (int i = 0; i < expEvolution.m_iRows; i++) {
-				double expected = expEvolution.m_afData[i][0];
-				double observed = obsEvolution.m_afData[i][0];
+				double expected = expEvolution.getValueAt(i, 0);
+				double observed = obsEvolution.getValueAt(i, 0);
 				Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
 			}
 			nbCompartmentChecked++;
@@ -303,9 +303,9 @@ public class CarbonAccountingToolTest {
 			System.gc();
 			double currentUsedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) * 1E-6;
 			if (i > 0) { // the first simulation is out of the scope since the field stand is empty
-				matX.m_afData[i-1][0] = 1;
-				matX.m_afData[i-1][1] = i;
-				matY.m_afData[i-1][0] = currentUsedMemory;
+				matX.setValueAt(i - 1, 0, 1);
+				matX.setValueAt(i - 1, 1, i);
+				matY.setValueAt(i - 1, 0, currentUsedMemory);
 			}
 			FORMATTER.setMinimumFractionDigits(2);
 			System.out.println("Memory load after run " + i + " = " + FORMATTER.format(currentUsedMemory));
@@ -313,10 +313,10 @@ public class CarbonAccountingToolTest {
 		Matrix betaEstimate = matX.transpose().multiply(matX).getInverseMatrix().multiply(matX.transpose())
 				.multiply(matY);
 		Matrix res = matY.subtract(matX.multiply(betaEstimate));
-		double sigma2 = res.transpose().multiply(res).m_afData[0][0] / (res.m_iRows - betaEstimate.m_iRows);
+		double sigma2 = res.transpose().multiply(res).getValueAt(0, 0) / (res.m_iRows - betaEstimate.m_iRows);
 		Matrix omegaMatrix = matX.transpose().multiply(matX).getInverseMatrix().scalarMultiply(sigma2);
-		double slopeParameterEstimate = betaEstimate.m_afData[betaEstimate.m_iRows - 1][0];
-		double standardError = Math.sqrt(omegaMatrix.m_afData[omegaMatrix.m_iRows - 1][omegaMatrix.m_iRows - 1]);
+		double slopeParameterEstimate = betaEstimate.getValueAt(betaEstimate.m_iRows - 1, 0);
+		double standardError = Math.sqrt(omegaMatrix.getValueAt(omegaMatrix.m_iRows - 1, omegaMatrix.m_iRows - 1));
 		double prob = 1 - GaussianUtility.getCumulativeProbability(Math.abs(slopeParameterEstimate / standardError));
 		System.out.println("Slope parameter estimate = " + slopeParameterEstimate);
 		System.out.println("Pr > z = " + prob);
@@ -352,8 +352,8 @@ public class CarbonAccountingToolTest {
 		Assert.assertTrue("Testing the size of the map", obsMapAverageLifetime.size() == obsMapHalflife.size());
 		int nbCompartmentChecked = 0;
 		for (CompartmentInfo key : obsMapAverageLifetime.keySet()) {
-			double expected = obsMapAverageLifetime.get(key).getMean().m_afData[0][0];
-			double observed = obsMapHalflife.get(key).getMean().m_afData[0][0];
+			double expected = obsMapAverageLifetime.get(key).getMean().getValueAt(0, 0);
+			double observed = obsMapHalflife.get(key).getMean().getValueAt(0, 0);
 			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
 			nbCompartmentChecked++;
 		}
@@ -388,8 +388,8 @@ public class CarbonAccountingToolTest {
 		int nbCompartmentChecked = 0;
 //		Assert.assertTrue("Testing the size of the map", refMap.size() == obsMap.size());
 		for (CompartmentInfo key : refMap.keySet()) {
-			double expected = refMap.get(key).getMean().m_afData[0][0];
-			double observed = obsMap.get(key).getMean().m_afData[0][0];
+			double expected = refMap.get(key).getMean().getValueAt(0, 0);
+			double observed = obsMap.get(key).getMean().getValueAt(0, 0);
 			Assert.assertEquals("Testing compartment " + key.name(), expected, observed, 1E-8);
 			nbCompartmentChecked++;
 		}

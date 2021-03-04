@@ -133,7 +133,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 			if (year >= caller.minimumYearDate && year <= caller.maximumYearDate) {
 				double price = observedPriceMap.get(year);
 				obs = new Matrix(1,1);
-				obs.m_afData[0][0] = price;
+				obs.setValueAt(0, 0, price);
 				empDist.addRealization(obs);
 			}
 		}
@@ -152,9 +152,9 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 				}
 				Year year = yearDateMap.get(yearDate);
 				year.monteCarloId = monteCarloID;
-				price = getRandomEffectsForThisSubject(year).m_afData[0][0] + getBasicTrendModifier(yearDate);
+				price = getRandomEffectsForThisSubject(year).getValueAt(0, 0) + getBasicTrendModifier(yearDate);
 			} else {
-				price = getParameterEstimates().getMean().m_afData[0][0] + getBasicTrendModifier(yearDate);
+				price = getParameterEstimates().getMean().getValueAt(0, 0) + getBasicTrendModifier(yearDate);
 			}
 		}
 		return price * getMultiplierModifier();
@@ -167,7 +167,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		} else {
 			innerModifier = basicTrendModifier.getRelativeChangePercentPlusOne(yearDate);
 		}
-		return getParameterEstimates().getMean().m_afData[0][0] * (innerModifier - 1d);
+		return getParameterEstimates().getMean().getValueAt(0, 0) * (innerModifier - 1d);
 	}
 	
 	private double getMultiplierModifier() {
@@ -199,7 +199,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 		int index = (int) Math.floor(StatisticalUtility.getRandom().nextDouble() * getKnownYears().size());
 		int randomYear = getKnownYears().get(index);
 		Matrix randomDeviates = new Matrix(1,1);
-		randomDeviates.m_afData[0][0] = observedPriceMap.get(randomYear);
+		randomDeviates.setValueAt(0, 0, observedPriceMap.get(randomYear));
 		setDeviatesForRandomEffectsOfThisSubject(subject, randomDeviates);
 		return randomDeviates.getDeepClone();
 	}

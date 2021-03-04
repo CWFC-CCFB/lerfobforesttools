@@ -103,11 +103,11 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 		linkFunction.setParameterValue(0, pred);
 
 		double prob;
-		linkFunction.setParameterValue(1, beta.m_afData[14][0]);
+		linkFunction.setParameterValue(1, beta.getValueAt(14, 0));
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 			Matrix randomEffects = subModule.getRandomEffects(interval);
-			linkFunction.setParameterValue(2, randomEffects.m_afData[0][0]);
+			linkFunction.setParameterValue(2, randomEffects.getValueAt(0, 0));
 			prob = linkFunction.getValue();
 		} else {
 			linkFunction.setParameterValue(2, 0d);		// random effect arbitrarily set to 0

@@ -244,16 +244,16 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 					String key = "BiomassMgHa" + useClass.name().toUpperCase();
 					if (innerInputMap2 != null && innerInputMap2.containsKey(useClass)) {
 						MonteCarloEstimateMap amountMap = innerInputMap2.get(useClass).getSumAcrossSpecies();
-						innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().m_afData[0][0]);
+						innerOutputMap1.put(key, amountMap.get(Element.Biomass).getMean().getValueAt(0, 0));
 					} else {
 						innerOutputMap1.put(key, 0d);
 					}
 				}
 			}
-			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.m_afData[years.indexOf(year)][0]);
-			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill.m_afData[years.indexOf(year)][0]);
-			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable.m_afData[years.indexOf(year)][0]);
-			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.m_afData[years.indexOf(year)][0]);
+			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.getValueAt(years.indexOf(year), 0));
+			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill.getValueAt(years.indexOf(year), 0));
+			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable.getValueAt(years.indexOf(year), 0));
+			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.getValueAt(years.indexOf(year), 0));
 			
 		}
 		System.out.println("Stand " + standID + " processed...");
