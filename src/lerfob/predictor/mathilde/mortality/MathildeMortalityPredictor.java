@@ -84,9 +84,9 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 			double windstormParameter = getParameterValue(1);
 			double randomEffect = getParameterValue(2);
 			Matrix gradient = new Matrix(3,1);
-			gradient.m_afData[0][0] = 1d;
-			gradient.m_afData[1][0] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
-			gradient.m_afData[2][0] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
+			gradient.setValueAt(0, 0, 1d);
+			gradient.setValueAt(1, 0, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
+			gradient.setValueAt(2, 0, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			return gradient;
 		}
 
@@ -96,15 +96,15 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 			double windstormParameter = getParameterValue(1);
 			double randomEffect = getParameterValue(2);
 			Matrix hessian = new Matrix(3,3);
-			hessian.m_afData[0][0] = 0d;
-			hessian.m_afData[1][0] = 0d;
-			hessian.m_afData[2][0] = 0d;
-			hessian.m_afData[0][1] = 0d;
-			hessian.m_afData[1][1] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
-			hessian.m_afData[2][1] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
-			hessian.m_afData[0][2] = 0d;
-			hessian.m_afData[1][2] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
-			hessian.m_afData[2][2] = dummyWindstorm * Math.exp(windstormParameter + randomEffect);
+			hessian.setValueAt(0, 0, 0d);
+			hessian.setValueAt(1, 0, 0d);
+			hessian.setValueAt(2, 0, 0d);
+			hessian.setValueAt(0, 1, 0d);
+			hessian.setValueAt(1, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
+			hessian.setValueAt(2, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
+			hessian.setValueAt(0, 2, 0d);
+			hessian.setValueAt(1, 2, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
+			hessian.setValueAt(2, 2, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			return hessian;
 		}
 
@@ -197,25 +197,25 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		
 		int pointer = 0;
 		
-		oXVector.m_afData[0][pointer] = 1d;
+		oXVector.setValueAt(0, pointer, 1d);
 		pointer++;
 		
 		oXVector.setSubMatrix(species.getShortDummyVariable(), 0, pointer);
 		pointer += species.getShortDummyVariable().m_iCols;
 
-		oXVector.m_afData[0][pointer] = dbh;
+		oXVector.setValueAt(0, pointer, dbh);
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = logDbh * gr17;
+		oXVector.setValueAt(0, pointer, logDbh * gr17);
 		pointer++;
 
 		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(logDbh), 0, pointer);
 		pointer += species.getShortDummyVariable().m_iCols;
 		
-		oXVector.m_afData[0][pointer] = bal42;
+		oXVector.setValueAt(0, pointer, bal42);
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = bal22 * gr17;
+		oXVector.setValueAt(0, pointer, bal22 * gr17);
 		pointer++;
 
 		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(bal22), 0, pointer);
@@ -223,19 +223,19 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 
 		pointer++; // to skip b14
 		
-		oXVector.m_afData[0][pointer] = upcomingDrought;
+		oXVector.setValueAt(0, pointer, upcomingDrought);
 		pointer++;
 		
-		oXVector.m_afData[0][pointer] = upcomingCut * gr17;
+		oXVector.setValueAt(0, pointer, upcomingCut * gr17);
 		pointer++;
 
 		oXVector.setSubMatrix(species.getShortDummyVariable().scalarMultiply(upcomingCut), 0, pointer);
 		pointer += species.getShortDummyVariable().m_iCols;
 		
-		oXVector.m_afData[0][pointer] = Math.log(stand.getGrowthStepLengthYr());
+		oXVector.setValueAt(0, pointer, Math.log(stand.getGrowthStepLengthYr()));
 		pointer++;
 		
-		double result = oXVector.multiply(beta).m_afData[0][0];
+		double result = oXVector.multiply(beta).getValueAt(0, 0);
 		return result;
 	}
 	
@@ -268,11 +268,11 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		linkFunction.setParameterValue(0, pred);
 
 		double prob;
-		linkFunction.setParameterValue(1, beta.m_afData[14][0]);
+		linkFunction.setParameterValue(1, beta.getValueAt(14, 0));
 		if (isRandomEffectsVariabilityEnabled && stand.isAWindstormGoingToOccur()) {	// no need to draw a random effect if there is no windstorm
 			IntervalNestedInPlotDefinition interval = getIntervalNestedInPlotDefinition(stand, stand.getDateYr());
 			Matrix randomEffects = subModule.getRandomEffects(interval);
-			linkFunction.setParameterValue(2, randomEffects.m_afData[0][0]);
+			linkFunction.setParameterValue(2, randomEffects.getValueAt(0, 0));
 			prob = linkFunction.getValue();
 		} else {
 			linkFunction.setParameterValue(2, 0d);		// random effect arbitrarily set to 0

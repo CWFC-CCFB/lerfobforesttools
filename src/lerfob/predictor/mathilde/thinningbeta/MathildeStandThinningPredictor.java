@@ -114,12 +114,12 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 
 		int pointer = 0;
 
-		oXVector.m_afData[0][pointer] = 1d;
+		oXVector.setValueAt(0, pointer, 1d);
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = stand.getGrowthStepLengthYr(); // timeInterval
+		oXVector.setValueAt(0, pointer, stand.getGrowthStepLengthYr()); // timeInterval
 
-		double result = oXVector.multiply(beta).m_afData[0][0];
+		double result = oXVector.multiply(beta).getValueAt(0, 0);
 		return result;
 	}
 

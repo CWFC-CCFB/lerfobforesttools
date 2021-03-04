@@ -240,7 +240,7 @@ public class CATSensitivityAnalysisParameterWrapper implements REpiceaUIObject {
 		} else {
 			realSubject = subject;
 		}
-		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(realSubject).m_afData[0][0];
+		return parameterMap.get(selectedDistributionType).getParameterValueForThisSubject(realSubject).getValueAt(0, 0);
 	}
 	
 	@Override

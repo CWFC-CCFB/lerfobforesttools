@@ -142,7 +142,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 	protected void setEffectList(Matrix mat) {
 		effectList = new ArrayList<Integer>();
 		for (int i = 0; i < mat.m_iRows; i++) {
-			effectList.add((int) mat.m_afData[i][0]); 
+			effectList.add((int) mat.getValueAt(i, 0)); 
 		}
 	}
 	
@@ -197,51 +197,51 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 		for (Integer integer : effectList) {
 			switch(integer) {
 			case 1:
-				oXVector.m_afData[0][pointer] = basalAreaMinusSubj * lnDbh2;
+				oXVector.setValueAt(0, pointer, basalAreaMinusSubj * lnDbh2);
 				pointer++;
 				break;
 			case 2:
-				oXVector.m_afData[0][pointer] = lnDbh;
+				oXVector.setValueAt(0, pointer, lnDbh);
 				pointer++;
 				break;
 			case 3:
-				oXVector.m_afData[0][pointer] = basalAreaMinusSubj * lnDbh;
+				oXVector.setValueAt(0, pointer, basalAreaMinusSubj * lnDbh);
 				pointer++;
 				break;
 			case 4:
-				oXVector.m_afData[0][pointer] = harvested * lnDbh;
+				oXVector.setValueAt(0, pointer, harvested * lnDbh);
 				pointer++;
 				break;
 			case 5:
-				oXVector.m_afData[0][pointer] = lnDbh * meanPrec;
+				oXVector.setValueAt(0, pointer, lnDbh * meanPrec);
 				pointer++;
 				break;
 			case 6:
-				oXVector.m_afData[0][pointer] = lnDbh * meanTemp * meanTemp;
+				oXVector.setValueAt(0, pointer, lnDbh * meanTemp * meanTemp);
 				pointer++;
 				break;
 			case 7:
-				oXVector.m_afData[0][pointer] = lnDbh * meanTemp;
+				oXVector.setValueAt(0, pointer, lnDbh * meanTemp);
 				pointer++;
 				break;
 			case 8:
-				oXVector.m_afData[0][pointer] = lnDbh * slope;
+				oXVector.setValueAt(0, pointer, lnDbh * slope);
 				pointer++;
 				break;
 			case 9:
-				oXVector.m_afData[0][pointer] = socialIndex * lnDbh;
+				oXVector.setValueAt(0, pointer, socialIndex * lnDbh);
 				pointer++;
 				break;
 			case 10:
-				oXVector.m_afData[0][pointer] = socialIndex * socialIndex * lnDbh;
+				oXVector.setValueAt(0, pointer, socialIndex * socialIndex * lnDbh);
 				pointer++;
 				break;
 			case 11:
-				oXVector.m_afData[0][pointer] = lnDbh2;
+				oXVector.setValueAt(0, pointer, lnDbh2);
 				pointer++;
 				break;
 			case 12:
-				oXVector.m_afData[0][pointer] = socialIndex * lnDbh2;
+				oXVector.setValueAt(0, pointer, socialIndex * lnDbh2);
 				pointer++;
 				break;
 			default:
@@ -249,10 +249,10 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 			}
 		}
 
-		double fResult = 1.3 + oXVector.multiply(modelParameters).m_afData[0][0];
+		double fResult = 1.3 + oXVector.multiply(modelParameters).getValueAt(0, 0);
 		
 		Matrix Z_i = new Matrix(1,1);
-		Z_i.m_afData[0][0] = lnDbh;	// design vector for the plot random effect
+		Z_i.setValueAt(0, 0, lnDbh);	// design vector for the plot random effect
 
 		RegressionElements regElements = new RegressionElements();
 		
@@ -307,7 +307,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 
 	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		Matrix pred = new Matrix(1,1);
-		pred.m_afData[0][0] = predictHeightM(stand, tree);
+		pred.setValueAt(0, 0, predictHeightM(stand, tree));
 		Matrix variance = oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose());
 		return new GaussianEstimate(pred, variance);
 	}

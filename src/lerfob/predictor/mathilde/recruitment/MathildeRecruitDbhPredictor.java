@@ -43,19 +43,19 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 	private static final Map<MathildeTreeSpecies, Matrix> DummyMap = new HashMap<MathildeTreeSpecies, Matrix>();
 	static {
 		Matrix m = new Matrix(1,4);
-		m.m_afData[0][0] = 1d;
+		m.setValueAt(0, 0, 1d);
 		DummyMap.put(MathildeTreeSpecies.FAGUS, m);
 
 		m = new Matrix(1,4);
-		m.m_afData[0][1] = 1d;
+		m.setValueAt(0, 1, 1d);
 		DummyMap.put(MathildeTreeSpecies.CARPINUS, m);
 		
 		m = new Matrix(1,4);
-		m.m_afData[0][2] = 1d;
+		m.setValueAt(0, 2, 1d);
 		DummyMap.put(MathildeTreeSpecies.QUERCUS, m);
 		
 		m = new Matrix(1,4);
-		m.m_afData[0][3] = 1d;
+		m.setValueAt(0, 3, 1d);
 		DummyMap.put(MathildeTreeSpecies.OTHERS, m);
 	}
 
@@ -127,7 +127,7 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 		oXVector.setSubMatrix(speciesDummy.scalarMultiply(basalAreaM2Ha), 0, index);
 		index += speciesDummy.m_iCols;
 
-		double linearPredictor = oXVector.multiply(beta).m_afData[0][0];
+		double linearPredictor = oXVector.multiply(beta).getValueAt(0, 0);
 		return 1d/linearPredictor;
 	}
 	

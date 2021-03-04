@@ -44,10 +44,10 @@ public abstract interface MathildeTreeSpeciesProvider {
 			setText(englishText, frenchText);
 			shortDummyVariable = new Matrix(1,3);
 			if (ordinal() > 0) {
-				shortDummyVariable.m_afData[0][ordinal() - 1] = 1d;
+				shortDummyVariable.setValueAt(0, ordinal() - 1, 1d);
 			}
 			longDummyVariable = new Matrix(1,4);
-			longDummyVariable.m_afData[0][ordinal()] = 1d;
+			longDummyVariable.setValueAt(0, ordinal(), 1d);
 		}
 		
 		@Override

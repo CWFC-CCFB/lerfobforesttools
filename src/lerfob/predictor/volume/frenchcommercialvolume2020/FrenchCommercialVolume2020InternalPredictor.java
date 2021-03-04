@@ -49,7 +49,7 @@ final class FrenchCommercialVolume2020InternalPredictor extends REpiceaPredictor
 		this.resStdDev = Math.sqrt(residualVariance);
 		effectList = new ArrayList<Integer>();
 		for (int i = 0; i < effects.m_iRows; i++) {
-			effectList.add(((Double) effects.m_afData[i][0]).intValue());
+			effectList.add(((Double) effects.getValueAt(i, 0)).intValue());
 		}
 		init();
 	}
@@ -96,29 +96,29 @@ final class FrenchCommercialVolume2020InternalPredictor extends REpiceaPredictor
 
 			switch(effectID) {
 			case 1:
-				oXVector.m_afData[0][pointer] = hdratio;
+				oXVector.setValueAt(0, pointer, hdratio);
 				pointer++;
 				break;
 			case 2:
-				oXVector.m_afData[0][pointer] = cylinder;
+				oXVector.setValueAt(0, pointer, cylinder);
 				pointer++;
 				break;
 			case 3:
-				oXVector.m_afData[0][pointer] = cylinder * tree.getDbhCm();
+				oXVector.setValueAt(0, pointer, cylinder * tree.getDbhCm());
 				pointer++;
 				break;
 			}
 		}
 		
 		
-		return oXVector.multiply(beta).m_afData[0][0];
+		return oXVector.multiply(beta).getValueAt(0, 0);
 	}
 
 	double getVarianceOfTheMean(FrenchCommercialVolume2020TreeImpl tree) {
 		Matrix omega = getParameterEstimates().getVariance();
 		fixedEffectPrediction(tree);
 		Matrix stdErrMat = oXVector.multiply(omega).multiply(oXVector.transpose());
-		double varianceOfTheMean = stdErrMat.m_afData[0][0];
+		double varianceOfTheMean = stdErrMat.getValueAt(0, 0);
 		return varianceOfTheMean;
 	}
 

@@ -48,7 +48,7 @@ public class CATExponentialFunction extends CATDecayFunction {
 	@Override
 	public Matrix getGradient() {
 		Matrix gradient = new Matrix(ParameterID.values().length, 1);
-		gradient.m_afData[0][0] = getValue() * getX() / (getLambda() * getLambda());
+		gradient.setValueAt(0, 0, getValue() * getX() / (getLambda() * getLambda()));
 		return gradient;
 	}
 
@@ -59,7 +59,7 @@ public class CATExponentialFunction extends CATDecayFunction {
 		double functionValue = getValue();
 		double der2Param = - 2 * getX() / (getLambda() * getLambda() * getLambda());
 		double result = functionValue * derParam * derParam + functionValue * der2Param;
-		hessian.m_afData[0][0] = result; 
+		hessian.setValueAt(0, 0, result); 
 		return hessian;
 	}
 }

@@ -121,7 +121,7 @@ public class FrenchNFIThinnerPredictorTest {
 
 		double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, plot.getMonteCarloRealizationId());
 
-		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().m_afData[0][0];
+		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().getValueAt(0, 0);
 		
 		Assert.assertEquals("Prices 2017 oak", expectedPrice, prices[0], 1E-8);
 		
@@ -160,11 +160,11 @@ public class FrenchNFIThinnerPredictorTest {
 			double[] prices = thinner.priceProvider.getStandingPrices(plot.getTargetSpecies(), 2016, 2017, mc);
 			estimate.addRealization(new Matrix(prices));
 		}
-		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().m_afData[0][0];
-		double estimatedMean = estimate.getMean().m_afData[0][0];
+		double expectedPrice = thinner.priceProvider.subModels.get(species).getParameterEstimates().getMean().getValueAt(0, 0);
+		double estimatedMean = estimate.getMean().getValueAt(0, 0);
 		Assert.assertEquals("Prices 2017 oak", expectedPrice, estimatedMean, 3E-1);
 
-		double estimatedVariance = estimate.getVariance().m_afData[0][0];
+		double estimatedVariance = estimate.getVariance().getValueAt(0, 0);
 		Assert.assertTrue("Testing if variance greater than 0", estimatedVariance > 0);
 		
 		System.out.println("Successful stochastic test on oak price in 2017");
@@ -193,7 +193,7 @@ public class FrenchNFIThinnerPredictorTest {
 			double predictedProbability = thinner.predictEventProbability(plot, null, parms);
 			estimate.addRealization(new Matrix(new double[]{predictedProbability}));
 		}
-		double estimatedProbability = estimate.getMean().m_afData[0][0];
+		double estimatedProbability = estimate.getMean().getValueAt(0, 0);
 		Assert.assertEquals("Probability of harvesting", 0.027637913261943425, estimatedProbability, 5E-5);
 		
 		System.out.println("Successful stochastic test on an oak plot from 2016 to 2017");

@@ -110,21 +110,21 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 		
 		int pointer = 0;
 
-		oXVector.m_afData[0][pointer] = notYetCut;
+		oXVector.setValueAt(0, pointer, notYetCut);
 		pointer++;
 
-		oXVector.m_afData[0][pointer] = notYetCut * stand.getBasalAreaM2Ha();
+		oXVector.setValueAt(0, pointer, notYetCut * stand.getBasalAreaM2Ha());
 		pointer++;
 
 		if (alreadyCut != 0) {
-			oXVector.m_afData[0][pointer] = alreadyCut;
+			oXVector.setValueAt(0, pointer, alreadyCut);
 			pointer++;
 			
-			oXVector.m_afData[0][pointer] = alreadyCut * timeSinceLastCutYr;
+			oXVector.setValueAt(0, pointer, alreadyCut * timeSinceLastCutYr);
 			pointer++;
 		}
 		
-		double result = oXVector.multiply(beta).m_afData[0][0];
+		double result = oXVector.multiply(beta).getValueAt(0, 0);
 		return result;
 	}
 

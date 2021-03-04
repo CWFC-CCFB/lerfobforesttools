@@ -43,19 +43,19 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	private static final Map<MathildeTreeSpecies, Matrix> DummyMap = new HashMap<MathildeTreeSpecies, Matrix>();
 	static {
 		Matrix m = new Matrix(1,4);
-		m.m_afData[0][0] = 1d;
+		m.setValueAt(0, 0, 1d);
 		DummyMap.put(MathildeTreeSpecies.FAGUS, m);
 
 		m = new Matrix(1,4);
-		m.m_afData[0][1] = 1d;
+		m.setValueAt(0, 1, 1d);
 		DummyMap.put(MathildeTreeSpecies.CARPINUS, m);
 		
 		m = new Matrix(1,4);
-		m.m_afData[0][2] = 1d;
+		m.setValueAt(0, 2, 1d);
 		DummyMap.put(MathildeTreeSpecies.QUERCUS, m);
 		
 		m = new Matrix(1,4);
-		m.m_afData[0][3] = 1d;
+		m.setValueAt(0, 3, 1d);
 		DummyMap.put(MathildeTreeSpecies.OTHERS, m);
 	}
 
@@ -94,10 +94,10 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 			
 			Matrix thetaMat = ParameterLoader.loadVectorFromFile(thetaFilename).get();
 			Matrix theta = new Matrix(1,1);
-			theta.m_afData[0][0] = thetaMat.m_afData[0][0];
+			theta.setValueAt(0, 0, thetaMat.getValueAt(0, 0));
 			
 			Matrix thetaVar = new Matrix(1,1);
-			thetaVar.m_afData[0][0] = thetaMat.m_afData[1][0] * thetaMat.m_afData[1][0];
+			thetaVar.setValueAt(0, 0, thetaMat.getValueAt(1, 0) * thetaMat.getValueAt(1, 0));
 			Matrix beta = betaMap.get().matrixStack(theta, true);
 			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
 			omega = omega.matrixDiagBlock(thetaVar);
@@ -134,14 +134,14 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		} else {
 			Matrix m = copula.getRandomDeviate();		// watchout the copula was fitted with the species in this order : beech, hornbeam, oak, others
 			Matrix stochasticPred = new Matrix(4,1);
-			stochasticPred.m_afData[0][0] = getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.m_afData[1][0]), 
-					deterministicPred.getSubMatrix(0, 0, 0, deterministicPred.m_iCols - 1)); // hornbeam
-			stochasticPred.m_afData[1][0] = getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.m_afData[2][0]), 
-					deterministicPred.getSubMatrix(1, 1, 0, deterministicPred.m_iCols - 1)); // oak
-			stochasticPred.m_afData[2][0] = getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.m_afData[0][0]), 
-					deterministicPred.getSubMatrix(2, 2, 0, deterministicPred.m_iCols - 1)); // beech
-			stochasticPred.m_afData[3][0] = getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.m_afData[3][0]), 
-					deterministicPred.getSubMatrix(3, 3, 0, deterministicPred.m_iCols - 1)); // others
+			stochasticPred.setValueAt(0, 0, getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.getValueAt(1, 0)), 
+					deterministicPred.getSubMatrix(0, 0, 0, deterministicPred.m_iCols - 1))); // hornbeam
+			stochasticPred.setValueAt(1, 0, getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.getValueAt(2, 0)), 
+					deterministicPred.getSubMatrix(1, 1, 0, deterministicPred.m_iCols - 1))); // oak
+			stochasticPred.setValueAt(2, 0, getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.getValueAt(0, 0)), 
+					deterministicPred.getSubMatrix(2, 2, 0, deterministicPred.m_iCols - 1))); // beech
+			stochasticPred.setValueAt(3, 0, getNumberOfRecruit(GaussianUtility.getCumulativeProbability(m.getValueAt(3, 0)), 
+					deterministicPred.getSubMatrix(3, 3, 0, deterministicPred.m_iCols - 1))); // others
 			return stochasticPred;
 		}
 	}
@@ -151,7 +151,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		double newCumProb;
 		int i;
 		for (i = 0; i < predictions.m_iCols; i++) {
-			newCumProb = cumProb + predictions.m_afData[0][i];
+			newCumProb = cumProb + predictions.getValueAt(0, i);
 			if (cdf > cumProb && cdf <= newCumProb) {
 				break;
 			} else {
@@ -172,7 +172,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 	protected Matrix getMarginalPredictionsForThisStandAndSpecies(MathildeRecruitmentStand stand, MathildeTreeSpecies species, int resolution, boolean isResidualVariabilityEnabled) {
 		Matrix betaForThisStand = getParametersForThisRealization(stand);
 		Matrix betaCount = betaForThisStand.getSubMatrix(0, 11, 0, 0);
-		double theta = Math.exp(betaForThisStand.m_afData[betaForThisStand.m_iRows - 1][0]);
+		double theta = Math.exp(betaForThisStand.getValueAt(betaForThisStand.m_iRows - 1, 0));
 		Matrix betaZero = betaForThisStand.getSubMatrix(12, betaForThisStand.m_iRows - 2, 0, 0);
 		double negBinMean = getNegativeBinomialMean(betaCount, stand, species);
 		double nonZeroProb = getFalseZeroProbability(betaZero, stand, species);
@@ -190,12 +190,12 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 				} else {
 					p =  nonZeroProb * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion) / truncationFactor;
 				}
-				output.m_afData[0][j] = p;
+				output.setValueAt(0, j, p);
 			}
 		} else {
 			output = new Matrix(1,1);
 			double overallMean = nonZeroProb * negBinMean / truncationFactor;
-			output.m_afData[0][0] = overallMean;
+			output.setValueAt(0, 0, overallMean);
 		}
 		return output;
 	}
@@ -220,7 +220,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		oXVector.setSubMatrix(speciesDummy.scalarMultiply(basalAreaM2HaOfThisSpecies), 0, index);
 		index += speciesDummy.m_iCols;
 		
-		double linearPredictor = oXVector.multiply(betaCount).m_afData[0][0];
+		double linearPredictor = oXVector.multiply(betaCount).getValueAt(0, 0);
 		return Math.exp(linearPredictor);
 	}
 
@@ -247,7 +247,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		oXVectorZero.setSubMatrix(speciesDummy.scalarMultiply(basalAreaM2HaOfThisSpecies).scalarAdd(1d).logMatrix(), 0, index);
 		index += speciesDummy.m_iCols;
 
-		double linearPredictor = oXVectorZero.multiply(betaZero).m_afData[0][0];
+		double linearPredictor = oXVectorZero.multiply(betaZero).getValueAt(0, 0);
 		double expTerm = Math.exp(linearPredictor);
 		return expTerm / (1 + expTerm);
 	}

@@ -284,7 +284,7 @@ public class CATProductCompartment extends CATCompartment {
 	
 	protected Matrix getTotalHeatProductionMgWhHa(double plotAreaHa) {
 		Matrix mat = new Matrix(1,1);
-		mat.m_afData[0][0] = totalHeatProduction * 1d / plotAreaHa;
+		mat.setValueAt(0, 0, totalHeatProduction * 1d / plotAreaHa);
 		return mat;
 	}
 	

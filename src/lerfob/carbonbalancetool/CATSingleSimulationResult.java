@@ -127,7 +127,7 @@ class CATSingleSimulationResult implements CATSimulationResult {
 				compartment = manager.getCompartments().get(compartmentID);
 				
 				value = new Matrix(1,1);
-				value.m_afData[0][0] = compartment.getIntegratedCarbon(plotAreaHa);
+				value.setValueAt(0, 0, compartment.getIntegratedCarbon(plotAreaHa));
 				if (!budgetMap.containsKey(compartmentID)) {
 					budgetMap.put(compartmentID, new MonteCarloEstimate());
 				}

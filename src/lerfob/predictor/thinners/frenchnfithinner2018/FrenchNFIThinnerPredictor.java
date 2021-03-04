@@ -50,7 +50,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 		for (FrenchRegion2016 region : FrenchRegion2016.values()) {
 			dummy = new Matrix(1,12);
 			if (region.ordinal() > 0) {		// we skip Auvergne Rhone Alpes
-				dummy.m_afData[0][region.ordinal()-1] = 1d;
+				dummy.setValueAt(0, region.ordinal() - 1, 1d);
 			}
 			DummyRegion.put(region, dummy);
 		}
@@ -135,11 +135,11 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 		FrenchNFIThinnerSpecies targetSpecies = getTargetSpecies(plot, year0);
 		int parameterIndex = targetSpecies.ordinal() - 1;
 		
-		double intercept = beta.m_afData[0][0];
+		double intercept = beta.getValueAt(0, 0);
 		
-		double slope = beta.m_afData[1][0];
+		double slope = beta.getValueAt(1, 0);
 		if (parameterIndex >= 0) { // if oak then it is smaller than 0
-			slope += beta.m_afData[parameterIndex + 2][0];
+			slope += beta.getValueAt(parameterIndex + 2, 0);
 		}
 		
 		double baselineResult = 0;
@@ -170,26 +170,26 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 		}
 		
 		int index = 0;
-		oXVector.m_afData[0][index] = dummy_res;
+		oXVector.setValueAt(0, index, dummy_res);
 		index++;
 		
-		oXVector.m_afData[0][index] = basalAreaM2Ha;
+		oXVector.setValueAt(0, index, basalAreaM2Ha);
 		index++;
 
-		oXVector.m_afData[0][index] = plot.getNumberOfStemsHa() * basalAreaM2Ha * .001;
+		oXVector.setValueAt(0, index, plot.getNumberOfStemsHa() * basalAreaM2Ha * .001);
 		index++;
 
-		oXVector.m_afData[0][index] = plot.getSlopeInclinationPercent();
+		oXVector.setValueAt(0, index, plot.getSlopeInclinationPercent());
 		index++;
 
-		oXVector.m_afData[0][index] = plot.getSlopeInclinationPercent() * dummy_res;
+		oXVector.setValueAt(0, index, plot.getSlopeInclinationPercent() * dummy_res);
 		index++;
 		
-		oXVector.m_afData[0][index] = probabilityPrivateLand;
+		oXVector.setValueAt(0, index, probabilityPrivateLand);
 		index++;
 		
 		if (plot.wasThereAnySiliviculturalTreatmentInTheLast5Years()) {
-			oXVector.m_afData[0][index] = 1d * probabilityPrivateLand;
+			oXVector.setValueAt(0, index, 1d * probabilityPrivateLand);
 		}
 		index++;
 		
@@ -199,7 +199,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 		
 		Matrix subBeta = beta.getSubMatrix(NumberParmsForHazard, beta.m_iRows - 1, 0, 0);
 		
-		double xBeta = oXVector.multiply(subBeta).m_afData[0][0];
+		double xBeta = oXVector.multiply(subBeta).getValueAt(0, 0);
 		return Math.exp(xBeta);
 	}
 	

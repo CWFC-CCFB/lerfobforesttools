@@ -68,7 +68,7 @@ public interface FrenchCommercialVolume2014Tree extends DbhCmProvider,
 		
 		FrenchCommercialVolume2014TreeSpecies() {
 			dummy = new Matrix(1,27);
-			dummy.m_afData[0][ordinal()] = 1d;
+			dummy.setValueAt(0, ordinal(), 1d);
 		}
 		
 		protected Matrix getDummy() {return dummy;}

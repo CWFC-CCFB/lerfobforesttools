@@ -134,7 +134,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 				
 				subModule.setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
 				
-				subModule.errorTotalVariance = covParms.m_afData[0][0] + covParms.m_afData[1][0] + covParms.m_afData[2][0];
+				subModule.errorTotalVariance = covParms.getValueAt(0, 0) + covParms.getValueAt(1, 0) + covParms.getValueAt(2, 0);
 			}
 
 			oXVector = new Matrix(1, numberOfParameters);
@@ -168,52 +168,52 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		double bal422 = bal42 * bal42;
 		
 		int pointer = 0;
-		oXVector.m_afData[0][pointer] = 1d;
+		oXVector.setValueAt(0, pointer, 1d);
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies, 0, pointer);
 		pointer += dummySpecies.m_iCols;
 		
-		oXVector.m_afData[0][pointer] = tree.getLnDbhCm();
+		oXVector.setValueAt(0, pointer, tree.getLnDbhCm());
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(tree.getLnDbhCm()), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 		
-		oXVector.m_afData[0][pointer] = tree.getDbhCm();
+		oXVector.setValueAt(0, pointer, tree.getDbhCm());
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(tree.getDbhCm()), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 
-		oXVector.m_afData[0][pointer] = upcomingCut;
+		oXVector.setValueAt(0, pointer, upcomingCut);
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(upcomingCut), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 
-		oXVector.m_afData[0][pointer] = bal22;
+		oXVector.setValueAt(0, pointer, bal22);
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(bal22), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 		
-		oXVector.m_afData[0][pointer] = bal42;
+		oXVector.setValueAt(0, pointer, bal42);
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(bal42), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 		
-		oXVector.m_afData[0][pointer] = bal422;
+		oXVector.setValueAt(0, pointer, bal422);
 		pointer++;
 		oXVector.setSubMatrix(dummySpecies.scalarMultiply(bal422), 0, pointer);
 		pointer += dummySpecies.m_iCols;
 
 		
-		double predUptoNow = oXVector.getSubMatrix(0, 0, 0, pointer-1).multiply(currentBeta.getSubMatrix(0, pointer-1, 0, 0)).m_afData[0][0];
+		double predUptoNow = oXVector.getSubMatrix(0, 0, 0, pointer-1).multiply(currentBeta.getSubMatrix(0, pointer-1, 0, 0)).getValueAt(0, 0);
 		
 		double tIntervalVeg6 = stand.getMeanAnnualTempAbove6C();
 		
 		double b91, b81, b82, b3, b32;
-		b91 = currentBeta.m_afData[pointer++][0];
-		b81 = currentBeta.m_afData[pointer++][0];
-		b82 = currentBeta.m_afData[pointer++][0];
-		b3 = currentBeta.m_afData[pointer++][0];
-		b32 = currentBeta.m_afData[pointer++][0];
+		b91 = currentBeta.getValueAt(pointer++, 0);
+		b81 = currentBeta.getValueAt(pointer++, 0);
+		b82 = currentBeta.getValueAt(pointer++, 0);
+		b3 = currentBeta.getValueAt(pointer++, 0);
+		b32 = currentBeta.getValueAt(pointer++, 0);
 		
 		predUptoNow += b91 * stand.getGrowthStepLengthYr();
 
@@ -250,23 +250,23 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 
 		double pred = getFixedEffectOnlyPrediction(currentBeta, stand, tree);
 		
-		pred += subModule.getRandomEffects(tree).m_afData[0][0];
-		pred += subModule.getRandomEffects(stand).m_afData[0][0];
+		pred += subModule.getRandomEffects(tree).getValueAt(0, 0);
+		pred += subModule.getRandomEffects(stand).getValueAt(0, 0);
 		
 		if (!isRandomEffectsVariabilityEnabled) {
 			if (subModule.getBlupsForThisSubject(stand) != null) {
-				pred += subModule.getBlupsForThisSubject(stand).getVariance().m_afData[0][0] * .5;
+				pred += subModule.getBlupsForThisSubject(stand).getVariance().getValueAt(0, 0) * .5;
 			} else {
-				pred += subModule.getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().m_afData[0][0] * .5;
+				pred += subModule.getDefaultRandomEffects(HierarchicalLevel.PLOT).getVariance().getValueAt(0, 0) * .5;
 			}
 			
-			pred += subModule.getDefaultRandomEffects(HierarchicalLevel.TREE).getVariance().m_afData[0][0] * .5;
+			pred += subModule.getDefaultRandomEffects(HierarchicalLevel.TREE).getVariance().getValueAt(0, 0) * .5;
 		}
 		
 		if (isResidualVariabilityEnabled) {
-			pred += subModule.getResidualErrorForThisVersion().m_afData[0][0];
+			pred += subModule.getResidualErrorForThisVersion().getValueAt(0, 0);
 		} else {
-			pred += subModule.getDefaultResidualError(ErrorTermGroup.Default).getVariance().m_afData[0][0] * .5;
+			pred += subModule.getDefaultResidualError(ErrorTermGroup.Default).getVariance().getValueAt(0, 0) * .5;
 		}
 		
 		double backtransformedPred = Math.exp(pred) - 1;
@@ -345,14 +345,14 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 	protected final GaussianEstimate setRandomEffectsAccordingToHeightDeviate(Estimate<? extends StandardGaussianDistribution> heightRandomEffect,
 			Estimate<? extends StandardGaussianDistribution> diamIncRandomEffect, 
 			Matrix blupMean) {
-		double varianceRandomEffectHeight = heightRandomEffect.getVariance().m_afData[0][0];
-		double varianceRandomEffectDiameterGrowth = diamIncRandomEffect.getVariance().m_afData[0][0];
+		double varianceRandomEffectHeight = heightRandomEffect.getVariance().getValueAt(0, 0);
+		double varianceRandomEffectDiameterGrowth = diamIncRandomEffect.getVariance().getValueAt(0, 0);
 		double covariance = Math.sqrt(varianceRandomEffectHeight * varianceRandomEffectDiameterGrowth) * CorrelationRandomEffectsHeightDiameterGrowth; 
 		
 		Matrix mean = new Matrix(1,1);
-		mean.m_afData[0][0] = covariance / varianceRandomEffectHeight * blupMean.m_afData[0][0];
+		mean.setValueAt(0, 0, covariance / varianceRandomEffectHeight * blupMean.getValueAt(0, 0));
 		Matrix variance = new Matrix(1,1);
-		variance.m_afData[0][0] = varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight;
+		variance.setValueAt(0, 0, varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight);
 		return new GaussianEstimate(mean, variance);
 	}
 	

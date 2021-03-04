@@ -82,7 +82,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 
 	public void add(Estimate<?> estimate, Color color, Comparable category, Comparable group) {
-		if (estimate.getMean().m_afData[0][0] > 0d) {
+		if (estimate.getMean().getValueAt(0, 0) > 0d) {
 			if (!estimateMap.containsKey(category)) {
 				if (!rowKeys.contains(category)) {
 					rowKeys.add(category);
@@ -118,10 +118,10 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
 			if (ci != null && !ci.isThereAnyNaN()) {
 				recordBoolean(arg0, arg1, true);
-				return ci.getUpperLimit().m_afData[0][0];
+				return ci.getUpperLimit().getValueAt(0, 0);
 			} else {
 				recordBoolean(arg0, arg1, false);
-				return estimate.getMean().m_afData[0][0];
+				return estimate.getMean().getValueAt(0, 0);
 			}
 		}
 		return null;
@@ -166,10 +166,10 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 			ConfidenceInterval ci = estimate.getConfidenceIntervalBounds(percentile);
 			if (ci != null && !ci.isThereAnyNaN()) {
 				recordBoolean(arg0, arg1, true);
-				return ci.getLowerLimit().m_afData[0][0];
+				return ci.getLowerLimit().getValueAt(0, 0);
 			} else {
 				recordBoolean(arg0, arg1, false);
-				return estimate.getMean().m_afData[0][0];
+				return estimate.getMean().getValueAt(0, 0);
 			}
 		}
 		return null;
@@ -205,7 +205,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	public Number getValue(Comparable arg0, Comparable arg1) {
 		Estimate<?> estimate = getEstimate(arg0, arg1);
 		if (estimate != null) {
-			return estimate.getMean().m_afData[0][0];
+			return estimate.getMean().getValueAt(0, 0);
 		}
 		return null;
 	}
@@ -308,19 +308,19 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		MonteCarloEstimate estimate1 = new MonteCarloEstimate();
 		MonteCarloEstimate estimate2 = new MonteCarloEstimate();
 		Matrix mean = new Matrix(1,1);
-		mean.m_afData[0][0] = 10d;
+		mean.setValueAt(0, 0, 10d);
 		Matrix variance = new Matrix(1,1);
-		variance.m_afData[0][0] = Double.NaN;
+		variance.setValueAt(0, 0, Double.NaN);
 		GaussianEstimate estimate3 = new GaussianEstimate(mean, variance);
 		
 		Matrix mat1;
 		Matrix mat2;
 		for (int i = 0; i < 10000; i++) {
 			mat1 = new Matrix(1,1);
-			mat1.m_afData[0][0] = random.nextDouble();
+			mat1.setValueAt(0, 0, random.nextDouble());
 			estimate1.addRealization(mat1);
 			mat2 = new Matrix(1,1);
-			mat2.m_afData[0][0] = random.nextDouble() + 2;
+			mat2.setValueAt(0, 0, random.nextDouble() + 2);
 			estimate2.addRealization(mat2);
 		}
 		

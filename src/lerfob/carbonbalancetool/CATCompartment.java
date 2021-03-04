@@ -248,7 +248,7 @@ public class CATCompartment implements Comparable {
 		Matrix value = new Matrix(getCompartmentManager().getTimeTable().size(),1);
 		
 		for (int i = 0; i < value.m_iRows; i++) {
-			value.m_afData[i][0] = calculatedCarbonArray[i] * areaFactor;
+			value.setValueAt(i, 0, calculatedCarbonArray[i] * areaFactor);
 		}
 		
 		return value;
