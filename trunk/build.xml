@@ -38,7 +38,6 @@
 		</fileset>
 	</path>
 
-	
 	<path id="junit">
 		<fileset dir="${ext.dir}">
 			<include name="junit-4.12.jar" />
@@ -237,7 +236,7 @@
 
 	<!-- CREATE JAR FILE -->
     <target name="jar-cat" depends="compile,revision">
-        <jar destfile="${ext.dir}/cat_${cat.version}.jar">
+        <jar destfile="${ext.dir}/CATv${cat.version}.jar">
 			<fileset dir="${bin.dir}"/>
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="." includes="COPYING.LESSER.txt"/>
