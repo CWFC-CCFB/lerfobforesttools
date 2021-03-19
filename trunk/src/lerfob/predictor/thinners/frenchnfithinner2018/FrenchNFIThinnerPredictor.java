@@ -32,6 +32,7 @@ import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
 import repicea.simulation.disturbances.DisturbanceParameter;
 import repicea.simulation.thinners.REpiceaThinner;
+import repicea.simulation.thinners.REpiceaTreatmentDefinition;
 import repicea.util.ObjectUtility;
 
 /**
@@ -326,7 +327,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 	}
 
 	@Override
-	public Object getInformationOnThinning(FrenchNFIThinnerPlot stand) {return null;}
+	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(FrenchNFIThinnerPlot stand) {return null;}
 	
 	
 }
