@@ -27,6 +27,7 @@ import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.thinners.REpiceaThinner;
+import repicea.simulation.thinners.REpiceaTreatmentDefinition;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -152,18 +153,9 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 		return prob;
 	}
 
+
 	@Override
-	public Object getInformationOnThinning(MathildeThinningStand stand) {return null;}
+	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(MathildeThinningStand stand) {return null;}
 
-//	@Override
-//	public void clearDeviates() {
-//		for (MathildeThinningSubModule p : subModules.values()) {
-//			p.clearDeviates();
-//		}
-//	}
-
-//	public static void main(String[] args) {
-//		new MathildeStandThinningPredictor(false, false);
-//	}
 
 }
