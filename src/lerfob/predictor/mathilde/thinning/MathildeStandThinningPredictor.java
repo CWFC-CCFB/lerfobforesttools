@@ -20,6 +20,7 @@ package lerfob.predictor.mathilde.thinning;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import repicea.math.Matrix;
@@ -157,5 +158,10 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 	@Override
 	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(MathildeThinningStand stand) {return null;}
 
+	/*
+	 * This class does not make any distinction as to the treatment applied in the plots.
+	 */
+	@Override
+	public List<Enum> getTreatmentList() {return null;}
 
 }

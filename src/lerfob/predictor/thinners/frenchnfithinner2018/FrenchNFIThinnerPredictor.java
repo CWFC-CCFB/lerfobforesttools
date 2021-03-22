@@ -19,6 +19,7 @@
 package lerfob.predictor.thinners.frenchnfithinner2018;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.FrenchRegion2016;
@@ -328,6 +329,12 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 
 	@Override
 	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(FrenchNFIThinnerPlot stand) {return null;}
+
+	/*
+	 * This class does not make any distinction as to the treatment applied in the plots.
+	 */
+	@Override
+	public List<Enum> getTreatmentList() {return null;}
 	
 	
 }
