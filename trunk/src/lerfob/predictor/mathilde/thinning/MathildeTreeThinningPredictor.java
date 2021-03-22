@@ -20,6 +20,7 @@ package lerfob.predictor.mathilde.thinning;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,8 @@ import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * This class implements the tree level thinning submodel in Mathilde model.
@@ -49,6 +52,24 @@ import repicea.util.ObjectUtility;
 public final class MathildeTreeThinningPredictor extends REpiceaThinner<MathildeThinningStand, MathildeTree> {
 
 	protected static boolean isGaussianQuadratureEnabled = true;
+
+	private enum Treatment implements TextableEnum {
+		Thinning("Thinning", "Eclaircie");
+		
+		Treatment(String englishText, String frenchText) {
+			setText(englishText, frenchText);
+		}
+
+		@Override
+		public void setText(String englishText, String frenchText) {
+			REpiceaTranslator.setString(this, englishText, frenchText);
+		}
+		
+		@Override
+		public String toString() {
+			return REpiceaTranslator.getString(this);
+		}
+	}
 
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
@@ -198,6 +219,11 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 
 	@Override
 	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(MathildeThinningStand stand) {return null;}
+
+	@Override
+	public List<Enum> getTreatmentList() {
+		return Arrays.asList(Treatment.values());
+	}
 	
 
 }
