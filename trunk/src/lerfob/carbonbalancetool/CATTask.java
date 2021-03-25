@@ -185,7 +185,7 @@ public class CATTask extends AbstractGenericTask {
 ////			CATCompatibleStand stand = ((CATCompatibleEvenAgedStand) lastStand).getHarvestedStand();
 //			CATCompatibleStand stand = lastStand.getHarvestedStand();
 //			stands.add(stand);
-//			manager.init(stands);	// TODO FP this should not be called again because setRealization has been called before. The time table should handle this!			
+//			manager.init(stands);	
 //			caller.setFinalCutHadToBeCarriedOut(true);
 //		} 					
 
@@ -283,7 +283,7 @@ public class CATTask extends AbstractGenericTask {
 						double totalAboveGroundWoodPieceVolume = 0d;
 						double totalBelowGroundWoodPieceVolume = 0d;
 						for (WoodPiece woodPiece : woodPieces) {
-							if (isCancelled) {
+							if (isCancelled()) {
 								break outerLoop;
 							}
 
@@ -406,7 +406,7 @@ public class CATTask extends AbstractGenericTask {
 						Collection<WoodPiece> woodPieces = (Collection<WoodPiece>) treeLogger.getWoodPieces().get(t);
 						double totalWoodPieceCarbon = 0d;
 						for (WoodPiece woodPiece : woodPieces) {
-							if (isCancelled) {
+							if (isCancelled()) {
 								break outerLoop;
 							}
 							dispatchMap = caller.getCarbonToolSettings().getWoodSupplySetup().dispatchThisWoodPiece(woodPiece.getLogCategory().getName());
@@ -468,7 +468,7 @@ public class CATTask extends AbstractGenericTask {
 			// The belowground biomass of the logged trees must be considered as left in the forest
 			if (!manager.getTrees(StatusClass.cut).isEmpty()) {
 				for (CATCompatibleStand stand : manager.getTrees(StatusClass.cut).keySet()) {
-					if (isCancelled) {
+					if (isCancelled()) {
 						break;
 					}
 					int dateIndex = caller.getCarbonCompartmentManager().getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
@@ -581,7 +581,7 @@ public class CATTask extends AbstractGenericTask {
 		CATCompartmentManager manager = caller.getCarbonCompartmentManager();
 		BiomassParameters biomassParameters = manager.getCarbonToolSettings().getCurrentBiomassParameters();
 		for (CATCompatibleStand stand : treeMap.keySet()) {
-			if (isCancelled) {
+			if (isCancelled()) {
 				break;
 			}
 			int dateIndex = caller.getCarbonCompartmentManager().getTimeTable().getIndexOfThisStandOnTheTimeTable(stand);
@@ -641,7 +641,7 @@ public class CATTask extends AbstractGenericTask {
 		double progressFactor = (double) 100d / manager.getCompartments().size() / Task.values().length;
 		int compIter = 0;
 		for (CATCompartment carbonCompartment : manager.getCompartments().values()) {
-			if (isCancelled) {
+			if (isCancelled()) {
 				break;
 			}
 			carbonCompartment.calculateAndIntegrateCarbon();
