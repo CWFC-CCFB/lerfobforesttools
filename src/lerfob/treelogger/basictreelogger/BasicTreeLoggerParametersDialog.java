@@ -36,6 +36,8 @@ import repicea.gui.components.REpiceaSlider.Position;
 import repicea.gui.components.REpiceaSliderGroup;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.simulation.treelogger.TreeLoggerParametersDialog;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 
 @SuppressWarnings("serial")
 public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<BasicLogCategory> implements PropertyChangeListener {
@@ -161,13 +163,25 @@ public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<
 	@Override
 	public void synchronizeUIWithOwner() {
 		super.synchronizeUIWithOwner();
-		BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-				BasicTreeLoggerParameters.MessageID.ShortLived.toString());
+//		BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
+//				BasicTreeLoggerParameters.MessageID.ShortLived.toString());
+		BasicLogCategory logCategory = findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		shortLivedSlider.setValue((int) (logCategory.getVolumeProportion() * 100));
-		logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-				BasicTreeLoggerParameters.MessageID.LongLived.toString());
+//		logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
+//				BasicTreeLoggerParameters.MessageID.LongLived.toString());
+		logCategory = findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 		longLivedSlider.setValue((int) (logCategory.getVolumeProportion() * 100));
 	}
 
+	private BasicLogCategory findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID enumVar) {
+		BasicLogCategory logCat = null;
+		for (Language l : Language.values()) {
+			logCat = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, REpiceaTranslator.getTranslation(enumVar, l));
+			if (logCat != null) {
+				break;
+			}
+		}
+		return logCat;
+	}
 }
 
