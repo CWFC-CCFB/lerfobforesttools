@@ -2,7 +2,7 @@
 
 	<property name="project.name" value="lerfob-foresttools" />
 	<property name="project.description" value="Growth Models for Northern France" />
-	<property name="ext.dir" value="../externalLibraries" />
+	<property name="ext.dir" value="../externallibraries" />
 	<property name="bin.dir" value="bin" />
 	<property name="src.dir" value="src" />
 	<property name="test.dir" value="test" />
@@ -40,13 +40,19 @@
 
 	<path id="junit">
 		<fileset dir="${ext.dir}">
-			<include name="junit-4.12.jar" />
+			<include name="junit.jar" />
 		</fileset>
 	</path>
 
 	<path id="hamcrest">
 		<fileset dir="${ext.dir}">
-			<include name="hamcrest-core-1.3.jar" />
+			<include name="hamcrest-core.jar" />
+		</fileset>
+	</path>
+
+	<path id="jaxb">
+		<fileset dir="${ext.dir}/jaxb-ri/mod">
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
@@ -143,6 +149,7 @@
 				<path refid="repicea"/>
 				<path refid="jfreechart"/>
 				<path refid="py4j"/>
+                <path refid="jaxb"/>
 				<path refid="junit"/>
 				<path refid="hamcrest"/>
 			</classpath>
@@ -180,6 +187,7 @@
 				<path refid="jfreechart"/>
 				<path refid="py4j"/>
 				<path refid="repicea"/>
+                <path refid="jaxb"/>
 				<path refid="junit"/>
 				<path refid="hamcrest"/>
 			</classpath>
@@ -244,7 +252,7 @@
 			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
 			<zipgroupfileset dir="${ext.dir}/py4j/py4j-0.8.1/py4j-java" includes="*.jar"/>
 			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
-			<zipgroupfileset dir="${ext.dir}/jaxb" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/jaxb-ri/mod" includes="*.jar"/>
             <manifest>
                 <attribute name="Built-By" value="Mathieu Fortin"/>
 				<attribute name="Specification-Title" value="${project.description}"/>
