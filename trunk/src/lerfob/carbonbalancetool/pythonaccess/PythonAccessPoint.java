@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import lerfob.app.LERFOBJARSVNAppVersion;
@@ -47,6 +48,7 @@ import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
 import repicea.math.Matrix;
+import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
@@ -84,8 +86,10 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			speciesCode = CATSpecies.PINUS_PINASTER;
 		} else if (species.toLowerCase().trim().equals("douglas")) {
 			speciesCode = CATSpecies.PSEUDOTSUGA_MENZIESII;
+		} else if (species.toLowerCase().trim().equals("oak")) {
+			speciesCode = CATSpecies.QUERCUS;
 		} else {
-			throw new InvalidParameterException("Only beech and pine are accepted as species!");
+			throw new InvalidParameterException("Only beech, pine, douglas and oak are accepted as species!");
 		}
 		setSpeciesAndSettings(speciesCode);
 	}
@@ -173,7 +177,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		for (Integer dateYr : years) {
 			Map innerMap = (Map) ((Map) inputMap.get(dateYr)).get(keyFirstInnerMap);
 			
-			stand = new PythonCarbonToolCompatibleStand(speciesForSimulation.name(), areaHa, standID, dateYr);
+			stand = new PythonCarbonToolCompatibleStand(speciesForSimulation.name(), areaHa, standID, dateYr, ApplicationScale.Stand);
 			standList.add(stand);
 			
 			if (innerMap != null) {
@@ -187,8 +191,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && mqd > 0;
 				if (isProcessable) {
 					double nbTrees = nbTreesHa * stand.getAreaHa();
-					
-					if (speciesForSimulation == CATSpecies.PINUS_PINASTER) {
+					switch(speciesForSimulation) {
+					case PINUS_PINASTER:
 						tree = new PythonMaritimePineTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
@@ -197,7 +201,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								mqd,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
-					} else if (speciesForSimulation == CATSpecies.FAGUS_SYLVATICA) {
+						break;
+					case FAGUS_SYLVATICA:
 						tree = new PythonEuropeanBeechTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
@@ -206,7 +211,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								mqd,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
-					} else {
+						break;
+					case PSEUDOTSUGA_MENZIESII:
 						tree = new PythonDouglasFirTree(StatusClass.cut,
 								nbTrees,
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
@@ -215,6 +221,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								mqd,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
+						break;
+					case QUERCUS:
+						// TODO FP complete here
+						break;
+					default:
+						throw new InvalidParameterException("The species should be either pine, oak, beech or douglas");
 					}
 				}
 			}
@@ -230,12 +242,15 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		Matrix permanentSeqInLandfill = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillND).getMean();
 		Matrix landfillCarbonDegradable = simulationResult.getEvolutionMap().get(CompartmentInfo.LfillDeg).getMean();
 		Matrix emissionDueToTransformation = simulationResult.getEvolutionMap().get(CompartmentInfo.CarbEmis).getMean();
+
+		List<Integer> outputYears = new ArrayList<Integer>(productEvolutionMap.keySet());
+		Collections.sort(outputYears);
 		
-		Map<Integer, Map<String, Double>> outputMap = new HashMap<Integer, Map<String, Double>>();
+		Map<Integer, Map<String, Double>> outputMap = new TreeMap<Integer, Map<String, Double>>();
 		
-		for (Integer year : years) {
+		for (Integer year : outputYears) { 
 			if (!outputMap.containsKey(year)) {
-				outputMap.put(year, new HashMap<String, Double>());
+				outputMap.put(year, new TreeMap<String, Double>());
 			}
 			Map<String, Double> innerOutputMap1 = outputMap.get(year);
 			UseClassSpeciesMonteCarloEstimateMap innerInputMap2 = productEvolutionMap.get(year);
@@ -250,11 +265,10 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 					}
 				}
 			}
-			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.getValueAt(years.indexOf(year), 0));
-			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill.getValueAt(years.indexOf(year), 0));
-			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable.getValueAt(years.indexOf(year), 0));
-			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.getValueAt(years.indexOf(year), 0));
-			
+			innerOutputMap1.put("CurrentCarbonHWPMgHa", carbonInHWP.getValueAt(outputYears.indexOf(year), 0));
+			innerOutputMap1.put("LandfillCarbonNDMgHa", permanentSeqInLandfill.getValueAt(outputYears.indexOf(year), 0));
+			innerOutputMap1.put("LandfillCarbonDegMgHa", landfillCarbonDegradable.getValueAt(outputYears.indexOf(year), 0));
+			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.getValueAt(outputYears.indexOf(year), 0));
 		}
 		System.out.println("Stand " + standID + " processed...");
 		return outputMap;
@@ -288,7 +302,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		List<String> argumentList = Arrays.asList(args);
 		Integer listeningPort = null;
 		Integer callbackPort = null;
-
+		
 		if (argumentList.contains(LISTEN) && argumentList.contains(CALLBACK)) {
 			int indexListen = argumentList.indexOf(LISTEN) + 1;
 			int indexCallback = argumentList.indexOf(CALLBACK) + 1;
