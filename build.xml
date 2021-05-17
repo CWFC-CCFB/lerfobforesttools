@@ -27,7 +27,7 @@
 	</path>
 
 	<path id="py4j">
-		<fileset dir="${ext.dir}/py4j/py4j-0.8.1/py4j-java">
+		<fileset dir="${ext.dir}/py4j">
 			<include name="*.jar" />
 		</fileset>
 	</path>
@@ -250,7 +250,7 @@
 			<fileset dir="." includes="COPYING.LESSER.txt"/>
 			<fileset dir="." includes="README.txt"/>
 			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
-			<zipgroupfileset dir="${ext.dir}/py4j/py4j-0.8.1/py4j-java" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/py4j" includes="*.jar"/>
 			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
 			<zipgroupfileset dir="${ext.dir}/jaxb-ri/mod" includes="*.jar"/>
             <manifest>
@@ -267,5 +267,29 @@
         </jar>
     </target>
 
+	<!-- CREATE JAR FILE -->
+    <target name="jar-forets21" depends="compile,revision">
+        <jar destfile="${ext.dir}/lerfob-cat.jar">
+			<fileset dir="${bin.dir}"/>
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+			<fileset dir="." includes="COPYING.LESSER.txt"/>
+			<fileset dir="." includes="README.txt"/>
+			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
+			<zipgroupfileset dir="${ext.dir}/py4j" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/jaxb-ri/mod" includes="*.jar"/>
+            <manifest>
+                <attribute name="Built-By" value="Mathieu Fortin"/>
+				<attribute name="Specification-Title" value="${project.description}"/>
+				<attribute name="Specification-Version" value="${cat.version}"/>
+				<attribute name="Specification-Vendor" value="${vendor}"/>
+				<attribute name="Implementation-Title" value="${project.name}"/>
+				<attribute name="Implementation-Version" value="build"/>
+				<attribute name="Implementation-Vendor" value="${vendor}"/>
+				<attribute name="Main-Class" value="lerfob.carbonbalancetool.pythonaccess.PythonAccessPoint"/>
+				<attribute name="Class-Path" value="."/>
+            </manifest>
+        </jar>
+    </target>
 
 </project>	

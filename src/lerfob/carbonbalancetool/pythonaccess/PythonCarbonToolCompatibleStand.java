@@ -42,14 +42,16 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 	private final String standID;
 	private final int dateYr;
 	private final List<String> speciesList;
+	private final ApplicationScale appScale;
 	
-	PythonCarbonToolCompatibleStand(String species, double areaHa, String standID, int dateYr) {
+	PythonCarbonToolCompatibleStand(String species, double areaHa, String standID, int dateYr, ApplicationScale appScale) {
 		trees = new HashMap<StatusClass, List<PythonCarbonToolCompatibleTree>>();
 		speciesList = new ArrayList<String>();
 		speciesList.add(species);
 		this.areaHa = areaHa;
 		this.standID = standID;
 		this.dateYr = dateYr;
+		this.appScale = appScale;
 	}
 	
 	
@@ -114,7 +116,7 @@ class PythonCarbonToolCompatibleStand implements CATCompatibleStand, Comparable 
 	public ManagementType getManagementType() {return ManagementType.UnevenAged;}
 
 	@Override
-	public ApplicationScale getApplicationScale() {return ApplicationScale.FMU;}
+	public ApplicationScale getApplicationScale() {return appScale;}
 
 	@Override
 	public CATCompatibleStand getHarvestedStand() {return null;}
