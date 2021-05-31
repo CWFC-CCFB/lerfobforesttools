@@ -125,6 +125,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			} else {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			}
+			// TODO FP include the oak file here
 			System.out.println("Loading settings : " + filename);
 			setProductionManager(filename);
 		}
