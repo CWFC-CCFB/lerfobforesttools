@@ -302,11 +302,11 @@ public class CATScenarioComparisonDialog extends REpiceaDialog implements Action
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		if (arg0.getSource().equals(alternativeScenarioComboBox)) {
-			System.out.println("scenarioToCompareComboBox changed");
+//			System.out.println("scenarioToCompareComboBox changed");
 			setDateComboBoxForAlternativeScenario();
 		} else if (arg0.getSource().equals(comparisonModeComboBox)) {
 			doNotListenToAnymore();
-			System.out.println("comparisonModeComboBox changed");
+//			System.out.println("comparisonModeComboBox changed");
 			setComboBoxValues();
 			setDateComboBoxForBaseline();
 			setDateComboBoxForAlternativeScenario();

@@ -65,7 +65,7 @@ public class CATSimulationDifference implements CATSimulationResult {
 		} else {
 			refMap = new HashMap<CompartmentInfo, Estimate<?>>();
 			refMap.putAll(getEstimateForThisDate(baseline, refDate));
-			System.out.println("Just extracted date " + refDate + " in baseline");
+//			System.out.println("Just extracted date " + refDate + " in baseline");
 		}
 		
 		Map<CompartmentInfo, Estimate<?>> altMap;
@@ -74,7 +74,7 @@ public class CATSimulationDifference implements CATSimulationResult {
 		} else {
 			altMap = new HashMap<CompartmentInfo, Estimate<?>>();
 			altMap.putAll(getEstimateForThisDate(scenToCompare, altDate));
-			System.out.println("Just extracted date " + altDate + " in alternative scenario");
+//			System.out.println("Just extracted date " + altDate + " in alternative scenario");
 		}
 		
 		for (CompartmentInfo comp : altMap.keySet()) {
