@@ -238,14 +238,14 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 		}
 
 		index = getImportFieldManager().getIndexOfThisField(CATGrowthSimulationFieldID.Volume);
-		double treeVolumeDm3 = Double.parseDouble(oArray[index].toString());
+		double treeOverbarkVolumeDm3 = Double.parseDouble(oArray[index].toString());
 
 		instantiatePlotAndTree(getImportFieldManager().getFileSpecifications()[0], dateYr, realization, plotID, plotAreaHa, 
-				statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
+				statusClass, treeOverbarkVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
 	}
 	
 	protected void instantiatePlotAndTree(String standIdentification, int dateYr, int realization, String plotID, double plotAreaHa,
-			StatusClass statusClass, double treeVolumeDm3, double numberOfTrees, String originalSpeciesName, Double dbhCm) {
+			StatusClass statusClass, double treeOverbarkVolumeDm3, double numberOfTrees, String originalSpeciesName, Double dbhCm) {
 		if (!standMap.containsKey(dateYr)) {
 			standMap.put(dateYr, new CATGrowthSimulationCompositeStand(dateYr, standIdentification, this));
 		}
@@ -258,9 +258,9 @@ public class CATGrowthSimulationRecordReader extends REpiceaRecordReader {
 
 		CATGrowthSimulationTree tree;
 		if (dbhCm == null) {
-			tree = new CATGrowthSimulationTree(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName);
+			tree = new CATGrowthSimulationTree(plot, statusClass, treeOverbarkVolumeDm3, numberOfTrees, originalSpeciesName);
 		} else {
-			tree = new CATGrowthSimulationTreeWithDBH(plot, statusClass, treeVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
+			tree = new CATGrowthSimulationTreeWithDBH(plot, statusClass, treeOverbarkVolumeDm3, numberOfTrees, originalSpeciesName, dbhCm);
 		}
 		
 		plot.addTree(tree);
