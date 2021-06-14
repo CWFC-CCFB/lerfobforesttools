@@ -82,7 +82,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 	}
 
 	public void add(Estimate<?> estimate, Color color, Comparable category, Comparable group) {
-		if (estimate.getMean().getValueAt(0, 0) > 0d) {
+//		if (estimate.getMean().getValueAt(0, 0) > 0d) {
 			if (!estimateMap.containsKey(category)) {
 				if (!rowKeys.contains(category)) {
 					rowKeys.add(category);
@@ -96,7 +96,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 				}
 			}
 			innerMap.put(group, new EstimateWrapper(estimate.getProductEstimate(carbonFactor), color));
-		}
+//		}
 	}
 	
 	@Override

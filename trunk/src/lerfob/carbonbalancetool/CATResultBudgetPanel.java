@@ -38,8 +38,6 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 class CATResultBudgetPanel extends CATResultPanel {
 	
 	protected static enum MessageID implements TextableEnum {
-//		TitleDifference("Stock difference" , "Diff\u00E9rence de stock"),
-//		InfiniteSequence("Carbon budget in infinite sequence", "Bilan carbone en s\u00E9quence infinie"),
 		YAxis("Average Carbon (Mg/ha or Mg/ha/yr of C)", "Carbone moyen (Mg/ha ou Mg/ha/an de C)"),
 		YCO2Axis("Average Carbon (Mg/ha or Mg/ha/yr of CO2 Eq.)", "Carbone moyen (Mg/ha ou Mg/ha/an de CO2 Eq.)"),
 		XAxis("Compartment", "Compartiment");
