@@ -160,6 +160,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * @param mode defines how CAT is to be used. See the CATMode enum variable.
 	 */
 	public CarbonAccountingTool(CATMode mode) {
+		super(true); // we start the internal worker at once
 		this.mode = mode;
 		isShuttedDown = false;
 		setSettingMemory(new SettingMemory(REpiceaSystem.getJavaIOTmpDir() + "settingsCarbonTool.ser"));
