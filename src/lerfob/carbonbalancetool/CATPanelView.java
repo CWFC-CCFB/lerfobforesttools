@@ -88,13 +88,14 @@ class CATPanelView extends REpiceaPanel implements ChangeListener, PropertyChang
 			int nbValidComponents = 0;
 			int nbTabs = tabbedPane.getTabCount();
 			for (int i = 0; i < nbTabs; i++) {
-//				if (i != tabbedPane.getSelectedIndex()) {		// is there anything to compare with
-	 				if (isASingleResultSummary(i)) {
-						nbValidComponents++;
-					}
-//				}
+				if (isASingleResultSummary(i)) {
+					nbValidComponents++;
+				}
 			}
-			compareScenarioMenuItem.setEnabled(nbValidComponents >= 1 && isASingleResultSummary(tabbedPane.getSelectedIndex()));
+			int selectedIndex = tabbedPane.getSelectedIndex();
+			if (selectedIndex >= 0) {
+				compareScenarioMenuItem.setEnabled(nbValidComponents >= 1 && isASingleResultSummary(tabbedPane.getSelectedIndex()));
+			}
 		}
 
 		private boolean isASingleResultSummary(int selectedIndex) {
