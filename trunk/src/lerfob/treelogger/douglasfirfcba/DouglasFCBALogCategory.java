@@ -26,7 +26,7 @@ import repicea.simulation.treelogger.LoggableTree;
 import repicea.simulation.treelogger.WoodPiece;
 
 @SuppressWarnings("serial")
-class DouglasFCBALogCategory extends LogCategory {
+public class DouglasFCBALogCategory extends LogCategory {
 
 	protected final double minimumDbhCm;
 	protected final Grade grade;

@@ -72,25 +72,36 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 		currentFertilityClass = FertilityClass.Unknown;	// default value
 	}
 
+	private void makeSureThereIsASingleElement(Matrix m) {
+		if (m.getNumberOfElements() != 1) {
+			throw new InvalidParameterException("The fertility classes are based on univariate truncated normal distribution. It seems the suggested distribution is multivariate.");
+		}
+	}
 
 	protected Map<FertilityClass, TruncatedGaussianEstimate> getFertilityClassMap() {
 		if (fertilityClassMap == null) {
 			fertilityClassMap = new HashMap<FertilityClass, TruncatedGaussianEstimate>();
 			
 			Estimate<? extends StandardGaussianDistribution> levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
+			makeSureThereIsASingleElement(levelRandomEffects.getMean());
+			makeSureThereIsASingleElement(levelRandomEffects.getVariance());
+			
 			TruncatedGaussianEstimate truncatedEstimate;
 			Matrix stdMatrix = levelRandomEffects.getVariance().getLowerCholTriangle();
 			
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean().getValueAt(0, 0),
+					levelRandomEffects.getVariance().getValueAt(0, 0));
 			truncatedEstimate.setLowerBoundValue(stdMatrix.scalarMultiply(0.999));
 			fertilityClassMap.put(FertilityClass.I, truncatedEstimate);
 
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean().getValueAt(0, 0),
+					levelRandomEffects.getVariance().getValueAt(0, 0));
 			truncatedEstimate.setLowerBoundValue(stdMatrix.scalarMultiply(-0.7388));
 			truncatedEstimate.setUpperBoundValue(stdMatrix.scalarMultiply(0.999));
 			fertilityClassMap.put(FertilityClass.II, truncatedEstimate);
 
-			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean(), levelRandomEffects.getVariance());
+			truncatedEstimate = new TruncatedGaussianEstimate(levelRandomEffects.getMean().getValueAt(0, 0),
+					levelRandomEffects.getVariance().getValueAt(0, 0));
 			truncatedEstimate.setUpperBoundValue(stdMatrix.scalarMultiply(-0.7388));
 			fertilityClassMap.put(FertilityClass.III, truncatedEstimate);
 		}

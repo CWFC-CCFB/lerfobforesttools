@@ -33,8 +33,6 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 															CATAboveGroundVolumeProvider, 
 															CATBelowGroundVolumeProvider {
 
-//	final SpeciesType speciesType; 
-//	final AverageBasicDensity species;
 	final CATSpecies species;
 	StatusClass statusClass; 
 	final double number; 
@@ -78,8 +76,8 @@ abstract class PythonCarbonToolCompatibleTree implements 	CATCompatibleTree,
 	@Override
 	public StatusClass getStatusClass() {return statusClass;}
 
-//	@Override
-//	public double getBasicWoodDensity() {return species.getBasicDensity();}
+	@Override
+	public double getBasicWoodDensity() {return getCATSpecies().getBasicWoodDensity();}
 
 	@Override
 	public CATSpecies getCATSpecies() {return species;}
