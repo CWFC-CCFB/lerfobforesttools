@@ -36,18 +36,6 @@ class PythonDouglasFirTree extends PythonCarbonToolCompatibleTree implements Dou
 	@Override
 	public double getDbhCm() {return dbhCm;}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public double getBasicWoodDensity() {
-		return AverageBasicDensity.DouglasFir.getBasicDensity();		// to ensure that the JUnit test will be validated
-	}
-
-
-	@Override
-	public double getBarkProportionOfWoodVolume() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 
 }

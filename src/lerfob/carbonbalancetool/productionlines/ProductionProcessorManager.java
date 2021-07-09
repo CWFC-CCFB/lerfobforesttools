@@ -178,6 +178,7 @@ public class ProductionProcessorManager extends SystemManager implements Memoriz
 	 * The VERY_SMALL value serves as threshold when dealing with small quantities. Below the threshold the quantity is not considered at all. 
 	 */
 	public static final double VERY_SMALL = 1E-12;
+//	public static final double VERY_SMALL = 1E-200;
 
 	protected static enum EnhancedMode {CreateEndOfLifeLinkLine}
 	

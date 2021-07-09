@@ -23,7 +23,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -38,6 +37,7 @@ import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CATUtilityMaps.MonteCarloEstimateMap;
 import lerfob.carbonbalancetool.CATUtilityMaps.UseClassSpeciesMonteCarloEstimateMap;
 import lerfob.carbonbalancetool.CarbonAccountingTool;
+import lerfob.carbonbalancetool.catdiameterbasedtreelogger.CATDiameterBasedTreeLogger;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.Element;
 import lerfob.carbonbalancetool.productionlines.EndUseWoodProductCarbonUnitFeature.UseClass;
 import lerfob.carbonbalancetool.sensitivityanalysis.CATSensitivityAnalysisSettings;
@@ -52,6 +52,8 @@ import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.treelogger.TreeLoggerCompatibilityCheck;
 import repicea.simulation.treelogger.TreeLoggerDescription;
+import repicea.stats.distributions.TruncatedGaussianDistribution;
+import repicea.stats.distributions.utility.GaussianUtility;
 import repicea.util.ObjectUtility;
 
 /**
@@ -111,6 +113,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(MaritimePineBasicTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(EuropeanBeechBasicTreeLogger.class));
 		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(DouglasFCBATreeLogger.class));
+		defaultTreeLoggerDescriptions.add(new TreeLoggerDescription(CATDiameterBasedTreeLogger.class));
 		return defaultTreeLoggerDescriptions;
 	}
 
@@ -122,18 +125,21 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
 			} else if (speciesForSimulation.equals(CATSpecies.PSEUDOTSUGA_MENZIESII)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170703_P_EOL.prl";
-			} else {
+			} else if (speciesForSimulation.equals(CATSpecies.FAGUS_SYLVATICA)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
+			} else if (speciesForSimulation.equals(CATSpecies.QUERCUS)) {
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "GrandEstForestSector.prl";;
+			} else {
+				throw new Exception("The species is not recognized!");
 			}
-			// TODO FP include the oak file here
 			System.out.println("Loading settings : " + filename);
 			setProductionManager(filename);
 		}
 		String biomassFilename;
 		if (speciesForSimulation.equals(CATSpecies.PSEUDOTSUGA_MENZIESII)) {
-			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersDouglasFir.bpf";
+			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersDouglasFir.bpf"; // in this one, the basic densities are the default ones
 		} else {
-			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";
+			biomassFilename = ObjectUtility.getRelativePackagePath(getClass()) + "biomassParametersBeechPine.bpf";	// in this one, the basic densities are provided by the tree
 		}
 		setBiomassParameters(biomassFilename);
 	}
@@ -163,17 +169,16 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		}
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
+	
+	protected List<CATCompatibleStand> createStandList(String standID, Map inputMap) {
+		List<Integer> years = new ArrayList<Integer>();
+		years.addAll(inputMap.keySet());
+		Collections.sort(years);
 
 		final String keyFirstInnerMap = "RECOLTE";
 		List<CATCompatibleStand> standList = new ArrayList<CATCompatibleStand>();
 		PythonCarbonToolCompatibleStand stand;
 		PythonCarbonToolCompatibleTree tree;
-		
-		List<Integer> years = new ArrayList<Integer>();
-		years.addAll(inputMap.keySet());
-		Collections.sort(years);
 
 		for (Integer dateYr : years) {
 			Map innerMap = (Map) ((Map) inputMap.get(dateYr)).get(keyFirstInnerMap);
@@ -183,13 +188,13 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			
 			if (innerMap != null) {
 				double nbTreesHa = Double.parseDouble(innerMap.get("NbTrees").toString());
-				double mqd = Double.parseDouble(innerMap.get("DBHmy").toString());
+				double meanDbhCm = Double.parseDouble(innerMap.get("DBHmy").toString());
 				double weightCrownKg_M2 = convertStringToDouble(innerMap, "Wcrown");		// TODO FP this is a patch while waiting for Christophe's reply
 //				double weightCrownKg_M2 = Double.parseDouble(innerMap.get("Wcrown").toString());
 				double weightTrunkKg_M2 = Double.parseDouble(innerMap.get("Wtrunk").toString());
 				double dbhStandardDeviation = Double.parseDouble(innerMap.get("DBHect").toString());
 				double weightRootsKg_M2 = Double.parseDouble(innerMap.get("Wroots").toString());
-				boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && mqd > 0;
+				boolean isProcessable = weightCrownKg_M2 >= 0d && weightTrunkKg_M2 >= 0d && weightRootsKg_M2 >= 0d && meanDbhCm > 0;
 				if (isProcessable) {
 					double nbTrees = nbTreesHa * stand.getAreaHa();
 					switch(speciesForSimulation) {
@@ -199,7 +204,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
-								mqd,
+								meanDbhCm,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 						break;
@@ -209,7 +214,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
-								mqd,
+								meanDbhCm,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 						break;
@@ -219,12 +224,22 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 								getAverageDryBiomassByTree(weightRootsKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightTrunkKg_M2, nbTreesHa),
 								getAverageDryBiomassByTree(weightCrownKg_M2, nbTreesHa),
-								mqd,
+								meanDbhCm,
 								dbhStandardDeviation);
 						stand.addTree(StatusClass.cut, tree);
 						break;
 					case QUERCUS:
-						// TODO FP complete here
+						List<TreeFeatures> tfList = splitIntoTrees(nbTrees, meanDbhCm, dbhStandardDeviation, 10);
+						for (TreeFeatures tf : tfList) {
+							tree = new PythonOakTree(StatusClass.cut,
+									nbTrees * tf.massProbForNbStems,
+									getAverageDryBiomassByTree(weightRootsKg_M2 * tf.massProbForBiomass, nbTreesHa * tf.massProbForNbStems),
+									getAverageDryBiomassByTree(weightTrunkKg_M2 * tf.massProbForBiomass, nbTreesHa * tf.massProbForNbStems),
+									getAverageDryBiomassByTree(weightCrownKg_M2 * tf.massProbForBiomass, nbTreesHa * tf.massProbForNbStems),
+									tf.meanDbhForThisClass,
+									-1);
+							stand.addTree(StatusClass.cut, tree);						
+						}
 						break;
 					default:
 						throw new InvalidParameterException("The species should be either pine, oak, beech or douglas");
@@ -232,7 +247,15 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 				}
 			}
 		}
-		
+		return standList;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
+
+		List<CATCompatibleStand> standList = createStandList(standID, inputMap);
+
+		// stand list here
 		setStandList(standList);
 		calculateCarbon();
 		CATSimulationResult simulationResult = retrieveSimulationSummary();
@@ -289,6 +312,65 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	public String getRevision() {
 		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
 		return lerfobRevision;
+	}
+	
+
+	private static class TreeFeatures {
+		final double dbhCmMin;
+		final double dbhCmMax;
+		final double meanDbhForThisClass;
+		final double massProbForNbStems;
+		final TruncatedGaussianDistribution dist;
+		double massProbForBiomass;
+		TreeFeatures(double dbhCmMin, double dbhCmMax, double density, TruncatedGaussianDistribution dist) {
+			this.dbhCmMin = dbhCmMin;
+			this.dbhCmMax = dbhCmMax;
+			this.massProbForNbStems = density;
+			this.dist = dist;
+			Matrix lowerBound = new Matrix(1,1);
+			lowerBound.setValueAt(0, 0, dbhCmMin);
+			this.dist.setLowerBoundValue(lowerBound);
+			Matrix upperBound = new Matrix(1,1);
+			upperBound.setValueAt(0, 0, dbhCmMax);
+			this.dist.setUpperBoundValue(upperBound);
+			meanDbhForThisClass = this.dist.getMean().getValueAt(0, 0);
+			if (meanDbhForThisClass < dbhCmMin || meanDbhForThisClass > dbhCmMax) {
+				throw new InvalidParameterException("It seems the mean dbh of the truncated distribution is inconsistent with the bounds!");
+			}
+		}
+	}
+	
+	
+	private List<TreeFeatures> splitIntoTrees(double nbHa, double meanDbhCm, double stdDev, int nbIntervals) {
+		List<TreeFeatures> fList = new ArrayList<TreeFeatures>();
+		double q99 = GaussianUtility.getQuantile(0.995);
+		double min = meanDbhCm - q99 * stdDev;
+		if (min < 1d) {
+			min = 1d;
+		}
+		
+		double max = meanDbhCm + q99 * stdDev;
+		double coverage = GaussianUtility.getCumulativeProbability((max - meanDbhCm) / stdDev) - GaussianUtility.getCumulativeProbability((min - meanDbhCm) / stdDev);
+		double range = max - min;
+		double step = range / nbIntervals;
+		for (int i = 0; i < nbIntervals; i++) {
+			double dmin = min + i * step;
+			double dmax = dmin + step;
+			double mass = GaussianUtility.getCumulativeProbability((dmax - meanDbhCm) / stdDev) - GaussianUtility.getCumulativeProbability((dmin - meanDbhCm) / stdDev);
+			mass /= coverage;	// rescaling due to truncation
+			fList.add(new TreeFeatures(dmin, dmax, mass, new TruncatedGaussianDistribution(meanDbhCm, stdDev*stdDev)));
+		}
+		
+		double sumDbhPow3Mass = 0;
+		for (TreeFeatures f : fList) {
+			sumDbhPow3Mass += f.meanDbhForThisClass * f.meanDbhForThisClass * f.meanDbhForThisClass * f.massProbForNbStems;
+		}
+
+		for (TreeFeatures f : fList) {
+			f.massProbForBiomass = f.meanDbhForThisClass * f.meanDbhForThisClass * f.meanDbhForThisClass * f.massProbForNbStems / sumDbhPow3Mass;
+		}
+
+		return fList;
 	}
 	
 	
