@@ -228,8 +228,8 @@ public class CATTask extends AbstractGenericTask {
 			if (caller.guiInterface != null) {
 				logger.addTreeLoggerListener(caller.getUI()); 
 			}
-			logger.init(convertMapIntoCollectionOfLoggableTrees());
-			logger.run();
+			logger.init(convertMapIntoCollectionOfLoggableTrees());		
+			logger.run();		// woodPieces collection is cleared here
 			if (caller.guiInterface != null) {
 				logger.removeTreeLoggerListener(caller.getUI()); 
 			}			

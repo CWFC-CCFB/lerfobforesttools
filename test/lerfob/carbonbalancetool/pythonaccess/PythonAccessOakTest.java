@@ -152,10 +152,10 @@ public class PythonAccessOakTest {
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		
 		PythonOakTree tree = new PythonOakTree(StatusClass.cut,
-				1,
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				.1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
 				45,
 				7.45);
 
@@ -169,8 +169,8 @@ public class PythonAccessOakTest {
 				volume += woodPiece.getWeightedTotalVolumeM3();
 			}
 		}
-		double biomass = volume * CATSpecies.QUERCUS.getBasicWoodDensity();
-		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+		double biomass = volume * CATSpecies.QUERCUS.getBasicWoodDensity() / pap.areaHa;
+		Assert.assertEquals("Comparing logged biomasses", 100d, biomass, 1E-8);
 	}		
 
 }

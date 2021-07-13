@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
-import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.BiomassType;
 import lerfob.carbonbalancetool.productionlines.CarbonUnit.CarbonUnitStatus;
@@ -20,14 +21,17 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBALogCategory;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLoggerParameters;
 import repicea.serial.xml.XmlDeserializer;
+import repicea.serial.xml.XmlSerializer;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.ObjectUtility;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PythonAccessDouglasFirTest {
 
+	static double ResiduesLeftInForest;
 	
 	@SuppressWarnings("rawtypes")
 	private synchronized static Map getInputMap() throws Exception {
@@ -42,14 +46,16 @@ public class PythonAccessDouglasFirTest {
 	
 	@SuppressWarnings({ "rawtypes" })
 	@Test
-	public void testCompleteWithDouglasFir() throws Exception {
+	public void test3CompleteWithDouglasFir() throws Exception {
 		String refMapFilename = ObjectUtility.getPackagePath(PythonAccessTest.class) + "referenceDouglas.ref";
 		
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("douglas");
 		pap.setAreaHA(0.1);
-		
-		Map<Integer, Map<String, Double>> resultingMap = pap.processStandList("exampleDouglas", getInputMap());
+		Map inputMap = getInputMap();
+		Map<Integer, Map<String, Double>> resultingMap = pap.processStandList("exampleDouglas", inputMap);
+		double hwpCarbonIn2013 = resultingMap.get(2013).get("CurrentCarbonHWPMgHa");
+		System.out.println("HWP carbon in 2013 = " + hwpCarbonIn2013);
 //		XmlSerializer serializer = new XmlSerializer(refMapFilename);
 //		serializer.writeObject(resultingMap);
 		
@@ -89,24 +95,24 @@ public class PythonAccessDouglasFirTest {
 			}
 			System.out.println("Total biomass in HWP at year " + key + " - " + totalBiomass);
 			if (yearsWithBiomass.contains(key)) {
-				Assert.assertEquals("Comparing biomass for year " + key, 100, totalBiomass, 5);
+				Assert.assertEquals("Comparing biomass for year " + key, 100 - ResiduesLeftInForest, totalBiomass, 1E-8);
 			} 
 		}
 		System.out.println("Successfully compared this number of values: " + nbValuesCompared);
 	}
 
 	@Test
-	public void testWithDouglasFirLoggingOnly() throws Exception {
+	public void test1WithDouglasFirLoggingOnly() throws Exception {
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("douglas");
 		pap.setAreaHA(0.1);
 	
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		PythonDouglasFirTree tree = new PythonDouglasFirTree(StatusClass.cut,
-				1,
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				.1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
 				45,
 				7.45);
 
@@ -117,15 +123,18 @@ public class PythonAccessDouglasFirTest {
 		double volume = 0;
 		for (Collection<WoodPiece> woodPieces : manager.getWoodPieces().values()) {
 			for (WoodPiece woodPiece : woodPieces) {
+				if (woodPiece.getLogCategory().getName().equals("Residues")) {
+					ResiduesLeftInForest = woodPiece.getWeightedTotalVolumeM3() * tree.getBasicWoodDensity() * .67 / pap.areaHa;	// kept in a static variable to be later deduced from the total in the complete test since a part of this log category is left on the forest floor
+				}
 				volume += woodPiece.getWeightedTotalVolumeM3();
 			}
 		}
-		double biomass = volume * CATSpecies.PSEUDOTSUGA_MENZIESII.getBasicWoodDensity();
-		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+		double biomass = volume * tree.getBasicWoodDensity() / pap.areaHa;
+		Assert.assertEquals("Comparing logged biomasses", 100d, biomass, 1E-8);
 	}		
 
 	@Test
-	public void testWithDouglasFirProductionLinesOnly() throws Exception {
+	public void test2WithDouglasFirProductionLinesOnly() throws Exception {
 		PythonAccessPoint pap = new PythonAccessPoint();
 		pap.setSpecies("douglas");
 		pap.setAreaHA(0.1);

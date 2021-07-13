@@ -131,10 +131,10 @@ public class PythonAccessEuropeanBeechTest {
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		
 		PythonEuropeanBeechTree tree = new PythonEuropeanBeechTree(StatusClass.cut,
-				1,
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				.1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
 				45,
 				7.45);
 
@@ -148,8 +148,8 @@ public class PythonAccessEuropeanBeechTest {
 				volume += woodPiece.getWeightedTotalVolumeM3();
 			}
 		}
-		double biomass = volume * AverageBasicDensity.EuropeanBeech.getBasicDensity();
-		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+		double biomass = volume * AverageBasicDensity.EuropeanBeech.getBasicDensity() / pap.areaHa;
+		Assert.assertEquals("Comparing logged biomasses", 100d, biomass, 1E-8);
 	}		
 
 }

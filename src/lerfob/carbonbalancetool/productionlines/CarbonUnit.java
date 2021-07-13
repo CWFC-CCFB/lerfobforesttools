@@ -265,7 +265,9 @@ public class CarbonUnit extends ProcessUnit<Element> implements SpeciesNameProvi
 						if (samplingUnitID.equals(otherUnit.samplingUnitID)) {
 							if (speciesName.equals(otherUnit.speciesName)) {
 								if (getBiomassType() == otherUnit.getBiomassType()) {
-									return true;
+									if (!actualized && !otherUnit.actualized) { // if both units have not been actualized yet
+										return true;
+									}
 								}
 							}
 						}
