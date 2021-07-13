@@ -300,17 +300,6 @@ public class CATCompartment implements Comparable {
 		carbonMethodLibrary.selectCalculatorFunction(this);
 	}
 	
-	
-	
-//	protected static Vector<CompartmentInfo> getCompartmentInfoMap(boolean isFlux) {
-//		Vector<CompartmentInfo> outputSet = new Vector<CompartmentInfo>();
-//		for (CompartmentInfo compartmentInfo : CompartmentInfo.values()) {
-//			if (compartmentInfo.isFlux() == isFlux) {
-//				outputSet.add(compartmentInfo);
-//			}
-//		}
-//		return outputSet;
-//	}
 
 	@Override
 	public int compareTo (Object o) {

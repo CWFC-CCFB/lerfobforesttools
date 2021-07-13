@@ -47,10 +47,10 @@ public class PythonAccessMaritimePineTest {
 		TreeLogger<?,?> manager = pap.getCarbonToolSettings().getTreeLogger();
 		
 		PythonMaritimePineTree tree = new PythonMaritimePineTree(StatusClass.cut,
-				1,
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(10d, .1),
-				PythonAccessPoint.getAverageDryBiomassByTree(0, .1),
+				.1,
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(10d, 1),
+				PythonAccessPoint.getAverageDryBiomassByTree(0, 1),
 				45,
 				7.45);
 
@@ -64,8 +64,8 @@ public class PythonAccessMaritimePineTest {
 				volume += woodPiece.getWeightedTotalVolumeM3();
 			}
 		}
-		double biomass = volume * AverageBasicDensity.MaritimePine.getBasicDensity();
-		Assert.assertEquals("Comparing logged biomasses", 1000d, biomass, 1E-8);
+		double biomass = volume * AverageBasicDensity.MaritimePine.getBasicDensity() / pap.areaHa; 
+		Assert.assertEquals("Comparing logged biomasses", 100d, biomass, 1E-8);
 	}		
 
 	
