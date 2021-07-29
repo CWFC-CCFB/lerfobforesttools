@@ -26,6 +26,7 @@ import java.util.List;
 
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 
@@ -96,8 +97,34 @@ public class BasicTreeLoggerParameters extends TreeLoggerParameters<BasicLogCate
 		return guiInterface != null && guiInterface.isVisible();
 	}
 
+	/**
+	 * This method is deprecated because it caused language issues. The findLogCategoryRegardlessOfTheLanguage method should
+	 * be used instead. 
+	 */
+	@Deprecated
+	public BasicLogCategory getLogCategory(String speciesName, String name) {
+		return super.getLogCategory(speciesName, name);
+	}
+	
+	/**
+	 * Find the appropriate tree log category regardless of the language
+	 * @param enumVar
+	 * @return
+	 */
+	public BasicLogCategory findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID enumVar) {
+		BasicLogCategory logCat = null;
+		for (Language l : Language.values()) {
+			logCat = getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, REpiceaTranslator.getTranslation(enumVar, l));
+			if (logCat != null) {
+				break;
+			}
+		}
+		return logCat;
+	}
+
 	
 	public static void main(String[] args) {
+		REpiceaTranslator.setCurrentLanguage(Language.French);
 		BasicTreeLoggerParameters params = new BasicTreeLoggerParameters();
 		params.showUI(null);
 	}

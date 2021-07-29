@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Window;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -587,8 +588,20 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * Entry point for CAT in stand alone modes
 	 */
 	public static void main(String[] args) throws Exception {
-//		REpiceaTranslator.setCurrentLanguage(Language.French);
-		REpiceaTranslator.setCurrentLanguage(Language.English);
+		String languageOption = "-l";
+		List<String> arguments = Arrays.asList(args);
+		String selectedLanguage = REpiceaSystem.retrieveArgument(languageOption, arguments);
+		if (selectedLanguage == null || selectedLanguage.equals("en")) {
+			REpiceaTranslator.setCurrentLanguage(Language.English);
+		} else if (selectedLanguage.equals("fr")) {
+			REpiceaTranslator.setCurrentLanguage(Language.French);
+		} else {
+			System.out.println("The language option " + selectedLanguage + " is not recognized!");
+			System.out.println("Usage: -l en (for English)");
+			System.out.println("Usage: -l fr (for French)");
+			System.out.println("For now, the language will be set to English!");
+			REpiceaTranslator.setCurrentLanguage(Language.English);
+		}
 		CarbonAccountingTool tool = new CarbonAccountingTool();
 		tool.initializeTool();
 	}
