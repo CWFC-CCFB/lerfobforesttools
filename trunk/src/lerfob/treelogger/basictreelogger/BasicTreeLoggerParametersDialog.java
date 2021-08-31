@@ -36,8 +36,6 @@ import repicea.gui.components.REpiceaSlider.Position;
 import repicea.gui.components.REpiceaSliderGroup;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.simulation.treelogger.TreeLoggerParametersDialog;
-import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.Language;
 
 @SuppressWarnings("serial")
 public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<BasicLogCategory> implements PropertyChangeListener {
