@@ -47,6 +47,7 @@ import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
 import repicea.app.REpiceaJARSVNAppVersion;
+import repicea.lang.REpiceaSystem;
 import repicea.math.Matrix;
 import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
@@ -65,14 +66,31 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 
 	private static final String LISTEN = "-listen";
 	private static final String CALLBACK = "-callback";
+	private static final String VERBOSE = "-verbose";
 
+	private final boolean verbose;
+	
 	protected CATSpecies speciesForSimulation; 
 	protected double areaHa = 1d;
 	
-	public PythonAccessPoint() throws Exception {
+	/**
+	 * Main constructor.
+	 * @param verbose a boolean 
+	 * @throws Exception
+	 */
+	public PythonAccessPoint(boolean verbose) throws Exception {
 		super(CATMode.SCRIPT);
+		this.verbose = verbose;
 		initializeTool(null);
 		getCarbonToolSettings().setTreeLoggerDescriptions(findMatchingTreeLoggers(null));
+	}
+
+	/**
+	 * Constructor for tests.
+	 * @throws Exception
+	 */
+	protected PythonAccessPoint() throws Exception {
+		this(false);
 	}
 	
 	/**
@@ -250,9 +268,12 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		return standList;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public Map<Integer, Map<String, Double>> processStandList(String standID, Map inputMap) throws Exception {
-
+		long initTime = -1;
+		if (verbose) {
+			initTime = System.currentTimeMillis();
+		}
 		List<CATCompatibleStand> standList = createStandList(standID, inputMap);
 
 		// stand list here
@@ -295,6 +316,10 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			innerOutputMap1.put("CEqEmissionTransMgHa", emissionDueToTransformation.getValueAt(outputYears.indexOf(year), 0));
 		}
 		System.out.println("Stand " + standID + " processed...");
+		if (verbose) {
+			long totalTime = System.currentTimeMillis() - initTime;
+			System.out.println("Time to process stand list " + totalTime + " ms.");
+		}
 		return outputMap;
 	}
 	
@@ -386,34 +411,37 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		Integer listeningPort = null;
 		Integer callbackPort = null;
 		
-		if (argumentList.contains(LISTEN) && argumentList.contains(CALLBACK)) {
-			int indexListen = argumentList.indexOf(LISTEN) + 1;
-			int indexCallback = argumentList.indexOf(CALLBACK) + 1;
-			if (indexListen < argumentList.size() && indexCallback < argumentList.size()) {
-				String newListeningPort = argumentList.get(indexListen);
+		boolean verbose = false;
+		String verbStr = REpiceaSystem.retrieveArgument(VERBOSE, argumentList);
+		if (verbStr != null && verbStr.toLowerCase().equals("t")) {
+			verbose = true;
+		}
+
+		String newListeningPort = REpiceaSystem.retrieveArgument(LISTEN, argumentList);
+		String newCallbackPort = REpiceaSystem.retrieveArgument(CALLBACK, argumentList);
+		
+		if (newListeningPort != null && newCallbackPort != null) {
+			try {
+				listeningPort = Integer.parseInt(newListeningPort);
+				callbackPort = Integer.parseInt(newCallbackPort);
 				try {
-					listeningPort = Integer.parseInt(newListeningPort);
-					String newCallbackPort = argumentList.get(indexCallback);
-					try {
-						if (newCallbackPort.equals(newListeningPort)) {
-							throw new InvalidParameterException("The callback and the listing ports should be different!");
-						}
-						callbackPort = Integer.parseInt(newCallbackPort);
-					} catch (NumberFormatException e) {
-						System.out.println("Unable to set callback port to " + newCallbackPort +".");
-						System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
-					} catch (InvalidParameterException e) {
-						System.out.println(e.getMessage());
-						System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
+					if (callbackPort ==  listeningPort) {
+						throw new InvalidParameterException("The callback and the listing ports should be different!");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Unable to listen port " + newListeningPort +".");
+					System.out.println("Unable to set callback port to " + newCallbackPort +".");
+					System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
+				} catch (InvalidParameterException e) {
+					System.out.println(e.getMessage());
 					System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
 				}
+			} catch (NumberFormatException e) {
+				System.out.println("Unable to listen port " + newListeningPort +".");
+				System.out.println("The listening and callback ports will be set to default values 25333 and 25334 respectively!");
 			}
-		} 
+		}
 		
-		PythonAccessPoint pap = new PythonAccessPoint();
+		PythonAccessPoint pap = new PythonAccessPoint(verbose);
 		
 		GatewayServer gatewayServer;
 		String portMessage;
