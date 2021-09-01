@@ -318,7 +318,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		System.out.println("Stand " + standID + " processed...");
 		if (verbose) {
 			long totalTime = System.currentTimeMillis() - initTime;
-			System.out.println("Time to process stand list " + totalTime + " ms.");
+			System.out.println("Time to process stand list " + totalTime + " ms. - Current memory load = " + REpiceaSystem.getCurrentMemoryLoadMb() + " Mb");
 		}
 		return outputMap;
 	}
