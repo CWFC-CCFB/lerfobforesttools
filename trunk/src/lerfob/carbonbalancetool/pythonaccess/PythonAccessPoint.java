@@ -142,7 +142,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 			if (speciesForSimulation.equals(CATSpecies.PINUS_PINASTER)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "maritimepine.prl";
 			} else if (speciesForSimulation.equals(CATSpecies.PSEUDOTSUGA_MENZIESII)) {
-				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170703_P_EOL.prl";
+				filename = ObjectUtility.getRelativePackagePath(getClass()) + "Douglas_20170703_P_EOL_simplified.prl";
 			} else if (speciesForSimulation.equals(CATSpecies.FAGUS_SYLVATICA)) {
 				filename = ObjectUtility.getRelativePackagePath(getClass()) + "europeanbeech.prl";;
 			} else if (speciesForSimulation.equals(CATSpecies.QUERCUS)) {
