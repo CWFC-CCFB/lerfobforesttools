@@ -5,6 +5,7 @@
 	<property name="ext.dir" value="../externallibraries" />
 	<property name="bin.dir" value="bin" />
 	<property name="src.dir" value="src" />
+	<property name="dep.dir" value="ext" />
 	<property name="test.dir" value="test" />
 	<property name="test.rep.dir" value="../testdev" />
 	<property name="java.doc.dir" value="../javadoc" />
@@ -15,17 +16,25 @@
 
 
 	<path id="myJARFile">
-		<fileset dir="${ext.dir}">
-			<include name="${project.name}.jar" />
+		<fileset dir="${ext.dir}/${project.name}">
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
 	<path id="repicea">
-		<fileset dir="${ext.dir}">
-			<include name="repicea.jar" />
+		<fileset dir="${ext.dir}/repicea">
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
+
+	<path id="extensions">
+		<fileset dir="${dep.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<!--
 	<path id="py4j">
 		<fileset dir="${ext.dir}/py4j">
 			<include name="*.jar" />
@@ -55,7 +64,7 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-
+	-->
 	<!-- REVISION : retrieve the head revision and stores its number in a file -->
 	<target name="revision" description="Retrieve the head revision">
 	
@@ -80,8 +89,7 @@
 		
         <javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on">
 			<classpath>
-				<path refid="jfreechart"/>
-				<path refid="py4j"/>
+				<path refid="extensions"/>
 				<path refid="repicea"/>
 			</classpath>
 		</javac>
@@ -98,10 +106,8 @@
 		
         <javac srcdir="${test.dir}" destdir="${bin.dir}">
 			<classpath>
-				<path refid="jfreechart"/>
-				<path refid="py4j"/>
+				<path refid="extensions"/>
 				<path refid="repicea"/>
-				<path refid="junit"/>
 			</classpath>
 		</javac>
 		
@@ -119,10 +125,7 @@
         <javac srcdir="${test.dir}" destdir="${bin.dir}">
 			<classpath>
 				<path refid="myJARFile"/>
-				<path refid="jfreechart"/>
-				<path refid="py4j"/>
 				<path refid="repicea"/>
-				<path refid="junit"/>
 			</classpath>
 		</javac>
 		
@@ -147,11 +150,7 @@
 			<classpath>
 				<pathelement location="${bin.dir}" />
 				<path refid="repicea"/>
-				<path refid="jfreechart"/>
-				<path refid="py4j"/>
-                <path refid="jaxb"/>
-				<path refid="junit"/>
-				<path refid="hamcrest"/>
+				<path refid="extensions"/>
 			</classpath>
 			
 			<formatter type="xml"/>
@@ -184,12 +183,7 @@
 			<classpath>
 				<pathelement location="${bin.dir}" />
 				<path refid="myJARFile"/>
-				<path refid="jfreechart"/>
-				<path refid="py4j"/>
 				<path refid="repicea"/>
-                <path refid="jaxb"/>
-				<path refid="junit"/>
-				<path refid="hamcrest"/>
 			</classpath>
 			
 			<formatter type="xml"/>
@@ -224,7 +218,14 @@
 
 	<!-- CREATE JAR FILE -->
     <target name="jar" depends="compile,revision">
-        <jar destfile="${ext.dir}/${project.name}.jar">
+        <delete dir="${ext.dir}/${project.name}"/>
+        <mkdir dir="${ext.dir}/${project.name}"/>
+    	
+		<copy todir="${ext.dir}/${project.name}">
+			<fileset dir="${dep.dir}"/>
+		</copy>
+
+        <jar destfile="${ext.dir}/${project.name}/${project.name}.jar">
 			<fileset dir="${bin.dir}"/>
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="." includes="COPYING.LESSER.txt"/>
@@ -249,10 +250,8 @@
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="." includes="COPYING.LESSER.txt"/>
 			<fileset dir="." includes="README.txt"/>
-			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
-			<zipgroupfileset dir="${ext.dir}/py4j" includes="*.jar"/>
-			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
-			<zipgroupfileset dir="${ext.dir}/jaxb-ri/mod" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/repicea" includes="*.jar"/>
+			<zipgroupfileset dir="${dep.dir}" includes="*.jar"/>
             <manifest>
                 <attribute name="Built-By" value="Mathieu Fortin"/>
 				<attribute name="Specification-Title" value="${project.description}"/>
@@ -274,10 +273,8 @@
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="." includes="COPYING.LESSER.txt"/>
 			<fileset dir="." includes="README.txt"/>
-			<zipgroupfileset dir="${ext.dir}" includes="repicea.jar"/>
-			<zipgroupfileset dir="${ext.dir}/py4j" includes="*.jar"/>
-			<zipgroupfileset dir="${ext.dir}/jfreechart" includes="*.jar"/>
-			<zipgroupfileset dir="${ext.dir}/jaxb-ri/mod" includes="*.jar"/>
+			<zipgroupfileset dir="${ext.dir}/repicea" includes="*.jar"/>
+			<zipgroupfileset dir="${dep.dir}" includes="*.jar"/>
             <manifest>
                 <attribute name="Built-By" value="Mathieu Fortin"/>
 				<attribute name="Specification-Title" value="${project.description}"/>
