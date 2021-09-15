@@ -56,5 +56,12 @@ public interface CATCarbonContentRatioProvider {
 	 * @return the ratio tC/t dry biomass (double)
 	 */
 	public double getCarbonContentRatio();
+	
+	/**
+	 * If the predictor benefits from a stochastic implementation, then the sensitivity analysis is enabled.
+	 * @return a boolean
+	 */
+	public default boolean isCarbonContentRatioPredictorStochastic() {return false;}
+
 
 }

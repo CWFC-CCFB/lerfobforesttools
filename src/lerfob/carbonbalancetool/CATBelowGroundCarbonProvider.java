@@ -30,4 +30,10 @@ public interface CATBelowGroundCarbonProvider {
 	 */
 	public double getBelowGroundCarbonMg();
 
+	/**
+	 * If the predictor benefits from a stochastic implementation, then the sensitivity analysis is enabled.
+	 * @return a boolean
+	 */
+	public default boolean isBelowGroundCarbonPredictorStochastic() {return false;}
+
 }
