@@ -56,8 +56,8 @@ public class PythonAccessDouglasFirTest {
 		Map<Integer, Map<String, Double>> resultingMap = pap.processStandList("exampleDouglas", inputMap);
 		double hwpCarbonIn2013 = resultingMap.get(2013).get("CurrentCarbonHWPMgHa");
 		System.out.println("HWP carbon in 2013 = " + hwpCarbonIn2013);
-//		XmlSerializer serializer = new XmlSerializer(refMapFilename);
-//		serializer.writeObject(resultingMap);
+		XmlSerializer serializer = new XmlSerializer(refMapFilename);
+		serializer.writeObject(resultingMap);
 		
 		XmlDeserializer deserializer = new XmlDeserializer(refMapFilename);
 		Map<?,?> refMap = (Map) deserializer.readObject();

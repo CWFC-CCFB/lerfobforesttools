@@ -30,4 +30,10 @@ public interface CATAboveGroundVolumeProvider {
 	 */
 	public double getAboveGroundVolumeM3();
 
+	/**
+	 * If the predictor benefits from a stochastic implementation, then the sensitivity analysis is enabled.
+	 * @return a boolean
+	 */
+	public default boolean isAboveGroundVolumePredictorStochastic() {return false;}
+
 }

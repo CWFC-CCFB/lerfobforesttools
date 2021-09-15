@@ -29,4 +29,11 @@ public interface CATBelowGroundBiomassProvider {
 	 * @return a double
 	 */
 	public double getBelowGroundBiomassMg();
+	
+	/**
+	 * If the predictor benefits from a stochastic implementation, then the sensitivity analysis is enabled.
+	 * @return a boolean
+	 */
+	public default boolean isBelowGroundBiomassPredictorStochastic() {return false;}
+
 }

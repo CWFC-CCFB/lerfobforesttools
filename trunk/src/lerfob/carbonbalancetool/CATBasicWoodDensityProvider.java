@@ -24,7 +24,10 @@ package lerfob.carbonbalancetool;
  */
 public interface CATBasicWoodDensityProvider {
 
-	// TODO use the basic wood density from the CATSettings class
+	/**
+	 * This enum is deprecated. <br>
+	 * Use the basic wood density from the CATSettings class instead.
+	 */
 	@Deprecated
 	public enum AverageBasicDensity {
 		SessileOak(.685, 12d),		// Nepveu Table IV.3 12% moisture content
@@ -69,5 +72,12 @@ public interface CATBasicWoodDensityProvider {
 	 * @return the basic wood density (Mg/m3)
 	 */
 	public double getBasicWoodDensity();
+	
+	/**
+	 * If the predictor benefits from a stochastic implementation, then the sensitivity analysis is enabled.
+	 * @return a boolean
+	 */
+	public default boolean isBasicWoodDensityPredictorStochastic() {return false;}
+
 
 }
