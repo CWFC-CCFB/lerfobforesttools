@@ -1,0 +1,135 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+import org.tmatesoft.svn.core.wc.*
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.8.11'
+    }
+}
+
+def getSvnRevision(){
+    ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+    SVNClientManager clientManager = SVNClientManager.newInstance(options);
+    SVNStatusClient statusClient = clientManager.getStatusClient();
+    SVNStatus status = statusClient.doStatus(projectDir, false);
+    SVNRevision revision = status.getRevision();
+    return revision.getNumber();
+}
+
+project.version = lerfobForestToolsVersion + '.' + getSvnRevision()
+
+println "Building " + rootProject.name + " v" + project.version
+
+println "Using java version " + JavaVersion.current()
+
+sourceSets {
+    main {    	
+        java {
+            srcDirs 'src'            
+        }
+        
+        resources {
+			srcDirs= ['src']
+			exclude '**/*.java'
+		}
+		
+		output.resourcesDir = "$buildDir/classes/java/$name"
+    }
+
+    test {
+        java {
+            srcDirs 'test'
+        }
+                
+        resources {
+			srcDirs= ['test']
+			exclude '**/*.java'
+		}
+		
+		output.resourcesDir = "$buildDir/classes/java/$name"
+    }               
+}
+
+dependencies {
+    implementation 'org.jfree:jcommon:1.0.23'
+    implementation 'org.jfree:jfreechart:1.0.17'
+    implementation 'jfree:jfreechart-swt:1.0.17'
+    implementation 'net.sf.py4j:py4j:0.10.9.2'    
+    
+    implementation group: 'org', name: 'repicea', version: '1+'    
+	    
+    testImplementation "junit:junit:4.12"    
+}
+
+test {
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+
+    // set heap size for the test JVM(s)
+    maxHeapSize = "2048m"
+    
+    exclude '**/ProductionEnvironmentTest.class'
+}
+
+task integrationTest(type: Test) {
+	description = 'Runs the integration tests.'
+    group = 'verification'
+	dependsOn jar
+	
+	include '**/*.class'
+	
+	testLogging.showStandardStreams = true
+    testClassesDirs = sourceSets.test.output.classesDirs
+        
+    // set classpath to test classes + test dependencies + JAR
+    classpath = project.sourceSets.test.output + configurations.testRuntimeClasspath + files(jar.archiveFile) 
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+    maxHeapSize = "2048m"
+}
+
+check.dependsOn integrationTest
+
+jar {
+	 manifest {
+        attributes("Built-By": "Mathieu Fortin",
+        		   "Specification-Title": "Growth Models for Northern France",
+        		   "Specification-Version": archiveVersion,                   
+                   "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
+                   "Implementation-Title": "mrnf-foresttools",
+                   "Implementation-Version": archiveVersion,
+                   "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
+                   )
+    }
+    
+	into ('/') {
+		from files(['./README.txt', './COPYING.LESSER.txt'])			
+	}
+	
+	// include all java files from main sourceset into the jar file (resources are already included)
+	from sourceSets.main.allJava		
+}
+
+task deleteInstallFolder(type: Delete) {
+  delete "${installDir}"  
+}
+
+task install(type: Copy) {
+	description = 'Copies the output jar to installation folder.'
+	group = 'build'
+	dependsOn jar,deleteInstallFolder
+	from configurations.default
+	from jar
+	into "${installDir}"
+}
