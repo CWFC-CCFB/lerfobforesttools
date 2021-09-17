@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
@@ -281,6 +282,7 @@ public class CarbonAccountingToolTest {
 		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
 	}
 
+	@Ignore
 	@Test
 	public void testMemoryLeakage() throws Exception {
 		int nbSimulations = 10;
@@ -395,6 +397,11 @@ public class CarbonAccountingToolTest {
 		}
 		System.out.println("Successfully tested this number of compartments " + nbCompartmentChecked);
 		cat.requestShutdown();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		CarbonAccountingToolTest test = new CarbonAccountingToolTest();
+		test.testMemoryLeakage();
 	}
 
 }
