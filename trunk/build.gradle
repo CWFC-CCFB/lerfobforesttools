@@ -33,10 +33,6 @@ def getSvnRevision(){
     return revision.getNumber();
 }
 
-project.version = lerfobForestToolsVersion + '.' + getSvnRevision()
-
-println "Building " + rootProject.name + " v" + project.version
-
 println "Using java version " + JavaVersion.current()
 
 sourceSets {
@@ -76,6 +72,11 @@ dependencies {
     implementation group: 'org', name: 'repicea', version: '1+'    
 	    
     testImplementation "junit:junit:4.12"    
+}
+
+compileJava {
+	project.version=lerfobForestToolsVersion + '.' + getSvnRevision()
+	println "Building " + rootProject.name + " v" + project.version
 }
 
 test {
