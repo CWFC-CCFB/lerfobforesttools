@@ -340,7 +340,7 @@ public class CarbonAccountingToolTest {
 		cat.setStandList(recordReader.getStandList());
 		
 		cat.getCarbonToolSettings().getCustomizableProductionProcessorManager().load(averageLifetimeFilename);
-		cat.getCarbonToolSettings().currentProcessorManager = ProductionManagerName.customized;
+		cat.getCarbonToolSettings().setCurrentProductionProcessorManagerSelection(ProductionManagerName.customized);
 		cat.calculateCarbon();
 		CATSingleSimulationResult resultAverageLifetime = cat.getCarbonCompartmentManager().getSimulationSummary();
 		Map<CompartmentInfo, Estimate<?>> obsMapAverageLifetime = resultAverageLifetime.getBudgetMap();

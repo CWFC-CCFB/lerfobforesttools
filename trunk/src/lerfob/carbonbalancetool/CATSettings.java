@@ -215,8 +215,8 @@ public final class CATSettings {
 //	protected int currentProcessorManagerIndex = 0;
 //	protected int currentBiomassParametersIndex = 0; 
 
-	protected ProductionManagerName currentProcessorManager = ProductionManagerName.values()[0];
-	protected BiomassParametersName currentBiomassParameters = BiomassParametersName.values()[0]; 
+	private ProductionManagerName currentProcessorManager = ProductionManagerName.values()[0];
+	private BiomassParametersName currentBiomassParameters = BiomassParametersName.values()[0]; 
 
 	private boolean verbose;
 	
@@ -339,6 +339,25 @@ public final class CATSettings {
 		}
 	}
 	
+	/**
+	 * Set the current selection of biomass parameter
+	 * @param bPar a BiomassParametersName enum
+	 */
+	public void setCurrentBiomassParametersSelection(BiomassParametersName bPar) {
+		currentBiomassParameters = bPar;
+	}
+
+	protected BiomassParametersName getCurrentBiomassParametersSelection() {return currentBiomassParameters;}
+	
+	/**
+	 * Set the current selection of production manager
+	 * @param pMan a ProductionManagerName enum
+	 */
+	public void setCurrentProductionProcessorManagerSelection(ProductionManagerName pMan) {
+		currentProcessorManager = pMan;
+	}
+	
+	protected ProductionManagerName getCurrentProductionProcessorManagerSelection() {return currentProcessorManager;}
 	
 	/**
 	 * This method returns the list of possible tree loggers.
