@@ -202,7 +202,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	 * This method returns the settings of the carbon accounting tool.
 	 * @return a CarbonAccountingToolSettings instance
 	 */
-	protected CATSettings getCarbonToolSettings() {
+	public CATSettings getCarbonToolSettings() {
 		return carbonCompartmentManager.getCarbonToolSettings();
 	}
 
@@ -534,7 +534,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 
 	protected void setBiomassParameters() throws IOException {
 		getCarbonToolSettings().getCustomizableBiomassParameters().load(biomassParametersFilename);
-		getCarbonToolSettings().currentBiomassParameters = BiomassParametersName.customized;
+		getCarbonToolSettings().setCurrentBiomassParametersSelection(BiomassParametersName.customized);
 	}
 	
 	/**
@@ -554,7 +554,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 	
 	protected void setProductionManager() throws IOException {
 		getCarbonToolSettings().getCustomizableProductionProcessorManager().load(productionManagerFilename);
-		getCarbonToolSettings().currentProcessorManager = ProductionManagerName.customized;
+		getCarbonToolSettings().setCurrentProductionProcessorManagerSelection(ProductionManagerName.customized);
 	}
 	
 	/**

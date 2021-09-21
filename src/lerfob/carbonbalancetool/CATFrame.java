@@ -354,12 +354,12 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		
 		hwpComboBox = new REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper>(MessageID.HWP_Parameters.toString()); 
 		hwpComboBox.getComboBox().setModel(new DefaultComboBoxModel<ProductionProcessorManagerWrapper>(caller.getCarbonToolSettings().productionManagerMap.values().toArray(new ProductionProcessorManagerWrapper[]{})));
-		ProductionProcessorManagerWrapper currentProductionManagerItem = caller.getCarbonToolSettings().productionManagerMap.get(caller.getCarbonToolSettings().currentProcessorManager);
+		ProductionProcessorManagerWrapper currentProductionManagerItem = caller.getCarbonToolSettings().productionManagerMap.get(caller.getCarbonToolSettings().getCurrentProductionProcessorManagerSelection());
 		hwpComboBox.getComboBox().setSelectedItem(currentProductionManagerItem);
 
 		biomassComboBox  = new REpiceaComboBoxOpenButton<BiomassParametersWrapper>(MessageID.Biomass.toString()); 
 		biomassComboBox.getComboBox().setModel(new DefaultComboBoxModel<BiomassParametersWrapper>(caller.getCarbonToolSettings().biomassParametersMap.values().toArray(new BiomassParametersWrapper[]{})));
-		BiomassParametersWrapper currentBiomassParametersWrapper = caller.getCarbonToolSettings().biomassParametersMap.get(caller.getCarbonToolSettings().currentBiomassParameters);
+		BiomassParametersWrapper currentBiomassParametersWrapper = caller.getCarbonToolSettings().biomassParametersMap.get(caller.getCarbonToolSettings().getCurrentBiomassParametersSelection());
 		biomassComboBox.getComboBox().setSelectedItem(currentBiomassParametersWrapper);
 		
 		refreshInterface();
@@ -735,9 +735,9 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		if (arg0.getSource().equals(biomassComboBox.getComboBox())) {
-			caller.getCarbonToolSettings().currentBiomassParameters = ((BiomassParametersWrapper) biomassComboBox.getComboBox().getSelectedItem()).name;
+			caller.getCarbonToolSettings().setCurrentBiomassParametersSelection(((BiomassParametersWrapper) biomassComboBox.getComboBox().getSelectedItem()).name);
 		} else if (arg0.getSource().equals(hwpComboBox.getComboBox())) {
-			caller.getCarbonToolSettings().currentProcessorManager = ((ProductionProcessorManagerWrapper) hwpComboBox.getComboBox().getSelectedItem()).name;
+			caller.getCarbonToolSettings().setCurrentProductionProcessorManagerSelection(((ProductionProcessorManagerWrapper) hwpComboBox.getComboBox().getSelectedItem()).name);
 		}
 	}
 

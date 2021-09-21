@@ -162,14 +162,14 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 		setBiomassParameters(biomassFilename);
 	}
 
-	/*
-	 * For extended visibility only (non-Javadoc)
-	 * @see lerfob.carbonbalancetool.CarbonAccountingTool#getCarbonToolSettings()
-	 */
-	@Override
-	protected CATSettings getCarbonToolSettings() {
-		return super.getCarbonToolSettings();
-	}
+//	/*
+//	 * For extended visibility only (non-Javadoc)
+//	 * @see lerfob.carbonbalancetool.CarbonAccountingTool#getCarbonToolSettings()
+//	 */
+//	@Override
+//	protected CATSettings getCarbonToolSettings() {
+//		return super.getCarbonToolSettings();
+//	}
 	
 	@Override
 	protected void shutdown(int shutdownCode) {
