@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompatibleStand;
@@ -21,7 +22,6 @@ import lerfob.carbonbalancetool.productionlines.CarbonUnitList;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import repicea.serial.xml.XmlDeserializer;
-import repicea.serial.xml.XmlSerializer;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.simulation.processsystem.AmountMap;
 import repicea.simulation.treelogger.TreeLogger;
@@ -58,7 +58,7 @@ public class PythonAccessOakTest {
 		}
 	}
 	
-	
+	@Ignore
 	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void testCompleteWithOak() throws Exception {
