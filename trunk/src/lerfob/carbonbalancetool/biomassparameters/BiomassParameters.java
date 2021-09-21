@@ -24,6 +24,8 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidParameterException;
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -59,6 +61,13 @@ import repicea.util.ObjectUtility;
 
 public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInterfaceableObject, Resettable, Memorizable {
 
+	public static enum Tier2Implementation {
+		RootExpansionFactor,
+		BranchExpansionFactor,
+		BasicWoodDensityFactor,
+		CarbonContentFactor
+	}
+	
 	static {
 		XmlSerializerChangeMonitor.registerClassNameChange("lerfob.carbonbalancetool.CarbonToolCompatibleTree$SpeciesType",	
 				"repicea.simulation.covariateproviders.treelevel.SpeciesNameProvider$SpeciesType");
@@ -138,6 +147,48 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 	public BiomassParameters() {
 		this(new DefaultREpiceaGUIPermission(true));
 	}
+	
+	public boolean isTier2ImplementationEnabled(Tier2Implementation item) {
+		switch(item) {
+		case RootExpansionFactor:
+			return this.rootExpansionFactorFromModel;			
+		case BranchExpansionFactor:
+			return this.branchExpansionFactorFromModel;			
+		case BasicWoodDensityFactor:
+			return this.basicWoodDensityFromModel;			
+		case CarbonContentFactor:
+			return this.carbonContentFromModel;			
+		default:
+			throw new InvalidParameterException("isTier2ImplementationEnabled : This item is not recognized :" + item.name());
+		}
+	}
+	
+	public void setTier2ImplementationEnabled(Tier2Implementation item, boolean value) {
+		switch(item) {
+		case RootExpansionFactor:
+			rootExpansionFactorFromModel = value;
+			if (value && !rootExpansionFactorFromModelEnabled)
+				System.out.println("setTier2ImplementationEnabled Warning : " + item.name() + " was enabled but implementation doesn't support it.");
+			break;
+		case BranchExpansionFactor:
+			branchExpansionFactorFromModel = value;
+			if (value && !rootExpansionFactorFromModelEnabled)
+				System.out.println("setTier2ImplementationEnabled Warning : " + item.name() + " was enabled but implementation doesn't support it.");
+			break;
+		case BasicWoodDensityFactor:
+			basicWoodDensityFromModel = value;
+			if (value && !rootExpansionFactorFromModelEnabled)
+				System.out.println("setTier2ImplementationEnabled Warning : " + item.name() + " was enabled but implementation doesn't support it.");
+			break;
+		case CarbonContentFactor:
+			carbonContentFromModel = value;
+			if (value && !rootExpansionFactorFromModelEnabled)
+				System.out.println("setTier2ImplementationEnabled Warning : " + item.name() + " was enabled but implementation doesn't support it.");
+			break;
+		default:
+			throw new InvalidParameterException("setTier2ImplementationEnabled : This item is not recognized :" + item.name());
+		}
+	}
 
 	
 	public void setReferent(Object referent) {
@@ -179,9 +230,13 @@ public class BiomassParameters implements REpiceaShowableUIWithParent, IOUserInt
 
 	private void testReferent(Object referent) {
 		branchExpansionFactorFromModelEnabled = referent instanceof CATAboveGroundVolumeProvider || referent instanceof CATAboveGroundBiomassProvider || referent instanceof CATAboveGroundCarbonProvider;
+		branchExpansionFactorFromModel = branchExpansionFactorFromModelEnabled;
 		rootExpansionFactorFromModelEnabled = referent instanceof CATBelowGroundVolumeProvider || referent instanceof CATBelowGroundBiomassProvider || referent instanceof CATBelowGroundCarbonProvider;
+		rootExpansionFactorFromModel = rootExpansionFactorFromModelEnabled;
 		basicWoodDensityFromModelEnabled = referent instanceof CATBasicWoodDensityProvider;
+		basicWoodDensityFromModel = basicWoodDensityFromModelEnabled;
 		carbonContentFromModelEnabled = referent instanceof CATCarbonContentRatioProvider;
+		carbonContentFromModel = carbonContentFromModelEnabled;
 	}
 
 	public boolean isValid() {
