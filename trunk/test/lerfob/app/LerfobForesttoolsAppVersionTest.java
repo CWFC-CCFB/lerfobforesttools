@@ -24,22 +24,23 @@ package lerfob.app;
 import org.junit.Assert;
 import org.junit.Test;
 
-import repicea.util.ObjectUtility;
+import repicea.util.JarUtility;
 
-public class LERFOBJARSVNAppVersionTest {
+public class LerfobForesttoolsAppVersionTest {
 
 	@Test
 	public void compileVersionAndRetrieve() {
-		if (!ObjectUtility.isEmbeddedInJar(LERFOBJARSVNAppVersionCompiler.class)) {
-			LERFOBJARSVNAppVersionCompiler.main(null);
+		String build = LerfobForesttoolsAppVersion.getInstance().getBuild();
+		System.out.println("Build is: " + build);
+		if (JarUtility.isEmbeddedInJar(LerfobForesttoolsAppVersion.class)) {
+			try {
+				Integer.parseInt(build);
+			} catch (NumberFormatException e) {
+				Assert.fail("The revision cannot be parsed to an integer!");
+			}
+		} else {
+			Assert.assertEquals("Unknown", build);
 		}
-		String build = LERFOBJARSVNAppVersion.getInstance().getBuild();
-		try {
-			Integer.parseInt(build);
-		} catch (NumberFormatException e) {
-			Assert.fail("The revision cannot be parsed to an integer!");
-		}
-
 	}
 
 }

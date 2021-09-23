@@ -32,7 +32,7 @@ import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import lerfob.app.LERFOBJARSVNAppVersion;
+import lerfob.app.LerfobForesttoolsAppVersion;
 import lerfob.carbonbalancetool.CATTask.SetProperRealizationTask;
 import lerfob.carbonbalancetool.CATTask.Task;
 import lerfob.carbonbalancetool.CATUtility.BiomassParametersName;
@@ -49,7 +49,7 @@ import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import repicea.app.AbstractGenericEngine;
 import repicea.app.GenericTask;
-import repicea.app.REpiceaJARSVNAppVersion;
+import repicea.app.REpiceaAppVersion;
 import repicea.app.SettingMemory;
 import repicea.gui.REpiceaShowableUI;
 import repicea.gui.REpiceaShowableUIWithParent;
@@ -261,7 +261,7 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				if (!hasAlreadyBeenInstanciated) {
 					String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
 					String iconPath =  packagePath + "SplashImage.jpg";
-					String bottomSplashWindowString = "Build " +  LERFOBJARSVNAppVersion.getInstance().getBuild() + "-" + REpiceaJARSVNAppVersion.getInstance().getBuild();
+					String bottomSplashWindowString = "Build " +  LerfobForesttoolsAppVersion.getInstance().getBuild() + "-" + REpiceaAppVersion.getInstance().getBuild();
 					new REpiceaSplashWindow(iconPath, 4, parentFrame, bottomSplashWindowString);
 
 					String licensePath = packagePath + "CATLicense_en.html";
