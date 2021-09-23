@@ -28,10 +28,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import lerfob.app.LERFOBJARSVNAppVersion;
+import lerfob.app.LerfobForesttoolsAppVersion;
 import lerfob.carbonbalancetool.CATCompartment.CompartmentInfo;
 import lerfob.carbonbalancetool.CATCompatibleStand;
-import lerfob.carbonbalancetool.CATSettings;
 import lerfob.carbonbalancetool.CATSettings.CATSpecies;
 import lerfob.carbonbalancetool.CATSimulationResult;
 import lerfob.carbonbalancetool.CATUtilityMaps.MonteCarloEstimateMap;
@@ -46,7 +45,7 @@ import lerfob.treelogger.douglasfirfcba.DouglasFCBATreeLogger;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLogger;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLogger;
 import py4j.GatewayServer;
-import repicea.app.REpiceaJARSVNAppVersion;
+import repicea.app.REpiceaAppVersion;
 import repicea.lang.REpiceaSystem;
 import repicea.math.Matrix;
 import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
@@ -335,7 +334,7 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @return a String
 	 */
 	public String getRevision() {
-		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
+		String lerfobRevision = "LerfobForesttools; " + LerfobForesttoolsAppVersion.getInstance().getRevision();
 		return lerfobRevision;
 	}
 	
@@ -405,8 +404,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println("Running on repicea " + REpiceaJARSVNAppVersion.getInstance().getRevision());
-		System.out.println("Running on lerfob-foresttools " + LERFOBJARSVNAppVersion.getInstance().getRevision());
+		System.out.println("Running on repicea " + REpiceaAppVersion.getInstance().getRevision());
+		System.out.println("Running on lerfob-foresttools " + LerfobForesttoolsAppVersion.getInstance().getRevision());
 		List<String> argumentList = Arrays.asList(args);
 		Integer listeningPort = null;
 		Integer callbackPort = null;

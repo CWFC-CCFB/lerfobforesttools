@@ -18,25 +18,19 @@
  */
 package lerfob.app;
 
-import repicea.app.AbstractAppVersion;
-import repicea.util.ObjectUtility;
+import repicea.app.REpiceaAppVersion;
 
 /**
  * This class retrieves information on the version and other features of the 
  * lerfob-forestools.jar application. 
  * @author Mathieu Fortin - August 2015
  */
-public class LERFOBJARSVNAppVersion extends AbstractAppVersion {
+public class LerfobForesttoolsAppVersion extends REpiceaAppVersion {
 
-	private static LERFOBJARSVNAppVersion SINGLETON;
+	private static LerfobForesttoolsAppVersion SINGLETON;
 	
-	private static final String AppName = "lerfob";
-	protected static final String ShortFilename = AppName + "_revision.csv";
-	
-	protected static final String CompleteFilename = ObjectUtility.getRelativePackagePath(LERFOBJARSVNAppVersion.class) + ShortFilename;
-	
-	private LERFOBJARSVNAppVersion() {
-		super(AppName, CompleteFilename);
+	private LerfobForesttoolsAppVersion() {
+		super();
 	}
 
 	/**
@@ -44,17 +38,12 @@ public class LERFOBJARSVNAppVersion extends AbstractAppVersion {
 	 * to return the revision number of this version.
 	 * @return the singleton instance of the REpiceaJARSVNAppVersion class
 	 */
-	public static LERFOBJARSVNAppVersion getInstance() {
+	public static LerfobForesttoolsAppVersion getInstance() {
 		if (SINGLETON == null) {
-			SINGLETON = new LERFOBJARSVNAppVersion();
+			SINGLETON = new LerfobForesttoolsAppVersion();
 		}
 		return SINGLETON;
 	}
 	
-	
-	public static void main(String[] args) {
-		String version = LERFOBJARSVNAppVersion.getInstance().getRevision();
-		System.out.println(version);
-	}
 
 }

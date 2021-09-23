@@ -23,7 +23,7 @@ import java.util.List;
 
 import lerfob.carbonbalancetool.CarbonAccountingTool;
 import lerfob.carbonbalancetool.pythonaccess.PythonAccessPoint;
-import repicea.app.REpiceaJARSVNAppVersion;
+import repicea.app.REpiceaAppVersion;
 import repicea.lang.REpiceaSystem;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.Language;
@@ -38,9 +38,9 @@ public class LerfobForesttools {
 	private static final String APPLICATION = "-app";
 
 	public static void main(String[] args) throws Exception {
-		String repiceaRevision = REpiceaJARSVNAppVersion.getInstance().getName() + "; " + REpiceaJARSVNAppVersion.getInstance().getRevision();
+		String repiceaRevision = "REpicea; " + REpiceaAppVersion.getInstance().getRevision();
 		System.out.println(repiceaRevision);
-		String lerfobRevision = LERFOBJARSVNAppVersion.getInstance().getName() + "; " + LERFOBJARSVNAppVersion.getInstance().getRevision();
+		String lerfobRevision = "LerfobForesttools; " + LerfobForesttoolsAppVersion.getInstance().getRevision();
 		System.out.println(lerfobRevision);
 		String inputString = "";
 		for (String str : args) {
