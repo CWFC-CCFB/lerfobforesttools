@@ -79,7 +79,8 @@ dependencies {
 }
 
 compileJava {
-	project.version=lerfobForestToolsVersion + '.' + getSvnRevision()
+	project.version=lerfobForestToolsVersion
+	project.ext.build=getSvnRevision()
 	println "Building " + rootProject.name + " v" + project.version
 }
 
@@ -119,7 +120,7 @@ jar {
         		   "Specification-Version": archiveVersion,                   
                    "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    "Implementation-Title": "mrnf-foresttools",
-                   "Implementation-Version": archiveVersion,
+                   "Implementation-Version": project.ext.build,
                    "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    )
     }
