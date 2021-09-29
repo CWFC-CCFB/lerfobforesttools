@@ -119,7 +119,7 @@ jar {
         		   "Specification-Title": "Growth Models for Northern France",
         		   "Specification-Version": archiveVersion,                   
                    "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
-                   "Implementation-Title": "mrnf-foresttools",
+                   "Implementation-Title": "lerfobforesttools",
                    "Implementation-Version": project.ext.build,
                    "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    )
