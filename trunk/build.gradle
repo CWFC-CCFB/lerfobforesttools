@@ -86,6 +86,7 @@ task updateRevision(type: WriteProperties) {
 	project.ext.build = getSvnRevision()
 	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
 	property "Revision", project.ext.build
+	property "Version", lerfobForestToolsVersion
 }
 
 compileJava {
