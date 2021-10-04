@@ -1,9 +1,20 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.10.3'
+    }
+}
+
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
 
 import org.tmatesoft.svn.core.wc.*
-
 
 sourceCompatibility = 1.8
 //targetCompatibility = 1.8
@@ -13,14 +24,6 @@ repositories {
     mavenLocal()
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.10.3'
-    }
-}
 
 def getSvnRevision(){
     ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
@@ -131,6 +134,16 @@ jar {
 	
 	// include all java files from main sourceset into the jar file (resources are already included)
 	from sourceSets.main.allJava		
+}
+
+shadowJar {
+	archiveBaseName.set("CAT")
+	archiveClassifier.set("")
+	destinationDirectory.set(file("${installDirCAT}"))
+    manifest {
+    	inheritFrom jar.manifest
+        attributes 'Main-Class': 'lerfob.app.LerfobForesttools'
+    }
 }
 
 task deleteInstallFolder(type: Delete) {
