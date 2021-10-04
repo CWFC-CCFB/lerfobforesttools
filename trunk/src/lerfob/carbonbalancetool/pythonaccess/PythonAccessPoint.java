@@ -404,8 +404,8 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println("Running on repicea " + REpiceaAppVersion.getInstance().getRevision());
-		System.out.println("Running on lerfob-foresttools " + LerfobForesttoolsAppVersion.getInstance().getRevision());
+//		System.out.println("Running on repicea " + REpiceaAppVersion.getInstance().getRevision());
+//		System.out.println("Running on lerfobforesttools " + LerfobForesttoolsAppVersion.getInstance().getRevision());
 		List<String> argumentList = Arrays.asList(args);
 		Integer listeningPort = null;
 		Integer callbackPort = null;
