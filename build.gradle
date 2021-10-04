@@ -81,9 +81,16 @@ dependencies {
     testImplementation "junit:junit:4.12"    
 }
 
+
+task updateRevision(type: WriteProperties) {
+	project.ext.build = getSvnRevision()
+	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
+	property "Revision", project.ext.build
+}
+
 compileJava {
 	project.version=lerfobForestToolsVersion
-	project.ext.build=getSvnRevision()
+//	project.ext.build=getSvnRevision()
 	println "Building " + rootProject.name + " v" + project.version
 }
 
@@ -117,13 +124,14 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 jar {
-	 manifest {
+	dependsOn updateRevision
+	manifest {
         attributes("Built-By": "Mathieu Fortin",
         		   "Specification-Title": "Growth Models for Northern France",
         		   "Specification-Version": archiveVersion,                   
                    "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    "Implementation-Title": "lerfobforesttools",
-                   "Implementation-Version": project.ext.build,
+//                   "Implementation-Version": project.ext.build,
                    "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    )
     }
