@@ -38,10 +38,12 @@ public class LerfobForesttools {
 	private static final String APPLICATION = "-app";
 
 	public static void main(String[] args) throws Exception {
-		String repiceaRevision = "REpicea; " + REpiceaAppVersion.getInstance().getRevision();
-		System.out.println(repiceaRevision);
-		String lerfobRevision = "LerfobForesttools; " + LerfobForesttoolsAppVersion.getInstance().getRevision();
-		System.out.println(lerfobRevision);
+		System.out.println("Running on repicea " + REpiceaAppVersion.getInstance().getRevision());
+		System.out.println("Running on lerfobforesttools " + LerfobForesttoolsAppVersion.getInstance().getRevision());
+//		String repiceaRevision = "repicea; " + REpiceaAppVersion.getInstance().getRevision();
+//		System.out.println(repiceaRevision);
+//		String lerfobRevision = "lerfobforesttools; " + LerfobForesttoolsAppVersion.getInstance().getRevision();
+//		System.out.println(lerfobRevision);
 		String inputString = "";
 		for (String str : args) {
 			inputString = inputString + str + "; ";
