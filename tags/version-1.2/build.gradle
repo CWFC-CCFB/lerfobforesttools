@@ -1,0 +1,169 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.10.3'
+    }
+}
+
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+import org.tmatesoft.svn.core.wc.*
+
+sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+
+def getSvnRevision(){
+    ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+    SVNClientManager clientManager = SVNClientManager.newInstance(options);
+    // here we force updating to the HEAD SVN version so that the local working copy is up to date with the repo
+    // (the local SVN revision is behind the HEAD even if the current user himself just commited to the HEAD)
+    // the "install" target depends on the "integrationTest" target to make sure we publish a tested version
+    // i.e. user A commits, then user B commits something else, then A publishes -> user B updates and retests before publishing
+    SVNUpdateClient updateClient = clientManager.getUpdateClient();
+    updateClient.doUpdate(projectDir, SVNRevision.HEAD, false);
+    SVNStatusClient statusClient = clientManager.getStatusClient();
+    SVNStatus status = statusClient.doStatus(projectDir, false);
+    SVNRevision revision = status.getRevision();
+    return revision.getNumber();
+}
+
+println "Using java version " + JavaVersion.current()
+
+sourceSets {
+    main {    	
+        java {
+            srcDirs 'src'            
+        }
+        
+        resources {
+			srcDirs= ['src']
+			exclude '**/*.java'
+		}
+		
+		output.resourcesDir = "$buildDir/classes/java/$name"
+    }
+
+    test {
+        java {
+            srcDirs 'test'
+        }
+                
+        resources {
+			srcDirs= ['test']
+			exclude '**/*.java'
+		}
+		
+		output.resourcesDir = "$buildDir/classes/java/$name"
+    }               
+}
+
+dependencies {
+    implementation 'org.jfree:jcommon:1.0.23'
+    implementation 'org.jfree:jfreechart:1.0.17'
+    implementation 'jfree:jfreechart-swt:1.0.17'
+    implementation 'net.sf.py4j:py4j:0.10.9.2'    
+    
+    implementation group: 'org', name: 'repicea', version: '1+'    
+	    
+    testImplementation "junit:junit:4.12"    
+}
+
+
+task updateRevision(type: WriteProperties) {
+	project.ext.build = getSvnRevision()
+	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
+	property "Revision", project.ext.build
+	property "Version", lerfobForestToolsVersion
+}
+
+compileJava {
+	project.version=lerfobForestToolsVersion
+//	project.ext.build=getSvnRevision()
+	println "Building " + rootProject.name + " v" + project.version
+}
+
+test {
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+
+    // set heap size for the test JVM(s)
+    maxHeapSize = "2048m"
+    
+    exclude '**/ProductionEnvironmentTest.class'
+}
+
+task integrationTest(type: Test) {
+	description = 'Runs the integration tests.'
+    group = 'verification'
+	dependsOn jar
+	
+	include '**/*.class'
+	
+	testLogging.showStandardStreams = true
+    testClassesDirs = sourceSets.test.output.classesDirs
+        
+    // set classpath to test classes + test dependencies + JAR
+    classpath = project.sourceSets.test.output + configurations.testRuntimeClasspath + files(jar.archiveFile) 
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+    maxHeapSize = "2048m"
+}
+
+check.dependsOn integrationTest
+
+jar {
+	dependsOn updateRevision
+	manifest {
+        attributes("Built-By": "Mathieu Fortin",
+        		   "Specification-Title": "Growth Models for Northern France",
+        		   "Specification-Version": archiveVersion,                   
+                   "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
+                   "Implementation-Title": "lerfobforesttools",
+//                   "Implementation-Version": project.ext.build,
+                   "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
+                   )
+    }
+    
+	into ('/') {
+		from files(['./README.txt', './COPYING.LESSER.txt'])			
+	}
+	
+	// include all java files from main sourceset into the jar file (resources are already included)
+	from sourceSets.main.allJava		
+}
+
+shadowJar {
+	archiveBaseName.set("CAT")
+	archiveClassifier.set("")
+	destinationDirectory.set(file("${installDirCAT}"))
+    manifest {
+    	inheritFrom jar.manifest
+        attributes 'Main-Class': 'lerfob.app.LerfobForesttools'
+    }
+}
+
+task deleteInstallFolder(type: Delete) {
+  delete "${installDir}"  
+}
+
+task install(type: Copy) {
+	description = 'Copies the output jar to installation folder.'
+	group = 'build'
+	dependsOn jar,deleteInstallFolder,integrationTest
+	from configurations.default
+	from jar
+	into "${installDir}"
+}

@@ -1,0 +1,313 @@
+Espece,Dimension,Annee,Prix
+Chene,47.5 et +,1989,132.2
+Chene,47.5 et +,1999,127.3
+Chene,47.5 et +,2006,130.9
+Chene,47.5 et +,2007,171
+Chene,47.5 et +,2008,167.4
+Chene,47.5 et +,2009,119.9
+Chene,47.5 et +,2010,128.5
+Chene,47.5 et +,2011,134.5
+Chene,47.5 et +,2012,131
+Chene,47.5 et +,2013,144
+Chene,47.5 et +,2014,164.7
+Chene,47.5 et +,2015,184.4
+Chene,47.5 et +,2016,204.4
+Chene,27.5-47.5,1989,39.8
+Chene,27.5-47.5,1999,37.2
+Chene,27.5-47.5,2006,42.3
+Chene,27.5-47.5,2007,56.5
+Chene,27.5-47.5,2008,54.7
+Chene,27.5-47.5,2009,37.8
+Chene,27.5-47.5,2010,40.7
+Chene,27.5-47.5,2011,42.2
+Chene,27.5-47.5,2012,39.9
+Chene,27.5-47.5,2013,46.4
+Chene,27.5-47.5,2014,54
+Chene,27.5-47.5,2015,55.7
+Chene,27.5-47.5,2016,60.8
+Chene,<27.5,1989,8.2
+Chene,<27.5,1999,9
+Chene,<27.5,2006,11.6
+Chene,<27.5,2007,15.5
+Chene,<27.5,2008,13.4
+Chene,<27.5,2009,12
+Chene,<27.5,2010,14.3
+Chene,<27.5,2011,15.4
+Chene,<27.5,2012,13.6
+Chene,<27.5,2013,17.3
+Chene,<27.5,2014,19.7
+Chene,<27.5,2015,17.8
+Chene,<27.5,2016,16
+Chene,total,1989,82.6
+Chene,total,1999,81.3
+Chene,total,2006,91.1
+Chene,total,2007,123.2
+Chene,total,2008,121.8
+Chene,total,2009,87.3
+Chene,total,2010,94.4
+Chene,total,2011,98.9
+Chene,total,2012,99.4
+Chene,total,2013,111.4
+Chene,total,2014,128
+Chene,total,2015,144.4
+Chene,total,2016,162.5
+Hetre,37.5 et +,1989,63.1
+Hetre,37.5 et +,1999,94.8
+Hetre,37.5 et +,2006,41.4
+Hetre,37.5 et +,2007,47.6
+Hetre,37.5 et +,2008,38.4
+Hetre,37.5 et +,2009,33.4
+Hetre,37.5 et +,2010,35.4
+Hetre,37.5 et +,2011,37.7
+Hetre,37.5 et +,2012,35.8
+Hetre,37.5 et +,2013,42.2
+Hetre,37.5 et +,2014,49.1
+Hetre,37.5 et +,2015,45.9
+Hetre,37.5 et +,2016,43.2
+Hetre,27.5-37.5,1989,24.7
+Hetre,27.5-37.5,1999,25.3
+Hetre,27.5-37.5,2006,20
+Hetre,27.5-37.5,2007,25
+Hetre,27.5-37.5,2008,19
+Hetre,27.5-37.5,2009,17.8
+Hetre,27.5-37.5,2010,19.5
+Hetre,27.5-37.5,2011,20.7
+Hetre,27.5-37.5,2012,20
+Hetre,27.5-37.5,2013,24.2
+Hetre,27.5-37.5,2014,28.1
+Hetre,27.5-37.5,2015,24.7
+Hetre,27.5-37.5,2016,21.9
+Hetre,<27.5,1989,10.7
+Hetre,<27.5,1999,9.5
+Hetre,<27.5,2006,12.6
+Hetre,<27.5,2007,17.1
+Hetre,<27.5,2008,12.7
+Hetre,<27.5,2009,12.2
+Hetre,<27.5,2010,13.9
+Hetre,<27.5,2011,14.9
+Hetre,<27.5,2012,13.9
+Hetre,<27.5,2013,17.1
+Hetre,<27.5,2014,21.7
+Hetre,<27.5,2015,18.2
+Hetre,<27.5,2016,16.3
+Hetre,total,1989,50
+Hetre,total,1999,76.5
+Hetre,total,2006,37.3
+Hetre,total,2007,43.3
+Hetre,total,2008,33.9
+Hetre,total,2009,30
+Hetre,total,2010,31.6
+Hetre,total,2011,33.7
+Hetre,total,2012,31.6
+Hetre,total,2013,37.9
+Hetre,total,2014,43.9
+Hetre,total,2015,40
+Hetre,total,2016,37.3
+Sapin,22.5 et +,1989,49.7
+Sapin,22.5 et +,1999,40.9
+Sapin,22.5 et +,2006,39.8
+Sapin,22.5 et +,2007,44.7
+Sapin,22.5 et +,2008,38.2
+Sapin,22.5 et +,2009,39.3
+Sapin,22.5 et +,2010,46.2
+Sapin,22.5 et +,2011,46.2
+Sapin,22.5 et +,2012,37.8
+Sapin,22.5 et +,2013,43.9
+Sapin,22.5 et +,2014,45.2
+Sapin,22.5 et +,2015,40.4
+Sapin,22.5 et +,2016,38.6
+Sapin ,<22.5,1989,6.6
+Sapin ,<22.5,1999,4.4
+Sapin ,<22.5,2006,10.5
+Sapin ,<22.5,2007,11.5
+Sapin ,<22.5,2008,8.1
+Sapin ,<22.5,2009,12.6
+Sapin ,<22.5,2010,15.7
+Sapin ,<22.5,2011,16.4
+Sapin ,<22.5,2012,14.8
+Sapin ,<22.5,2013,19.7
+Sapin ,<22.5,2014,21
+Sapin ,<22.5,2015,18.9
+Sapin ,<22.5,2016,20.9
+Sapin,total,1989,47.9
+Sapin,total,1999,39.9
+Sapin,total,2006,39.2
+Sapin,total,2007,44.1
+Sapin,total,2008,37.8
+Sapin,total,2009,38.5
+Sapin,total,2010,45.5
+Sapin,total,2011,45.7
+Sapin,total,2012,37.3
+Sapin,total,2013,43.4
+Sapin,total,2014,44.8
+Sapin,total,2015,39.9
+Sapin,total,2016,38.2
+Epicea,22.5 et +,1989,48.3
+Epicea,22.5 et +,1999,40.2
+Epicea,22.5 et +,2006,40.2
+Epicea,22.5 et +,2007,44.6
+Epicea,22.5 et +,2008,37.5
+Epicea,22.5 et +,2009,42.1
+Epicea,22.5 et +,2010,46.5
+Epicea,22.5 et +,2011,49.8
+Epicea,22.5 et +,2012,40
+Epicea,22.5 et +,2013,47.1
+Epicea,22.5 et +,2014,49.1
+Epicea,22.5 et +,2015,43.5
+Epicea,22.5 et +,2016,42.5
+Epicea,<22.5,1989,8.8
+Epicea,<22.5,1999,7.9
+Epicea,<22.5,2006,12.5
+Epicea,<22.5,2007,14.2
+Epicea,<22.5,2008,11.2
+Epicea,<22.5,2009,16.6
+Epicea,<22.5,2010,15.3
+Epicea,<22.5,2011,20.4
+Epicea,<22.5,2012,15.6
+Epicea,<22.5,2013,22.6
+Epicea,<22.5,2014,25.5
+Epicea,<22.5,2015,24.2
+Epicea,<22.5,2016,21.8
+Epicea,total,1989,43.8
+Epicea,total,1999,37.2
+Epicea,total,2006,38.7
+Epicea,total,2007,43.1
+Epicea,total,2008,36.3
+Epicea,total,2009,39.5
+Epicea,total,2010,44.7
+Epicea,total,2011,48.2
+Epicea,total,2012,38.5
+Epicea,total,2013,45.8
+Epicea,total,2014,47.7
+Epicea,total,2015,42.6
+Epicea,total,2016,41.4
+Pin sylvestre,22.5 et +,1989,27.7
+Pin sylvestre,22.5 et +,1999,26.2
+Pin sylvestre,22.5 et +,2006,27.6
+Pin sylvestre,22.5 et +,2007,32.2
+Pin sylvestre,22.5 et +,2008,25.3
+Pin sylvestre,22.5 et +,2009,25
+Pin sylvestre,22.5 et +,2010,27.7
+Pin sylvestre,22.5 et +,2011,29.7
+Pin sylvestre,22.5 et +,2012,28.1
+Pin sylvestre,22.5 et +,2013,32.3
+Pin sylvestre,22.5 et +,2014,34.7
+Pin sylvestre,22.5 et +,2015,31.4
+Pin sylvestre,22.5 et +,2016,26.3
+Pin sylvestre,<22.5,1989,4.1
+Pin sylvestre,<22.5,1999,5.8
+Pin sylvestre,<22.5,2006,9.9
+Pin sylvestre,<22.5,2007,10.7
+Pin sylvestre,<22.5,2008,6.9
+Pin sylvestre,<22.5,2009,
+Pin sylvestre,<22.5,2010,11.3
+Pin sylvestre,<22.5,2011,10.7
+Pin sylvestre,<22.5,2012,11.8
+Pin sylvestre,<22.5,2013,11.6
+Pin sylvestre,<22.5,2014,14.4
+Pin sylvestre,<22.5,2015,16.2
+Pin sylvestre,<22.5,2016,14.6
+Pin sylvestre,total,1989,24.8
+Pin sylvestre,total,1999,24.2
+Pin sylvestre,total,2006,26.4
+Pin sylvestre,total,2007,30.9
+Pin sylvestre,total,2008,24.2
+Pin sylvestre,total,2009,24.4
+Pin sylvestre,total,2010,26.6
+Pin sylvestre,total,2011,28.3
+Pin sylvestre,total,2012,26.4
+Pin sylvestre,total,2013,31.2
+Pin sylvestre,total,2014,33.7
+Pin sylvestre,total,2015,30.2
+Pin sylvestre,total,2016,25.5
+Pin maritime,22.5 et +,1989,24.4
+Pin maritime,22.5 et +,1999,26.4
+Pin maritime,22.5 et +,2006,27.3
+Pin maritime,22.5 et +,2007,30.6
+Pin maritime,22.5 et +,2008,26.1
+Pin maritime,22.5 et +,2009,
+Pin maritime,22.5 et +,2010,21.9
+Pin maritime,22.5 et +,2011,27.7
+Pin maritime,22.5 et +,2012,24.8
+Pin maritime,22.5 et +,2013,29
+Pin maritime,22.5 et +,2014,38.7
+Pin maritime,22.5 et +,2015,37.1
+Pin maritime,22.5 et +,2016,35.7
+Pin maritime,<22.5,1989,8.5
+Pin maritime,<22.5,1999,8.5
+Pin maritime,<22.5,2006,11.2
+Pin maritime,<22.5,2007,12.7
+Pin maritime,<22.5,2008,14.2
+Pin maritime,<22.5,2009,
+Pin maritime,<22.5,2010,9.8
+Pin maritime,<22.5,2011,11.2
+Pin maritime,<22.5,2012,9.3
+Pin maritime,<22.5,2013,16.8
+Pin maritime,<22.5,2014,28.2
+Pin maritime,<22.5,2015,27.8
+Pin maritime,<22.5,2016,25.4
+Pin maritime,total,1989,21.8
+Pin maritime,total,1999,24.5
+Pin maritime,total,2006,26.5
+Pin maritime,total,2007,29.4
+Pin maritime,total,2008,25.2
+Pin maritime,total,2009,20
+Pin maritime,total,2010,21.4
+Pin maritime,total,2011,27.3
+Pin maritime,total,2012,23.2
+Pin maritime,total,2013,28.7
+Pin maritime,total,2014,38.5
+Pin maritime,total,2015,36.9
+Pin maritime,total,2016,35.3
+Taillis feuillus,total,1989,6.9
+Taillis feuillus,total,1999,8.5
+Taillis feuillus,total,2006,12
+Taillis feuillus,total,2007,11.8
+Taillis feuillus,total,2008,13.5
+Taillis feuillus,total,2009,12.8
+Taillis feuillus,total,2010,14.8
+Taillis feuillus,total,2011,16
+Taillis feuillus,total,2012,15.2
+Taillis feuillus,total,2013,16.9
+Taillis feuillus,total,2014,18.4
+Taillis feuillus,total,2015,14.9
+Taillis feuillus,total,2016,14.7
+Toutes essences,total,1989,39.5
+Toutes essences,total,1999,44.5
+Toutes essences,total,2006,41.4
+Toutes essences,total,2007,53.3
+Toutes essences,total,2008,50.3
+Toutes essences,total,2009,36
+Toutes essences,total,2010,42.7
+Toutes essences,total,2011,43.8
+Toutes essences,total,2012,41.2
+Toutes essences,total,2013,47.2
+Toutes essences,total,2014,55.3
+Toutes essences,total,2015,55.8
+Toutes essences,total,2016,54.4
+Douglas,total,2004,34.6
+Douglas,total,2005,39.4
+Douglas,total,2006,48.6
+Douglas,total,2007,60.3
+Douglas,total,2008,52.1
+Douglas,total,2009,49.4
+Douglas,total,2010,53.9
+Douglas,total,2011,55.3
+Douglas,total,2012,49
+Douglas,total,2013,53.4
+Douglas,total,2014,57.6
+Douglas,total,2015,52
+Douglas,total,2016,55.7
+Peuplier,total,2004,35.5
+Peuplier,total,2005,35.3
+Peuplier,total,2006,37.1
+Peuplier,total,2007,39.4
+Peuplier,total,2008,36.4
+Peuplier,total,2009,29.4
+Peuplier,total,2010,34.8
+Peuplier,total,2011,33.2
+Peuplier,total,2012,29.8
+Peuplier,total,2013,38.9
+Peuplier,total,2014,34.2
+Peuplier,total,2015,33.9
+Peuplier,total,2016,32.4
