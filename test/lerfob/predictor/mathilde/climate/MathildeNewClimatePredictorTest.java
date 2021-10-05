@@ -159,7 +159,7 @@ public class MathildeNewClimatePredictorTest {
 		double expectedVariance = climatePredictor.getBlupsForThisSubject(s).getVariance().getValueAt(0, 0);
 		double actualVariance = estimate.getVariance().getValueAt(0, 0);
 		Assert.assertEquals("Comparing blup means",	expectedMean, actualMean, 5E-3);
-		Assert.assertEquals("Comparing blup variances",	expectedVariance, actualVariance, 1E-3);
+		Assert.assertEquals("Comparing blup variances",	expectedVariance, actualVariance, 2E-3);
 		System.out.println("MathildeClimatePredictorTest, Stochastic simulation of blups successfully tested!");
 	}
 
