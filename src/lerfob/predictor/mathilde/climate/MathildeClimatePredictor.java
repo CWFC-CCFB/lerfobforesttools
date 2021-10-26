@@ -54,6 +54,9 @@ import repicea.util.ObjectUtility;
 @SuppressWarnings("serial")
 public class MathildeClimatePredictor extends REpiceaPredictor implements REpiceaClimateChangeGenerator<MathildeClimatePlot> {
 
+	/**
+	 * Map of expected temperature changes in central Europe (from IPCC Fifth assessment report WG1 Annex 1 - pp.1350-1351)
+	 */
 	private final static Map<RepresentativeConcentrationPathway, Double> ExpectedChangeByTheEndOfThe21stCentury = new HashMap<RepresentativeConcentrationPathway, Double>();
 	static {
 		ExpectedChangeByTheEndOfThe21stCentury.put(RepresentativeConcentrationPathway.RCP2_6, 1.5d);
