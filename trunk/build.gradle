@@ -11,7 +11,6 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'java'
-//    id 'com.github.johnrengelman.shadow' version '6.1.0'			// Should not be reenabled relies on log4j 2.13 MF2022-01-17
 }
 
 import org.tmatesoft.svn.core.wc.*
@@ -90,7 +89,6 @@ task updateRevision(type: WriteProperties) {
 
 compileJava {
 	project.version=lerfobForestToolsVersion
-//	project.ext.build=getSvnRevision()
 	println "Building " + rootProject.name + " v" + project.version
 }
 
@@ -131,7 +129,6 @@ jar {
         		   "Specification-Version": archiveVersion,                   
                    "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    "Implementation-Title": "lerfobforesttools",
-//                   "Implementation-Version": project.ext.build,
                    "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    )
     }
@@ -144,21 +141,11 @@ jar {
 	from sourceSets.main.allJava		
 }
 
-/*			Has been disabled because the plugin uses log4j 2.13 MF2022-01-17
-shadowJar {
-	archiveBaseName.set("CAT")
-	archiveClassifier.set("")
-	destinationDirectory.set(file("${installDirCAT}"))
-    manifest {
-    	inheritFrom jar.manifest
-        attributes 'Main-Class': 'lerfob.app.LerfobForesttools'
-    }
-}
-*/
-
 task fatJar(type: Jar) {
 	group = 'build'
 	description = 'Creates a fat jar for distribution'
+	dependsOn updateRevision
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE		// to avoid duplicate files
     manifest {
          attributes("Built-By": "Mathieu Fortin",
         		   "Specification-Title": "Growth Models for Northern France",
@@ -168,10 +155,9 @@ task fatJar(type: Jar) {
                    "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
                    "Main-Class": "lerfob.app.LerfobForesttools")
     }
-    baseName = 'CAT'
-	destinationDir =  file("${installDirCAT}")  
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }		// this configuration might be optimized so not to include the source files and others MF2022-01-17
-    with jar
+    archiveBaseName = 'CAT'
+	destinationDirectory =  file("${installDirCAT}")  
+    from { sourceSets.main.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }		
 }
 
 task deleteInstallFolder(type: Delete) {
