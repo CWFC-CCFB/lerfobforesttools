@@ -1,83 +1,169 @@
 package lerfob.carbonbalancetool;
 
-import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
+import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.carbonbalancetool.io.CATSpeciesSelectionDialog;
+import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog;
+import repicea.gui.REpiceaAWTProperty;
+import repicea.gui.REpiceaGUITestRobot;
 import repicea.gui.UIControlManager;
-import repicea.io.REpiceaOSVGFileHandlerUI;
-import repicea.simulation.processsystem.SystemManagerDialog;
+import repicea.gui.UIControlManager.CommonControlID;
+import repicea.gui.components.REpiceaMatchSelectorDialog;
+import repicea.gui.genericwindows.REpiceaLicenseWindow;
+import repicea.io.tools.ImportFieldManagerDialog;
 import repicea.simulation.processsystem.SystemManagerDialog.MessageID;
+import repicea.util.ObjectUtility;
 
 public class CarbonAccountingToolGUITest {
-
 	
-	private final static int WAIT_TIME = 500;
-
-	@Test
-	public void testSVNExport() throws Exception {
-		ProductionProcessorManager man = new ProductionProcessorManager();
-		SystemManagerDialog dlg = man.getUI(null);
+	static CarbonAccountingTool CAT;
+	static REpiceaGUITestRobot ROBOT;
+	
+	@BeforeClass
+	public static void initTest() throws Exception {
+		CAT = new CarbonAccountingTool();
 		Runnable toRun = new Runnable() {
 			@Override
 			public void run() {
-				man.showUI(null);
-			}
-		};
-		Thread t = new Thread(toRun);
-		t.start();
-		Thread.sleep(WAIT_TIME);
-		JMenu menu = null;
-		for (int i = 0; i < dlg.getJMenuBar().getMenuCount(); i++) {
-			menu = dlg.getJMenuBar().getMenu(i);
-			if (UIControlManager.CommonMenuTitle.File.name().equals(menu.getName())) {
-				break;
-			}
-		}
-		if (menu == null) {
-			throw new Exception("Unable to find File menu in the menu bar!");
-		}
-		JMenuItem item = null;
-		for (int i = 0; i < menu.getItemCount(); i++) {
-			item = menu.getItem(i);
-			if (item != null) {
-				String itemName = item.getName();
-				if (MessageID.ExportAsSVG.name().equals(item.getName())) {
-					break;
+				try {
+					CAT.initializeTool();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		}
-		if (item == null) {
-			throw new Exception("Unable to find the ExportToSVG menu item in the File menu!");
-		}
-		ActionListener[] listeners = item.getListeners(ActionListener.class);
-		REpiceaOSVGFileHandlerUI oSVGHandler = null;
-		for (ActionListener l : listeners) {
-			if (l instanceof REpiceaOSVGFileHandlerUI) {
-				oSVGHandler = (REpiceaOSVGFileHandlerUI) l;
-				break;
+		};
+
+		ROBOT = new REpiceaGUITestRobot();
+		Thread t = ROBOT.startGUI(toRun, REpiceaLicenseWindow.class);
+		ROBOT.clickThisButton("acceptLicense");
+		ROBOT.clickThisButton(UIControlManager.CommonControlID.Continue.name(), CAT.getUI().getClass());
+	}
+	
+	@AfterClass
+	public static void cleanUp() {
+		CAT.getUI().dispose();
+		ROBOT.shutdown();
+	}
+
+	@Test
+	public void testSVNExportHappyPath() throws Exception {
+		JComboBox b = (JComboBox) ROBOT.findComponentWithThisName(CATFrame.MessageID.HWP_Parameters.name() + "_ComboBox");
+		Runnable toRun = new Runnable() {
+			public void run() {
+				b.getModel().setSelectedItem(CAT.getCarbonCompartmentManager().getCarbonToolSettings().productionManagerMap.get(ProductionManagerName.customized));
 			}
-		}
-		if (oSVGHandler == null) {
-			throw new Exception("Unable to find the REpiceaOSVGFileHandlerUI instance related to the SVG export!");
-		}
+		};
+		SwingUtilities.invokeLater(toRun);
+		ROBOT.letDispatchThreadProcess();
+		
+		toRun = new Runnable() {
+			public void run() {
+				try {
+					ROBOT.clickThisButton(CATFrame.MessageID.HWP_Parameters.name());
+				} catch (InvocationTargetException | InterruptedException e) {}
+			}
+		};
+		ROBOT.startGUI(toRun, ProductionProcessorManagerDialog.class);
+		
+		ROBOT.clickThisButton(UIControlManager.CommonMenuTitle.File.name()); 
+		
+		toRun = new Runnable() {
+			public void run() {
+				try {
+					ROBOT.clickThisButton(MessageID.ExportToSVG.name());
+				} catch (InvocationTargetException | InterruptedException e) {} 
+			}
+		};
+		ROBOT.startGUI(toRun, JDialog.class);
+
 		String filename = System.getProperty("java.io.tmpdir") + "exportFluxConfiguration.svg";
 		File f = new File(filename);
 		if (f.exists())
 			f.delete();
-		oSVGHandler.internalSaveAction(filename);
-		Thread.sleep(WAIT_TIME);
-		Assert.assertTrue("Testing if svg export file exists", f.exists());
+		ROBOT.fillThisTextField("Filename", filename);
 		
-		dlg.setVisible(false);
-		dlg.dispose();
-		t.join();
+		ROBOT.clickThisButton(CommonControlID.Save.name(), REpiceaAWTProperty.SVGFileSaved);
+		
+		Assert.assertTrue("Testing if svg export file exists", f.exists());
+
+		ROBOT.clickThisButton(UIControlManager.CommonMenuTitle.File.name()); 
+		ROBOT.clickThisButton(UIControlManager.CommonControlID.Close.name());
+	}
+	
+	@Test
+	public void testImportAndSimulateYieldTableHappyPath() throws Exception {
+		ROBOT.clickThisButton(UIControlManager.CommonMenuTitle.File.name());
+		ROBOT.clickThisButton(UIControlManager.CommonControlID.Import.name()); 
+		Runnable toRun = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ROBOT.clickThisButton(CATFrame.MessageID.ImportYieldTable.name()); 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		Thread t = ROBOT.startGUI(toRun, JDialog.class);
+		String fileToLoad = ObjectUtility.getPackagePath(getClass()) + File.separator + "io" + File.separator + "ExampleYieldTable.csv";
+		ROBOT.fillThisTextField("Filename", fileToLoad);
+		ROBOT.clickThisButton("Open", CATSpeciesSelectionDialog.class);		
+		ROBOT.clickThisButton("Ok", ImportFieldManagerDialog.class);
+		ROBOT.clickThisButton("Ok", CATAWTProperty.StandListProperlySet);
+		
+		List<CATCompatibleStand> stands = CAT.getCarbonCompartmentManager().getStandList();
+		System.out.println("Number of stands " + stands.size());
+		Assert.assertEquals("Testing the number of CATCompatibleStand instances imported", 46, stands.size());
+		
+		int tabCountBefore = CAT.getUI().graphicPanel.tabbedPane.getTabCount();
+		ROBOT.clickThisButton(CATFrame.MessageID.CalculateCarbonBalance.name(), CATAWTProperty.CarbonCalculationSuccessful); 
+		int tabCountAfter = CAT.getUI().graphicPanel.tabbedPane.getTabCount();
+		Assert.assertEquals("Testing if a tab has been craeted in the tabbedPane instance", tabCountBefore + 1, tabCountAfter);
+	}
+	
+	@Test
+	public void testImportAndSimulateGrowthSimulationHappyPath() throws Exception {
+		ROBOT.clickThisButton(UIControlManager.CommonMenuTitle.File.name());
+		ROBOT.clickThisButton(UIControlManager.CommonControlID.Import.name()); 
+		
+		Runnable toRun = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ROBOT.clickThisButton(CATFrame.MessageID.ImportGrowthSimulation.name()); 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		Thread t = ROBOT.startGUI(toRun, JDialog.class);
+		String fileToLoad = ObjectUtility.getPackagePath(getClass()) + File.separator + "io" + File.separator + "MathildeTreeExport.csv";
+		ROBOT.fillThisTextField("Filename", fileToLoad);
+		ROBOT.clickThisButton("Open", ImportFieldManagerDialog.class);		
+		ROBOT.clickThisButton("Ok", REpiceaMatchSelectorDialog.class);
+		ROBOT.clickThisButton("Ok", CATAWTProperty.StandListProperlySet);
+		
+		List<CATCompatibleStand> stands = CAT.getCarbonCompartmentManager().getStandList();
+		Assert.assertEquals("Testing the number of CATCompatibleStand instances imported", 8, stands.size());
+		
+		int tabCountBefore = CAT.getUI().graphicPanel.tabbedPane.getTabCount();
+		ROBOT.clickThisButton(CATFrame.MessageID.CalculateCarbonBalance.name(), CATAWTProperty.CarbonCalculationSuccessful); 
+		int tabCountAfter = CAT.getUI().graphicPanel.tabbedPane.getTabCount();
+		Assert.assertEquals("Testing if a tab has been craeted in the tabbedPane instance", tabCountBefore + 1, tabCountAfter);
 	}
 	
 	

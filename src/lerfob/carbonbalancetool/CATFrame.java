@@ -1,3 +1,23 @@
+/*
+ * This file is part of the lerfob-foresttools library.
+ *
+ * Copyright (C) 2010-2014 Mathieu Fortin for LERFOB AgroParisTech/INRA, 
+ * Copyright (C) 2022 Her Majesty the Queen in right of Canada
+ * Author: Mathieu Fortin, Canadian Wood Fibre Centre
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
 package lerfob.carbonbalancetool;
 
 import java.awt.BorderLayout;
@@ -191,7 +211,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 
 	protected final CarbonAccountingTool caller;
 
-	private CATPanelView graphicPanel;
+	protected CATPanelView graphicPanel;
 
 	protected final REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper> hwpComboBox;
 	protected final REpiceaComboBoxOpenButton<BiomassParametersWrapper> biomassComboBox;
@@ -263,13 +283,13 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		file = UIControlManager.createCommonMenu(CommonMenuTitle.File);
 		menuBar.add(file);
 
-		importMenu = new JMenu(CommonControlID.Import.toString());
+		importMenu = UIControlManager.createCommonMenu(CommonControlID.Import);
 		file.add(importMenu);
 		file.add(new JSeparator());
 		
-		yieldTable = new JMenuItem(MessageID.ImportYieldTable.toString());
+		yieldTable = UIControlManager.createCommonMenuItem(MessageID.ImportYieldTable);
 		importMenu.add(yieldTable);
-		growthSimulation = new JMenuItem(MessageID.ImportGrowthSimulation.toString());
+		growthSimulation = UIControlManager.createCommonMenuItem(MessageID.ImportGrowthSimulation);
 		importMenu.add(growthSimulation);
 		
 		close = UIControlManager.createCommonMenuItem(CommonControlID.Quit);
@@ -278,7 +298,7 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		JMenu actionMenu = new JMenu("Actions");
 		menuBar.add(actionMenu);
 
-		calculateCarbonMenuItem = new JMenuItem(MessageID.CalculateCarbonBalance.toString());
+		calculateCarbonMenuItem = UIControlManager.createCommonMenuItem(MessageID.CalculateCarbonBalance);
 		ImageIcon carbonIcon = CommonGuiUtility.retrieveIcon(getClass(), "carbonIcon.png");
 		calculateCarbonMenuItem.setIcon(carbonIcon);
 		calculateCarbonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
@@ -352,12 +372,12 @@ public class CATFrame extends REpiceaFrame implements PropertyChangeListener, It
 		about.add(help);
 
 		
-		hwpComboBox = new REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper>(MessageID.HWP_Parameters.toString()); 
+		hwpComboBox = new REpiceaComboBoxOpenButton<ProductionProcessorManagerWrapper>(MessageID.HWP_Parameters); 
 		hwpComboBox.getComboBox().setModel(new DefaultComboBoxModel<ProductionProcessorManagerWrapper>(caller.getCarbonToolSettings().productionManagerMap.values().toArray(new ProductionProcessorManagerWrapper[]{})));
 		ProductionProcessorManagerWrapper currentProductionManagerItem = caller.getCarbonToolSettings().productionManagerMap.get(caller.getCarbonToolSettings().getCurrentProductionProcessorManagerSelection());
 		hwpComboBox.getComboBox().setSelectedItem(currentProductionManagerItem);
 
-		biomassComboBox  = new REpiceaComboBoxOpenButton<BiomassParametersWrapper>(MessageID.Biomass.toString()); 
+		biomassComboBox  = new REpiceaComboBoxOpenButton<BiomassParametersWrapper>(MessageID.Biomass); 
 		biomassComboBox.getComboBox().setModel(new DefaultComboBoxModel<BiomassParametersWrapper>(caller.getCarbonToolSettings().biomassParametersMap.values().toArray(new BiomassParametersWrapper[]{})));
 		BiomassParametersWrapper currentBiomassParametersWrapper = caller.getCarbonToolSettings().biomassParametersMap.get(caller.getCarbonToolSettings().getCurrentBiomassParametersSelection());
 		biomassComboBox.getComboBox().setSelectedItem(currentBiomassParametersWrapper);

@@ -31,6 +31,7 @@ import lerfob.carbonbalancetool.productionlines.ProductionLineManager;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManager;
 import lerfob.carbonbalancetool.productionlines.WoodyDebrisProcessor.WoodyDebrisProcessorID;
 import repicea.app.AbstractGenericTask;
+import repicea.gui.REpiceaAWTEvent;
 import repicea.lang.MemoryWatchDog;
 import repicea.simulation.ApplicationScaleProvider.ApplicationScale;
 import repicea.simulation.covariateproviders.treelevel.SamplingUnitIDProvider;
@@ -47,7 +48,8 @@ public class CATTask extends AbstractGenericTask {
 	 * This enum defines the different tasks performed by the InternalSwingWorker class.
 	 * @author Mathieu Fortin - December 2010
 	 */
-	public static enum Task {LOG_AND_BUCK_TREES(true), 
+	public static enum Task {
+		LOG_AND_BUCK_TREES(true), 
 		GENERATE_WOODPRODUCTS(true), 
 		ACTUALIZE_CARBON(true), 
 		COMPILE_CARBON(true),
@@ -121,12 +123,14 @@ public class CATTask extends AbstractGenericTask {
 			break;
 		case DISPLAY_RESULT:
 			caller.showResult();
+			REpiceaAWTEvent.fireEvent(new REpiceaAWTEvent(CATAWTProperty.CarbonCalculationSuccessful));
 			break;
 		case SHOW_INTERFACE:
 			caller.showUI();
 			break;
 		case SET_STANDLIST:
 			caller.setStandList();
+			REpiceaAWTEvent.fireEvent(new REpiceaAWTEvent(this, CATAWTProperty.StandListProperlySet));
 			break;
 		case LOG_AND_BUCK_TREES:
 			firePropertyChange("OngoingTask", null, currentTask);

@@ -139,7 +139,7 @@ public class ProductionProcessorManagerDialog extends SystemManagerDialog implem
 	@Override
 	protected void init() {
 		super.init();
-		comboBoxPanel = new REpiceaComboBoxOpenButton<TreeLoggerParameters<?>>(MessageID.BuckingModelLabel.toString(), getCaller().getGUIPermission());
+		comboBoxPanel = new REpiceaComboBoxOpenButton<TreeLoggerParameters<?>>(MessageID.BuckingModelLabel, getCaller().getGUIPermission());
 		treeLoggerComboBox = comboBoxPanel.getComboBox();
 		downloadExamplesMenuItem = new JMenuItem(MessageID.ExamplesOfFluxConfigurations.toString());
 	}
