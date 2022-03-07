@@ -1,3 +1,22 @@
+/*
+ * This file is part of the lerfob-foresttools library.
+ *
+ * Copyright (C) 2022 Her Majesty the Queen in right of Canada
+ * Author: Mathieu Fortin, Canadian Wood Fibre Centre
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
 package lerfob.carbonbalancetool;
 
 import java.io.File;
@@ -11,10 +30,10 @@ import javax.swing.SwingUtilities;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATUtility.ProductionManagerName;
+import lerfob.carbonbalancetool.CarbonAccountingTool.CATMode;
 import lerfob.carbonbalancetool.io.CATSpeciesSelectionDialog;
 import lerfob.carbonbalancetool.productionlines.ProductionProcessorManagerDialog;
 import repicea.gui.REpiceaAWTProperty;
@@ -34,7 +53,7 @@ public class CarbonAccountingToolGUITest {
 	
 	@BeforeClass
 	public static void initTest() throws Exception {
-		CAT = new CarbonAccountingTool();
+		CAT = new CarbonAccountingTool(CATMode.FROM_OTHER_APP);		// FROM_OTHER_APP to avoid shutdown with exit 
 		Runnable toRun = new Runnable() {
 			@Override
 			public void run() {
@@ -53,9 +72,22 @@ public class CarbonAccountingToolGUITest {
 	}
 	
 	@AfterClass
-	public static void cleanUp() {
-		CAT.getUI().dispose();
+	public static void cleanUp() throws Exception {
+		ROBOT.clickThisButton(UIControlManager.CommonMenuTitle.File.name());
+		Runnable doRun = new Runnable() {
+			public void run() {
+				try {
+					ROBOT.clickThisButton(UIControlManager.CommonControlID.Quit.name());
+				} catch (InvocationTargetException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		ROBOT.startGUI(doRun, JDialog.class);
 		ROBOT.shutdown();
+		ROBOT.clickThisButton("Yes");
+		CAT.guiInterface.dispose();
+		int u = 0;
 	}
 
 	@Test
@@ -125,7 +157,6 @@ public class CarbonAccountingToolGUITest {
 		ROBOT.clickThisButton("Ok", CATAWTProperty.StandListProperlySet);
 		
 		List<CATCompatibleStand> stands = CAT.getCarbonCompartmentManager().getStandList();
-		System.out.println("Number of stands " + stands.size());
 		Assert.assertEquals("Testing the number of CATCompatibleStand instances imported", 46, stands.size());
 		
 		int tabCountBefore = CAT.getUI().graphicPanel.tabbedPane.getTabCount();
@@ -155,6 +186,25 @@ public class CarbonAccountingToolGUITest {
 		ROBOT.fillThisTextField("Filename", fileToLoad);
 		ROBOT.clickThisButton("Open", ImportFieldManagerDialog.class);		
 		ROBOT.clickThisButton("Ok", REpiceaMatchSelectorDialog.class);
+		ROBOT.clickThisButton("File");
+
+		toRun = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ROBOT.clickThisButton("Open"); 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		ROBOT.startGUI(toRun, JDialog.class);
+		
+		fileToLoad = ObjectUtility.getPackagePath(getClass()) + File.separator + "io" + File.separator + "speciesCorrespondanceForSimulationData.xml";
+		ROBOT.fillThisTextField("Filename", fileToLoad);
+		ROBOT.clickThisButton("Open");		
+		ROBOT.letDispatchThreadProcess();
 		ROBOT.clickThisButton("Ok", CATAWTProperty.StandListProperlySet);
 		
 		List<CATCompatibleStand> stands = CAT.getCarbonCompartmentManager().getStandList();
