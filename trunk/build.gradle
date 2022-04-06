@@ -15,8 +15,11 @@ plugins {
 
 import org.tmatesoft.svn.core.wc.*
 
-sourceCompatibility = 1.8
-//targetCompatibility = 1.8
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(8))
+  }
+}
 
 repositories {
     mavenCentral()
