@@ -329,15 +329,6 @@ public class PythonAccessPoint extends CarbonAccountingTool {
 	@Override
 	protected void respondToWindowClosing() {}	// Do nothing to avoid the automatic shut down
 
-	/**
-	 * This method returns the version of the lerfob-cat application.
-	 * @return a String
-	 */
-	public String getRevision() {
-		String lerfobRevision = "LerfobForesttools; " + LerfobForesttoolsAppVersion.getInstance().getRevision();
-		return lerfobRevision;
-	}
-	
 
 	private static class TreeFeatures {
 		final double dbhCmMin;
