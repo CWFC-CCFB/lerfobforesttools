@@ -261,7 +261,8 @@ public class CarbonAccountingTool extends AbstractGenericEngine implements REpic
 				if (!hasAlreadyBeenInstanciated) {
 					String packagePath = ObjectUtility.getRelativePackagePath(CarbonAccountingTool.class);
 					String iconPath =  packagePath + "SplashImage.jpg";
-					String bottomSplashWindowString = "Build " +  LerfobForesttoolsAppVersion.getInstance().getBuild() + "-" + REpiceaAppVersion.getInstance().getBuild();
+					String bottomSplashWindowString = "Versions lerfob " +  LerfobForesttoolsAppVersion.getInstance().getVersion() + 
+							"- repicea " + REpiceaAppVersion.getInstance().getVersion();
 					new REpiceaSplashWindow(iconPath, 4, parentFrame, bottomSplashWindowString);
 
 					String licensePath = packagePath + "CATLicense_en.html";
