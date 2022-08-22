@@ -19,7 +19,6 @@
 package lerfob.predictor.mathilde.thinning;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +34,9 @@ import repicea.simulation.ParameterMap;
 import repicea.simulation.thinners.REpiceaThinner;
 import repicea.simulation.thinners.REpiceaTreatmentDefinition;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.integral.AbstractGaussQuadrature.NumberOfPoints;
 import repicea.stats.integral.GaussHermiteQuadrature;
-import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
+import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -71,9 +71,33 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		}
 	}
 
+	private static final double SqrtTwo = Math.sqrt(2d);
+	protected static final int IndexParameterToBeIntegrated = 1;
+	
+	class EmbeddedLinkFunction extends LinkFunction implements GaussHermiteQuadratureCompatibleFunction<Double> {
+
+		double standardDeviation;
+		
+		public EmbeddedLinkFunction(Type type) {
+			super(type);
+		}
+
+		@Override
+		public double convertFromGaussToOriginal(double x, double mu, int covarianceIndexI, int covarianceIndexJ) {
+			return SqrtTwo * standardDeviation * x + mu;
+		}
+
+		@Override
+		public double getIntegralAdjustment(int dimensions) {
+			return Math.pow(Math.PI, -dimensions/2d);
+		}
+		
+	}
+
+	
 	private final Map<Integer, MathildeThinningSubModule> subModules;
 
-	private final LinkFunction linkFunction;
+	private final EmbeddedLinkFunction linkFunction;
 	
 	private int numberOfParameters;
 
@@ -87,7 +111,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		subModules = new HashMap<Integer, MathildeThinningSubModule>();
 		init();
 		oXVector = new Matrix(1, numberOfParameters);
-		linkFunction = new LinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
+		linkFunction = new EmbeddedLinkFunction(Type.Logit); // rm+fc-10.6.2015 Logit
 		linkFunction.setVariableValue(0, 1d);	// variable that multiplies the xBeta
 		linkFunction.setVariableValue(1, 1d);	// variable that multiplies the random effect parameter
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N5);
@@ -204,9 +228,10 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 				prob = linkFunction.getValue();
 			} else {	// i.e. deterministic mode
 				linkFunction.setParameterValue(1, 0d);
-				List<Integer> parameterIndices = new ArrayList<Integer>();
-				parameterIndices.add(1);
-				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
+//				List<Integer> parameterIndices = new ArrayList<Integer>();
+//				parameterIndices.add(1);
+				linkFunction.standardDeviation = subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation().getValueAt(0, 0);
+				prob = ghq.getIntegralApproximation(linkFunction, IndexParameterToBeIntegrated, true);
 			}
 			
 		return prob;
