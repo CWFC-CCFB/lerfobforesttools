@@ -19,14 +19,13 @@
 package lerfob.predictor.mathilde.mortality;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.AbstractMathematicalFunction;
+import repicea.math.MathematicalFunction;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
@@ -36,8 +35,9 @@ import repicea.simulation.REpiceaBinaryEventPredictor;
 import repicea.simulation.covariateproviders.treelevel.TreeStatusProvider.StatusClass;
 import repicea.stats.StatisticalUtility;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.integral.AbstractGaussQuadrature.NumberOfPoints;
 import repicea.stats.integral.GaussHermiteQuadrature;
-import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
+import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -63,6 +63,29 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	
 	protected static boolean isGaussianQuadratureEnabled = true;	
 	
+	private static final double SqrtTwo = Math.sqrt(2d);
+	protected static final int IndexParameterToBeIntegrated = 2;
+	
+	class EmbeddedLinkFunction extends LinkFunction implements GaussHermiteQuadratureCompatibleFunction<Double> {
+
+		double standardDeviation;
+		
+		public EmbeddedLinkFunction(Type type, MathematicalFunction eta) {
+			super(type, eta);
+		}
+
+		@Override
+		public double convertFromGaussToOriginal(double x, double mu, int covarianceIndexI, int covarianceIndexJ) {
+			return SqrtTwo * standardDeviation * x + mu;
+		}
+
+		@Override
+		public double getIntegralAdjustment(int dimensions) {
+			return Math.pow(Math.PI, -dimensions/2d);
+		}
+		
+	}
+
 	protected class InternalMathematicalFunction extends AbstractMathematicalFunction {
 		
 		private InternalMathematicalFunction() {
@@ -112,7 +135,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 	
 	protected final Map<Integer, MathildeMortalitySubModule> subModules;
 	
-	protected final LinkFunction linkFunction;
+	protected final EmbeddedLinkFunction linkFunction;
 	protected int numberOfParameters;
 	protected GaussHermiteQuadrature ghq;
 
@@ -133,7 +156,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		subModules = new HashMap<Integer, MathildeMortalitySubModule>();
 		init();
 		oXVector = new Matrix(1,numberOfParameters);
-		linkFunction = new LinkFunction(Type.CLogLog, new InternalMathematicalFunction());
+		linkFunction = new EmbeddedLinkFunction(Type.CLogLog, new InternalMathematicalFunction());
 		linkFunction.setVariableValue(0, 1d);
 		ghq = new GaussHermiteQuadrature(NumberOfPoints.N15);		
 	}
@@ -277,9 +300,10 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		} else {
 			linkFunction.setParameterValue(2, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
-				List<Integer> parameterIndices = new ArrayList<Integer>();
-				parameterIndices.add(2);
-				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
+//				List<Integer> parameterIndices = new ArrayList<Integer>();
+//				parameterIndices.add(2);
+				linkFunction.standardDeviation = subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation().getValueAt(0, 0);
+				prob = ghq.getIntegralApproximation(linkFunction, IndexParameterToBeIntegrated, true);
 			} else {									// no need to evaluate the quadrature when there is no windstorm
 				prob = linkFunction.getValue();
 			}

@@ -24,12 +24,15 @@ import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree;
+import repicea.math.MathematicalFunction;
 import repicea.math.Matrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianEstimate;
+import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
+import repicea.stats.model.glm.LinkFunction;
 import repicea.util.ObjectUtility;
 
 @SuppressWarnings("serial")
@@ -112,9 +115,8 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 		} else {
 			linkFunction.setParameterValue(2, 0d);		// random effect arbitrarily set to 0
 			if (stand.isAWindstormGoingToOccur() && isGaussianQuadratureEnabled) {
-				List<Integer> parameterIndices = new ArrayList<Integer>();
-				parameterIndices.add(2);
-				prob = ghq.getIntegralApproximation(linkFunction, parameterIndices, subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation());
+				linkFunction.standardDeviation = subModule.getDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT).getDistribution().getStandardDeviation().getValueAt(0, 0);
+				prob = ghq.getIntegralApproximation(linkFunction, IndexParameterToBeIntegrated, true);
 			} else {									// no need to evaluate the quadrature when there is no windstorm
 				prob = linkFunction.getValue();
 			}

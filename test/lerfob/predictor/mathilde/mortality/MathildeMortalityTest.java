@@ -6,15 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lerfob.predictor.mathilde.MathildeTree;
-
 import org.junit.Test;
 
+import lerfob.predictor.mathilde.MathildeTree;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
 import repicea.stats.distributions.EmpiricalDistribution;
+import repicea.stats.integral.AbstractGaussQuadrature.NumberOfPoints;
 import repicea.stats.integral.GaussHermiteQuadrature;
-import repicea.stats.integral.GaussQuadrature.NumberOfPoints;
 import repicea.util.ObjectUtility;
 
 public class MathildeMortalityTest {
