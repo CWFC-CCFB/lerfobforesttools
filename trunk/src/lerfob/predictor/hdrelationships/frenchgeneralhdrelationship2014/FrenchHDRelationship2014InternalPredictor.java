@@ -29,6 +29,7 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
 import lerfob.predictor.hdrelationships.FrenchHeightPredictor;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
@@ -142,7 +143,7 @@ public class FrenchHDRelationship2014InternalPredictor extends HDRelationshipPre
 		}
 	}
 	
-	protected void setResidualVariance(Matrix sigma2) {
+	protected void setResidualVariance(SymmetricMatrix sigma2) {
 		double correlationParameters = PhiParameters.get(species.getSpeciesType());
 		GaussianErrorTermEstimate estimate = new GaussianErrorTermEstimate(sigma2, correlationParameters, TypeMatrixR.LINEAR);
 		setDefaultResidualError(ErrorTermGroup.Default, estimate);

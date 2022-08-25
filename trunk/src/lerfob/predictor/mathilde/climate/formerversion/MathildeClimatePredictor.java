@@ -27,6 +27,7 @@ import java.util.Map;
 import lerfob.predictor.mathilde.climate.MathildeClimatePlot;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
@@ -84,16 +85,17 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 			ParameterMap omegaMap = ParameterLoader.loadVectorFromFile(omegaFilename);	
 
 			Matrix defaultBetaMean = betaMap.get();
-			Matrix omega = omegaMap.get().squareSym();
+			SymmetricMatrix omega = omegaMap.get().squareSym();
 			Matrix covparms = covparmsMap.get();
 
-			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms.getSubMatrix(2, 2, 0, 0)));
+			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(
+					SymmetricMatrix.convertToSymmetricIfPossible(covparms.getSubMatrix(2, 2, 0, 0))));
 			setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 			oXVector = new Matrix(1, defaultBetaMean.m_iRows);
 	
 			rho = covparms.getValueAt(1, 0);
 			Matrix meanRandomEffect = new Matrix(1,1);
-			Matrix varianceRandomEffect = covparms.getSubMatrix(0, 0, 0, 0);
+			SymmetricMatrix varianceRandomEffect = SymmetricMatrix.convertToSymmetricIfPossible(covparms.getSubMatrix(0, 0, 0, 0));
 			setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(meanRandomEffect, varianceRandomEffect));
 			
 		} catch (Exception e) {
@@ -268,7 +270,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 			Matrix varBlupsFirstTerm = matVu.subtract(covV.multiply(invVk).multiply(covV.transpose())).subtract(matRu);
 			Matrix covariance = covV.multiply(invVk).multiply(matXk).multiply(omega).scalarMultiply(-1d);
 			Matrix varBlupsSecondTerm = covariance.multiply(matXk.transpose()).multiply(invVk).multiply(covV.transpose());
-			Matrix varBlups = varBlupsFirstTerm.subtract(varBlupsSecondTerm);
+			SymmetricMatrix varBlups = SymmetricMatrix.convertToSymmetricIfPossible(varBlupsFirstTerm.subtract(varBlupsSecondTerm));
 			
 			this.blups = new GaussianEstimate(blups, varBlups);
 			listStandID = new ArrayList<String>();
@@ -276,7 +278,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 				MathildeClimatePlot plot = standsForWhichBlupsWillBePredicted.get(index); 
 				setBlupsForThisSubject(plot,
 						new GaussianEstimate(blups.getSubMatrix(index, index, 0, 0), 
-						varBlups.getSubMatrix(index, index, index, index)));
+								SymmetricMatrix.convertToSymmetricIfPossible(varBlups.getSubMatrix(index, index, index, index))));
 				listStandID.add(plot.getSubjectId());
 			}
 		}

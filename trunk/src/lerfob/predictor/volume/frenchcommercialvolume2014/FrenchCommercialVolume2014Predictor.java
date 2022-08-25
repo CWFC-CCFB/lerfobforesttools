@@ -18,7 +18,9 @@
  */
 package lerfob.predictor.volume.frenchcommercialvolume2014;
 
+import repicea.math.DiagonalMatrix;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.SASParameterEstimates;
@@ -61,8 +63,8 @@ public final class FrenchCommercialVolume2014Predictor extends REpiceaPredictor 
 		
 		try {
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
-			Matrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
-			Matrix covparms = ParameterLoader.loadVectorFromFile(covparmsFilename).get().matrixDiagonal();
+			SymmetricMatrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
+			DiagonalMatrix covparms = ParameterLoader.loadVectorFromFile(covparmsFilename).get().matrixDiagonal();
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(covparms));
 			setParameterEstimates(new SASParameterEstimates(beta, omega));
 		} catch (Exception e) {

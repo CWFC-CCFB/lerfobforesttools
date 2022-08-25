@@ -26,6 +26,7 @@ import java.util.Map;
 
 import lerfob.predictor.volume.frenchcommercialvolume2020.FrenchCommercialVolume2020Tree.FrenchCommercialVolume2020TreeSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -85,7 +86,7 @@ public final class FrenchCommercialVolume2020Predictor extends REpiceaPredictor 
 			for (FrenchCommercialVolume2020TreeSpecies species : FrenchCommercialVolume2020TreeSpecies.values()) {
 				int index = species.ordinal() + 1;
 				Matrix betaSpecies = beta.get(index);
-				Matrix omegaSpecies = omega.get(index).squareSym();
+				SymmetricMatrix omegaSpecies = omega.get(index).squareSym();
 				ModelParameterEstimates parms = new ModelParameterEstimates(betaSpecies, omegaSpecies);
 				Matrix sem = speciesEffectMatch.get(index);
 				double residualVariance = covparms.get(index).getValueAt(0, 0);

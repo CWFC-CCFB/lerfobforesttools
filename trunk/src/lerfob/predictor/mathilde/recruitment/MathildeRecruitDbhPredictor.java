@@ -25,6 +25,7 @@ import java.util.Map;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -85,7 +86,8 @@ public class MathildeRecruitDbhPredictor extends REpiceaPredictor {
 
 			ParameterMap betaMap = ParameterLoader.loadVectorFromFile(betaFilename);
 			Matrix beta = betaMap.get();
-			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);	
+			SymmetricMatrix omega = SymmetricMatrix.convertToSymmetricIfPossible(
+					ParameterLoader.loadMatrixFromFile(omegaFilename));	
 			setParameterEstimates(new ModelParameterEstimates(beta, omega));
 
 		} catch (IOException e) {

@@ -27,6 +27,7 @@ import java.util.Map;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
@@ -139,7 +140,8 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 
 				// // rm+fc-10.6.2015 for the thining model, betaMap contains
 				Matrix defaultBetaMean = betaMap.get(excludedGroup);
-				Matrix randomEffectVariance = defaultBetaMean.getSubMatrix(defaultBetaMean.m_iRows - 1, defaultBetaMean.m_iRows - 1, 0, 0); // last element
+				SymmetricMatrix randomEffectVariance = SymmetricMatrix.convertToSymmetricIfPossible(
+						defaultBetaMean.getSubMatrix(defaultBetaMean.m_iRows - 1, defaultBetaMean.m_iRows - 1, 0, 0)); // last element
 				defaultBetaMean = defaultBetaMean.getSubMatrix(MathildeStandThinningPredictor.NumberOfParameters, 
 						defaultBetaMean.m_iRows - 2, 
 						0, 
@@ -156,7 +158,8 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 				
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
-				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
+				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, 
+						SymmetricMatrix.convertToSymmetricIfPossible(omega)));
 				
 				Matrix meanIntervalRandomEffect = new Matrix(1,1);
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, randomEffectVariance));
