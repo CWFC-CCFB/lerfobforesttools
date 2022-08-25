@@ -24,6 +24,7 @@ import java.util.Map;
 import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
@@ -102,17 +103,17 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 				int index = species.getIndexIn2014();
 				
 				Matrix mean = betaMap.get(index);
-				Matrix variance = omegaMap.get(index).squareSym();
+				SymmetricMatrix variance = omegaMap.get(index).squareSym();
 				ModelParameterEstimates defaultBeta = new SASParameterEstimates(mean, variance);
 				internalPredictor.setParameterEstimates(defaultBeta);
 				
 				Matrix covparms = covparmMap.get(index);
 				
-				Matrix matrixG = covparms.getSubMatrix(0, 0, 0, 0);
+				SymmetricMatrix matrixG = SymmetricMatrix.convertToSymmetricIfPossible(covparms.getSubMatrix(0, 0, 0, 0));
 				Matrix defaultRandomEffectsMean = new Matrix(1, 1);
 				internalPredictor.setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(defaultRandomEffectsMean, matrixG));
 				
-				Matrix residualVariance = covparms.getSubMatrix(1, 1, 0, 0);
+				SymmetricMatrix residualVariance = SymmetricMatrix.convertToSymmetricIfPossible(covparms.getSubMatrix(1, 1, 0, 0));
 				internalPredictor.setResidualVariance(residualVariance);
 				
 				internalPredictor.setEffectList(effectList.get(index));

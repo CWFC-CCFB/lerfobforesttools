@@ -21,6 +21,7 @@ package lerfob.predictor.dopalep;
 import java.io.IOException;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
@@ -47,15 +48,18 @@ public class DopalepDbhIncrementPredictor extends REpiceaPredictor implements Gr
 		
 		try {
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
-			Matrix omega = ParameterLoader.loadMatrixFromFile(omegaFilename);
+			SymmetricMatrix omega = SymmetricMatrix.convertToSymmetricIfPossible(
+					ParameterLoader.loadMatrixFromFile(omegaFilename));
 			setParameterEstimates(new ModelParameterEstimates(beta, omega));
 			oXVector = new Matrix(1, getParameterEstimates().getMean().m_iRows);
 			
 			Matrix covParms = ParameterLoader.loadVectorFromFile(covParmsFilename).get();
-			Matrix randomEffectVariance = covParms.getSubMatrix(0, 0, 0, 0);
+			SymmetricMatrix randomEffectVariance = SymmetricMatrix.convertToSymmetricIfPossible(
+					covParms.getSubMatrix(0, 0, 0, 0));
 			setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(new Matrix(1,1), randomEffectVariance));
 
-			Matrix sigma2 = covParms.getSubMatrix(1, 1, 0, 0);
+			SymmetricMatrix sigma2 = SymmetricMatrix.convertToSymmetricIfPossible(
+					covParms.getSubMatrix(1, 1, 0, 0));
 			setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(sigma2));
 						
 		} catch (IOException e) {

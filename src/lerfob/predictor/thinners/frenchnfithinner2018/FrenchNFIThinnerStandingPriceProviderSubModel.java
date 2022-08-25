@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
@@ -137,7 +138,7 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 				empDist.addRealization(obs);
 			}
 		}
-		setParameterEstimates(new ModelParameterEstimates(empDist.getMean(), new Matrix(1,1)));
+		setParameterEstimates(new ModelParameterEstimates(empDist.getMean(), new SymmetricMatrix(1)));
 		setDefaultRandomEffects(HierarchicalLevel.YEAR, new GaussianEstimate(new Matrix(1,1), empDist.getVariance()));
 	}
 	

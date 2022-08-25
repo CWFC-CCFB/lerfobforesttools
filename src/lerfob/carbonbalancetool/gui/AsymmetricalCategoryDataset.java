@@ -38,6 +38,7 @@ import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.stats.estimates.ConfidenceInterval;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianEstimate;
@@ -309,7 +310,7 @@ public class AsymmetricalCategoryDataset implements StatisticalCategoryDataset, 
 		MonteCarloEstimate estimate2 = new MonteCarloEstimate();
 		Matrix mean = new Matrix(1,1);
 		mean.setValueAt(0, 0, 10d);
-		Matrix variance = new Matrix(1,1);
+		SymmetricMatrix variance = new SymmetricMatrix(1);
 		variance.setValueAt(0, 0, Double.NaN);
 		GaussianEstimate estimate3 = new GaussianEstimate(mean, variance);
 		

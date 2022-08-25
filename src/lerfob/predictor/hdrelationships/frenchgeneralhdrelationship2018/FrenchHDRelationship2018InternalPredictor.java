@@ -29,6 +29,7 @@ import lerfob.predictor.FertilityClassEmulator;
 import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
 import lerfob.predictor.hdrelationships.FrenchHeightPredictor;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.climate.REpiceaClimateVariableMap;
@@ -144,7 +145,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 		}
 	}
 	
-	protected void setResidualVariance(Matrix sigma2) {
+	protected void setResidualVariance(SymmetricMatrix sigma2) {
 		double correlationParameters = PhiParameters.get(species.getSpeciesType());
 		GaussianErrorTermEstimate estimate = new GaussianErrorTermEstimate(sigma2, correlationParameters, TypeMatrixR.LINEAR);
 		setDefaultResidualError(ErrorTermGroup.Default, estimate);
@@ -319,7 +320,8 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 	synchronized GaussianEstimate predictHeightAndVariance(FrenchHDRelationship2018Plot stand, FrenchHDRelationship2018Tree tree) {
 		Matrix pred = new Matrix(1,1);
 		pred.setValueAt(0, 0, predictHeightM(stand, tree));
-		Matrix variance = oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose());
+		SymmetricMatrix variance = SymmetricMatrix.convertToSymmetricIfPossible(
+				oXVector.multiply(this.getParameterEstimates().getVariance()).multiply(oXVector.transpose()));
 		return new GaussianEstimate(pred, variance);
 	}
 	

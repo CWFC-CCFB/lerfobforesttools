@@ -27,6 +27,7 @@ import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies
 import repicea.math.AbstractMathematicalFunction;
 import repicea.math.MathematicalFunction;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
@@ -114,18 +115,18 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 		}
 
 		@Override
-		public Matrix getHessian() {
+		public SymmetricMatrix getHessian() {
 			double dummyWindstorm = getVariableValue(1);
 			double windstormParameter = getParameterValue(1);
 			double randomEffect = getParameterValue(2);
-			Matrix hessian = new Matrix(3,3);
+			SymmetricMatrix hessian = new SymmetricMatrix(3);
 			hessian.setValueAt(0, 0, 0d);
-			hessian.setValueAt(1, 0, 0d);
-			hessian.setValueAt(2, 0, 0d);
+//			hessian.setValueAt(1, 0, 0d);
+//			hessian.setValueAt(2, 0, 0d);
 			hessian.setValueAt(0, 1, 0d);
-			hessian.setValueAt(1, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
-			hessian.setValueAt(2, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			hessian.setValueAt(0, 2, 0d);
+			hessian.setValueAt(1, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
+//			hessian.setValueAt(2, 1, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			hessian.setValueAt(1, 2, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			hessian.setValueAt(2, 2, dummyWindstorm * Math.exp(windstormParameter + randomEffect));
 			return hessian;
@@ -181,8 +182,10 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 					numberOfParameters = betaPrelim.m_iRows - 1;
 				}
 				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
-				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
-				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
+				SymmetricMatrix randomEffectVariance = SymmetricMatrix.convertToSymmetricIfPossible(
+						betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0));
+				SymmetricMatrix omega = SymmetricMatrix.convertToSymmetricIfPossible(
+						omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1));		
 				MathildeMortalitySubModule subModule = new MathildeMortalitySubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));

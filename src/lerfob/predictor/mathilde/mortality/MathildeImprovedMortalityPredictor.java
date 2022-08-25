@@ -19,20 +19,16 @@
 package lerfob.predictor.mathilde.mortality;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import lerfob.predictor.mathilde.MathildeTree;
-import repicea.math.MathematicalFunction;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.stats.estimates.GaussianEstimate;
-import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
-import repicea.stats.model.glm.LinkFunction;
 import repicea.util.ObjectUtility;
 
 @SuppressWarnings("serial")
@@ -59,14 +55,16 @@ public class MathildeImprovedMortalityPredictor extends	MathildeMortalityPredict
 			numberOfParameters = -1;
 			int numberOfExcludedGroups = 10;		
 			
-			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			//
+			for (int excludedGroup = 0; excludedGroup <= numberOfExcludedGroups; excludedGroup++) {			
 				Matrix betaPrelim = betaMap.get(excludedGroup);
 				if (numberOfParameters == -1) {
 					numberOfParameters = betaPrelim.m_iRows - 1;
 				}
 				Matrix defaultBetaMean = betaPrelim.getSubMatrix(0, numberOfParameters - 1, 0, 0);
-				Matrix randomEffectVariance = betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0);
-				Matrix omega = omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1);		
+				SymmetricMatrix randomEffectVariance = SymmetricMatrix.convertToSymmetricIfPossible(
+						betaPrelim.getSubMatrix(numberOfParameters, numberOfParameters, 0, 0));
+				SymmetricMatrix omega = SymmetricMatrix.convertToSymmetricIfPossible(
+						omegaMap.get(excludedGroup).squareSym().getSubMatrix(0, numberOfParameters - 1, 0, numberOfParameters - 1));		
 				MathildeMortalitySubModule subModule = new MathildeMortalitySubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(new Matrix(randomEffectVariance.m_iRows,1), randomEffectVariance));

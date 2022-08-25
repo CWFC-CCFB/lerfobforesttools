@@ -19,7 +19,6 @@
 package lerfob.predictor.mathilde.thinningbeta;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +27,7 @@ import java.util.Map;
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
@@ -36,8 +36,8 @@ import repicea.simulation.thinners.REpiceaThinner;
 import repicea.simulation.thinners.REpiceaTreatmentDefinition;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.integral.AbstractGaussQuadrature.NumberOfPoints;
-import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
 import repicea.stats.integral.GaussHermiteQuadrature;
+import repicea.stats.integral.GaussHermiteQuadrature.GaussHermiteQuadratureCompatibleFunction;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -148,13 +148,14 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 					numberOfParameters = defaultBetaMean.m_iRows;
 				}
 				
-				Matrix omega = omegaMap.get(excludedGroup).squareSym();
+				SymmetricMatrix omega = omegaMap.get(excludedGroup).squareSym();
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				
 				subModule.setParameterEstimates(new ModelParameterEstimates(defaultBetaMean, omega));
 				
-				Matrix covParms = covparmsMap.get(excludedGroup);
+				SymmetricMatrix covParms = SymmetricMatrix.convertToSymmetricIfPossible(
+						covparmsMap.get(excludedGroup));
 				
 				Matrix meanIntervalRandomEffect = new Matrix(1,1);
 				subModule.setDefaultRandomEffects(HierarchicalLevel.INTERVAL_NESTED_IN_PLOT, new GaussianEstimate(meanIntervalRandomEffect, covParms));

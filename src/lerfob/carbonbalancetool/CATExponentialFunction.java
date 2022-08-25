@@ -19,6 +19,7 @@
 package lerfob.carbonbalancetool;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 
 
 
@@ -53,8 +54,8 @@ public class CATExponentialFunction extends CATDecayFunction {
 	}
 
 	@Override
-	public Matrix getHessian() {
-		Matrix hessian = new Matrix(ParameterID.values().length, ParameterID.values().length);
+	public SymmetricMatrix getHessian() {
+		SymmetricMatrix hessian = new SymmetricMatrix(ParameterID.values().length);
 		double derParam = getX() / (getLambda() * getLambda());
 		double functionValue = getValue();
 		double der2Param = - 2 * getX() / (getLambda() * getLambda() * getLambda());

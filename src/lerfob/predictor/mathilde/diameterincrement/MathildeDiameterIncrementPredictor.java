@@ -28,6 +28,7 @@ import lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2014.FrenchHD
 import lerfob.predictor.mathilde.MathildeTree;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.GrowthModel;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
@@ -112,7 +113,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 				if (numberOfParameters == -1) {
 					numberOfParameters = defaultBetaMean.m_iRows;
 				}
-				Matrix omega = omegaMap.get(excludedGroup).squareSym();
+				SymmetricMatrix omega = omegaMap.get(excludedGroup).squareSym();
 
 				MathildeDiameterIncrementSubModule subModule = new MathildeDiameterIncrementSubModule(isParametersVariabilityEnabled, isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
 				subModules.put(excludedGroup, subModule);
@@ -122,15 +123,14 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 				Matrix covParms = covparmsMap.get(excludedGroup);
 				
 				Matrix meanPlotRandomEffect = new Matrix(1,1);
-				Matrix varPlotRandomEffect = covParms.getSubMatrix(0, 0, 0, 0);
+				SymmetricMatrix varPlotRandomEffect = SymmetricMatrix.convertToSymmetricIfPossible(covParms.getSubMatrix(0, 0, 0, 0));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.PLOT, new GaussianEstimate(meanPlotRandomEffect, varPlotRandomEffect));
 				
-				
 				Matrix meanTreeRandomEffect = new Matrix(1,1);
-				Matrix varTreeRandomEffect = covParms.getSubMatrix(1, 1, 0, 0);
+				SymmetricMatrix varTreeRandomEffect = SymmetricMatrix.convertToSymmetricIfPossible(covParms.getSubMatrix(1, 1, 0, 0));
 				subModule.setDefaultRandomEffects(HierarchicalLevel.TREE, new GaussianEstimate(meanTreeRandomEffect, varTreeRandomEffect));
 				
-				Matrix varResidualError = covParms.getSubMatrix(2, 2, 0, 0);
+				SymmetricMatrix varResidualError = SymmetricMatrix.convertToSymmetricIfPossible(covParms.getSubMatrix(2, 2, 0, 0));
 				
 				subModule.setDefaultResidualError(ErrorTermGroup.Default, new GaussianErrorTermEstimate(varResidualError));
 				
@@ -351,7 +351,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		
 		Matrix mean = new Matrix(1,1);
 		mean.setValueAt(0, 0, covariance / varianceRandomEffectHeight * blupMean.getValueAt(0, 0));
-		Matrix variance = new Matrix(1,1);
+		SymmetricMatrix variance = new SymmetricMatrix(1);
 		variance.setValueAt(0, 0, varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight);
 		return new GaussianEstimate(mean, variance);
 	}

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import lerfob.simulation.covariateproviders.plotlevel.FrenchRegion2016Provider.FrenchRegion2016;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.SASParameterEstimates;
@@ -121,7 +122,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 			String omegaFilename = path + "0_omega.csv";
 			
 			Matrix beta = ParameterLoader.loadVectorFromFile(betaFilename).get();
-			Matrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
+			SymmetricMatrix omega = ParameterLoader.loadVectorFromFile(omegaFilename).get().squareSym();
 			
 			ModelParameterEstimates estimate = new SASParameterEstimates(beta, omega);
 			setParameterEstimates(estimate); 

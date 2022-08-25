@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
@@ -89,7 +90,7 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 				if (numberOfParameters == -1) {
 					numberOfParameters = defaultBetaMean.m_iRows;
 				}
-				Matrix omega = omegaMap.get(excludedGroup).squareSym();
+				SymmetricMatrix omega = omegaMap.get(excludedGroup).squareSym();
 
 
 				MathildeThinningSubModule subModule = new MathildeThinningSubModule(isParametersVariabilityEnabled,	isRandomEffectsVariabilityEnabled, isResidualVariabilityEnabled);
