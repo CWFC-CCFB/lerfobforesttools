@@ -77,7 +77,7 @@ dependencies {
     implementation 'org.jfree:jfreechart:1.0.17'
     implementation 'jfree:jfreechart-swt:1.0.17'
     implementation 'net.sf.py4j:py4j:0.10.9.2'    
-    implementation group: 'org', name: 'repicea', version: '1.4+'    
+    implementation group: 'org', name: 'repicea', version: '1+'    
     
     testImplementation "junit:junit:4.12"    
 }
