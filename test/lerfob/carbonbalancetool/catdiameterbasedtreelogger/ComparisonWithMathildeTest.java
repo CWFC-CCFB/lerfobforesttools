@@ -1,3 +1,21 @@
+/*
+ * This file is part of the lerfob-forestools library.
+ *
+ * Copyright (C) 2010-2017 Mathieu Fortin for LERFOB INRA/AgroParisTech, 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed with the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * Please see the license at http://www.gnu.org/copyleft/lesser.html.
+ */
 package lerfob.carbonbalancetool.catdiameterbasedtreelogger;
 
 import java.io.IOException;
@@ -6,7 +24,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import lerfob.carbonbalancetool.CATCompatibleTree;
@@ -18,6 +38,8 @@ import lerfob.treelogger.mathilde.MathildeTreeLogger;
 import lerfob.treelogger.mathilde.MathildeTreeLoggerParameters;
 import repicea.simulation.treelogger.WoodPiece;
 import repicea.util.ObjectUtility;
+import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 
 public class ComparisonWithMathildeTest {
 
@@ -65,6 +87,14 @@ public class ComparisonWithMathildeTest {
 				return null;
 			}
 		}
+	}
+
+	private static Language languageBefore;
+	
+	@BeforeClass
+	public static void doThisBefore() {
+		languageBefore = REpiceaTranslator.getCurrentLanguage();
+		REpiceaTranslator.setCurrentLanguage(Language.English);
 	}
 
 	@Test
@@ -214,6 +244,10 @@ public class ComparisonWithMathildeTest {
 		return outputMap;
 	}
 	
+	@AfterClass
+	public static void doThatAfter() {
+		REpiceaTranslator.setCurrentLanguage(languageBefore);
+	}
 	
 	
 }
