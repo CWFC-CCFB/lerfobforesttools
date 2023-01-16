@@ -46,13 +46,13 @@ import repicea.gui.OwnedWindow;
 import repicea.gui.REpiceaAWTProperty;
 import repicea.gui.UIControlManager;
 import repicea.gui.components.REpiceaComboBoxOpenButton;
-import repicea.net.BrowserCaller;
 import repicea.simulation.processsystem.SystemLayout;
 import repicea.simulation.processsystem.SystemManagerDialog;
 import repicea.simulation.processsystem.SystemPanel;
 import repicea.simulation.processsystem.UISetup;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.simulation.treelogger.TreeLoggerParametersDialog;
+import repicea.util.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
