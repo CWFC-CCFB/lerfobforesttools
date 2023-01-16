@@ -53,9 +53,9 @@ import repicea.gui.components.NumberFormatFieldFactory.Range;
 import repicea.io.IOUserInterface;
 import repicea.io.REpiceaIOFileHandlerUI;
 import repicea.lang.REpiceaSystem;
-import repicea.net.BrowserCaller;
 import repicea.serial.Memorizable;
 import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.SpeciesType;
+import repicea.util.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 

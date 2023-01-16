@@ -43,9 +43,9 @@ import repicea.io.GExportRecord;
 import repicea.io.REpiceaRecordSet;
 import repicea.io.tools.REpiceaExportTool;
 import repicea.io.tools.REpiceaExportToolDialog;
-import repicea.net.BrowserCaller;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.MonteCarloEstimate;
+import repicea.util.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 

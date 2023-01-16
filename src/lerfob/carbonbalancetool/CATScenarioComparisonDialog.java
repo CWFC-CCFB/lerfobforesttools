@@ -21,7 +21,7 @@ import repicea.gui.AutomatedHelper;
 import repicea.gui.REpiceaDialog;
 import repicea.gui.UIControlManager;
 import repicea.gui.UIControlManager.CommonControlID;
-import repicea.net.BrowserCaller;
+import repicea.util.BrowserCaller;
 import repicea.util.REpiceaTranslator;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
