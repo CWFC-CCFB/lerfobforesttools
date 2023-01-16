@@ -26,22 +26,6 @@ repositories {
     mavenLocal()
 }
 
-
-def getSvnRevision(){
-    ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
-    SVNClientManager clientManager = SVNClientManager.newInstance(options);
-    // here we force updating to the HEAD SVN version so that the local working copy is up to date with the repo
-    // (the local SVN revision is behind the HEAD even if the current user himself just commited to the HEAD)
-    // the "install" target depends on the "integrationTest" target to make sure we publish a tested version
-    // i.e. user A commits, then user B commits something else, then A publishes -> user B updates and retests before publishing
-    SVNUpdateClient updateClient = clientManager.getUpdateClient();
-    updateClient.doUpdate(projectDir, SVNRevision.HEAD, false);
-    SVNStatusClient statusClient = clientManager.getStatusClient();
-    SVNStatus status = statusClient.doStatus(projectDir, false);
-    SVNRevision revision = status.getRevision();
-    return revision.getNumber();
-}
-
 println "Using java version " + JavaVersion.current()
 
 sourceSets {
@@ -88,16 +72,40 @@ dependencies {
     testImplementation "junit:junit:4.12"    
 }
 
+def getSemVersion = { ->
+
+	def versionStdOut = new ByteArrayOutputStream()
+
+	def cmd = ['gitversion', '/showvariable', 'SemVer']
+	
+	    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+	        def oscmd = ['cmd', '/c'] + cmd
+	        exec {
+	        	commandLine oscmd
+	        	standardOutput = versionStdOut
+        	}
+	    
+	    } else {
+	        def oscmd = ['sh'] + cmd
+	        exec {
+	        	commandLine oscmd
+	    		standardOutput = versionStdOut
+    		}
+    	}
+    
+    return versionStdOut.toString().trim()        	
+}
+
 
 task updateRevision(type: WriteProperties) {
-	project.ext.build = getSvnRevision()
-	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
-	property "Revision", project.ext.build
-	property "Version", lerfobForestToolsVersion
+//	project.ext.build = getSvnRevision()
+//	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
+//	property "Revision", project.ext.build
+//	property "Version", lerfobForestToolsVersion
 }
 
 compileJava {
-	project.version=lerfobForestToolsVersion
+	project.version=getSemVersion()
 	println "Building " + rootProject.name + " v" + project.version
 }
 
