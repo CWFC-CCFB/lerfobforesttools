@@ -1,19 +1,10 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.10.3'
-    }
-}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
 
-plugins {
-    id 'idea'
-    id 'eclipse'
-    id 'java'
-}
-
-import org.tmatesoft.svn.core.wc.*
+group = 'org'
+version = project.version
 
 java {
   toolchain {
@@ -57,17 +48,9 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.jfree:jcommon:1.0.23'
-    implementation 'org.jfree:jfreechart:1.0.17'
-    implementation 'jfree:jfreechart-swt:1.0.17'
-    implementation 'net.sf.py4j:py4j:0.10.9.2'    
     implementation group: 'org', name: 'repicea', version: '[1.9.4,)'    
     implementation group: 'org', name: 'repicea-mathstats', version: '[1.1,)'    
     implementation group: 'org', name: 'repicea-simulation', version: '[1.0.2,)'    
-    
-    implementation group: 'org.apache.xmlgraphics', name: 'batik-svggen', version: '1.14'
-	implementation group: 'org.apache.xmlgraphics', name: 'batik-dom', version: '1.14'
-	implementation group: 'org.apache.xmlgraphics', name: 'batik-codec', version: '1.14'
     
     testImplementation "junit:junit:4.12"    
 }
@@ -96,13 +79,6 @@ def getSemVersion = { ->
     return versionStdOut.toString().trim()        	
 }
 
-
-task updateRevision(type: WriteProperties) {
-//	project.ext.build = getSvnRevision()
-//	outputFile = file("$buildDir/classes/java/main/lerfob/app/revision")	
-//	property "Revision", project.ext.build
-//	property "Version", lerfobForestToolsVersion
-}
 
 compileJava {
 	project.version=getSemVersion()
@@ -139,7 +115,6 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 jar {
-	dependsOn updateRevision
 	manifest {
         attributes("Built-By": "Mathieu Fortin",
         		   "Specification-Title": "Growth Models for Northern France",
@@ -158,24 +133,6 @@ jar {
 	from sourceSets.main.allJava		
 }
 
-task fatJar(type: Jar) {
-	group = 'build'
-	description = 'Creates a fat jar for distribution'
-	dependsOn updateRevision
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE		// to avoid duplicate files
-    manifest {
-         attributes("Built-By": "Mathieu Fortin",
-        		   "Specification-Title": "Growth Models for Northern France",
-        		   "Specification-Version": archiveVersion,                   
-                   "Specification-Vendor": "LERFOB and Canadian Wood Fibre Centre",
-                   "Implementation-Title": "lerfobforesttools",
-                   "Implementation-Vendor": "LERFOB and Canadian Wood Fibre Centre",
-                   "Main-Class": "lerfob.app.LerfobForesttools")
-    }
-    archiveBaseName = 'CAT'
-	destinationDirectory =  file("${installDirCAT}")  
-    from { sourceSets.main.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }		
-}
 
 task deleteInstallFolder(type: Delete) {
   delete "${installDir}"  
@@ -188,4 +145,27 @@ task install(type: Copy) {
 	from configurations.default
 	from jar
 	into "${installDir}"
+}
+
+publishing {
+    publications {
+        lerfobforesttools(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'LocalFile'
+            url = "file://${buildDir}/repo"
+        }
+    }
+}
+
+publishLerfobforesttoolsPublicationToMavenLocal {
+	dependsOn integrationTest
+}
+
+publishLerfobforesttoolsPublicationToLocalFileRepository {
+	dependsOn integrationTest
 }

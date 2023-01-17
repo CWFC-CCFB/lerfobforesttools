@@ -2,7 +2,7 @@ package lerfob;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lerfob.app.LerfobForesttools;
+import lerfob.app.LerfobForesttoolsAppVersion;
 
 
 public class ProductionEnvironmentTest {
@@ -13,7 +13,7 @@ public class ProductionEnvironmentTest {
 	 * This test is excluded from the normal local tests and executed only with the integration tests from the JAR file
 	 */
 	public void makeSurePackageIsRunningFromJAR() {
-		String resourceURL = LerfobForesttools.class.getResource("LerfobForesttools.class").toString();
+		String resourceURL = LerfobForesttoolsAppVersion.class.getResource("LerfobForesttoolsAppVersion.class").toString();
 		Assert.assertTrue(resourceURL.startsWith("jar:"));
 	}
 }
