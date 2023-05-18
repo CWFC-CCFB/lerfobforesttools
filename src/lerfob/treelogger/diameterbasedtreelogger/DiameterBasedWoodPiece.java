@@ -29,6 +29,7 @@ public class DiameterBasedWoodPiece extends WoodPiece {
 	 * Constructor.
 	 * @param logCategory a MaritimePineBasicTreeLogCategory instance
 	 * @param tree a MaritimePineBasicTree instance
+	 * @param overbark a boolean true if the volume was measured over bark
 	 * @param volumeForThisWoodPieceM3 the volume without any expansion factor
 	 */
 	public DiameterBasedWoodPiece(DiameterBasedTreeLogCategory logCategory, LoggableTree tree, boolean overbark, double volumeForThisWoodPieceM3) {

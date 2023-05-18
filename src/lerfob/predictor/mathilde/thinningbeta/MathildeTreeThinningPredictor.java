@@ -108,6 +108,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 
 	/**
 	 * Constructor.
+	 * @param isVariabilityEnabled a boolean true to enable the stochasticity of the model
 	 */
 	public MathildeTreeThinningPredictor(boolean isVariabilityEnabled) {
 		super(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);

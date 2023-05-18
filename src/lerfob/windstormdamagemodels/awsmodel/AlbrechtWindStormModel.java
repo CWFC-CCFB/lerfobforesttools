@@ -72,9 +72,9 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	}
 
 	/**
-	 * This method makes it possible to enable the stochastic mode. BY DEFAULT, 
-	 * THE STOCHASTIC MODE IS DISABLED.
-	 * @param enabled
+	 * Enable the stochastic mode.<p> 
+	 * By default, the stochastic model is set to false.
+	 * @param enabled a boolean true to enable the stochastic mode.
 	 */
 	public void setStochasticModeEnabled(boolean enabled) {
 		isStochasticModeEnabled = enabled;
@@ -133,7 +133,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	}
 	
 	/**
-	 * This method returns the predicted proportion of stand damage (<75% of basal area damaged) given that the stand is not totally damaged. 
+	 * Provide the predicted proportion of stand damage (&#60; 75% of basal area damaged) given that the stand is not totally damaged. 
 	 * @return the proportion (double)
 	 */
 	private double getProportionOfStandDamageIfNotTotallyDamaged() {
@@ -145,14 +145,20 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	}
 	
 	/**
-	 * This method generates three predictions : 1- the probability of stand damage, 
-	 * 2- the probability of total damage (>75% of basal area damaged) conditional on the occurrence of stand damaged, and
-	 * 3- the proportion of stand damage (<75% of basal area damaged) given that the stand is not totally damaged. NOTE: if
-	 * there is no tree in this stand, the method returns an array containing null probabilities.
+	 * Generates the model predictions. <p>
+	 * 
+	 * Those consists of three predictions:
+	 * <ul>
+	 * <li>the probability of stand damage, 
+	 * <li>the probability of total damage (&#62; 75% of basal area damaged) conditional on the occurrence of stand damaged, and
+	 * <li>the proportion of stand damage (&#60; 75% of basal area damaged) given that the stand is not totally damaged. 
+	 * </ul>
+	 * 
+	 * NOTE: if there is no tree in this stand, the method returns an array containing null probabilities.
 	 * @param stand a AWSStand object
 	 * @param treatment a AWSTreatment object
 	 * @return an array of three doubles corresponding to the above mentioned probabilities 
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	public double[] getPredictionForThisStand(AWSStand stand, AWSTreatment treatment) throws Exception {
 		boolean isNewTreatment;
@@ -206,7 +212,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	 * @param stand a AWSStand instance
 	 * @param treatment a AWSTreatment instance
 	 * @return the list of damaged trees
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	public Collection<AWSTree> getDamagedTreesOfThisStand(AWSStand stand, AWSTreatment treatment) throws Exception {
 		Collection<AWSTree> damagedTrees = new ArrayList<AWSTree>();
@@ -237,7 +243,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	 * have been calculated prior to this.
 	 * @param tree a AWSTree object
 	 * @return a boolean (true = the tree is damaged, otherwise is false)
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	protected Boolean getResultForThisTree(AWSTree tree) throws Exception {
 		try {
@@ -298,8 +304,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 			} else {
 				xVector[2] = getReferenceTables().getRelativeH100D100Ratio(species, 
 						getStand().getDominantDiameterCm(),
-						getStand().getDominantHeightM(),
-						(Integer) getStandVariable(StandVariable.year));
+						getStand().getDominantHeightM());
 			}
 			break;
 		case DouglasFir:
@@ -335,8 +340,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 			} else {
 				xVector[6] = getReferenceTables().getRelativeH100D100Ratio(species, 
 						getStand().getDominantDiameterCm(),
-						getStand().getDominantHeightM(),
-						(Integer) getStandVariable(StandVariable.year));
+						getStand().getDominantHeightM());
 			}
 			randomEffect = getRandomEffect(RandomEffectID.Step1Spruce);
 			break;
@@ -372,7 +376,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	 * This method computes the probability of observing more than 75% of damage in the stand for a particular tree species.
 	 * @param species a TreeSpecies enum variable
 	 * @return the probability (double)
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	@SuppressWarnings("rawtypes")
 	protected double computeProbabilityOfTotalDamage(AWSTreeSpecies species) throws Exception {
@@ -416,8 +420,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 			} else {
 				xVector[2] = getReferenceTables().getRelativeH100D100Ratio(species, 
 						getStand().getDominantDiameterCm(),
-						getStand().getDominantHeightM(),
-						(Integer) getStandVariable(StandVariable.year));
+						getStand().getDominantHeightM());
 			}
 			break;
 		case SilverFir:
@@ -446,7 +449,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 	 * This method computes the damage proportion from 0 to 75% for a particular tree species.
 	 * @param species a TreeSpecies enum variable
 	 * @return the probability (double)
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	protected double computeProportionOfDamageIfNotTotallyDamaged(AWSTreeSpecies species) throws Exception {
 		double randomEffect = 0d;
@@ -530,8 +533,7 @@ public class AlbrechtWindStormModel extends AWSModelCore implements ItemListener
 			} else {
 				referenceH100D100 = getReferenceTables().getRelativeH100D100Ratio((AWSTreeSpecies) getStandVariable(StandVariable.DominantSpecies), 
 					getStand().getDominantDiameterCm(),
-					getStand().getDominantHeightM(),
-					(Integer) getStandVariable(StandVariable.year));
+					getStand().getDominantHeightM());
 			}
 			xVector[5] = getTree().getHeightM() / getTree().getDbhCm() / referenceH100D100; // relative h/d - ratio  
 		}

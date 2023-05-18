@@ -108,8 +108,8 @@ public class BasicTreeLoggerParameters extends TreeLoggerParameters<BasicLogCate
 	
 	/**
 	 * Find the appropriate tree log category regardless of the language
-	 * @param enumVar
-	 * @return
+	 * @param enumVar a MessageID enum
+	 * @return a BasicLogCategory instance
 	 */
 	public BasicLogCategory findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID enumVar) {
 		BasicLogCategory logCat = null;

@@ -47,7 +47,7 @@ public class FrenchCommercialVolume2020TreeImpl implements FrenchCommercialVolum
 	 * @param speciesName the species name. It should be an enum name among the FrenchCommercialVolume2020TreeSpecies enum variable (e.g. Pinus halepensis).
 	 * @param pred an optional prediction for test purposes.
 	 * @param se the standard error of the prediction for test purposes.
-	 * @param se prediction variance (mean + residual) for test purposes.
+	 * @param var prediction variance (mean + residual) for test purposes.
 	 */
 	protected FrenchCommercialVolume2020TreeImpl(int id, double dbhCm, double heightM, String speciesName, double pred, double se, double var) {
 		this.id = id;

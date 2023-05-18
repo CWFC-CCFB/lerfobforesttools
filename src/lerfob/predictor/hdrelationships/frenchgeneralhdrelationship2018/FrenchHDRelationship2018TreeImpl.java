@@ -91,6 +91,7 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 
 	/**
 	 * Constructor.
+	 * @param id the id of the tree
 	 * @param heightM the height of the tree (m) or -1 if it was not observed
 	 * @param dbhCm the diameter at breast height (cm)
 	 * @param gOther the basal area of other trees (m2/ha)

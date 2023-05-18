@@ -27,12 +27,13 @@ import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 public class DrexhageAndColinRootBiomassPredictor {
 
 	/**
-	 * This static method returns the root biomass for Oak trees in kg.
-	 * It is based on the equations in Drexhage & Colin 2001 (see Table 2, eq. 9).
+	 * Provide the root dry biomass for Oak trees.<p>
+	 * It is based on the equations in Drexhage and Colin 2001 (see Table 2, eq. 9).
 	 * @see <a href=http://forestry.oxfordjournals.org/content/74/5/491.full.pdf+html> 
 	 * Drexhage, M., and Colin, F. 2001. Estimating root system biomass from breast-height diameters. Forestry 74(5): 491-497.
 	 * </a>
 	 * @param tree a DbhCmProvider instance
+	 * @return the biomass in kg.
 	 */
 	public static double getRootBiomassContentForOakKg(DbhCmProvider tree) { 
 		if (tree == null) {return -1d;}
@@ -42,13 +43,14 @@ public class DrexhageAndColinRootBiomassPredictor {
 	}
 
 	/**
-	 * This static method returns the root dry biomass for Beech trees in kg.
+	 * Provide the root dry biomass for Beech trees.<p>
 	 * It is based on the equation for Fagus sylvatica (NE France) 
-	 * in Drexhage & Colin 2001 (see Table 2, eq. 8).
+	 * in Drexhage and Colin 2001 (see Table 2, eq. 8).
 	 * @see <a href=http://forestry.oxfordjournals.org/content/74/5/491.full.pdf+html> 
 	 * Drexhage, M., and Colin, F. 2001. Estimating root system biomass from breast-height diameters. Forestry 74(5): 491-497.
 	 * </a>
 	 * @param tree a DbhCmProvider instance
+	 * @return the biomass in kg.
 	 */
 	public static double getRootBiomassForBeechKg(DbhCmProvider tree) {
 		if (tree == null) {return -1d;}

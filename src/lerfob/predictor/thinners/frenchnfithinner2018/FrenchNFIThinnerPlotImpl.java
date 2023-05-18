@@ -41,13 +41,13 @@ public class FrenchNFIThinnerPlotImpl implements FrenchNFIThinnerPlot {
 	
 	/**
 	 * Constructor.
-	 * @param plotId
-	 * @param regionName
-	 * @param basalAreaM2Ha
-	 * @param nbStemsHa
-	 * @param slopeInclinationPercent
-	 * @param wasThereAnySiliviculturalTreatmentInTheLast5Years
-	 * @param probabilityOfBeingOnPrivateLand
+	 * @param plotId the plot id
+	 * @param regionName the region name
+	 * @param basalAreaM2Ha the basal area of the plot
+	 * @param nbStemsHa the stem density
+	 * @param slopeInclinationPercent the slope inclination
+	 * @param wasThereAnySiliviculturalTreatmentInTheLast5Years a boolean true if a treatment occurred in the last five years
+	 * @param probabilityOfBeingOnPrivateLand the probability of being on private land
 	 */
 	public FrenchNFIThinnerPlotImpl(String plotId,
 			String regionName, 

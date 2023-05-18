@@ -1,20 +1,25 @@
-Copyright (C) 2009-2019 
+The lerfobforesttools library
+==================
+
+<!-- badges: start -->
+[![Java CI](https://github.com/CWFC-CCFB/betadivcalc/actions/workflows/gradle.yml/badge.svg)](https://github.com/CWFC-CCFB/lerfobforesttools/actions/workflows/gradle.yml)
+<!-- badges: end -->
 
 Mathieu Fortin, Canadian Forest Service (formerly LERFoB, AgroParisTech)
 
 Email: mathieu.fortin.re@gmail.com
 
-Contributors
-	Frederic Mothe, INRAE
-	Patrick Vallet, INRAE
-	Francois de Coligny, INRAE
-	Ruben Manso, formerly LERFoB, AgroParisTech
-	Axel Albrecht, FVA Baden-Wurttenberg 
+Contributors:
+- Frederic Mothe, INRAE
+- Patrick Vallet, INRAE
+- Francois de Coligny, INRAE
+- Ruben Manso, formerly LERFoB, AgroParisTech
+- Axel Albrecht, FVA Baden-Wurttenberg 
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
-version 3 of the License, or (at your option) any later version.
+version 2.1 of the License, or (at your option) any later version.
 
 This library is distributed with the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied
@@ -24,10 +29,10 @@ License for more details.
 
 Please see the license at http://www.gnu.org/copyleft/lesser.html.
 
-This library requires the repicea library to work properly, which 
-is protected by a GNU Lesser General Public License. It also requires 
-the JFreeChart library (http://www.jfree.org/jfreechart/) protected by a 
-GNU LGP license and py4j library (http://py4j.sourceforge.net/) protected by a BSD license. 
+This library requires the following libraries:
+- repicea (licensed LGPL 2.1)
+- repicea-mathstats (licensed LGPL 2.1)
+- repicea-simulation (licensed LGPL 2.1)
 
 It might also require the jabx library version 2.3.2 (Copyright (c) 2017 Oracle and/or its affiliates, 
 https://eclipse-ee4j.github.io/jaxb-ri/) if the JVM is running under Java 11 or 13. 

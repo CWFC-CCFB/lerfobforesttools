@@ -47,11 +47,11 @@ public class AWSModelCore {
 		 */
 		firstStep,
 		/**
-		 * The occurrence of total stand damage (>= 75% of basal area affected) conditional on the first modeling step (Bernoulli distribution)
+		 * The occurrence of total stand damage (&#62;= 75% of basal area affected) conditional on the first modeling step (Bernoulli distribution)
 		 */
 		secondStep,
 		/**
-		 * The partial storm damage conditional on the second modeling step, i.e. <= 75% of basal area affected (Binomial distribution)
+		 * The partial storm damage conditional on the second modeling step, i.e. &#60;= 75% of basal area affected (Binomial distribution)
 		 */
 		thirdStep,
 		/**
@@ -101,6 +101,7 @@ public class AWSModelCore {
 	
 	/**
 	 * This method records the AWSStand and its random effect vector in the randomDeviatesRegistry member.
+	 * @param randomEffectID the id of the random effect
 	 * @return the random effect if the stochastic mode is enabled or 0 otherwise 
 	 */
 	protected double getRandomEffect(RandomEffectID randomEffectID) {

@@ -275,7 +275,7 @@ public class AWSReferenceTables {
 	 * @param hDom the dominant height
 	 * @param basalArea the current basal area (m2/ha)
 	 * @return the optimal basal area (a double)
-	 * @throws Exception
+	 * @throws Exception if an error has occurred
 	 */
 	protected double getStockDensity(AWSTreeSpecies species, int age, double hDom, double basalArea) throws Exception {
 		try {
@@ -330,15 +330,7 @@ public class AWSReferenceTables {
 	 * @param h100 the dominant height (m)
 	 * @return the relative ratio (a double)
 	 */
-	protected double getRelativeH100D100Ratio(AWSTreeSpecies species, double d100, double h100, int year) {
-//		Map<Integer, Double> ratiosForThisSpecies = relativeH100D100Ratios.get(species);
-//		if (ratiosForThisSpecies != null) {
-//			int yearClass = (int) Math.round(year / 5d) * 5;
-//			double meanRatioForThisYearClass = ratiosForThisSpecies.get(yearClass);
-//			return h100 / d100 / meanRatioForThisYearClass;
-//		} else  {
-//			return -1d;
-//		}
+	protected double getRelativeH100D100Ratio(AWSTreeSpecies species, double d100, double h100) {
 		Double averageRatio = averageRelativeH100D100Ratios.get(species);
 		if (averageRatio != null) {
 			return h100 / d100 / averageRatio;

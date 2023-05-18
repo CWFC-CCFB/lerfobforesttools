@@ -93,9 +93,8 @@ public final class BWDModel {
 	 * @param stand = a BWDStand instance
 	 * @param windSpeed = the windspeed in km/h (double)
 	 * @return the proportion of damaged trees (double)
-	 * @throws Exception
 	 */
-	public double getProportionOfDamagedTrees(BWDStand stand, double windSpeed) throws Exception {
+	public double getProportionOfDamagedTrees(BWDStand stand, double windSpeed) {
 		Matrix xVector = new Matrix(1,8);
 		
 		xVector.setValueAt(0, 0, 1d);
@@ -137,12 +136,11 @@ public final class BWDModel {
 	
 	/**
 	 * This method returns the probability of wind damage for an individual tree. It is designed for wind speeds above 140 km/h.
-	 * The calibration data mostly come from the For�t de Haye (see Vincent Badeau's thesis).
+	 * The calibration data mostly come from the Foret de Haye (see Vincent Badeau's thesis).
 	 * @param tree = a BWDTree instance
 	 * @return the probability of stand damage (double)
-	 * @throws Exception
 	 */
-	public double getProbabilityOfDamageForThisTree(BWDTree tree) throws Exception {
+	public double getProbabilityOfDamageForThisTree(BWDTree tree) {
 		double cHorizonDepth = tree.getSoilHorizonCDepthM();
 		double treeHeight = tree.getHeightM();
 		double treeDbh = tree.getDbhCm();

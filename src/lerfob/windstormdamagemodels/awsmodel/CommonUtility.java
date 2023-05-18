@@ -102,9 +102,8 @@ public class CommonUtility {
 	 * @param areaFactor the area factor
 	 * @param heightRequested a boolean, true means dominant height is requested while false requests the dominant diameter
 	 * @return either the dominant height or the dominant diameter
-	 * @throws Exception
 	 */
-	protected static Double getDominantHeightOrDiameter(Collection<AWSTree> trees, double areaFactor, boolean heightRequested) throws Exception {		// true means the plot are weighted
+	protected static Double getDominantHeightOrDiameter(Collection<AWSTree> trees, double areaFactor, boolean heightRequested) {		// true means the plot are weighted
 		
 		double dominantValue = 0;
 		double numberForDominantPerHa = 100;

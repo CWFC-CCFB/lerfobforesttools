@@ -25,7 +25,7 @@ import lerfob.fagacees.FagaceesSpeciesProvider.FgSpecies;
 
 /**
  * This class implements Bouchon's volume equation for oak and European beech. It Calculates the commercial wood volume for the stem and the branches, using a small end minimum diameter of 7cm.
- * @see Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.
+ * @see <a href = "https://infodoc.agroparistech.fr/index.php?lvl=notice_display&id=98751"> Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.</a>
  * @author Mathieu Fortin - November 2011
  */
 public class BouchonVolumeEquations {
@@ -33,7 +33,6 @@ public class BouchonVolumeEquations {
 	/**
 	 * Calculates the commercial wood volume for the stem and the branches, using a 
 	 * small-end minimum diameter of 7cm.
-	 * @see Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.
 	 * @param dbh the diameter at breast height (cm)
 	 * @param height the height (m)
 	 * @param species a Species enum variable Oak or Beech
@@ -137,7 +136,6 @@ public class BouchonVolumeEquations {
 	/**
 	 * Calculates the over-bark wood volume for STEM ONLY, using a small end minimum 
 	 * diameter of 7 cm using Bouchon Volume Tables (Bouchon 1982 for beech, Bouchon 1974 for oak)
-	 * @see Bouchon, J. 1974. Les tarifs de cubage. ENGREF. 57 p.
 	 * @param dbh the diameter at breast height (cm)
 	 * @param height the height (m)
 	 * @param species a FgSpecies enum variable Oak or Beech

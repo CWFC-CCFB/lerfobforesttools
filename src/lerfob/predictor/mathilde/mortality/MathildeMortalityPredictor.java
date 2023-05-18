@@ -142,7 +142,7 @@ public class MathildeMortalityPredictor extends REpiceaBinaryEventPredictor<Math
 
 	/**
 	 * Constructor.
-	 * @param isVariabilityEnabled
+	 * @param isVariabilityEnabled a boolean true to enable the stochasticity of the model
 	 */
 	public MathildeMortalityPredictor(boolean isVariabilityEnabled) {
 		this(isVariabilityEnabled, isVariabilityEnabled, isVariabilityEnabled);	
