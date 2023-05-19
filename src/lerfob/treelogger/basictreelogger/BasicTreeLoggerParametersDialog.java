@@ -147,16 +147,12 @@ public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getSource().equals(shortLivedSlider)) {
-//			BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-//					BasicTreeLoggerParameters.MessageID.ShortLived.toString());
+		if (evt.getSource().equals(shortLivedSlider) && evt.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
+//			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
-			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
-		} else if (evt.getSource().equals(longLivedSlider)) {
-//			BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-//					BasicTreeLoggerParameters.MessageID.LongLived.toString());
-			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
+		} else if (evt.getSource().equals(longLivedSlider) && evt.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
+//			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
 		}
@@ -170,12 +166,8 @@ public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<
 	@Override
 	public void synchronizeUIWithOwner() {
 		super.synchronizeUIWithOwner();
-//		BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-//				BasicTreeLoggerParameters.MessageID.ShortLived.toString());
 		BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		shortLivedSlider.setValue((int) (logCategory.getVolumeProportion() * 100));
-//		logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
-//				BasicTreeLoggerParameters.MessageID.LongLived.toString());
 		logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 		longLivedSlider.setValue((int) (logCategory.getVolumeProportion() * 100));
 	}
