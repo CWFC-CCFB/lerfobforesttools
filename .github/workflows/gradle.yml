@@ -27,17 +27,17 @@ jobs:
         distribution: temurin
         java-version: ${{ matrix.java }}
     
-#    - name: Install xvfb with Linux if needed
-#      if: ${{ matrix.os == 'ubuntu-latest' }}
-#      run: sudo apt-get install xvfb
+    - name: Install xvfb with Linux if needed
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: sudo apt-get install xvfb
     
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-        
- #   - name: Execute Gradle 'integrationTest' task on Linux
- #     if: ${{ matrix.os == 'ubuntu-latest' }}
- #     run: xvfb-run ./gradlew integrationTest
+
+    - name: Execute Gradle 'integrationTest' task on Linux
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: xvfb-run ./gradlew integrationTest
 
     - name: Execute Gradle 'integrationTest' task on other OS
-  #    if: ${{ matrix.os != 'ubuntu-latest' }}
+      if: ${{ matrix.os != 'ubuntu-latest' }}
       run: ./gradlew integrationTest  
