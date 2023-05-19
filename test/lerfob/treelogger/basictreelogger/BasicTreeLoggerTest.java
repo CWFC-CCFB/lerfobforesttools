@@ -47,6 +47,10 @@ public class BasicTreeLoggerTest {
 	 */
 	@Test
 	public void testLanguageCompatibilityAllInFrench() throws IOException, InterruptedException {
+		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+			System.out.println("Test will be skipped because Mac does not support Times font.");
+			return;
+		}
 		Language languageAtBeginning = REpiceaTranslator.getCurrentLanguage();
 		REpiceaTranslator.setCurrentLanguage(Language.French); // make sure we read it in English because those in the file .prl are in 
 		String filename = ObjectUtility.getPackagePath(getClass()) + "basicTreeLoggerParmsInFrench.tlp";
