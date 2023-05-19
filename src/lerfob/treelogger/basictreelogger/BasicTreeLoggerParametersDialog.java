@@ -151,10 +151,12 @@ public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<
 //			BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
 //					BasicTreeLoggerParameters.MessageID.ShortLived.toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
+			System.out.println("New value = " + evt.getNewValue().toString());
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
 		} else if (evt.getSource().equals(longLivedSlider)) {
 //			BasicLogCategory logCategory = params.getLogCategory(BasicTreeLoggerParameters.ANY_SPECIES, 
 //					BasicTreeLoggerParameters.MessageID.LongLived.toString());
+			System.out.println("New value = " + evt.getNewValue().toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
 		}
