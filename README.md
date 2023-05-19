@@ -2,7 +2,7 @@ The lerfobforesttools library
 ==================
 
 <!-- badges: start -->
-[![Java CI](https://github.com/CWFC-CCFB/betadivcalc/actions/workflows/gradle.yml/badge.svg)](https://github.com/CWFC-CCFB/lerfobforesttools/actions/workflows/gradle.yml)
+[![Java CI](https://github.com/CWFC-CCFB/lerfobforesttools/actions/workflows/gradle.yml/badge.svg)](https://github.com/CWFC-CCFB/lerfobforesttools/actions/workflows/gradle.yml)
 <!-- badges: end -->
 
 Mathieu Fortin, Canadian Forest Service (formerly LERFoB, AgroParisTech)
