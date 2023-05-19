@@ -34,7 +34,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        cache-disabled: true
+        gradle-version: 8.1
         
     - name: Execute Gradle 'integrationTest' task on Linux
       if: ${{ matrix.os == 'ubuntu-latest' }}
