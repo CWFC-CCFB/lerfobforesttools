@@ -97,6 +97,10 @@ public class BasicTreeLoggerTest {
 	 */
 	@Test
 	public void testLanguageCompatibilityWhenFileRecordedInFrenchButReadInEnglish() throws IOException, InterruptedException {
+		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+			System.out.println("Test will be skipped because Mac does not support Times font.");
+			return;
+		}
 		Language languageAtBeginning = REpiceaTranslator.getCurrentLanguage();
 		REpiceaTranslator.setCurrentLanguage(Language.English); // make sure we read it in English because those in the file .prl are in 
 		String filename = ObjectUtility.getPackagePath(getClass()) + "basicTreeLoggerParmsInFrench.tlp";
@@ -118,14 +122,11 @@ public class BasicTreeLoggerTest {
 		REpiceaSlider slider2 = (REpiceaSlider) sliders.get(1);
 		slider1.setValue(52);
 		Thread.sleep(WAIT_TIME);
-		Thread.sleep(WAIT_TIME);
-		Thread.sleep(WAIT_TIME);
-		Thread.sleep(WAIT_TIME);
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
 		BasicLogCategory shortLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		BasicLogCategory longLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
-		System.out.println("ShortLived volume proportion = " + shortLived.getVolumeProportion());
-		System.out.println("LongLived volume proportion = " + longLived.getVolumeProportion());
+//		System.out.println("ShortLived volume proportion = " + shortLived.getVolumeProportion());
+//		System.out.println("LongLived volume proportion = " + longLived.getVolumeProportion());
 		Assert.assertEquals("Testing if volume proportion has been recorded in short-lived category", 0.52, shortLived.getVolumeProportion(), 1E-8);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
 		JButton cancelButton = null;
