@@ -120,6 +120,7 @@ public class BasicTreeLoggerTest {
 		Thread.sleep(WAIT_TIME);
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
 		BasicLogCategory shortLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
+		System.out.println("ShortLived volume proportion = " + shortLived.getVolumeProportion());
 		Assert.assertEquals("Testing if volume proportion has been recorded in short-lived category", 0.52, shortLived.getVolumeProportion(), 1E-8);
 		BasicLogCategory longLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
