@@ -118,6 +118,7 @@ public class BasicTreeLoggerTest {
 		REpiceaSlider slider2 = (REpiceaSlider) sliders.get(1);
 		slider1.setValue(52);
 		Thread.sleep(WAIT_TIME);
+		Thread.sleep(WAIT_TIME);
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
 		BasicLogCategory shortLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		System.out.println("ShortLived volume proportion = " + shortLived.getVolumeProportion());

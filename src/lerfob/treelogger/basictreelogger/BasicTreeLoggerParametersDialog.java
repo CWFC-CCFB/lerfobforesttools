@@ -148,11 +148,11 @@ public class BasicTreeLoggerParametersDialog extends TreeLoggerParametersDialog<
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource().equals(shortLivedSlider) && evt.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
-//			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
+			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
 		} else if (evt.getSource().equals(longLivedSlider) && evt.getPropertyName().equals(REpiceaSlider.SLIDER_CHANGE)) {
-//			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
+			System.out.println("Property name =" + evt.getPropertyName() + "; New value = " + evt.getNewValue().toString());
 			BasicLogCategory logCategory = getTreeLoggerParameters().findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 			logCategory.setVolumeProportion(((Integer) evt.getNewValue()) * .01);
 		}
