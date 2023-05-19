@@ -170,7 +170,7 @@ task install(type: Copy) {
 
 publishing {
     publications {
-        repicea(MavenPublication) {
+        lerfobforesttools(MavenPublication) {
           	from components.java
         	pom {
         		name = 'LERFoB Foresttools'
@@ -217,14 +217,10 @@ publishing {
 }
 
 signing {
-    sign publishing.publications.repicea
+    sign publishing.publications.lerfobforesttools
 }
 
-publishRepiceaPublicationToMavenLocal {
-	dependsOn jar
-}
-
-publishRepiceaPublicationToLocalFileRepository {
+publishLerfobforesttoolsPublicationToLocalFileRepository {
 	dependsOn jar
 }
 
