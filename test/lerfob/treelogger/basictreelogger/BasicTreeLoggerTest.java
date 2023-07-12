@@ -21,7 +21,6 @@
  */
 package lerfob.treelogger.basictreelogger;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import repicea.gui.CommonGuiUtility;
+import repicea.gui.REpiceaGUITestRobot;
 import repicea.gui.components.REpiceaSlider;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
@@ -38,15 +38,13 @@ import repicea.util.REpiceaTranslator.Language;
 
 public class BasicTreeLoggerTest {
 
-	private final static int WAIT_TIME = 500;
-
 	
 	/*
 	 * Log categories could be saved in French and then we read in English, the categories would no longer be recognized.
 	 * This resulted in null pointer exception being thrown.
 	 */
 	@Test
-	public void testLanguageCompatibilityAllInFrench() throws IOException, InterruptedException {
+	public void testLanguageCompatibilityAllInFrench() throws Exception {
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 			System.out.println("Test will be skipped because Mac does not support Times font.");
 			return;
@@ -57,41 +55,35 @@ public class BasicTreeLoggerTest {
 		BasicTreeLoggerParameters parms = new BasicTreeLoggerParameters();
 		parms.load(filename);
 		BasicTreeLoggerParametersDialog dlg = parms.getUI(null);
-		Runnable toRun = new Runnable() {
+		Runnable doRun = new Runnable() {
 			@Override
 			public void run() {
 				parms.showUI(null);
 			}
 		};
-		Thread t = new Thread(toRun);
-		t.start();
-		Thread.sleep(WAIT_TIME);
+		REpiceaGUITestRobot robot = new REpiceaGUITestRobot();
+		robot.startGUI(doRun, BasicTreeLoggerParametersDialog.class);
+		
 		List<REpiceaSlider> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
 		List<JButton> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
 		REpiceaSlider slider1 = sliders.get(0);
 		REpiceaSlider slider2 = sliders.get(1);
 		slider1.setValue(52);
-		Thread.sleep(WAIT_TIME);
+		
+		robot.letDispatchThreadProcess();
+
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
 		BasicLogCategory shortLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		Assert.assertEquals("Testing if volume proportion has been recorded in short-lived category", 0.52, shortLived.getVolumeProportion(), 1E-8);
 		BasicLogCategory longLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
-		JButton cancelButton = null;
-		for (JButton button : buttons) {
-			if (button.getText().equals("Annuler")) {
-				cancelButton = button;
-			}
-		}
-		if (cancelButton == null) {
-			Assert.fail("Cannot find the cancel button in the dialog!");
-		} else {
-			while (dlg.isVisible()) {
-				cancelButton.doClick();
-			}
-		}
-		dlg.dispose();
-		t.join();
+		
+		robot.clickThisButton("Cancel");
+		
+		robot.letDispatchThreadProcess();
+		
+		robot.shutdown();
+		
 		REpiceaTranslator.setCurrentLanguage(languageAtBeginning);
 	}
 
@@ -100,7 +92,7 @@ public class BasicTreeLoggerTest {
 	 * This resulted in null pointer exception being thrown.
 	 */
 	@Test
-	public void testLanguageCompatibilityWhenFileRecordedInFrenchButReadInEnglish() throws IOException, InterruptedException {
+	public void testLanguageCompatibilityWhenFileRecordedInFrenchButReadInEnglish() throws Exception {
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 			System.out.println("Test will be skipped because Mac does not support Times font.");
 			return;
@@ -110,44 +102,39 @@ public class BasicTreeLoggerTest {
 		String filename = ObjectUtility.getPackagePath(getClass()) + "basicTreeLoggerParmsInFrench.tlp";
 		BasicTreeLoggerParameters parms = new BasicTreeLoggerParameters();
 		parms.load(filename);
+		
+		REpiceaGUITestRobot robot = new REpiceaGUITestRobot();
+		
 		BasicTreeLoggerParametersDialog dlg = parms.getUI(null);
-		Runnable toRun = new Runnable() {
+		
+		Runnable doRun = new Runnable() {
 			@Override
 			public void run() {
 				parms.showUI(null);
 			}
 		};
-		Thread t = new Thread(toRun);
-		t.start();
-		Thread.sleep(WAIT_TIME);
+		
+		robot.startGUI(doRun, BasicTreeLoggerParametersDialog.class);
+		
 		List<REpiceaSlider> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
 		List<JButton> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
 		REpiceaSlider slider1 = sliders.get(0);
 		REpiceaSlider slider2 = sliders.get(1);
 		slider1.setValue(52);
-		Thread.sleep(WAIT_TIME);
+		robot.letDispatchThreadProcess();
+		
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
+		
 		BasicLogCategory shortLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.ShortLived);
 		BasicLogCategory longLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 //		System.out.println("ShortLived volume proportion = " + shortLived.getVolumeProportion());
 //		System.out.println("LongLived volume proportion = " + longLived.getVolumeProportion());
 		Assert.assertEquals("Testing if volume proportion has been recorded in short-lived category", 0.52, shortLived.getVolumeProportion(), 1E-8);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
-		JButton cancelButton = null;
-		for (JButton button : buttons) {
-			if (button.getText().equals("Cancel")) {
-				cancelButton = button;
-			}
-		}
-		if (cancelButton == null) {
-			Assert.fail("Cannot find the cancel button in the dialog!");
-		} else {
-			while (dlg.isVisible()) {
-				cancelButton.doClick();
-			}
-		}
-		dlg.dispose();
-		t.join();
+		
+		robot.clickThisButton("Cancel");
+		robot.letDispatchThreadProcess();
+		robot.shutdown();
 		REpiceaTranslator.setCurrentLanguage(languageAtBeginning);
 	}
 	
