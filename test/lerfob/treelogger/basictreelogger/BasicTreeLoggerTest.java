@@ -66,10 +66,10 @@ public class BasicTreeLoggerTest {
 		Thread t = new Thread(toRun);
 		t.start();
 		Thread.sleep(WAIT_TIME);
-		List<Component> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
-		List<Component> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
-		REpiceaSlider slider1 = (REpiceaSlider) sliders.get(0);
-		REpiceaSlider slider2 = (REpiceaSlider) sliders.get(1);
+		List<REpiceaSlider> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
+		List<JButton> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
+		REpiceaSlider slider1 = sliders.get(0);
+		REpiceaSlider slider2 = sliders.get(1);
 		slider1.setValue(52);
 		Thread.sleep(WAIT_TIME);
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
@@ -78,9 +78,9 @@ public class BasicTreeLoggerTest {
 		BasicLogCategory longLived = parms.findLogCategoryRegardlessOfTheLanguage(BasicTreeLoggerParameters.MessageID.LongLived);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
 		JButton cancelButton = null;
-		for (Component button : buttons) {
-			if (((JButton) button).getText().equals("Annuler")) {
-				cancelButton = (JButton) button;
+		for (JButton button : buttons) {
+			if (button.getText().equals("Annuler")) {
+				cancelButton = button;
 			}
 		}
 		if (cancelButton == null) {
@@ -120,10 +120,10 @@ public class BasicTreeLoggerTest {
 		Thread t = new Thread(toRun);
 		t.start();
 		Thread.sleep(WAIT_TIME);
-		List<Component> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
-		List<Component> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
-		REpiceaSlider slider1 = (REpiceaSlider) sliders.get(0);
-		REpiceaSlider slider2 = (REpiceaSlider) sliders.get(1);
+		List<REpiceaSlider> sliders = CommonGuiUtility.mapComponents(dlg, REpiceaSlider.class);
+		List<JButton> buttons = CommonGuiUtility.mapComponents(dlg, JButton.class);
+		REpiceaSlider slider1 = sliders.get(0);
+		REpiceaSlider slider2 = sliders.get(1);
 		slider1.setValue(52);
 		Thread.sleep(WAIT_TIME);
 		Assert.assertEquals("Testing if other slider is synchronized", 48, slider2.getValue());
@@ -134,9 +134,9 @@ public class BasicTreeLoggerTest {
 		Assert.assertEquals("Testing if volume proportion has been recorded in short-lived category", 0.52, shortLived.getVolumeProportion(), 1E-8);
 		Assert.assertEquals("Testing if volume proportion has been recorded in long-lived category", 0.48, longLived.getVolumeProportion(), 1E-8);
 		JButton cancelButton = null;
-		for (Component button : buttons) {
-			if (((JButton) button).getText().equals("Cancel")) {
-				cancelButton = (JButton) button;
+		for (JButton button : buttons) {
+			if (button.getText().equals("Cancel")) {
+				cancelButton = button;
 			}
 		}
 		if (cancelButton == null) {
