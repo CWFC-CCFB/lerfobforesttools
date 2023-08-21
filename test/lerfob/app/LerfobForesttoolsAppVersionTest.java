@@ -33,7 +33,7 @@ public class LerfobForesttoolsAppVersionTest {
 		String version = LerfobForesttoolsAppVersion.getInstance().getVersion();
 		System.out.println("Version is: " + version);
 		if (JarUtility.isEmbeddedInJar(LerfobForesttoolsAppVersion.class)) {
-			Assert.assertTrue(!"Unknown".equals(version));			
+			Assert.assertTrue(version !=  null && !version.isEmpty());			
 		} else {
 			Assert.assertEquals("Unknown", version);
 		}

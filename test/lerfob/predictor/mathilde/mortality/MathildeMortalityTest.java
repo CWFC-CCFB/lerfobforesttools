@@ -11,9 +11,9 @@ import org.junit.Test;
 import lerfob.predictor.mathilde.MathildeTree;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
+import repicea.math.integral.AbstractGaussQuadrature.NumberOfPoints;
+import repicea.math.integral.GaussHermiteQuadrature;
 import repicea.stats.distributions.EmpiricalDistribution;
-import repicea.stats.integral.AbstractGaussQuadrature.NumberOfPoints;
-import repicea.stats.integral.GaussHermiteQuadrature;
 import repicea.util.ObjectUtility;
 
 public class MathildeMortalityTest {

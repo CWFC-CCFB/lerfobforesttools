@@ -93,9 +93,9 @@ configurations {
 
 
 dependencies {
-   implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.9.7,)'    
-    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-mathstats', version: '[1.1.5,)'    
-    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.0.4,)'    
+   implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.9.8,)'    
+    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-mathstats', version: '[1.2.2,)'    
+    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.0.6,)'    
     
     testImplementation "junit:junit:4.12"    
 }

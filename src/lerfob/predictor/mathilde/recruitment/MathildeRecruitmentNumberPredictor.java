@@ -25,12 +25,12 @@ import java.util.Map;
 import lerfob.predictor.mathilde.MathildeTreeSpeciesProvider.MathildeTreeSpecies;
 import repicea.math.Matrix;
 import repicea.math.SymmetricMatrix;
+import repicea.math.utility.GaussianUtility;
+import repicea.math.utility.NegativeBinomialUtility;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.REpiceaPredictor;
-import repicea.stats.distributions.utility.GaussianUtility;
-import repicea.stats.distributions.utility.NegativeBinomialUtility;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.util.ObjectUtility;
 

@@ -24,10 +24,10 @@ import java.util.List;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.europeanbeech.EuropeanBeechBasicTreeLoggerParameters.Grade;
+import repicea.math.utility.GaussianUtility;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
-import repicea.stats.distributions.utility.GaussianUtility;
 
 @SuppressWarnings("serial")
 public class EuropeanBeechBasicTreeLogCategory extends DiameterBasedTreeLogCategory {
