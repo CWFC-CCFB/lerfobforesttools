@@ -196,7 +196,8 @@ class FrenchNFIThinnerStandingPriceProviderSubModel extends REpiceaPredictor {
 	 * @see repicea.simulation.REpiceaPredictor#simulateDeviatesForRandomEffectsOfThisSubject(repicea.simulation.MonteCarloSimulationCompliantObject, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, 
+			Estimate<Matrix, SymmetricMatrix, ?> randomEffectsEstimate) {
 		int index = (int) Math.floor(StatisticalUtility.getRandom().nextDouble() * getKnownYears().size());
 		int randomYear = getKnownYears().get(index);
 		Matrix randomDeviates = new Matrix(1,1);

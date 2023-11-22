@@ -1,6 +1,7 @@
 package lerfob.predictor.mathilde;
 
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
@@ -32,7 +33,7 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public void setDefaultRandomEffects(HierarchicalLevel level, Estimate<? extends StandardGaussianDistribution> estimate) {
+	public void setDefaultRandomEffects(HierarchicalLevel level, Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> estimate) {
 		super.setDefaultRandomEffects(level, estimate);
 	}
 	
@@ -57,7 +58,7 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	 * @see repicea.simulation.ModelBasedSimulator#setDefaultBeta(repicea.stats.estimates.GaussianEstimate)
 	 */
 	@Override
-	public Estimate<? extends StandardGaussianDistribution> getDefaultRandomEffects(HierarchicalLevel level) {
+	public Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getDefaultRandomEffects(HierarchicalLevel level) {
 		return super.getDefaultRandomEffects(level);
 	}
 
@@ -100,7 +101,7 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	 * @see repicea.simulation.ModelBasedSimulator#setBlupsAtThisLevel(repicea.simulation.HierarchicalLevel, int, repicea.stats.estimates.Estimate)
 	 */
 	@Override
-	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	public Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 
@@ -112,7 +113,8 @@ public abstract class MathildeSubModule extends REpiceaPredictor {
 	public final void init() {}
 	
 	@Override
-	public Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+	public Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, 
+			Estimate<Matrix, SymmetricMatrix, ?> randomEffectsEstimate) {
 		return super.simulateDeviatesForRandomEffectsOfThisSubject(subject, randomEffectsEstimate);
 	}
 }

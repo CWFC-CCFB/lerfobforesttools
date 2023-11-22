@@ -11,6 +11,7 @@ import lerfob.predictor.mathilde.climate.GeographicalCoordinatesGenerator.PlotCo
 import lerfob.simulation.covariateproviders.plotlevel.FrenchDepartmentProvider.FrenchDepartment;
 import repicea.io.javacsv.CSVReader;
 import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.climate.REpiceaClimateVariableMap.ClimateVariable;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
@@ -115,7 +116,7 @@ public class MathildeNewClimatePredictorTest {
 		for (MathildeClimatePlot s : MathildeClimatePredictor.getReferenceStands()) {
 			MathildeClimatePlotImpl stand = (MathildeClimatePlotImpl) s;
 			climatePredictor.getClimateVariables(stand);
-			Estimate<? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
+			Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> blup = climatePredictor.getBlupsForThisSubject(stand);
 			String experiment = stand.getSubjectId();
 			
 			double actualMean = blup.getMean().getValueAt(0, 0); 

@@ -19,6 +19,8 @@
 package lerfob.predictor.hdrelationships;
 
 import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree.FrenchHdSpecies;
+import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.hdrelationships.HDRelationshipStand;
 import repicea.simulation.hdrelationships.HDRelationshipTree;
 import repicea.simulation.hdrelationships.HeightPredictor;
@@ -59,7 +61,7 @@ public interface FrenchHeightPredictor<Stand extends HDRelationshipStand, Tree e
 	 * @param stand a HDRelationshipStand instance that stands for the plot.
 	 * @return an Estimate instance
 	 */
-	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(Stand stand);
+	public Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getBlupsForThisSubject(Stand stand);
 
 	
 }

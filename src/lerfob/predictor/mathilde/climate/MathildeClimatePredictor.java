@@ -374,7 +374,8 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	}
 
 	@Override
-	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<?> randomEffectsEstimate) {
+	protected Matrix simulateDeviatesForRandomEffectsOfThisSubject(MonteCarloSimulationCompliantObject subject, 
+			Estimate<Matrix, SymmetricMatrix, ?> randomEffectsEstimate) {
 		if (listStandID.contains(subject.getSubjectId())) {
 			Matrix simulatedBlups = blups.getRandomDeviate();
 			List<MathildeClimatePlot> standList = ((MathildeClimatePlot) subject).getAllMathildeClimatePlots();
@@ -392,7 +393,7 @@ public class MathildeClimatePredictor extends REpiceaPredictor implements REpice
 	 * @see repicea.simulation.ModelBasedSimulator#getBlupsForThisSubject(repicea.simulation.MonteCarloSimulationCompliantObject)
 	 */
 	@Override
-	protected Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
+	protected Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getBlupsForThisSubject(MonteCarloSimulationCompliantObject subject) {
 		return super.getBlupsForThisSubject(subject);
 	}
 	

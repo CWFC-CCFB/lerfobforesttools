@@ -1,6 +1,8 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
 import lerfob.predictor.mathilde.MathildeSubModule;
+import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.simulation.ModelParameterEstimates;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.stats.distributions.StandardGaussianDistribution;
@@ -38,7 +40,8 @@ final class MathildeDiameterIncrementSubModule extends MathildeSubModule {
 		return super.doBlupsExistForThisSubject(subject);
 	}
 	
-	protected void registerBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, Estimate<? extends StandardGaussianDistribution> blups) {
+	protected void registerBlupsForThisSubject(MonteCarloSimulationCompliantObject subject, 
+			Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> blups) {
 		setBlupsForThisSubject(subject, blups);
 	}
 	

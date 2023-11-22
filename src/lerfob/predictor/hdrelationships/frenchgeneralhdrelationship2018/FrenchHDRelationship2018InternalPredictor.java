@@ -83,7 +83,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 		if (fertilityClassMap == null) {
 			fertilityClassMap = new HashMap<FertilityClass, TruncatedGaussianEstimate>();
 			
-			Estimate<? extends StandardGaussianDistribution> levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
+			Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> levelRandomEffects = getDefaultRandomEffects(HierarchicalLevel.PLOT);
 			makeSureThereIsASingleElement(levelRandomEffects.getMean());
 			makeSureThereIsASingleElement(levelRandomEffects.getVariance());
 			
@@ -113,7 +113,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 	 * For extended visibility
 	 */
 	@Override
-	protected void setDefaultRandomEffects(HierarchicalLevel level, Estimate<? extends StandardGaussianDistribution> estimate) {
+	protected void setDefaultRandomEffects(HierarchicalLevel level, Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> estimate) {
 		super.setDefaultRandomEffects(level, estimate);
 	}
 	
@@ -275,7 +275,7 @@ public class FrenchHDRelationship2018InternalPredictor extends HDRelationshipPre
 	}
 
 	@Override
-	public Estimate<? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2018Plot stand) {
+	public Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getBlupsForThisSubject(FrenchHDRelationship2018Plot stand) {
 		return super.getBlupsForThisSubject(stand);
 	}
 

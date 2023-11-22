@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import repicea.io.javacsv.CSVReader;
+import repicea.math.Matrix;
+import repicea.math.SymmetricMatrix;
 import repicea.serial.xml.XmlDeserializer;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
@@ -98,7 +100,7 @@ public class FrenchHDRelationship2018PredictorTest {
 				if (tree.getFrenchHDTreeSpecies().getIndex() <= 4) {
 					int index = tree.getFrenchHDTreeSpecies().getIndex();
 					predictor.predictHeightM(stand, tree);
-					Estimate<? extends StandardGaussianDistribution> currentBlups = predictor.getBlups(stand, tree);
+					Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> currentBlups = predictor.getBlups(stand, tree);
 					double actualBlup = currentBlups.getMean().getValueAt(0, 0);
 					double actualVariance = currentBlups.getVariance().getValueAt(0, 0);
 					int convertedIndex = Integer.parseInt(stand.getSubjectId());
@@ -301,7 +303,7 @@ public class FrenchHDRelationship2018PredictorTest {
 		for (Object obj : stand.getTreesForFrenchHDRelationship()) {
 			tree = (FrenchHDRelationship2018TreeImpl2) obj;
 			predictor.predictHeightM(stand, tree);
-			Estimate est = predictor.getBlups(stand, tree);
+			Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> est = predictor.getBlups(stand, tree);
 			String speciesName = tree.getFrenchHDTreeSpecies().name();
 			if (!predictedMap.containsKey(speciesName)) {
 				predictedMap.put(speciesName, est.getMean().getValueAt(0, 0));

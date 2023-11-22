@@ -139,7 +139,7 @@ public final class FrenchHDRelationship2014Predictor extends REpiceaPredictor im
 	 * @param tree the Tree instance
 	 * @return an Estimate instance
 	 */
-	protected Estimate<? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
+	protected Estimate<Matrix, SymmetricMatrix, ? extends StandardGaussianDistribution> getBlups(FrenchHDRelationship2014Stand stand, FrenchHDRelationship2014Tree tree) {
 		FrenchHDRelationship2014InternalPredictor internalPred = predictorMap.get(tree.getFrenchHDTreeSpecies());
 		return internalPred.getBlupsForThisSubject(stand);
 	}
