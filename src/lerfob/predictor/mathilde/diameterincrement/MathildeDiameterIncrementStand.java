@@ -23,7 +23,7 @@ import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.plotlevel.BasalAreaM2HaProvider;
 import repicea.simulation.covariateproviders.plotlevel.GrowthStepLengthYrProvider;
 import repicea.simulation.covariateproviders.plotlevel.InterventionPlannedProvider;
-import repicea.simulation.covariateproviders.plotlevel.MeanSeasonalTemperatureProvider;
+import repicea.simulation.covariateproviders.plotlevel.MeanSeasonalTemperatureCelsiusProvider;
 
 /**
  * This interface ensures that the Stand instance is compatible with the MathildeDiameterIncrementPredictor.
@@ -33,7 +33,7 @@ public interface MathildeDiameterIncrementStand extends MonteCarloSimulationComp
 										GrowthStepLengthYrProvider, 
 										BasalAreaM2HaProvider,
 										InterventionPlannedProvider,
-										MeanSeasonalTemperatureProvider {
+										MeanSeasonalTemperatureCelsiusProvider {
 
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {

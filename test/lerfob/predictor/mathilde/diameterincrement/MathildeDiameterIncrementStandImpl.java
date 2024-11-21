@@ -50,7 +50,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 	}
 
 	@Override
-	public double getMeanAnnualTempAbove6C() {
+	public double getMeanSeasonalTemperatureCelsius() {
 		return tIntervalVeg6;
 	}
 
