@@ -206,7 +206,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		
 		double predUptoNow = oXVector.getSubMatrix(0, 0, 0, pointer-1).multiply(currentBeta.getSubMatrix(0, pointer-1, 0, 0)).getValueAt(0, 0);
 		
-		double tIntervalVeg6 = stand.getMeanAnnualTempAbove6C();
+		double tIntervalVeg6 = stand.getMeanSeasonalTemperatureCelsius();
 		
 		double b91, b81, b82, b3, b32;
 		b91 = currentBeta.getValueAt(pointer++, 0);
