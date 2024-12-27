@@ -20,7 +20,7 @@ Contributors:
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+version 3 of the License, or (at your option) any later version.
 
 This library is distributed with the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied
@@ -30,12 +30,13 @@ License for more details.
 
 Please see the license at http://www.gnu.org/copyleft/lesser.html.
 
-This library requires the following libraries:
-- repicea (licensed LGPL 2.1)
-- repicea-mathstats (licensed LGPL 2.1)
-- repicea-simulation (licensed LGPL 2.1)
+This library is compiled under Java 8. 
 
-It might also require the jabx library version 2.3.2 (Copyright (c) 2017 Oracle and/or its affiliates, 
-https://eclipse-ee4j.github.io/jaxb-ri/) if the JVM is running under Java 11 or 13. 
-The jabx library is protected by the Eclipse Distribution License 
-(see https://www.eclipse.org/org/documents/edl-v10.php).
+This library requires the following libraries:
+- repicea (https://github.com/CWFC-CCFB/repicea) which is licensed under 
+the Lesser General Public License version 3.0  
+- repicea-mathstats (https://github.com/CWFC-CCFB/repicea-mathstats) which is licensed under 
+the Lesser General Public License version 3.0
+- repicea-simulation (https://github.com/CWFC-CCFB/repicea-simulation) which is licensed under 
+the Lesser General Public License version 3.0
+
