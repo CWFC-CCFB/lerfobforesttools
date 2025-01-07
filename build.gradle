@@ -51,6 +51,7 @@ repositories {
 		url "https://repo1.maven.org/maven2/"
 	}
     mavenCentral()
+    mavenLocal()
 }
 
 println "Using java version " + JavaVersion.current()
@@ -93,9 +94,9 @@ configurations {
 
 
 dependencies {
-  	implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.14.1,)'    
+  	implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.15.0,)'    
     implementation group: 'io.github.cwfc-ccfb', name: 'repicea-mathstats', version: '[1.6.1,)'    
-    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.2.2,)'    
+    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.3.0,)'    
      
     testImplementation "junit:junit:4.12"    
 }
