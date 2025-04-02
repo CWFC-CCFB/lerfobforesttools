@@ -35,6 +35,7 @@ import repicea.simulation.covariateproviders.treelevel.SpeciesTypeProvider.Speci
 import repicea.simulation.disturbances.DisturbanceParameter;
 import repicea.simulation.thinners.REpiceaThinner;
 import repicea.simulation.thinners.REpiceaTreatmentDefinition;
+import repicea.simulation.thinners.REpiceaTreatmentEnum;
 import repicea.util.ObjectUtility;
 
 /**
@@ -335,7 +336,7 @@ public class FrenchNFIThinnerPredictor extends REpiceaThinner<FrenchNFIThinnerPl
 	 * This class does not make any distinction as to the treatment applied in the plots.
 	 */
 	@Override
-	public List<Enum> getTreatmentList() {return null;}
+	public List<REpiceaTreatmentEnum> getTreatmentList() {return null;}
 	
 	
 }

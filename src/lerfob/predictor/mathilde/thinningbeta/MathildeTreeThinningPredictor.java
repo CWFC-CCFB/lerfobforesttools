@@ -37,12 +37,12 @@ import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.thinners.REpiceaThinner;
 import repicea.simulation.thinners.REpiceaTreatmentDefinition;
+import repicea.simulation.thinners.REpiceaTreatmentEnum;
 import repicea.stats.estimates.GaussianEstimate;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
 import repicea.util.REpiceaTranslator;
-import repicea.util.REpiceaTranslator.TextableEnum;
 
 /**
  * This class implements the tree level thinning submodel in Mathilde model.
@@ -55,7 +55,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 
 	protected static boolean isGaussianQuadratureEnabled = true;
 
-	private enum Treatment implements TextableEnum {
+	private enum Treatment implements REpiceaTreatmentEnum {
 		Thinning("Thinning", "Eclaircie");
 		
 		Treatment(String englishText, String frenchText) {
@@ -71,6 +71,12 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 		public String toString() {
 			return REpiceaTranslator.getString(this);
 		}
+
+		@Override
+		public String getCompleteName() {return toString();}
+
+		@Override
+		public boolean isFinalCut() {return false;}
 	}
 
 	private static final double SqrtTwo = Math.sqrt(2d);
@@ -249,7 +255,7 @@ public final class MathildeTreeThinningPredictor extends REpiceaThinner<Mathilde
 	public REpiceaTreatmentDefinition getTreatmentDefinitionForThisHarvestedStand(MathildeThinningStand stand) {return null;}
 
 	@Override
-	public List<Enum> getTreatmentList() {
+	public List<REpiceaTreatmentEnum> getTreatmentList() {
 		return Arrays.asList(Treatment.values());
 	}
 

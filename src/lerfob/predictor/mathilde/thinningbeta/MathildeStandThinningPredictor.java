@@ -30,6 +30,7 @@ import repicea.simulation.ParameterLoader;
 import repicea.simulation.ParameterMap;
 import repicea.simulation.thinners.REpiceaThinner;
 import repicea.simulation.thinners.REpiceaTreatmentDefinition;
+import repicea.simulation.thinners.REpiceaTreatmentEnum;
 import repicea.stats.model.glm.LinkFunction;
 import repicea.stats.model.glm.LinkFunction.Type;
 import repicea.util.ObjectUtility;
@@ -158,6 +159,6 @@ public final class MathildeStandThinningPredictor extends REpiceaThinner<Mathild
 	 * This class does not make any distinction as to the treatment applied in the plots.
 	 */
 	@Override
-	public List<Enum> getTreatmentList() {return null;}
+	public List<REpiceaTreatmentEnum> getTreatmentList() {return null;}
 
 }
