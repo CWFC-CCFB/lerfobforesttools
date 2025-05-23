@@ -28,7 +28,7 @@ import repicea.simulation.treelogger.TreeLoggerParametersDialog;
 public class DiameterBasedTreeLoggerParametersDialog extends TreeLoggerParametersDialog<DiameterBasedTreeLogCategory> {
 
 	static {
-		UIControlManager.setTitle(DiameterBasedTreeLoggerParametersDialog.class, "Tree Logger based on diameter at breast height", "Module de billonnage bas\u00E9 sur le diam\u00E8tre \u00EA 1,3 m");
+		UIControlManager.setTitle(DiameterBasedTreeLoggerParametersDialog.class, "Tree Logger based on diameter at breast height", "Module de billonnage bas\u00E9 sur le diam\u00E8tre \u00E0 1,3 m");
 	}
 
 	

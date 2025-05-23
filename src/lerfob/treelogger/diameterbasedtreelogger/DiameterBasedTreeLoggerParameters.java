@@ -21,12 +21,15 @@ package lerfob.treelogger.diameterbasedtreelogger;
 import java.awt.Container;
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import repicea.gui.permissions.DefaultREpiceaGUIPermission;
+import repicea.lang.REpiceaSystem;
 import repicea.simulation.treelogger.TreeLogger;
 import repicea.simulation.treelogger.TreeLoggerParameters;
 import repicea.util.REpiceaTranslator;
+import repicea.util.REpiceaTranslator.Language;
 import repicea.util.REpiceaTranslator.TextableEnum;
 
 @SuppressWarnings("serial")
@@ -117,9 +120,18 @@ public class DiameterBasedTreeLoggerParameters extends TreeLoggerParameters<Diam
 	}
 
 	public static void main(String[] args) {
+		String languageStr = REpiceaSystem.retrieveArgument("-l", Arrays.asList(args));
+		languageStr = languageStr == null ? "en" : languageStr;
+			
+		Language language = languageStr.equals("fr") ?
+				Language.French :
+					Language.English;
+		
+		System.out.println("Setting language set to " + language.toString());
+		REpiceaTranslator.setCurrentLanguage(language);
+
 		DiameterBasedTreeLoggerParameters params = new DiameterBasedTreeLoggerParameters(DiameterBasedTreeLogger.class);
 		params.setReadWritePermissionGranted(new DefaultREpiceaGUIPermission(true));
-		params.showUI(null);
 		params.showUI(null);
 		System.exit(0);
 	}

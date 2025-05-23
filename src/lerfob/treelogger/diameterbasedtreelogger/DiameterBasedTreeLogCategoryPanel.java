@@ -47,7 +47,7 @@ import repicea.util.REpiceaTranslator.TextableEnum;
 public class DiameterBasedTreeLogCategoryPanel extends LogCategoryPanel<DiameterBasedTreeLogCategory> implements NumberFieldListener, PropertyChangeListener {
 	
 	protected static enum MessageID implements TextableEnum {
-		MinimumDBH("Minimum DBH (cm)", "DHP minimum (cm)"),
+		MinimumDBH("Minimum DBH (cm)", "Diam\u00E8tre minimal \u00E0 1,3 m (cm)"),
 		PotentialUse("Proportion of commercial volume (%)", "Proportion du volume commercial (%)"),
 		DownGrading("Proportion downgraded (%)", "Proportion de d\u00E9class\u00E9s (%)");
 
