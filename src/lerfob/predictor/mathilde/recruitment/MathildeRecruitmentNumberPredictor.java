@@ -179,7 +179,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 		double negBinMean = getNegativeBinomialMean(betaCount, stand, species);
 		double nonZeroProb = getFalseZeroProbability(betaZero, stand, species);
 		double dispersion = 1d/theta;
-		double truncationFactor = 1 - NegativeBinomialUtility.getMassProbability(0, negBinMean, dispersion);
+		double truncationFactor = 1 - NegativeBinomialUtility.getProbabilityMass(0, negBinMean, dispersion);
 				
 		Matrix output;
 		if (isResidualVariabilityEnabled) {
@@ -190,7 +190,7 @@ public class MathildeRecruitmentNumberPredictor extends REpiceaPredictor {
 				if (j==0) {
 					p = (1 - nonZeroProb);
 				} else {
-					p =  nonZeroProb * NegativeBinomialUtility.getMassProbability(j, negBinMean, dispersion) / truncationFactor;
+					p =  nonZeroProb * NegativeBinomialUtility.getProbabilityMass(j, negBinMean, dispersion) / truncationFactor;
 				}
 				output.setValueAt(0, j, p);
 			}
