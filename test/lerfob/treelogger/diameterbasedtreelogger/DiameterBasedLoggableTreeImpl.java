@@ -20,6 +20,7 @@ package lerfob.treelogger.diameterbasedtreelogger;
 
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.species.REpiceaSpecies.SpeciesLocale;
 import repicea.simulation.treelogger.LoggableTree;
 
 class DiameterBasedLoggableTreeImpl implements LoggableTree, DbhCmProvider {
@@ -40,14 +41,17 @@ class DiameterBasedLoggableTreeImpl implements LoggableTree, DbhCmProvider {
 	public double getDbhCm() {return dbhCm;}
 
 	@Override
-	public double getBarkProportionOfWoodVolume() {
-		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume();
+	public double getBarkProportionOfWoodVolume(SpeciesLocale locale) {
+		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume(locale);
 	}
 
 	@Override
 	public boolean isCommercialVolumeOverbark() {
 		return true;
 	}
+
+	@Override
+	public SpeciesLocale getSpeciesLocale() {return SpeciesLocale.IPCC;}
 
 
 }

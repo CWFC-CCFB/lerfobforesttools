@@ -1,6 +1,7 @@
 package lerfob.treelogger.mathilde;
 
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.species.REpiceaSpecies.SpeciesLocale;
 
 class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 
@@ -26,8 +27,13 @@ class MathildeLoggableTreeImpl implements MathildeLoggableTree {
 	}
 
 	@Override
-	public double getBarkProportionOfWoodVolume() {
-		return REpiceaSpecies.Species.Quercus_spp.getBarkProportionOfWoodVolume();
+	public double getBarkProportionOfWoodVolume(SpeciesLocale locale) {
+		return REpiceaSpecies.Species.Quercus_spp.getBarkProportionOfWoodVolume(locale);
+	}
+
+	@Override
+	public SpeciesLocale getSpeciesLocale() {
+		return SpeciesLocale.IPCC;
 	}
 
 }

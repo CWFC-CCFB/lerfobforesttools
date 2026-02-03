@@ -1,6 +1,7 @@
 package lerfob.treelogger.douglasfirfcba;
 
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.species.REpiceaSpecies.SpeciesLocale;
 
 class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 
@@ -28,9 +29,12 @@ class DouglasFCBALoggableTreeImpl implements DouglasFCBALoggableTree {
 
 
 	@Override
-	public double getBarkProportionOfWoodVolume() {
-		return REpiceaSpecies.Species.Pseudotsuga_menziesii.getBarkProportionOfWoodVolume();
+	public double getBarkProportionOfWoodVolume(SpeciesLocale locale) {
+		return REpiceaSpecies.Species.Pseudotsuga_menziesii.getBarkProportionOfWoodVolume(locale);
 	}
+
+	@Override
+	public SpeciesLocale getSpeciesLocale() {return SpeciesLocale.IPCC;}
 
 
 

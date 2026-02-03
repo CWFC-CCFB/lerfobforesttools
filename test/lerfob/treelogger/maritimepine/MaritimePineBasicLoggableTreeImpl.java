@@ -1,6 +1,7 @@
 package lerfob.treelogger.maritimepine;
 
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.species.REpiceaSpecies.SpeciesLocale;
 
 class MaritimePineBasicLoggableTreeImpl implements MaritimePineBasicLoggableTree {
 
@@ -49,9 +50,15 @@ class MaritimePineBasicLoggableTreeImpl implements MaritimePineBasicLoggableTree
 	public double getHarvestedCrownVolumeM3() {return branchVolumeM3;}
 
 	@Override
-	public double getBarkProportionOfWoodVolume() {
-		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume();
+	public double getBarkProportionOfWoodVolume(SpeciesLocale locale) {
+		return REpiceaSpecies.Species.Pinus_pinaster.getBarkProportionOfWoodVolume(locale);
 	}
 
+	@Override
+	public SpeciesLocale getSpeciesLocale() {
+		return SpeciesLocale.IPCC;
+	}
+
+	
 
 }

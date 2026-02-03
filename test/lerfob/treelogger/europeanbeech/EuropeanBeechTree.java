@@ -19,6 +19,7 @@
 package lerfob.treelogger.europeanbeech;
 
 import repicea.simulation.species.REpiceaSpecies;
+import repicea.simulation.species.REpiceaSpecies.SpeciesLocale;
 
 public class EuropeanBeechTree implements EuropeanBeechBasicTree {
 
@@ -61,8 +62,13 @@ public class EuropeanBeechTree implements EuropeanBeechBasicTree {
 	}
 
 	@Override
-	public double getBarkProportionOfWoodVolume() {
-		return REpiceaSpecies.Species.Fagus_sylvatica.getBarkProportionOfWoodVolume();
+	public double getBarkProportionOfWoodVolume(SpeciesLocale locale) {
+		return REpiceaSpecies.Species.Fagus_sylvatica.getBarkProportionOfWoodVolume(locale);
+	}
+
+	@Override
+	public SpeciesLocale getSpeciesLocale() {
+		return SpeciesLocale.IPCC;
 	}
 
 }
