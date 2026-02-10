@@ -1,5 +1,7 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
+import repicea.simulation.climate.REpiceaClimate.ClimateVariableTemporalResolution;
+
 public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncrementStand {
 
 	private double st;
@@ -50,7 +52,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 	}
 
 	@Override
-	public double getMeanSeasonalTemperatureCelsius() {
+	public double getMeanSeasonalTemperatureCelsius(ClimateVariableTemporalResolution resolution) {
 		return tIntervalVeg6;
 	}
 

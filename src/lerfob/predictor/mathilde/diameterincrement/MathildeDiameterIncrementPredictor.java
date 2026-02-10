@@ -39,6 +39,7 @@ import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorEvent;
 import repicea.simulation.REpiceaPredictorEvent.ModelBasedSimulatorEventProperty;
 import repicea.simulation.REpiceaPredictorListener;
+import repicea.simulation.climate.REpiceaClimate.ClimateVariableTemporalResolution;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -54,6 +55,8 @@ import repicea.util.ObjectUtility;
  * @author Mathieu Fortin and Ruben Manso - August 2013
  */
 public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, REpiceaPredictorListener {
+
+	private static final ClimateVariableTemporalResolution Normals50YrResolution = ClimateVariableTemporalResolution.Normals30Year;
 
 	private static final long serialVersionUID = 20130627L;
 
@@ -206,7 +209,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		
 		double predUptoNow = oXVector.getSubMatrix(0, 0, 0, pointer-1).multiply(currentBeta.getSubMatrix(0, pointer-1, 0, 0)).getValueAt(0, 0);
 		
-		double tIntervalVeg6 = stand.getMeanSeasonalTemperatureCelsius();
+		double tIntervalVeg6 = stand.getMeanSeasonalTemperatureCelsius(Normals50YrResolution);
 		
 		double b91, b81, b82, b3, b32;
 		b91 = currentBeta.getValueAt(pointer++, 0);
