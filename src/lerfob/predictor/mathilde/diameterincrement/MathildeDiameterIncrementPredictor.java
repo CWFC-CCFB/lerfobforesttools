@@ -39,7 +39,7 @@ import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorEvent;
 import repicea.simulation.REpiceaPredictorEvent.ModelBasedSimulatorEventProperty;
 import repicea.simulation.REpiceaPredictorListener;
-import repicea.simulation.climate.REpiceaClimate.ClimateVariableTemporalResolution;
+import repicea.simulation.climate.REpiceaClimateManager.ClimateVariableTemporalResolution;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;

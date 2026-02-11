@@ -1,6 +1,6 @@
 package lerfob.predictor.mathilde.diameterincrement;
 
-import repicea.simulation.climate.REpiceaClimate.ClimateVariableTemporalResolution;
+import repicea.simulation.climate.REpiceaClimateManager.ClimateVariableTemporalResolution;
 
 public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncrementStand {
 
