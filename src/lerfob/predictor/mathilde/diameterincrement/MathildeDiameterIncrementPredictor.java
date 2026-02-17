@@ -39,7 +39,6 @@ import repicea.simulation.REpiceaPredictor;
 import repicea.simulation.REpiceaPredictorEvent;
 import repicea.simulation.REpiceaPredictorEvent.ModelBasedSimulatorEventProperty;
 import repicea.simulation.REpiceaPredictorListener;
-import repicea.simulation.climate.REpiceaClimateManager.ClimateVariableTemporalResolution;
 import repicea.stats.distributions.StandardGaussianDistribution;
 import repicea.stats.estimates.Estimate;
 import repicea.stats.estimates.GaussianErrorTermEstimate;
@@ -54,10 +53,10 @@ import repicea.util.ObjectUtility;
 	 increment in beech and oak stands. Forestry 88: 540-551</a>
  * @author Mathieu Fortin and Ruben Manso - August 2013
  */
-public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor implements GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, REpiceaPredictorListener {
-
-	private static final ClimateVariableTemporalResolution Normals50YrResolution = ClimateVariableTemporalResolution.Normals30Year;
-
+public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor 
+									implements 	GrowthModel<MathildeDiameterIncrementStand, MathildeTree>, 
+												REpiceaPredictorListener {
+	
 	private static final long serialVersionUID = 20130627L;
 
 	private static final Map<MathildeTreeSpecies,Double> MAX_ANNUAL_INCREMENT = new HashMap<MathildeTreeSpecies, Double>();		// according to Manso et al. 2015 Forestry
@@ -209,7 +208,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		
 		double predUptoNow = oXVector.getSubMatrix(0, 0, 0, pointer-1).multiply(currentBeta.getSubMatrix(0, pointer-1, 0, 0)).getValueAt(0, 0);
 		
-		double tIntervalVeg6 = stand.getMeanSeasonalTemperatureCelsius(Normals50YrResolution);
+		double tIntervalVeg6 = stand.getMeanSeasonalTemperatureCelsius();
 		
 		double b91, b81, b82, b3, b32;
 		b91 = currentBeta.getValueAt(pointer++, 0);
@@ -358,6 +357,7 @@ public final class MathildeDiameterIncrementPredictor extends REpiceaPredictor i
 		variance.setValueAt(0, 0, varianceRandomEffectDiameterGrowth - covariance * covariance / varianceRandomEffectHeight);
 		return new GaussianEstimate(mean, variance);
 	}
+
 	
 //	@Override
 //	public void clearDeviates() {
