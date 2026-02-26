@@ -17,7 +17,7 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 			int grSpecies, 
 			double bal22, 
 			double bal42,
-			double stepLengthYrs, 
+			int stepLengthYrs, 
 			int upcomingCut,
 			int upcomingDrought,
 			int upcomingWindstorm) {

@@ -18,7 +18,7 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 			int grEss,
 			double st,
 			double upcomingCut,
-			double deltaT,
+			int deltaT,
 			double pred,
 			double tIntervalVeg6) {
 		dbh = diam0;

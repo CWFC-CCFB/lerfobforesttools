@@ -92,7 +92,7 @@ class MathildeClimatePlotImpl implements MathildeClimatePlot {
 	 * @see repicea.simulation.covariateproviders.standlevel.GrowthStepLengthYrProvider#getGrowthStepLengthYr()
 	 */
 	@Override
-	public double getGrowthStepLengthYr() {
+	public int getGrowthStepLengthYr() {
 		return 0;
 	}
 

@@ -28,7 +28,7 @@ class MathildeRecruitmentStandImpl implements MathildeRecruitmentStand {
 	public int getMonteCarloRealizationId() {return 0;}
 
 	@Override
-	public double getGrowthStepLengthYr() {return 5;}
+	public int getGrowthStepLengthYr() {return 5;}
 
 	@Override
 	public double getBasalAreaM2Ha() {return basalAreaM2Ha;}

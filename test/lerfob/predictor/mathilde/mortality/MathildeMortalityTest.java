@@ -34,7 +34,7 @@ public class MathildeMortalityTest {
 			double bal42;
 			int grEss;
 			int upcomingCut;
-			double deltaT;
+			int deltaT;
 			double pred;
 			int upcomingDrought;
 			int upcomingWindstorm;
@@ -84,7 +84,7 @@ public class MathildeMortalityTest {
 			double bal42;
 			int grEss;
 			int upcomingCut;
-			double deltaT;
+			int deltaT;
 			double pred;
 			int upcomingDrought;
 			int upcomingWindstorm;

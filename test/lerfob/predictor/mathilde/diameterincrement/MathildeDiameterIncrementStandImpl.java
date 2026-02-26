@@ -4,13 +4,13 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 
 	private double st;
 	private boolean isGoingToBeHarvested;
-	private double deltaT;
+	private int deltaT;
 	private int monteCarloRealization;
 	private double tIntervalVeg6;
 
 	protected MathildeDiameterIncrementStandImpl(double st, 
 			double upcomingCut, 
-			double deltaT, 
+			int deltaT, 
 			int realization,
 			double tIntervalVeg6) {
 		this.st = st;
@@ -45,7 +45,7 @@ public class MathildeDiameterIncrementStandImpl implements MathildeDiameterIncre
 	}
 
 	@Override
-	public double getGrowthStepLengthYr() {
+	public int getGrowthStepLengthYr() {
 		return deltaT;
 	}
 

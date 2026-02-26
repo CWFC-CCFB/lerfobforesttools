@@ -32,7 +32,7 @@ public class MathildeDiameterIncrementTest {
 			int grEss;
 			double st;
 			int upcomingCut;
-			double deltaT;
+			int deltaT;
 			double logPred;
 			double tIntervalVeg6;
 			MathildeTree tree;
@@ -44,7 +44,7 @@ public class MathildeDiameterIncrementTest {
 				bal42 = Double.parseDouble(record[4].toString());
 				st = Double.parseDouble(record[6].toString());
 				grEss = Integer.parseInt(record[7].toString());
-				deltaT = Double.parseDouble(record[8].toString());
+				deltaT = Integer.parseInt(record[8].toString());
 				upcomingCut = Integer.parseInt(record[9].toString());
 				tIntervalVeg6 = Double.parseDouble(record[10].toString());
 				

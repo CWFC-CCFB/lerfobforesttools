@@ -45,7 +45,7 @@ class MathildeThinningStandImpl implements MathildeThinningStand {
 	}
 
 	@Override
-	public double getGrowthStepLengthYr() {
+	public int getGrowthStepLengthYr() {
 		return 0;
 	}
 }

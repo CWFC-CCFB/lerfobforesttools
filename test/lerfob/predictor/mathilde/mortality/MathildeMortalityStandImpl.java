@@ -3,12 +3,12 @@ package lerfob.predictor.mathilde.mortality;
 public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 
 	private boolean isGoingToBeHarvested;
-	private double stepLengthYrs;
+	private int stepLengthYrs;
 	private boolean isAWindstormGoingToOccur;
 	private boolean isADroughtGoingToOccur;
 	private int monteCarloRealizationID;
 	
-	protected MathildeMortalityStandImpl(double stepLengthYrs, int upcomingCut, int upcomingDought, int upcomingWindstorm) {
+	protected MathildeMortalityStandImpl(int stepLengthYrs, int upcomingCut, int upcomingDought, int upcomingWindstorm) {
 		this.stepLengthYrs = stepLengthYrs;
 		isGoingToBeHarvested = false;
 		if (upcomingCut == 1) {
@@ -31,7 +31,7 @@ public class MathildeMortalityStandImpl implements MathildeMortalityStand {
 	}
 
 	@Override
-	public double getGrowthStepLengthYr() {
+	public int getGrowthStepLengthYr() {
 		return stepLengthYrs;
 	}
 

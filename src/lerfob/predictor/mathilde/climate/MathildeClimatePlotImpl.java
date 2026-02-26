@@ -102,7 +102,7 @@ class MathildeClimatePlotImpl implements MathildeClimatePlot {
 	}
 
 	@Override
-	public double getGrowthStepLengthYr() {return growthStepLengthYr;}
+	public int getGrowthStepLengthYr() {return growthStepLengthYr;}
 
 	@Override
 	public int getNumberOfDroughtsDuringUpcomingGrowthStep() {return nbDroughtsInUpcomingGrowthStep;}
