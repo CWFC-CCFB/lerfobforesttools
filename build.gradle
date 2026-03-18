@@ -27,23 +27,14 @@ task sourcesJar(type: Jar) {
                    "Implementation-Vendor": "CWFC-CCFB",
                    )
     }
-   	duplicatesStrategy = DuplicatesStrategy.EXCLUDE		// to avoid duplicate files
-    
-	into ('/') {
-		from files(['./README.md', './LICENSE.md'])			
-	}
-	
-	// include all java files from main sourceset into the jar file (resources are already included)
-	from sourceSets.main.java
-	from sourceSets.main.resources		
 }
 
 java {
   toolchain { 
         languageVersion = JavaLanguageVersion.of(8)
   }
-  withSourcesJar()
   withJavadocJar()
+  withSourcesJar()
 }
 
 repositories {
@@ -94,9 +85,9 @@ configurations {
 
 
 dependencies {
-    implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.17.2,)'    
+    implementation group: 'io.github.cwfc-ccfb', name: 'repicea', version: '[1.17.3,)'    
     implementation group: 'io.github.cwfc-ccfb', name: 'repicea-mathstats', version: '[1.8.1,)'    
-    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.5.1,)'    
+    implementation group: 'io.github.cwfc-ccfb', name: 'repicea-simulation', version: '[1.5.3,)'    
     testImplementation "junit:junit:4.12"    
 }
 
