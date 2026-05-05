@@ -20,10 +20,10 @@ package lerfob.predictor.dopalep;
 
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
-import repicea.simulation.covariateproviders.treelevel.BasalAreaLargerThanSubjectM2Provider;
+import repicea.simulation.covariateproviders.treelevel.BasalAreaLargerThanSubjectM2HaProvider;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 
-public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject, BasalAreaLargerThanSubjectM2Provider {
+public interface DopalepTree extends DbhCmProvider, MonteCarloSimulationCompliantObject, BasalAreaLargerThanSubjectM2HaProvider {
 	
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {
