@@ -27,6 +27,15 @@ task sourcesJar(type: Jar) {
                    "Implementation-Vendor": "CWFC-CCFB",
                    )
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE		// to avoid duplicate files
+    
+	into ('/') {
+		from files(['./README.md', './LICENSE.md'])			
+	}
+	
+	// include all java files from main sourceset into the jar file (resources are already included)
+	from sourceSets.main.java
+//	from sourceSets.main.resources		
 }
 
 java {
@@ -118,6 +127,8 @@ jar {
                    "Implementation-Vendor": "CWFC-CCFB",
                    )
     }
+    
+    exclude '**/*.java'
     
 	into ('/') {
 		from files(['./README.md', './LICENSE.md'])			
