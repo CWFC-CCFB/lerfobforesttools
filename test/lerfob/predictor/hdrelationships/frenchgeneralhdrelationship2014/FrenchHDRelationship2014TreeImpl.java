@@ -90,34 +90,12 @@ class FrenchHDRelationship2014TreeImpl implements FrenchHDRelationship2014Tree {
 	public double getDbhCm() {return dbhCm;}
 
 	@Override
-	public double getLnDbhCmPlus1() {return Math.log(getDbhCm() + 1);}
-
-	@Override
-	public double getSquaredLnDbhCmPlus1() {
-		double lnDbhCm = getLnDbhCmPlus1();
-		return lnDbhCm * lnDbhCm;
-	}
-
-	@Override
 	public FrenchHdSpecies getFrenchHDTreeSpecies() {
 		if (MatchMap.containsKey(species)) {
 			return MatchMap.get(species);
  		} else {
  			return null;
  		}
-//		int index = FrenchHDRelationship2014PredictorTest.speciesList.indexOf(species);
-////		return FrenchHdSpecies.values()[index];
-//		FrenchHdSpecies sp = FrenchHdSpecies.getSpeciesIn2014().get(index);
-//		if (!oMap.containsKey(sp.name())) {
-//			oMap.put(sp.name(), species);
-//			System.out.println("New match : " + sp.name() + " - " + species);
-//		} else {
-//			if (!oMap.get(sp.name()).equals(species)) {
-//				System.out.println("Mismatch : " + sp.name() + " - " + species);
-//			}
-//		}
-//		
-//		return sp;
 	}
 
 	protected double getPred() {return pred;}

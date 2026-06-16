@@ -19,9 +19,6 @@ class MathildeTreeImpl implements MathildeTree {
 	public double getDbhCm() {return 0;}
 
 	@Override
-	public double getLnDbhCm() {return 0;}
-
-	@Override
 	public String getSubjectId() {return null;}
 
 	@Override

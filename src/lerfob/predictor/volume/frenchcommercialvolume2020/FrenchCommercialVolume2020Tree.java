@@ -25,17 +25,25 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
-import repicea.simulation.covariateproviders.treelevel.SquaredDbhCmProvider;
 
 /**
  * Makes sure the tree can provide the information to run the volume model.
  * @author Mathieu Fortin - August 2020
  */
 public interface FrenchCommercialVolume2020Tree extends DbhCmProvider,
-														SquaredDbhCmProvider,
 														HeightMProvider,
 														MonteCarloSimulationCompliantObject {
 	
+	
+	/**
+	 * This method returns the square of dbh. 
+	 * @return the square of dbh in cm2 (double)
+	 */
+	public default double getSquaredDbhCm() {
+		double dbhCm = getDbhCm();
+		return dbhCm * dbhCm;
+	}
+
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {
 		return HierarchicalLevel.TREE;

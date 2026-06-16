@@ -46,11 +46,6 @@ public final class MathildeMortalityTreeImpl implements MathildeTree {
 	}
 
 	@Override
-	public double getLnDbhCm() {
-		return Math.log(getDbhCm());
-	}
-
-	@Override
 	public String getSubjectId() {
 		return "0";
 	}

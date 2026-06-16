@@ -21,8 +21,6 @@ package lerfob.predictor.hdrelationships.frenchgeneralhdrelationship2018;
 import lerfob.predictor.hdrelationships.FrenchHDRelationshipTree;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
-import repicea.simulation.covariateproviders.treelevel.LnDbhCmPlus1Provider;
-import repicea.simulation.covariateproviders.treelevel.SquaredLnDbhCmPlus1Provider;
 
 /**
  * The HeightableTree interface ensures the compatibility with the French general HD relationship.
@@ -30,9 +28,24 @@ import repicea.simulation.covariateproviders.treelevel.SquaredLnDbhCmPlus1Provid
  */
 public interface FrenchHDRelationship2018Tree extends FrenchHDRelationshipTree, 
 										HeightMProvider,
-										DbhCmProvider,
-										LnDbhCmPlus1Provider,
-										SquaredLnDbhCmPlus1Provider {
+										DbhCmProvider {
+
+	/**
+	 * This method returns ln(dbh + 1) with the dbh in cm.
+	 * @return a double
+	 */
+	public default double getLnDbhCmPlus1() {
+		return Math.log(getDbhCm() + 1);
+	}
+
+	/**
+	 * This method returns (ln(dbh + 1))^2 with the dbh in cm.
+	 * @return a double
+	 */
+	public default double getSquaredLnDbhCmPlus1() {
+		double lnDbhCmPlus1 = getLnDbhCmPlus1();
+		return lnDbhCmPlus1 * lnDbhCmPlus1;
+	}
 
 	
 	/**

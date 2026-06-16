@@ -83,9 +83,6 @@ public class FrenchCommercialVolume2020TreeImpl implements FrenchCommercialVolum
 	public double getDbhCm() {return dbhCm;}
 
 	@Override
-	public double getSquaredDbhCm() {return getDbhCm() * getDbhCm();}
-
-	@Override
 	public double getHeightM() {return heightM;}
 
 	@Override

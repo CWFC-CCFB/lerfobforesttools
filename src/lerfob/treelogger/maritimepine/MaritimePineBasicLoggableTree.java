@@ -19,7 +19,6 @@
 package lerfob.treelogger.maritimepine;
 
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
-import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
 /**
@@ -28,8 +27,14 @@ import repicea.simulation.treelogger.LoggableTree;
  * @author Mathieu Fortin - November 2014
  */
 public interface MaritimePineBasicLoggableTree extends LoggableTree, 
-													DbhCmProvider, 
-													DbhCmStandardDeviationProvider {
+													DbhCmProvider {
+
+	
+	/**
+	 * This method returns the standard deviation of the DBH (cm)
+	 * @return a double
+	 */
+	public double getDbhCmStandardDeviation();
 
 	
 	/**

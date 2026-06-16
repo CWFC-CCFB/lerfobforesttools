@@ -21,19 +21,27 @@ package lerfob.predictor.mathilde;
 import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
-import repicea.simulation.covariateproviders.treelevel.LnDbhCmProvider;
 
 /**
  * This interface ensures that the Tree instance is compatible with all Mathilde predictors.
  * @author Mathieu Fortin - June 2013
  */
 public interface MathildeTree extends DbhCmProvider, 
-									LnDbhCmProvider, 
 									MonteCarloSimulationCompliantObject,
 									MathildeTreeSpeciesProvider {
 	
+	
+	
+	/**
+	 * This method returns ln(dbh) with the dbh in cm.
+	 * @return a double
+	 */
+	public default double getLnDbhCm() {
+		return Math.log(getDbhCm());
+	}
+
 	@Override
-	default public HierarchicalLevel getHierarchicalLevel() {
+	public default HierarchicalLevel getHierarchicalLevel() {
 		return HierarchicalLevel.TREE;
 	}
 

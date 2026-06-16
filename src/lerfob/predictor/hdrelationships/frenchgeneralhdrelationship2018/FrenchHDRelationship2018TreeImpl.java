@@ -177,29 +177,13 @@ public class FrenchHDRelationship2018TreeImpl implements FrenchHDRelationship201
 	public double getDbhCm() {return dbhCm;}
 
 	@Override
-	public double getLnDbhCmPlus1() {return Math.log(getDbhCm() + 1);}
-
-	@Override
-	public double getSquaredLnDbhCmPlus1() {
-		double lnDbhCm = getLnDbhCmPlus1();
-		return lnDbhCm * lnDbhCm;
-	}
-
-	@Override
 	public FrenchHdSpecies getFrenchHDTreeSpecies() {return species;}
 
 	protected double getGOther() {return gOther;}
 	protected double getBasalAreaM2() {return getSquaredDbhCm() * Math.PI * 0.000025;}
 
 	@Override
-	public double getSquaredDbhCm() {
-		return getDbhCm() * getDbhCm();
-	}
-
-	@Override
-	public HierarchicalLevel getHierarchicalLevel() {
-		return HierarchicalLevel.TREE;
-	}
+	public HierarchicalLevel getHierarchicalLevel() {return HierarchicalLevel.TREE;}
 
 	@Override
 	public FrenchCommercialVolume2014TreeSpecies getFrenchCommercialVolume2014TreeSpecies() {

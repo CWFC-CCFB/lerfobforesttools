@@ -52,11 +52,6 @@ public class MathildeDiameterIncrementTreeImpl implements MathildeTree {
 	}
 
 	@Override
-	public double getLnDbhCm() {
-		return Math.log(dbh);
-	}
-
-	@Override
 	public String getSubjectId() {
 		return ((Integer) hashCode()).toString();
 	}

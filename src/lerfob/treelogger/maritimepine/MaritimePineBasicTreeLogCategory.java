@@ -7,8 +7,6 @@ import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedTreeLogCategory;
 import lerfob.treelogger.diameterbasedtreelogger.DiameterBasedWoodPiece;
 import lerfob.treelogger.maritimepine.MaritimePineBasicTreeLoggerParameters.Grade;
 import repicea.math.utility.GaussianUtility;
-import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
-import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
 @SuppressWarnings("serial")
@@ -20,31 +18,26 @@ public class MaritimePineBasicTreeLogCategory extends DiameterBasedTreeLogCatego
 	}
 	
 	@Override
-	protected boolean isEligible(LoggableTree tree) {
-		if (tree instanceof MaritimePineBasicLoggableTree) {
-			boolean subjectToMinimumDiameter = true;
-			if (tree instanceof DbhCmStandardDeviationProvider) {
-				subjectToMinimumDiameter = ((DbhCmStandardDeviationProvider) tree).getDbhCmStandardDeviation() <= 0d;
-			} 
-			if (subjectToMinimumDiameter) {		// only enabled if the standard deviation is 0
-				return ((MaritimePineBasicLoggableTree) tree).getDbhCm() >= minimumDbhCm;
-			} else {
-				return true;
-			}
+	protected boolean isEligible(LoggableTree t) {
+		if (t instanceof MaritimePineBasicLoggableTree) {
+			MaritimePineBasicLoggableTree tree = (MaritimePineBasicLoggableTree) t;
+			boolean subjectToMinimumDiameter = tree.getDbhCmStandardDeviation() <= 0d;
+			return subjectToMinimumDiameter ?		// only enabled if the standard deviation is 0
+				tree.getDbhCm() >= minimumDbhCm :
+					true;
 		}
 		return false;
 	}
 	
 	@Override
-	protected List<DiameterBasedWoodPiece> extractFromTree(LoggableTree tree, Object... parms) {
+	protected List<DiameterBasedWoodPiece> extractFromTree(LoggableTree t, Object... parms) {
 		List<DiameterBasedWoodPiece> pieces = null;
-		if (isEligible(tree)) {
+		if (isEligible(t)) {
+			MaritimePineBasicLoggableTree tree = (MaritimePineBasicLoggableTree) t;
 			pieces = new ArrayList<DiameterBasedWoodPiece>();
-			double mqd = ((DbhCmProvider) tree).getDbhCm();
-			double dbhStandardDeviation = 0d;
-			if (tree instanceof DbhCmStandardDeviationProvider) {
-				dbhStandardDeviation = ((DbhCmStandardDeviationProvider) tree).getDbhCmStandardDeviation();
-			}
+			double mqd = tree.getDbhCm();
+			double dbhStandardDeviation = tree.getDbhCmStandardDeviation();
+			
 			double energyWoodProportion;
 			double highQualitySawlogProportion;
 			double lowQualitySawlogProportion;

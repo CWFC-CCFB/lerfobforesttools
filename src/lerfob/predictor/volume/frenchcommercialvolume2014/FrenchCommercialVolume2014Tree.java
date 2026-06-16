@@ -23,12 +23,20 @@ import repicea.simulation.HierarchicalLevel;
 import repicea.simulation.MonteCarloSimulationCompliantObject;
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
 import repicea.simulation.covariateproviders.treelevel.HeightMProvider;
-import repicea.simulation.covariateproviders.treelevel.SquaredDbhCmProvider;
 
 public interface FrenchCommercialVolume2014Tree extends DbhCmProvider,
-														SquaredDbhCmProvider,
 														HeightMProvider,
 														MonteCarloSimulationCompliantObject {
+
+	/**
+	 * This method returns the square of dbh. 
+	 * @return the square of dbh in cm2 (double)
+	 */
+	public default double getSquaredDbhCm() {
+		double dbhCm = getDbhCm();
+		return dbhCm * dbhCm;
+	}
+
 	
 	@Override
 	default public HierarchicalLevel getHierarchicalLevel() {

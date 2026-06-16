@@ -19,14 +19,19 @@
 package lerfob.treelogger.europeanbeech;
 
 import repicea.simulation.covariateproviders.treelevel.DbhCmProvider;
-import repicea.simulation.covariateproviders.treelevel.DbhCmStandardDeviationProvider;
 import repicea.simulation.treelogger.LoggableTree;
 
 public interface EuropeanBeechBasicTree extends LoggableTree, 
-											DbhCmProvider, 
-											DbhCmStandardDeviationProvider {
+											DbhCmProvider {
 
 	@Override
 	public default boolean isCommercialVolumeOverbark() {return true;}
+
+	
+	/**
+	 * This method returns the standard deviation of the DBH (cm)
+	 * @return a double
+	 */
+	public double getDbhCmStandardDeviation();
 
 }
