@@ -33,11 +33,6 @@ jobs:
       run: sudo apt-get install xvfb
     
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v6
-      with:
-        gradle-version: 8.11.1
-
-    - name: Build project
       uses: gradle/gradle-build-action@v2
 
     - name: Execute Gradle 'integrationTest' task on Linux
